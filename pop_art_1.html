@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI: הפופ-ארט של המחר - שלוט בבינה המלאכותית!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Tailwind config for Pop Art colors */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        :root {
+            --pop-red: #E60023; /* Brighter, more iconic red */
+            --pop-blue: #007bff; /* Vibrant blue */
+            --pop-yellow: #FFDD00; /* Sunny, bold yellow */
+            --pop-black: #1A1A1A; /* Deep black for contrast */
+            --pop-white: #F8F8F8; /* Soft white for text */
+            --pop-green: #28A745; /* Energetic green */
+            --pop-orange: #FD7E14; /* Punchy orange */
+        }
+
+        /* Base styles */
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: var(--pop-black);
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            cursor: none; /* Hide default cursor */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Custom Cursor Styling */
+        #custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%); /* Center the cursor */
+            transition: transform 0.1s ease-out, width 0.1s ease-out, height 0.1s ease-out, box-shadow 0.1s ease-out; /* Smooth movement and state changes */
+            border: 2px solid var(--pop-yellow); /* Visible border */
+            box-shadow: 0 0 0 2px var(--pop-black), 0 0 0 4px var(--pop-red); /* High-contrast shadow layers */
+        }
+        #custom-cursor.hovered {
+            width: 30px;
+            height: 30px;
+            box-shadow: 0 0 0 2px var(--pop-black), 0 0 0 6px var(--pop-green); /* Larger, green shadow on hover */
+        }
+
+        /* Pop Art specific typography */
+        .pop-text {
+            font-family: 'Rubik Mono One', sans-serif;
+            letter-spacing: 1px;
+            line-height: 1.1;
+            text-shadow: 3px 3px 0px var(--pop-black); /* Strong shadow for depth */
+        }
+
+        /* Pop Art Card Style */
+        .pop-card {
+            border: 4px solid var(--pop-black);
+            box-shadow: 8px 8px 0px var(--pop-red); /* Strong offset shadow */
+            transition: all 0.2s ease-out;
+            transform-origin: center;
+        }
+        .pop-card:hover {
+            transform: translate(-4px, -4px) scale(1.02); /* Pop out effect */
+            box-shadow: 12px 12px 0px var(--pop-yellow);
+        }
+
+        /* Pop Art Button Style */
+        .pop-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            font-family: 'Rubik Mono One', sans-serif;
+            font-size: 1.25rem;
+            text-transform: uppercase;
+            color: var(--pop-white);
+            background-color: var(--pop-red);
+            border: 4px solid var(--pop-black);
+            box-shadow: 6px 6px 0px var(--pop-blue);
+            cursor: none; /* Custom cursor handles interaction */
+            transition: all 0.2s ease-out;
+        }
+        .pop-button:hover {
+            background-color: var(--pop-yellow);
+            color: var(--pop-black);
+            box-shadow: 6px 6px 0px var(--pop-green);
+            transform: translate(-2px, -2px);
+        }
+
+        /* Background dots/patterns for Pop Art (Ben-Day dots inspired) */
+        .pop-bg-pattern {
+            background-image:
+                radial-gradient(var(--pop-black) 10%, transparent 10%),
+                radial-gradient(var(--pop-black) 10%, transparent 10%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            opacity: 0.1;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+        }
+
+        /* Specific element positioning for Pop Art "collage" effect */
+        .content-block {
+            position: absolute; /* Allows for overlapping and free placement */
+            padding: 2rem;
+            z-index: 10;
+        }
+
+        /* Image styling for Pop Art */
+        .pop-image {
+            border: 4px solid var(--pop-black);
+            box-shadow: 10px 10px 0px var(--pop-blue);
+            filter: grayscale(100%) brightness(120%) contrast(150%); /* Comic book effect */
+            transition: all 0.3s ease-in-out;
+            cursor: none;
+        }
+        .pop-image:hover {
+            filter: none; /* Colorize on hover */
+            box-shadow: 10px 10px 0px var(--pop-yellow);
+            transform: rotate(-3deg) scale(1.05);
+        }
+
+        /* Speech Bubble Styling (RTL adapted) */
+        .speech-bubble {
+            position: relative;
+            background: var(--pop-white);
+            border-radius: .6em;
+            padding: 1rem;
+            border: 4px solid var(--pop-black);
+            box-shadow: 6px 6px 0px var(--pop-green);
+            direction: rtl;
+        }
+        /* Tail pointing to the left (for RTL context) */
+        .speech-bubble:after {
+            content: '';
+            position: absolute;
+            left: 0; /* Tail emerges from left */
+            top: 50%;
+            width: 0;
+            height: 0;
+            border: 20px solid transparent;
+            border-right-color: var(--pop-white); /* White tip */
+            border-left: 0;
+            border-top: 0;
+            margin-top: -10px;
+            margin-left: -20px; /* Offset to point outwards */
+        }
+        /* Black outline for the tail */
+        .speech-bubble:before {
+            content: '';
+            position: absolute;
+            left: -8px; /* Slightly offset for outline */
+            top: 50%;
+            width: 0;
+            height: 0;
+            border: 24px solid transparent;
+            border-right-color: var(--pop-black); /* Black outline */
+            border-left: 0;
+            border-top: 0;
+            margin-top: -12px;
+            margin-left: -24px;
+            z-index: -1; /* Behind the white tail */
+        }
+
+
+        /* Animation for key elements */
+        @keyframes pulse-pop {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.03); opacity: 0.95; }
+        }
+        .animate-pulse-pop {
+            animation: pulse-pop 2s infinite ease-in-out;
+        }
+
+        /* Responsive adjustments - stacking for small screens */
+        @media (max-width: 768px) {
+            .pop-text {
+                font-size: 2rem !important; /* Make text readable */
+                letter-spacing: 1px;
+                text-shadow: 2px 2px 0px var(--pop-black);
+            }
+            .content-block {
+                position: relative; /* Stack elements on smaller screens */
+                width: 95%; /* Use full width */
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 2rem; /* Add spacing between stacked blocks */
+                top: auto !important; /* Remove absolute positioning */
+                left: auto !important;
+                right: auto !important;
+                transform: none !important; /* Remove rotations */
+                padding: 1.5rem; /* Smaller padding */
+            }
+            .pop-card {
+                box-shadow: 4px 4px 0px var(--pop-red); /* Smaller shadows */
+                border-width: 2px;
+            }
+            .pop-button {
+                padding: 0.75rem 1.5rem;
+                font-size: 1rem;
+                border-width: 2px;
+                box-shadow: 4px 4px 0px var(--pop-blue);
+            }
+            .pop-image {
+                width: 120px;
+                height: 120px;
+                margin-left: auto;
+                margin-right: auto;
+                display: block;
+                box-shadow: 6px 6px 0px var(--pop-blue);
+            }
+            .speech-bubble {
+                margin-top: 1rem; /* Space below image */
+                width: 90%;
+            }
+            .speech-bubble:after, .speech-bubble:before {
+                 /* Adjust tail position if it's too far left/right on mobile */
+                margin-left: -15px; /* Bring tail closer to the content */
+            }
+            /* Hide decorative blocks on small screens */
+            .hidden-mobile {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body class="relative min-h-screen bg-[var(--pop-black)] text-[var(--pop-white)] overflow-y-auto">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Background Pattern - Pop Art Ben-Day dots inspired -->
+    <div class="pop-bg-pattern"></div>
+
+    <!-- Main Content Wrapper - acts as a canvas -->
+    <div class="relative w-full min-h-screen pb-20 md:p-8 lg:p-12 overflow-hidden">
+
+        <!-- Title Block 1: "לשלוט בבינה המלאכותית" -->
+        <div class="content-block bg-[var(--pop-red)] text-[var(--pop-white)] pop-card absolute top-10 right-10 w-11/12 md:w-1/2 lg:w-2/5 p-6 md:p-8 lg:p-10 transform -rotate-3 hover:rotate-0" style="z-index: 15;">
+            <h1 class="pop-text text-4xl md:text-5xl lg:text-6xl text-center">לשלוט בבינה המלאכותית</h1>
+            <p class="mt-4 text-center text-lg md:text-xl lg:text-2xl font-bold">לא רק להבין - אלא להוביל!</p>
+        </div>
+
+        <!-- Title Block 2: "העתיד הוא עכשיו" -->
+        <div class="content-block bg-[var(--pop-blue)] text-[var(--pop-yellow)] pop-card absolute top-[280px] left-10 w-10/12 md:w-1/3 lg:w-1/4 p-5 md:p-6 lg:p-8 transform rotate-6 hover:rotate-0" style="z-index: 18;">
+            <h2 class="pop-text text-3xl md:text-4xl lg:text-5xl text-center">העתיד הוא עכשיו!</h2>
+            <p class="mt-3 text-center text-base md:text-lg">הצטרפו למהפכה הדיגיטלית, היום!</p>
+        </div>
+
+        <!-- Zevik Aviner's Image and Intro -->
+        <div class="content-block absolute top-[550px] right-[5vw] md:top-[300px] md:right-[15vw] lg:top-[280px] lg:right-[20vw] z-20 flex flex-col items-center">
+            <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="pop-image w-32 h-32 md:w-48 md:h-48 rounded-full object-cover shadow-lg mb-4 transform rotate-12 hover:rotate-0" style="object-position: top;">
+            <div class="speech-bubble w-64 md:w-80 lg:w-96 text-center text-[var(--pop-black)]">
+                <p class="font-bold text-lg md:text-xl lg:text-2xl mb-2 pop-text">זאביק אבינר כאן!</p>
+                <p class="text-sm md:text-base">המומחה שלכם לכיבוש עולם ה-AI.</p>
+                <p class="text-sm md:text-base">הופך טכנולוגיה למציאות יומיומית.</p>
+            </div>
+        </div>
+
+        <!-- Core Message / Call to Action -->
+        <div class="content-block bg-[var(--pop-yellow)] text-[var(--pop-black)] pop-card absolute top-[800px] right-10 md:top-[600px] md:right-[10vw] lg:top-[500px] lg:right-[2vw] w-11/12 md:w-1/2 lg:w-1/3 p-5 md:p-6 lg:p-8 transform -rotate-8 hover:rotate-0" style="z-index: 16;">
+            <p class="pop-text text-2xl md:text-3xl lg:text-4xl text-center mb-4">AI לכולם - מעשי ונגיש!</p>
+            <p class="text-base md:text-lg text-center leading-relaxed">מסע למידה אינטנסיבי שיהפוך אתכם ממסוקרנים למאסטרים. כלים שתתחילו ליישם *מיד* בעבודה ובחיים האישיים.</p>
+        </div>
+
+        <!-- Expertise Areas - as fragmented pop art elements -->
+        <div class="content-block absolute top-[1150px] left-10 md:top-[900px] md:left-[5vw] lg:top-[850px] lg:left-[10vw] w-11/12 md:w-2/3 lg:w-1/2 p-4 md:p-6 bg-[var(--pop-green)] pop-card text-[var(--pop-white)] transform rotate-4 hover:rotate-0" style="z-index: 12;">
+            <h3 class="pop-text text-xl md:text-2xl lg:text-3xl mb-4 text-center">תחומי שליטה וחדשנות:</h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 text-center">
+                <div class="pop-button !text-sm !py-2 !px-3 !border-2 !shadow-sm !bg-[var(--pop-blue)] !hover:bg-[var(--pop-yellow)] !hover:text-[var(--pop-black)]">יצירת טקסט ותוכן</div>
+                <div class="pop-button !text-sm !py-2 !px-3 !border-2 !shadow-sm !bg-[var(--pop-red)] !hover:bg-[var(--pop-green)] !hover:text-[var(--pop-black)]">אפליקציות חכמות</div>
+                <div class="pop-button !text-sm !py-2 !px-3 !border-2 !shadow-sm !bg-[var(--pop-yellow)] !hover:bg-[var(--pop-red)] !hover:text-[var(--pop-white)]">אתרים מבוססי AI</div>
+                <div class="pop-button !text-sm !py-2 !px-3 !border-2 !shadow-sm !bg-[var(--pop-black)] !text-[var(--pop-white)] !hover:bg-[var(--pop-blue)]">ניתוח נתונים</div>
+                <div class="pop-button !text-sm !py-2 !px-3 !border-2 !shadow-sm !bg-[var(--pop-green)] !hover:bg-[var(--pop-orange)] !hover:text-[var(--pop-black)]">תמונות ואומנות</div>
+                <div class="pop-button !text-sm !py-2 !px-3 !border-2 !shadow-sm !bg-[var(--pop-blue)] !hover:bg-[var(--pop-red)] !hover:text-[var(--pop-white)]">אוטומציה</div>
+            </div>
+        </div>
+
+        <!-- Services Section - as bursting "products" -->
+        <div class="content-block absolute top-[1500px] right-10 md:top-[1200px] md:right-[5vw] lg:top-[1150px] lg:right-[15vw] w-11/12 md:w-2/3 lg:w-1/2 p-5 bg-[var(--pop-orange)] pop-card text-[var(--pop-black)] transform -rotate-10 hover:rotate-0" style="z-index: 14;">
+            <h3 class="pop-text text-xl md:text-2xl lg:text-3xl mb-4 text-center">השירותים הלוהטים שלנו:</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-[var(--pop-white)] p-4 border-2 border-[var(--pop-black)] shadow-md hover:scale-105 transition-transform">
+                    <h4 class="font-bold pop-text text-lg md:text-xl text-[var(--pop-red)]">סדנאות קבוצתיות</h4>
+                    <p class="text-sm md:text-base">מעשיות, ממוקדות, לכל הרמות. גלו את כוח הקבוצה.</p>
+                </div>
+                <div class="bg-[var(--pop-white)] p-4 border-2 border-[var(--pop-black)] shadow-md hover:scale-105 transition-transform">
+                    <h4 class="font-bold pop-text text-lg md:text-xl text-[var(--pop-blue)]">שיעורים פרטיים</h4>
+                    <p class="text-sm md:text-base">מותאמים אישית - קצב, רמה וצרכים. אתם במרכז.</p>
+                </div>
+                <div class="bg-[var(--pop-white)] p-4 border-2 border-[var(--pop-black)] shadow-md hover:scale-105 transition-transform">
+                    <h4 class="font-bold pop-text text-lg md:text-xl text-[var(--pop-green)]">הרצאות לארגונים</h4>
+                    <p class="text-sm md:text-base">פיתחו אופקים לצוותים שלכם. השראה וכלים חדשניים.</p>
+                </div>
+                <div class="bg-[var(--pop-white)] p-4 border-2 border-[var(--pop-black)] shadow-md hover:scale-105 transition-transform">
+                    <h4 class="font-bold pop-text text-lg md:text-xl text-[var(--pop-yellow)]">ייעוץ ופיתוח</h4>
+                    <p class="text-sm md:text-base">ליווי צמוד לפרויקטים מבוססי AI. חזון שהופך למציאות.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information - Bold, direct, comic-like -->
+        <div class="content-block absolute top-[1900px] left-10 md:top-[1500px] md:left-[10vw] lg:top-[1450px] lg:left-[25vw] w-11/12 md:w-1/2 lg:w-1/3 p-6 md:p-8 bg-[var(--pop-black)] pop-card text-[var(--pop-white)] transform rotate-5 hover:rotate-0" style="z-index: 20;">
+            <h3 class="pop-text text-2xl md:text-3xl lg:text-4xl text-center mb-4 text-[var(--pop-red)]">רוצים לשלוט? דברו איתנו!</h3>
+            <div class="flex flex-col items-center space-y-3">
+                <a href="https://wa.me/972546609385" target="_blank" class="pop-button bg-[var(--pop-green)] hover:bg-[var(--pop-yellow)] hover:text-[var(--pop-black)]">ווטסאפ: 054-6609385</a>
+                <a href="mailto:zaviner@gmail.com" class="pop-button bg-[var(--pop-blue)] hover:bg-[var(--pop-orange)] hover:text-[var(--pop-white)]">אימייל: zaviner@gmail.com</a>
+            </div>
+            <p class="mt-6 text-center text-sm md:text-base text-[var(--pop-yellow)] animate-pulse-pop">אל תחכו! העתיד מחכה רק לכם!</p>
+        </div>
+
+        <!-- Filler/Decorative Pop Art elements - Hidden on mobile -->
+        <div class="content-block hidden-mobile md:block absolute top-[10vh] left-[40vw] w-20 h-20 bg-[var(--pop-green)] transform rotate-45 ben-day-dots opacity-70" style="z-index: 5;"></div>
+        <div class="content-block hidden-mobile md:block absolute top-[160vh] right-[20vw] w-32 h-32 bg-[var(--pop-yellow)] transform -rotate-15 opacity-80" style="z-index: 5;"></div>
+        <div class="content-block hidden-mobile md:block absolute bottom-10 left-10 w-40 h-16 bg-[var(--pop-blue)] text-[var(--pop-white)] pop-text text-xl flex items-center justify-center transform rotate-12 opacity-90" style="z-index: 5;">AI POWER!</div>
+        <div class="content-block hidden-mobile md:block absolute top-[90vh] right-[5vw] w-24 h-24 bg-[var(--pop-red)] transform skew-x-12 opacity-80" style="z-index: 5;"></div>
+        <div class="content-block hidden-mobile md:block absolute top-[130vh] left-[2vw] w-28 h-20 bg-[var(--pop-orange)] text-[var(--pop-white)] pop-text text-base flex items-center justify-center transform -rotate-6 opacity-90" style="z-index: 5;">CONTROL!</div>
+
+    </div>
+
+    <script>
+        const customCursor = document.getElementById('custom-cursor');
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
+        let speed = 0.2; // Adjust for smoother/snappier movement
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * speed;
+            cursorY += (mouseY - cursorY) * speed;
+            customCursor.style.left = cursorX + 'px';
+            customCursor.style.top = cursorY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Start cursor animation
+        animateCursor();
+
+        // Cursor hover effect for interactive elements
+        const interactiveElements = document.querySelectorAll('.pop-card, .pop-button, .pop-image, a');
+
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                customCursor.classList.add('hovered');
+            });
+            el.addEventListener('mouseleave', () => {
+                customCursor.classList.remove('hovered');
+            });
+        });
+
+        // Dynamically adjust content-block positions for small screens (stacking)
+        function adjustContentPositions() {
+            const blocks = document.querySelectorAll('.content-block');
+            const decorativeBlocks = document.querySelectorAll('.hidden-mobile'); // Select blocks to be hidden on mobile
+
+            if (window.innerWidth <= 768) { // Small screens (mobile)
+                blocks.forEach(block => {
+                    block.style.position = 'relative'; // Switch to relative for stacking
+                    block.style.top = 'auto'; // Remove absolute positioning
+                    block.style.left = 'auto';
+                    block.style.right = 'auto';
+                    block.style.transform = 'none'; // Remove rotations
+                });
+                // Ensure decorative blocks are hidden
+                decorativeBlocks.forEach(block => {
+                    block.style.display = 'none';
+                });
+            } else { // Larger screens (desktop) - revert to absolute positioning and original transforms
+                blocks.forEach(block => {
+                    if (block.style.position === 'relative') { // Only change if it was stacked
+                        block.style.position = 'absolute';
+                        // Restore original positioning and transform from dataset
+                        block.style.top = block.dataset.originalTop || 'auto';
+                        block.style.left = block.dataset.originalLeft || 'auto';
+                        block.style.right = block.dataset.originalRight || 'auto';
+                        block.style.transform = block.dataset.originalTransform || 'none';
+                    }
+                });
+                // Ensure decorative blocks are visible
+                decorativeBlocks.forEach(block => {
+                    block.style.display = ''; // Revert to original display property (e.g., 'block')
+                });
+            }
+        }
+
+        // Store original positions and transforms for desktop view
+        document.querySelectorAll('.content-block').forEach(block => {
+            block.dataset.originalTop = block.style.top;
+            block.dataset.originalLeft = block.style.left;
+            block.dataset.originalRight = block.style.right;
+            block.dataset.originalTransform = block.style.transform;
+        });
+
+        // Call on load and resize
+        window.addEventListener('load', adjustContentPositions);
+        window.addEventListener('resize', adjustContentPositions);
+    </script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - בינה מלאכותית: אמנות המחר</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🤖%3C/text%3E%3C/svg%3E">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Noto+Serif+Hebrew:wght@400;700&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cyanotype-dark: #0A3C59; /* Deep indigo/Prussian blue */
+            --cyanotype-medium: #1A5276; /* Slightly lighter blue */
+            --cyanotype-light: #3EA6B7; /* Bright cyan accent */
+            --paper-off-white: #F8F4E3; /* Aged paper texture */
+            --ink-black: #051F2A; /* Dark, almost black for text on light backgrounds */
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: var(--cyanotype-dark);
+            color: var(--paper-off-white);
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Noto Serif Hebrew', serif;
+            color: var(--cyanotype-light);
+        }
+
+        .font-mono-tech {
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out, width 0.1s ease-out, height 0.1s ease-out;
+            opacity: 0.9;
+            will-change: transform;
+        }
+
+        .custom-cursor-grow {
+            width: 40px;
+            height: 40px;
+        }
+
+        .cyanotype-bg-texture {
+            background: radial-gradient(circle at center, rgba(10, 60, 89, 0.7) 0%, rgba(10, 60, 89, 0.9) 60%, rgba(10, 60, 89, 1) 100%),
+                        url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)" opacity="0.05"></rect></svg>') top left / 100% 100% repeat;
+            /* Subtle noise/grain effect overlay */
+            filter: saturate(1.2) contrast(1.1);
+        }
+
+        .section-separator {
+            @apply w-2/3 h-[1px] bg-cyanotype-light mx-auto my-12 opacity-30;
+            box-shadow: 0 0 10px var(--cyanotype-light);
+        }
+
+        .fade-in {
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .img-tint {
+            filter: grayscale(100%) brightness(80%) contrast(120%) sepia(80%) hue-rotate(180deg) saturate(150%);
+            /* Transforms image to fit cyanotype aesthetic */
+        }
+
+    </style>
+</head>
+<body class="relative min-h-screen">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Parallax Background Element -->
+    <div id="parallax-bg" class="fixed inset-0 w-full h-full z-[-1] cyanotype-bg-texture" style="transform: translateY(0);">
+        <div class="absolute inset-0 bg-gradient-to-t from-transparent to-cyanotype-dark opacity-30"></div>
+    </div>
+
+    <!-- Main Content Wrapper -->
+    <main class="relative z-10 p-4 md:p-8 lg:p-12 max-w-6xl mx-auto space-y-24 text-paper-off-white leading-relaxed">
+
+        <!-- Hero Section -->
+        <section class="min-h-screen flex flex-col justify-center items-center text-center py-20 fade-in">
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 tracking-wide leading-tight text-cyanotype-light drop-shadow-lg">
+                בינה מלאכותית: <br class="md:hidden">אמנות המחר, בהישג ידך היום.
+            </h1>
+            <p class="text-xl md:text-2xl max-w-3xl mb-10 text-paper-off-white opacity-90">
+                בעולם שמשתנה בקצב מסחרר, AI הוא לא רק טכנולוגיה - הוא שפת יצירה חדשה. הצטרפו למסע המרתק להבנתה ושליטה בה, עם זאביק אבינר.
+            </p>
+            <a href="#contact" class="inline-block py-3 px-8 text-xl md:text-2xl font-bold rounded-full bg-cyanotype-light text-ink-black hover:bg-cyan-400 transition-all duration-300 transform hover:scale-105 shadow-xl">
+                צאו לדרך!
+            </a>
+        </section>
+
+        <div class="section-separator fade-in"></div>
+
+        <!-- The Journey - Introduction to AI -->
+        <section class="max-w-4xl mx-auto text-center fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8 text-cyanotype-light">
+                המסע אל עולם היצירה החדש
+            </h2>
+            <p class="text-lg md:text-xl mb-6 opacity-90">
+                האם דמיינתם פעם ליצור תוכן בלחיצת כפתור, לפתח אפליקציות חכמות ללא קוד מסובך, או להפוך נתונים מורכבים לתובנות ברורות? הבינה המלאכותית פותחת שערים לעולמות של אפשרויות בלתי נתפסות.
+            </p>
+            <p class="text-lg md:text-xl opacity-90">
+                זהו אינו מדע בדיוני, אלא המציאות של ימינו. אנו מזמינים אתכם, בין אם אתם מתחילים סקרנים, אנשי מקצוע המבקשים יתרון, מנהלים החושבים קדימה, או מפתחים המכוונים לפרויקט הבא – ללמוד, ליצור ולשלוט בכוחה של הבינה המלאכותית.
+            </p>
+        </section>
+
+        <div class="section-separator fade-in"></div>
+
+        <!-- The Canvas of Possibility - Expertise Areas -->
+        <section class="fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 text-cyanotype-light">
+                הבד הדיגיטלי: תחומי השראה ויצירה
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-12 text-center">
+                <div class="p-8 rounded-lg border border-cyanotype-medium bg-cyanotype-dark hover:shadow-cyanotype-light/30 shadow-lg transition-all duration-300 transform hover:scale-[1.02] fade-in">
+                    <h3 class="text-2xl md:text-3xl font-semibold mb-4 text-cyanotype-light">יצירת טקסטים ותוכן</h3>
+                    <p class="text-md opacity-85">שחררו את קולם של הרעיונות שלכם - ממאמרים אקדמיים ועד פוסטים לרשתות חברתיות, AI יוצר עבורכם את המילים המדויקות.</p>
+                </div>
+                <div class="p-8 rounded-lg border border-cyanotype-medium bg-cyanotype-dark hover:shadow-cyanotype-light/30 shadow-lg transition-all duration-300 transform hover:scale-[1.02] fade-in">
+                    <h3 class="text-2xl md:text-3xl font-semibold mb-4 text-cyanotype-light">בניית אפליקציות חכמות</h3>
+                    <p class="text-md opacity-85">הפכו רעיונות למציאות דיגיטלית - פיתוח אפליקציות אינטראקטיביות הלומדות ומגיבות למשתמש.</p>
+                </div>
+                <div class="p-8 rounded-lg border border-cyanotype-medium bg-cyanotype-dark hover:shadow-cyanotype-light/30 shadow-lg transition-all duration-300 transform hover:scale-[1.02] fade-in">
+                    <h3 class="text-2xl md:text-3xl font-semibold mb-4 text-cyanotype-light">פיתוח אתרים מבוססי AI</h3>
+                    <p class="text-md opacity-85">אתרים חיים ונושמים - מאתרים דינמיים ועד חווית משתמש מותאמת אישית, כלים שישנו את פני האינטרנט.</p>
+                </div>
+                <div class="p-8 rounded-lg border border-cyanotype-medium bg-cyanotype-dark hover:shadow-cyanotype-light/30 shadow-lg transition-all duration-300 transform hover:scale-[1.02] fade-in">
+                    <h3 class="text-2xl md:text-3xl font-semibold mb-4 text-cyanotype-light">ניתוח נתונים ומחקר</h3>
+                    <p class="text-md opacity-85">פענחו את הסיפורים החבויים בנתונים - קבלת תובנות עמוקות וקבלת החלטות מבוססת מידע מדויק.</p>
+                </div>
+                <div class="p-8 rounded-lg border border-cyanotype-medium bg-cyanotype-dark hover:shadow-cyanotype-light/30 shadow-lg transition-all duration-300 transform hover:scale-[1.02] fade-in">
+                    <h3 class="text-2xl md:text-3xl font-semibold mb-4 text-cyanotype-light">יצירת תמונות ואומנות</h3>
+                    <p class="text-md opacity-85">הפכו את הדמיון לוויזואליה - עיצוב גרפי, איורים ואמנות דיגיטלית, בינה מלאכותית כשותפה יצירתית.</p>
+                </div>
+                <div class="p-8 rounded-lg border border-cyanotype-medium bg-cyanotype-dark hover:shadow-cyanotype-light/30 shadow-lg transition-all duration-300 transform hover:scale-[1.02] fade-in">
+                    <h3 class="text-2xl md:text-3xl font-semibold mb-4 text-cyanotype-light">אוטומציה של תהליכים</h3>
+                    <p class="text-md opacity-85">ייעלו את שגרת יומכם - משימות חוזרות הופכות לאוטומטיות, משחררות אתכם לחדשנות וליצירה.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-separator fade-in"></div>
+
+        <!-- Crafting Your Future - Services -->
+        <section class="max-w-4xl mx-auto fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 text-cyanotype-light">
+                נתיבי היצירה שלך עם AI
+            </h2>
+            <div class="space-y-12">
+                <div class="flex flex-col md:flex-row items-center bg-cyanotype-medium p-8 rounded-lg shadow-xl border border-cyanotype-light/50 fade-in">
+                    <div class="md:w-1/4 text-center mb-6 md:mb-0 md:pl-8">
+                        <h3 class="text-3xl font-bold text-cyanotype-light">סדנאות קבוצתיות</h3>
+                    </div>
+                    <div class="md:w-3/4 text-right">
+                        <p class="text-lg opacity-95">צללו לעולם ה-AI עם קבוצת עמיתים, בסדנאות מעשיות וממוקדות. למידה משותפת המעודדת שיתוף פעולה וחדשנות.</p>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row items-center bg-cyanotype-medium p-8 rounded-lg shadow-xl border border-cyanotype-light/50 fade-in">
+                    <div class="md:w-1/4 text-center mb-6 md:mb-0 md:pl-8">
+                        <h3 class="text-3xl font-bold text-cyanotype-light">שיעורים פרטיים</h3>
+                    </div>
+                    <div class="md:w-3/4 text-right">
+                        <p class="text-lg opacity-95">למידה מותאמת אישית, בקצב ובדגשים המתאימים בדיוק לצרכים וליעדים שלכם. פיתוח מיומנויות ספציפיות והעמקה בתחומים נבחרים.</p>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row items-center bg-cyanotype-medium p-8 rounded-lg shadow-xl border border-cyanotype-light/50 fade-in">
+                    <div class="md:w-1/4 text-center mb-6 md:mb-0 md:pl-8">
+                        <h3 class="text-3xl font-bold text-cyanotype-light">הרצאות לארגונים</h3>
+                    </div>
+                    <div class="md:w-3/4 text-right">
+                        <p class="text-lg opacity-95">הדלקת הניצוץ בצוות שלכם - הרצאות מרתקות הפותחות אופקים חדשים, מעוררות השראה ומציגות את הפוטנציאל העצום של AI לארגונים.</p>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row items-center bg-cyanotype-medium p-8 rounded-lg shadow-xl border border-cyanotype-light/50 fade-in">
+                    <div class="md:w-1/4 text-center mb-6 md:mb-0 md:pl-8">
+                        <h3 class="text-3xl font-bold text-cyanotype-light">ייעוץ ופיתוח פרויקטים</h3>
+                    </div>
+                    <div class="md:w-3/4 text-right">
+                        <p class="text-lg opacity-95">מליווי אסטרטגי ועד פיתוח מעשי - הפכו את הרעיונות המבוססים על AI לפרויקטים מוצלחים ופורצי דרך, עם ליווי מומחה.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-separator fade-in"></div>
+
+        <!-- The Guide - Zevik Aviner Bio -->
+        <section class="max-w-4xl mx-auto text-center md:flex md:items-center md:text-right gap-12 fade-in">
+            <div class="md:w-1/3 mb-8 md:mb-0 fade-in">
+                <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="w-48 h-48 md:w-64 md:h-64 rounded-full mx-auto object-cover border-4 border-cyanotype-light shadow-2xl img-tint">
+            </div>
+            <div class="md:w-2/3 fade-in">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-cyanotype-light">
+                    זאביק אבינר - המדריך שלך לאמנות ה-AI
+                </h2>
+                <p class="text-lg md:text-xl mb-4 opacity-95">
+                    זאביק אבינר, מומחה בעל שם עולמי בתחום הבינה המלאכותית, אינו רק מורה – הוא אמן המשלב ידע עמוק עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות AI פורצות דרך.
+                </p>
+                <p class="text-lg md:text-xl opacity-95">
+                    הוא מאמין בהנגשת הטכנולוגיה המורכבת והפיכתה לכלי יומיומי עוצמתי, כזה שכל אחד ואחת יכולים לאמץ וליצור באמצעותו. בזאביק תמצאו לא רק מדריך, אלא מנטור שיוביל אתכם ביד בטוחה אל העתיד הדיגיטלי.
+                </p>
+            </div>
+        </section>
+
+        <div class="section-separator fade-in"></div>
+
+        <!-- Connect - Contact Info -->
+        <section id="contact" class="max-w-3xl mx-auto text-center py-20 fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold mb-10 text-cyanotype-light">
+                התחילו ליצור את העתיד שלכם
+            </h2>
+            <p class="text-xl md:text-2xl mb-8 opacity-95">
+                מוכנים לצאת למסע? צרו קשר עוד היום ונתחיל לתכנן את הדרך שלכם לשליטה בבינה המלאכותית.
+            </p>
+            <div class="space-y-6">
+                <a href="https://wa.me/972546609385" target="_blank" rel="noopener noreferrer" class="block w-full md:w-2/3 mx-auto py-4 px-8 bg-cyanotype-light text-ink-black text-2xl font-bold rounded-full hover:bg-cyan-400 transition-all duration-300 transform hover:scale-105 shadow-xl">
+                    ווטסאפ: 054-6609385
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="block w-full md:w-2/3 mx-auto py-4 px-8 bg-cyanotype-medium text-paper-off-white text-2xl font-bold rounded-full hover:bg-cyan-400 hover:text-ink-black transition-all duration-300 transform hover:scale-105 shadow-xl">
+                    אימייל: zaviner@gmail.com
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-10 text-paper-off-white opacity-70 text-sm mt-20 fade-in">
+        <p>&copy; 2023 זאביק אבינר - כל הזכויות שמורות.</p>
+        <p>אמנות הבינה המלאכותית בהישג ידך.</p>
+    </footer>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        const interactiveElements = 'a, button, input[type="submit"], .hover\\:scale-\\[1\\.02\\]'; // Target interactive elements
+        document.querySelectorAll(interactiveElements).forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('custom-cursor-grow'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('custom-cursor-grow'));
+        });
+
+        // Parallax Effect Logic
+        const parallaxBg = document.getElementById('parallax-bg');
+        if (parallaxBg) {
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                // Adjust the multiplier for stronger/weaker parallax
+                parallaxBg.style.transform = `translateY(${scrollY * 0.15}px)`;
+            });
+        }
+
+        // Scroll Reveal (Intersection Observer) Logic
+        const faders = document.querySelectorAll('.fade-in');
+        const appearOptions = {
+            threshold: 0.15, // When 15% of the item is visible
+            rootMargin: "0px 0px -50px 0px" // Start appearing slightly before reaching the bottom
+        };
+
+        const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return;
+                } else {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Stop observing once visible
+                }
+            });
+        }, appearOptions);
+
+        faders.forEach(fader => {
+            appearOnScroll.observe(fader);
+        });
+    </script>
+</body>
+</html>

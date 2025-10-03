@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שליטת הרוח הדיגיטלית</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Tailwind Configuration - for Tingatinga colors and theme */
+        :root {
+            --tinga-blue: #007bff; /* Vibrant Blue */
+            --tinga-yellow: #ffc107; /* Bright Yellow */
+            --tinga-red: #dc3545; /* Bold Red */
+            --tinga-green: #28a745; /* Lush Green */
+            --tinga-orange: #fd7e14; /* Fiery Orange */
+            --tinga-dark: #212529; /* Deep Black/Dark Grey */
+            --tinga-light: #f8f9fa; /* Off-White/Cream */
+        }
+
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        /* General styles for Tingatinga feel */
+        body {
+            font-family: 'Rubik', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll from overflow */
+            background-color: var(--tinga-light);
+            cursor: none; /* Hide default cursor */
+            color: var(--tinga-dark);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: transparent;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s, transform 0.1s ease-out;
+            z-index: 9999; /* Always on top */
+            border: 2px solid var(--tinga-light); /* Light border */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8), /* Dark shadow for contrast */
+                        0 0 10px rgba(255, 255, 255, 0.5); /* Inner glow for better visibility */
+        }
+
+        .custom-cursor.hovered {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%) scale(1.2);
+            border-color: var(--tinga-orange);
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8),
+                        0 0 15px var(--tinga-yellow); /* Yellow glow on hover */
+        }
+
+        /* Tingatinga specific styling */
+        .tinga-element {
+            border: 4px solid var(--tinga-dark); /* Thick black border */
+            box-shadow: 8px 8px 0px rgba(0,0,0,0.2); /* Simple shadow for depth */
+        }
+
+        .tinga-text-outline {
+            -webkit-text-stroke: 1.5px var(--tinga-dark); /* Black outline for text */
+            text-stroke: 1.5px var(--tinga-dark);
+            color: var(--tinga-light); /* Light inner color for text */
+            text-shadow: 2px 2px 0 var(--tinga-dark); /* Add shadow for more depth, Tingatinga often has this feel */
+        }
+        
+        .tinga-pattern-bg {
+            /* Using a simple SVG data URL for a repeating geometric pattern */
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23fd7e14' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zm0 30v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM12 34v-4H10v4H6v2h4v4h2v-4h4v-2h-4zm0-30V0H10v4H6v2h4v4h2V6h4V4h-4zm0 30v-4H10v4H6v2h4v4h2v-4h4v-2h-4zm0-30V0H10v4H6v2h4v4h2V6h4V4h-4z'%3E%3C/path%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-size: 60px 60px;
+            animation: pan-bg 60s linear infinite; /* Slow panning animation */
+        }
+
+        @keyframes pan-bg {
+            from { background-position: 0 0; }
+            to { background-position: 100% 100%; }
+        }
+
+        .tinga-icon {
+            filter: drop-shadow(4px 4px 0 rgba(0,0,0,0.5)); /* Simple shadow for icons */
+        }
+
+        /* Unique element styles for Tingatinga feel */
+        .hero-title-container {
+            clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%); /* Irregular shape */
+            background-color: var(--tinga-red);
+            padding: 2rem 4rem;
+            display: inline-block;
+            transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+        }
+        .hero-title-container:hover {
+            transform: scale(1.05) rotate(2deg);
+            background-color: var(--tinga-orange);
+        }
+
+        .info-card {
+            background-color: var(--tinga-blue);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
+        }
+        .info-card:hover {
+            transform: translateY(-10px) rotate(-2deg);
+            box-shadow: 12px 12px 0px rgba(0,0,0,0.3);
+            background-color: var(--tinga-red);
+        }
+
+        .expertise-item {
+            background-color: var(--tinga-yellow);
+            transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .expertise-item:hover {
+            background-color: var(--tinga-orange);
+            transform: scale(1.05);
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.3);
+        }
+
+        .service-item {
+            background-color: var(--tinga-green);
+            transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .service-item:hover {
+            background-color: var(--tinga-blue);
+            transform: scale(1.05);
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.3);
+        }
+
+        .zevik-card {
+            background-color: var(--tinga-orange);
+            transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .zevik-card:hover {
+            transform: scale(1.02) rotate(1deg);
+            background-color: var(--tinga-red);
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.3);
+        }
+
+        .contact-info {
+            background-color: var(--tinga-dark);
+            color: var(--tinga-light);
+            border-top: 4px solid var(--tinga-red);
+            transition: background-color 0.3s ease-in-out;
+        }
+        .contact-info:hover {
+            background-color: #333; /* Slightly lighter dark on hover */
+        }
+        
+        /* Specific shapes for Tingatinga feel using clip-path */
+        .clip-diamond {
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+        .clip-wave {
+            clip-path: polygon(0% 15%, 15% 0%, 100% 0%, 85% 15%, 100% 100%, 85% 85%, 15% 100%, 0% 85%);
+        }
+        .clip-leaf {
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        /* Animations */
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 4s ease-in-out infinite;
+        }
+
+        @keyframes ping-slow {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 0; }
+        }
+        .animate-ping-slow {
+            animation: ping-slow 6s ease-out infinite;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-title-container {
+                padding: 1rem 2rem;
+            }
+            .tinga-text-outline {
+                -webkit-text-stroke: 1px var(--tinga-dark);
+                text-stroke: 1px var(--tinga-dark);
+                text-shadow: 1px 1px 0 var(--tinga-dark);
+            }
+            .custom-cursor {
+                width: 15px;
+                height: 15px;
+            }
+            .custom-cursor.hovered {
+                width: 30px;
+                height: 30px;
+            }
+            .zevik-card {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body class="relative min-h-screen">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="customCursor"></div>
+
+    <!-- Tingatinga Pattern Background (fixed, negative z-index) -->
+    <div class="fixed inset-0 tinga-pattern-bg z-[-1] opacity-70"></div>
+
+    <!-- Main Content Wrapper (positive z-index) -->
+    <div class="relative z-10 p-4 md:p-8 lg:p-12 flex flex-col items-center min-h-screen overflow-hidden">
+
+        <!-- Hero Title - A vibrant, irregularly shaped element -->
+        <div class="hero-title-container tinga-element text-center mb-16 md:mb-24 mt-8 lg:mt-16 cursor-pointer">
+            <h1 class="text-3xl md:text-5xl lg:text-7xl font-bold tinga-text-outline leading-tight">
+                שליטת הרוח הדיגיטלית: <br> הדהוד הבינה המלאכותית
+            </h1>
+        </div>
+
+        <!-- Introduction Section - A flowing narrative block -->
+        <div class="w-full max-w-4xl tinga-element p-6 md:p-8 mb-16 md:mb-24 bg-tinga-yellow text-tinga-dark text-center shadow-lg rounded-3xl clip-leaf transition-all duration-500 ease-in-out hover:bg-tinga-orange hover:shadow-xl">
+            <p class="text-lg md:text-xl leading-relaxed">
+                בעולם שבו קווי המציאות מתמוססים אל תוך גלי הקוד, נברא כוח חדש - הבינה המלאכותית. לא כוח שיש לירא, אלא רוח שיש להבין, לרתום ולשלוט. זהו מסע אל ליבת היצירה הדיגיטלית, שם כל אחד ואחת יכולים להפוך לאומנים ולמנהיגים של העידן החדש. <strong class="font-bold text-tinga-red">העתיד אינו ממתין - הוא קורה עכשיו, ואתם מוזמנים לעצב אותו.</strong>
+            </p>
+        </div>
+
+        <!-- Zevik Aviner - The Guide (central figure) -->
+        <div class="zevik-card tinga-element p-6 md:p-8 mb-16 md:mb-24 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 lg:gap-16 w-full max-w-5xl rounded-full clip-diamond transform hover:scale-105 transition-transform duration-500 ease-in-out cursor-pointer">
+            <div class="flex-shrink-0 relative">
+                <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="rounded-full w-32 h-32 md:w-48 md:h-48 tinga-element border-tinga-dark object-cover shadow-lg tinga-icon">
+                <div class="absolute inset-0 rounded-full border-4 border-tinga-dark animate-ping-slow"></div>
+            </div>
+            <div class="text-center md:text-right flex-grow">
+                <h2 class="text-3xl md:text-4xl font-bold tinga-text-outline mb-2">
+                    זאביק אבינר - שומר הלהבה הדיגיטלית
+                </h2>
+                <p class="text-lg md:text-xl text-tinga-light leading-relaxed">
+                    זאביק אבינר, איש המסתורין של הקוד, המנוסה בפיתוח פרויקטים ומערכות AI, פורש את דרך ההתבוננות. הוא המדריך שלכם בעולם הנפלא הזה, מנגיש את הלא-נודע והופך את כלי ה-AI לפטיש יצירה בידי כל אחד.
+                </p>
+            </div>
+        </div>
+        
+        <!-- Target Audience - "The Tribes Calling Forth" -->
+        <div class="w-full max-w-6xl mb-16 md:mb-24 flex flex-col items-center">
+            <h2 class="text-4xl md:text-5xl font-bold tinga-text-outline mb-12 relative">
+                <span class="bg-tinga-blue px-6 py-3 rounded-full tinga-element block clip-wave hover:bg-tinga-green transition-colors duration-300 ease-in-out cursor-pointer">השבטים הקוראים לבוא</span>
+                <span class="absolute -bottom-4 left-1/2 -translate-x-1/2 w-24 h-4 bg-tinga-yellow rounded-full tinga-element animate-pulse-slow"></span>
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
+                <div class="info-card tinga-element p-6 text-center rounded-2xl bg-tinga-blue text-tinga-light transform hover:scale-105 cursor-pointer">
+                    <h3 class="text-2xl font-bold mb-3">המתחילים</h3>
+                    <p class="text-base leading-relaxed">לצעוד בשבילי הפלא של ה-AI ולהכיר את רוחותיה.</p>
+                </div>
+                <div class="info-card tinga-element p-6 text-center rounded-2xl bg-tinga-green text-tinga-light transform hover:scale-105 cursor-pointer">
+                    <h3 class="text-2xl font-bold mb-3">היוצרים</h3>
+                    <p class="text-base leading-relaxed">לארוג את כוח ה-AI אל תוך עבודתם ולהפוך למאסטרים.</p>
+                </div>
+                <div class="info-card tinga-element p-6 text-center rounded-2xl bg-tinga-red text-tinga-light transform hover:scale-105 cursor-pointer">
+                    <h3 class="text-2xl font-bold mb-3">המנהיגים</h3>
+                    <p class="text-base leading-relaxed">להאיר את דרך הקהילה והארגון באמצעות בינה מלאכותית.</p>
+                </div>
+                <div class="info-card tinga-element p-6 text-center rounded-2xl bg-tinga-orange text-tinga-light transform hover:scale-105 cursor-pointer">
+                    <h3 class="text-2xl font-bold mb-3">החולמים</h3>
+                    <p class="text-base leading-relaxed">לפרוץ גבולות ולברוא פרויקטים מבוססי AI מתקדמים.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Expertise - "Keys to the Digital Kingdom" -->
+        <div class="w-full max-w-6xl mb-16 md:mb-24 flex flex-col items-center">
+            <h2 class="text-4xl md:text-5xl font-bold tinga-text-outline mb-12 relative">
+                <span class="bg-tinga-orange px-6 py-3 rounded-full tinga-element block clip-wave hover:bg-tinga-red transition-colors duration-300 ease-in-out cursor-pointer">מפתחות הממלכה הדיגיטלית</span>
+                <span class="absolute -bottom-4 left-1/2 -translate-x-1/2 w-24 h-4 bg-tinga-blue rounded-full tinga-element animate-pulse-slow"></span>
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 w-full">
+                <div class="expertise-item tinga-element p-5 text-center rounded-xl bg-tinga-yellow text-tinga-dark cursor-pointer flex flex-col items-center justify-center h-48 hover:shadow-xl">
+                    <span class="text-5xl mb-2 tinga-icon">✍️</span>
+                    <h3 class="text-2xl font-bold">לשונות טקסט</h3>
+                    <p class="text-base">יצירת תוכן מרהיב</p>
+                </div>
+                <div class="expertise-item tinga-element p-5 text-center rounded-xl bg-tinga-yellow text-tinga-dark cursor-pointer flex flex-col items-center justify-center h-48 hover:shadow-xl">
+                    <span class="text-5xl mb-2 tinga-icon">📱</span>
+                    <h3 class="text-2xl font-bold">רוחות אפליקציה</h3>
+                    <p class="text-base">בניית כלים חכמים</p>
+                </div>
+                <div class="expertise-item tinga-element p-5 text-center rounded-xl bg-tinga-yellow text-tinga-dark cursor-pointer flex flex-col items-center justify-center h-48 hover:shadow-xl">
+                    <span class="text-5xl mb-2 tinga-icon">🌐</span>
+                    <h3 class="text-2xl font-bold">נתיבי אתר</h3>
+                    <p class="text-base">פיתוח עולמות רשתיים</p>
+                </div>
+                <div class="expertise-item tinga-element p-5 text-center rounded-xl bg-tinga-yellow text-tinga-dark cursor-pointer flex flex-col items-center justify-center h-48 hover:shadow-xl">
+                    <span class="text-5xl mb-2 tinga-icon">📊</span>
+                    <h3 class="text-2xl font-bold">חקר נתונים</h3>
+                    <p class="text-base">פענוח סודות המספרים</p>
+                </div>
+                <div class="expertise-item tinga-element p-5 text-center rounded-xl bg-tinga-yellow text-tinga-dark cursor-pointer flex flex-col items-center justify-center h-48 hover:shadow-xl">
+                    <span class="text-5xl mb-2 tinga-icon">🎨</span>
+                    <h3 class="text-2xl font-bold">אומנות חזיונית</h3>
+                    <p class="text-base">ציור במכחול דיגיטלי</p>
+                </div>
+                <div class="expertise-item tinga-element p-5 text-center rounded-xl bg-tinga-yellow text-tinga-dark cursor-pointer flex flex-col items-center justify-center h-48 hover:shadow-xl">
+                    <span class="text-5xl mb-2 tinga-icon">⚙️</span>
+                    <h3 class="text-2xl font-bold">מכונת פעולה</h3>
+                    <p class="text-base">אוטומציה קסומה</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Offered - "Gates to Break Through" -->
+        <div class="w-full max-w-6xl mb-16 md:mb-24 flex flex-col items-center">
+            <h2 class="text-4xl md:text-5xl font-bold tinga-text-outline mb-12 relative">
+                <span class="bg-tinga-green px-6 py-3 rounded-full tinga-element block clip-wave hover:bg-tinga-blue transition-colors duration-300 ease-in-out cursor-pointer">שערים לפרוץ</span>
+                <span class="absolute -bottom-4 left-1/2 -translate-x-1/2 w-24 h-4 bg-tinga-red rounded-full tinga-element animate-pulse-slow"></span>
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 w-full">
+                <div class="service-item tinga-element p-6 text-center rounded-2xl bg-tinga-green text-tinga-light transform hover:scale-105 cursor-pointer">
+                    <h3 class="text-2xl font-bold mb-3">מעגלי סדנה</h3>
+                    <p class="text-base leading-relaxed">התכנסויות מעשיות, חקר משותף.</p>
+                </div>
+                <div class="service-item tinga-element p-6 text-center rounded-2xl bg-tinga-green text-tinga-light transform hover:scale-105 cursor-pointer">
+                    <h3 class="text-2xl font-bold mb-3">שיעורי אחד על אחד</h3>
+                    <p class="text-base leading-relaxed">מסע אישי, מותאם לנשמה.</p>
+                </div>
+                <div class="service-item tinga-element p-6 text-center rounded-2xl bg-tinga-green text-tinga-light transform hover:scale-105 cursor-pointer">
+                    <h3 class="text-2xl font-bold mb-3">הקשבה לארגונים</h3>
+                    <p class="text-base leading-relaxed">פתיחת אופקים חדשים לכל שבט.</p>
+                </div>
+                <div class="service-item tinga-element p-6 text-center rounded-2xl bg-tinga-green text-tinga-light transform hover:scale-105 cursor-pointer">
+                    <h3 class="text-2xl font-bold mb-3">ייעוץ וליווי מסע</h3>
+                    <p class="text-base leading-relaxed">שביל מקצועי לפיתוח חזונות.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Info - "Call to Connection" -->
+        <div class="contact-info w-full p-8 md:p-10 text-center rounded-t-3xl tinga-element mt-16 md:mt-24">
+            <h2 class="text-4xl md:text-5xl font-bold tinga-text-outline text-tinga-yellow mb-6">
+                קריאת הקשר
+            </h2>
+            <p class="text-xl md:text-2xl text-tinga-light mb-4 flex items-center justify-center gap-4">
+                <a href="https://wa.me/972546609385" class="text-tinga-light hover:text-tinga-green transition-colors duration-300 ease-in-out cursor-pointer">
+                    <span class="text-3xl tinga-icon">📱</span> ווטסאפ: 054-6609385
+                </a>
+            </p>
+            <p class="text-xl md:text-2xl text-tinga-light flex items-center justify-center gap-4">
+                <a href="mailto:zaviner@gmail.com" class="text-tinga-light hover:text-tinga-blue transition-colors duration-300 ease-in-out cursor-pointer">
+                    <span class="text-3xl tinga-icon">✉️</span> אימייל: zaviner@gmail.com
+                </a>
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        const customCursor = document.getElementById('customCursor');
+        // Select all elements that should trigger cursor interaction
+        const interactiveElements = document.querySelectorAll('a, button, input[type="submit"], .cursor-pointer, .hero-title-container, .info-card, .expertise-item, .service-item, .zevik-card, .tinga-element');
+
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = e.clientX + 'px';
+            customCursor.style.top = e.clientY + 'px';
+        });
+
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('hovered'));
+        });
+    </script>
+</body>
+</html>

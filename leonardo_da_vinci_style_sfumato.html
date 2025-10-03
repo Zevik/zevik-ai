@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - למדו לשלוט בבינה המלאכותית</title>
+    <meta name="description" content="אתר מקצועי המציג שירותי הדרכה, סדנאות ושיעורים פרטיים ללימוד AI בהנחיית זאביק אבינר. הפיכת AI לנגיש וישים לכולם.">
+    
+    <!-- Google Fonts for Sfumato style: Playfair Display for headings, Noto Sans Hebrew for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Custom Configuration for Sfumato colors and fonts -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'sfumato-dark': '#1c1c1c',     // Very dark, deep tone
+                        'sfumato-medium': '#3a3a3a',   // Medium dark
+                        'sfumato-light': '#8d8d8d',    // Soft gray
+                        'sfumato-cream': '#e0d8ce',    // Muted cream/parchment
+                        'sfumato-gold': '#b8860b',     // Muted gold accent
+                        'sfumato-shadow': 'rgba(0,0,0,0.6)', // For depth
+                    },
+                    fontFamily: {
+                        display: ['"Playfair Display"', 'serif'],
+                        body: ['"Noto Sans Hebrew"', 'sans-serif'],
+                    },
+                    spacing: {
+                        '128': '32rem',
+                        '144': '36rem',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* General body styling for Sfumato base */
+        body {
+            font-family: 'Noto Sans Hebrew', sans-serif;
+            background-color: #1c1c1c; /* sfumato-dark */
+            color: #e0d8ce; /* sfumato-cream */
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax */
+            cursor: none; /* Hide default cursor */
+        }
+
+        /* Custom Cursor Styling - MANDATORY High-Contrast Technique */
+        #custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            transition: transform 0.1s ease-out; /* Smooth follow effect */
+            z-index: 9999; /* Always on top */
+            border: 2px solid #FFFFFF; /* Light border for visibility on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark, high-opacity shadow for visibility on light backgrounds */
+            mix-blend-mode: normal; /* Explicitly ensure no mix-blend-mode */
+            display: block; /* Ensure it's always visible */
+        }
+        
+        /* Ensure all text is high contrast by inheriting from body or explicit setting */
+        h1, h2, h3, h4, h5, h6, p, li, a, span, div {
+            color: inherit; /* Inherit from body's sfumato-cream on dark backgrounds */
+        }
+        .text-sfumato-dark { color: #1c1c1c; } /* For elements on light backgrounds if any */
+        .text-sfumato-gold { color: #b8860b; } /* For highlights and accents */
+        
+        /* Smooth scrolling for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Parallax container for background elements */
+        .parallax-bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -10; /* Deeper than content to ensure content is always on top */
+        }
+
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            will-change: transform;
+            filter: blur(2px) opacity(0.8); /* Subtle blur for sfumato effect */
+            transform: translateZ(0); /* For hardware acceleration */
+        }
+        
+        /* Styling for Zevik's image to fit Sfumato aesthetic */
+        .sfumato-image {
+            filter: grayscale(80%) sepia(20%) brightness(90%) contrast(110%);
+            opacity: 0.85;
+            transition: all 0.5s ease-in-out;
+        }
+        .sfumato-image:hover {
+            filter: grayscale(50%) sepia(30%) brightness(100%) contrast(120%);
+            opacity: 1;
+        }
+
+        /* Responsive typography adjustments */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem !important; }
+            h2 { font-size: 2rem !important; }
+            .text-3xl { font-size: 1.875rem !important; }
+            .text-2xl { font-size: 1.5rem !important; }
+            .text-xl { font-size: 1.25rem !important; }
+        }
+
+        /* Custom scrollbar for aesthetic purposes */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #2a2a2a; /* Slightly lighter than sfumato-dark */
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #555; /* Medium gray */
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #888; /* Lighter gray on hover */
+        }
+
+    </style>
+</head>
+<body class="font-body text-sfumato-cream min-h-screen relative">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Container -->
+    <div class="parallax-bg-container">
+        <!-- Layer 1: Deepest, slowest parallax, subtle gradient -->
+        <div class="parallax-layer bg-gradient-to-tr from-sfumato-dark to-sfumato-medium" data-parallax-speed="0.05"></div>
+        <!-- Layer 2: Middle speed, subtle radial light source effect -->
+        <div class="parallax-layer bg-gradient-radial from-sfumato-light via-transparent to-transparent opacity-10" data-parallax-speed="0.1"></div>
+        <!-- Layer 3: Faster speed, more texture/depth -->
+        <div class="parallax-layer bg-gradient-to-tl from-sfumato-medium to-sfumato-dark opacity-15" data-parallax-speed="0.15"></div>
+    </div>
+
+    <!-- Main Content Wrapper -->
+    <main class="relative z-0 min-h-screen py-16 px-4 md:px-8 lg:px-16 flex flex-col items-center">
+
+        <!-- Hero Section -->
+        <section id="hero" class="relative z-10 text-center py-20 md:py-32 lg:py-48 max-w-5xl mx-auto mb-24 md:mb-32 opacity-0 animate-fade-in transition-opacity duration-1000">
+            <h1 class="font-display text-5xl md:text-7xl font-bold leading-tight mb-8 text-sfumato-cream drop-shadow-lg">
+                לפענח את הסוד: בינה מלאכותית בעידן חדש
+            </h1>
+            <p class="text-xl md:text-2xl leading-relaxed max-w-3xl mx-auto mb-12 text-sfumato-light">
+                בצילה של המציאות המשתנה, שבה הגבולות מיטשטשים והאפשרויות אינסופיות, ניצבת הבינה המלאכותית – לא ככלי בלבד, אלא כרוח חדשה, כחזון של האפשרי. אנו מזמינים אתכם למסע אל תוך נבכיה, לחשוף את עוצמתה ולפסל בה את עתידכם.
+            </p>
+            <a href="#about-ai" class="inline-block bg-sfumato-gold text-sfumato-dark hover:bg-opacity-80 transition-all duration-300 px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
+                התחילו את המסע
+            </a>
+        </section>
+
+        <!-- About AI Section -->
+        <section id="about-ai" class="relative z-10 my-24 md:my-32 p-8 md:p-12 lg:p-16 max-w-4xl mx-auto bg-sfumato-dark bg-opacity-70 rounded-3xl shadow-2xl backdrop-blur-sm border border-sfumato-medium opacity-0 animate-fade-in transition-opacity duration-1000" data-delay="300">
+            <h2 class="font-display text-4xl md:text-5xl font-bold mb-8 text-center text-sfumato-cream">
+                יצירת מופת דיגיטלית: מהות הבינה המלאכותית
+            </h2>
+            <p class="text-lg md:text-xl leading-relaxed mb-6 text-sfumato-light">
+                כמו ציור של אמן דגול, ה-AI מורכבת משכבות על גבי שכבות של ידע, לוגיקה ואינטואיציה. היא רוקמת תבניות מנתונים, יוצרת יופי ממספרים, ופותחת שערים לעולמות של יצירה ופתרון בעיות שטרם דמיינו. זוהי אמנות המחשב, המאפשרת לנו לראות, ליצור ולהבין בדרכים חדשות.
+            </p>
+            <p class="text-lg md:text-xl leading-relaxed text-sfumato-light">
+                הכוח שוכן ביכולת הטרנספורמטיבית שלה – להפוך את המורכב לפשוט, את הבלתי נראה לגלוי, ואת העתיד להווה. היא אינה רק כלי, אלא שותפה יצירתית, מאיץ של רעיונות ואמצעי להגשמת חזונות.
+            </p>
+        </section>
+
+        <!-- Why Learn AI Section -->
+        <section id="why-learn-ai" class="relative z-10 my-24 md:my-32 p-8 md:p-12 lg:p-16 max-w-4xl mx-auto bg-sfumato-dark bg-opacity-70 rounded-3xl shadow-2xl backdrop-blur-sm border border-sfumato-medium opacity-0 animate-fade-in transition-opacity duration-1000" data-delay="600">
+            <h2 class="font-display text-4xl md:text-5xl font-bold mb-8 text-center text-sfumato-cream">
+                למי נועד המסע? קהלים והשראה
+            </h2>
+            <p class="text-lg md:text-xl leading-relaxed mb-6 text-sfumato-light">
+                מי שחשקה נפשו להציץ אל מעבר לאופק, להתרומם מעל השגרה. אם אתם חדשים למחוזות הידע, או שאתם אנשי מקצוע המבקשים לחדד את כליכם, מנהיגים השואפים להוביל ארגונים אל הפסגה, או חולמים לפרוץ דרך בפרויקטים חדשניים – הבינה המלאכותית היא המפתח.
+            </p>
+            <ul class="list-none space-y-4 text-lg md:text-xl text-sfumato-cream text-center">
+                <li class="relative pl-8">
+                    <span class="absolute right-0 top-1 text-sfumato-gold text-2xl">•</span>
+                    <span class="font-bold">המתחילים</span> – למעוניינים לגעת בקסם, ללא ידע מוקדם.
+                </li>
+                <li class="relative pl-8">
+                    <span class="absolute right-0 top-1 text-sfumato-gold text-2xl">•</span>
+                    <span class="font-bold">אנשי המקצוע</span> – להטמעה מיידית בעבודה, לשיפור והתייעלות.
+                </li>
+                <li class="relative pl-8">
+                    <span class="absolute right-0 top-1 text-sfumato-gold text-2xl">•</span>
+                    <span class="font-bold">מנהלים וארגונים</span> – להרחיב אופקים לצוותים, להוביל חדשנות.
+                </li>
+                <li class="relative pl-8">
+                    <span class="absolute right-0 top-1 text-sfumato-gold text-2xl">•</span>
+                    <span class="font-bold">חלוצי העתיד</span> – לפיתוח פרויקטים מתקדמים, ליצירה פורצת דרך.
+                </li>
+            </ul>
+            <p class="text-lg md:text-xl leading-relaxed mt-6 text-center text-sfumato-light">
+                הנגישות, העוצמה והיישום המיידי הם עמודי התווך של תפיסתנו.
+            </p>
+        </section>
+
+        <!-- Areas of Expertise Section -->
+        <section id="expertise" class="relative z-10 my-24 md:my-32 p-8 md:p-12 lg:p-16 max-w-4xl mx-auto bg-sfumato-dark bg-opacity-70 rounded-3xl shadow-2xl backdrop-blur-sm border border-sfumato-medium opacity-0 animate-fade-in transition-opacity duration-1000" data-delay="900">
+            <h2 class="font-display text-4xl md:text-5xl font-bold mb-8 text-center text-sfumato-cream">
+                היכן נטביע את חותמנו? תחומי התמחות
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
+                <div class="sfumato-card p-6 bg-sfumato-medium bg-opacity-50 rounded-xl shadow-inner border border-sfumato-light hover:scale-105 transition-transform duration-300">
+                    <h3 class="font-display text-2xl font-semibold mb-3 text-sfumato-gold">רוקמי מילים</h3>
+                    <p class="text-lg text-sfumato-cream">יצירת טקסטים, תוכן וסיפורים עוצמתיים.</p>
+                </div>
+                <div class="sfumato-card p-6 bg-sfumato-medium bg-opacity-50 rounded-xl shadow-inner border border-sfumato-light hover:scale-105 transition-transform duration-300">
+                    <h3 class="font-display text-2xl font-semibold mb-3 text-sfumato-gold">אדריכלים דיגיטליים</h3>
+                    <p class="text-lg text-sfumato-cream">בניית אפליקציות ואתרים חכמים מבוססי AI.</p>
+                </div>
+                <div class="sfumato-card p-6 bg-sfumato-medium bg-opacity-50 rounded-xl shadow-inner border border-sfumato-light hover:scale-105 transition-transform duration-300">
+                    <h3 class="font-display text-2xl font-semibold mb-3 text-sfumato-gold">מפענחי נתונים</h3>
+                    <p class="text-lg text-sfumato-cream">ניתוח נתונים ומחקר, חשיפת תובנות עמוקות.</p>
+                </div>
+                <div class="sfumato-card p-6 bg-sfumato-medium bg-opacity-50 rounded-xl shadow-inner border border-sfumato-light hover:scale-105 transition-transform duration-300">
+                    <h3 class="font-display text-2xl font-semibold mb-3 text-sfumato-gold">אומני חזון</h3>
+                    <p class="text-lg text-sfumato-cream">יצירת תמונות ואומנות ויזואלית באמצעות AI.</p>
+                </div>
+                <div class="sfumato-card p-6 bg-sfumato-medium bg-opacity-50 rounded-xl shadow-inner border border-sfumato-light hover:scale-105 transition-transform duration-300 col-span-1 md:col-span-2">
+                    <h3 class="font-display text-2xl font-semibold mb-3 text-sfumato-gold">משחררי תהליכים</h3>
+                    <p class="text-lg text-sfumato-cream">אוטומציה של תהליכים, פינוי זמן ליצירה אמיתית.</p>
+                </div>
+            </div>
+            <p class="text-lg md:text-xl leading-relaxed mt-8 text-center text-sfumato-light">
+                כל אלו, כקווים דקים בציור מופלא, מצטרפים ליצירה שלמה של חדשנות.
+            </p>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="relative z-10 my-24 md:my-32 p-8 md:p-12 lg:p-16 max-w-4xl mx-auto bg-sfumato-dark bg-opacity-70 rounded-3xl shadow-2xl backdrop-blur-sm border border-sfumato-medium opacity-0 animate-fade-in transition-opacity duration-1000" data-delay="1200">
+            <h2 class="font-display text-4xl md:text-5xl font-bold mb-8 text-center text-sfumato-cream">
+                נתיבי המסע אל התובנה
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="service-card text-center p-8 bg-sfumato-medium bg-opacity-50 rounded-xl shadow-xl border border-sfumato-light hover:scale-105 transition-transform duration-300">
+                    <h3 class="font-display text-3xl font-semibold mb-4 text-sfumato-gold">סדנאות עומק</h3>
+                    <p class="text-xl text-sfumato-cream">מפגשים מעוררי השראה, שבהם הידיים עובדות והתובנות מתגבשות לכדי יצירה מעשית. מעשיות וממוקדות, ללמידה חווייתית.</p>
+                </div>
+                <div class="service-card text-center p-8 bg-sfumato-medium bg-opacity-50 rounded-xl shadow-xl border border-sfumato-light hover:scale-105 transition-transform duration-300">
+                    <h3 class="font-display text-3xl font-semibold mb-4 text-sfumato-gold">ליווי אישי</h3>
+                    <p class="text-xl text-sfumato-cream">מסלול אחד על אחד, מותאם לכם, לקצב שלכם, לשאלות הייחודיות שלכם. צעד אחר צעד אל השליטה המלאה.</p>
+                </div>
+                <div class="service-card text-center p-8 bg-sfumato-medium bg-opacity-50 rounded-xl shadow-xl border border-sfumato-light hover:scale-105 transition-transform duration-300">
+                    <h3 class="font-display text-3xl font-semibold mb-4 text-sfumato-gold">הרצאות חזון</h3>
+                    <p class="text-xl text-sfumato-cream">פותחות אופקים חדשים, מפיחות רוח בארגונים שלמים. מבט לעתיד, והשראה לפעולה מידית בצוות.</p>
+                </div>
+                <div class="service-card text-center p-8 bg-sfumato-medium bg-opacity-50 rounded-xl shadow-xl border border-sfumato-light hover:scale-105 transition-transform duration-300">
+                    <h3 class="font-display text-3xl font-semibold mb-4 text-sfumato-gold">ייעוץ ופיתוח</h3>
+                    <p class="text-xl text-sfumato-cream">שותפות מלאה, מבריאת הרעיון ועד למימושו בעולם האמיתי. ליווי מקצועי לפרויקטים מבוססי AI מורכבים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide Section -->
+        <section id="the-guide" class="relative z-10 my-24 md:my-32 p-8 md:p-12 lg:p-16 max-w-4xl mx-auto bg-sfumato-dark bg-opacity-70 rounded-3xl shadow-2xl backdrop-blur-sm border border-sfumato-medium flex flex-col md:flex-row items-center gap-10 opacity-0 animate-fade-in transition-opacity duration-1000" data-delay="1500">
+            <div class="w-48 h-48 md:w-64 md:h-64 flex-shrink-0 relative overflow-hidden rounded-full border-4 border-sfumato-gold shadow-lg">
+                <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="w-full h-full object-cover sfumato-image">
+                <div class="absolute inset-0 bg-gradient-to-t from-sfumato-dark via-transparent to-transparent opacity-60"></div>
+            </div>
+            <div class="text-center md:text-right">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-4 text-sfumato-cream">המורה דרך: זאביק אבינר</h2>
+                <p class="text-lg md:text-xl leading-relaxed mb-6 text-sfumato-light">
+                    כמו רב-אמן המכיר כל משיכה במכחול, זאביק אבינר מביא עמו עולם שלם של ניסיון והבנה עמוקה בנבכי הבינה המלאכותית. מפתח, אומן, ומנגיש טכנולוגיה – הוא פורש בפניכם את המפה, מוביל אתכם בבטחה אל היעד.
+                </p>
+                <p class="text-lg md:text-xl leading-relaxed text-sfumato-light">
+                    בבקיאות ובחוכמה, הוא הופך את המורכב לפשוט, את העתיד לנוכח, ואת הבלתי אפשרי לאפשרי, ומזמין אתכם להיות חלק מהמהפכה הדיגיטלית.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="relative z-10 my-24 md:my-32 p-8 md:p-12 lg:p-16 max-w-4xl mx-auto bg-sfumato-dark bg-opacity-70 rounded-3xl shadow-2xl backdrop-blur-sm border border-sfumato-medium text-center opacity-0 animate-fade-in transition-opacity duration-1000" data-delay="1800">
+            <h2 class="font-display text-4xl md:text-5xl font-bold mb-8 text-sfumato-cream">לחיבור ולחקירה נוספת</h2>
+            <p class="text-xl md:text-2xl leading-relaxed mb-8 text-sfumato-light">
+                הגיע הזמן לפתוח בשיחה, לחשוף את הפוטנציאל הטמון בכם ובארגונכם. צרו קשר עוד היום, ונתחיל לפסל יחד את מחר.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-6">
+                <a href="https://wa.me/972546609385" target="_blank" class="inline-block bg-sfumato-gold text-sfumato-dark hover:bg-opacity-80 transition-all duration-300 px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
+                    <i class="fa-brands fa-whatsapp ml-2"></i> ווטסאפ: 054-6609385
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="inline-block bg-sfumato-gold text-sfumato-dark hover:bg-opacity-80 transition-all duration-300 px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
+                    <i class="fa-regular fa-envelope ml-2"></i> אימייל: zaviner@gmail.com
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Font Awesome for icons (whatsapp, email) - placed after content to ensure icons are defined before use -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            // Position the cursor at the mouse coordinates
+            customCursor.style.left = e.clientX + 'px';
+            customCursor.style.top = e.clientY + 'px';
+        });
+
+        // Parallax Effect Logic
+        document.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            document.querySelectorAll('.parallax-layer').forEach(layer => {
+                const speed = parseFloat(layer.getAttribute('data-parallax-speed'));
+                // Apply a negative translation to move layers slower than scroll
+                const transformValue = -scrollY * speed;
+                layer.style.transform = `translateY(${transformValue}px)`;
+            });
+        });
+
+        // Scroll-triggered animations (Fade-in and subtle slide-up for sections)
+        const sections = document.querySelectorAll('section');
+        const fadeInObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = parseInt(entry.target.getAttribute('data-delay')) || 0;
+                    setTimeout(() => {
+                        entry.target.classList.add('opacity-100');
+                        entry.target.classList.remove('opacity-0');
+                    }, delay);
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, {
+            rootMargin: '0px',
+            threshold: 0.2 // Trigger when 20% of the section is visible
+        });
+
+        sections.forEach(section => {
+            fadeInObserver.observe(section);
+        });
+
+        // Add a subtle animation keyframe for fade-in effect via JavaScript
+        // This is done programmatically to keep all code within the single HTML file.
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes fade-in {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .animate-fade-in.opacity-100 {
+                animation: fade-in 1s ease-out forwards;
+            }
+        `;
+        document.head.appendChild(style);
+
+    </script>
+</body>
+</html>

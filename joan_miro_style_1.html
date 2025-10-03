@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הקוסמוס הדיגיטלי מתעורר: לשלוט בבינה המלאכותית - זאביק אבינר AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Varela+Round&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Miró-esque color palette and general styles */
+        :root {
+            --color-primary-red: #ef4444; /* Tailwind red-500 */
+            --color-primary-blue: #3b82f6; /* Tailwind blue-500 */
+            --color-primary-yellow: #facc15; /* Tailwind yellow-400 */
+            --color-black: #000000;
+            --color-white: #ffffff;
+            --color-gray-dark: #1f2937; /* Tailwind gray-800 */
+            --color-gray-light: #f3f4f6; /* Tailwind gray-100 */
+        }
+
+        body {
+            font-family: 'Assistant', sans-serif; /* A clear, modern Hebrew font */
+            background-color: var(--color-black);
+            overflow-x: hidden; /* Prevent horizontal scroll from overflowing elements */
+            cursor: none; /* Hide default cursor to show custom one */
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Varela Round', sans-serif; /* A rounded, friendly display font */
+            font-weight: 700;
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: width 0.2s ease, height 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+            box-sizing: border-box; /* Include padding/border in element's total width/height */
+            /* MANDATORY high-contrast styling */
+            border: 2px solid var(--color-white);
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8);
+        }
+
+        .custom-cursor.active {
+            width: 30px;
+            height: 30px;
+            transform: scale(1.2);
+            background-color: rgba(255, 255, 255, 0.2); /* Subtle fill on active */
+        }
+
+        /* Miró-esque blob shapes for background parallax */
+        .blob-shape {
+            position: fixed; /* Fixed position for parallax */
+            background-color: var(--color-primary-red);
+            opacity: 0.6;
+            filter: blur(80px); /* Soften the edges */
+            z-index: -1;
+            animation: pulse 10s infinite alternate;
+        }
+
+        .blob-1 {
+            width: 400px;
+            height: 400px;
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            top: -100px;
+            right: -100px;
+            background-color: var(--color-primary-blue);
+        }
+        .blob-2 {
+            width: 300px;
+            height: 300px;
+            border-radius: 40% 60% 70% 30% / 30% 70% 40% 60%;
+            bottom: -50px;
+            left: -50px;
+            background-color: var(--color-primary-yellow);
+            animation-delay: 2s;
+        }
+        .blob-3 {
+            width: 500px;
+            height: 500px;
+            border-radius: 70% 30% 60% 40% / 50% 60% 30% 70%;
+            top: 50%;
+            right: 20%;
+            transform: translateY(-50%);
+            background-color: var(--color-primary-red);
+            opacity: 0.4;
+            animation-delay: 4s;
+        }
+        .blob-4 {
+            width: 250px;
+            height: 250px;
+            border-radius: 30% 70% 50% 50% / 70% 30% 60% 40%;
+            top: 10%;
+            left: 5%;
+            background-color: var(--color-primary-blue);
+            opacity: 0.5;
+            animation-delay: 1s;
+        }
+        .blob-5 {
+            width: 350px;
+            height: 350px;
+            border-radius: 50% 50% 40% 60% / 60% 40% 50% 50%;
+            bottom: 20%;
+            right: 15%;
+            background-color: var(--color-primary-yellow);
+            opacity: 0.7;
+            animation-delay: 3s;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.6; }
+            50% { transform: scale(1.1) rotate(10deg); opacity: 0.7; }
+            100% { transform: scale(1) rotate(0deg); opacity: 0.6; }
+        }
+
+        /* Miró-esque line separator */
+        .miro-line {
+            height: 4px;
+            background-color: var(--color-white); /* Changed to white for better contrast with dark background */
+            width: 80%;
+            margin: 4rem auto;
+            transform: skewX(-15deg);
+            opacity: 0.8;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5); /* Add glow */
+        }
+
+        /* Custom styling for instructor image */
+        .zevik-image {
+            border-radius: 50%;
+            border: 4px solid var(--color-primary-red);
+            box-shadow: 0 0 0 8px rgba(0,0,0,0.2), 0 0 0 12px var(--color-primary-blue);
+            transition: transform 0.3s ease-in-out;
+        }
+        .zevik-image:hover {
+            transform: scale(1.05) rotate(5deg);
+        }
+
+        /* General link styling */
+        a {
+            color: var(--color-primary-blue);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        a:hover {
+            color: var(--color-primary-red);
+            text-decoration: underline;
+        }
+
+        /* Ensure contact info is readable */
+        .contact-info a {
+            color: var(--color-primary-yellow); /* Override for dark background with specific accent */
+        }
+        .contact-info a:hover {
+            color: var(--color-white); /* Hover to white for stark contrast */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .blob-shape {
+                filter: blur(40px); /* Less blur on smaller screens for performance */
+            }
+            .blob-1, .blob-2, .blob-3, .blob-4, .blob-5 {
+                width: 150px;
+                height: 150px;
+            }
+            .miro-line {
+                width: 95%;
+                margin: 2.5rem auto;
+            }
+        }
+    </style>
+</head>
+<body class="bg-black text-white relative min-h-screen">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Miró-esque Background Blobs (Parallax candidates) -->
+    <div class="blob-shape blob-1" data-parallax-speed="0.8"></div>
+    <div class="blob-shape blob-2" data-parallax-speed="0.5"></div>
+    <div class="blob-shape blob-3" data-parallax-speed="0.7"></div>
+    <div class="blob-shape blob-4" data-parallax-speed="0.9"></div>
+    <div class="blob-shape blob-5" data-parallax-speed="0.6"></div>
+
+    <main class="relative z-10 p-4 sm:p-8 md:p-12 lg:p-16">
+
+        <!-- Hero Section - The Digital Cosmos Awakens -->
+        <section class="min-h-screen flex items-center justify-center text-center relative px-4 parallax-content-section">
+            <div class="max-w-4xl mx-auto z-20 bg-black bg-opacity-70 p-8 rounded-3xl border-4 border-white shadow-2xl">
+                <h1 class="text-4xl sm:text-6xl lg:text-8xl font-extrabold mb-4 text-primary-red leading-tight">
+                    הקוסמוס הדיגיטלי מתעורר:<br class="hidden sm:inline"> לשלוט בבינה המלאכותית
+                </h1>
+                <p class="text-lg sm:text-2xl mb-8 text-primary-yellow">
+                    בתוך המבוך המופלא של הקידוד והלוגיקה, אנו מגלים שפה חדשה – שפת הבינה המלאכותית.
+                </p>
+                <p class="text-base sm:text-xl max-w-2xl mx-auto leading-relaxed text-gray-200">
+                    זאביק אבינר, כארכיטקט של חלומות דיגיטליים, מזמין אתכם למסע שבו מורכבות הופכת לבהירות, ואפשרויות בלתי נתפסות נעשות קונקרטיות. <span class="text-primary-blue font-bold">העתיד אינו רק נתון, הוא נברא.</span>
+                </p>
+                <a href="#services" class="inline-block mt-10 px-8 py-4 bg-primary-blue text-white text-xl sm:text-2xl font-bold rounded-full hover:bg-primary-red transition duration-300 transform hover:scale-105 shadow-lg">
+                    הצטרפו למסע
+                </a>
+            </div>
+            <div class="absolute bottom-10 animate-bounce">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            </div>
+        </section>
+
+        <div class="miro-line"></div>
+
+        <!-- Target Audience Section -->
+        <section class="py-16 sm:py-24 bg-primary-blue bg-opacity-10 rounded-3xl mx-auto max-w-6xl relative z-10 px-4 text-white parallax-content-section">
+            <div class="max-w-5xl mx-auto text-center">
+                <h2 class="text-4xl sm:text-5xl font-bold mb-10 text-primary-yellow">
+                    מפת דרכים לכוכבים: מי ימצא את דרכו?
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="p-6 bg-white bg-opacity-10 rounded-2xl border-2 border-primary-red hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                        <h3 class="text-2xl font-bold mb-4 text-primary-red">חוקרי גלקסיות חדשים</h3>
+                        <p class="text-lg leading-relaxed text-gray-100">
+                            למתחילים, המעוניינים לשרטט את הקווים הראשונים במפת ה-AI.
+                        </p>
+                    </div>
+                    <div class="p-6 bg-white bg-opacity-10 rounded-2xl border-2 border-primary-yellow hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                        <h3 class="text-2xl font-bold mb-4 text-primary-yellow">אדריכלי העתיד</h3>
+                        <p class="text-lg leading-relaxed text-gray-100">
+                            אנשי מקצוע המבקשים לשלב כלים מתקדמים בבניית המציאות היומיומית שלהם.
+                        </p>
+                    </div>
+                    <div class="p-6 bg-white bg-opacity-10 rounded-2xl border-2 border-primary-blue hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                        <h3 class="text-2xl font-bold mb-4 text-primary-blue">מנהיגי שיירות הכוכבים</h3>
+                        <p class="text-lg leading-relaxed text-gray-100">
+                            מנהלים וארגונים השואפים להוביל את צוותיהם לעבר אופקים טכנולוגיים חדשים.
+                        </p>
+                    </div>
+                    <div class="p-6 bg-white bg-opacity-10 rounded-2xl border-2 border-primary-red hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                        <h3 class="text-2xl font-bold mb-4 text-primary-red">יוצרי היקום</h3>
+                        <p class="text-lg leading-relaxed text-gray-100">
+                            למתקדמים, הפועלים לבניית פרויקטים חדשניים המבוססים על ליבת ה-AI.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="miro-line"></div>
+
+        <!-- Expertise Section -->
+        <section class="py-16 sm:py-24 px-4 text-white parallax-content-section">
+            <div class="max-w-6xl mx-auto text-center">
+                <h2 class="text-4xl sm:text-5xl font-bold mb-10 text-primary-red">
+                    צבעי היצירה: איפה הבינה המלאכותית פוגשת את הדמיון?
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-primary-yellow bg-opacity-80 p-6 rounded-tl-full rounded-br-full border-4 border-black text-black shadow-lg">
+                        <h3 class="text-2xl font-bold mb-3">אריגת מילים ורעיונות</h3>
+                        <p class="text-lg">יצירת טקסטים ותוכן חדשני.</p>
+                    </div>
+                    <div class="bg-primary-blue bg-opacity-80 p-6 rounded-tr-full rounded-bl-full border-4 border-black text-black shadow-lg">
+                        <h3 class="text-2xl font-bold mb-3">בניית מערכות חכמות</h3>
+                        <p class="text-lg">פיתוח אפליקציות חכמות ואינטואיטיביות.</p>
+                    </div>
+                    <div class="bg-primary-red bg-opacity-80 p-6 rounded-bl-full rounded-tr-full border-4 border-black text-black shadow-lg">
+                        <h3 class="text-2xl font-bold mb-3">קוסמוס ווב אינטראקטיבי</h3>
+                        <p class="text-lg">בניית אתרים מבוססי AI המרחיבים את הגבולות.</p>
+                    </div>
+                    <div class="bg-primary-blue bg-opacity-80 p-6 rounded-tl-full rounded-br-full border-4 border-black text-black shadow-lg">
+                        <h3 class="text-2xl font-bold mb-3">פענוח כוכבי נתונים</h3>
+                        <p class="text-lg">ניתוח נתונים ומחקר מעמיק בעזרת AI.</p>
+                    </div>
+                    <div class="bg-primary-red bg-opacity-80 p-6 rounded-tr-full rounded-bl-full border-4 border-black text-black shadow-lg">
+                        <h3 class="text-2xl font-bold mb-3">ציור תמונות וחלומות</h3>
+                        <p class="text-lg">יצירת תמונות ואומנות ויזואלית בעזרת בינה מלאכותית.</p>
+                    </div>
+                    <div class="bg-primary-yellow bg-opacity-80 p-6 rounded-bl-full rounded-tr-full border-4 border-black text-black shadow-lg">
+                        <h3 class="text-2xl font-bold mb-3">ריקוד האוטומציה</h3>
+                        <p class="text-lg">ייעול תהליכים והפיכת משימות לזורמות.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="miro-line"></div>
+
+        <!-- Services Section -->
+        <section id="services" class="py-16 sm:py-24 bg-primary-red bg-opacity-10 rounded-3xl mx-auto max-w-6xl relative z-10 px-4 text-white parallax-content-section">
+            <div class="max-w-5xl mx-auto text-center">
+                <h2 class="text-4xl sm:text-5xl font-bold mb-10 text-primary-blue">
+                    גשרי אור: הדרכים שלכם אל הידע
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="group relative p-8 bg-white bg-opacity-10 rounded-3xl border-4 border-primary-yellow overflow-hidden shadow-xl transform transition duration-300 hover:scale-105">
+                        <div class="absolute inset-0 bg-primary-yellow opacity-0 group-hover:opacity-20 transition duration-300"></div>
+                        <h3 class="text-3xl font-bold mb-4 text-primary-yellow relative z-10">סדנאות קבוצתיות</h3>
+                        <p class="text-lg leading-relaxed text-gray-100 relative z-10">
+                            מסעות ממוקדים וחווייתיים, בהם קבוצת לומדים מגלה יחד את נפלאות ה-AI דרך תרגילים מעשיים ודיונים מעוררי מחשבה.
+                        </p>
+                    </div>
+                    <div class="group relative p-8 bg-white bg-opacity-10 rounded-3xl border-4 border-primary-blue overflow-hidden shadow-xl transform transition duration-300 hover:scale-105">
+                        <div class="absolute inset-0 bg-primary-blue opacity-0 group-hover:opacity-20 transition duration-300"></div>
+                        <h3 class="text-3xl font-bold mb-4 text-primary-blue relative z-10">שיעורים פרטיים</h3>
+                        <p class="text-lg leading-relaxed text-gray-100 relative z-10">
+                            ליווי אישי מותאם למסלולכם הייחודי, מהצעדים הראשונים ועד לפיתוח פרויקטים מורכבים. קצב אישי, תוכן מותאם.
+                        </p>
+                    </div>
+                    <div class="group relative p-8 bg-white bg-opacity-10 rounded-3xl border-4 border-primary-red overflow-hidden shadow-xl transform transition duration-300 hover:scale-105">
+                        <div class="absolute inset-0 bg-primary-red opacity-0 group-hover:opacity-20 transition duration-300"></div>
+                        <h3 class="text-3xl font-bold mb-4 text-primary-red relative z-10">הרצאות לארגונים</h3>
+                        <p class="text-lg leading-relaxed text-gray-100 relative z-10">
+                            השראה ופתיחת אופקים לצוותים, להבנת הפוטנציאל העצום של AI וכיצד ניתן לשלב אותו באסטרטגיה העסקית.
+                        </p>
+                    </div>
+                    <div class="group relative p-8 bg-white bg-opacity-10 rounded-3xl border-4 border-primary-yellow overflow-hidden shadow-xl transform transition duration-300 hover:scale-105">
+                        <div class="absolute inset-0 bg-primary-yellow opacity-0 group-hover:opacity-20 transition duration-300"></div>
+                        <h3 class="text-3xl font-bold mb-4 text-primary-yellow relative z-10">ייעוץ ופיתוח פרויקטים</h3>
+                        <p class="text-lg leading-relaxed text-gray-100 relative z-10">
+                            ליווי מקצועי ומומחיות בפיתוח פרויקטים מבוססי AI, מהרעיון הראשוני ועד ליישום מלא.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="miro-line"></div>
+
+        <!-- Instructor Section -->
+        <section class="py-16 sm:py-24 px-4 text-white parallax-content-section">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-4xl sm:text-5xl font-bold mb-10 text-primary-yellow">
+                    הכוכב המנחה: זאביק אבינר
+                </h2>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
+                    <div class="flex-shrink-0">
+                        <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר - מומחה בינה מלאכותית" class="zevik-image w-48 h-48 sm:w-64 sm:h-64 object-cover">
+                    </div>
+                    <div class="md:text-right text-center flex-grow">
+                        <p class="text-xl sm:text-2xl font-bold mb-4 text-primary-blue">
+                            מומחה בינה מלאכותית ומגשר בין האדם למכונה.
+                        </p>
+                        <p class="text-lg sm:text-xl leading-relaxed text-gray-200">
+                            עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק מתמחה בהנגשת הטכנולוגיה המורכבת והפיכתה לכלי עבודה יומיומי עוצמתי. הוא המדריך שלכם במסע אל עבר השליטה בבינה המלאכותית.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="miro-line"></div>
+
+        <!-- Contact Section -->
+        <section class="py-16 sm:py-24 px-4 parallax-content-section contact-info">
+            <div class="max-w-4xl mx-auto text-center bg-primary-blue bg-opacity-20 p-8 rounded-3xl border-4 border-primary-yellow shadow-2xl">
+                <h2 class="text-4xl sm:text-5xl font-bold mb-8 text-primary-red">
+                    צרו קשר: פתחו שער לעתיד
+                </h2>
+                <div class="space-y-6 text-xl sm:text-2xl font-medium">
+                    <p>
+                        <a href="https://wa.me/972546609385" target="_blank" rel="noopener noreferrer" class="hover:underline flex items-center justify-center">
+                            <svg class="w-8 h-8 ml-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.35 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.25 4.74 1.25 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm3.39 14.51c-.13.23-.27.27-.47.3-.2.03-.49.07-.75-.12-.27-.19-1.07-.52-1.29-.69-.22-.17-.37-.27-.52.27-.15.54-.57.69-.7.82-.13.13-.27.1-.5-.12-.23-.22-.96-.34-1.83-1.13-.67-.62-1.12-1.46-1.25-1.69-.12-.23-.01-.36.1-.47.1-.12.27-.27.4-.39.13-.12.17-.22.2-.37.03-.15-.01-.27-.12-.52-.1-.23-.47-1.1-.64-1.48-.17-.37-.34-.3-.47-.35-.12-.05-.27-.05-.4-.05-.12 0-.34.05-.52.23-.17.17-.64.62-.64 1.51 0 .89.66 1.74.75 1.87.09.13 1.3 2.02 3.12 2.89 1.82.87 1.82.58 2.15.55.33-.03.88-.35 1-.65.1-.3.1-.56.07-.65-.03-.09-.13-.23-.27-.37z"/>
+                            </svg>
+                            ווטסאפ: 054-6609385
+                        </a>
+                    </p>
+                    <p>
+                        <a href="mailto:zaviner@gmail.com" class="hover:underline flex items-center justify-center">
+                            <svg class="w-8 h-8 ml-3" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 12.713l-11.75 8.287h23.5l-11.75-8.287zm0-2.426l11.75-8.287h-23.5l11.75 8.287z"/>
+                            </svg>
+                            אימייל: zaviner@gmail.com
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="py-10 text-center text-gray-400 text-sm mt-12 border-t border-gray-700 border-opacity-30">
+            &copy; 2024 זאביק אבינר. כל הזכויות שמורות. נבנה באהבה על גבולות המציאות הדיגיטלית.
+        </footer>
+
+    </main>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        document.addEventListener('mousedown', () => {
+            cursor.classList.add('active');
+        });
+        document.addEventListener('mouseup', () => {
+            cursor.classList.remove('active');
+        });
+        document.querySelectorAll('a, button, input[type="submit"], [role="button"]').forEach(el => { // Add role="button" for more elements
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+
+
+        // Parallax Effect for Background Blobs (fixed elements)
+        const parallaxElements = document.querySelectorAll('.blob-shape');
+
+        window.addEventListener('scroll', () => {
+            let scrollY = window.pageYOffset;
+
+            parallaxElements.forEach(el => {
+                const speed = parseFloat(el.dataset.parallaxSpeed);
+                // Move the blob relative to its fixed position based on scroll, slower than foreground
+                const translateY = scrollY * speed * -0.5; // Negative to move against scroll direction, reduced speed
+                el.style.transform = `translateY(${translateY}px)`;
+            });
+        });
+
+        // Simple Fade-in/Slide-up animation on scroll for content sections
+        const sections = document.querySelectorAll('.parallax-content-section');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(50px)'; // Start slightly below
+            observer.observe(section);
+        });
+
+    </script>
+</body>
+</html>

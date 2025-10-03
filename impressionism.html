@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אורות בינה מלאכותית - זאביק אבינר</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;700&family=Heebo:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* General body styling */
+        body {
+            font-family: 'Heebo', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll from subtle movements */
+            cursor: none; /* Hide default cursor */
+            background: radial-gradient(circle at top right, #e0f2fe, #d1e5f8); /* Very light, soft gradient */
+            min-height: 100vh;
+        }
+
+        /* Custom cursor styling */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.9); /* White border */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.7); /* Dark shadow for visibility */
+            transition: transform 0.1s ease-out;
+            z-index: 9999; /* Ensure cursor is always on top */
+            opacity: 0.9;
+            transform: translate(-50%, -50%); /* Center the cursor */
+        }
+
+        /* Canvas background styling */
+        #impressionistic-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Behind all content */
+        }
+
+        /* Custom scrollbar for artistic feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f0f8ff; /* Light, airy track */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a7d0ec; /* Soft blue thumb */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7bb5d1; /* Slightly darker on hover */
+        }
+
+        /* Impressionistic text styling for titles */
+        .title-impressionistic {
+            font-family: 'Frank Ruhl Libre', serif;
+            letter-spacing: 0.05em;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        }
+
+        /* Content section general styling */
+        .content-fragment {
+            padding: 3rem 2rem;
+            margin-bottom: 4rem;
+            border-radius: 1.5rem;
+            backdrop-filter: blur(8px) brightness(1.1); /* Soft blur effect */
+            background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+            position: relative;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            overflow: hidden;
+        }
+        @media (min-width: 768px) {
+            .content-fragment {
+                padding: 4rem 3rem;
+            }
+        }
+        /* CSS for fade-in animation (for JS to toggle) */
+        .animate-fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .animate-fade-in-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .animate-fade-in-up.delay-100 { transition-delay: 0.1s; }
+        .animate-fade-in-up.delay-200 { transition-delay: 0.2s; }
+        .animate-fade-in-up.delay-300 { transition-delay: 0.3s; }
+        .animate-fade-in-up.delay-400 { transition-delay: 0.4s; }
+        .animate-fade-in-up.delay-500 { transition-delay: 0.5s; }
+        .animate-fade-in-up.delay-600 { transition-delay: 0.6s; }
+        .animate-fade-in-up.delay-700 { transition-delay: 0.7s; }
+        .animate-fade-in-up.delay-800 { transition-delay: 0.8s; }
+        .animate-fade-in-up.delay-900 { transition-delay: 0.9s; }
+        .animate-fade-in-up.delay-1000 { transition-delay: 1.0s; }
+        .animate-fade-in-up.delay-1100 { transition-delay: 1.1s; }
+        .animate-fade-in-up.delay-1200 { transition-delay: 1.2s; }
+        .animate-fade-in-up.delay-1300 { transition-delay: 1.3s; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 text-gray-800 antialiased">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Impressionistic Canvas Background -->
+    <canvas id="impressionistic-canvas"></canvas>
+
+    <main class="relative z-10 p-4 md:p-8 lg:p-12 min-h-screen flex flex-col items-center">
+
+        <!-- Main Title Fragment -->
+        <section class="content-fragment text-center w-full md:w-3/4 lg:w-2/3 my-12 md:my-20 lg:my-24" style="transform: rotate(-1deg); margin-left: 10%;">
+            <h1 class="title-impressionistic text-5xl md:text-6xl lg:text-7xl font-bold text-indigo-800 mb-4 animate-fade-in-up">
+                אור חדש עולה - לשלוט בבינה המלאכותית
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-700 leading-relaxed font-light animate-fade-in-up delay-100">
+                העתיד אינו מחכה - הוא נשזר עכשיו, במכחול של ידע.
+            </p>
+        </section>
+
+        <!-- Ze'evik Aviner Introduction Fragment -->
+        <section class="content-fragment w-full md:w-3/4 lg:w-2/3 my-12 md:my-20 lg:my-24 flex flex-col md:flex-row-reverse items-center gap-8" style="transform: rotate(1deg); margin-right: 10%;">
+            <div class="md:w-1/3 flex-shrink-0">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר" class="w-48 h-48 md:w-64 md:h-64 rounded-full mx-auto object-cover border-4 border-indigo-200 shadow-xl opacity-90 transition-all duration-500 hover:scale-105 hover:opacity-100" style="filter: saturate(1.2) contrast(1.1) brightness(0.9); transform: rotate(-3deg);">
+            </div>
+            <div class="md:w-2/3 text-center md:text-right">
+                <h2 class="title-impressionistic text-4xl md:text-5xl font-semibold text-purple-700 mb-4 animate-fade-in-up delay-200">
+                    זאביק אבינר - האמן המנחה
+                </h2>
+                <p class="text-lg md:text-xl text-gray-700 leading-loose animate-fade-in-up delay-300">
+                    המסע אל תוך הבהירות הדיגיטלית. מומחה המנגיש את גווני הבינה המלאכותית,
+                    הופך את המורכב למואר, את הנסתר לגלוי.
+                    <br>
+                    ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI.
+                </p>
+            </div>
+        </section>
+
+        <!-- Core Message Fragment -->
+        <section class="content-fragment w-full md:w-3/4 lg:w-2/3 my-12 md:my-20 lg:my-24 text-center" style="transform: rotate(0.5deg); margin-left: 5%;">
+            <h2 class="title-impressionistic text-4xl md:text-5xl font-semibold text-blue-700 mb-6 animate-fade-in-up delay-400">
+                הפיכת ה-AI לנגיש וישים לכולם
+            </h2>
+            <p class="text-lg md:text-xl text-gray-700 leading-loose animate-fade-in-up delay-500">
+                בואו לחוות את הקסם. ללמוד לצייר עם פיקסלים של מחשבה, לפסל קודים של הבנה.
+                <br>
+                ממבט ראשון בקווי המתאר ועד ליצירת יצירות מופת משלכם.
+                <br>
+                כלים חיים, נושמים, לשימוש מיידי, לעבודה ולחיים.
+            </p>
+        </section>
+
+        <!-- Target Audience Fragment -->
+        <section class="content-fragment w-full md:w-3/4 lg:w-2/3 my-12 md:my-20 lg:my-24" style="transform: rotate(-0.5deg); margin-right: 5%;">
+            <h2 class="title-impressionistic text-4xl md:text-5xl font-semibold text-teal-700 mb-6 text-center animate-fade-in-up delay-600">
+                למי נועד האור הזה?
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-center md:text-right animate-fade-in-up delay-700">
+                <p class="text-lg md:text-xl text-gray-700 leading-relaxed p-4 bg-white/70 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <span class="text-xl font-bold text-teal-600 block mb-2">ראשית הדרך:</span>
+                    הרוצים לפקוח עין ראשונה אל עולם הצבעים המופלא של ה-AI.
+                </p>
+                <p class="text-lg md:text-xl text-gray-700 leading-relaxed p-4 bg-white/70 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <span class="text-xl font-bold text-teal-600 block mb-2">אמני מקצוע:</span>
+                    אנשי מקצוע המבקשים להטמיע נגיעות של אינטליגנציה ביצירתם.
+                </p>
+                <p class="text-lg md:text-xl text-gray-700 leading-relaxed p-4 bg-white/70 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <span class="text-xl font-bold text-teal-600 block mb-2">מובילי חזון:</span>
+                    מנהלים וארגונים השואפים להאיר את נתיב צוותיהם.
+                </p>
+                <p class="text-lg md:text-xl text-gray-700 leading-relaxed p-4 bg-white/70 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <span class="text-xl font-bold text-teal-600 block mb-2">יוצרים מתקדמים:</span>
+                    השואפים לפרוץ את גבולות הדמיון בפרויקטים חדשניים.
+                </p>
+            </div>
+        </section>
+
+        <!-- Areas of Expertise Fragment -->
+        <section class="content-fragment w-full md:w-3/4 lg:w-2/3 my-12 md:my-20 lg:my-24" style="transform: rotate(1.5deg); margin-left: 12%;">
+            <h2 class="title-impressionistic text-4xl md:text-5xl font-semibold text-green-700 mb-6 text-center animate-fade-in-up delay-800">
+                גווני המכחול - תחומי התמחות
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-center md:text-right animate-fade-in-up delay-900">
+                <p class="text-lg text-gray-700 leading-relaxed p-3 bg-white/70 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <span class="font-bold text-green-600 block mb-1">מילים נשזרות:</span> יצירת טקסטים ותוכן.
+                </p>
+                <p class="text-lg text-gray-700 leading-relaxed p-3 bg-white/70 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <span class="font-bold text-green-600 block mb-1">קשתות של מחשבה:</span> בניית אפליקציות חכמות.
+                </p>
+                <p class="text-lg text-gray-700 leading-relaxed p-3 bg-white/70 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <span class="font-bold text-green-600 block mb-1">אופקים דיגיטליים:</span> פיתוח אתרים מבוססי AI.
+                </p>
+                <p class="text-lg text-gray-700 leading-relaxed p-3 bg-white/70 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <span class="font-bold text-green-600 block mb-1">הבנת הזרמים:</span> ניתוח נתונים ומחקר.
+                </p>
+                <p class="text-lg text-gray-700 leading-relaxed p-3 bg-white/70 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <span class="font-bold text-green-600 block mb-1">פיגמנטים של דמיון:</span> יצירת תמונות ואומנות.
+                </p>
+                <p class="text-lg text-gray-700 leading-relaxed p-3 bg-white/70 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <span class="font-bold text-green-600 block mb-1">ריקוד האוטומציה:</span> אוטומציה של תהליכים.
+                </p>
+            </div>
+        </section>
+
+        <!-- Services Offered Fragment -->
+        <section class="content-fragment w-full md:w-3/4 lg:w-2/3 my-12 md:my-20 lg:my-24" style="transform: rotate(-1.2deg); margin-right: 12%;">
+            <h2 class="title-impressionistic text-4xl md:text-5xl font-semibold text-orange-700 mb-6 text-center animate-fade-in-up delay-1000">
+                הפלטה של הגילוי - שירותים מוצעים
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-center md:text-right animate-fade-in-up delay-1100">
+                <div class="p-5 bg-white/70 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <h3 class="title-impressionistic text-3xl font-medium text-orange-600 mb-3">סדנאות אור</h3>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        קבוצתיות, מעשיות, כמו טיפות צבע על קנבס - ללמוד ביחד, ליצור ביחד.
+                    </p>
+                </div>
+                <div class="p-5 bg-white/70 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <h3 class="title-impressionistic text-3xl font-medium text-orange-600 mb-3">שיעורים אישיים</h3>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        מכחול אינדיבידואלי, מותאם לקצב ולרצון - בניית מסלול אישי להצלחה.
+                    </p>
+                </div>
+                <div class="p-5 bg-white/70 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <h3 class="title-impressionistic text-3xl font-medium text-orange-600 mb-3">הרצאות פתיחת אופקים</h3>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        לארגונים, מבט אל מעבר לפינה, אל האור הבא - השראה וכלים לצוותים.
+                    </p>
+                </div>
+                <div class="p-5 bg-white/70 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300">
+                    <h3 class="title-impressionistic text-3xl font-medium text-orange-600 mb-3">ייעוץ וליווי</h3>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        ביצירת פרויקטים, ליווי צמוד מהרעיון עד ליצירה המוגמרת - הגשמת חזונות AI.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Fragment -->
+        <section class="content-fragment w-full md:w-3/4 lg:w-2/3 my-12 md:my-20 lg:my-24 text-center" style="transform: rotate(0.8deg); margin-left: 8%;">
+            <h2 class="title-impressionistic text-4xl md:text-5xl font-semibold text-gray-800 mb-6 animate-fade-in-up delay-1200">
+                כדי לגעת באור, לשטוף את העיניים בצבעי המחר:
+            </h2>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-6 animate-fade-in-up delay-1300">
+                <a href="https://wa.me/972546609385" class="group flex items-center bg-green-500 text-white py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 text-xl font-bold">
+                    <svg class="w-7 h-7 ml-3" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12.043 2.119c-5.467 0-9.916 4.437-9.916 9.904 0 1.765.462 3.468 1.353 4.978l-1.42 5.183 5.309-1.399c1.442.796 3.087 1.258 4.674 1.258h.004c5.467 0 9.916-4.437 9.916-9.904s-4.449-9.904-9.916-9.904zm4.723 13.064s-.54.24-.764.385c-.22.145-.5.22-.765.253-.266.035-.556.035-.845-.07-.28-.096-.694-.27-.905-.445-.21-.18-.46-.425-.66-.64-.2-.21-.444-.485-.624-.73-.178-.246-.353-.496-.457-.75-.1-.25-.01-1.35.63-2.67.57-1.18.995-1.28.995-1.28l.06-.14c-.01-.02-.03-.04-.07-.08-.04-.04-.15-.17-.18-.21-.03-.05-.07-.1-.08-.13-.02-.03-.06-.06-.1-.06-.04 0-.09.01-.13.03-.05.02-.13.08-.2.15-.08.08-.17.18-.25.26-.08.09-.16.18-.24.29-.08.11-.15.22-.22.34-.07.12-.13.25-.19.38-.05.13-.1.27-.15.41-.04.14-.07.28-.1.43-.03.14-.04.29-.04.44s.07.29.15.43c.08.14.19.3.3.44.11.14.23.28.36.43.13.14.28.29.44.43.16.15.33.29.51.42.19.13.38.26.58.38.2.12.4.24.6.35.2.12.4.22.6.3.2.08.4.14.6.17.2.03.4.03.6.01.2-.02.4-.07.6-.14.2-.07.4-.17.6-.27.2-.1.4-.23.6-.37.2-.14.39-.3.57-.49.18-.19.36-.4.52-.63.17-.23.32-.47.46-.72.14-.26.26-.54.36-.83.09-.29.17-.59.22-.9.05-.3.07-.61.07-.92-.002-.303-.002-.593-.002-.753l.002-.01z"/>
+                    </svg>
+                    <span>ווטסאפ: 054-6609385</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="group flex items-center bg-indigo-600 text-white py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 text-xl font-bold">
+                    <svg class="w-7 h-7 ml-3" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M22 4H2c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h20c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 2v.5l-10 7.5-10-7.5V6h20zM2 18V9.2l10 7.5 10-7.5V18H2z"/>
+                    </svg>
+                    <span>אימייל: zaviner@gmail.com</span>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor JS
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+        document.addEventListener('mouseenter', () => customCursor.style.opacity = '0.9');
+        document.addEventListener('mouseleave', () => customCursor.style.opacity = '0');
+
+        // Impressionistic Canvas Background JS
+        const canvas = document.getElementById('impressionistic-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const particleCount = 70; // More particles for a denser, impressionistic feel
+        const particleSize = 30; // Larger particles to emulate brushstrokes
+
+        // Set canvas dimensions
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            // Re-initialize particles to spread them across new dimensions
+            particles.forEach(p => {
+                p.x = Math.random() * canvas.width;
+                p.y = Math.random() * canvas.height;
+            });
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Particle class for more complex behavior
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * particleSize + 5; // Min size 5
+                this.speedX = Math.random() * 0.5 - 0.25; // Slower movement
+                this.speedY = Math.random() * 0.5 - 0.25;
+                // Softer colors, lower opacity, using HSL for dynamic hues
+                this.hue = Math.random() * 360; // Random hue
+                this.color = `hsla(${this.hue}, 70%, 70%, ${Math.random() * 0.3 + 0.1})`;
+                this.life = Math.random() * 100 + 50; // Longer life
+                this.opacity = Math.random() * 0.3 + 0.1;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.life -= 0.5; // Slowly fade out
+                this.opacity = Math.max(0, this.opacity - 0.002); // Fade out more gradually
+
+                // Wrap around canvas edges
+                if (this.x > canvas.width + this.size) this.x = -this.size;
+                if (this.x < -this.size) this.x = canvas.width + this.size;
+                if (this.y > canvas.height + this.size) this.y = -this.size;
+                if (this.y < -this.size) this.y = canvas.height + this.size;
+
+                // Re-spawn if life is too low or opacity is gone
+                if (this.life <= 0 || this.opacity <= 0) {
+                    this.reset();
+                }
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * particleSize + 5;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.hue = Math.random() * 360;
+                this.color = `hsla(${this.hue}, 70%, 70%, ${Math.random() * 0.3 + 0.1})`;
+                this.life = Math.random() * 100 + 50;
+                this.opacity = Math.random() * 0.3 + 0.1;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size / 2, 0, Math.PI * 2); // Circles for a soft, diffused look
+                ctx.fill();
+            }
+        }
+
+        // Initialize particles
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+        initParticles();
+
+        // Animation loop
+        function animateCanvas() {
+            // Create a subtle trailing effect by drawing a semi-transparent rectangle over the canvas
+            // This is key for the "blending" or "smearing" effect characteristic of Impressionism
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.03)'; // Very subtle white overlay
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateCanvas);
+        }
+        animateCanvas();
+
+        // Parallax-like effect on scroll for content fragments
+        document.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            document.querySelectorAll('.content-fragment').forEach((fragment, index) => {
+                // Vary speed for more organic, layered movement
+                const speed = (index % 2 === 0 ? 0.08 : 0.06) * (index % 3 === 0 ? -1 : 1); // Randomize direction slightly
+                const offset = scrollY * speed;
+                const originalRotate = fragment.dataset.originalRotate || '0deg';
+                fragment.style.transform = `translateY(${offset}px) rotate(${originalRotate})`;
+            });
+        });
+
+        // Store original rotation for parallax calculation
+        document.querySelectorAll('.content-fragment').forEach(fragment => {
+            const originalTransform = fragment.style.transform;
+            const match = originalTransform.match(/rotate\(([^)]+)\)/);
+            if (match && match[1]) {
+                fragment.dataset.originalRotate = match[1];
+            } else {
+                fragment.dataset.originalRotate = '0deg';
+            }
+        });
+
+        // Animate elements on scroll / fade in effect using IntersectionObserver
+        const fadeInElements = document.querySelectorAll('.animate-fade-in-up');
+
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // When 10% of the item is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Stop observing once visible
+                }
+            });
+        }, observerOptions);
+
+        fadeInElements.forEach(el => {
+            observer.observe(el);
+        });
+
+    </script>
+</body>
+</html>

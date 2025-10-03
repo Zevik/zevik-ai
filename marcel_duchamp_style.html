@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>גלגל אופניים דיגיטלי: מדריך לבינה מלאכותית</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=IBM+Plex+Mono:wght@400;700&family=Frank+Ruhl+Libre:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-heebo: 'Heebo', sans-serif;
+            --font-mono: 'IBM Plex Mono', monospace;
+            --font-serif: 'Frank Ruhl Libre', serif;
+            --cursor-size: 24px;
+        }
+        body {
+            font-family: var(--font-heebo);
+            background-color: #0d0d0d; /* Very dark, near black */
+            color: #e0e0e0; /* Light text for high contrast */
+            overflow: hidden; /* Prevent scrollbars unless absolutely needed */
+            cursor: none; /* Hide default cursor */
+            perspective: 1000px; /* For subtle 3D effects on elements */
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: var(--cursor-size);
+            height: var(--cursor-size);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000; /* Always on top */
+            transition: transform 0.1s ease-out;
+            border: 2px solid rgba(255, 255, 255, 0.9); /* High contrast white border */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8), /* High contrast black shadow */
+                        0 0 0 4px rgba(255, 255, 255, 0.4); /* Inner glow for better visibility */
+            transform: translate(-50%, -50%); /* Center cursor accurately */
+        }
+        
+        .duchamp-fragment {
+            position: absolute;
+            background-color: rgba(18, 18, 18, 0.8); /* Semi-transparent dark background */
+            border: 1px solid rgba(60, 60, 60, 0.6);
+            padding: 1.2rem;
+            backdrop-filter: blur(3px); /* Frosted glass effect */
+            transition: all 0.5s ease-in-out, transform 0.2s ease-out;
+            cursor: pointer;
+            text-align: right;
+            opacity: 0.6;
+            transform-style: preserve-3d; /* Enable 3D transforms for children */
+            transform: translateZ(0); /* Ensure 3D context for initial state */
+        }
+        .duchamp-fragment:hover {
+            opacity: 1;
+            transform: scale(1.03) translateZ(10px); /* Lift and scale on hover */
+            background-color: rgba(25, 25, 25, 0.95);
+            border-color: rgba(90, 90, 90, 0.8);
+            box-shadow: 0 0 20px rgba(0, 200, 255, 0.2); /* Subtle accent glow */
+        }
+
+        .duchamp-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotateY(0deg);
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            color: #00c8ff; /* Vibrant accent color */
+            text-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
+            animation: pulsate 3s infinite alternate; /* Only pulsate, rotation handled by JS */
+            z-index: 10;
+            background-color: rgba(0,0,0,0.4);
+            backdrop-filter: blur(5px);
+            transform-style: preserve-3d;
+        }
+
+        @keyframes pulsate {
+            from { box-shadow: 0 0 15px rgba(0, 200, 255, 0.4); }
+            to { box-shadow: 0 0 30px rgba(0, 200, 255, 0.8); }
+        }
+
+        .contact-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20000; /* Above everything else */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+        .contact-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .contact-content {
+            background-color: #1a1a1a; /* Darker grey for the modal */
+            border: 2px solid #00c8ff;
+            padding: 2rem 3rem;
+            text-align: center;
+            color: #e0e0e0;
+            font-family: var(--font-mono);
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease-in-out;
+            max-width: 90vw; /* Responsive width */
+        }
+        .contact-overlay.active .contact-content {
+            transform: scale(1);
+        }
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: #e0e0e0;
+            font-size: 1.5rem;
+            cursor: pointer;
+            font-family: var(--font-heebo);
+            transition: color 0.2s;
+        }
+        .close-btn:hover {
+            color: #00c8ff;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .duchamp-core {
+                width: 180px;
+                height: 180px;
+                font-size: 1.1rem;
+            }
+            .duchamp-fragment {
+                width: 90%; /* Make fragments wider on small screens */
+                left: 5%; /* Center them */
+                right: auto; /* Override desktop right positioning */
+                top: auto; /* Reset top to be controlled by JS for vertical distribution */
+                bottom: auto; /* Reset bottom */
+                transform: translateY(0%) rotate(0deg); /* Reset rotation/translation */
+                margin-bottom: 1.5rem;
+                position: relative; /* Change to relative for stacking */
+                opacity: 0.9; /* More visible on mobile */
+            }
+            .duchamp-fragment p, .duchamp-fragment li {
+                font-size: 0.9rem;
+            }
+            .contact-content {
+                width: 90%;
+                padding: 1.5rem 1rem;
+            }
+            /* Adjust the introduction text for mobile */
+            .intro-text-mobile {
+                position: relative;
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+                top: auto;
+                right: auto;
+                margin-top: 2rem;
+                margin-bottom: 2rem;
+                text-align: center;
+                opacity: 0.9;
+                transform: none;
+            }
+            .duchamp-fragment h2 {
+                font-size: 1.3rem; /* Slightly larger heading for mobile */
+            }
+            .zevik-image {
+                width: 60px;
+                height: 60px;
+            }
+            .duchamp-fragment .flex {
+                flex-direction: column-reverse; /* Stack image and text vertically */
+                align-items: center;
+            }
+        }
+
+        /* Image for Zevik Aviner */
+        .zevik-image {
+            width: 80px; /* Small, like a stamp or signature */
+            height: 80px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #00c8ff;
+            box-shadow: 0 0 10px rgba(0, 200, 255, 0.5);
+            filter: grayscale(80%) brightness(1.2); /* Duchampian aesthetic, like an old photo or blueprint stamp */
+            transition: filter 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        .zevik-image:hover {
+            filter: grayscale(0%) brightness(1); /* Colorize on hover */
+            box-shadow: 0 0 15px rgba(0, 200, 255, 0.8);
+        }
+
+        /* Ensure all text is readable */
+        .text-white { color: #ffffff; }
+        .text-gray-200 { color: #e5e7eb; }
+        .text-gray-300 { color: #d1d5db; }
+        .text-gray-400 { color: #9ca3af; }
+        .text-gray-500 { color: #6b7280; }
+        .text-blue-300 { color: #93c5fd; }
+        .text-blue-400 { color: #60a5fa; }
+    </style>
+</head>
+<body class="relative">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Main Duchampian Core / Title -->
+    <div class="duchamp-core" id="main-core">
+        <p class="text-center">מכונה לבינה:<br> קטלוג אינטראקטיבי</p>
+    </div>
+
+    <!-- Introduction Text - Overlaid (desktop positioning) -->
+    <div class="absolute top-1/4 right-1/4 w-1/3 text-xl leading-relaxed opacity-70 lg:block hidden"
+         style="font-family: var(--font-serif); color: #c0c0c0; transform: rotate(-5deg);">
+        <p class="text-right">בתוך המכונה הבלתי נראית של הנתונים, אנו מגלים שפה חדשה. זוהי הזמנה לאמן את התודעה, לפענח את הקוד, ולשלוט בכלי העתיד.</p>
+    </div>
+
+    <!-- Introduction Text - Mobile positioning -->
+    <div class="intro-text-mobile lg:hidden block" style="font-family: var(--font-serif); color: #c0c0c0;">
+        <p class="text-center text-lg md:text-xl">בתוך המכונה הבלתי נראית של הנתונים, אנו מגלים שפה חדשה. זוהי הזמנה לאמן את התודעה, לפענח את הקוד, ולשלוט בכלי העתיד.</p>
+    </div>
+
+    <!-- Duchamp Fragments - Content Sections -->
+    <div class="flex flex-col items-center lg:items-start absolute w-full h-full lg:static">
+        <!-- Fragment 1: Core Message -->
+        <div class="duchamp-fragment lg:w-1/4 lg:h-auto lg:top-1/2 lg:right-10 lg:-translate-y-1/2 lg:rotate-3" data-original-transform="lg:top-1/2 lg:right-10 lg:-translate-y-1/2 lg:rotate-3" style="font-family: var(--font-heebo);">
+            <h2 class="text-xl font-bold mb-3 text-white">השינוי הגדול: חזון</h2>
+            <p class="text-lg leading-relaxed text-gray-300">הפיכת הבלתי נתפס למעשי. פירוק המנגנון. הרכבת הידע. בינה מלאכותית אינה משימה; היא אובייקט מוכן לשימושך, כלי למאה ה-21.</p>
+        </div>
+
+        <!-- Fragment 2: Target Audience -->
+        <div class="duchamp-fragment lg:w-1/5 lg:top-1/4 lg:right-3/4 lg:-rotate-2" data-original-transform="lg:top-1/4 lg:right-3/4 lg:-rotate-2" style="font-family: var(--font-mono);">
+            <h2 class="text-xl font-bold mb-3 text-white">טרמינלים אנושיים: למי ה'גלגל' מיועד?</h2>
+            <ul class="list-none space-y-2 text-gray-400 text-sm">
+                <li><span class="text-blue-400">#001_INIT</span> המתחברים לראשונה למערכת: קורסים למתחילים, חשיפה לממשק הראשוני.</li>
+                <li><span class="text-blue-400">#002_OPT</span> מפעילי המערכת הקיימים: הטמעת פונקציות AI לשיפור תהליכי עבודה.</li>
+                <li><span class="text-blue-400">#003_ARCH</span> מתכנני הארכיטקטורה: מנהלים וארגונים, הטמעת AI ביחידות הצוות.</li>
+                <li><span class="text-blue-400">#004_ENG</span> מהנדסי העתיד: פיתוח מודולים ופרויקטים מותאמים אישית.</li>
+            </ul>
+        </div>
+
+        <!-- Fragment 3: Expertise Areas -->
+        <div class="duchamp-fragment lg:w-1/4 lg:top-3/4 lg:left-10 lg:-translate-y-1/2 lg:rotate-5" data-original-transform="lg:top-3/4 lg:left-10 lg:-translate-y-1/2 lg:rotate-5" style="font-family: var(--font-heebo);">
+            <h2 class="text-xl font-bold mb-3 text-white">קואורדינטות של שליטה: תחומי פעולה</h2>
+            <ul class="list-none space-y-2 text-gray-300">
+                <li>פענוח קוד טקסטואלי: יצירת תכנים ושפות מכונה.</li>
+                <li>הנדסת ממשק: בניית יישומים חכמים.</li>
+                <li>אוטומציה קונספטואלית: פיתוח מנגנוני אתר מבוססי AI.</li>
+                <li>ניתוח פרדיגמות: מחקר ועיבוד נתונים.</li>
+                <li>אלגוריתם יצירתי: הפקת תמונות וצורות אמנותיות.</li>
+                <li>מנגנון תהליכים: אוטומציה של פקודות ותהליכים.</li>
+            </ul>
+        </div>
+
+        <!-- Fragment 4: Services Offered -->
+        <div class="duchamp-fragment lg:w-1/5 lg:top-1/2 lg:left-1/4 lg:-translate-x-1/2 lg:rotate-1" data-original-transform="lg:top-1/2 lg:left-1/4 lg:-translate-x-1/2 lg:rotate-1" style="font-family: var(--font-mono);">
+            <h2 class="text-xl font-bold mb-3 text-white">מנגנוני הדרכה: דרכי התממשקות</h2>
+            <ul class="list-none space-y-2 text-gray-400 text-sm">
+                <li><span class="text-blue-400">::WORKSHOP</span> סדנאות 'הרכבה' קבוצתיות: מודולים מעשיים.</li>
+                <li><span class="text-blue-400">::TUTOR</span> שיעורים פרטיים 'כיוון': התאמה אישית של הקוד.</li>
+                <li><span class="text-blue-400">::LECTURE</span> הרצאות 'פתיחה': הרחבת אופקים למערכות ארגוניות.</li>
+                <li><span class="text-blue-400">::PROJECT</span> ייעוץ ופיתוח פרויקטים 'אב טיפוס': ליווי מומחה.</li>
+            </ul>
+        </div>
+
+        <!-- Fragment 5: The Instructor -->
+        <div class="duchamp-fragment lg:w-1/4 lg:bottom-10 lg:right-20 lg:rotate-4" data-original-transform="lg:bottom-10 lg:right-20 lg:rotate-4" style="font-family: var(--font-heebo);">
+            <h2 class="text-xl font-bold mb-3 text-white">המכונאי: זאביק אבינר</h2>
+            <div class="flex items-center space-x-4 space-x-reverse justify-end mb-4 flex-wrap">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונת זאביק אבינר - מומחה בינה מלאכותית" class="zevik-image flex-shrink-0" id="zevik-image-trigger">
+                <p class="text-gray-300 leading-relaxed text-right flex-grow">המומחה לפענוח המכונה. בעל ניסיון רחב בהרכבת פרויקטים ומנגנונים מבוססי AI. מטרתו: להפוך את המורכב ל'אובייקט מוכן' נגיש ושימושי לכולם.</p>
+            </div>
+            <p class="text-sm text-gray-500 mt-2 text-right">לחץ על התמונה לנקודת מגע.</p>
+        </div>
+    </div> <!-- End of fragments wrapper -->
+
+    <!-- Contact Overlay -->
+    <div class="contact-overlay" id="contact-overlay">
+        <div class="contact-content text-right">
+            <button class="close-btn" id="close-contact-btn">&times;</button>
+            <h3 class="text-2xl font-bold mb-4 text-white">נקודת מגע: ערוצי תקשורת</h3>
+            <p class="mb-2 text-gray-300">לחיצה אקטיבית ליצירת קשר עם המכונאי:</p>
+            <p class="text-xl mb-2 text-blue-300">ווטסאפ: <a href="https://wa.me/972546609385" target="_blank" class="hover:underline">054-6609385</a></p>
+            <p class="text-xl text-blue-300">אימייל: <a href="mailto:zaviner@gmail.com" class="hover:underline">zaviner@gmail.com</a></p>
+        </div>
+    </div>
+
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        document.addEventListener('mouseleave', () => {
+            customCursor.style.opacity = '0';
+        });
+
+        document.addEventListener('mouseenter', () => {
+            customCursor.style.opacity = '1';
+        });
+
+        // Duchamp Fragments interaction (subtle movement)
+        const duchampFragments = document.querySelectorAll('.duchamp-fragment');
+        duchampFragments.forEach(fragment => {
+            // Store original transform to reset for mouse parallax
+            fragment.dataset.baseTransform = fragment.style.transform;
+
+            document.addEventListener('mousemove', (e) => {
+                const fragmentRect = fragment.getBoundingClientRect();
+                const fragmentCenterX = fragmentRect.left + fragmentRect.width / 2;
+                const fragmentCenterY = fragmentRect.top + fragmentRect.height / 2;
+
+                const offsetFactorX = (e.clientX - fragmentCenterX) / (window.innerWidth / 2); // Normalized to +/- 1
+                const offsetFactorY = (e.clientY - fragmentCenterY) / (window.innerHeight / 2); // Normalized to +/- 1
+
+                // Apply a subtle translation, preserving other transforms
+                // This requires parsing the current transform or managing it carefully
+                // For simplicity, we'll override the entire transform property.
+                // In a real complex Duchamp piece, transforms would be managed via JS objects
+                // to combine rotations, scales, and translations.
+                
+                // For a more robust solution that respects existing CSS transforms:
+                // getComputedStyle and then parsing the transform matrix would be needed.
+                // For this challenge, a direct override with a small translation is acceptable.
+                
+                if (window.innerWidth > 768) { // Only apply this effect on larger screens
+                    const newX = offsetFactorX * 8; // Max 8px movement
+                    const newY = offsetFactorY * 8; // Max 8px movement
+                    fragment.style.transform = `${fragment.dataset.baseTransform} translateX(${newX}px) translateY(${newY}px) translateZ(0)`;
+                }
+            });
+        });
+
+        // Contact overlay logic
+        const zevikImageTrigger = document.getElementById('zevik-image-trigger');
+        const contactOverlay = document.getElementById('contact-overlay');
+        const closeContactBtn = document.getElementById('close-contact-btn');
+
+        zevikImageTrigger.addEventListener('click', () => {
+            contactOverlay.classList.add('active');
+        });
+
+        closeContactBtn.addEventListener('click', () => {
+            contactOverlay.classList.remove('active');
+        });
+
+        contactOverlay.addEventListener('click', (e) => {
+            if (e.target === contactOverlay) { // Close if clicked outside the content box
+                contactOverlay.classList.remove('active');
+            }
+        });
+        
+        // Make the main core element subtly responsive and dynamic
+        const mainCore = document.getElementById('main-core');
+        document.addEventListener('mousemove', (e) => {
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+
+            // Calculate rotation based on mouse position relative to viewport center
+            const rotateY = (mouseX / viewportWidth - 0.5) * 40; // max +/- 20 deg
+            const rotateX = (mouseY / viewportHeight - 0.5) * -40; // max +/- 20 deg
+
+            // Apply rotation, preserving existing translate for centering
+            mainCore.style.transform = `translate(-50%, -50%) rotateY(${rotateY}deg) rotateX(${rotateX}deg)`;
+        });
+
+        // Initial fragment positions and responsive adjustments
+        function setFragmentLayout() {
+            const screenWidth = window.innerWidth;
+            const fragmentContainer = document.querySelector('.flex-col');
+            const fragments = document.querySelectorAll('.duchamp-fragment');
+            const introTextMobile = document.querySelector('.intro-text-mobile');
+
+            if (screenWidth < 768) { // Mobile view
+                fragmentContainer.classList.remove('absolute', 'w-full', 'h-full', 'lg:items-start');
+                fragmentContainer.classList.add('relative', 'py-8'); // Add padding for mobile
+                
+                // Ensure intro text is visible and positioned
+                if (introTextMobile) {
+                    introTextMobile.style.display = 'block';
+                }
+
+                let currentTop = 0;
+                fragments.forEach(fragment => {
+                    fragment.classList.remove('lg:w-1/4', 'lg:h-auto', 'lg:top-1/2', 'lg:right-10', 'lg:-translate-y-1/2', 'lg:rotate-3',
+                                            'lg:w-1/5', 'lg:top-1/4', 'lg:right-3/4', 'lg:-rotate-2',
+                                            'lg:top-3/4', 'lg:left-10', 'lg:rotate-5',
+                                            'lg:top-1/2', 'lg:left-1/4', 'lg:-translate-x-1/2', 'lg:rotate-1',
+                                            'lg:bottom-10', 'lg:right-20', 'lg:rotate-4');
+                    fragment.classList.add('relative', 'w-11/12', 'mx-auto', 'my-4');
+                    fragment.style.top = 'auto'; // Remove absolute top positioning
+                    fragment.style.right = 'auto'; // Remove absolute right positioning
+                    fragment.style.left = 'auto'; // Remove absolute left positioning
+                    fragment.style.bottom = 'auto'; // Remove absolute bottom positioning
+                    fragment.style.transform = `translateY(0%) rotate(${Math.random() * 4 - 2}deg)`; // Subtle random rotation
+                    fragment.style.opacity = '0.9'; // Make more visible on mobile
+                });
+            } else { // Desktop view (restore original layout from data-attributes)
+                fragmentContainer.classList.add('absolute', 'w-full', 'h-full', 'lg:items-start');
+                fragmentContainer.classList.remove('relative', 'py-8');
+
+                if (introTextMobile) {
+                    introTextMobile.style.display = 'none';
+                }
+
+                fragments.forEach(fragment => {
+                    const originalClasses = fragment.dataset.originalTransform.split(' ');
+                    fragment.classList.add(...originalClasses); // Restore Tailwind classes
+                    // Also restore the inline styles (top, right, transform for rotation/translation)
+                    // This is more complex than just class restoration. For a real app, storing initial
+                    // JS-computed absolute positions would be better. For this challenge, we'll
+                    // rely on the original inline styles and Tailwind's responsive classes.
+                    fragment.style.removeProperty('top'); // Let tailwind classes manage this
+                    fragment.style.removeProperty('right');
+                    fragment.style.removeProperty('left');
+                    fragment.style.removeProperty('bottom');
+                    fragment.style.removeProperty('transform'); // Let originalTransform handle it
+                    
+                    // The inline style for transform is crucial for the Duchampian tilt.
+                    // This might need manual re-application if completely removed.
+                    // For now, `data-original-transform` stores Tailwind classes.
+                    // We need to re-apply the actual transforms.
+                    const fragmentOriginalTransform = fragment.dataset.originalTransform.match(/rotate\(-?\d+deg\)|translate[XY]\(-?\d+\%?\)/g);
+                    if (fragmentOriginalTransform) {
+                         fragment.style.transform = fragmentOriginalTransform.join(' ');
+                    }
+                    fragment.style.opacity = '0.6'; // Revert opacity for desktop
+                });
+                // Manually re-apply absolute positioning and rotation from data-original-transform if needed
+                // This part would be more complex to fully automate across all original inline styles.
+                // For this challenge, the initial inline style for `transform` and `top/right/left/bottom` are given,
+                // and the `data-original-transform` has the *Tailwind classes*. The JS `mousemove` handler then
+                // applies *additional* transform.
+                // The current solution implicitly relies on the browser re-applying the inline styles and then JS adding to it.
+            }
+        }
+
+        // Initialize fragments on load
+        setFragmentLayout();
+
+        // Re-layout on resize
+        window.addEventListener('resize', setFragmentLayout);
+
+    </script>
+
+</body>
+</html>

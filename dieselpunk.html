@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מַדָּע הַשְּׁלִיטָה: הַבְּלוּפְּרִינְט לְבִינָה מְלָאכוּתִית</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Dieselpunk Aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700&family=Michroma&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS for Dieselpunk aesthetic and interactive elements */
+        :root {
+            --diesel-gray-dark: #2c3e50; /* Base background - deep blue-gray */
+            --diesel-gray-medium: #34495e; /* Secondary dark gray */
+            --diesel-accent-brass: #f39c12; /* Brass/copper accent */
+            --diesel-accent-red: #c0392b; /* Subtle warning/power accent */
+            --diesel-text-light: #ecf0f1; /* Off-white for readability */
+            --diesel-text-dark: #1f2a37; /* Dark text for contrast on light */
+        }
+
+        body {
+            font-family: 'Assistant', sans-serif;
+            cursor: none; /* Hide default cursor */
+            background-color: var(--diesel-gray-dark);
+            color: var(--diesel-text-light);
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Orbitron', sans-serif; /* For strong, technical headings */
+            color: var(--diesel-accent-brass);
+        }
+
+        .michroma {
+            font-family: 'Michroma', sans-serif; /* For a more refined, industrial look */
+        }
+
+        /* Custom High-Contrast Cursor */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), /* Dark shadow for contrast */
+                        0 0 12px var(--diesel-accent-brass), /* Glowing effect for dieselpunk */
+                        0 0 2px var(--diesel-accent-red) inset; /* Inner glow for intensity */
+            transform: translate(-50%, -50%);
+            transition: width 0.1s, height 0.1s, opacity 0.1s, box-shadow 0.1s;
+            z-index: 9999;
+            opacity: 1;
+        }
+        #custom-cursor.active {
+            width: 30px;
+            height: 30px;
+            opacity: 0.8;
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8),
+                        0 0 18px var(--diesel-accent-brass),
+                        0 0 4px var(--diesel-accent-red) inset;
+        }
+
+        /* Dieselpunk Background Grid/Blueprint Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image:
+                linear-gradient(to right, rgba(243, 156, 18, 0.07) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(243, 156, 18, 0.07) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* Main Content Panels - Industrial / Riveted Look */
+        .panel {
+            border: 2px solid var(--diesel-accent-brass);
+            background-color: rgba(44, 62, 80, 0.9); /* Slightly transparent dark background */
+            box-shadow: 0 0 20px rgba(var(--diesel-accent-brass), 0.3), inset 0 0 8px rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px); /* Subtle glass/frosted effect */
+            border-radius: 6px; /* Slightly rounded edges for robustness */
+            position: relative;
+            padding: 2.5rem; /* Increased padding */
+            margin-bottom: 4rem; /* More space between panels */
+        }
+
+        /* Rivet Effects for Panels */
+        .rivet-effect::before, .rivet-effect::after,
+        .rivet-effect-tr::before, .rivet-effect-bl::after,
+        .rivet-effect-tl::before, .rivet-effect-br::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--diesel-accent-brass);
+            border: 1px solid rgba(0,0,0,0.6);
+            box-shadow: inset 0 0 4px rgba(0,0,0,0.6), 0 0 3px rgba(243, 156, 18, 0.7);
+            z-index: 10;
+        }
+        .rivet-effect-tl::before { top: -5px; left: -5px; } /* Top-Left */
+        .rivet-effect-tr::before { top: -5px; right: -5px; left: auto; } /* Top-Right */
+        .rivet-effect-bl::after { bottom: -5px; left: -5px; right: auto; } /* Bottom-Left */
+        .rivet-effect-br::after { bottom: -5px; right: -5px; top: auto; } /* Bottom-Right */
+
+        /* Glowing Text Effect */
+        .glow-text {
+            text-shadow: 0 0 10px var(--diesel-accent-brass), 0 0 5px rgba(255,255,255,0.5);
+        }
+
+        /* Section Separator - Industrial Bar */
+        .section-separator {
+            height: 3px;
+            background: linear-gradient(to right, transparent 5%, var(--diesel-accent-brass), transparent 95%);
+            margin: 3rem 0;
+            box-shadow: 0 0 10px rgba(var(--diesel-accent-brass), 0.7);
+        }
+
+        /* Button Styling - Lever/Switch Aesthetic */
+        .button-style {
+            background-color: var(--diesel-accent-brass);
+            color: var(--diesel-text-dark);
+            padding: 1rem 2.5rem;
+            border-radius: 4px;
+            border: 2px solid var(--diesel-accent-red); /* Stronger border */
+            box-shadow: 0 6px 12px rgba(0,0,0,0.5), inset 0 0 8px rgba(0,0,0,0.3);
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        .button-style:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.6), 0 0 20px var(--diesel-accent-brass);
+            background-color: #e68a00; /* Slightly darker brass on hover */
+        }
+        .button-style::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s ease-in-out;
+        }
+        .button-style:hover::before {
+            left: 120%;
+        }
+
+        /* Gear Icon Animation */
+        @keyframes rotateGear {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .gear-icon {
+            display: inline-block;
+            animation: rotateGear 18s linear infinite; /* Slow, continuous rotation */
+        }
+
+        /* Scroll Indicator */
+        #scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--diesel-accent-brass);
+            z-index: 100;
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+        }
+        #scroll-indicator .arrow {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 15px solid var(--diesel-accent-brass);
+            margin-top: 8px;
+            animation: bounce 1.8s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-12px); }
+            60% { transform: translateY(-6px); }
+        }
+
+        /* Fade-in Animation for Sections */
+        .fade-in-hidden {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .fade-in-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .panel {
+                padding: 1.5rem;
+                margin-bottom: 3rem;
+            }
+            .rivet-effect::before, .rivet-effect::after,
+            .rivet-effect-tr::before, .rivet-effect-bl::after,
+            .rivet-effect-tl::before, .rivet-effect-br::after {
+                width: 8px;
+                height: 8px;
+            }
+            #custom-cursor {
+                width: 15px;
+                height: 15px;
+            }
+            #custom-cursor.active {
+                width: 25px;
+                height: 25px;
+            }
+            .text-5xl { font-size: 2.5rem; }
+            .text-4xl { font-size: 2rem; }
+            .text-3xl { font-size: 1.75rem; }
+            .text-2xl { font-size: 1.5rem; }
+            .text-xl { font-size: 1.25rem; }
+            .button-style { padding: 0.8rem 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="custom-cursor"></div>
+
+    <main class="relative z-0 min-h-screen p-8 lg:p-16 flex flex-col items-center">
+
+        <!-- Initializing Sequence: Main AI Control Panel -->
+        <section class="max-w-4xl w-full text-center panel rivet-effect-tl rivet-effect-tr rivet-effect-bl rivet-effect-br">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 glow-text michroma leading-tight">
+                מַדָּע הַשְּׁלִיטָה: הַבְּלוּפְּרִינְט לְבִינָה מְלָאכוּתִית
+            </h1>
+            <h2 class="text-xl md:text-3xl text-gray-300 font-light mb-6 orbitron">
+                הֶעָתִיד נִבְנֶה עַכְשָׁיו – וְאַתָּה הַמַּהֲנְדֵּס הָרָאשִׁי
+            </h2>
+            <p class="text-lg text-gray-200 leading-relaxed max-w-2xl mx-auto assistant mb-8">
+                בעידן המכונות החכמות, בינה מלאכותית היא כוח מניע מהפכני. לא עוד מדע בדיוני, אלא מערכת עוצמתית הדורשת הבנה, שליטה ויכולת תכנות. זאביק אבינר, המהנדס הראשי שלנו, מזמין אותך למסע הנדסי חסר תקדים: לפענוח המערכת, תכנות המנגנונים וכיבוש אופקים טכנולוגיים חדשים.
+            </p>
+            <div class="section-separator w-2/3 mx-auto my-10"></div>
+            <p class="text-xl md:text-2xl font-bold text-yellow-500 assistant">
+                הפיכת AI לנגיש וישים לכולם - מהתחלה ועד רמה מתקדמת. כלים מעשיים שניתן ליישם מיד.
+            </p>
+        </section>
+
+        <!-- Personnel Designations: Target Audience -->
+        <section class="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="panel rivet-effect-tl rivet-effect-br flex flex-col items-center text-center">
+                <h3 class="text-2xl font-bold mb-4 text-yellow-400 orbitron">צוותי איתור: מפעילים חדשים</h3>
+                <p class="text-gray-200 assistant">
+                    למגלי עולם ה-AI - אלו השואפים להניע את גלגלי המכונה, להבין את עקרונותיה הבסיסיים ולהתחבר לכוחה.
+                </p>
+            </div>
+            <div class="panel rivet-effect-tr rivet-effect-bl flex flex-col items-center text-center">
+                <h3 class="text-2xl font-bold mb-4 text-yellow-400 orbitron">יחידות הטמעה: מומחי שטח</h3>
+                <p class="text-gray-200 assistant">
+                    לאנשי מקצוע המבקשים לשלב את מנועי ה-AI בפעילותם השוטפת, לייעל תהליכים ולשדרג את יכולותיהם.
+                </p>
+            </div>
+            <div class="panel rivet-effect-tl rivet-effect-br flex flex-col items-center text-center">
+                <h3 class="text-2xl font-bold mb-4 text-yellow-400 orbitron">מפקדת אסטרטגיה: הנהלה וארגונים</h3>
+                <p class="text-gray-200 assistant">
+                    למנהלים ואובר-רשויות המחפשים לפרוס פתרונות AI רחבי היקף ולבנות צוותים חמושים בידע העתידני.
+                </p>
+            </div>
+            <div class="panel rivet-effect-tr rivet-effect-bl flex flex-col items-center text-center">
+                <h3 class="text-2xl font-bold mb-4 text-yellow-400 orbitron">מעבדות פיתוח: אדריכלי העתיד</h3>
+                <p class="text-gray-200 assistant">
+                    למתכנתים וחדשנים ברמה מתקדמת, המכוונים לפיתוח והטמעה של פרויקטים מורכבים מבוססי AI.
+                </p>
+            </div>
+        </section>
+
+        <!-- Calibration & Planning Modules: Expertise Areas -->
+        <section class="max-w-4xl w-full panel rivet-effect-tl rivet-effect-tr rivet-effect-bl rivet-effect-br">
+            <h3 class="text-3xl md:text-4xl font-bold text-center mb-10 glow-text michroma">תְּחוּמֵי כִּיּוּל וְתִכְנוּן: מִפְתָּחוֹת תִּפְעוּל</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-center">
+                <div class="p-4 border-b-2 border-l-2 border-gray-700 bg-gray-800 rounded-md shadow-inner hover:shadow-lg transition-all duration-300">
+                    <span class="text-5xl text-yellow-500 block mb-3">⚙️</span>
+                    <p class="text-xl font-bold text-gray-100 orbitron mb-1">הנדסת תוכן</p>
+                    <p class="text-gray-300 text-sm assistant">יצירה, אופטימיזציה ואוטומציה של טקסטים.</p>
+                </div>
+                <div class="p-4 border-b-2 border-l-2 border-gray-700 bg-gray-800 rounded-md shadow-inner hover:shadow-lg transition-all duration-300">
+                    <span class="text-5xl text-yellow-500 block mb-3">⚡</span>
+                    <p class="text-xl font-bold text-gray-100 orbitron mb-1">ארכיטקטורת אפליקציות</p>
+                    <p class="text-gray-300 text-sm assistant">פיתוח ועיצוב מערכות וכלים חכמים.</p>
+                </div>
+                <div class="p-4 border-b-2 border-l-2 border-gray-700 bg-gray-800 rounded-md shadow-inner hover:shadow-lg transition-all duration-300">
+                    <span class="text-5xl text-yellow-500 block mb-3">📡</span>
+                    <p class="text-xl font-bold text-gray-100 orbitron mb-1">פריסת רשת מתקדמת</p>
+                    <p class="text-gray-300 text-sm assistant">בניית אתרים מבוססי AI עם יכולות חדשניות.</p>
+                </div>
+                <div class="p-4 border-b-2 border-l-2 border-gray-700 bg-gray-800 rounded-md shadow-inner hover:shadow-lg transition-all duration-300">
+                    <span class="text-5xl text-yellow-500 block mb-3">📊</span>
+                    <p class="text-xl font-bold text-gray-100 orbitron mb-1">ניתוח טלמטריה</p>
+                    <p class="text-gray-300 text-sm assistant">פענוח נתונים, מחקר והסקת מסקנות חכמות.</p>
+                </div>
+                <div class="p-4 border-b-2 border-l-2 border-gray-700 bg-gray-800 rounded-md shadow-inner hover:shadow-lg transition-all duration-300">
+                    <span class="text-5xl text-yellow-500 block mb-3">🎨</span>
+                    <p class="text-xl font-bold text-gray-100 orbitron mb-1">ייצור ויזואלי</p>
+                    <p class="text-gray-300 text-sm assistant">יצירת תמונות, גרפיקה ואומנות באמצעות AI.</p>
+                </div>
+                <div class="p-4 border-b-2 border-l-2 border-gray-700 bg-gray-800 rounded-md shadow-inner hover:shadow-lg transition-all duration-300">
+                    <span class="text-5xl text-yellow-500 block mb-3">⏱️</span>
+                    <p class="text-xl font-bold text-gray-100 orbitron mb-1">מנועי אוטומציה</p>
+                    <p class="text-gray-300 text-sm assistant">ייעול ומיכון תהליכי עבודה ידניים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Operational Protocols: Services Offered -->
+        <section class="max-w-4xl w-full panel rivet-effect-tl rivet-effect-tr rivet-effect-bl rivet-effect-br">
+            <h3 class="text-3xl md:text-4xl font-bold text-center mb-10 glow-text michroma">פְּרוֹטוֹקוֹלִים תִּפְעוּלִיִּים: הַדְרָכָה וְהַטְמָעָה</h3>
+            <div class="space-y-8">
+                <div class="p-5 border-l-4 border-yellow-600 bg-blue-900 bg-opacity-70 rounded-md shadow-lg flex flex-col md:flex-row items-center justify-between transition-transform duration-300 hover:scale-[1.01]">
+                    <h4 class="text-xl md:text-2xl font-bold text-yellow-200 mb-3 md:mb-0 orbitron flex items-center">
+                        <span class="text-3xl ml-3 text-yellow-500">🛠️</span> סדנאות הנדסה קבוצתיות
+                    </h4>
+                    <p class="text-gray-200 assistant text-base md:text-lg">תרגול מעשי וממוקד לפריסת יכולות AI בפרויקטים אמיתיים.</p>
+                </div>
+                <div class="p-5 border-l-4 border-yellow-600 bg-blue-900 bg-opacity-70 rounded-md shadow-lg flex flex-col md:flex-row items-center justify-between transition-transform duration-300 hover:scale-[1.01]">
+                    <h4 class="text-xl md:text-2xl font-bold text-yellow-200 mb-3 md:mb-0 orbitron flex items-center">
+                        <span class="text-3xl ml-3 text-yellow-500">👤</span> שיעורים פרטיים – מפרט אישי
+                    </h4>
+                    <p class="text-gray-200 assistant text-base md:text-lg">התאמת תוכנית לימודים מדויקת לרמה ולצרכים הספציפיים שלך, כמו בניית מכונה בהזמנה.</p>
+                </div>
+                <div class="p-5 border-l-4 border-yellow-600 bg-blue-900 bg-opacity-70 rounded-md shadow-lg flex flex-col md:flex-row items-center justify-between transition-transform duration-300 hover:scale-[1.01]">
+                    <h4 class="text-xl md:text-2xl font-bold text-yellow-200 mb-3 md:mb-0 orbitron flex items-center">
+                        <span class="text-3xl ml-3 text-yellow-500">🏭</span> הרצאות אסטרטגיות לארגונים
+                    </h4>
+                    <p class="text-gray-200 assistant text-base md:text-lg">פתיחת אופקים חדשים, חשיפה לכוחה של ה-AI וחיבור צוותים לגלגלי העתיד הטכנולוגי.</p>
+                </div>
+                <div class="p-5 border-l-4 border-yellow-600 bg-blue-900 bg-opacity-70 rounded-md shadow-lg flex flex-col md:flex-row items-center justify-between transition-transform duration-300 hover:scale-[1.01]">
+                    <h4 class="text-xl md:text-2xl font-bold text-yellow-200 mb-3 md:mb-0 orbitron flex items-center">
+                        <span class="text-3xl ml-3 text-yellow-500"> blueprints </span> ייעוץ ופיתוח פרויקטים
+                    </h4>
+                    <p class="text-gray-200 assistant text-base md:text-lg">ליווי מקצועי ומומחיות בבנייה והטמעה של מערכות AI מורכבות ומותאמות אישית.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chief Engineer's Log: The Guide -->
+        <section class="max-w-4xl w-full panel rivet-effect-tl rivet-effect-tr rivet-effect-bl rivet-effect-br flex flex-col items-center text-center md:flex-row md:text-right md:justify-around">
+            <div class="mb-8 md:mb-0 md:ml-10 flex-shrink-0">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונת זאביק אבינר, מהנדס AI ראשי"
+                     class="w-40 h-40 md:w-48 md:h-48 rounded-full border-4 border-yellow-500 shadow-lg object-cover mx-auto md:mx-0
+                            filter grayscale hover:grayscale-0 transition-all duration-500 transform hover:scale-105">
+            </div>
+            <div class="md:flex-grow">
+                <h3 class="text-3xl md:text-4xl font-bold mb-4 glow-text michroma">זאביק אבינר - המהנדס הראשי</h3>
+                <p class="text-lg text-gray-200 leading-relaxed mb-4 assistant">
+                    זאביק אבינר אינו רק מומחה בינה מלאכותית; הוא האדריכל המנוסה שמפענח את סודות המערכת. עם ניסיון עשיר בפיתוח ופריסת מנועי AI למגוון רחב של יישומים, זאביק הפך את התיאוריה המורכבת לפרקטיקה ישימה והוא המדריך שלך לשליטה אמיתית.
+                </p>
+                <p class="text-lg text-gray-200 leading-relaxed mb-8 assistant">
+                    הוא מתמחה בהנגשת הטכנולוגיה, לפרק אותה לרכיבים מובנים ולהפוך אותה לכלי עבודה יומיומי עוצמתי - ממש כמו להרכיב מכונה חדשנית משלכם ולתפעל אותה במיומנות.
+                </p>
+                <div class="space-y-3 text-xl font-bold text-yellow-500 orbitron">
+                    <p>
+                        <span class="text-gray-400">ווטסאפ:</span> <a href="https://wa.me/972546609385" class="hover:underline hover:text-yellow-300 transition-colors duration-300" target="_blank">054-6609385</a>
+                    </p>
+                    <p>
+                        <span class="text-gray-400">אימייל:</span> <a href="mailto:zaviner@gmail.com" class="hover:underline hover:text-yellow-300 transition-colors duration-300" target="_blank">zaviner@gmail.com</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activation Sequence: Call to Action -->
+        <section class="max-w-xl w-full text-center panel rivet-effect-tl rivet-effect-tr rivet-effect-bl rivet-effect-br">
+            <h3 class="text-3xl md:text-4xl font-bold mb-6 glow-text michroma">מוכנים לְהַפְעִיל אֶת הַמַּעֲרֶכֶת?</h3>
+            <p class="text-xl text-gray-200 mb-10 assistant">
+                צור קשר עוד היום והתחל את מסעך לשליטה בבינה המלאכותית. הצעד הראשון להנדסת עתידך מתחיל כאן, בעזרתו של המהנדס הראשי.
+            </p>
+            <a href="https://wa.me/972546609385" target="_blank" class="button-style text-xl font-bold orbitron inline-flex items-center">
+                הפעל את המנגנונים עכשיו! <span class="gear-icon mr-3 text-2xl">⚙️</span>
+            </a>
+        </section>
+
+    </main>
+
+    <!-- Scroll Indicator - For Guiding User Interaction -->
+    <div id="scroll-indicator" class="hidden sm:flex">
+        <span class="assistant text-lg">גלול למטה לנתונים נוספים</span>
+        <div class="arrow"></div>
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+        document.addEventListener('mousedown', () => {
+            customCursor.classList.add('active');
+        });
+        document.addEventListener('mouseup', () => {
+            customCursor.classList.remove('active');
+        });
+
+        // Intersection Observer for Scroll-triggered Fade-in Effect
+        const panels = document.querySelectorAll('.panel');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the item is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in-visible');
+                    observer.unobserve(entry.target); // Stop observing once visible
+                }
+            });
+        }, observerOptions);
+
+        panels.forEach(panel => {
+            panel.classList.add('fade-in-hidden'); // Apply initial hidden state
+            observer.observe(panel);
+        });
+
+        // Scroll Indicator Visibility Logic
+        const scrollIndicator = document.getElementById('scroll-indicator');
+        let hideTimeout;
+
+        const handleScrollIndicator = () => {
+            if (window.scrollY > 150) { // Hide after scrolling down a bit
+                scrollIndicator.style.opacity = '0';
+                scrollIndicator.style.pointerEvents = 'none'; // Make it non-interactive
+            } else {
+                // Only show if at the top
+                scrollIndicator.style.opacity = '1';
+                scrollIndicator.style.pointerEvents = 'auto';
+            }
+        };
+
+        window.addEventListener('scroll', handleScrollIndicator);
+        // Initial check in case page is loaded scrolled
+        handleScrollIndicator();
+
+    </script>
+</body>
+</html>

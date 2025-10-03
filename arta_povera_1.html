@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>האדמה הדיגיטלית: בינה מלאכותית כשדה בור</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, hiding default cursor and setting fonts */
+        body {
+            font-family: 'Frank Ruhl Libre', serif; /* Main content font, classic and slightly rugged */
+            cursor: none; /* Hide default system cursor to use custom one */
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax effects */
+            background-color: #1a1a1a; /* Deep dark background */
+        }
+        /* Specific font for technical/code-like elements, lending a 'raw data' feel */
+        .mono-font {
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        /* Custom scrollbar to match the overall aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+            background-color: #333;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #666;
+            border-radius: 4px;
+            border: 1px solid #444; /* Subtle border for a more 'material' feel */
+        }
+        ::-webkit-scrollbar-track {
+            background-color: #222;
+        }
+
+        /* Parallax layers for depth and movement */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Ensure layers don't interfere with interactions */
+            will-change: transform; /* Optimize for smooth animation */
+        }
+
+        /* Arte Povera inspired overlay: subtle, layered textures mimicking raw material */
+        .arte-povera-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Layered gradients creating a subtle, distressed pattern */
+            background-image:
+                linear-gradient(rgba(100, 100, 100, 0.05), rgba(100, 100, 100, 0.05)),
+                linear-gradient(135deg, rgba(200, 200, 200, 0.03) 25%, transparent 25%, transparent 50%, rgba(200, 200, 200, 0.03) 50%, rgba(200, 200, 200, 0.03) 75%, transparent 75%, transparent),
+                linear-gradient(45deg, rgba(150, 150, 150, 0.02) 25%, transparent 25%, transparent 50%, rgba(150, 150, 150, 0.02) 50%, rgba(150, 150, 150, 0.02) 75%, transparent 75%, transparent);
+            background-size: 8px 8px, 16px 16px, 24px 24px; /* Varying sizes for depth */
+            pointer-events: none;
+            z-index: -5; /* Placed behind main content and most background layers */
+        }
+
+        /* Animation for content revealing on scroll, creating a sense of discovery */
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            /* Custom cubic-bezier for a more natural, springy feel */
+        }
+        .reveal-item.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Staggered delays for a more organic reveal sequence */
+        .reveal-item.delay-100 { transition-delay: 0.1s; }
+        .reveal-item.delay-200 { transition-delay: 0.2s; }
+        .reveal-item.delay-300 { transition-delay: 0.3s; }
+        .reveal-item.delay-400 { transition-delay: 0.4s; }
+        .reveal-item.delay-500 { transition-delay: 0.5s; }
+        .reveal-item.delay-600 { transition-delay: 0.6s; }
+        .reveal-item.delay-700 { transition-delay: 0.7s; }
+        .reveal-item.delay-800 { transition-delay: 0.8s; }
+        .reveal-item.delay-900 { transition-delay: 0.9s; }
+        .reveal-item.delay-1000 { transition-delay: 1.0s; }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-200 antialiased leading-relaxed relative">
+
+    <!-- Custom Cursor: mandatory high-contrast design -->
+    <div id="custom-cursor" class="fixed z-[9999] pointer-events-none rounded-full transition-transform duration-100 ease-out
+                                  w-6 h-6 border-2 border-white
+                                  shadow-[0_0_0_2px_rgba(0,0,0,0.8)]
+                                  flex items-center justify-center">
+        <!-- Inner dot for visual interest, still within high-contrast rules -->
+        <div class="w-2 h-2 bg-white rounded-full opacity-75"></div>
+    </div>
+
+    <!-- Arte Povera Overlay for subtle texture -->
+    <div class="arte-povera-overlay"></div>
+
+    <!-- Parallax Background Layers, creating depth and subtle movement -->
+    <div id="parallax-layer-1" class="parallax-layer z-[-10] bg-zinc-800 opacity-20"></div>
+    <div id="parallax-layer-2" class="parallax-layer z-[-15] bg-gray-700 opacity-15" style="transform: scale(1.05);"></div>
+    <div id="parallax-layer-3" class="parallax-layer z-[-20] bg-neutral-900 opacity-10" style="transform: scale(1.1);"></div>
+
+    <!-- Main Content Wrapper, positioned above background layers -->
+    <main class="relative z-10 min-h-screen pt-20 pb-40 px-4 md:px-8 lg:px-16 overflow-hidden">
+
+        <!-- Title Section: grand, imposing, like an inscription -->
+        <section class="min-h-screen flex items-center justify-center p-8 bg-black bg-opacity-30 border-b border-t border-gray-700 border-opacity-50 my-20 reveal-item">
+            <div class="max-w-4xl text-center">
+                <h1 class="text-6xl md:text-8xl font-bold mb-8 text-white tracking-wide leading-tight drop-shadow-lg reveal-item delay-200">
+                    האדמה הדיגיטלית: <br> בינה מלאכותית כשדה בור
+                </h1>
+                <p class="text-2xl md:text-3xl text-gray-300 mono-font leading-relaxed reveal-item delay-400">
+                    לא עוד מגדל שן של קוד - <br> אלא אבן פינה לכל יוצר, לכל עובד, לכל אדם. <br> הבינה המלאכותית נולדת מחדש, במגע ידך.
+                </p>
+            </div>
+        </section>
+
+        <!-- Core Message / Vision: a profound statement, like a manifesto fragment -->
+        <section class="max-w-3xl mx-auto my-32 p-8 border-2 border-dashed border-gray-600 border-opacity-70 reveal-item delay-600">
+            <h2 class="text-4xl font-bold mb-6 text-orange-300 reveal-item delay-700">
+                פריצת דרך אל האפשרי
+            </h2>
+            <p class="text-xl leading-loose text-gray-300 reveal-item delay-800">
+                בעולם שבו המידע זורם כנהר שוצף, הבינה המלאכותית היא המנוף שיאפשר לנו לא רק לצלוח אותו, אלא גם לחצוב בו נתיבים חדשים. אנו רואים בה לא טכנולוגיה מרוחקת, אלא חומר גלם ראשוני - אדמה דיגיטלית פורייה, הממתינה לידיים שידעו לעבד אותה. ננגיש את הכוח הזה לכולם, מהיסוד ועד לבניין, ונהפוך כל רעיון למציאות דיגיטלית חיה.
+            </p>
+        </section>
+
+        <!-- Target Audience Section: fragments describing the seekers of this new 'material' -->
+        <section class="max-w-4xl mx-auto my-32 p-8 bg-gray-800 bg-opacity-40 shadow-inner shadow-gray-700 reveal-item">
+            <h2 class="text-4xl font-bold mb-8 text-sky-300 reveal-item delay-100">
+                למי נועד המסע באדמה הדיגיטלית?
+            </h2>
+            <div class="grid md:grid-cols-2 gap-12 text-lg text-gray-300">
+                <div class="reveal-item delay-200">
+                    <h3 class="text-2xl font-semibold mb-3 text-white">החורשים הראשונים: מתחילים</h3>
+                    <p>אלה המעזים לחרוש לראשונה את שדה הלא-נודע של הבינה המלאכותית, ללא ידע קודם, אך עם סקרנות ורצון עז ליצור ולהבין.</p>
+                </div>
+                <div class="reveal-item delay-300">
+                    <h3 class="text-2xl font-semibold mb-3 text-white">אורגי החוט: אנשי מקצוע</h3>
+                    <p>אנשי מקצוע המבקשים לארוג את חוט העתיד מסיבים של קוד, ולהטמיע כלים חכמים בעבודתם היומיומית, להעצים את יכולותיהם.</p>
+                </div>
+                <div class="reveal-item delay-400">
+                    <h3 class="text-2xl font-semibold mb-3 text-white">בוני המבנים: מנהלים וארגונים</h3>
+                    <p>מנהלים וארגונים השואפים להקים מבנים חדשים, להכשיר צוותים, ולרתום את כוחה של הבינה המלאכותית לשינוי וצמיחה ארגונית.</p>
+                </div>
+                <div class="reveal-item delay-500">
+                    <h3 class="text-2xl font-semibold mb-3 text-white">חוצבי הזהב: מפתחי פרויקטים</h3>
+                    <p>ברמה מתקדמת - אלה המבקשים לחצוב זהב מתוך רסיסי מידע, לפתח פרויקטים מבוססי AI ולהפוך חזונות טכנולוגיים למציאות.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Specializations Section: 'tools' or 'crafts' in the new digital material -->
+        <section class="max-w-5xl mx-auto my-32 p-8 border-t border-b border-gray-600 border-dashed border-opacity-70 reveal-item">
+            <h2 class="text-5xl font-bold mb-12 text-teal-300 text-center reveal-item delay-100">
+                כלי חרושת דיגיטליים
+            </h2>
+            <div class="grid md:grid-cols-3 gap-10 text-lg">
+                <div class="p-6 bg-neutral-800 bg-opacity-50 border-r-2 border-b-2 border-gray-700 border-opacity-75 relative reveal-item delay-200">
+                    <div class="absolute top-0 right-0 h-8 w-12 bg-gray-900 mono-font text-xs flex items-center justify-center text-gray-500">- 01 -</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-purple-300">לפסל מילים</h3>
+                    <p class="text-gray-300">יצירת טקסטים, סיפורים, מאמרים ותוכן שיווקי מתוך אבק נתונים, בעזרת בינה מלאכותית מנחה. הפוך רעיונות למלל.</p>
+                </div>
+                <div class="p-6 bg-neutral-800 bg-opacity-50 border-l-2 border-b-2 border-gray-700 border-opacity-75 relative reveal-item delay-300">
+                    <div class="absolute top-0 left-0 h-8 w-12 bg-gray-900 mono-font text-xs flex items-center justify-center text-gray-500">- 02 -</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-indigo-300">לבנות כלים חכמים</h3>
+                    <p class="text-gray-300">פיתוח אפליקציות מותאמות אישית, המשלבות לוגיקה חכמה לפתרון בעיות ספציפיות, מחומרים פשוטים ורעיונות גדולים.</p>
+                </div>
+                <div class="p-6 bg-neutral-800 bg-opacity-50 border-r-2 border-t-2 border-gray-700 border-opacity-75 relative reveal-item delay-400">
+                    <div class="absolute bottom-0 right-0 h-8 w-12 bg-gray-900 mono-font text-xs flex items-center justify-center text-gray-500">- 03 -</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-blue-300">להקים מבנים דיגיטליים</h3>
+                    <p class="text-gray-300">פיתוח אתרים שורשיים ומתפתחים, המוטמעים בבינה מלאכותית ומגיבים לצרכי המשתמש בזמן אמת, כארגז חול דיגיטלי.</p>
+                </div>
+                <div class="p-6 bg-neutral-800 bg-opacity-50 border-l-2 border-t-2 border-gray-700 border-opacity-75 relative reveal-item delay-500">
+                    <div class="absolute bottom-0 left-0 h-8 w-12 bg-gray-900 mono-font text-xs flex items-center justify-center text-gray-500">- 04 -</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-lime-300">לחשוף סודות</h3>
+                    <p class="text-gray-300">ניתוח נתונים ומחקר מעמיק, להפיכת ערימות מידע גס לתובנות מעשיות, חשיפת סודות חבויים והסקת מסקנות יקרות ערך.</p>
+                </div>
+                <div class="p-6 bg-neutral-800 bg-opacity-50 border-r-2 border-b-2 border-gray-700 border-opacity-75 relative reveal-item delay-600">
+                    <div class="absolute top-0 right-0 h-8 w-12 bg-gray-900 mono-font text-xs flex items-center justify-center text-gray-500">- 05 -</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-red-300">להחיות חזיונות</h3>
+                    <p class="text-gray-300">יצירת תמונות ואומנות דיגיטלית, מעולמות דמיוניים ועד למציאות מוגברת, מצבעים דיגיטליים וקולות נשכחים.</p>
+                </div>
+                <div class="p-6 bg-neutral-800 bg-opacity-50 border-l-2 border-b-2 border-gray-700 border-opacity-75 relative reveal-item delay-700">
+                    <div class="absolute top-0 left-0 h-8 w-12 bg-gray-900 mono-font text-xs flex items-center justify-center text-gray-500">- 06 -</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-yellow-300">לשחרר את היד העובדת</h3>
+                    <p class="text-gray-300">אוטומציה של תהליכים משעממים וחוזרים, בחיבורים חכמים ופשוטים, כדי לאפשר לך להתמקד במה שחשוב באמת.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered Section: the journey mapped out, with symbolic 'markers' -->
+        <section class="max-w-4xl mx-auto my-32 p-8 bg-gray-900 bg-opacity-50 shadow-xl reveal-item">
+            <h2 class="text-4xl font-bold mb-10 text-cyan-300 text-center reveal-item delay-100">
+                מסע הלמידה: דרכים לחרוש את השדה
+            </h2>
+            <div class="grid md:grid-cols-2 gap-x-12 gap-y-16 text-xl">
+                <div class="relative pb-8 border-b border-gray-600 reveal-item delay-200">
+                    <h3 class="text-2xl font-semibold mb-4 text-green-300">מפגשי אדמה: סדנאות קבוצתיות</h3>
+                    <p class="text-gray-300">מעשיות וממוקדות, ללמוד בקבוצה קטנה, לחלוק רעיונות ולחפור יחד באדמה הדיגיטלית. ידע ישים מיידית.</p>
+                    <div class="absolute bottom-0 left-0 w-8 h-8 bg-gray-700 border border-gray-600 flex items-center justify-center mono-font text-gray-400 text-sm">🪨</div>
+                </div>
+                <div class="relative pb-8 border-b border-gray-600 reveal-item delay-300">
+                    <h3 class="text-2xl font-semibold mb-4 text-pink-300">חניכה אישית: שיעורים פרטיים</h3>
+                    <p class="text-gray-300">התאמה אישית לרמה ולצרכים שלך. ניווט פרטני בשבילי הבינה, בקצב שלך, אל עבר יעדים מוגדרים וברורים.</p>
+                    <div class="absolute bottom-0 left-0 w-8 h-8 bg-gray-700 border border-gray-600 flex items-center justify-center mono-font text-gray-400 text-sm">💡</div>
+                </div>
+                <div class="relative pb-8 border-b border-gray-600 md:border-b-0 reveal-item delay-400">
+                    <h3 class="text-2xl font-semibold mb-4 text-yellow-300">קריאה אל העתיד: הרצאות לארגונים</h3>
+                    <p class="text-gray-300">פתיחת אופקים לצוותים, הצגת פוטנציאל הבינה המלאכותית ועידוד חדשנות ארגונית דרך סיפורים ודוגמאות.</p>
+                    <div class="absolute bottom-0 left-0 w-8 h-8 bg-gray-700 border border-gray-600 flex items-center justify-center mono-font text-gray-400 text-sm">🗣️</div>
+                </div>
+                <div class="relative pb-8 reveal-item delay-500">
+                    <h3 class="text-2xl font-semibold mb-4 text-orange-300">בניין משותף: ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-gray-300">ליווי מקצועי, אבן על אבן, בפיתוח פרויקטים מבוססי AI, מהרעיון ועד ליישום. בונים יחד את העתיד.</p>
+                    <div class="absolute bottom-0 left-0 w-8 h-8 bg-gray-700 border border-gray-600 flex items-center justify-center mono-font text-gray-400 text-sm">🏗️</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instructor Section: Zevik Aviner presented as the 'carver' or 'master of material' -->
+        <section class="max-w-3xl mx-auto my-32 p-8 bg-zinc-800 bg-opacity-60 border-4 border-gray-700 border-double reveal-item">
+            <h2 class="text-5xl font-bold mb-8 text-white text-center reveal-item delay-100">
+                החוצב: זאביק אבינר
+            </h2>
+            <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                <div class="w-48 h-48 flex-shrink-0 relative overflow-hidden rounded-md reveal-item delay-200">
+                    <!-- Image treated as an artifact: grayscale, subtle border, gradient overlay -->
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונת זאביק אבינר, מומחה בינה מלאכותית"
+                         class="w-full h-full object-cover grayscale opacity-80 border-4 border-gray-600 transform hover:scale-105 transition-transform duration-300 ease-in-out">
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent opacity-50 pointer-events-none"></div>
+                </div>
+                <div class="text-lg text-gray-300 reveal-item delay-300">
+                    <p class="mb-4">
+                        זאביק אבינר הוא מגלה נתיבים חדשים בחומר הדיגיטלי, אמן ההנגשה של בינה מלאכותית. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק הפך את המורכב לפשוט, ואת התיאוריה לכלי עבודה יומיומי. הוא מאמין שהעתיד שייך לאלה שיודעים לעבד את "אדמת" ה-AI ולהפיק ממנה יצירות ופתרונות.
+                    </p>
+                    <p class="mono-font text-gray-400 text-sm reveal-item delay-400">
+                        "הבנה היא הכוח האמיתי. הבינה המלאכותית היא רק ההשתקפות."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section: a final, urgent call to action, framed as 'human touch' -->
+        <section class="max-w-2xl mx-auto my-32 p-8 border-4 border-double border-orange-400 border-opacity-70 bg-black bg-opacity-40 text-center reveal-item">
+            <h2 class="text-4xl font-bold mb-8 text-white reveal-item delay-100">
+                מגע אדם: להתחבר לאדון החומר
+            </h2>
+            <p class="text-xl mb-8 text-gray-300 reveal-item delay-200">
+                הגיע הזמן לעבד את האדמה הדיגיטלית שלך.
+            </p>
+            <div class="flex flex-col items-center gap-6 text-2xl mono-font text-lime-400 reveal-item delay-300">
+                <a href="https://wa.me/972546609385" target="_blank" class="hover:text-lime-200 transition-colors duration-200 flex items-center gap-3">
+                    <span class="text-3xl">📱</span> ווטסאפ: 054-6609385
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="hover:text-lime-200 transition-colors duration-200 flex items-center gap-3">
+                    <span class="text-3xl">✉️</span> אימייל: zaviner@gmail.com
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor Logic for immersive interaction
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            // Position the cursor div accurately
+            customCursor.style.transform = `translate(${e.clientX - customCursor.offsetWidth / 2}px, ${e.clientY - customCursor.offsetHeight / 2}px)`;
+        });
+
+        // Optional: Cursor interaction on hover for clickable elements
+        const clickableElements = 'a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])'; // Broad selector for interactive elements
+        document.querySelectorAll(clickableElements).forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('scale-150', 'bg-white', 'border-transparent'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('scale-150', 'bg-white', 'border-transparent'));
+        });
+
+
+        // Parallax Effect Logic for background layers
+        const parallaxLayers = [
+            { element: document.getElementById('parallax-layer-1'), speed: 0.08 },
+            { element: document.getElementById('parallax-layer-2'), speed: 0.05 },
+            { element: document.getElementById('parallax-layer-3'), speed: 0.02 }
+        ];
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.pageYOffset;
+
+            parallaxLayers.forEach(layer => {
+                const yPos = -(scrollY * layer.speed);
+                // Apply transform to create the parallax movement
+                layer.element.style.transform = `translateY(${yPos}px)`;
+            });
+        });
+
+        // Intersection Observer for Reveal Items: content appears on scroll
+        const revealItems = document.querySelectorAll('.reveal-item');
+
+        const observerOptions = {
+            root: null, // Observe relative to the viewport
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the item is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Stop observing once revealed to save resources
+                }
+            });
+        }, observerOptions);
+
+        revealItems.forEach(item => {
+            observer.observe(item);
+        });
+
+        // Initialize parallax on load to account for initial scroll position
+        window.dispatchEvent(new Event('scroll'));
+    </script>
+</body>
+</html>

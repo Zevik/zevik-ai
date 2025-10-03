@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שער לעתיד: אמנות השליטה בבינה המלאכותית</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base Colors & Typography */
+        :root {
+            --primary-color: #00e676; /* Electric Green - for highlights, borders, primary focus */
+            --secondary-color: #00b0ff; /* Deep Sky Blue - for links, secondary highlights */
+            --accent-purple: #9c27b0; /* For subtle code elements */
+            --bg-dark-primary: #0a0a0a; /* Main background */
+            --bg-dark-secondary: #121212; /* Card/section backgrounds */
+            --text-light: #e0e0e0; /* Main text color */
+            --text-muted: #a0a0a0; /* Subtler text */
+        }
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: var(--bg-dark-primary);
+            color: var(--text-light);
+            cursor: none; /* Hide default browser cursor */
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .font-mono {
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        /* Custom Cursor Styling - High Contrast Mandatory */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            transform: translate(-50%, -50%); /* Center the cursor on mouse pointer */
+            z-index: 9999;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            transition: transform 0.1s ease-out, width 0.1s ease-out, height 0.1s ease-out;
+            will-change: transform, width, height;
+        }
+        .custom-cursor-inner {
+            width: 12px;
+            height: 12px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.1s ease-out, height 0.1s ease-out, background-color 0.1s ease-out, box-shadow 0.2s ease-out;
+        }
+        .cursor-outer {
+            border: 2px solid #FFFFFF; /* White border for visibility on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for visibility on light backgrounds */
+        }
+        /* Cursor interaction states */
+        .link-hover .custom-cursor-inner {
+            background-color: var(--secondary-color);
+            width: 20px;
+            height: 20px;
+            box-shadow: 0 0 10px var(--secondary-color), 0 0 20px var(--secondary-color) inset;
+        }
+        .interactive-hover .custom-cursor-inner {
+            background-color: var(--accent-purple);
+            width: 16px;
+            height: 16px;
+            box-shadow: 0 0 8px var(--accent-purple);
+        }
+
+        /* Parallax Background Layers - Generative SVG for art style */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10; /* Ensures content is on top */
+            pointer-events: none;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            transition: transform 0.1s ease-out; /* Smooth movement on scroll */
+            will-change: transform;
+        }
+        /* Layer 1: Subtle grid, darker */
+        .parallax-layer.layer-1 {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg stroke='%23444' stroke-width='1' %3E%3Cpath d='M-40 80L1600 80M-40 160L1600 160M-40 240L1600 240M-40 320L1600 320M-40 400L1600 400M-40 480L1600 480M-40 560L1600 560M-40 640L1600 640M-40 720L1600 720M-40 800L1600 800'/%3E%3Cpath d='M-40 800L1600 0M-40 720L1600 -80M-40 640L1600 -160M-40 560L1600 -240M-40 480L1600 -320M-40 400L1600 -400M-40 320L1600 -480M-40 240L1600 -560M-40 160L1600 -640M-40 80L1600 -720M-40 0L1600 -800' opacity='0.5'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 200px 200px; /* Zoomed out grid */
+            animation: moveGrid 30s linear infinite; /* Continuous animation */
+        }
+        /* Layer 2: Brighter, more active grid, faster movement */
+        .parallax-layer.layer-2 {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25' viewBox='0 0 1600 800'%3E%3Cg stroke='%2300e676' stroke-width='1' %3E%3Cpath d='M-40 80L1600 80M-40 160L1600 160M-40 240L1600 240M-40 320L1600 320M-40 400L1600 400M-40 480L1600 480M-40 560L1600 560M-40 640L1600 640M-40 720L1600 720M-40 800L1600 800' opacity='0.1'/%3E%3Cpath d='M0 0L0 800M80 0L80 800M160 0L160 800M240 0L240 800M320 0L320 800M400 0L400 800M480 0L480 800M560 0L560 800M640 0L640 800M720 0L720 800M800 0L800 800' opacity='0.05'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 150px 150px;
+            animation: moveGrid 45s reverse linear infinite; /* Different speed/direction for depth */
+            transform: scale(1.1); /* Slightly larger to enhance parallax effect */
+        }
+        @keyframes moveGrid {
+            from { background-position: 0 0; }
+            to { background-position: 200px 200px; }
+        }
+        
+        /* Scroll Reveal Animation for Content Sections */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transition-delay: var(--scroll-reveal-delay, 0s); /* Individual delays for staggered appearance */
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero Section Specific Styles */
+        .hero-title-glow {
+            text-shadow: 0 0 8px var(--primary-color), 0 0 16px var(--primary-color), 0 0 24px var(--primary-color), 0 0 32px var(--primary-color);
+            transition: text-shadow 0.3s ease-in-out;
+        }
+        .hero-title-glow:hover {
+            text-shadow: 0 0 12px var(--secondary-color), 0 0 24px var(--secondary-color), 0 0 36px var(--secondary-color), 0 0 48px var(--secondary-color);
+        }
+
+        /* Zevik's Image Placeholder - for accessibility if image fails */
+        .zevik-placeholder {
+            background-color: var(--bg-dark-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-align: center;
+            border: 4px dashed var(--secondary-color) !important; /* Visual cue for placeholder */
+        }
+        .zevik-placeholder::before {
+            content: 'תמונת מומחה AI'; /* Descriptive text for placeholder */
+        }
+
+        /* RTL Specific Styling Adjustments */
+        .border-r-4 { border-right-width: 4px; border-left-width: 0; } /* Ensure border is on the right for RTL headings */
+        .pr-4 { padding-right: 1rem; padding-left: 0; } /* Padding on the right */
+        
+        /* Link Styling */
+        a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            position: relative;
+            z-index: 10; /* Ensure links are above card pseudo-elements */
+        }
+        a:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        /* AI Card Styling for Services & Expertise */
+        .ai-card {
+            background-color: rgba(17, 24, 39, 0.65); /* Dark background with transparency */
+            border-right: 3px solid var(--primary-color); /* Right border for RTL aesthetic */
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, border-color 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4); /* Initial subtle shadow */
+        }
+        /* Holographic/Glow effect on hover */
+        .ai-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(0,230,118,0.08) 0%, transparent 70%); /* Green radial gradient */
+            z-index: 0;
+            transition: opacity 0.4s ease-in-out;
+            opacity: 0;
+        }
+        .ai-card:hover::before {
+            opacity: 1;
+        }
+        .ai-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,230,118,0.3), 0 0 20px rgba(0,230,118,0.4); /* Enhanced shadow on hover */
+            border-color: var(--secondary-color); /* Border color changes on hover */
+        }
+        .ai-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.75rem;
+            position: relative;
+            z-index: 1; /* Keep text above pseudo-element */
+        }
+        .ai-card p {
+            color: var(--text-light);
+            position: relative;
+            z-index: 1;
+            font-size: 0.95rem;
+        }
+
+        /* Code Block Styling */
+        .code-block {
+            background-color: rgba(17, 24, 39, 0.7);
+            border-right: 2px solid var(--primary-color);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border-radius: 0.375rem;
+            line-height: 1.6;
+            direction: ltr; /* Ensure code block itself is LTR for readability */
+            text-align: left; /* Ensure code block text is left-aligned */
+        }
+        .code-block span.text-green-400 { color: var(--primary-color); }
+        .code-block span.text-blue-400 { color: var(--secondary-color); }
+        .code-block span.text-yellow-300 { color: #facc15; } /* Tailwind yellow-300 */
+        .code-block span.text-purple-400 { color: var(--accent-purple); }
+        .code-block span.text-orange-300 { color: #fdba74; } /* Tailwind orange-300 */
+
+        /* Contact Details Styling with Icons */
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--secondary-color);
+            margin-top: 0.5rem;
+            transition: color 0.2s ease-in-out;
+            font-weight: 700;
+        }
+        .contact-link:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+        .contact-link svg {
+            margin-right: 0.5rem; /* Icon on the right of text for RTL */
+            margin-left: 0;
+            transition: transform 0.2s ease-in-out;
+        }
+        .contact-link:hover svg {
+            transform: translateX(-3px); /* Subtle slide effect on hover */
+        }
+        .whatsapp-icon { color: #25D366; } /* WhatsApp brand color */
+        .mail-icon { color: var(--primary-color); } /* Using primary accent for mail icon */
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-100 antialiased overflow-x-hidden">
+
+    <!-- Custom Cursor -->
+    <div id="customCursor" class="custom-cursor cursor-outer">
+        <div class="custom-cursor-inner"></div>
+    </div>
+
+    <!-- Parallax Background Layers -->
+    <div id="parallaxBg1" class="parallax-layer layer-1"></div>
+    <div id="parallaxBg2" class="parallax-layer layer-2"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 min-h-screen flex flex-col items-center justify-center p-6 md:p-12 lg:p-24">
+
+        <!-- Hero Section -->
+        <header class="text-center py-20 w-full max-w-5xl">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-l from-green-400 to-blue-500 leading-tight hero-title-glow scroll-reveal" style="--scroll-reveal-delay: 0s;">
+                שער לעתיד: אמנות השליטה בבינה המלאכותית
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto scroll-reveal" style="--scroll-reveal-delay: 0.2s;">
+                הבינה המלאכותית כבר אינה מדע בדיוני. היא השפה החדשה, הכוח המעצב של המחר – ואתם מוזמנים ללמוד אותה, לשלוט בה, ולצייר באמצעותה את עתידכם.
+            </p>
+            <a href="#services" class="inline-block px-8 py-3 bg-gradient-to-r from-green-500 to-blue-600 text-white text-lg font-bold rounded-full hover:scale-105 transition-transform duration-300 shadow-lg shadow-green-500/30 scroll-reveal link-hover" style="--scroll-reveal-delay: 0.4s;">
+                צאו למסע אל עולם ה-AI
+            </a>
+        </header>
+
+        <!-- The Vision - About AI Section -->
+        <section id="about-ai" class="w-full max-w-4xl my-24 p-8 rounded-xl bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-700 relative scroll-reveal interactive-item" style="--scroll-reveal-delay: 0s;">
+            <h2 class="text-4xl font-bold text-green-400 mb-6 border-r-4 border-green-500 pr-4">השליטה: מפרום הנתונים ועד ליצירה</h2>
+            <p class="text-lg leading-relaxed text-gray-200 mb-6">
+                לפרום את צפונות הקוד, להבין את לחש הנתונים, ולהפוך טכנולוגיה מורכבת לכלי עבודה יומיומי. אנו מאמינים שהיכולת לרתום את עוצמת ה-AI אינה שמורה למתי מעט, אלא זכות נגישה לכל מי שמוכן/ה להביט אל האופק החדש. מצעדיכם הראשונים בעולם הדיגיטלי ועד לבניית מערכות חכמות פורצות דרך – נלווה אתכם בכל שלב.
+            </p>
+            <div class="code-block font-mono text-gray-300 text-sm">
+                <span class="text-green-400">def</span> <span class="text-blue-400">master_ai</span>(<span class="text-yellow-300">אתם</span>):<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-purple-400">הדפס</span>(<span class="text-orange-300">"AI אינה עוד קופסה שחורה. היא קנבס ליצירה."</span>)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;return <span class="text-white">גישה_לעתיד</span>(<span class="text-yellow-300">אתם</span>)
+            </div>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section id="audience" class="w-full max-w-5xl my-24 p-8 rounded-xl bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-700 relative scroll-reveal interactive-item" style="--scroll-reveal-delay: 0.2s;">
+            <h2 class="text-4xl font-bold text-blue-400 mb-6 border-r-4 border-blue-500 pr-4">למי מיועד המסע?</h2>
+            <p class="text-lg leading-relaxed text-gray-200 mb-8">
+                המסע אל לב הבינה המלאכותית פתוח בפניכם, בין אם אתם אדריכלי מחר, יזמים דיגיטליים, מנהיגי צוותים, או פשוט סקרנים המבקשים להצטרף למהפכה. אנו נבנה את הגשרים שיחברו אתכם אל המימד הבא, עם ידע מעשי וכלים שאפשר ליישם מיד.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                <div class="ai-card flex flex-col items-center interactive-item">
+                    <span class="text-5xl text-green-400 mb-4">💡</span>
+                    <h3 class="text-xl font-bold">מתחילים</h3>
+                    <p class="text-sm text-gray-300">הצעדים הראשונים בעולם החדש.</p>
+                </div>
+                <div class="ai-card flex flex-col items-center interactive-item">
+                    <span class="text-5xl text-blue-400 mb-4">💼</span>
+                    <h3 class="text-xl font-bold">אנשי מקצוע</h3>
+                    <p class="text-sm text-gray-300">הטמעת AI לעבודה יעילה.</p>
+                </div>
+                <div class="ai-card flex flex-col items-center interactive-item">
+                    <span class="text-5xl text-purple-400 mb-4">🏢</span>
+                    <h3 class="text-xl font-bold">מנהלים וארגונים</h3>
+                    <p class="text-sm text-gray-300">הובלה חדשנית לצוותים.</p>
+                </div>
+                <div class="ai-card flex flex-col items-center interactive-item">
+                    <span class="text-5xl text-orange-400 mb-4">🚀</span>
+                    <h3 class="text-xl font-bold">מפתחי פרויקטים</h3>
+                    <p class="text-sm text-gray-300">בניית פתרונות מבוססי AI.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Areas of Expertise Section -->
+        <section id="expertise" class="w-full max-w-5xl my-24 p-8 rounded-xl bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-700 relative scroll-reveal interactive-item" style="--scroll-reveal-delay: 0.4s;">
+            <h2 class="text-4xl font-bold text-green-400 mb-6 border-r-4 border-green-500 pr-4">תחומי שליטה: לאן תוכלו לקחת את ה-AI?</h2>
+            <p class="text-lg leading-relaxed text-gray-200 mb-8">
+                הבינה המלאכותית פורצת גבולות בכל תחומי החיים. אצלנו תלמדו לרתום את כוחה לעולמות של יצירה, ניתוח, אוטומציה ופיתוח.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="ai-card interactive-item">
+                    <h3 class="text-2xl font-bold mb-2">יצירת נרטיבים דיגיטליים</h3>
+                    <p class="text-gray-300">הפיכת רעיונות לטקסטים, תסריטים, מאמרים וכל תוכן כתוב, בקלות וביעילות מדהימה.</p>
+                </div>
+                <div class="ai-card interactive-item">
+                    <h3 class="text-2xl font-bold mb-2">הנדסת מציאות חכמה</h3>
+                    <p class="text-gray-300">בניית אפליקציות חכמות המגיבות למשתמש, לומדות ופועלות באופן אוטונומי.</p>
+                </div>
+                <div class="ai-card interactive-item">
+                    <h3 class="text-2xl font-bold mb-2">אדריכלות רשתות חכמות</h3>
+                    <p class="text-gray-300">פיתוח אתרים המשלבים AI לחוויית משתמש אישית, דינמית ומתקדמת.</p>
+                </div>
+                <div class="ai-card interactive-item">
+                    <h3 class="text-2xl font-bold mb-2">פענוח צפני הנתונים</h3>
+                    <p class="text-gray-300">ניתוח כמויות אדירות של מידע, זיהוי דפוסים והסקת מסקנות יקרות ערך.</p>
+                </div>
+                <div class="ai-card interactive-item">
+                    <h3 class="text-2xl font-bold mb-2">אמנות חזותית אלגוריתמית</h3>
+                    <p class="text-gray-300">יצירת תמונות, גרפיקה ואומנות דיגיטלית באמצעות אלגוריתמים מתקדמים.</p>
+                </div>
+                <div class="ai-card interactive-item">
+                    <h3 class="text-2xl font-bold mb-2">מכניקת אוטומציה מתקדמת</h3>
+                    <p class="text-gray-300">אוטומציה של תהליכים עסקיים, שיפור יעילות והפחתת עבודה ידנית.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="w-full max-w-4xl my-24 p-8 rounded-xl bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-700 relative scroll-reveal interactive-item" style="--scroll-reveal-delay: 0.6s;">
+            <h2 class="text-4xl font-bold text-blue-400 mb-6 border-r-4 border-blue-500 pr-4">נתיבים אל הידע: השירותים שלנו</h2>
+            <p class="text-lg leading-relaxed text-gray-200 mb-8">
+                אנו מציעים מגוון רחב של מסגרות לימוד והתמחות, המותאמות לצרכים ולרמות שונות. בחרו את הנתיב המתאים לכם וצאו לדרך.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="ai-card interactive-item">
+                    <h3 class="text-2xl font-bold mb-2">סדנאות - קבוצות מחקר יישומיות</h3>
+                    <p class="text-gray-300">למידה מעשית בקבוצה קטנה, עם דגש על פרויקטים ויישומים מיידיים בעולם האמיתי.</p>
+                </div>
+                <div class="ai-card interactive-item">
+                    <h3 class="text-2xl font-bold mb-2">שיעורים פרטיים - קפסולת ידע אישית</h3>
+                    <p class="text-gray-300">תוכנית לימודים מותאמת אישית, בקצב שלכם, עם דגש על צרכים ספציפיים ומטרות אישיות.</p>
+                </div>
+                <div class="ai-card interactive-item">
+                    <h3 class="text-2xl font-bold mb-2">הרצאות - חזון ופנורמה ארגונית</h3>
+                    <p class="text-gray-300">הרצאות מרתקות ומעוררות השראה לארגונים וצוותים, לפתיחת אופקים והבנת הפוטנציאל של ה-AI.</p>
+                </div>
+                <div class="ai-card interactive-item">
+                    <h3 class="text-2xl font-bold mb-2">ייעוץ ופיתוח - שותפות ביצירת מחר</h3>
+                    <p class="text-gray-300">ליווי מקצועי בפיתוח פרויקטים מבוססי AI, החל משלב הרעיון ועד ליישום המלא.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instructor Section -->
+        <section id="instructor" class="w-full max-w-4xl my-24 p-8 rounded-xl bg-gray-800 bg-opacity-70 backdrop-blur-sm border border-gray-700 relative scroll-reveal interactive-item" style="--scroll-reveal-delay: 0.8s;">
+            <div class="flex flex-col md:flex-row items-center md:items-start text-center md:text-right">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר, מומחה בינה מלאכותית" class="w-32 h-32 rounded-full object-cover mb-6 md:mb-0 md:ml-8 border-4 border-green-500 shadow-lg shadow-green-500/40 transform hover:scale-105 transition-transform duration-300 interactive-item" onerror="this.onerror=null;this.src='';this.alt='תמונת מומחה AI';this.classList.add('zevik-placeholder'); this.style.width='128px'; this.style.height='128px';">
+                <div>
+                    <h2 class="text-4xl font-bold text-green-400 mb-4 border-r-4 border-green-500 pr-4">זאביק אבינר: המצפן שלכם בעולם ה-AI</h2>
+                    <p class="text-lg leading-relaxed text-gray-200 mb-6">
+                        עם ניסיון עשיר בעיצוב, פיתוח והטמעת מערכות בינה מלאכותית, זאביק הפך את הפיכת הטכנולוגיה למובנת ושימושית למשימת חייו. הוא לא רק מלמד, אלא חושף דרכים יצירתיות לרתום את הפוטנציאל העצום של ה-AI, ומלווה כל תלמיד ותלמידה בדרכם אל השליטה.
+                    </p>
+                    <div class="flex flex-col md:flex-row justify-center md:justify-end gap-4 text-lg">
+                        <a href="https://wa.me/972546609385" target="_blank" class="contact-link link-hover" aria-label="שלחו הודעת ווטסאפ לזאביק אבינר">
+                            054-6609385
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 whatsapp-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.557-3.84-1.557-5.887C.187 5.233 6.096 0 12.964 0h.065c3.504 0 6.714 1.354 9.172 3.812 2.458 2.458 3.81 5.669 3.81 9.173s-1.352 6.714-3.81 9.172c-2.458 2.459-5.668 3.811-9.172 3.811h-.065c-2.047 0-4.083-.515-5.887-1.557L.057 24zm6.593-4.576l-.666-.398c-.604-.363-1.03-.893-1.259-1.523l-.158-.456-1.032 3.79L6.65 19.424zm4.843 3.424c1.785 0 3.51-.486 5.006-1.404l.436-.26.963.255 3.394.899-1.025-3.61c-.563-.198-.946-.226-1.428-.276-.482-.05-1.03-.05-1.528-.15l-.46-.098c-.967-.19-1.84-.486-2.61-.887-.77-.4-1.42-1.002-1.93-1.78-.51-.778-.85-1.666-1.02-2.66-.17-1.002-.19-2.02-.06-3.07.12-1.056.46-2.05.99-2.98.53-1.12 1.31-2.07 2.34-2.85.99-.78 2.05-1.29 3.2-1.56s2.32-.23 3.46-.02c.86.15 1.63.4 2.29.74.65.34 1.14.77 1.47 1.29.32.52.47.96.47 1.34s-.17.76-.58 1.11c-.4.36-.93.57-1.6.66l-.68.09c-.4.05-.75.05-1.06-.05-.3-.11-.5-.22-.6-.33-.1-.1-.13-.2-.13-.24s.0-.08.06-.15c.06-.06.15-.15.28-.27.13-.13.29-.26.47-.4.18-.15.35-.27.52-.37.16-.1.2-.12.11-.27-.08-.14-.24-.48-.47-.98-.24-.5-.45-.98-.63-1.4-.18-.42-.3-.8-.3-.88s.0-.1.08-.14c.08-.03.2-.05.36-.05s.32.0.46.03c.15.02.26.08.33.17s.14.22.14.39c0 .16-.06.32-.17.48-.11.16-.27.32-.47.47-.2.16-.38.29-.55.4-.17.1-.3.17-.4.2-.1.03-.16.03-.2-.01-.03-.04-.03-.1-.03-.2-.03-.1-.02-.16 0-.2.03-.05.08-.08.16-.08.08 0 .16.02.22.06.07.03.1.06.1.09s-.02.06-.06.08c-.03.02-.06.03-.1.03-.03 0-.06-.0-.08-.01-.02-.01-.03-.02-.04-.03-.02-.01-.02-.02-.02-.02s0-.01.0-.01c.0-.01.0-.01.0-.01.0-.01.0-.01.0-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01-.01

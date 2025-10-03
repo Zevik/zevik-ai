@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>דאדא AI: המניפסט של זאביק - העתיד התפרץ!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&family=Staatliches&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS for Dada aesthetics and cursor */
+        body {
+            font-family: 'Heebo', sans-serif;
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll from Dada elements */
+            background-color: #000; /* Default background */
+            color: #fff; /* Default text color */
+        }
+
+        /* Define custom cursor styles as per directive: light border, dark shadow */
+        .custom-main-cursor {
+            position: fixed;
+            pointer-events: none; /* Ensures cursor doesn't interfere with clicks */
+            z-index: 9999; /* Always on top */
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* REQUIRED: Light color border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* REQUIRED: Dark, high-opacity shadow */
+            transition: transform 0.05s ease-out; /* Smooth follow */
+            transform-origin: center center;
+            opacity: 1; /* Always visible */
+        }
+
+        /* Trail cursors for artistic effect, not subject to strict visibility rule */
+        .cursor-trail {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998; /* Below main cursor */
+            width: 8px; /* Smaller trail elements */
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.4); /* Slightly translucent white */
+            border-radius: 50%;
+            opacity: 0; /* Starts invisible, made visible by JS */
+            transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+        }
+
+        /* Dada background elements for visual chaos */
+        .dada-bg-element {
+            position: fixed;
+            background-color: rgba(255, 255, 255, 0.04); /* Subtle white shapes */
+            z-index: -1; /* Always behind content */
+            transform: rotate(var(--rotate, 0deg));
+            animation: float 20s infinite ease-in-out alternate;
+            pointer-events: none; /* Ensures elements don't block interaction */
+        }
+
+        /* Animation for background elements */
+        @keyframes float {
+            0% { transform: translate(var(--x1, 0%), var(--y1, 0%)) rotate(var(--rotate, 0deg)); }
+            100% { transform: translate(var(--x2, 0%), var(--y2, 0%)) rotate(var(--rotate-end, 0deg)); }
+        }
+
+        /* Google Fonts integration */
+        .font-staatliches {
+            font-family: 'Staatliches', cursive;
+        }
+        .font-heebo {
+            font-family: 'Heebo', sans-serif;
+        }
+
+        /* Scrambling text effect styles */
+        .scramble-text::after {
+            content: ''; /* Ensures element is visible even if text is empty */
+        }
+        .scramble-text .text-gray-600 {
+            color: #4a5568; /* Scrambled characters are darker gray for contrast */
+        }
+    </style>
+</head>
+<body class="bg-black text-white relative">
+
+    <!-- Custom Cursor & Trails -->
+    <div id="custom-main-cursor" class="custom-main-cursor"></div>
+    <div id="cursor-trail-1" class="cursor-trail"></div>
+    <div id="cursor-trail-2" class="cursor-trail"></div>
+    <div id="cursor-trail-3" class="cursor-trail"></div>
+
+    <!-- Dada Background Elements -->
+    <div class="dada-bg-element w-24 h-24 rounded-full" style="--x1: 10%; --y1: 15%; --x2: 20%; --y2: 5%; --rotate: 30deg; --rotate-end: 60deg; left: 10vw; top: 10vh; animation-delay: 0s;"></div>
+    <div class="dada-bg-element w-48 h-12" style="--x1: -5%; --y1: 30%; --x2: 5%; --y2: 40%; --rotate: -20deg; --rotate-end: -50deg; left: 80vw; top: 30vh; animation-delay: 5s;"></div>
+    <div class="dada-bg-element w-32 h-32 square" style="--x1: 25%; --y1: 60%; --x2: 35%; --y2: 70%; --rotate: 45deg; --rotate-end: 90deg; left: 5vw; top: 70vh; animation-delay: 10s;"></div>
+    <div class="dada-bg-element w-16 h-64" style="--x1: 50%; --y1: 10%; --x2: 40%; --y2: 20%; --rotate: 10deg; --rotate-end: 20deg; left: 60vw; top: 5vh; animation-delay: 15s;"></div>
+    <div class="dada-bg-element w-40 h-8 rounded-full" style="--x1: -10%; --y1: 80%; --x2: 0%; --y2: 90%; --rotate: -60deg; --rotate-end: -90deg; left: 20vw; top: 90vh; animation-delay: 2s;"></div>
+    <div class="dada-bg-element w-56 h-16 transform rotate-90" style="--x1: 70%; --y1: 50%; --x2: 80%; --y2: 60%; --rotate: 90deg; --rotate-end: 120deg; left: -10vw; top: 50vh; animation-delay: 7s;"></div>
+    <div class="dada-bg-element w-20 h-20 square" style="--x1: 40%; --y1: 0%; --x2: 30%; --y2: 10%; --rotate: 15deg; --rotate-end: 30deg; left: 90vw; top: 0vh; animation-delay: 12s;"></div>
+
+
+    <main class="relative z-10 min-h-screen p-4 sm:p-8 md:p-12 lg:p-16 flex flex-col justify-between overflow-hidden">
+
+        <!-- Header - Fragmented Title -->
+        <header class="text-right mb-16 md:mb-24 lg:mb-32">
+            <h1 class="font-staatliches text-5xl sm:text-6xl md:text-7xl lg:text-8xl leading-none mb-4 transform -rotate-3 translate-x-4 text-[#FF00FF] hover:text-[#00FFFF] transition-colors duration-300">
+                בינה. מלאכותית?
+            </h1>
+            <p class="font-heebo text-xl sm:text-2xl md:text-3xl lg:text-4xl leading-tight opacity-80 transform rotate-1 translate-x-8 text-gray-300">
+                העתיד. כבר כאן. נשבר. נבנה.
+            </p>
+        </header>
+
+        <!-- Hero Section - Dada Manifesto -->
+        <section class="mb-16 md:mb-24 lg:mb-32 max-w-4xl mx-auto">
+            <h2 class="font-staatliches text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-8 text-center text-[#FFFF00] leading-snug">
+                מניפסט ה-AI. <span class="block -translate-y-4 md:-translate-y-8 lg:-translate-y-12">החדש.</span>
+            </h2>
+            <p class="font-heebo text-lg sm:text-xl md:text-2xl leading-relaxed mb-6 text-gray-200 text-center relative scramble-text" data-scramble="
+                הפיכת AI לנגיש וישים לכולם - מהתחלה ועד רמה מתקדמת.
+                כלים מעשיים שניתן ליישם מיד בעבודה ובחיים.
+                הקסם אינו למעטים. הוא פשטני. מורכב. הוא שלך.
+                לגעת. ליצור. להרוס את הישן.">
+                <!-- Initial text to be scrambled by JS -->
+                בינה מלאכותית: לא מיתוס, אלא פטיש למחשבה. היא לא מחכה. היא כבר כאן, בונה ומפרקת מציאויות.
+                אנו מציעים לא להביט, אלא לגעת. לא לחלום, אלא לבנות.
+                העתיד אינו תיאוריה. הוא כלי. כלי בידיים שלך.
+                הצטרף למהפכה. אל תהיה צופה.
+            </p>
+        </section>
+
+        <!-- Target Audience - Dada collage of ideas -->
+        <section class="mb-16 md:mb-24 lg:mb-32 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform rotate-2 hover:rotate-0 transition-transform duration-300 border-2 border-[#00FFFF]">
+                <h3 class="font-staatliches text-2xl mb-4 text-[#00FFFF]">למתחילים. הפיצוץ הראשון.</h3>
+                <p class="font-heebo text-gray-300 text-sm md:text-base">פחד? לא עוד. הצעד הראשון הוא הפיצוץ הגדול. בינה: מדוע ואיך?</p>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform -rotate-1 hover:rotate-0 transition-transform duration-300 border-2 border-[#FFFF00]">
+                <h3 class="font-staatliches text-2xl mb-4 text-[#FFFF00]">למקצוענים. הקריסה המבוקרת.</h3>
+                <p class="font-heebo text-gray-300 text-sm md:text-base">שבור את השגרה. AI כשותף, לא כמתחרה. הטמעה פרועה.</p>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform rotate-3 hover:rotate-0 transition-transform duration-300 border-2 border-[#FF00FF]">
+                <h3 class="font-staatliches text-2xl mb-4 text-[#FF00FF]">למנהלים. המהפך הארגוני.</h3>
+                <p class="font-heebo text-gray-300 text-sm md:text-base">הצוות שלך: עתיד. AI: המנוע. קבל החלטות מופרעות.</p>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg transform -rotate-2 hover:rotate-0 transition-transform duration-300 border-2 border-white">
+                <h3 class="font-staatliches text-2xl mb-4 text-white">לבוני העתיד. הפרויקט הבלתי אפשרי.</h3>
+                <p class="font-heebo text-gray-300 text-sm md:text-base">פרויקטים מורכבים? רסק את הקיים. AI כמעבדה, לא כספר הוראות.</p>
+            </div>
+        </section>
+
+        <!-- Expertise - Dada word fragments -->
+        <section class="mb-16 md:mb-24 lg:mb-32 text-center relative">
+            <h2 class="font-staatliches text-4xl sm:text-5xl md:text-6xl text-[#00FFFF] mb-12 -rotate-2 inline-block transform px-4 py-2 border-b-4 border-[#00FFFF]">
+                תחומי הפירוק. והבנייה.
+            </h2>
+            <div class="flex flex-wrap justify-center gap-4 sm:gap-6 md:gap-8">
+                <span class="font-staatliches text-2xl sm:text-3xl lg:text-4xl text-[#FFFF00] transform rotate-1 hover:scale-110 transition-transform duration-200">טקסטים מתפוצצים</span>
+                <span class="font-heebo text-lg sm:text-xl lg:text-2xl text-gray-400 transform -rotate-3 hover:scale-105 transition-transform duration-200">אפליקציות חכמות-אבסורדיות</span>
+                <span class="font-staatliches text-xl sm:text-2xl lg:text-3xl text-[#FF00FF] transform rotate-2 hover:scale-110 transition-transform duration-200">אתרים-כאוס</span>
+                <span class="font-heebo text-md sm:text-lg lg:text-xl text-gray-300 transform -rotate-1 hover:scale-105 transition-transform duration-200">נתונים-פסיפס</span>
+                <span class="font-staatliches text-3xl sm:text-4xl lg:text-5xl text-white transform rotate-4 hover:scale-110 transition-transform duration-200">תמונות-הלם</span>
+                <span class="font-heebo text-xl sm:text-2xl lg:text-3xl text-gray-500 transform -rotate-2 hover:scale-105 transition-transform duration-200">אוטומציה-של-שתיקה</span>
+            </div>
+        </section>
+
+        <!-- Services Offered - Dada Action Verbs -->
+        <section class="mb-16 md:mb-24 lg:mb-32 grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div class="bg-gray-900 p-8 rounded-lg shadow-xl border-4 border-dashed border-[#FF00FF] transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+                <h3 class="font-staatliches text-3xl sm:text-4xl text-[#FF00FF] mb-4">סדנאות: הפיצוץ המשותף.</h3>
+                <p class="font-heebo text-gray-200 text-lg">מעשיות. ממוקדות. קבוצתיות. שבירת חומות הידע. יצירה בלתי מוגבלת.</p>
+            </div>
+            <div class="bg-gray-900 p-8 rounded-lg shadow-xl border-4 border-dashed border-[#FFFF00] transform rotate-2 hover:rotate-0 transition-transform duration-300">
+                <h3 class="font-staatliches text-3xl sm:text-4xl text-[#FFFF00] mb-4">שיעורים: הקריסה האישית.</h3>
+                <p class="font-heebo text-gray-200 text-lg">התאמה אישית. רמה. צרכים. אתה במרכז הכאוס. בנה את דרכך הייחודית.</p>
+            </div>
+            <div class="bg-gray-900 p-8 rounded-lg shadow-xl border-4 border-dashed border-[#00FFFF] transform -rotate-1 hover:rotate-0 transition-transform duration-300">
+                <h3 class="font-staatliches text-3xl sm:text-4xl text-[#00FFFF] mb-4">הרצאות: ההד המהדהד.</h3>
+                <p class="font-heebo text-gray-200 text-lg">לארגונים. לצוותים. פתיחת אופקים. ריסוק הנורמה. חשיבה חדשה, קיצונית.</p>
+            </div>
+            <div class="bg-gray-900 p-8 rounded-lg shadow-xl border-4 border-dashed border-white transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                <h3 class="font-staatliches text-3xl sm:text-4xl text-white mb-4">ייעוץ ופיתוח: הפרויקט-בלתי-אפשרי.</h3>
+                <p class="font-heebo text-gray-200 text-lg">ליווי מקצועי. הפיכת רעיונות לכאוס מבוקר. בניית העתיד כעת.</p>
+            </div>
+        </section>
+
+        <!-- The Guide - Zevik Aviner -->
+        <section class="mb-16 md:mb-24 lg:mb-32 max-w-4xl mx-auto text-center relative p-8 bg-black rounded-xl shadow-2xl border-4 border-double border-white">
+            <h2 class="font-staatliches text-5xl sm:text-6xl text-white mb-8 transform -rotate-2">
+                זאביק. המכונאי.
+            </h2>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-8 mb-8">
+                <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - המומחה שידריך אותך בטירוף ה-AI"
+                     class="w-32 h-32 sm:w-40 sm:h-40 rounded-full border-4 border-[#FF00FF] shadow-lg transform rotate-6 hover:rotate-0 transition-transform duration-300 object-cover object-center">
+                <p class="font-heebo text-xl sm:text-2xl leading-relaxed text-gray-100 text-center sm:text-right">
+                    זאביק אבינר - מומחה בינה מלאכותית. לא רק מבין, אלא מפרק ומרכיב מחדש.
+                    <span class="block mt-2 text-gray-300 text-lg">הוא הקואורדינטה האנושית בכאוס המכונה. זאביק: מנגיש את הבלתי נגיש. מפרק ומרכיב את הפחד.</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Section - Disrupted but Clear -->
+        <footer class="text-center relative p-8 bg-gray-900 rounded-lg shadow-inner border-2 border-gray-700">
+            <h2 class="font-staatliches text-4xl sm:text-5xl text-[#00FFFF] mb-8 transform rotate-3">
+                צור קשר. הפרעה הכרחית.
+            </h2>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-6 sm:gap-12 font-heebo text-xl sm:text-2xl text-gray-200">
+                <a href="https://wa.me/972546609385" target="_blank" rel="noopener noreferrer"
+                   class="hover:text-[#FFFF00] transition-colors duration-200 flex items-center gap-2 transform -rotate-1 hover:scale-105">
+                    <span class="font-staatliches text-3xl text-[#FFFF00]">ווטסאפ:</span> 054-6609385
+                </a>
+                <a href="mailto:zaviner@gmail.com"
+                   class="hover:text-[#FF00FF] transition-colors duration-200 flex items-center gap-2 transform rotate-2 hover:scale-105">
+                    <span class="font-staatliches text-3xl text-[#FF00FF]">אימייל:</span> zaviner@gmail.com
+                </a>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        // JavaScript for custom cursor, text scramble, and other Dada effects
+
+        // Custom Cursor Logic
+        const mainCursor = document.getElementById('custom-main-cursor');
+        const trailCursors = [
+            document.getElementById('cursor-trail-1'),
+            document.getElementById('cursor-trail-2'),
+            document.getElementById('cursor-trail-3')
+        ];
+        let mouseX = 0, mouseY = 0;
+        let mainCursorX = 0, mainCursorY = 0;
+        const mainCursorSpeed = 0.1; // Smoothness for main cursor
+        const trailSpeeds = [0.08, 0.06, 0.04]; // Speeds for trail elements
+
+        function animateCursors() {
+            // Update main cursor position with easing
+            mainCursorX += (mouseX - mainCursorX) * mainCursorSpeed;
+            mainCursorY += (mouseY - mainCursorY) * mainCursorSpeed;
+            mainCursor.style.transform = `translate(${mainCursorX - mainCursor.offsetWidth / 2}px, ${mainCursorY - mainCursor.offsetHeight / 2}px)`;
+
+            let prevX = mainCursorX;
+            let prevY = mainCursorY;
+
+            // Update trail cursors positions with varying speeds
+            trailCursors.forEach((trail, index) => {
+                // Ensure trail follows slightly behind the previous element/cursor
+                const trailX = prevX + (mouseX - prevX) * trailSpeeds[index] * (index + 1);
+                const trailY = prevY + (mouseY - prevY) * trailSpeeds[index] * (index + 1);
+                trail.style.transform = `translate(${trailX - trail.offsetWidth / 2}px, ${trailY - trail.offsetHeight / 2}px)`;
+                trail.style.opacity = '1'; // Make trail visible once JS starts
+                prevX = trailX; // Use current trail's position as "previous" for the next trail
+                prevY = trailY;
+            });
+
+            requestAnimationFrame(animateCursors);
+        }
+
+        // Listen for mouse movement to update target coordinates
+        document.addEventListener('mousemove', e => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Initialize cursor animation
+        animateCursors();
+
+
+        // Text Scramble Effect
+        class TextScramble {
+            constructor(el) {
+                this.el = el;
+                // Add common English chars + numbers + punctuation + Hebrew alphabet
+                this.chars = '!<>-_\\/[]{}—=+*&^%$#@!0123456789abcdefghijklmnopqrstuvwxyzאבגדהוזחטיכלמנסעפצקרשת';
+                this.update = this.update.bind(this);
+            }
+            setText(newText) {
+                const oldText = this.el.textContent;
+                const length = Math.max(oldText.length, newText.length);
+                const promise = new Promise(resolve => this.resolve = resolve);
+                this.queue = [];
+                for (let i = 0; i < length; i++) {
+                    const from = oldText[i] || '';
+                    const to = newText[i] || '';
+                    const start = Math.floor(Math.random() * 40); // Random start frame
+                    const end = start + Math.floor(Math.random() * 40); // Random end frame
+                    this.queue.push({ from, to, start, end });
+                }
+                cancelAnimationFrame(this.frameRequest); // Stop any existing animation
+                this.frame = 0;
+                this.update(); // Start new animation
+                return promise;
+            }
+            update() {
+                let output = '';
+                let complete = 0;
+                for (let i = 0, n = this.queue.length; i < n; i++) {
+                    let { from, to, start, end, char } = this.queue[i];
+                    if (this.frame >= end) {
+                        complete++;
+                        output += to; // Character is fully revealed
+                    } else if (this.frame >= start) {
+                        if (!char || Math.random() < 0.28) { // Randomly change scrambled char
+                            char = this.randomChar();
+                            this.queue[i].char = char;
+                        }
+                        output += `<span class="text-gray-600">${char}</span>`; // Scrambled chars
+                    } else {
+                        output += from; // Original character (before scrambling starts)
+                    }
+                }
+                this.el.innerHTML = output;
+                if (complete === this.queue.length) {
+                    this.resolve(); // Animation finished
+                } else {
+                    this.frameRequest = requestAnimationFrame(this.update);
+                    this.frame++;
+                }
+            }
+            randomChar() {
+                return this.chars[Math.floor(Math.random() * this.chars.length)];
+            }
+        }
+
+        // Apply text scramble effect to designated elements
+        const scrambleElements = document.querySelectorAll('.scramble-text');
+        scrambleElements.forEach(el => {
+            const fx = new TextScramble(el);
+            const scrambleData = el.dataset.scramble; // Get scramble text from data attribute
+            
+            // Set initial content to scrambleData so it's ready for scrambling
+            el.textContent = scrambleData;
+
+            // Trigger scramble on scroll into view
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        fx.setText(scrambleData); // Scramble the text
+                        observer.unobserve(entry.target); // Unobserve after first scramble
+                    }
+                });
+            }, { threshold: 0.5 }); // Trigger when 50% of element is visible
+
+            observer.observe(el);
+        });
+
+
+        // Simple Dada-esque paragraph shuffle on hover for the "Target Audience" section
+        const targetAudienceSection = document.querySelector('section:nth-of-type(2)'); // Second section, "Target Audience"
+        if (targetAudienceSection) {
+            const paragraphs = Array.from(targetAudienceSection.querySelectorAll('div > p'));
+            const originalParagraphs = paragraphs.map(p => p.textContent); // Store original text content
+
+            let shuffled = false;
+
+            targetAudienceSection.addEventListener('mouseenter', () => {
+                if (!shuffled) {
+                    // On hover, shuffle the text content of the paragraphs
+                    paragraphs.forEach(p => {
+                        const randomIndex = Math.floor(Math.random() * originalParagraphs.length);
+                        p.textContent = originalParagraphs[randomIndex];
+                    });
+                    shuffled = true;
+                }
+            });
+
+            targetAudienceSection.addEventListener('mouseleave', () => {
+                if (shuffled) {
+                    // On mouse leave, revert to original text order
+                    paragraphs.forEach((p, index) => {
+                        p.textContent = originalParagraphs[index];
+                    });
+                    shuffled = false;
+                }
+            });
+        }
+
+
+        // Dada-esque element animation on scroll (parallax-like but less precise)
+        document.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+
+            // Animate header elements to move slightly out of sync with scroll
+            const headerH1 = document.querySelector('header h1');
+            const headerP = document.querySelector('header p');
+            if (headerH1) {
+                // Apply rotation and translation based on scroll, preserving base transforms
+                headerH1.style.transform = `rotate(${-3 - scrollY * 0.01}deg) translate(${4 + scrollY * 0.02}px)`;
+            }
+            if (headerP) {
+                headerP.style.transform = `rotate(${1 + scrollY * 0.005}deg) translate(${8 - scrollY * 0.01}px)`;
+            }
+
+            // Animate background elements to move with varying speeds (parallax-like)
+            document.querySelectorAll('.dada-bg-element').forEach((el, index) => {
+                const speed = (index % 3) * 0.05 + 0.02; // Varying speeds for different elements
+                const yOffset = scrollY * speed;
+                const initialTransform = el.style.transform; // Get existing transform (rotation from CSS)
+                // Apply new translateY while preserving other transforms
+                el.style.transform = `translateY(${yOffset}px) ${initialTransform.includes('rotate') ? initialTransform.split(')')[0] + ')' : ''}`;
+            });
+        });
+
+    </script>
+</body>
+</html>

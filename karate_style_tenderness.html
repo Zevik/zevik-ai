@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אור בצללים דיגיטליים - זאביק אבינר AI</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Noto Serif Hebrew for dramatic headings, Open Sans Hebrew for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@300;400;700&family=Open+Sans+Hebrew:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles to enhance Tenebrism aesthetic */
+        body {
+            background-color: #0d0d0d; /* Very dark, near-black background */
+            font-family: 'Open Sans Hebrew', sans-serif;
+            color: #e0e0e0; /* Light text for high contrast */
+            overflow-x: hidden; /* Prevent horizontal scroll for artistic integrity */
+            cursor: none; /* Hide default cursor to use custom one */
+            perspective: 1000px; /* Base for potential 3D effects/parallax */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        /* Dramatic serif font for headings, evoking classical artistry */
+        h1, h2, h3, .font-serif-dramatic {
+            font-family: 'Noto Serif Hebrew', serif;
+            font-weight: 700;
+        }
+        /* A subtle, warm gold for highlights and focus points, like illuminated details in a painting */
+        .text-light-gold {
+            color: #F8D786;
+        }
+        /* Text shadow to simulate a soft glow, as if lit from an unseen source */
+        .text-shadow-light {
+            text-shadow: 0 0 8px rgba(248, 215, 134, 0.4), 0 0 15px rgba(248, 215, 134, 0.2);
+        }
+        /* Custom cursor styling for mandated visibility */
+        .cursor-custom {
+            position: fixed;
+            pointer-events: none; /* Allows interaction with elements beneath */
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* High-contrast light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* High-contrast dark shadow */
+            z-index: 9999; /* Always on top */
+            transform: translate(-50%, -50%); /* Centers the cursor */
+            transition: transform 0.1s ease-out, width 0.3s ease, height 0.3s ease, border-width 0.3s ease, box-shadow 0.3s ease;
+            opacity: 1; /* Ensures it's always visible */
+        }
+        /* Cursor effect on hover, symbolizing heightened focus or 'illumination' */
+        .cursor-custom.hover-effect {
+            width: 40px;
+            height: 40px;
+            border-width: 3px;
+            border-color: #F8D786; /* Gold border on hover */
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.9), 0 0 15px rgba(248, 215, 134, 0.7); /* Stronger glow/shadow */
+        }
+        /* Base styles for scroll-reveal elements - starting invisible and slightly transformed */
+        .reveal-element, .reveal-element-left, .reveal-element-right {
+            opacity: 0;
+            transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .reveal-element {
+            transform: translateY(50px) scale(0.95);
+        }
+        .reveal-element-left {
+            transform: translateX(100px);
+        }
+        .reveal-element-right {
+            transform: translateX(-100px);
+        }
+        /* State for visible elements - fully opaque and in original position/scale */
+        .is-visible {
+            opacity: 1;
+            transform: translateY(0) translateX(0) scale(1);
+        }
+
+        /* Tenebrism-inspired background layer with a subtle radial gradient for a 'light source' effect */
+        .tenebrism-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at 65% 35%, rgba(40, 40, 40, 0.15) 0%, rgba(13, 13, 13, 0.95) 60%, rgba(13, 13, 13, 1) 100%);
+            z-index: -1; /* Ensures it's behind all content */
+            pointer-events: none;
+            will-change: transform; /* Hint for browser optimization */
+        }
+    </style>
+</head>
+<body class="bg-[#0d0d0d] text-gray-100 antialiased relative">
+
+    <!-- Tenebrism Background Layer - Subtle radial gradient for depth and light source feel -->
+    <div id="tenebrism-bg" class="tenebrism-background"></div>
+
+    <!-- Custom Cursor - The user's 'torch' in the digital darkness -->
+    <div id="custom-cursor" class="cursor-custom"></div>
+
+    <!-- Main Content Wrapper - A canvas for emerging narratives and forms -->
+    <div class="relative z-10 min-h-screen pb-64 px-8 md:px-16 lg:px-24 xl:px-32 flex flex-col items-center">
+
+        <!-- Vignette 1: Grand Opening - The Revelation of AI's Promise -->
+        <div class="min-h-screen w-full flex flex-col justify-center items-center text-center pt-24 pb-16 relative">
+            <h1 class="font-serif-dramatic text-5xl md:text-7xl lg:text-8xl leading-tight text-light-gold mb-8 text-shadow-light reveal-element max-w-4xl">
+                אור בצללים דיגיטליים:<br>
+                <span class="block mt-4 text-4xl md:text-6xl lg:text-7xl text-white">לשלוט בבינה המלאכותית</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 max-w-3xl reveal-element delay-300">
+                בעידן שבו צללים של אי-ודאות מרקדים סביבנו, ובאופק נגלים יבשות חדשות של ידע – הבינה המלאכותית היא המגדלור, הלפיד הבוער ביד אמן. לא ככוח זר, אלא כהרחבה של תודעתנו.
+            </p>
+        </div>
+
+        <!-- Vignette 2: The Maestro - Zevik Aviner, Guiding Light -->
+        <div class="min-h-screen w-full flex flex-col justify-center items-center text-center relative py-16 md:py-24">
+            <div class="flex flex-col md:flex-row-reverse items-center justify-center gap-12 max-w-5xl mx-auto">
+                <div class="md:w-1/3 flex justify-center reveal-element-right delay-500">
+                    <!-- Image treated artistically with filters for a dramatic, tenebrist effect -->
+                    <img src="https://link.zevikaviner.com/zevik" alt="דיוקנו של זאביק אבינר, מומחה בינה מלאכותית" class="w-64 h-64 md:w-80 md:h-80 object-cover rounded-full shadow-lg border-4 border-gray-700 opacity-90 transition-opacity duration-700 hover:opacity-100 hover:scale-105" style="filter: grayscale(80%) sepia(20%) brightness(80%) contrast(120%);">
+                </div>
+                <div class="md:w-2/3 text-right reveal-element-left delay-700">
+                    <h2 class="font-serif-dramatic text-4xl md:text-5xl text-light-gold mb-6 text-shadow-light">
+                        זאביק אבינר: המאסטרו של האור הדיגיטלי
+                    </h2>
+                    <p class="text-lg md:text-xl text-gray-300 leading-relaxed mb-4">
+                        מתוך עומק הידע והניסיון, זאביק חושף את סודות ה-AI. הוא לא רק מורה, אלא אמן המפסל את ההבנה, מנגיש את המורכב, והופך את הבלתי ידוע לכלי עוצמתי בידיים שלך. דמותו ניצבת על סף האפלה, מציעה יד מאירה.
+                    </p>
+                    <p class="text-base md:text-lg text-gray-400">
+                        היכולת לפסל את העתיד, לחשוף את הנסתר, לגלף את הבלתי נתפס - נמצאת כעת בהישג ידך. אך מי ינחה את היד, מי יאיר את הדרך?
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vignette 3: Paths to Illumination - Services as Journeys -->
+        <div class="min-h-screen w-full flex flex-col justify-center items-center relative py-16 md:py-24">
+            <h2 class="font-serif-dramatic text-4xl md:text-5xl text-light-gold mb-16 text-shadow-light text-center reveal-element">
+                דרכים אל ההארה: הכלים לפסל את עולמך
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+                <div class="bg-gray-900 bg-opacity-70 p-8 rounded-lg shadow-xl border border-gray-800 reveal-element delay-300 transition-transform hover:scale-105 hover:bg-opacity-80">
+                    <h3 class="font-serif-dramatic text-2xl text-light-gold mb-4 text-shadow-light">סדנאות עומק</h3>
+                    <p class="text-gray-200 leading-relaxed">
+                        מסעות קבוצתיים אל לב ה-AI, שבהם יחד נחקור, ניצור ונפעיל. מעשיות, ממוקדות, ומעוררות השראה – אנו מפוררים את מחסומי המורכבות ומאפשרים לכל אחד לגלות את ניצוץ היצירה הדיגיטלית שבו.
+                    </p>
+                </div>
+                <div class="bg-gray-900 bg-opacity-70 p-8 rounded-lg shadow-xl border border-gray-800 reveal-element delay-500 transition-transform hover:scale-105 hover:bg-opacity-80">
+                    <h3 class="font-serif-dramatic text-2xl text-light-gold mb-4 text-shadow-light">שיעורים פרטיים</h3>
+                    <p class="text-gray-200 leading-relaxed">
+                        הכוונה אישית, קרן אור יחידה המותאמת בדיוק לקצב ולצורכי נשמתך הטכנולוגית. מסע צמיחה מואץ, שבו כל שאלה מוצאת מענה וכל אתגר הופך להזדמנות להארה פרטית.
+                    </p>
+                </div>
+                <div class="bg-gray-900 bg-opacity-70 p-8 rounded-lg shadow-xl border border-gray-800 reveal-element delay-700 transition-transform hover:scale-105 hover:bg-opacity-80">
+                    <h3 class="font-serif-dramatic text-2xl text-light-gold mb-4 text-shadow-light">הרצאות לארגונים</h3>
+                    <p class="text-gray-200 leading-relaxed">
+                        פתיחת אופקים חדשים לצוותים, זריעת ניצוצות של ידע וחדשנות בארגון כולו. להאיר את הדרך קדימה, לחשוף את הפוטנציאל הטמון בבינה מלאכותית לעולם העסקי.
+                    </p>
+                </div>
+                <div class="bg-gray-900 bg-opacity-70 p-8 rounded-lg shadow-xl border border-gray-800 reveal-element delay-900 transition-transform hover:scale-105 hover:bg-opacity-80">
+                    <h3 class="font-serif-dramatic text-2xl text-light-gold mb-4 text-shadow-light">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-gray-200 leading-relaxed">
+                        ליווי מקצועי מהרעיון הבוסרי ועד ליצירה המוגמרת – אנו מפסלים יחד את הפרויקט, אור אחר אור, פיקסל אחר פיקסל. להפוך חזון למציאות מוארת בעזרת AI.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vignette 4: Illuminated Gems - Facets of AI Mastery -->
+        <div class="min-h-screen w-full flex flex-col justify-center items-center relative py-16 md:py-24">
+            <h2 class="font-serif-dramatic text-4xl md:text-5xl text-light-gold mb-16 text-shadow-light text-center reveal-element">
+                פנינים מוארות: תחומי השליטה בבינה המלאכותית
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="bg-gray-900 bg-opacity-60 p-6 rounded-lg shadow-md reveal-element delay-200 transition-transform hover:bg-opacity-70 hover:scale-105">
+                    <h3 class="text-xl text-light-gold font-serif-dramatic mb-2">יצירת נרטיבים דיגיטליים ותוכן</h3>
+                </div>
+                <div class="bg-gray-900 bg-opacity-60 p-6 rounded-lg shadow-md reveal-element delay-400 transition-transform hover:bg-opacity-70 hover:scale-105">
+                    <h3 class="text-xl text-light-gold font-serif-dramatic mb-2">בניית מציאויות חכמות</h3>
+                </div>
+                <div class="bg-gray-900 bg-opacity-60 p-6 rounded-lg shadow-md reveal-element delay-600 transition-transform hover:bg-opacity-70 hover:scale-105">
+                    <h3 class="text-xl text-light-gold font-serif-dramatic mb-2">אריגת רשתות מבוססות חוכמה</h3>
+                </div>
+                <div class="bg-gray-900 bg-opacity-60 p-6 rounded-lg shadow-md reveal-element delay-800 transition-transform hover:bg-opacity-70 hover:scale-105">
+                    <h3 class="text-xl text-light-gold font-serif-dramatic mb-2">פענוח תבניות נסתרות: ניתוח נתונים</h3>
+                </div>
+                <div class="bg-gray-900 bg-opacity-60 p-6 rounded-lg shadow-md reveal-element delay-1000 transition-transform hover:bg-opacity-70 hover:scale-105">
+                    <h3 class="text-xl text-light-gold font-serif-dramatic mb-2">פיסול תמונות ואמנות חדשה</h3>
+                </div>
+                <div class="bg-gray-900 bg-opacity-60 p-6 rounded-lg shadow-md reveal-element delay-1200 transition-transform hover:bg-opacity-70 hover:scale-105">
+                    <h3 class="text-xl text-light-gold font-serif-dramatic mb-2">תיאטרון הצללים הדיגיטלי: אוטומציה</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vignette 5: The Fading Shadows - Call to Action, a guiding light -->
+        <div class="min-h-screen w-full flex flex-col justify-center items-center text-center relative py-16 md:py-24">
+            <h2 class="font-serif-dramatic text-4xl md:text-5xl text-light-gold mb-12 text-shadow-light reveal-element">
+                הצללים מתפוגגים, האור מחכה
+            </h2>
+            <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mb-8 reveal-element delay-300">
+                צור קשר עם זאביק אבינר, המאיר את הדרך אל עתיד של שליטה ויצירה עם בינה מלאכותית.
+            </p>
+            <div class="flex flex-col md:flex-row gap-6 reveal-element delay-500">
+                <a href="https://wa.me/972546609385" target="_blank" class="block bg-light-gold text-gray-900 px-8 py-4 rounded-full text-xl md:text-2xl font-bold hover:bg-white hover:text-black transition-all duration-300 shadow-lg border-2 border-transparent hover:border-light-gold hover-effect-target">
+                    ווטסאפ: 054-6609385
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="block border-2 border-light-gold text-light-gold px-8 py-4 rounded-full text-xl md:text-2xl font-bold hover:bg-light-gold hover:text-gray-900 transition-all duration-300 shadow-lg hover-effect-target">
+                    אימייל: zaviner@gmail.com
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript for Custom Cursor and Scroll Reveal Interactions -->
+    <script>
+        // Custom Cursor Logic - A dynamic 'light source' for the user
+        const customCursor = document.getElementById('custom-cursor');
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
+        const speed = 0.2; // Smoothness of cursor movement
+
+        function animateCursor() {
+            // Lerp (linear interpolation) for smooth cursor following
+            cursorX += (mouseX - cursorX) * speed;
+            cursorY += (mouseY - cursorY) * speed;
+            customCursor.style.left = `${cursorX}px`;
+            customCursor.style.top = `${cursorY}px`;
+            requestAnimationFrame(animateCursor); // Loop animation
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Add hover effect to interactive elements, enhancing the cursor's visual feedback
+        document.querySelectorAll('a, button, .hover-effect-target').forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('hover-effect'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('hover-effect'));
+        });
+
+        // Initialize cursor animation
+        animateCursor();
+
+        // Scroll Reveal Logic - Elements emerge from darkness as they enter the viewport
+        const revealElements = document.querySelectorAll('.reveal-element, .reveal-element-left, .reveal-element-right');
+
+        const observerOptions = {
+            root: null, // Observe relative to the viewport
+            rootMargin: '0px',
+            threshold: 0.2 // Element is 20% visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Extract delay from class name (e.g., 'delay-300' -> 300ms)
+                    const delayClass = Array.from(entry.target.classList).find(cls => cls.startsWith('delay-'));
+                    const delay = delayClass ? parseInt(delayClass.replace('delay-', '')) : 0;
+                    
+                    setTimeout(() => {
+                        entry.target.classList.add('is-visible');
+                    }, delay);
+                    observer.unobserve(entry.target); // Stop observing once revealed
+                }
+            });
+        }, observerOptions);
+
+        // Attach observer to all reveal elements
+        revealElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // Parallax effect on the background to enhance depth
+        const tenebrismBg = document.getElementById('tenebrism-bg');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            // Apply a slight vertical shift to the background for a subtle parallax effect
+            tenebrismBg.style.transform = `translateY(${scrollY * 0.1}px)`;
+        });
+    </script>
+</body>
+</html>

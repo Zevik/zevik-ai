@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - אדריכל AI: לשלוט בעתיד</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;600;700&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --color-primary: #8B5CF6; /* Purple-500 */
+            --color-secondary: #0EA5E9; /* Sky-500 */
+            --color-accent: #E879F9; /* Fuchsia-400 */
+            --color-text-light: #F8FAFC; /* Slate-50 */
+            --color-text-dark: #0F172A; /* Slate-900 */
+            --color-bg-dark: #020617; /* Slate-950 */
+            --color-bg-medium: #1E293B; /* Slate-800 */
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: var(--color-bg-dark);
+            color: var(--color-text-light);
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Chakra Petch', sans-serif;
+            color: var(--color-accent);
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #a855f7; /* Primary cursor color */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark outline for contrast */
+            transform: translate(-50%, -50%);
+            transition: width 0.15s ease-out, height 0.15s ease-out, border-radius 0.15s ease-out;
+            will-change: transform; /* Optimize animation */
+        }
+        .custom-cursor.hover {
+            width: 40px;
+            height: 40px;
+            border-radius: 25%; /* Square effect on hover */
+            background-color: rgba(232, 121, 249, 0.2); /* Light fill on hover */
+        }
+
+        /* Sci-fi Background Layers */
+        .background-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1; /* Ensure it's behind content */
+            opacity: 0.8;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .bg-layer-1 {
+            background: radial-gradient(circle at 10% 10%, rgba(139, 92, 246, 0.15) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 90%, rgba(232, 121, 249, 0.15) 0%, transparent 40%);
+        }
+        .bg-layer-2 {
+            background: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="smallGrid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/></pattern><pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(%23smallGrid)"/><path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/></svg>');
+            transform: scale(1.1); /* To allow parallax movement */
+        }
+        .bg-layer-3 {
+            background: radial-gradient(ellipse at 50% 15%, rgba(147, 51, 234, 0.2) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 80%, rgba(6, 182, 212, 0.2) 0%, transparent 60%);
+            transform: scale(1.2); /* Deeper parallax */
+        }
+
+        /* Utility for glowing effect */
+        .glow-text {
+            text-shadow: 0 0 8px var(--color-accent), 0 0 12px var(--color-primary);
+        }
+        .glow-border {
+            border: 1px solid var(--color-accent);
+            box-shadow: 0 0 15px rgba(232, 121, 249, 0.4), 0 0 5px rgba(232, 121, 249, 0.6) inset;
+        }
+
+        /* Scroll indicator styles */
+        #scroll-indicator {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0.8;
+        }
+        .scroll-arrow {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid var(--color-secondary);
+            animation: bounce 1.5s infinite;
+            margin-top: 5px;
+        }
+        .scroll-arrow:nth-child(2) { animation-delay: 0.2s; opacity: 0.8; }
+        .scroll-arrow:nth-child(3) { animation-delay: 0.4s; opacity: 0.6; }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* General Link Styling for Readability */
+        a {
+            color: var(--color-secondary);
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            text-decoration: none;
+        }
+        a:hover {
+            color: var(--color-accent);
+            text-shadow: 0 0 5px var(--color-accent);
+        }
+
+        /* Image styling */
+        .profile-img {
+            border: 3px solid var(--color-primary);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.6);
+        }
+
+        /* Keyframe animations */
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fade-in 1s ease-out forwards;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .animate-float {
+            animation: float 5s ease-in-out infinite;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .custom-cursor {
+                display: none; /* Hide custom cursor on smaller screens for better touch experience */
+            }
+            .background-layer {
+                opacity: 1; /* Less subtle on small screens */
+            }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Sci-fi Background Layers for Parallax -->
+    <div class="background-layer bg-layer-1" id="bg-layer-1"></div>
+    <div class="background-layer bg-layer-2" id="bg-layer-2"></div>
+    <div class="background-layer bg-layer-3" id="bg-layer-3"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 min-h-screen p-4 sm:p-8 md:p-12 lg:p-16 flex flex-col items-center">
+
+        <!-- Hero Section -->
+        <section class="min-h-screen flex items-center justify-center text-center w-full max-w-6xl mx-auto py-20 px-4 md:px-0">
+            <div class="space-y-8 animate-fade-in">
+                <h1 class="text-4xl sm:text-6xl md:text-7xl font-bold leading-tight text-white glow-text">
+                    שער העתיד נפתח: המאסטרים של AI נוצרים כאן
+                </h1>
+                <p class="text-lg sm:text-xl md:text-2xl text-gray-200 leading-relaxed max-w-3xl mx-auto glow-text">
+                    מעבר לקוד: לפענח את סודות ה-AI ולהפוך את הע

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>האקדמיה המוארת לבינה מלאכותית: אומנות ההגשמה הדיגיטלית</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Rococo feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Noto+Serif+Hebrew:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles for Rococo feel */
+        body {
+            font-family: 'Noto Serif Hebrew', serif; /* Primary font for Hebrew readability */
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax */
+            scroll-behavior: smooth;
+            background-color: #F8F4F0; /* Creamy background */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif; /* Elegant display font */
+        }
+        /* Custom cursor styling */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8), /* Dark shadow for contrast on any background */
+                        0 0 15px rgba(255, 182, 193, 0.7); /* Soft pink glow for rococo */
+            transition: transform 0.1s ease-out; /* Smoother follow */
+            z-index: 9999;
+            transform: translate(-50%, -50%); /* Center cursor */
+            will-change: transform;
+        }
+
+        /* Rococo background elements - using SVG patterns and soft gradients */
+        .rococo-bg-pattern-1 {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23e0e0e0' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M0 60V0h60v60h-4v-4H4v4H0zm4-8V8h48v48H4V52zm12-4V16h32v32H16z'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 300px;
+            background-repeat: repeat;
+        }
+        .rococo-bg-gradient {
+            background: radial-gradient(circle at top left, #FFB6C1 0%, transparent 40%),
+                        radial-gradient(circle at bottom right, #B0E0E6 0%, transparent 40%);
+            opacity: 0.6;
+            mix-blend-mode: overlay; /* Soft blend for rococo feel, on fixed background is generally safe */
+        }
+        /* Ornate border for sections */
+        .border-rococo {
+            border-width: 10px;
+            border-style: solid;
+            border-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23FADADD'/%3E%3Cstop offset='100%25' stop-color='%23FDFD96'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='none' stroke='url(%23a)' stroke-width='4' d='M20,2 L80,2 A18,18 0 0 1 98,20 L98,80 A18,18 0 0 1 80,98 L20,98 A18,18 0 0 1 2,80 L2,20 A18,18 0 0 1 20,2 z M50,10 L50,90 M10,50 L90,50'/%3E%3C/svg%3E") 30 / 10px stretch;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* Custom Scrollbar for a more elegant look */
+        /* Works only on Webkit browsers */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FFB6C1; /* Soft pink */
+            border-radius: 4px;
+            border: 2px solid #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #E0BBE4; /* Slightly darker pink/purple */
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased relative">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+
+    <!-- Rococo Background Layer (fixed, z-[-1]) -->
+    <div class="fixed inset-0 rococo-bg-pattern-1 opacity-20 z-[-1]"></div>
+    <div class="fixed inset-0 rococo-bg-gradient z-[-1]"></div>
+
+    <!-- Main Content Wrapper (z-index higher) -->
+    <div class="relative z-10 min-h-screen p-4 md:p-8 lg:p-12 overflow-hidden">
+
+        <!-- Header - A grand entrance -->
+        <header class="text-center mb-16 pt-12 relative">
+            <h1 class="text-5xl md:text-7xl font-bold text-pink-700 leading-tight mb-4 drop-shadow-lg text-shadow-md">
+                האקדמיה המוארת לבינה מלאכותית
+            </h1>
+            <p class="text-2xl md:text-3xl text-gray-700 italic font-thin leading-relaxed">
+                אומנות ההגשמה הדיגיטלית בעידן החדש
+            </p>
+            <div class="absolute inset-x-0 bottom-[-20px] h-1 bg-gradient-to-r from-transparent via-pink-300 to-transparent"></div>
+        </header>
+
+        <!-- Hero Section - A majestic tableau -->
+        <section class="mb-24 relative bg-white bg-opacity-80 p-8 md:p-12 lg:p-16 rounded-3xl shadow-xl border-rococo transform hover:scale-105 transition-transform duration-500 ease-in-out">
+            <div class="absolute -inset-2 bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 rounded-3xl opacity-50 blur-lg z-[-1]"></div>
+            <div class="relative text-center">
+                <h2 class="text-4xl md:text-5xl text-purple-700 font-bold mb-8">
+                    ברוכים הבאים לסלון החדשנות
+                </h2>
+                <p class="text-xl md:text-2xl leading-relaxed mb-8 text-gray-700">
+                    בנבכי המבוך הדיגיטלי, בו שזורים חוטי המחשבה והיצירה, פורחת לה אומנות חדשה - הבינה המלאכותית.
+                    אנו מזמינים אתכם למסע אקסקלוסיבי אל לב הפאר הטכנולוגי, בו כל רעיון לובש צורה, וכל חזון הופך למציאות מרהיבה.
+                    בואו ללמוד לשלוט במברשת העתיד, תחת שרביטו של המאסטרו <span class="font-bold text-pink-600">זאביק אבינר</span>.
+                </p>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-6 mt-10">
+                    <a href="#services" class="px-8 py-4 bg-pink-500 text-white text-xl font-semibold rounded-full shadow-lg hover:bg-pink-600 transition-all duration-300 transform hover:scale-105 active:scale-95 rococo-button">
+                        גלו את השירותים שלנו
+                    </a>
+                    <a href="#contact" class="px-8 py-4 bg-purple-500 text-white text-xl font-semibold rounded-full shadow-lg hover:bg-purple-600 transition-all duration-300 transform hover:scale-105 active:scale-95 rococo-button">
+                        צרו קשר אישי
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Message - The core philosophy -->
+        <section class="mb-24 text-center relative px-4 md:px-8">
+            <h2 class="text-4xl md:text-5xl text-blue-700 font-bold mb-8">
+                הפיכת AI מחידה עתידנית לכלי יומיומי חינני
+            </h2>
+            <p class="text-xl md:text-2xl leading-relaxed max-w-4xl mx-auto text-gray-700 bg-white bg-opacity-80 p-6 rounded-2xl shadow-md border border-pink-200">
+                הבינה המלאכותית, שהייתה עד כה נחלתם של מעטים, פורשת כעת את כנפיה הרחבות בפני כולם.
+                מטרתנו היא להפוך את הטכנולוגיה המהפכנית הזו למשהו נגיש, מעשי ואף אומנותי.
+                בין אם צעדיכם הראשונים בעולם הקסום של ה-AI, ובין אם אתם מבקשים להטמיע נגיעות גאוניות בפרויקטים מתקדמים -
+                אצלנו תמצאו את ההדרכה המדויקת, המעשית והמעוררת השראה, שתהפוך אתכם לאדריכלי העתיד הדיגיטלי שלכם.
+            </p>
+        </section>
+
+        <!-- Zevik Aviner - The Maestro's Chamber -->
+        <section class="mb-24 relative bg-white bg-opacity-80 p-8 md:p-12 lg:p-16 rounded-3xl shadow-xl border-rococo flex flex-col lg:flex-row items-center gap-10">
+             <div class="absolute -inset-2 bg-gradient-to-br from-pink-100 via-blue-100 to-green-100 rounded-3xl opacity-50 blur-lg z-[-1]"></div>
+            <div class="flex-shrink-0 lg:w-1/3 text-center">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר - מומחה בינה מלאכותית"
+                     class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover shadow-2xl border-4 border-pink-300 mx-auto transform hover:scale-110 transition-transform duration-500 ease-in-out"
+                     loading="lazy">
+                <h3 class="text-3xl md:text-4xl font-bold text-pink-700 mt-6">זאביק אבינר</h3>
+                <p class="text-xl md:text-2xl text-gray-600 italic">המאסטרו של הבינה המלאכותית</p>
+            </div>
+            <div class="lg:w-2/3 text-lg md:text-xl text-gray-700 leading-relaxed text-right">
+                <p class="mb-4">
+                    מאסטרו זאביק אבינר, אדריכל חלומות דיגיטליים, מומחה בעל שם עולמי בתחומי הבינה המלאכותית.
+                    ניסיונו העשיר בפיתוח מערכות מורכבות, אפליקציות מהפכניות ופתרונות יצירתיים, הופך אותו למדריך האידיאלי למסע אל עבר השליטה הטכנולוגית.
+                </p>
+                <p class="mb-4">
+                    הוא רואה ב-AI לא רק כלי, אלא כשותף יצירתי, ומתמחה בהנגשת סודותיו לכל דורש, באלגנטיות ובהירות.
+                    עם זאביק, תגלו כיצד הבינה המלאכותית יכולה להעצים את יכולותיכם, לפתוח אופקים חדשים ולהפוך את העתיד לנגיש יותר מאי פעם.
+                </p>
+                <div class="mt-8 text-center lg:text-right">
+                    <p class="text-2xl font-semibold text-purple-600 mb-2">
+                        צרו קשר ישיר עם המאסטרו:
+                    </p>
+                    <p class="text-xl text-gray-700">
+                        <a href="https://wa.me/972546609385" class="text-blue-500 hover:text-blue-700 transition-colors duration-300 flex items-center justify-center lg:justify-end gap-2 mb-2">
+                            <svg class="w-6 h-6 inline" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.5 3.44 1.45 4.96l-1.5 5.48 5.6-1.45c1.47.8 3.16 1.22 4.36 1.22 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm3.62 14.52s-.2-.3-.59-.49c-.4-.19-2.36-1.16-2.73-1.29-.38-.14-.33-.09-.05-.5.28-.4.49-.87.66-1.05.17-.18.2-.15.39-.09.19.05 1.27.42 1.46.61.19.19.32.29.35.48.04.19.04.35 0 .54-.04.19-.2.3-.4.39-.19.09-.43.18-.83.27-1.39.29-2.75-.89-3.08-2.03-.33-1.14-.3-1.05-.22-1.22.08-.17.65-.77.87-.98.22-.2.25-.37.15-.55-.09-.19-.39-.94-.55-1.3-.15-.36-.29-.31-.48-.31-.19 0-.4-.01-.61-.01-.19 0-.5.06-.76.33-.27.27-1.03 1-.99 2.45.04 1.45 1.06 2.85 2.44 3.48 1.38.64 2.15.61 2.85.61.7 0 1.39-.19 1.83-.4.43-.21.73-.42.86-.62.13-.2.2-.37.1-.56z"/></svg>
+                            054-6609385
+                        </a>
+                    </p>
+                    <p class="text-xl text-gray-700">
+                        <a href="mailto:zaviner@gmail.com" class="text-blue-500 hover:text-blue-700 transition-colors duration-300 flex items-center justify-center lg:justify-end gap-2">
+                            <svg class="w-6 h-6 inline" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                            zaviner@gmail.com
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services - A gallery of opportunities -->
+        <section id="services" class="mb-24 text-center relative px-4 md:px-8">
+            <h2 class="text-4xl md:text-5xl text-purple-700 font-bold mb-12">
+                שערי האקדמיה פתוחים בפניכם
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Service Card 1: Group Workshops -->
+                <div class="rococo-card group transform hover:scale-105 transition-transform duration-300 ease-in-out">
+                    <h3 class="text-2xl md:text-3xl font-bold text-pink-600 mb-4 group-hover:text-pink-800">סדנאות קבוצתיות</h3>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        מפגשים מעשיים, אינטימיים וממוקדים, בהם נחקור יחדיו את עומק היכולות של ה-AI, בסביבה תומכת ומעוררת השראה.
+                        למידה משותפת, חקירה מעמיקה ויישום מיידי של הכלים הנרכשים.
+                    </p>
+                </div>
+                <!-- Service Card 2: Private Lessons -->
+                <div class="rococo-card group transform hover:scale-105 transition-transform duration-300 ease-in-out">
+                    <h3 class="text-2xl md:text-3xl font-bold text-blue-600 mb-4 group-hover:text-blue-800">שיעורים פרטיים</h3>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        מסע אישי, עדין ומותאם במיוחד עבורכם. הנחיה אישית, קצב פרטי, ותוכנית לימודים התפורה לרצונותיכם ולשאיפותיכם האישיות.
+                        פיתוח יכולות ייחודיות בקצב המתאים לכם.
+                    </p>
+                </div>
+                <!-- Service Card 3: Lectures for Organizations -->
+                <div class="rococo-card group transform hover:scale-105 transition-transform duration-300 ease-in-out">
+                    <h3 class="text-2xl md:text-3xl font-bold text-green-600 mb-4 group-hover:text-green-800">הרצאות לארגונים</h3>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        אירועים מרתקים המיועדים לצוותים ולארגונים, לפתוח אופקים חדשים ולהפיח רוח יצירה בעולם העבודה.
+                        השראה וכלים מעשיים לשילוב AI באסטרטגיה העסקית.
+                    </p>
+                </div>
+                <!-- Service Card 4: Consulting & Project Development -->
+                <div class="rococo-card group transform hover:scale-105 transition-transform duration-300 ease-in-out">
+                    <h3 class="text-2xl md:text-3xl font-bold text-yellow-600 mb-4 group-hover:text-yellow-800">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        ליווי אדריכלי צמוד, מהגהה ראשונית ועד מימוש מלא, של פרויקטים מורכבים מבוססי AI.
+                        אנו נהפוך את חזונכם למציאות דיגיטלית מפוארת.
+                    </p>
+                </div>
+            </div>
+            <style>
+                .rococo-card {
+                    @apply bg-white bg-opacity-80 p-6 rounded-2xl shadow-xl border border-gray-200 text-right;
+                    position: relative;
+                    overflow: hidden;
+                }
+                .rococo-card::before {
+                    content: '';
+                    position: absolute;
+                    inset: -5px;
+                    border-radius: 20px;
+                    border: 3px solid transparent;
+                    background: linear-gradient(45deg, #FADADD, #D0EEF5) border-box;
+                    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+                    -webkit-mask-composite: xor;
+                    mask-composite: exclude;
+                    opacity: 0.7;
+                    transition: opacity 0.3s ease-in-out;
+                }
+                .rococo-card:hover::before {
+                    opacity: 1;
+                }
+            </style>
+        </section>
+
+        <!-- Expertise Areas - The Tapestry of Knowledge -->
+        <section class="mb-24 text-center relative px-4 md:px-8">
+            <h2 class="text-4xl md:text-5xl text-pink-700 font-bold mb-12">
+                אריג ההתמחות: תחומי AI שאנו מפענחים
+            </h2>
+            <div class="flex flex-wrap justify-center gap-6">
+                <!-- Each expertise as a delicate scroll or motif -->
+                <div class="rococo-motif transform hover:scale-105 transition-transform duration-300 ease-in-out group">
+                    <h3 class="text-xl md:text-2xl font-bold text-purple-600 mb-2 group-hover:text-purple-800">יצירת טקסטים ותוכן</h3>
+                    <p class="text-md text-gray-600">הפיכת רעיונות למילים קולחות ומרתקות.</p>
+                </div>
+                <div class="rococo-motif transform hover:scale-105 transition-transform duration-300 ease-in-out group">
+                    <h3 class="text-xl md:text-2xl font-bold text-blue-600 mb-2 group-hover:text-blue-800">בניית אפליקציות חכמות</h3>
+                    <p class="text-md text-gray-600">אפליקציות אינטואיטיביות המשלבות אינטליגנציה.</p>
+                </div>
+                <div class="rococo-motif transform hover:scale-105 transition-transform duration-300 ease-in-out group">
+                    <h3 class="text-xl md:text-2xl font-bold text-green-600 mb-2 group-hover:text-green-800">פיתוח אתרים מבוססי AI</h3>
+                    <p class="text-md text-gray-600">אתרים דינמיים ורספונסיביים עם בינה מובנית.</p>
+                </div>
+                <div class="rococo-motif transform hover:scale-105 transition-transform duration-300 ease-in-out group">
+                    <h3 class="text-xl md:text-2xl font-bold text-yellow-600 mb-2 group-hover:text-yellow-800">ניתוח נתונים ומחקר</h3>
+                    <p class="text-md text-gray-600">פענוח תובנות עמוקות ממאגרי מידע ענקיים.</p>
+                </div>
+                <div class="rococo-motif transform hover:scale-105 transition-transform duration-300 ease-in-out group">
+                    <h3 class="text-xl md:text-2xl font-bold text-red-600 mb-2 group-hover:text-red-800">יצירת תמונות ואומנות</h3>
+                    <p class="text-md text-gray-600">פיקסלים ההופכים ליצירות מופת דיגיטליות.</p>
+                </div>
+                <div class="rococo-motif transform hover:scale-105 transition-transform duration-300 ease-in-out group">
+                    <h3 class="text-xl md:text-2xl font-bold text-teal-600 mb-2 group-hover:text-teal-800">אוטומציה של תהליכים</h3>
+                    <p class="text-md text-gray-600">ייעול ודיוק משימות חוזרות באמצעות AI.</p>
+                </div>
+            </div>
+            <style>
+                .rococo-motif {
+                    @apply bg-white bg-opacity-80 p-6 rounded-full shadow-md border border-pink-100 flex flex-col items-center justify-center text-center w-64 h-64 md:w-72 md:h-72;
+                    position: relative;
+                    /* Rococo-like border effect */
+                    background-image: radial-gradient(circle at center, #FDFDFD 0%, #F5E9EC 100%);
+                    box-shadow: 0px 5px 15px rgba(0,0,0,0.08), inset 0 0 10px rgba(255,182,193,0.3);
+                }
+                .rococo-motif::before {
+                    content: '';
+                    position: absolute;
+                    inset: -5px;
+                    border-radius: 50%;
+                    border: 2px solid transparent;
+                    background: linear-gradient(45deg, #FFDAB9, #FFE4E1) border-box; /* Peach & Blush */
+                    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+                    -webkit-mask-composite: xor;
+                    mask-composite: exclude;
+                    opacity: 0.6;
+                    transition: opacity 0.3s ease-in-out;
+                }
+                .rococo-motif:hover::before {
+                    opacity: 1;
+                }
+            </style>
+        </section>
+
+        <!-- Call to Action / Audience - The Invitation -->
+        <section id="contact" class="mb-24 text-center relative bg-white bg-opacity-80 p-8 md:p-12 lg:p-16 rounded-3xl shadow-xl border-rococo">
+            <div class="absolute -inset-2 bg-gradient-to-br from-blue-100 via-pink-100 to-purple-100 rounded-3xl opacity-50 blur-lg z-[-1]"></div>
+            <h2 class="text-4xl md:text-5xl text-green-700 font-bold mb-8">
+                למי מיועד המסע המרהיב הזה?
+            </h2>
+            <div class="flex flex-col md:flex-row justify-center gap-8 text-right text-lg md:text-xl text-gray-700 leading-relaxed mb-10">
+                <ul class="list-disc list-inside space-y-3 mx-auto max-w-lg">
+                    <li class="rococo-list-item">
+                        <span class="font-semibold text-purple-600">מתחילים ומתחילות:</span> המעוניינים להכיר את עולם ה-AI בצעדים ראשונים, בבהירות ובאלגנטיות.
+                    </li>
+                    <li class="rococo-list-item">
+                        <span class="font-semibold text-pink-600">אנשי ואנשות מקצוע:</span> המבקשים להטמיע את כוחה של הבינה המלאכותית בעבודתם, ולשדרג את יכולותיהם.
+                    </li>
+                </ul>
+                <ul class="list-disc list-inside space-y-3 mx-auto max-w-lg">
+                    <li class="rococo-list-item">
+                        <span class="font-semibold text-blue-600">מנהלים, מנהלות וארגונים:</span> המחפשים הדרכות מעמיקות לצוותים, ופתיחת אופקים טכנולוגיים חדשים.
+                    </li>
+                    <li class="rococo-list-item">
+                        <span class="font-semibold text-yellow-600">מפתחים ומומחים:</span> המעוניינים לפתח פרויקטים מורכבים וחדשניים מבוססי AI, ולפרוץ גבולות.
+                    </li>
+                </ul>
+            </div>
+            <style>
+                .rococo-list-item {
+                    position: relative;
+                    padding-right: 1.5rem; /* Space for custom bullet */
+                    margin-bottom: 0.5rem;
+                }
+                .rococo-list-item::before {
+                    content: '❖'; /* Rococo-like diamond/star bullet */
+                    color: #FFB6C1; /* Soft pink */
+                    font-size: 1.2em;
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                }
+            </style>
+            <div class="mt-12">
+                <p class="text-2xl md:text-3xl font-bold text-pink-700 mb-6">
+                    הצטרפו לחוג המצומצם של אדריכלי העתיד!
+                </p>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-6">
+                    <a href="https://wa.me/972546609385" class="px-8 py-4 bg-green-500 text-white text-xl font-semibold rounded-full shadow-lg hover:bg-green-600 transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center gap-2 rococo-button">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.5 3.44 1.45 4.96l-1.5 5.48 5.6-1.45c1.47.8 3.16 1.22 4.36 1.22 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm3.62 14.52s-.2-.3-.59-.49c-.4-.19-2.36-1.16-2.73-1.29-.38-.14-.33-.09-.05-.5.28-.4.49-.87.66-1.05.17-.18.2-.15.39-.09.19.05 1.27.42 1.46.61.19.19.32.29.35.48.04.19.04.35 0 .54-.04.19-.2.3-.4.39-.19.09-.43.18-.83.27-1.39.29-2.75-.89-3.08-2.03-.33-1.14-.3-1.05-.22-1.22.08-.17.65-.77.87-.98.22-.2.25-.37.15-.55-.09-.19-.39-.94-.55-1.3-.15-.36-.29-.31-.48-.31-.19 0-.4-.01-.61-.01-.19 0-.5.06-.76.33-.27.27-1.03 1-.99 2.45.04 1.45 1.06 2.85 2.44 3.48 1.38.64 2.15.61 2.85.61.7 0 1.39-.19 1.83-.4.43-.21.73-.42.86-.62.13-.2.2-.37.1-.56z"/></svg>
+                        ווטסאפ: 054-6609385
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="px-8 py-4 bg-orange-500 text-white text-xl font-semibold rounded-full shadow-lg hover:bg-orange-600 transition-all duration-300 transform hover:scale-105 active:scale-95 flex items-center gap-2 rococo-button">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        אימייל: zaviner@gmail.com
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer - A graceful closing -->
+        <footer class="text-center py-12 border-t border-pink-200 mt-16 text-gray-600 text-lg italic">
+            <p>
+                © <span id="current-year"></span> האקדמיה המוארת לבינה מלאכותית. כל הזכויות שמורות למאסטרו זאביק אבינר.
+                <br>
+                אומנות ואינטליגנציה - יחד יוצרים עתיד מזהיר.
+            </p>
+        </footer>
+
+    </div> <!-- End Main Content Wrapper -->
+
+    <!-- JavaScript for interactivity -->
+    <script>
+        // Custom Cursor functionality
+        const customCursor = document.getElementById('custom-cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0; // These will be the actual top/left values
+        const speed = 0.2; // Adjust for smoother/faster follow
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * speed;
+            cursorY += (mouseY - cursorY) * speed;
+
+            // Set left and top directly, relying on CSS transform(-50%,-50%) for centering
+            customCursor.style.left = `${cursorX}px`;
+            customCursor.style.top = `${cursorY}px`;
+            
+            requestAnimationFrame(animateCursor);
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Add a slight scaling effect on interactive elements for rococo "playfulness"
+        document.querySelectorAll('a, button, .rococo-card, .rococo-motif').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                customCursor.style.transform = `translate(-50%, -50%) scale(1.5)`; // Apply scale relative to its center
+                customCursor.style.boxShadow = `0 0 0 2px rgba(0,0,0,0.8), 0 0 25px rgba(255, 182, 193, 1)`;
+            });
+            el.addEventListener('mouseleave', () => {
+                customCursor.style.transform = `translate(-50%, -50%) scale(1)`; // Reset scale
+                customCursor.style.boxShadow = `0 0 0 2px rgba(0,0,0,0.8), 0 0 15px rgba(255, 182, 193, 0.7)`;
+            });
+        });
+
+        animateCursor(); // Start the cursor animation
+
+        // Footer year update
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Simple Rococo-like shimmer/fade on scroll for main content wrapper elements
+        const contentSections = document.querySelectorAll('section');
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.2 // Trigger when 20% of the item is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.transition = 'opacity 1s ease-out, transform 1s ease-out';
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target); // Observe once
+                }
+            });
+        }, observerOptions);
+
+        contentSections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)'; // Start slightly off-screen for a subtle reveal
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

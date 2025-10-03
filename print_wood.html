@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>בינה מלאכותית – האמנות החדשה</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Woodcut Aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700&family=Rubik+One&display=swap" rel="stylesheet">
+    <style>
+        /* Woodcut style CSS - Custom fonts, colors, and effects */
+        body {
+            font-family: 'Frank Ruhl Libre', serif;
+            background-color: #0c0a09; /* Stone-950 - deep, dark background */
+            color: #f5f5dc; /* Amber-100 - light, paper-like text */
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax/rotated elements */
+            cursor: none; /* Hide default cursor to use custom one */
+            scroll-behavior: smooth; /* Smooth scrolling for artistic transitions */
+        }
+        .rubik-one {
+            font-family: 'Rubik One', sans-serif; /* Bold, blocky font for headings */
+        }
+        
+        /* Custom Cursor Styling - Mandatory high-contrast technique */
+        #custom-cursor {
+            z-index: 9999; /* Always on top */
+            pointer-events: none; /* Allows clicks on elements beneath */
+            transition: transform 0.07s ease-out, width 0.1s ease-out, height 0.1s ease-out, opacity 0.1s ease-out;
+            opacity: 1; /* Ensure visibility */
+            width: 2rem; /* Default size */
+            height: 2rem; /* Default size */
+        }
+
+        /* Woodcut Block Styling - Simulating carved elements */
+        .carved-block {
+            background-color: rgba(28, 25, 23, 0.7); /* Stone-800 with transparency for layering */
+            border: 2px solid #b91c1c; /* Rose-700 for a deep red accent border */
+            box-shadow: 8px 8px 0px #7f1d1d, 12px 12px 0px rgba(0,0,0,0.5); /* Layered shadows for 3D/carved depth */
+            position: relative; /* For z-index stacking within sections */
+            z-index: 10; /* Ensure content is above background layers */
+            padding: 2.5rem; /* Default padding */
+            margin: 2rem; /* Default margin */
+        }
+        /* Make carved blocks responsive */
+        @media (max-width: 768px) {
+            .carved-block {
+                box-shadow: 4px 4px 0px #7f1d1d, 6px 6px 0px rgba(0,0,0,0.5);
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+        }
+
+        /* Stamped Text Animation - Simulating print-like appearance */
+        .stamped-text {
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            /* Initial state before animation */
+        }
+        .stamped-text.animated-stamp {
+            animation: stamp-in 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            /* Easing for a more deliberate, physical feel */
+        }
+        @keyframes stamp-in {
+            0% { opacity: 0; transform: translateY(20px) scale(0.95); }
+            60% { opacity: 1; transform: translateY(-5px) scale(1.02); }
+            100% { opacity: 1; transform: translateY(0px) scale(1); }
+        }
+
+        /* Grayscale filter for image to match woodcut style */
+        .grayscale-filter {
+            filter: grayscale(100%) contrast(150%) brightness(80%); /* High contrast B&W */
+        }
+    </style>
+</head>
+<body class="bg-stone-950 text-amber-100 leading-relaxed text-lg">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="fixed rounded-full border-2 border-white shadow-[0_0_0_2px_rgba(0,0,0,0.8)] flex items-center justify-center -translate-x-1/2 -translate-y-1/2">
+        <div class="w-3 h-3 bg-white rounded-full"></div>
+    </div>
+
+    <!-- Main Content Wrapper - Holds all sections, allowing for z-indexing and flow -->
+    <div class="relative z-10 min-h-screen pt-16 pb-32 overflow-hidden">
+
+        <!-- Introduction Section - Main Title -->
+        <section class="min-h-screen flex items-center justify-center p-8 relative overflow-hidden">
+            <!-- Parallax Background Layer -->
+            <div class="absolute inset-0 bg-gradient-to-br from-stone-900 to-stone-950 opacity-50 z-0 parallax-bg" data-parallax-speed="0.05" style="transform: rotate(5deg) scale(1.1); top: -10vh; bottom: -10vh; left: -10vw; right: -10vw;"></div>
+            
+            <div class="text-center carved-block max-w-4xl mx-auto stamped-text">
+                <h1 class="rubik-one text-6xl md:text-8xl text-rose-500 mb-6 leading-tight">
+                    גלה את העוצמה החבויה:<br> בינה מלאכותית – האמנות החדשה
+                </h1>
+                <p class="text-2xl md:text-3xl font-medium tracking-wide">
+                    זאביק אבינר חורט את הדרך אל עתיד בידיים שלך.
+                </p>
+            </div>
+        </section>
+
+        <!-- Zevik's Image and Quote Section -->
+        <section class="min-h-screen flex flex-col md:flex-row items-center justify-center p-8 relative overflow-hidden -mt-32 md:-mt-48">
+             <!-- Parallax Background Layer -->
+            <div class="absolute inset-0 bg-stone-800 opacity-20 z-0 parallax-bg" data-parallax-speed="0.08" style="transform: rotate(-3deg) scale(1.1); top: -15vh; bottom: -15vh; left: -10vw; right: -10vw;"></div>
+
+            <div class="w-full md:w-1/2 flex justify-center items-center p-4 z-20 stamped-text" style="animation-delay: 0.2s;">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונת דיוקן של זאביק אבינר, מומחה בינה מלאכותית" class="grayscale-filter w-64 h-64 md:w-80 md:h-80 object-cover rounded-full border-4 border-rose-700 shadow-xl shadow-rose-950">
+            </div>
+            <div class="w-full md:w-1/2 carved-block mt-8 md:mt-0 md:-mr-16 lg:-mr-32 max-w-xl z-10 stamped-text" style="animation-delay: 0.4s;">
+                <p class="text-xl md:text-2xl italic mb-4">
+                    "בינה מלאכותית אינה רק כלי; היא שפה חדשה, אמנות חדשה. אני כאן כדי לעזור לך לפענח את סודותיה ולגלף איתה את המחר."
+                </p>
+                <p class="text-rose-500 font-bold text-xl">- זאביק אבינר, מגולף הבינה המלאכותית</p>
+            </div>
+        </section>
+
+        <!-- Core Message Section - AI for Everyone -->
+        <section class="min-h-screen flex items-center justify-center p-8 relative overflow-hidden -mt-32">
+            <!-- Parallax Background Layer -->
+            <div class="absolute inset-0 bg-stone-900 opacity-30 z-0 parallax-bg" data-parallax-speed="0.06" style="transform: rotate(2deg) scale(1.05); top: -5vh; bottom: -5vh; left: -5vw; right: -5vw;"></div>
+
+            <div class="carved-block max-w-4xl mx-auto stamped-text" style="animation-delay: 0.6s;">
+                <h2 class="rubik-one text-4xl md:text-5xl text-rose-500 mb-6">הפיכת AI לנגיש וישים לכולם</h2>
+                <p class="text-xl md:text-2xl leading-loose">
+                    מעולם החלומות למציאות מוחשית.
+                    אנו הופכים את הבינה המלאכותית לשימושית וקלה להבנה – מהצעדים הראשונים ועד יצירת פרויקטים מורכבים.
+                    כלים מעשיים, טכניקות פורצות דרך, יישומים מיידיים לעבודה ולחיים.
+                    זו לא רק למידה, זו הפיכה לאמן של עתיד הדיגיטל.
+                </p>
+            </div>
+        </section>
+
+        <!-- Target Audience Blocks - Presented as carved fragments -->
+        <section class="min-h-screen flex items-center justify-center p-8 relative overflow-hidden -mt-32 md:-mt-48">
+            <!-- Parallax Background Layer -->
+            <div class="absolute inset-0 bg-stone-800 opacity-25 z-0 parallax-bg" data-parallax-speed="0.07" style="transform: rotate(-1deg) scale(1.08); top: -8vh; bottom: -8vh; left: -6vw; right: -6vw;"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                <div class="carved-block stamped-text" style="animation-delay: 0.8s;">
+                    <h3 class="rubik-one text-2xl text-rose-500 mb-4">הגילוף הראשון: מתחילים</h3>
+                    <p>אלו החפצים להכיר את העולם המופלא של ה-AI – בצעדים ברורים ומונגשים.</p>
+                </div>
+                <div class="carved-block stamped-text" style="animation-delay: 1s;">
+                    <h3 class="rubik-one text-2xl text-rose-500 mb-4">האמנות המתפתחת: מקצוענים</h3>
+                    <p>אנשי ואנשות מקצוע השואפים להטמיע את כוח ה-AI בעבודתם היומיומית.</p>
+                </div>
+                <div class="carved-block stamped-text" style="animation-delay: 1.2s;">
+                    <h3 class="rubik-one text-2xl text-rose-500 mb-4">תחריטים מיוחדים: ארגונים</h3>
+                    <p>מנהלים וצוותים המחפשים להרחיב אופקים ולפתח יכולות AI אצל עובדיהם.</p>
+                </div>
+                <div class="carved-block stamped-text" style="animation-delay: 1.4s;">
+                    <h3 class="rubik-one text-2xl text-rose-500 mb-4">פיסול מתקדם: פרויקטים</h3>
+                    <p>יוצרים ומהנדסים המעוניינים לבנות פרויקטים מורכבים ועוצמתיים מבוססי AI.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Areas - Iconic blocks -->
+        <section class="min-h-screen flex flex-col items-center justify-center p-8 relative overflow-hidden -mt-32 md:-mt-48">
+            <!-- Parallax Background Layer -->
+            <div class="absolute inset-0 bg-stone-900 opacity-35 z-0 parallax-bg" data-parallax-speed="0.09" style="transform: rotate(4deg) scale(1.1); top: -10vh; bottom: -10vh; left: -10vw; right: -10vw;"></div>
+
+            <h2 class="rubik-one text-4xl md:text-5xl text-rose-500 mb-12 carved-block text-center stamped-text max-w-3xl" style="animation-delay: 1.6s;">
+                תחומי התמחות: גילוף הדיגיטל
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="carved-block flex flex-col items-center text-center stamped-text" style="animation-delay: 1.8s;">
+                    <span class="text-6xl mb-4">✍️</span>
+                    <h3 class="rubik-one text-2xl text-amber-200 mb-2">מילת המפתח: יצירת תוכן</h3>
+                    <p>ממאמרים עד שירה, ה-AI כותב, יוצר ומרחיב אופקים טקסטואליים.</p>
+                </div>
+                <div class="carved-block flex flex-col items-center text-center stamped-text" style="animation-delay: 2s;">
+                    <span class="text-6xl mb-4">💡</span>
+                    <h3 class="rubik-one text-2xl text-amber-200 mb-2">לב המכונה: בניית אפליקציות</h3>
+                    <p>פיתוח יישומים חכמים המשלבים למידה עמוקה ופתרונות חדשניים.</p>
+                </div>
+                <div class="carved-block flex flex-col items-center text-center stamped-text" style="animation-delay: 2.2s;">
+                    <span class="text-6xl mb-4">🌐</span>
+                    <h3 class="rubik-one text-2xl text-amber-200 mb-2">הבסיס הדיגיטלי: פיתוח אתרים</h3>
+                    <p>בניית אתרים אינטראקטיביים ומתקדמים מבוססי בינה מלאכותית.</p>
+                </div>
+                <div class="carved-block flex flex-col items-center text-center stamped-text" style="animation-delay: 2.4s;">
+                    <span class="text-6xl mb-4">📊</span>
+                    <h3 class="rubik-one text-2xl text-amber-200 mb-2">חקירת העץ: ניתוח נתונים</h3>
+                    <p>פענוח תובנות נסתרות מנתונים באמצעות כלי AI עוצמתיים.</p>
+                </div>
+                <div class="carved-block flex flex-col items-center text-center stamped-text" style="animation-delay: 2.6s;">
+                    <span class="text-6xl mb-4">🎨</span>
+                    <h3 class="rubik-one text-2xl text-amber-200 mb-2">יצירת דימויים: אמנות חזותית</h3>
+                    <p>הפיכת רעיונות ויזואליים למציאות באמצעות מודלי יצירת תמונות מתקדמים.</p>
+                </div>
+                <div class="carved-block flex flex-col items-center text-center stamped-text" style="animation-delay: 2.8s;">
+                    <span class="text-6xl mb-4">⚙️</span>
+                    <h3 class="rubik-one text-2xl text-amber-200 mb-2">חיתוך מדויק: אוטומציה</h3>
+                    <p>ייעול תהליכים וחיסכון בזמן בעזרת אוטומציה חכמה מבוססת AI.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered - Blocks with distinct borders -->
+        <section class="min-h-screen flex flex-col items-center justify-center p-8 relative overflow-hidden -mt-32 md:-mt-48">
+            <!-- Parallax Background Layer -->
+            <div class="absolute inset-0 bg-stone-800 opacity-20 z-0 parallax-bg" data-parallax-speed="0.05" style="transform: rotate(-2deg) scale(1.06); top: -6vh; bottom: -6vh; left: -7vw; right: -7vw;"></div>
+
+            <h2 class="rubik-one text-4xl md:text-5xl text-rose-500 mb-12 carved-block text-center stamped-text max-w-3xl" style="animation-delay: 3s;">
+                שירותים מוצעים: אמנות הלמידה
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="carved-block text-center stamped-text" style="animation-delay: 3.2s;">
+                    <h3 class="rubik-one text-3xl text-amber-200 mb-4">סדנאות חריטה קבוצתיות</h3>
+                    <p class="text-xl">מעשיות, ממוקדות ואינטראקטיביות – ללמוד, ליצור וליישם ביחד.</p>
+                </div>
+                <div class="carved-block text-center stamped-text" style="animation-delay: 3.4s;">
+                    <h3 class="rubik-one text-3xl text-amber-200 mb-4">שיעורים פרטיים – גילוף אישי</h3>
+                    <p class="text-xl">התאמה מושלמת לרמה, לקצב ולצרכים האישיים שלך.</p>
+                </div>
+                <div class="carved-block text-center stamped-text" style="animation-delay: 3.6s;">
+                    <h3 class="rubik-one text-3xl text-amber-200 mb-4">הרצאות – פתיחת אופקים חדשים</h3>
+                    <p class="text-xl">השראה, ידע וכלים ראשוניים לצוותים ולארגונים ברחבי הארץ.</p>
+                </div>
+                <div class="carved-block text-center stamped-text" style="animation-delay: 3.8s;">
+                    <h3 class="rubik-one text-3xl text-amber-200 mb-4">ייעוץ ופיתוח פרויקטים – אמנות בהזמנה</h3>
+                    <p class="text-xl">ליווי מקצועי ובניית פתרונות AI מותאמים אישית לעסק שלך.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Information - Final, impactful block -->
+        <section class="min-h-screen flex items-center justify-center p-8 relative overflow-hidden -mt-32 md:-mt-48">
+            <!-- Parallax Background Layer -->
+            <div class="absolute inset-0 bg-stone-900 opacity-40 z-0 parallax-bg" data-parallax-speed="0.1" style="transform: rotate(-3deg) scale(1.15); top: -12vh; bottom: -12vh; left: -10vw; right: -10vw;"></div>
+
+            <div class="carved-block max-w-2xl mx-auto text-center stamped-text" style="animation-delay: 4s;">
+                <h2 class="rubik-one text-4xl md:text-5xl text-rose-500 mb-6">צור קשר: התחל לגלף</h2>
+                <p class="text-xl md:text-2xl mb-4">
+                    מוכנים לחרוט את עתידכם?
+                    זאביק אבינר ממתין לכם כדי להתחיל את המסע.
+                </p>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-6 mt-8">
+                    <a href="https://wa.me/972546609385" class="carved-block rubik-one text-amber-100 text-2xl md:text-3xl bg-rose-700 hover:bg-rose-800 px-8 py-4 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 block !p-4 !m-0">
+                        ווטסאפ: 054-6609385
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="carved-block rubik-one text-amber-100 text-2xl md:text-3xl bg-rose-700 hover:bg-rose-800 px-8 py-4 rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 block !p-4 !m-0">
+                        אימייל: zaviner@gmail.com
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div> <!-- End Main Content Wrapper -->
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        });
+
+        // Add hover effect for cursor on interactive elements
+        document.addEventListener('mouseover', e => {
+            let target = e.target;
+            // Check if the target or any of its ancestors has the 'carved-block' class, or is an A/BUTTON tag
+            let isInteractive = target.tagName === 'A' || target.tagName === 'BUTTON' || target.closest('.carved-block');
+            
+            if (isInteractive) {
+                customCursor.style.width = '4rem'; // Larger on hover
+                customCursor.style.height = '4rem'; // Larger on hover
+            } else {
+                customCursor.style.width = '2rem'; // Default size
+                customCursor.style.height = '2rem'; // Default size
+            }
+        });
+
+        // Parallax and Stamped-Text Animation Logic
+        const parallaxBackgrounds = document.querySelectorAll('.parallax-bg');
+        const stampedElements = document.querySelectorAll('.stamped-text');
+
+        const animateOnScroll = () => {
+            let scrollY = window.scrollY;
+
+            // Parallax Effect for background layers
+            parallaxBackgrounds.forEach(el => {
+                const speed = parseFloat(el.getAttribute('data-parallax-speed'));
+                const yPos = -scrollY * speed; // Move background layers in opposite direction of scroll
+                // Preserve other transforms (like rotate and scale)
+                el.style.transform = `translateY(${yPos}px) ${el.style.transform.split(') ').slice(1).join(') ') || ''}`;
+            });
+
+            // Stamped Text Effect (reveal on scroll)
+            stampedElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                // Trigger animation when element is 85% visible in viewport and not already animated
+                if (rect.top < window.innerHeight * 0.85 && rect.bottom > 0 && !el.classList.contains('animated-stamp')) {
+                    el.classList.add('animated-stamp'); // Add class to trigger CSS animation
+                }
+            });
+        };
+
+        // Initial run and scroll event listener
+        window.addEventListener('scroll', animateOnScroll);
+        // Run once on load to position elements and stamp initial visible text
+        animateOnScroll(); 
+        
+        // Ensure elements that are visible on load get their animation immediately
+        document.addEventListener('DOMContentLoaded', () => {
+            stampedElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight * 0.85 && rect.bottom > 0) {
+                    el.classList.add('animated-stamp');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

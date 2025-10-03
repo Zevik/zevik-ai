@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>המראה החדש: AI בהתאמה אישית - זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;700&family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            background-color: #0d0d0d; /* Deep charcoal */
+            color: #e0e0e0; /* Off-white */
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor */
+        }
+
+        .font-amatic {
+            font-family: 'Amatic SC', cursive;
+        }
+
+        #customCursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            transition: transform 0.1s ease-out;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            border: 2px solid #FFFFFF; /* Visible on dark */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Visible on light */
+        }
+
+        /* Artistic background elements - "Digital Fabric" */
+        .fabric-line {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.03); /* Subtle white lines */
+            pointer-events: none;
+            z-index: -10;
+        }
+
+        .fabric-curve {
+            position: absolute;
+            width: 150%;
+            height: 150%;
+            border-radius: 50%;
+            background: radial-gradient(circle at center, rgba(103, 232, 249, 0.03) 0%, rgba(103, 232, 249, 0) 70%); /* Subtle glowing effect */
+            pointer-events: none;
+            z-index: -15;
+            animation: breathe 15s infinite alternate ease-in-out;
+        }
+
+        @keyframes breathe {
+            0% { transform: scale(1) translate(-50%, -50%); opacity: 0.7; }
+            100% { transform: scale(1.1) translate(-50%, -50%); opacity: 1; }
+        }
+
+        /* Parallax effect base */
+        .parallax-layer {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Text reveal effect */
+        .text-reveal span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .text-reveal.revealed span {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in {
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+        .fade-in.active {
+            opacity: 1;
+        }
+
+        .animate-pulse-subtle {
+            animation: pulse-subtle 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse-subtle {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.02); opacity: 1; }
+        }
+
+        /* Ensure images and elements are not distorted by aspect ratios too much */
+        .object-cover-art {
+            object-fit: cover;
+            object-position: center;
+        }
+    </style>
+</head>
+<body class="bg-neutral-950 text-neutral-100 min-h-screen">
+
+    <!-- Custom Cursor -->
+    <div id="customCursor" class="border-2 border-white shadow-[0_0_0_2px_rgba(0,0,0,0.8)]"></div>
+
+    <!-- Artistic Background Elements - "Digital Fabric" & Curves -->
+    <div class="fabric-line w-full h-px top-1/4 left-0"></div>
+    <div class="fabric-line w-full h-px top-3/4 left-0"></div>
+    <div class="fabric-line h-full w-px right-1/4 top-0"></div>
+    <div class="fabric-line h-full w-px left-1/4 top-0"></div>
+    <div class="fabric-curve top-0 left-0" style="transform: translate(-70%, -70%);"></div>
+    <div class="fabric-curve bottom-0 right-0" style="transform: translate(70%, 70%); animation-delay: 2s;"></div>
+    <div class="fabric-curve top-1/2 left-1/2 opacity-50" style="transform: translate(-50%, -50%); width: 80%; height: 80%; animation-delay: 1s;"></div>
+
+
+    <main class="relative z-10 p-8 sm:p-12 lg:p-16 min-h-screen flex flex-col justify-center items-center">
+
+        <!-- Opening "Statement Piece" -->
+        <section class="max-w-4xl text-center mb-24 fade-in">
+            <h1 class="font-amatic text-6xl sm:text-7xl lg:text-8xl leading-none text-sky-300 mb-8 animate-pulse-subtle">
+                המראה החדש: AI בהתאמה אישית
+            </h1>
+            <p class="text-xl sm:text-2xl lg:text-3xl leading-relaxed text-neutral-200 mb-12 text-reveal">
+                <span>העתיד</span> <span>אינו</span> <span>עוד</span> <span>קונספט.</span> <span>הוא</span> <span>הבד</span> <span>ממנו</span> <span>אנו</span> <span>תופרים</span> <span>את</span> <span>המציאות.</span>
+                <span>בואו</span> <span>ללמוד</span> <span>לשלוט</span> <span>בחוטי</span> <span>הבינה</span> <span>המלאכותית,</span> <span>לעיצוב</span> <span>המחר,</span>
+                <span>וליצור</span> <span>קולקציה</span> <span>שתשנה</span> <span>את</span> <span>עולמכם.</span>
+            </p>
+        </section>
+
+        <!-- "Runway" of Expertise -->
+        <section class="max-w-6xl w-full my-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 sm:gap-16 fade-in">
+            <h2 class="col-span-full text-center font-amatic text-5xl sm:text-6xl text-emerald-300 mb-12">
+                אומנות ה-AI: גזרות חדשניות
+            </h2>
+            <article class="p-8 border border-neutral-700 rounded-3xl bg-neutral-900 shadow-lg hover:shadow-sky-500/20 transition-all duration-500 ease-in-out transform hover:-translate-y-2 fade-in">
+                <h3 class="text-3xl font-bold text-sky-300 mb-4 text-center">יצירת טקסטים ותוכן</h3>
+                <p class="text-lg text-neutral-300 leading-relaxed text-right">
+                    כמו מעצב השולט בשפת הבד, ה-AI מאפשר לך לארוג מילים, סיפורים ותוכן שובה לב בקלות ובדיוק, ליצור נרטיבים מותאמים לכל מטרה.
+                </p>
+            </article>
+            <article class="p-8 border border-neutral-700 rounded-3xl bg-neutral-900 shadow-lg hover:shadow-sky-500/20 transition-all duration-500 ease-in-out transform hover:-translate-y-2 fade-in">
+                <h3 class="text-3xl font-bold text-sky-300 mb-4 text-center">בניית אפליקציות חכמות</h3>
+                <p class="text-lg text-neutral-300 leading-relaxed text-right">
+                    לתפור יישומים שיודעים לחשוב, ללמוד ולהגיב. להפוך רעיונות מורכבים לפתרונות אינטואיטיביים, כמו בגד העוטף את המשתמש בנוחות.
+                </p>
+            </article>
+            <article class="p-8 border border-neutral-700 rounded-3xl bg-neutral-900 shadow-lg hover:shadow-sky-500/20 transition-all duration-500 ease-in-out transform hover:-translate-y-2 fade-in">
+                <h3 class="text-3xl font-bold text-sky-300 mb-4 text-center">פיתוח אתרים מבוססי AI</h3>
+                <p class="text-lg text-neutral-300 leading-relaxed text-right">
+                    להלביש את המידע שלך במעטפת דיגיטלית חכמה. אתרים שמתאימים את עצמם, מציעים המלצות ומגישים חוויה פרסונלית לכל מבקר.
+                </p>
+            </article>
+            <article class="p-8 border border-neutral-700 rounded-3xl bg-neutral-900 shadow-lg hover:shadow-sky-500/20 transition-all duration-500 ease-in-out transform hover:-translate-y-2 fade-in">
+                <h3 class="text-3xl font-bold text-sky-300 mb-4 text-center">ניתוח נתונים ומחקר</h3>
+                <p class="text-lg text-neutral-300 leading-relaxed text-right">
+                    לחשוף את הסודות הנסתרים בתוך הנתונים. ה-AI כמכונת תפירה מדויקת, המגלה דפוסים ומגמות שקודם היו בלתי נראים.
+                </p>
+            </article>
+            <article class="p-8 border border-neutral-700 rounded-3xl bg-neutral-900 shadow-lg hover:shadow-sky-500/20 transition-all duration-500 ease-in-out transform hover:-translate-y-2 fade-in">
+                <h3 class="text-3xl font-bold text-sky-300 mb-4 text-center">יצירת תמונות ואומנות</h3>
+                <p class="text-lg text-neutral-300 leading-relaxed text-right">
+                    כמו מעצב אופנה המשרטט את חזונו, ה-AI מאפשר לך לצייר, ליצור ולעצב עולמות ויזואליים חדשים, מפשט את תהליך היצירה ומעניק לך כוח אמנותי.
+                </p>
+            </article>
+            <article class="p-8 border border-neutral-700 rounded-3xl bg-neutral-900 shadow-lg hover:shadow-sky-500/20 transition-all duration-500 ease-in-out transform hover:-translate-y-2 fade-in">
+                <h3 class="text-3xl font-bold text-sky-300 mb-4 text-center">אוטומציה של תהליכים</h3>
+                <p class="text-lg text-neutral-300 leading-relaxed text-right">
+                    להפוך את העבודה היומיומית למכונה משומנת. לאוטם תהליכים שחוזרים על עצמם, ולפנות זמן יקר ליצירה ולחדשנות.
+                </p>
+            </article>
+        </section>
+
+        <!-- "Collection" of Services -->
+        <section class="max-w-5xl w-full my-24 fade-in">
+            <h2 class="text-center font-amatic text-5xl sm:text-6xl text-emerald-300 mb-12">
+                הקולקציה שלך: שירותי התאמה אישית
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="p-10 border border-emerald-700 rounded-tl-[60px] rounded-br-[60px] bg-neutral-900 shadow-lg hover:shadow-emerald-500/20 transition-all duration-500 ease-in-out transform hover:scale-[1.01] fade-in">
+                    <h3 class="text-3xl font-bold text-emerald-300 mb-4 text-right">סדנאות קבוצתיות: קוטור דיגיטלי</h3>
+                    <p class="text-lg text-neutral-300 leading-relaxed text-right">
+                        חוויות למידה מעשיות וממוקדות, לקבוצות קטנות. תפירה משותפת של ידע וכלים, בסביבה תומכת ומעוררת השראה.
+                    </p>
+                </div>
+                <div class="p-10 border border-emerald-700 rounded-tr-[60px] rounded-bl-[60px] bg-neutral-900 shadow-lg hover:shadow-emerald-500/20 transition-all duration-500 ease-in-out transform hover:scale-[1.01] fade-in">
+                    <h3 class="text-3xl font-bold text-emerald-300 mb-4 text-right">שיעורים פרטיים: עיצוב אישי</h3>
+                    <p class="text-lg text-neutral-300 leading-relaxed text-right">
+                        הדרכה אחד על אחד, מותאמת באופן מושלם לרמתך וצרכיך. כמו חליפה שנתפרה במיוחד עבורך, שתתאים בדיוק למידותיך.
+                    </p>
+                </div>
+                <div class="p-10 border border-emerald-700 rounded-br-[60px] rounded-tl-[60px] bg-neutral-900 shadow-lg hover:shadow-emerald-500/20 transition-all duration-500 ease-in-out transform hover:scale-[1.01] fade-in">
+                    <h3 class="text-3xl font-bold text-emerald-300 mb-4 text-right">הרצאות לארגונים: פתיחת אופקים</h3>
+                    <p class="text-lg text-neutral-300 leading-relaxed text-right">
+                        חשיפה מעוררת השראה לעולם ה-AI עבור צוותים. לפתוח בפניהם את הטרנדים החדשים, להצית את היצירתיות ולהכין אותם למחר.
+                    </p>
+                </div>
+                <div class="p-10 border border-emerald-700 rounded-bl-[60px] rounded-tr-[60px] bg-neutral-900 shadow-lg hover:shadow-emerald-500/20 transition-all duration-500 ease-in-out transform hover:scale-[1.01] fade-in">
+                    <h3 class="text-3xl font-bold text-emerald-300 mb-4 text-right">ייעוץ ופיתוח פרויקטים: ליווי מהסטודיו</h3>
+                    <p class="text-lg text-neutral-300 leading-relaxed text-right">
+                        ליווי מקצועי מתחילתו ועד סופו של כל פרויקט AI. מהשרטוט הראשוני ועד למוצר המוגמר - יד ביד איתך.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- "The Designer" - Zevik Aviner -->
+        <section class="max-w-4xl w-full my-24 fade-in">
+            <h2 class="text-center font-amatic text-5xl sm:text-6xl text-sky-300 mb-12">
+                המעצב הראשי: זאביק אבינר
+            </h2>
+            <div class="flex flex-col md:flex-row items-center justify-center bg-neutral-900 p-10 rounded-full md:rounded-[100px] border border-sky-700 shadow-xl shadow-sky-500/10 gap-8 transform transition-transform duration-700 ease-out hover:scale-[1.03]">
+                <div class="flex-shrink-0 relative w-48 h-48 sm:w-64 sm:h-64 rounded-full overflow-hidden border-4 border-sky-400 p-1 bg-gradient-to-br from-sky-400 to-emerald-400 shadow-2xl">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר, מומחה בינה מלאכותית" class="w-full h-full object-cover-art rounded-full transition-transform duration-500 hover:scale-105">
+                </div>
+                <div class="text-center md:text-right flex-grow">
+                    <h3 class="text-4xl font-bold text-emerald-300 mb-4">זאביק אבינר</h3>
+                    <p class="text-xl text-neutral-200 leading-relaxed mb-6">
+                        המעצב הראשי מאחורי המראה החדש. מומחה בינה מלאכותית המתרגם קוד לחזון, ואלגוריתמים לאמנות. הוא מזמין אתכם למדוד את עתידכם. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק מתמחה בהנגשת הטכנולוגיה ובהפיכתה לכלי עבודה יומיומי.
+                    </p>
+                    <div class="text-lg text-neutral-300 space-y-2 mt-4">
+                        <p><strong>ווטסאפ:</strong> <a href="https://wa.me/972546609385" target="_blank" class="text-sky-400 hover:text-sky-300 transition-colors duration-300">054-6609385</a></p>
+                        <p><strong>אימייל:</strong> <a href="mailto:zaviner@gmail.com" class="text-sky-400 hover:text-sky-300 transition-colors duration-300">zaviner@gmail.com</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Closing "Tagline" -->
+        <section class="max-w-3xl text-center mt-24 pb-24 fade-in">
+            <p class="font-amatic text-4xl sm:text-5xl text-sky-200 leading-snug">
+                העתיד הוא עכשיו - והוא מעוצב במיוחד בשבילך.
+            </p>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('customCursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // Add subtle hover effect to cursor for interactive elements
+        document.querySelectorAll('a, button, article, div[data-interactive]').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                customCursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                customCursor.style.borderColor = '#6EE7B7'; // emerald-300
+                customCursor.style.boxShadow = '0 0 0 2px rgba(0,0,0,0.8), 0 0 15px rgba(103,232,249,0.5)'; // sky-300 glow
+            });
+            el.addEventListener('mouseleave', () => {
+                customCursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                customCursor.style.borderColor = '#FFFFFF';
+                customCursor.style.boxShadow = '0 0 0 2px rgba(0,0,0,0.8)';
+            });
+        });
+
+        // Text Reveal Effect on Load
+        function animateTextReveal(element) {
+            const spans = element.querySelectorAll('span');
+            spans.forEach((span, index) => {
+                setTimeout(() => {
+                    span.classList.add('revealed');
+                }, index * 80); // Stagger the reveal of each letter/word
+            });
+        }
+
+        const introTextReveal = document.querySelector('.text-reveal');
+        if (introTextReveal) {
+            // Split the content into spans for animation
+            introTextReveal.innerHTML = introTextReveal.textContent.split(' ').map(word => `<span>${word}</span>`).join(' ');
+            introTextReveal.classList.add('revealed'); // This will trigger the reveal via CSS
+        }
+
+
+        // Fade-in on scroll (simplified for a gallery experience)
+        const fadeInElements = document.querySelectorAll('.fade-in');
+
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // 10% of element visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    if (entry.target.classList.contains('text-reveal') && !entry.target.dataset.animated) {
+                        animateTextReveal(entry.target);
+                        entry.target.dataset.animated = 'true';
+                    }
+                    observer.unobserve(entry.target); // Only animate once
+                }
+            });
+        }, observerOptions);
+
+        fadeInElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // Initialize first fade-in element immediately if it's visible on load
+        if (fadeInElements.length > 0 && fadeInElements[0].getBoundingClientRect().top < window.innerHeight) {
+            fadeInElements[0].classList.add('active');
+            if (fadeInElements[0].classList.contains('text-reveal')) {
+                animateTextReveal(fadeInElements[0]);
+            }
+        }
+
+
+        // Parallax effect with mouse movement
+        const artContainer = document.querySelector('main');
+        const bgLines = document.querySelectorAll('.fabric-line');
+        const bgCurves = document.querySelectorAll('.fabric-curve');
+
+        artContainer.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 2; // -1 to 1
+            const y = (e.clientY / window.innerHeight - 0.5) * 2; // -1 to 1
+
+            bgLines.forEach((line, index) => {
+                const depth = (index % 2 === 0 ? 10 : 20); // Different depths for visual variety
+                line.style.transform = `translate(${x * depth}px, ${y * depth}px)`;
+            });
+
+            bgCurves.forEach((curve, index) => {
+                const depth = (index % 2 === 0 ? 5 : 15);
+                curve.style.transform = `translate(${x * depth - 50}% , ${y * depth - 50}%)`;
+            });
+
+            // Make the cursor follow the mouse smoothly
+            customCursor.style.transform = `translate(${e.clientX - customCursor.offsetWidth / 2}px, ${e.clientY - customCursor.offsetHeight / 2}px)`;
+        });
+
+        // Set initial cursor position (if needed, e.g., on first load)
+        window.addEventListener('load', () => {
+            if (customCursor) {
+                customCursor.style.left = `${window.innerWidth / 2}px`;
+                customCursor.style.top = `${window.innerHeight / 2}px`;
+            }
+        });
+
+    </script>
+</body>
+</html>

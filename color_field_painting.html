@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - מאסטרינג AI: אמנות העתיד</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Tailwind Configuration for Fonts */
+        :root {
+            --font-rubik: 'Rubik', sans-serif;
+            --font-heebo: 'Heebo', sans-serif;
+        }
+        .font-rubik { font-family: var(--font-rubik); }
+        .font-heebo { font-family: var(--font-heebo); }
+
+        /* General Body Styling & Color Field Background */
+        body {
+            background: linear-gradient(135deg, #1A1A2E, #16213E, #0F3460); /* Deep, evolving background */
+            min-height: 100vh;
+            color: #E0E0E0; /* Light text for high contrast on dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll from shifting elements */
+            cursor: none; /* Hide default cursor to use custom one */
+            perspective: 1000px; /* For subtle 3D transformations */
+        }
+
+        /* Custom Cursor Styling - High Contrast & Always Visible */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none; /* Allows clicks to pass through */
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* Visible on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8), /* Visible on light backgrounds */
+                        0 0 15px rgba(255, 255, 255, 0.5); /* Subtle glow */
+            transition: transform 0.1s ease-out, opacity 0.3s ease-out, box-shadow 0.2s ease-out;
+            z-index: 9999; /* Ensure cursor is always on top */
+            transform: translate(-50%, -50%); /* Center cursor on its point */
+        }
+
+        /* Color Field Elements for Artistic Background */
+        .color-field {
+            position: fixed;
+            pointer-events: none;
+            mix-blend-mode: screen; /* For soft, glowing blend. Does not apply to cursor. */
+            animation: flow-field 40s infinite alternate ease-in-out;
+            opacity: 0.15;
+            filter: blur(100px); /* Creates the soft, expansive "field" effect */
+            z-index: -1; /* Ensures they are behind all content */
+        }
+
+        /* Specific positions and colors for each field */
+        .color-field-1 {
+            width: 80vh; height: 80vh;
+            background: radial-gradient(circle, #FF6F61, transparent 70%); /* Warm, inviting red-orange */
+            top: -10vh; right: -10vw;
+            animation-delay: 0s;
+        }
+        .color-field-2 {
+            width: 90vh; height: 90vh;
+            background: radial-gradient(circle, #6B4E71, transparent 70%); /* Deep, contemplative purple */
+            bottom: -20vh; left: -15vw;
+            animation-delay: 10s;
+        }
+        .color-field-3 {
+            width: 70vh; height: 70vh;
+            background: radial-gradient(circle, #5E8C61, transparent 70%); /* Organic, hopeful green */
+            top: 20vh; left: 30vw;
+            animation-delay: 20s;
+        }
+        .color-field-4 {
+            width: 60vh; height: 60vh;
+            background: radial-gradient(circle, #4A7C99, transparent 70%); /* Calm, expansive blue */
+            bottom: 10vh; right: 20vw;
+            animation-delay: 30s;
+        }
+
+        /* Animation for the Color Fields - subtle movement */
+        @keyframes flow-field {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.15; }
+            50% { transform: translate(10vw, 5vh) scale(1.1); opacity: 0.25; }
+            100% { transform: translate(0, 0) scale(1); opacity: 0.15; }
+        }
+
+        /* Scroll Reveal Animation - elements fade and slightly rotate into view */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px) perspective(1000px) rotateX(5deg);
+            transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .scroll-reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0) perspective(1000px) rotateX(0deg);
+        }
+
+        /* Styling for section panels - semi-transparent, frosted glass look */
+        .section-panel {
+            background-color: rgba(255, 255, 255, 0.05); /* Very light, translucent background */
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* CTA Button Styling - animated gradient */
+        .cta-button {
+            background: linear-gradient(90deg, #FF6F61, #E82A7D); /* Vibrant gradient */
+            background-size: 200% 200%;
+            animation: gradient-shift 5s ease infinite alternate; /* Continuous subtle animation */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .cta-button:hover {
+            transform: scale(1.05); /* Slightly enlarge on hover */
+            box-shadow: 0 0 30px rgba(255, 111, 97, 0.6); /* Glowing shadow */
+        }
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        /* Keyframe animations for specific elements */
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up { animation: fade-in-up 1s ease-out forwards; }
+        .delay-100 { animation-delay: 0.1s; } .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; } .delay-400 { animation-delay: 0.4s; }
+        .delay-500 { animation-delay: 0.5s; } .delay-600 { animation-delay: 0.6s; }
+        .delay-700 { animation-delay: 0.7s; }
+
+        @keyframes fade-in-right {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .animate-fade-in-right { animation: fade-in-right 0.8s ease-out forwards; }
+
+        @keyframes fade-in-left {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        .animate-fade-in-left { animation: fade-in-left 0.8s ease-out forwards; }
+
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(0.95); opacity: 0.2; }
+            50% { transform: scale(1.05); opacity: 0.3; }
+        }
+        .animate-pulse-slow { animation: pulse-slow 8s ease-in-out infinite; }
+
+        @keyframes spin-slow-reverse {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+        @keyframes ping-slow {
+            0% { transform: scale(0.9); opacity: 0.2; }
+            50% { transform: scale(1.1); opacity: 0.4; }
+            100% { transform: scale(0.9); opacity: 0.2; }
+        }
+        .animate-spin-slow-reverse { animation: spin-slow-reverse 60s linear infinite; }
+        .animate-ping-slow { animation: ping-slow 5s ease-in-out infinite; }
+    </style>
+</head>
+<body class="font-heebo text-gray-200">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Color Field Background Elements (fixed position, negative z-index) -->
+    <div class="color-field color-field-1"></div>
+    <div class="color-field color-field-2"></div>
+    <div class="color-field color-field-3"></div>
+    <div class="color-field color-field-4"></div>
+
+    <!-- Main Content Wrapper (relative to body, higher z-index to be on top) -->
+    <div class="relative z-10 min-h-screen flex flex-col items-center p-4 md:p-8 overflow-hidden">
+
+        <!-- Header / Hero Section -->
+        <header class="w-full max-w-5xl text-center my-16 md:my-24 scroll-reveal">
+            <h1 class="text-6xl md:text-8xl font-rubik font-black leading-tight mb-6 text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-purple-400 drop-shadow-lg">
+                <span class="block animate-fade-in-up">למדו לשלוט בבינה המלאכותית</span>
+                <span class="block text-4xl md:text-6xl font-light mt-4 text-cyan-200" style="animation-delay: 0.2s;">העתיד הוא עכשיו.</span>
+            </h1>
+            <p class="text-xl md:text-2xl mt-8 mb-12 max-w-3xl mx-auto leading-relaxed text-yellow-100 font-light" style="animation-delay: 0.4s;">
+                מסע טרנספורמטיבי אל עולם ה-AI - אמנות, מדע, וכלים מעשיים שישנו את דרך פעולתכם, בהנחיית זאביק אבינר, מומחה בינה מלאכותית.
+            </p>
+            <a href="#contact" class="inline-block cta-button text-white font-rubik font-bold py-4 px-10 rounded-full text-lg md:text-xl shadow-lg hover:shadow-xl transition-all duration-300" style="animation-delay: 0.6s;">
+                גלו את הכוח של AI
+            </a>
+        </header>
+
+        <!-- Main Message / Core Philosophy -->
+        <section class="w-full max-w-4xl mt-24 mb-32 section-panel scroll-reveal relative">
+            <h2 class="text-4xl md:text-5xl font-rubik font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300 text-right drop-shadow-md">
+                הנגשת החדשנות. יצירת מציאות.
+            </h2>
+            <p class="text-lg md:text-xl leading-loose mb-6 text-right font-light text-gray-100">
+                אנו מאמינים כי בינה מלאכותית אינה מותרות של מעטים, אלא כלי עוצמתי השייך לכולם. זאביק אבינר מציע גשר אל העתיד - מסדנאות יסוד למתחילים מוחלטים ועד לפיתוח פרויקטים מתקדמים, אנו מפרקים את המורכבות ומספקים ידע מעשי שניתן ליישם באופן מיידי, בחיים ובעבודה.
+            </p>
+            <p class="text-lg md:text-xl leading-loose text-right font-light text-gray-100">
+                כלים. תובנות. התקדמות. הצטרפו אלינו למסע שיהפוך אתכם לאדריכלי המחר.
+            </p>
+            <div class="absolute -bottom-8 -left-8 w-24 h-24 bg-teal-400/20 rounded-full blur-2xl animate-pulse-slow"></div>
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-purple-500/20 rounded-full blur-2xl animate-pulse-slow delay-500"></div>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section class="w-full max-w-5xl my-24 grid md:grid-cols-2 gap-12 relative z-10">
+            <div class="section-panel scroll-reveal">
+                <h3 class="text-3xl md:text-4xl font-rubik font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-indigo-300 text-right">
+                    למי מיועד המסע?
+                </h3>
+                <ul class="space-y-4 text-lg md:text-xl text-right font-light text-gray-100">
+                    <li class="flex items-center justify-end animate-fade-in-right" style="animation-delay: 0.1s;">
+                        <span class="ml-3">החולמים והסקרנים שרוצים להכיר את עולם ה-AI מאפס.</span>
+                        <span class="text-cyan-400 text-2xl">⚡</span>
+                    </li>
+                    <li class="flex items-center justify-end animate-fade-in-right" style="animation-delay: 0.2s;">
+                        <span class="ml-3">אנשי מקצוע המעוניינים לשדרג את יכולותיהם ולהטמיע AI בעבודה השוטפת.</span>
+                        <span class="text-purple-400 text-2xl">🛠️</span>
+                    </li>
+                    <li class="flex items-center justify-end animate-fade-in-right" style="animation-delay: 0.3s;">
+                        <span class="ml-3">מנהלים וארגונים המחפשים להעצים את צוותיהם בידע וכלים חדשניים.</span>
+                        <span class="text-pink-400 text-2xl">📈</span>
+                    </li>
+                    <li class="flex items-center justify-end animate-fade-in-right" style="animation-delay: 0.4s;">
+                        <span class="ml-3">מפתחים ויוזמים השואפים לבנות פרויקטים מבוססי AI ברמה מתקדמת.</span>
+                        <span class="text-teal-400 text-2xl">🚀</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="flex items-center justify-center section-panel scroll-reveal animate-fade-in-left" style="animation-delay: 0.5s;">
+                <div class="text-center text-4xl md:text-5xl font-rubik font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-300 drop-shadow-lg">
+                    אתם העתיד. אנחנו המצפן.
+                </div>
+            </div>
+        </section>
+
+        <!-- Areas of Expertise -->
+        <section class="w-full max-w-5xl my-24 relative z-10 section-panel scroll-reveal">
+            <h3 class="text-4xl md:text-5xl font-rubik font-bold mb-12 text-center text-transparent bg-clip-text bg-gradient-to-r from-pink-300 to-red-300 drop-shadow-md">
+                תחומי התמחות - היכן הקסם קורה
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="expertise-card p-6 rounded-xl bg-purple-900/40 border border-purple-800/50 text-center hover:scale-105 transition-transform duration-300 scroll-reveal" style="animation-delay: 0.1s;">
+                    <span class="text-6xl mb-4 block">✍️</span>
+                    <h4 class="text-2xl font-rubik font-bold mb-2 text-purple-200">יצירת טקסטים ותוכן</h4>
+                    <p class="text-md text-gray-300">אמנות המילים בעידן הדיגיטלי - סטוריטלינג, שיווק, וקופירייטינג בעזרת AI.</p>
+                </div>
+                <div class="expertise-card p-6 rounded-xl bg-blue-900/40 border border-blue-800/50 text-center hover:scale-105 transition-transform duration-300 scroll-reveal" style="animation-delay: 0.2s;">
+                    <span class="text-6xl mb-4 block">📱</span>
+                    <h4 class="text-2xl font-rubik font-bold mb-2 text-blue-200">בניית אפליקציות חכמות</h4>
+                    <p class="text-md text-gray-300">מהרעיון לאפליקציה חכמה המגיבה למשתמשים באופן אינטואיטיבי.</p>
+                </div>
+                <div class="expertise-card p-6 rounded-xl bg-teal-900/40 border border-teal-800/50 text-center hover:scale-105 transition-transform duration-300 scroll-reveal" style="animation-delay: 0.3s;">
+                    <span class="text-6xl mb-4 block">🌐</span>
+                    <h4 class="text-2xl font-rubik font-bold mb-2 text-teal-200">פיתוח אתרים מבוססי AI</h4>
+                    <p class="text-md text-gray-300">הפיכת אתרים לחוויה אישית ודינמית בעזרת כוחה של AI.</p>
+                </div>
+                <div class="expertise-card p-6 rounded-xl bg-orange-900/40 border border-orange-800/50 text-center hover:scale-105 transition-transform duration-300 scroll-reveal" style="animation-delay: 0.4s;">
+                    <span class="text-6xl mb-4 block">📊</span>
+                    <h4 class="text-2xl font-rubik font-bold mb-2 text-orange-200">ניתוח נתונים ומחקר</h4>
+                    <p class="text-md text-gray-300">הפקת תובנות עמוקות וקבלת החלטות מבוססות נתונים במהירות שיא.</p>
+                </div>
+                <div class="expertise-card p-6 rounded-xl bg-red-900/40 border border-red-800/50 text-center hover:scale-105 transition-transform duration-300 scroll-reveal" style="animation-delay: 0.5s;">
+                    <span class="text-6xl mb-4 block">🎨</span>
+                    <h4 class="text-2xl font-rubik font-bold mb-2 text-red-200">יצירת תמונות ואומנות</h4>
+                    <p class="text-md text-gray-300">גבולות היצירתיות נפרצים - מגרפיקה מדהימה ועד אמנות דיגיטלית פורצת דרך.</p>
+                </div>
+                <div class="expertise-card p-6 rounded-xl bg-emerald-900/40 border border-emerald-800/50 text-center hover:scale-105 transition-transform duration-300 scroll-reveal" style="animation-delay: 0.6s;">
+                    <span class="text-6xl mb-4 block">⚙️</span>
+                    <h4 class="text-2xl font-rubik font-bold mb-2 text-emerald-200">אוטומציה של תהליכים</h4>
+                    <p class="text-md text-gray-300">פינוי זמן יקר ואופטימיזציה של תהליכים בעזרת בינה מלאכותית.</p>
+                </div>
+            </div>
+            <div class="absolute -top-16 right-1/4 w-40 h-40 bg-pink-400/20 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div class="absolute -bottom-16 left-1/4 w-40 h-40 bg-blue-400/20 rounded-full blur-3xl animate-pulse-slow delay-700"></div>
+        </section>
+
+        <!-- Services Offered -->
+        <section class="w-full max-w-5xl my-24 relative z-10 section-panel scroll-reveal">
+            <h3 class="text-4xl md:text-5xl font-rubik font-bold mb-12 text-center text-transparent bg-clip-text bg-gradient-to-r from-orange-300 to-red-300 drop-shadow-md">
+                המסלולים שלכם אל העתיד
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="p-8 rounded-xl bg-gradient-to-br from-indigo-900/50 to-purple-900/50 border border-indigo-700/50 hover:shadow-xl transition-shadow duration-300 scroll-reveal" style="animation-delay: 0.1s;">
+                    <h4 class="text-3xl font-rubik font-bold mb-4 text-indigo-300 text-right">סדנאות קבוצתיות - אמנות הלמידה המשותפת</h4>
+                    <p class="text-lg leading-relaxed text-gray-300 text-right">
+                        חוויה מעשית, ממוקדת ואינטראקטיבית. צללו לעומק נושאים נבחרים בקבוצות קטנות, למדו מניסיונם של אחרים וצרו יחד פרויקטים מרתקים. הסדנאות שלנו הן פלטפורמה לשיתוף, יצירה והתפתחות מואצת.
+                    </p>
+                </div>
+                <div class="p-8 rounded-xl bg-gradient-to-br from-teal-900/50 to-cyan-900/50 border border-teal-700/50 hover:shadow-xl transition-shadow duration-300 scroll-reveal" style="animation-delay: 0.2s;">
+                    <h4 class="text-3xl font-rubik font-bold mb-4 text-teal-300 text-right">שיעורים פרטיים - קשב אישי, התקדמות מקסימלית</h4>
+                    <p class="text-lg leading-relaxed text-gray-300 text-right">
+                        המסלול המהיר ביותר להבנה ולשליטה. שיעורים פרטיים המותאמים אישית לרמת הידע, קצב הלמידה והיעדים הספציפיים שלכם. פיתוח מיומנויות מדויק ופתרון אתגרים אישיים בזמן אמת.
+                    </p>
+                </div>
+                <div class="p-8 rounded-xl bg-gradient-to-br from-pink-900/50 to-red-900/50 border border-pink-700/50 hover:shadow-xl transition-shadow duration-300 scroll-reveal" style="animation-delay: 0.3s;">
+                    <h4 class="text-3xl font-rubik font-bold mb-4 text-pink-300 text-right">הרצאות לארגונים - השראה ופתיחת אופקים</h4>
+                    <p class="text-lg leading-relaxed text-gray-300 text-right">
+                        הביאו את העתיד לצוות שלכם. הרצאות מרתקות ומעוררות מחשבה החושפות את כוחה של ה-AI, מגמות חדשניות וכיצד ניתן לשלב אותה באסטרטגיה העסקית. הזדמנות לעורר השראה ולצייד את העובדים בכלים של מחר.
+                    </p>
+                </div>
+                <div class="p-8 rounded-xl bg-gradient-to-br from-emerald-900/50 to-green-900/50 border border-emerald-700/50 hover:shadow-xl transition-shadow duration-300 scroll-reveal" style="animation-delay: 0.4s;">
+                    <h4 class="text-3xl font-rubik font-bold mb-4 text-emerald-300 text-right">ייעוץ ופיתוח פרויקטים - ליווי מקצועי, תוצאות מוחשיות</h4>
+                    <p class="text-lg leading-relaxed text-gray-300 text-right">
+                        הגשימו את חזונכם עם ליווי צמוד של מומחה. מייעוץ אסטרטגי ועד פיתוח פרויקטים מבוססי AI, אנו נהפוך את הרעיונות שלכם למציאות טכנולוגית מתקדמת, צעד אחר צעד.
+                    </p>
+                </div>
+            </div>
+            <div class="absolute -bottom-10 right-1/2 translate-x-1/2 w-48 h-48 bg-yellow-400/20 rounded-full blur-3xl animate-pulse-slow delay-500"></div>
+        </section>
+
+        <!-- The Guide - Zevik Aviner -->
+        <section class="w-full max-w-4xl my-24 relative z-10 section-panel scroll-reveal flex flex-col md:flex-row items-center md:items-start text-center md:text-right">
+            <div class="md:ml-8 mb-8 md:mb-0 flex-shrink-0 relative">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר - מומחה בינה מלאכותית" class="w-48 h-48 rounded-full object-cover border-4 border-yellow-400 shadow-2xl animate-spin-slow-reverse">
+                <div class="absolute inset-0 rounded-full border-4 border-yellow-400 opacity-20 animate-ping-slow"></div>
+            </div>
+            <div class="flex-grow">
+                <h3 class="text-4xl md:text-5xl font-rubik font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-300 drop-shadow-md">
+                    זאביק אבינר - האדריכל של העתיד שלכם
+                </h3>
+                <p class="text-lg md:text-xl leading-relaxed mb-4 text-gray-100">
+                    זאביק אבינר הוא לא רק מומחה בינה מלאכותית, אלא אמן בפירוק טכנולוגיות מורכבות והפיכתן לכלי עבודה יומיומיים ונגישים. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק מביא עמו ידע מעמיק, גישה פרקטית ותשוקה אמיתית להעצים כל אדם וארגון בכוחה של החדשנות.
+                </p>
+                <p class="text-lg md:text-xl leading-relaxed text-gray-100">
+                    תחת הנחייתו, תגלו כיצד AI יכולה להפוך מ"רעיון גדול" ל"כלי עבודה יעיל" בידיים שלכם.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="w-full max-w-3xl mt-24 mb-32 section-panel text-center scroll-reveal">
+            <h3 class="text-4xl md:text-5xl font-rubik font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-cyan-300 drop-shadow-md">
+                צרו קשר - התחילו את המסע שלכם
+            </h3>
+            <p class="text-xl md:text-2xl leading-relaxed mb-8 text-gray-100">
+                הגיע הזמן להצטרף למהפכת ה-AI. בין אם אתם מתחילים או שואפים למצוינות, זאביק אבינר כאן כדי להדריך אתכם.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
+                <a href="https://wa.me/972546609385" target="_blank" class="flex items-center justify-center cta-button text-white font-rubik font-bold py-3 px-8 rounded-full text-lg shadow-lg hover:shadow-xl transition-all duration-300">
+                    <span class="ml-2">וואטסאפ: 054-6609385</span>
+                    <span class="text-2xl">💬</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="flex items-center justify-center bg-gray-700/50 hover:bg-gray-600/70 border border-gray-600 text-white font-rubik font-bold py-3 px-8 rounded-full text-lg shadow-lg hover:shadow-xl transition-all duration-300">
+                    <span class="ml-2">אימייל: zaviner@gmail.com</span>
+                    <span class="text-2xl">📧</span>
+                </a>
+            </div>
+            <p class="mt-12 text-md text-gray-400">
+                <span class="text-yellow-300">#למדו_לשלוט_בבינה_המלאכותית</span> - העתיד הוא עכשיו
+            </p>
+        </section>
+
+        <!-- Footer -->
+        <footer class="w-full max-w-5xl text-center py-10 mt-24 border-t border-gray-700/50 text-gray-400 text-sm scroll-reveal">
+            <p>&copy; 2023 זאביק אבינר - כל הזכויות שמורות. אמנות ובינה מלאכותית נפגשות.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // Custom Cursor JavaScript
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Hide cursor when it leaves the window
+        document.addEventListener('mouseleave', () => {
+            cursor.style.opacity = '0';
+        });
+        document.addEventListener('mouseenter', () => {
+            cursor.style.opacity = '1';
+        });
+
+        // Scroll Reveal Animation (Intersection Observer)
+        const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Unobserve once visible to prevent re-triggering
+                }
+            });
+        }, {
+            threshold: 0.1, // Trigger when 10% of the element is visible
+            rootMargin: '0px 0px -50px 0px' // Start animation a bit before reaching the viewport bottom
+        });
+
+        scrollRevealElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // Optional: Animate custom cursor on hover over interactive elements
+        document.querySelectorAll('a, button, .expertise-card').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                cursor.style.boxShadow = '0 0 0 2px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 255, 255, 0.8)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursor.style.boxShadow = '0 0 0 2px rgba(0, 0, 0, 0.8), 0 0 15px rgba(255, 255, 255, 0.5)';
+            });
+        });
+
+    </script>
+</body>
+</html>

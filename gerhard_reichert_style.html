@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ממלכת ה-AI - אומנות דיגיטלית מאת זאביק אבינר</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Rubik:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Base styles, override default Tailwind */
+        body {
+            font-family: 'Heebo', sans-serif;
+            overflow: hidden; /* Prevent scrollbars unless absolutely needed by design */
+            background-color: #000; /* Start with a dark base */
+            cursor: none; /* Hide default cursor */
+            touch-action: none; /* Disable touch gestures like pinch-zoom */
+            -webkit-user-select: none; /* Disable text selection */
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Custom cursor styling for high visibility */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.9); /* White border, visible on dark */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8), /* Dark shadow, visible on light */
+                        0 0 10px rgba(255, 255, 255, 0.4); /* Subtle glow for emphasis */
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: transform 0.1s ease-out, width 0.1s ease-out, height 0.1s ease-out, border-color 0.1s ease-out, box-shadow 0.1s ease-out;
+            will-change: transform, width, height, border-color, box-shadow;
+        }
+
+        .custom-cursor.active {
+            width: 40px;
+            height: 40px;
+            border-color: rgba(0, 255, 255, 0.7); /* Cyan border on hover */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8),
+                        0 0 15px rgba(0, 255, 255, 0.6); /* Enhanced glow on hover */
+        }
+
+        /* Richter-esque layer styling - blurred, abstracted backgrounds */
+        .richter-layer {
+            position: fixed;
+            inset: -10vw; /* Extend slightly beyond viewport to allow for movement and rotation without revealing edges */
+            z-index: -1;
+            transform: scale(1.1) rotate(0.5deg); /* Subtle initial transform for depth */
+            filter: blur(50px) saturate(150%) contrast(120%);
+            transition: opacity 2s ease-in-out, filter 2s ease-in-out, transform 2s ease-in-out;
+            will-change: opacity, filter, transform;
+        }
+
+        /* General content block styling - distinct, layered, and interactive */
+        .content-block {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.6); /* Slightly transparent dark background */
+            padding: 2rem;
+            border-radius: 0.5rem;
+            backdrop-filter: blur(10px); /* Glassmorphism effect for depth */
+            transition: transform 0.4s ease-out, opacity 0.4s ease-out, filter 0.4s ease-out, background-color 0.4s ease-out, z-index 0s 0.4s;
+            will-change: transform, opacity, filter, background-color;
+            border-right: 2px solid rgba(0, 255, 255, 0.3); /* Subtle accent line */
+            border-bottom: 2px solid rgba(0, 255, 255, 0.3);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7); /* Text shadow for better contrast on blurred backgrounds */
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1); /* Soft glow around blocks */
+        }
+        .content-block:hover {
+            transform: scale(1.02) rotate(0deg); /* Slightly enlarge and straighten on hover */
+            opacity: 1;
+            background-color: rgba(0, 0, 0, 0.8);
+            filter: brightness(1.2);
+            z-index: 10; /* Bring hovered block to front for focus */
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3); /* Stronger glow on hover */
+            transition: transform 0.4s ease-out, opacity 0.4s ease-out, filter 0.4s ease-out, background-color 0.4s ease-out, z-index 0s;
+        }
+
+        /* Initial hidden state for staggered reveal */
+        .content-block.hidden-initial {
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+        }
+
+        /* Specific block positions and artistic styles */
+        #block-intro {
+            top: 10%;
+            right: 5%;
+            width: 40%;
+            min-width: 300px;
+            max-width: 500px;
+            opacity: 0.9;
+            transform: rotate(-2deg);
+            color: #E0E7FF; /* Light blue text */
+        }
+
+        #block-message {
+            top: 30%;
+            left: 10%;
+            width: 35%;
+            min-width: 280px;
+            max-width: 450px;
+            opacity: 0.8;
+            transform: rotate(3deg);
+            color: #B2F0F0; /* Light cyan text */
+            z-index: 5;
+        }
+
+        #block-audience {
+            bottom: 10%;
+            right: 15%;
+            width: 30%;
+            min-width: 250px;
+            max-width: 400px;
+            opacity: 0.7;
+            transform: rotate(-5deg);
+            color: #D1FAE5; /* Light mint text */
+            z-index: 6;
+        }
+
+        #block-expertise {
+            top: 5%;
+            left: 5%;
+            width: 45%;
+            min-width: 320px;
+            max-width: 550px;
+            opacity: 0.85;
+            transform: rotate(1deg);
+            color: #C7D2FE; /* Light indigo text */
+            z-index: 4;
+        }
+
+        #block-services {
+            bottom: 5%;
+            left: 20%;
+            width: 40%;
+            min-width: 300px;
+            max-width: 500px;
+            opacity: 0.9;
+            transform: rotate(-4deg);
+            color: #FBCFE8; /* Light pink text */
+            z-index: 7;
+        }
+
+        #block-zevik {
+            top: 50%;
+            right: 1%;
+            width: 30%;
+            min-width: 280px;
+            max-width: 400px;
+            transform: translateY(-50%) rotate(2deg);
+            background: rgba(0, 0, 0, 0.7);
+            color: #FFF;
+            z-index: 8;
+        }
+        #zevik-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+            border: 3px solid rgba(0, 255, 255, 0.5); /* Cyan border for a digital feel */
+            filter: grayscale(80%) blur(1px) contrast(110%); /* Richter-esque treatment */
+            transition: filter 0.3s ease-in-out;
+        }
+        #zevik-image:hover {
+            filter: grayscale(0%) blur(0px) contrast(100%); /* Clarify on hover */
+        }
+
+        #block-contact {
+            bottom: 2%;
+            right: 2%;
+            width: 25%;
+            min-width: 200px;
+            max-width: 350px;
+            background: rgba(10, 20, 30, 0.8);
+            color: #A7F3D0; /* Light emerald text */
+            z-index: 10;
+        }
+
+        /* Responsive adjustments for smaller screens (Mobile first approach for flow) */
+        @media (max-width: 1024px) {
+            body {
+                overflow-y: auto; /* Allow scrolling on small screens */
+                cursor: auto; /* Restore default cursor */
+            }
+            .custom-cursor {
+                display: none; /* Hide custom cursor on touch devices */
+            }
+            .richter-layer {
+                display: none; /* Hide complex background layers for performance on mobile */
+            }
+            .content-block {
+                position: relative; /* Switch to relative for standard flow */
+                width: 90% !important; /* Wider blocks for readability */
+                left: 50% !important;
+                right: auto !important;
+                transform: translateX(-50%) rotate(0deg) !important; /* Center and straighten */
+                top: auto !important;
+                bottom: auto !important;
+                margin-top: 2vh; /* Add vertical spacing */
+                margin-bottom: 2vh;
+                opacity: 1 !important; /* Ensure visibility */
+                backdrop-filter: blur(5px);
+                border: 1px solid rgba(0, 255, 255, 0.2); /* Simpler border */
+                box-shadow: 0 0 15px rgba(0, 255, 255, 0.1);
+            }
+            .content-block:hover {
+                transform: translateX(-50%) scale(1.02) rotate(0deg) !important; /* Retain centering on hover */
+                box-shadow: 0 0 25px rgba(0, 255, 255, 0.2);
+            }
+            #block-zevik {
+                top: auto;
+                transform: translateX(-50%) rotate(0deg) !important;
+            }
+            #block-contact {
+                margin-top: 2vh;
+                margin-bottom: 5vh; /* More space at the bottom */
+                transform: translateX(-50%) rotate(0deg) !important;
+            }
+            /* Adjust font sizes for mobile */
+            .text-3xl { font-size: 2rem; }
+            .text-5xl { font-size: 2.5rem; }
+            .text-2xl { font-size: 1.5rem; }
+            .text-4xl { font-size: 2rem; }
+            .text-lg { font-size: 1rem; }
+            .text-xl { font-size: 1.125rem; }
+            .text-base { font-size: 0.9rem; }
+        }
+        @media (max-width: 768px) {
+            .content-block {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-black text-white selection:bg-cyan-500 selection:text-black">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+
+    <!-- Richter-esque Background Layers (Abstraction and Dynamic Art) -->
+    <div class="richter-layer bg-gradient-to-br from-indigo-900 via-gray-900 to-teal-900 opacity-60" data-layer-id="1"></div>
+    <div class="richter-layer bg-gradient-to-tl from-slate-800 via-zinc-900 to-blue-900 opacity-50" data-layer-id="2"></div>
+    <div class="richter-layer bg-gradient-to-tr from-cyan-900 via-gray-800 to-purple-900 opacity-40" data-layer-id="3"></div>
+
+    <!-- Content Blocks (Fragmented Information, Artistically Presented) -->
+
+    <div id="block-intro" class="content-block hidden-initial text-lg md:text-xl font-light leading-relaxed">
+        <h1 class="text-3xl md:text-5xl font-bold mb-4 text-cyan-400 font-rubik leading-tight">
+            בינה מלאכותית – האומנות החדשה
+        </h1>
+        <p class="mb-3">
+            בעולם שמשתנה בקצב מסחרר, AI אינה רק טכנולוגיה – היא שפת היצירה וההבנה של המחר. זוהי קריאה להתמרה, ללמידה, לשליטה בכלי שמעצב את פני העתיד. המהפכה כבר כאן, והיא ממתינה שתפענח אותה.
+        </p>
+        <p>
+            אומנות דיגיטלית זו מזמינה אתכם למסע אל תוך ליבת הבינה המלאכותית, בהנחייתו של זאביק אבינר – אמן קוד ומדריך חזון.
+        </p>
+    </div>
+
+    <div id="block-message" class="content-block hidden-initial text-base md:text-lg font-light leading-relaxed">
+        <h2 class="text-2xl md:text-4xl font-bold mb-3 text-emerald-400 font-rubik">
+            לפענח את הקוד – להפוך את ה-AI לנגיש
+        </h2>
+        <p class="mb-3">
+            המסר שלנו צלול וברור: AI שייך לכולם. מהבסיס הפשוט ביותר ועד הפיתוחים המורכבים ביותר. כאן תמצאו את הכלים, הידע וההשראה להפוך את המורכב לפשוט, את הרחוק לקרוב, ואת העתיד לנוכח. כלים מעשיים שימושיים באופן מיידי בחייכם ובעבודתכם.
+        </p>
+    </div>
+
+    <div id="block-audience" class="content-block hidden-initial text-base md:text-lg font-light leading-relaxed">
+        <h2 class="text-2xl md:text-3xl font-bold mb-3 text-purple-400 font-rubik">
+            למי מיועדת היצירה?
+        </h2>
+        <ul class="list-none space-y-2 pr-4">
+            <li><span class="text-cyan-300">&larr;</span> אלו המבקשים לגעת לראשונה בעולם ה-AI.</li>
+            <li><span class="text-cyan-300">&larr;</span> אנשי מקצוע המחפשים שילוב AI בעשייתם היומיומית.</li>
+            <li><span class="text-cyan-300">&larr;</span> מנהלים וארגונים השואפים להעצים צוותים בידע מתקדם.</li>
+            <li><span class="text-cyan-300">&larr;</span> יזמים ויוצרים – לפיתוח פרויקטים מבוססי AI מן היסוד.</li>
+        </ul>
+    </div>
+
+    <div id="block-expertise" class="content-block hidden-initial text-base md:text-lg font-light leading-relaxed">
+        <h2 class="text-2xl md:text-3xl font-bold mb-3 text-orange-400 font-rubik">
+            תחומי ההתמחות – גבולות מתרחבים
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <p class="mb-2"><span class="text-emerald-300">&bull;</span> יצירת טקסטים ותוכן חדשניים.</p>
+                <p class="mb-2"><span class="text-emerald-300">&bull;</span> בניית אפליקציות חכמות ואינטואיטיביות.</p>
+                <p class="mb-2"><span class="text-emerald-300">&bull;</span> פיתוח אתרים בעידן ה-AI.</p>
+            </div>
+            <div>
+                <p class="mb-2"><span class="text-emerald-300">&bull;</span> ניתוח נתונים, מחקר והסקת מסקנות.</p>
+                <p class="mb-2"><span class="text-emerald-300">&bull;</span> יצירת תמונות, אומנות וקונספטים חזותיים.</p>
+                <p class="mb-2"><span class="text-emerald-300">&bull;</span> אוטומציה של תהליכים – לשחרר זמן וכישרון.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="block-services" class="content-block hidden-initial text-base md:text-lg font-light leading-relaxed">
+        <h2 class="text-2xl md:text-3xl font-bold mb-3 text-fuchsia-400 font-rubik">
+            שירותים מעבר למסך
+        </h2>
+        <ul class="list-none space-y-2 pr-4">
+            <li><span class="text-yellow-300">&rsaquo;</span> **סדנאות קבוצתיות:** חוויות מעשיות, ממוקדות מטרה, המעניקות ידע יישומי מידי.</li>
+            <li><span class="text-yellow-300">&rsaquo;</span> **שיעורים פרטיים:** ליווי אישי, התאמה מוחלטת לקצב ולשאיפות שלכם.</li>
+            <li><span class="text-yellow-300">&rsaquo;</span> **הרצאות לארגונים:** הצצה לעולם העתיד, פתיחת אופקים והנעת צוותים חדשניים.</li>
+            <li><span class="text-yellow-300">&rsaquo;</span> **ייעוץ ופיתוח פרויקטים:** שותפות מקצועית בהגשמת חזונות מבוססי AI.</li>
+        </ul>
+    </div>
+
+    <div id="block-zevik" class="content-block hidden-initial text-base md:text-lg font-light leading-relaxed text-center">
+        <img id="zevik-image" src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר - מומחה בינה מלאכותית" class="mx-auto block">
+        <h2 class="text-2xl md:text-3xl font-bold mb-2 text-sky-400 font-rubik">
+            זאביק אבינר – האדם מאחורי הקוד
+        </h2>
+        <p class="mb-3">
+            מומחה בינה מלאכותית עם ניסיון עשיר בפיתוח ובהטמעה. זאביק מאמין בהנגשת הטכנולוגיה ובהפיכתה לכלי עבודה יומיומי לכל אחד ואחת. הוא המפתח לממלכת ה-AI הפרטית שלכם.
+        </p>
+    </div>
+
+    <div id="block-contact" class="content-block hidden-initial text-sm md:text-base font-light leading-relaxed text-center">
+        <p class="mb-1">
+            **ליצירת קשר עם המדריך:**
+        </p>
+        <p class="text-lg md:text-xl font-bold text-lime-300">
+            <a href="https://wa.me/972546609385" target="_blank" class="hover:text-white transition-colors duration-200">
+                וואטסאפ: 054-6609385
+            </a>
+        </p>
+        <p class="text-lg md:text-xl font-bold text-lime-300 mt-2">
+            <a href="mailto:zaviner@gmail.com" class="hover:text-white transition-colors duration-200">
+                אימייל: zaviner@gmail.com
+            </a>
+        </p>
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
+        let speed = 0.2; // Cursor lag speed
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * speed;
+            cursorY += (mouseY - cursorY) * speed;
+            cursor.style.transform = `translate3d(${cursorX - 16}px, ${cursorY - 16}px, 0)`; // Adjust by half cursor size
+            requestAnimationFrame(animateCursor);
+        }
+
+        document.addEventListener('mousemove', e => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            // Only show cursor if it was hidden and on desktop
+            if (window.innerWidth > 1024 && cursor.style.display === 'none') {
+                cursor.style.display = 'block';
+                document.body.style.cursor = 'none'; // Hide default cursor
+            }
+        });
+
+        document.addEventListener('mouseenter', () => {
+             if (window.innerWidth > 1024) {
+                 cursor.style.display = 'block';
+                 document.body.style.cursor = 'none'; // Hide default cursor
+             }
+        });
+
+        document.addEventListener('mouseleave', () => {
+            cursor.style.display = 'none';
+            document.body.style.cursor = 'auto'; // Restore default cursor
+        });
+
+        // Add hover effect for interactive elements
+        document.querySelectorAll('a, .content-block').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+
+        // Hide custom cursor on touch devices or small screens
+        function checkScreenSize() {
+            if (window.innerWidth <= 1024 || 'ontouchstart' in window) {
+                cursor.style.display = 'none';
+                document.body.style.cursor = 'auto'; // Restore default cursor
+            } else {
+                cursor.style.display = 'block';
+                document.body.style.cursor = 'none'; // Hide default cursor
+            }
+        }
+        window.addEventListener('resize', checkScreenSize);
+        checkScreenSize(); // Initial check on load
+
+        animateCursor(); // Start cursor animation loop
+
+        // Richter-esque Background Animation Logic
+        const layers = document.querySelectorAll('.richter-layer');
+        let hueShift = 0;
+
+        function animateBackgroundLayers() {
+            hueShift = (hueShift + 0.05) % 360; // Slowly shift hue for subtle color changes
+            layers.forEach((layer, index) => {
+                const rotation = Math.sin(Date.now() * 0.00005 + index) * 2; // Subtle rotation
+                const blur = 50 + Math.sin(Date.now() * 0.0001 + index) * 10; // Pulsating blur
+                const saturation = 150 + Math.cos(Date.now() * 0.00008 + index) * 20; // Pulsating saturation
+                const contrast = 120 + Math.sin(Date.now() * 0.00006 + index) * 15; // Pulsating contrast
+                const scale = 1.1 + Math.sin(Date.now() * 0.00004 + index) * 0.05; // Subtle scale
+
+                layer.style.filter = `blur(${blur}px) saturate(${saturation}%) contrast(${contrast}%) hue-rotate(${hueShift}deg)`;
+                layer.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
+            });
+            requestAnimationFrame(animateBackgroundLayers);
+        }
+        animateBackgroundLayers(); // Start background animation loop
+
+        // Content Block Reveal Animation (Staggered fade-in on load)
+        document.addEventListener('DOMContentLoaded', () => {
+            const contentBlocks = document.querySelectorAll('.content-block');
+            contentBlocks.forEach((block, index) => {
+                setTimeout(() => {
+                    block.classList.remove('hidden-initial');
+                    // Reset opacity and transform to their initial non-hidden states
+                    block.style.opacity = getComputedStyle(block).opacity; // Use computed opacity from CSS
+                    let initialTransform = block.dataset.initialTransform || getComputedStyle(block).transform;
+                    if (initialTransform.includes('translateY(20px)')) {
+                        initialTransform = initialTransform.replace(/translateY\(20px\)/, 'translateY(0px)');
+                    }
+                    if (initialTransform.includes('scale(0.9)')) {
+                        initialTransform = initialTransform.replace(/scale\(0.9\)/, 'scale(1)');
+                    }
+                    block.style.transform = initialTransform;
+                }, 200 + index * 150); // Staggered delay for artistic reveal
+            });
+
+            // Parallax-like effect for content blocks based on mouse movement (Desktop only)
+            if (window.innerWidth > 1024) {
+                // Store initial transforms to maintain rotations
+                contentBlocks.forEach(block => {
+                    block.dataset.initialTransform = getComputedStyle(block).transform;
+                });
+
+                document.addEventListener('mousemove', e => {
+                    const pageX = e.clientX / window.innerWidth - 0.5;
+                    const pageY = e.clientY / window.innerHeight - 0.5;
+
+                    contentBlocks.forEach((block, index) => {
+                        const depth = (index % 3) * 0.8 + 1; // Vary depth for different blocks
+                        const moveX = -pageX * 20 * depth;
+                        const moveY = -pageY * 15 * depth;
+
+                        // Get the initial rotation from dataset to preserve it during parallax
+                        const initialTransform = block.dataset.initialTransform || '';
+                        let currentRotate = 'rotate(0deg)';
+                        const rotateMatch = initialTransform.match(/rotate\(([^)]+)\)/);
+                        if (rotateMatch && rotateMatch[1]) {
+                            currentRotate = `rotate(${rotateMatch[1]})`;
+                        }
+
+                        // Apply new transform including parallax and original rotation
+                        block.style.transform = `translate(${moveX}px, ${moveY}px) ${currentRotate}`;
+                    });
+                });
+            }
+        });
+
+    </script>
+</body>
+</html>

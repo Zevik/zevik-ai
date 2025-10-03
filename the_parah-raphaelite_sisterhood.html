@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - האחווה הפרה-רפאליטימית של AI</title>
+    <meta name="description" content="מסע אל נבכי הבינה המלאכותית בהדרכת זאביק אבינר - למדו לשלוט באמנות העתיד.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Tailwind Configuration for Hebrew Fonts */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        :root {
+            --color-pr-teal: #004d40;
+            --color-pr-gold: #b8860b;
+            --color-pr-rose: #8b0000;
+            --color-pr-light: #f0f8ff; /* AliceBlue */
+            --color-pr-dark-text: #2d3748;
+            --color-pr-light-text: #f7fafc;
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            color: var(--color-pr-dark-text);
+            background-color: var(--color-pr-light);
+            cursor: none; /* Hide default cursor */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Frank Ruhl Libre', serif;
+            color: var(--color-pr-dark-text);
+        }
+
+        /* Custom Cursor Styling */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+            transition: transform 0.1s ease-out, background-color 0.2s ease-in-out;
+            transform-origin: center center;
+            will-change: transform;
+        }
+        .custom-cursor.active {
+            transform: scale(1.5);
+            background-color: var(--color-pr-gold);
+        }
+
+        /* Parallax background elements */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-size: cover;
+            background-position: center center;
+            will-change: transform;
+            opacity: 0.1;
+        }
+
+        .parallax-element-1 {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cdefs%3E%3ClinearGradient id='a' x1='0' x2='0' y1='0' y2='1'%3E%3Cstop offset='0' stop-color='%231b5e20'/%3E%3Cstop offset='1' stop-color='%23004d40'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg opacity='.6'%3E%3Cpath fill='url(%23a)' d='M-1 0L35 15C20.6 19.3 12.3 25 7.7 31.8c-4.6 6.7-7 14.7-7.7 23.4l-.1.1V0H-1z'/%3E%3Cpath fill='url(%23a)' d='M-1 69c.7 8.7 3.2 16.7 7.7 23.4s12.9 12.4 20.2 16.7L-1 101V69z'/%3E%3C/g%3E%3C/svg%3E");
+            animation: flow 20s linear infinite alternate;
+        }
+        .parallax-element-2 {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Cdefs%3E%3ClinearGradient id='b' x1='0' x2='0' y1='0' y2='1'%3E%3Cstop offset='0' stop-color='%231b5e20'/%3E%3Cstop offset='1' stop-color='%23004d40'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cg opacity='.6'%3E%3Cpath fill='url(%23b)' d='M101 0V32L65 17c14.4-4.3 22.7-10 27.3-16.8S99 0 101 0z'/%3E%3Cpath fill='url(%23b)' d='M101 69c-2 8.7-4.5 16.7-9 23.4s-12.9 12.4-20.2 16.7L101 101V69z'/%3E%3C/g%3E%3C/svg%3E");
+            animation: flow-reverse 25s linear infinite alternate;
+            opacity: 0.05;
+        }
+
+        @keyframes flow {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(20px, 20px); }
+        }
+
+        @keyframes flow-reverse {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-25px, -25px); }
+        }
+
+        /* Scroll reveal animation */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Styling for the Pre-Raphaelite aesthetic */
+        .pr-gradient-bg {
+            background: linear-gradient(135deg, var(--color-pr-teal) 0%, #002e26 100%);
+            color: var(--color-pr-light-text);
+        }
+
+        .pr-card {
+            background-color: var(--color-pr-light);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 2rem;
+            text-align: right;
+        }
+
+        .pr-section-heading {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--color-pr-rose);
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            position: relative;
+            display: inline-block;
+            line-height: 1.2;
+        }
+        .pr-section-heading::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: -10px;
+            width: 80%;
+            height: 3px;
+            background-color: var(--color-pr-gold);
+        }
+
+        .pr-button {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background-color: var(--color-pr-gold);
+            color: var(--color-pr-dark-text);
+            font-family: 'Heebo', sans-serif;
+            font-weight: 700;
+            border-radius: 9999px;
+            text-decoration: none;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border: 2px solid transparent;
+        }
+        .pr-button:hover {
+            background-color: #d1b100;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+            border-color: var(--color-pr-rose);
+        }
+
+        .pr-link {
+            color: var(--color-pr-gold);
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .pr-link::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: -2px;
+            width: 0;
+            height: 1px;
+            background-color: var(--color-pr-rose);
+            transition: width 0.3s ease;
+        }
+        .pr-link:hover::after {
+            width: 100%;
+        }
+
+        /* Specific section styling */
+        #hero-section {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%25" height="100%25" viewBox="0 0 1200 800"><defs><filter id="f1" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur in="SourceGraphic" stdDeviation="50"/></filter><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%23004d40"/><stop offset="100%" stop-color="%23002e26"/></linearGradient><linearGradient id="g2" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="%238b0000"/><stop offset="100%" stop-color="%23b8860b"/></linearGradient></defs><rect width="100%25" height="100%25" fill="url(%23g1)"/><circle cx="30%" cy="30%" r="200" fill="url(%23g2)" filter="url(%23f1)" opacity="0.4"><animate attributeName="cx" values="30%; 70%; 30%" dur="25s" repeatCount="indefinite"/><animate attributeName="cy" values="30%; 70%; 30%" dur="25s" repeatCount="indefinite"/></circle><circle cx="70%" cy="70%" r="150" fill="url(%23g2)" filter="url(%23f1)" opacity="0.3"><animate attributeName="cx" values="70%; 30%; 70%" dur="30s" repeatCount="indefinite"/><animate attributeName="cy" values="70%; 30%; 70%" dur="30s" repeatCount="indefinite"/></circle></svg>');
+            background-size: cover;
+            background-position: center;
+            animation: backgroundPan 60s linear infinite alternate;
+        }
+
+        @keyframes backgroundPan {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        /* Specific styling for the AI mastery icon grid */
+        .expertise-grid-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .expertise-grid-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+        }
+        .expertise-grid-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(0,77,64,0.8) 0%, rgba(184,134,11,0.7) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+        .expertise-grid-item:hover::before {
+            opacity: 1;
+        }
+        .expertise-grid-item .icon-text-wrapper {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Contact section specific */
+        .contact-card {
+            background-color: var(--color-pr-teal);
+            color: var(--color-pr-light-text);
+            padding: 3rem;
+            border-radius: 1rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Parallax Background Elements -->
+    <div class="parallax-bg parallax-element-1"></div>
+    <div class="parallax-bg parallax-element-2"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10">
+
+        <!-- Hero Section: הפתח אל הנעלם -->
+        <section id="hero-section" class="relative min-h-screen flex items-center justify-center text-center p-8 pr-gradient-bg">
+            <div class="max-w-4xl mx-auto scroll-reveal">
+                <h1 class="text-6xl md:text-8xl font-bold mb-6 leading-tight text-white drop-shadow-lg">
+                    <span class="block text-pr-gold text-5xl md:text-7xl mb-4 animate-pulse">האחווה הפרה-רפאליטימית</span>
+                    <span class="block text-white">שליטה בבינה המלאכותית:</span>
+                    <span class="block text-white">האומנות היא עכשיו, העתיד הוא יצירתך.</span>
+                </h1>
+                <p class="text-xl md:text-3xl mt-8 text-pr-light-text leading-relaxed">
+                    בואו נחקור את סודות ה-AI, נפסל את המציאות ונצייר את המחר.
+                    <br>הצטרפו למסע אל מעבר לטכנולוגיה - אל אמנות היצירה האינטליגנטית.
+                </p>
+                <a href="#about-zaavik" class="pr-button mt-12 text-lg md:text-xl">גלו את המדריך</a>
+            </div>
+        </section>
+
+        <!-- Core Message Section: נבכי הבינה, נגישות הרוח -->
+        <section class="py-24 px-8 max-w-7xl mx-auto text-center scroll-reveal">
+            <h2 class="pr-section-heading mb-16 text-pr-dark-text text-center mx-auto scroll-reveal">המסר המרכזי: הפיכת הנעלם לנגיש</h2>
+            <div class="max-w-3xl mx-auto leading-loose text-lg md:text-xl text-gray-800 scroll-reveal">
+                <p class="mb-6">
+                    בעידן שבו הבינה המלאכותית נדמית כממלכה רחוקה של מכשפים, אנו מזמינים אתכם למסע חניכה.
+                    לא עוד אלגוריתמים מורכבים בתיאוריות יבשות, אלא כלים מעשיים הנמסרים באמנות ובפשטות.
+                    ממתחילים ועד מומחים, נלווה אתכם צעד אחר צעד, ממבוך הקוד אל דרך היצירה החופשית.
+                </p>
+                <p>
+                    AI אינו רק טכנולוגיה - זוהי השפה החדשה של היצירה, המפתח לשערים שלא נפתחו.
+                    בעבודה, בחיים, באמנות – למדו לשזור את חוטי הבינה המלאכותית אל תוך המרקם של יומכם,
+                    והפכו את הרעיונות המופשטים לכוח מניע ומוחשי.
+                </p>
+            </div>
+        </section>
+
+        <!-- Target Audience Section: חברי האחווה - מי יצטרף למסע? -->
+        <section class="py-24 px-8 pr-gradient-bg text-pr-light-text scroll-reveal">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="pr-section-heading mb-16 text-center text-pr-gold mx-auto scroll-reveal">קהל היעד: קריאה לאומנים וחוזי העתיד</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 text-center text-lg md:text-xl scroll-reveal">
+                    <div class="p-8 bg-pr-teal rounded-lg shadow-xl border-t-4 border-pr-rose hover:scale-105 transition-transform duration-300">
+                        <h3 class="font-bold text-3xl mb-4 text-pr-gold">המתחילים</h3>
+                        <p>אלה ששומעים את קריאת ה-AI ומעוניינים להכיר את עולמו הקסום מן היסוד, ללא ידע מוקדם.</p>
+                    </div>
+                    <div class="p-8 bg-pr-teal rounded-lg shadow-xl border-t-4 border-pr-rose hover:scale-105 transition-transform duration-300">
+                        <h3 class="font-bold text-3xl mb-4 text-pr-gold">אנשי המקצוע</h3>
+                        <p>בעלי המלאכה המודרניים, המבקשים להטמיע את כוח ה-AI כדי לשכלל את עבודתם ולהתעלות מעליה.</p>
+                    </div>
+                    <div class="p-8 bg-pr-teal rounded-lg shadow-xl border-t-4 border-pr-rose hover:scale-105 transition-transform duration-300">
+                        <h3 class="font-bold text-3xl mb-4 text-pr-gold">מנהלים וארגונים</h3>
+                        <p>המובילים והחזונאים, השואפים להעצים את צוותיהם ולהפוך את הארגון למכונה יצירתית חכמה.</p>
+                    </div>
+                    <div class="p-8 bg-pr-teal rounded-lg shadow-xl border-t-4 border-pr-rose hover:scale-105 transition-transform duration-300">
+                        <h3 class="font-bold text-3xl mb-4 text-pr-gold">המפתחים המתקדמים</h3>
+                        <p>אומני הקוד, השואפים לפתח פרויקטים פורצי דרך ולפרוץ את גבולות היכולת של הבינה המלאכותית.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Section: מלאכות ה-AI - אומנויות העתיד -->
+        <section class="py-24 px-8 max-w-7xl mx-auto scroll-reveal">
+            <h2 class="pr-section-heading mb-16 text-center mx-auto scroll-reveal">תחומי ההתמחות: פיסול, ציור ושזירה דיגיטלית</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-center scroll-reveal">
+                <div class="pr-card expertise-grid-item text-pr-dark-text p-8 flex flex-col items-center justify-center">
+                    <div class="icon-text-wrapper">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwNGQ0MCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTUgMTJIMTlNMTEuNSAxOWwxLjUtNy0xLjUtN00xMiAxMi4yYzUuMiAwIDYuNS02LjIgNC41LTguMUE1LjQ0IDUuNDQgMCAwIDAgMTIgMyAxMiAxMiAwIDAgMCA3LjUgNC4xYzIgMS45IDMuNSAzLjcgOC41IDguMXoiLz48L3N2Zz4=" alt="יצירת טקסטים ותוכן" class="w-20 h-20 mb-4 mx-auto text-pr-teal">
+                        <h3 class="text-2xl font-bold mb-2 text-pr-teal">פיסול מילים ותוכן</h3>
+                        <p class="text-gray-700">יצירה וליטוש של טקסטים, מאמרים, קמפיינים וסיפורים באמצעות בינה מלאכותית יוצרת.</p>
+                    </div>
+                </div>
+                <div class="pr-card expertise-grid-item text-pr-dark-text p-8 flex flex-col items-center justify-center">
+                    <div class="icon-text-wrapper">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwNGQ0MCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTkgMTFDMTUuMDkgMTEgMTcgOC41IDE3IDVDMTcgMTUgMTQgMTcgOCAxN0M1IDIzIDIgMTcgMiAxN0MyIDE1IDYgMTIgOSAxMi41TTIzIDhjLS43LTItMi03LTYtN0MxMiA0IDcgMTEgOCA4IDkgNSAxMS41IDMgMTMgMyIvPjwvc3ZnPg==" alt="בניית אפליקציות חכמות" class="w-20 h-20 mb-4 mx-auto text-pr-teal">
+                        <h3 class="text-2xl font-bold mb-2 text-pr-teal">אדריכלות אפליקציות חכמות</h3>
+                        <p class="text-gray-700">בניית אפליקציות חדשניות המשלבות יכולות AI למען חוויות משתמש פורצות דרך.</p>
+                    </div>
+                </div>
+                <div class="pr-card expertise-grid-item text-pr-dark-text p-8 flex flex-col items-center justify-center">
+                    <div class="icon-text-wrapper">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwNGQ0MCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIgMyBoMjAgdjE4IGgyMCBWMzUgYSAyIDIgMCAwIDEtMiAydi0xMiBtLTggNGwxLjUuNTQ1YTMuMyAzLjMgMCAwIDAgMS42LS42MzdjLjU4LS41MDQuOC0xLjI0Ny42LTIuMTZDNjIuMSA1Mi42IDYxIDQ5LjIgNDYuMiAzNi4xYTIgMiAwIDAgMS0uNCAuNGwtLjctLjciTTIgMTJoMjAiLz48L3N2Zz4=" alt="פיתוח אתרים מבוססי AI" class="w-20 h-20 mb-4 mx-auto text-pr-teal">
+                        <h3 class="text-2xl font-bold mb-2 text-pr-teal">קונסטרוקציה של אתרי AI</h3>
+                        <p class="text-gray-700">יצירת אתרי אינטרנט דינמיים ואינטליגנטיים המשתמשים ב-AI לשיפור חוויית הגלישה.</p>
+                    </div>
+                </div>
+                <div class="pr-card expertise-grid-item text-pr-dark-text p-8 flex flex-col items-center justify-center">
+                    <div class="icon-text-wrapper">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwNGQ0MCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIgMTJWNi44YTQgNCAwIDAgMSAyLjgtMy44TDcuMyAyTDEyIDMuNWwtNC43IDEuNGE0IDQgMCAwIDAgLTMuOCAyLjhWNmM5LjQgMCA1LjggMTAuNiAxMiAxMC42IDYuMiAwIDIuNi0xMC42IDEyLTEwLjYgVjEyYzAtLjcgMC02Ljc1LTEuNS03LjVBOSA5IDAgMCAwIDE3LjUgMTAuNUExMCAxMCAwIDAgMCAxNiAyMS45bC0xLjUtLjRMOCAyMi41bDEuNS40TDEyIDIyLjVMMTIuNSAyMWwxLjUuNCIvPjwvc3ZnPg==" alt="ניתוח נתונים ומחקר" class="w-20 h-20 mb-4 mx-auto text-pr-teal">
+                        <h3 class="text-2xl font-bold mb-2 text-pr-teal">נרטיבים של נתונים ומחקר</h3>
+                        <p class="text-gray-700">פירוש כמויות עתק של נתונים, חשיפת תובנות עמוקות וניסוח מחקרים חכמים.</p>
+                    </div>
+                </div>
+                <div class="pr-card expertise-grid-item text-pr-dark-text p-8 flex flex-col items-center justify-center">
+                    <div class="icon-text-wrapper">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwNGQ0MCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTIuMzUgMTJsOS40MSA5LjQxYzMuNjkgMy42OSAxMC4yMiAxLjI1IDExLjUtMy42OWwtNi02TDEyIDYuMDhMOC41OSAxMC44MnEzLjY5LTMuNjkgNS40MS01LjQxYzMuNzUtMy43NS42LTkuNS0zLjY5LTExLjVoLS4wOWwtMS40NiAxLjQ2Yy00LjggNC44LTEuMDUgMTYuNjkgLTYuOTggMTkuMWE2IDYgMCAwIDAtLjQ4LS40NEM2LjUgOS43OCA2LjUgNS4zNyA2LjUuMTkgNi41IDIgNi41IDcgNi45IDIuMiAyLjIgNy42LS42LjYgMTEuNS0zLjY5bC0xLjQ2LTEuNDZjLTIuNDMtMi40My02LjQtLjU3LTYuMyAyLjA1djAtMS40NiIvPjwvc3ZnPg==" alt="יצירת תמונות ואומנות" class="w-20 h-20 mb-4 mx-auto text-pr-teal">
+                        <h3 class="text-2xl font-bold mb-2 text-pr-teal">גילוף תמונות ואמנות</h3>
+                        <p class="text-gray-700">הפיכת רעיונות ויזואליים למציאות מרהיבה בעזרת בינה מלאכותית יוצרת תמונות.</p>
+                    </div>
+                </div>
+                <div class="pr-card expertise-grid-item text-pr-dark-text p-8 flex flex-col items-center justify-center">
+                    <div class="icon-text-wrapper">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzAwNGQ0MCIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTQgMTBoMTZsLTUtNEM2LjUgMi4yIDUgMiA1IDIgMTAuNSA1IDExLjggMTQgMTIgMTVDMTQgMTggMTAuNSAyMC43IDcgMjEuMWE2IDYgMCAwIDEtMy44LTIuOWwtLjgtLjkiLz48L3N2Zz4=" alt="אוטומציה של תהליכים" class="w-20 h-20 mb-4 mx-auto text-pr-teal">
+                        <h3 class="text-2xl font-bold mb-2 text-pr-teal">כישוף אוטומציה של תהליכים</h3>
+                        <p class="text-gray-700">ייעול והשבחת תהליכים עסקיים ותפעוליים באמצעות פתרונות AI אוטומטיים.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section: נתיבי החניכה - דרכי הלימוד -->
+        <section class="py-24 px-8 pr-gradient-bg text-pr-light-text scroll-reveal">
+            <div class="max-w-7xl mx-auto">
+                <h2 class="pr-section-heading mb-16 text-center text-pr-gold mx-auto scroll-reveal">שירותים מוצעים: נתיבי החניכה</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-center text-lg md:text-xl scroll-reveal">
+                    <div class="p-8 bg-pr-teal rounded-lg shadow-xl border-b-4 border-pr-gold hover:bg-opacity-90 transition-all duration-300">
+                        <h3 class="font-bold text-4xl mb-4 text-pr-rose">סדנאות קבוצתיות</h3>
+                        <p class="mb-4">מסעות מעשיים וממוקדים, שבהם נלמד, נתנסה וניצור יחד את קסם ה-AI בכיף וביסודיות.</p>
+                        <p class="text-sm italic">לגלות את העוצמה שבשיתוף ובסינרגיה.</p>
+                    </div>
+                    <div class="p-8 bg-pr-teal rounded-lg shadow-xl border-b-4 border-pr-gold hover:bg-opacity-90 transition-all duration-300">
+                        <h3 class="font-bold text-4xl mb-4 text-pr-rose">שיעורים פרטיים</h3>
+                        <p class="mb-4">חניכה אישית ועמוקה, מותאמת במדויק לרמת הידע, קצב הלימוד והצרכים הספציפיים שלכם.</p>
+                        <p class="text-sm italic">ללטש את הכישורים עד לרמת המומחיות האישית.</p>
+                    </div>
+                    <div class="p-8 bg-pr-teal rounded-lg shadow-xl border-b-4 border-pr-gold hover:bg-opacity-90 transition-all duration-300">
+                        <h3 class="font-bold text-4xl mb-4 text-pr-rose">הרצאות והשראה לארגונים</h3>
+                        <p class="mb-4">פתיחת אופקים והטמעת חשיבה חדשנית לצוותים ומנהלים, חשיפה לעולם ה-AI ויישומיו.</p>
+                        <p class="text-sm italic">להצית את ניצוץ היצירה הדיגיטלית בקרב כולם.</p>
+                    </div>
+                    <div class="p-8 bg-pr-teal rounded-lg shadow-xl border-b-4 border-pr-gold hover:bg-opacity-90 transition-all duration-300">
+                        <h3 class="font-bold text-4xl mb-4 text-pr-rose">ייעוץ ופיתוח פרויקטים</h3>
+                        <p class="mb-4">ליווי מקצועי, ייעוץ אסטרטגי ופיתוח פתרונות AI מותאמים אישית לצרכי העסק והחזון שלכם.</p>
+                        <p class="text-sm italic">לתרגם רעיונות גדולים למציאות טכנולוגית מנצחת.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Zaavik Aviner Section: המדריך - שוזר חוטי הבינה -->
+        <section id="about-zaavik" class="py-24 px-8 max-w-7xl mx-auto scroll-reveal">
+            <h2 class="pr-section-heading mb-16 text-center mx-auto scroll-reveal">המדריך: זאביק אבינר - שוזר חוטי הבינה</h2>
+            <div class="md:flex md:items-center md:space-x-reverse md:space-x-12 lg:space-x-reverse lg:space-x-20 pr-card p-12 text-pr-dark-text scroll-reveal">
+                <div class="md:w-1/3 flex justify-center mb-8 md:mb-0">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר" class="rounded-full w-64 h-64 object-cover shadow-lg border-4 border-pr-gold transition-transform hover:scale-105 duration-300">
+                </div>
+                <div class="md:w-2/3 text-center md:text-right">
+                    <h3 class="text-5xl font-bold mb-6 text-pr-teal">זאביק אבינר</h3>
+                    <p class="text-xl leading-loose mb-6">
+                        מומחה בינה מלאכותית בעל ניסיון עשיר באריגת פרויקטים, אפליקציות ומערכות מבוססות AI.
+                        זאביק אינו רק טכנולוג - הוא אומן הנגשה, השואף להפוך את הטכנולוגיה המורכבת לכלי עבודה יומיומי,
+                        נגיש, ופורה לכל אדם. הוא מאמין שהידע לשלוט ב-AI צריך להיות נחלת הכלל, ופועל להפיץ את הבשורה.
+                    </p>
+                    <div class="mt-8 text-xl font-medium text-pr-dark-text">
+                        <p class="mb-4">
+                            <a href="https://wa.me/972546609385" target="_blank" class="pr-link flex items-center justify-center md:justify-end">
+                                <span class="ml-2">054-6609385</span>
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDRkNDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik0zLjQgMi45QzEuOCA2LjkgMS41IDEyIDQgMTUuNmEzLjUgMy41IDAgMCAwIDEuMyAxLjZMMjEgMjMgMjAgMThsLTQuNS0xLjRhMy41IDMuNSAwIDAgMC0xLjMtMS42QzguOCA4LjggNS44IDMuNyAzLjQgMi45WiIvPjwvc3ZnPg==" class="w-6 h-6 inline-block">
+                            </a>
+                        </p>
+                        <p>
+                            <a href="mailto:zaviner@gmail.com" class="pr-link flex items-center justify-center md:justify-end">
+                                <span class="ml-2">zaviner@gmail.com</span>
+                                <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDRkNDAiIHN0cm9rZS13aWR0aD0iMS41IiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiPjxwYXRoIGQ9Ik00IDVsMTYuOCAxMC40Yy44LjUgMS4yIDEuNCAxLjIgMi40VjE5YTMgMyAwIDAgMS0zIDNIM2EzIDMgMCAwIDEtMy0zVjcuNmMwLTEgLjQtMS45IDEuMi0yLjRMMTAgNUwyMiA1Ii8+PC9zdmc+" class="w-6 h-6 inline-block">
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer: חותם האחווה -->
+        <footer class="py-12 pr-gradient-bg text-center text-pr-light-text text-sm scroll-reveal">
+            <p>&copy; 2024 זאביק אבינר - כל הזכויות שמורות. אמנות העתיד, עכשיו.</p>
+            <p class="mt-2">עיצוב דיגיטלי בהשראת האחווה הפרה-רפאליטימית וקסם הבינה המלאכותית.</p>
+        </footer>
+
+    </div> <!-- End Main Content Wrapper -->
+
+    <script>
+        // Custom Cursor JavaScript
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.transform = `translate(${e.clientX - 14}px, ${e.clientY - 14}px)`;
+        });
+
+        const interactiveElements = document.querySelectorAll('a, button, .pr-button, .expertise-grid-item, .pr-card');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+
+        // Parallax Effect JavaScript
+        const parallaxBg1 = document.querySelector('.parallax-element-1');
+        const parallaxBg2 = document.querySelector('.parallax-element-2');
+
+        document.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            if (parallaxBg1) {
+                parallaxBg1.style.transform = `translateY(${scrollY * 0.15}px)`;
+            }
+            if (parallaxBg2) {
+                parallaxBg2.style.transform = `translateY(${scrollY * 0.08}px)`;
+            }
+        });
+
+        // Scroll Reveal Animation JavaScript
+        const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Stop observing once visible
+                }
+            });
+        }, observerOptions);
+
+        scrollRevealElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

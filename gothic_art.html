@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שערים נפתחים: מסע אל לב הבינה המלאכותית – זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=Heebo:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles & Custom Fonts */
+        :root {
+            --color-dark-primary: #0a0a0a; /* Near black */
+            --color-dark-secondary: #1a082a; /* Deep purple */
+            --color-accent-gold: #D4AF37; /* Old gold */
+            --color-accent-red: #8B0000; /* Dark red */
+            --color-text-light: #E0E0E0; /* Off-white */
+            --color-text-secondary: #B0A0C0; /* Muted lavender */
+        }
+
+        body {
+            cursor: none; /* Hide default cursor */
+            font-family: 'Heebo', sans-serif;
+            background-color: var(--color-dark-primary);
+            color: var(--color-text-light);
+            line-height: 1.75;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            position: relative;
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            position: fixed;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* Visible on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Visible on light backgrounds */
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: width 0.2s ease, height 0.2s ease;
+        }
+        .custom-cursor.hovered {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(212, 175, 55, 0.2); /* Subtle gold tint */
+        }
+
+        /* Gothic Themed Typography */
+        h1, h2 {
+            font-family: 'Cinzel Decorative', serif;
+            color: var(--color-accent-gold);
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.7), 0 0 15px rgba(212, 175, 55, 0.4);
+            letter-spacing: 0.05em;
+        }
+        h3, h4 {
+            font-family: 'EB Garamond', serif;
+            color: var(--color-text-light);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            letter-spacing: 0.03em;
+        }
+
+        p, li, span, div {
+            font-family: 'Heebo', sans-serif;
+            color: var(--color-text-light);
+        }
+
+        /* Stained Glass Effect */
+        .stained-glass-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 80% 20%, rgba(139, 0, 0, 0.1) 0%, transparent 50%), /* Red */
+                radial-gradient(ellipse at 20% 80%, rgba(75, 0, 130, 0.1) 0%, transparent 50%), /* Indigo */
+                radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55, 0.05) 0%, transparent 60%); /* Gold */
+            background-size: 200% 200%; /* Larger to allow movement */
+            animation: moveStainedGlass 60s infinite alternate linear;
+            z-index: -2; /* Below the main content and other parallax layers */
+            opacity: 0.7;
+            filter: blur(0.5px);
+        }
+
+        @keyframes moveStainedGlass {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        /* Parallax Container */
+        .parallax-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1; /* Behind content, but above stained glass */
+        }
+
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center center;
+            will-change: transform;
+        }
+
+        /* Specific Parallax Layers - Gothic Architecture/Textures */
+        .layer-deep {
+            background-image: url('data:image/svg+xml,%3Csvg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M1 0h98v1H1zM0 1h1v98H0zM99 1h1v98h-1zM1 99h98v1H1z" fill="%23222" opacity="0.1"/%3E%3C/svg%3E'); /* Subtle grid for texture */
+            background-size: 200px;
+            opacity: 0.4;
+        }
+        .layer-mid {
+            background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23333" fill-opacity="0.1"%3E%3Cpath fill-rule="evenodd" d="M0 0h30v30H0V0zm30 30h30v30H30V30z"/%3E%3C/g%3E%3C/svg%3E'); /* Another texture */
+            background-size: 150px;
+            opacity: 0.2;
+        }
+        .layer-light {
+            background-image: url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="%23555" fill-opacity="0.05"%3E%3Cpath d="M0 40L40 0H20L0 20V40zm20 0L40 20V0H20L0 20V40z"/%3E%3C/g%3E%3C/svg%3E'); /* Subtle pattern */
+            background-size: 100px;
+            opacity: 0.1;
+        }
+
+        /* Scrollbar styling for a darker, more gothic feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--color-dark-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-dark-secondary);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-accent-gold);
+        }
+
+        /* Generic Card Styling */
+        .gothic-card {
+            background: linear-gradient(145deg, rgba(10,10,10,0.8), rgba(26,8,42,0.9));
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7), 
+                        0 0 20px rgba(212, 175, 55, 0.1);
+            transition: all 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+        .gothic-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.1) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            z-index: 0;
+        }
+        .gothic-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.9), 
+                        0 0 30px rgba(212, 175, 55, 0.3);
+            border-color: var(--color-accent-gold);
+        }
+        .gothic-card:hover::before {
+            opacity: 1;
+            animation: rotateGlow 5s linear infinite;
+        }
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .gothic-text-glow {
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.6), 0 0 10px rgba(212, 175, 55, 0.4);
+        }
+    </style>
+</head>
+<body class="antialiased text-var(--color-text-light) bg-var(--color-dark-primary)">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+
+    <!-- Stained Glass Background Effect -->
+    <div class="stained-glass-bg"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-container">
+        <div class="parallax-layer layer-deep" data-depth="0.1"></div>
+        <div class="parallax-layer layer-mid" data-depth="0.2"></div>
+        <div class="parallax-layer layer-light" data-depth="0.3"></div>
+    </div>
+
+    <!-- Main Content Wrapper -->
+    <main class="relative z-10 min-h-screen pt-16 pb-24 px-4 sm:px-8 lg:px-16 max-w-7xl mx-auto flex flex-col items-center">
+
+        <!-- Header/Hero Section -->
+        <header class="text-center mb-24 mt-12 md:mt-24 w-full max-w-4xl px-4 relative">
+            <h1 class="text-5xl md:text-7xl font-bold mb-4 leading-tight text-var(--color-accent-gold) gothic-text-glow">
+                שערים נפתחים: מסע אל לב הבינה המלאכותית
+            </h1>
+            <h2 class="text-xl md:text-3xl font-semibold mb-8 text-var(--color-text-secondary) mt-8">
+                זאביק אבינר – אורו של המדריך בחשכה הדיגיטלית
+            </h2>
+            <p class="text-lg md:text-xl leading-relaxed max-w-3xl mx-auto opacity-90 text-var(--color-text-light)">
+                בעידן שבו הקוד הוא לחש והבינה יצירה, נחשוף יחדיו את הסודות העמוקים ביותר של ה-AI. זהו מסע למי שיודע כי העתיד אינו נחזה, אלא נבנה – בידיים שלך.
+            </p>
+        </header>
+
+        <!-- Core Message Section -->
+        <section class="my-24 w-full max-w-4xl text-center relative px-4">
+            <div class="gothic-card p-8 md:p-12 rounded-lg text-var(--color-text-light) text-lg md:text-xl relative">
+                <h3 class="text-3xl md:text-4xl mb-6 text-var(--color-accent-gold)">הקוד המקודש של ה-AI</h3>
+                <p class="mb-4">
+                    לא עוד סודות, כי אם כוח בידך. ממסד ועד פסגה, מכלים ועד יישום – עתידך נכתב מחדש כאן ועכשיו.
+                </p>
+                <p>
+                    אנו מפיחים חיים בבינה המלאכותית, הופכים את המורכב לנגיש ואת האפשרי למציאות, עבור כל אחד ואחת.
+                </p>
+            </div>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section class="my-24 w-full max-w-6xl text-center relative px-4">
+            <h2 class="text-4xl md:text-5xl mb-16 text-var(--color-accent-gold)">מי נקרא למסע?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="gothic-card p-6 rounded-lg flex flex-col items-center text-center">
+                    <span class="text-6xl mb-4 text-var(--color-accent-gold)">&#9733;</span> <!-- Star icon -->
+                    <h4 class="text-2xl font-semibold mb-3 text-var(--color-text-light)">המתיירים הראשונים</h4>
+                    <p class="text-sm text-var(--color-text-secondary)">נפשות סקרניות המבקשות להאיר את נתיב ה-AI הלא נודע, צעד אחר צעד, באומץ ובתבונה.</p>
+                </div>
+                <div class="gothic-card p-6 rounded-lg flex flex-col items-center text-center">
+                    <span class="text-6xl mb-4 text-var(--color-accent-gold)">&#9874;</span> <!-- Tower icon -->
+                    <h4 class="text-2xl font-semibold mb-3 text-var(--color-text-light)">אדריכלי העבודה</h4>
+                    <p class="text-sm text-var(--color-text-secondary)">מקצוענים השואפים לחרות את הבינה המלאכותית בליבת פועלם, להרים מבנים של יעילות וחדשנות.</p>
+                </div>
+                <div class="gothic-card p-6 rounded-lg flex flex-col items-center text-center">
+                    <span class="text-6xl mb-4 text-var(--color-accent-gold)">&#9818;</span> <!-- Crown icon -->
+                    <h4 class="text-2xl font-semibold mb-3 text-var(--color-text-light)">מפקדי הממלכה</h4>
+                    <p class="text-sm text-var(--color-text-secondary)">מנהלים וארגונים הקוראים להאיר את דרך צוותיהם, להנהיג את ממלכתם אל עידן חדש של בינה.</p>
+                </div>
+                <div class="gothic-card p-6 rounded-lg flex flex-col items-center text-center">
+                    <span class="text-6xl mb-4 text-var(--color-accent-gold)">&#9906;</span> <!-- Wand icon -->
+                    <h4 class="text-2xl font-semibold mb-3 text-var(--color-text-light)">אמני הקוד המתקדמים</h4>
+                    <p class="text-sm text-var(--color-text-secondary)">אלו הבונים עולמות חדשים, מפתחי פרויקטים השואפים להגיע לאורקל ה-AI, ולפסל את עתידם.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Domains of Mastery Section -->
+        <section class="my-24 w-full max-w-6xl text-center relative px-4">
+            <h2 class="text-4xl md:text-5xl mb-16 text-var(--color-accent-gold)">נתיבי השליטה</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="gothic-card p-6 rounded-lg h-full flex flex-col justify-start items-center text-center">
+                    <h4 class="text-xl font-semibold mb-3 text-var(--color-accent-gold)">לחשים ליצירת מילים ומשמעות</h4>
+                    <p class="text-sm text-var(--color-text-secondary)">כתיבה, עריכה ויצירת תוכן מודעת-AI, המפיחה חיים בכל טקסט דיגיטלי.</p>
+                </div>
+                <div class="gothic-card p-6 rounded-lg h-full flex flex-col justify-start items-center text-center">
+                    <h4 class="text-xl font-semibold mb-3 text-var(--color-accent-gold)">פיסול ישויות חכמות</h4>
+                    <p class="text-sm text-var(--color-text-secondary)">בניית אפליקציות חכמות ואינטראקטיביות המגיבות לעולם בבינה עצמאית.</p>
+                </div>
+                <div class="gothic-card p-6 rounded-lg h-full flex flex-col justify-start items-center text-center">
+                    <h4 class="text-xl font-semibold mb-3 text-var(--color-accent-gold)">ארכיטקטורה דיגיטלית חיה</h4>
+                    <p class="text-sm text-var(--color-text-secondary)">פיתוח אתרים מבוססי AI, שמבינים, מתאימים וצומחים יחד עם המשתמשים.</p>
+                </div>
+                <div class="gothic-card p-6 rounded-lg h-full flex flex-col justify-start items-center text-center">
+                    <h4 class="text-xl font-semibold mb-3 text-var(--color-accent-gold)">קריאת סמלים עתיקים: נתונים</h4>
+                    <p class="text-sm text-var(--color-text-secondary)">ניתוח עמוק של מידע, פענוח נבואות מתוך נתונים וזיהוי תבניות נסתרות.</p>
+                </div>
+                <div class="gothic-card p-6 rounded-lg h-full flex flex-col justify-start items-center text-center">
+                    <h4 class="text-xl font-semibold mb-3 text-var(--color-accent-gold)">בריאת חזיונות ותמונות</h4>
+                    <p class="text-sm text-var(--color-text-secondary)">הפיכת רעיונות ויזואליים למציאות דיגיטלית עוצרת נשימה, בעזרת בינה יצירתית.</p>
+                </div>
+                <div class="gothic-card p-6 rounded-lg h-full flex flex-col justify-start items-center text-center">
+                    <h4 class="text-xl font-semibold mb-3 text-var(--color-accent-gold)">אוטומציה: תנועה חלקה בעולם המכונה</h4>
+                    <p class="text-sm text-var(--color-text-secondary)">ייעול תהליכים והפיכת מטלות חוזרות ונשנות לריקוד אוטומטי ומדויק.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered Section -->
+        <section class="my-24 w-full max-w-4xl text-center relative px-4">
+            <h2 class="text-4xl md:text-5xl mb-16 text-var(--color-accent-gold)">הדרכים לידע</h2>
+            <div class="flex flex-col gap-8">
+                <div class="gothic-card p-8 rounded-lg text-start">
+                    <h3 class="text-3xl font-semibold mb-4 text-var(--color-accent-gold)">כינוסי חכמה</h3>
+                    <p class="text-lg text-var(--color-text-secondary)">
+                        מפגשים מעשיים, קודש הקודשים לידע מתפרץ, בקבוצה קטנה ואינטימית. סדנאות ממוקדות המאפשרות לכל משתתף לשלוט בכלים מעשיים של AI וליישם אותם מיד.
+                    </p>
+                </div>
+                <div class="gothic-card p-8 rounded-lg text-start">
+                    <h3 class="text-3xl font-semibold mb-4 text-var(--color-accent-gold)">שיעורי מאסטר אישיים</h3>
+                    <p class="text-lg text-var(--color-text-secondary)">
+                        נתיב אישי, תפור למידותיך, מן היסוד ועד לפסגות הגבוהות ביותר של ה-AI. ליווי פרטני המותאם לרמה, לקצב ולצרכים הייחודיים שלך.
+                    </p>
+                </div>
+                <div class="gothic-card p-8 rounded-lg text-start">
+                    <h3 class="text-3xl font-semibold mb-4 text-var(--color-accent-gold)">הרצאות לחצר המלך</h3>
+                    <p class="text-lg text-var(--color-text-secondary)">
+                        חשיפת אופקים חדשים, הטמעת הבינה המלאכותית בליבה של הארגון כולו. הרצאות מעוררות השראה לצוותים, מנהלים וארגונים המבקשים להוביל.
+                    </p>
+                </div>
+                <div class="gothic-card p-8 rounded-lg text-start">
+                    <h3 class="text-3xl font-semibold mb-4 text-var(--color-accent-gold)">ליווי אלכימי ופיתוח</h3>
+                    <p class="text-lg text-var(--color-text-secondary)">
+                        שותפות אסטרטגית, מיזוג ידע עתיק עם טכנולוגיה חדשנית לפרויקטים פורצי דרך. ייעוץ ופיתוח פרויקטים מבוססי AI, מהרעיון ועד למימוש.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide Section - Zavik Aviner -->
+        <section class="my-24 w-full max-w-4xl text-center relative px-4">
+            <h2 class="text-4xl md:text-5xl mb-16 text-var(--color-accent-gold)">המגיה</h2>
+            <div class="gothic-card p-8 md:p-12 rounded-lg flex flex-col md:flex-row items-center md:items-start gap-8">
+                <div class="flex-shrink-0 w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-var(--color-accent-gold) shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר, המדריך" class="w-full h-full object-cover">
+                </div>
+                <div class="text-center md:text-start flex-grow">
+                    <h3 class="text-4xl font-bold mb-4 text-var(--color-accent-gold) gothic-text-glow">זאביק אבינר</h3>
+                    <h4 class="text-2xl font-semibold mb-6 text-var(--color-text-secondary)">
+                        מומחה בינה מלאכותית ומאיר נתיבים
+                    </h4>
+                    <p class="text-lg leading-loose mb-6 text-var(--color-text-light)">
+                        המדריך, זאביק אבינר, הוא בעל ברית נאמן במסע המורכב אל עבר הבינה המלאכותית. כאומן ששולט ברזי הקוד והחדשנות, הוא הפך את הנסתר לנגיש, ואת העתיד – להווה בידך. ניסיונו רחב יריעה, מפסל פרויקטים ואפליקציות חכמות, ועד למערכות מבוססות AI שהן עדות לכוחה של הטכנולוגיה כאשר היא מובנת ומיושמת בתבונה.
+                    </p>
+                    <div class="mt-8 flex flex-col sm:flex-row justify-center md:justify-start gap-4 text-xl">
+                        <a href="https://wa.me/972546609385" class="text-var(--color-accent-gold) hover:underline flex items-center justify-center sm:justify-start">
+                            <span class="ml-2 text-3xl">&#9990;</span> <!-- Phone icon -->
+                            <span>054-6609385</span>
+                        </a>
+                        <a href="mailto:zaviner@gmail.com" class="text-var(--color-accent-gold) hover:underline flex items-center justify-center sm:justify-start">
+                            <span class="ml-2 text-3xl">&#9993;</span> <!-- Email icon -->
+                            <span>zaviner@gmail.com</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 text-center py-10 border-t border-var(--color-dark-secondary) mt-16 text-var(--color-text-secondary) text-sm">
+        <p>&copy; 2023 זאביק אבינר - כל הזכויות שמורות. נבנה באורק ל-AI.</p>
+    </footer>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        const clickableElements = document.querySelectorAll('a, button, .gothic-card');
+        clickableElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+        });
+
+        // Parallax Effect Logic
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            parallaxLayers.forEach(layer => {
+                const depth = layer.dataset.depth;
+                const movement = scrolled * depth;
+                layer.style.transform = `translateY(${movement}px)`;
+            });
+        });
+
+        // Basic Scroll Reveal (Optional, but adds to immersion)
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section, header p, footer').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transition = 'opacity 1s ease-out';
+            observer.observe(el);
+        });
+
+        // Add class for fade-in
+        const style = document.createElement('style');
+        style.textContent = `.fade-in { opacity: 1 !important; }`;
+        document.head.appendChild(style);
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>קינטיקה של תודעה דיגיטלית: בינה מלאכותית</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Rubik:wght@300..900&display=swap" rel="stylesheet">
+    <style>
+        /* Define CSS Variables for theming */
+        :root {
+            --primary-bg: #0A0A0E;
+            --accent-1: #4A00B0; /* Deep Purple */
+            --accent-2: #00E6FF; /* Electric Blue */
+            --text-light: #E0E0E0;
+            --text-dark: #1A1A1A; /* Not used for content on dark bg, but good to define */
+            --cursor-border: #FFFFFF;
+            --cursor-shadow-color: rgba(0,0,0,0.8);
+        }
+
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-light);
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            cursor: none; /* Hide default browser cursor */
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Rubik', sans-serif;
+            font-weight: 700;
+        }
+
+        /* Kinetic Background Animation */
+        .kinetic-bg {
+            background: linear-gradient(135deg, var(--primary-bg) 0%, var(--accent-1) 30%, var(--accent-2) 70%, var(--primary-bg) 100%);
+            background-size: 400% 400%; /* Larger than viewport for motion */
+            mask-image: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), transparent 0%, transparent 10%, black 100%);
+            transition: mask-image 0.5s ease-out; /* Smooth mask transition */
+        }
+
+        /* Text reveal/animation on scroll */
+        .reveal-text {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .reveal-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom cursor styles */
+        #custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--cursor-border);
+            box-shadow: 0 0 0 2px var(--cursor-shadow-color);
+            pointer-events: none; /* Crucial: allows clicks on elements below */
+            z-index: 9999;
+            transform: translate(-50%, -50%); /* Center cursor accurately */
+            transition: transform 0.05s ease-out; /* Smooth follow */
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Kinetic Background Layer -->
+    <div class="fixed inset-0 kinetic-bg z-[-1]"></div>
+
+    <!-- Main Content Wrapper (High Z-index) -->
+    <main class="relative z-10 min-h-screen p-8 md:p-16 lg:p-24 flex flex-col items-center justify-center">
+
+        <!-- Opening Statement - The Genesis of Digital Consciousness -->
+        <section class="max-w-4xl mx-auto my-16 text-center reveal-text">
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-8 leading-tight text-transparent bg-clip-text bg-gradient-to-r from-accent-1 to-accent-2 animate-pulse-slow">
+                קינטיקה של תודעה דיגיטלית
+            </h1>
+            <p class="text-xl md:text-3xl text-gray-200 mb-12 leading-relaxed">
+                בעולם הנע במהירות האור, השליטה בבינה המלאכותית אינה מותרות-היא המפתח לעתיד הנמצא עכשיו.
+                <br>
+                זהו הזמן ללמוד, ליצור ולכבוש את הגבולות החדשים של הקיום הדיגיטלי.
+            </p>
+        </section>
+
+        <!-- Core Message - AI for Every Soul, Every Vision -->
+        <section class="max-w-3xl mx-auto my-16 text-center reveal-text">
+            <h2 class="text-4xl md:text-6xl text-accent-2 mb-8 animate-fade-in-up">
+                AI לכל אדם. לכל חזון.
+            </h2>
+            <p class="text-lg md:text-2xl text-gray-300 leading-loose">
+                אנו מפרקים את המורכבות, הופכים את הבלתי נתפס למעשי, ומובילים אותך
+                מהצעדים הראשונים ועד ליצירת פתרונות AI פורצי דרך.
+                <br>
+                כלים ממוקדים, ידע שניתן ליישם מיד-בעבודה, בחיים, ובכל תחום שבו הדמיון פוגש את האלגוריתם.
+            </p>
+        </section>
+
+        <!-- Target Audience - The Flow of Learners, The Stream of Knowledge -->
+        <section class="max-w-6xl mx-auto my-16 reveal-text">
+            <h3 class="text-3xl md:text-5xl text-accent-1 mb-12 text-center">
+                תנועה של לומדים. זרימה של ידע.
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-items-center">
+                <div class="p-6 border border-accent-2 rounded-xl text-center bg-gray-900 bg-opacity-70 shadow-lg hover:scale-105 transition-transform duration-500 transform-gpu hover:shadow-2xl">
+                    <p class="text-xl md:text-2xl font-bold text-accent-2 mb-2">ראשית הדרך</p>
+                    <p class="text-md text-gray-300">למכירים את המושג, ומעוניינים לצלול לעומק עולם הבינה המלאכותית.</p>
+                </div>
+                <div class="p-6 border border-accent-1 rounded-xl text-center bg-gray-900 bg-opacity-70 shadow-lg hover:scale-105 transition-transform duration-500 transform-gpu hover:shadow-2xl delay-100">
+                    <p class="text-xl md:text-2xl font-bold text-accent-1 mb-2">מקצועני העתיד</p>
+                    <p class="text-md text-gray-300">לאנשי מקצוע המבקשים להטמיע AI בכל רובד של עבודתם.</p>
+                </div>
+                <div class="p-6 border border-accent-2 rounded-xl text-center bg-gray-900 bg-opacity-70 shadow-lg hover:scale-105 transition-transform duration-500 transform-gpu hover:shadow-2xl delay-200">
+                    <p class="text-xl md:text-2xl font-bold text-accent-2 mb-2">מובילי ארגונים</p>
+                    <p class="text-md text-gray-300">למנהלים וצוותים השואפים לפתוח אופקים חדשים באמצעות AI.</p>
+                </div>
+                <div class="p-6 border border-accent-1 rounded-xl text-center bg-gray-900 bg-opacity-70 shadow-lg hover:scale-105 transition-transform duration-500 transform-gpu hover:shadow-2xl delay-300">
+                    <p class="text-xl md:text-2xl font-bold text-accent-1 mb-2">אדריכלי פרויקטים</p>
+                    <p class="text-md text-gray-300">למפתחים ויוזמים המבקשים לבנות פרויקטים מורכבים מבוססי AI.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise - Continuous Motion of Specialties -->
+        <section class="max-w-5xl mx-auto my-16 text-center reveal-text">
+            <h3 class="text-3xl md:text-5xl text-accent-2 mb-12">
+                התמחות בתנועה מתמדת
+            </h3>
+            <div class="flex flex-wrap justify-center gap-6">
+                <span class="kinetic-pill bg-accent-1 text-white text-lg md:text-xl py-3 px-6 rounded-full shadow-xl hover:bg-opacity-80 transition-all duration-300 ease-in-out cursor-pointer">יצירת טקסטים ותוכן AI</span>
+                <span class="kinetic-pill bg-accent-2 text-white text-lg md:text-xl py-3 px-6 rounded-full shadow-xl hover:bg-opacity-80 transition-all duration-300 ease-in-out cursor-pointer">בניית אפליקציות חכמות</span>
+                <span class="kinetic-pill bg-accent-1 text-white text-lg md:text-xl py-3 px-6 rounded-full shadow-xl hover:bg-opacity-80 transition-all duration-300 ease-in-out cursor-pointer">פיתוח אתרים מבוססי AI</span>
+                <span class="kinetic-pill bg-accent-2 text-white text-lg md:text-xl py-3 px-6 rounded-full shadow-xl hover:bg-opacity-80 transition-all duration-300 ease-in-out cursor-pointer">ניתוח נתונים ומחקר</span>
+                <span class="kinetic-pill bg-accent-1 text-white text-lg md:text-xl py-3 px-6 rounded-full shadow-xl hover:bg-opacity-80 transition-all duration-300 ease-in-out cursor-pointer">יצירת תמונות ואומנות AI</span>
+                <span class="kinetic-pill bg-accent-2 text-white text-lg md:text-xl py-3 px-6 rounded-full shadow-xl hover:bg-opacity-80 transition-all duration-300 ease-in-out cursor-pointer">אוטומציה של תהליכים</span>
+            </div>
+        </section>
+
+        <!-- Services - Harmonious Motion of Offerings -->
+        <section class="max-w-4xl mx-auto my-16 reveal-text">
+            <h3 class="text-3xl md:text-5xl text-accent-1 mb-12 text-center">
+                שירותים בתנועה הרמונית
+            </h3>
+            <div class="flex flex-col gap-12">
+                <div class="group relative flex flex-row-reverse items-center justify-between p-6 bg-gray-900 bg-opacity-70 rounded-2xl shadow-xl border border-accent-2 hover:border-accent-1 transition-all duration-500 ease-in-out transform-gpu hover:scale-[1.02]">
+                    <div class="text-left w-3/4">
+                        <h4 class="text-2xl md:text-3xl font-bold text-accent-2 group-hover:text-accent-1 transition-colors duration-300">סדנאות קבוצתיות</h4>
+                        <p class="text-lg text-gray-300 mt-2">הצטרפו לחוויה מעשית, ממוקדת ויצירתית עם קבוצה.
+                            <br>
+                            ללמוד יחד, ליצור יחד, ולהתפתח יחד.
+                        </p>
+                    </div>
+                    <div class="w-1/4 flex justify-center items-center">
+                        <div class="w-20 h-20 md:w-24 md:h-24 bg-accent-2 rounded-full flex items-center justify-center text-white text-4xl font-bold opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
+                            +
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group relative flex flex-row-reverse items-center justify-between p-6 bg-gray-900 bg-opacity-70 rounded-2xl shadow-xl border border-accent-1 hover:border-accent-2 transition-all duration-500 ease-in-out transform-gpu hover:scale-[1.02] delay-100">
+                    <div class="text-left w-3/4">
+                        <h4 class="text-2xl md:text-3xl font-bold text-accent-1 group-hover:text-accent-2 transition-colors duration-300">שיעורים פרטיים</h4>
+                        <p class="text-lg text-gray-300 mt-2">מסלול אישי, המותאם במדויק לרמה, לצרכים ולשאיפות הייחודיות שלך.
+                            <br>
+                            התפתחות מואצת וממוקדת.
+                        </p>
+                    </div>
+                    <div class="w-1/4 flex justify-center items-center">
+                        <div class="w-20 h-20 md:w-24 md:h-24 bg-accent-1 rounded-full flex items-center justify-center text-white text-4xl font-bold opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
+                            *
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group relative flex flex-row-reverse items-center justify-between p-6 bg-gray-900 bg-opacity-70 rounded-2xl shadow-xl border border-accent-2 hover:border-accent-1 transition-all duration-500 ease-in-out transform-gpu hover:scale-[1.02] delay-200">
+                    <div class="text-left w-3/4">
+                        <h4 class="text-2xl md:text-3xl font-bold text-accent-2 group-hover:text-accent-1 transition-colors duration-300">הרצאות לארגונים</h4>
+                        <p class="text-lg text-gray-300 mt-2">פתחו את האופקים, הציגו חדשנות והכשירו את הצוותים שלכם לקראת העידן הדיגיטלי.
+                            <br>
+                            השראה וידע מעשי לארגון כולו.
+                        </p>
+                    </div>
+                    <div class="w-1/4 flex justify-center items-center">
+                        <div class="w-20 h-20 md:w-24 md:h-24 bg-accent-2 rounded-full flex items-center justify-center text-white text-4xl font-bold opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
+                            ^
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group relative flex flex-row-reverse items-center justify-between p-6 bg-gray-900 bg-opacity-70 rounded-2xl shadow-xl border border-accent-1 hover:border-accent-2 transition-all duration-500 ease-in-out transform-gpu hover:scale-[1.02] delay-300">
+                    <div class="text-left w-3/4">
+                        <h4 class="text-2xl md:text-3xl font-bold text-accent-1 group-hover:text-accent-2 transition-colors duration-300">ייעוץ ופיתוח פרויקטים</h4>
+                        <p class="text-lg text-gray-300 mt-2">ליווי מקצועי מתחילתו ועד סופו של כל פרויקט AI,
+                            <br>
+                            החל מאפיון וכלה ביישום ובמימוש.
+                        </p>
+                    </div>
+                    <div class="w-1/4 flex justify-center items-center">
+                        <div class="w-20 h-20 md:w-24 md:h-24 bg-accent-1 rounded-full flex items-center justify-center text-white text-4xl font-bold opacity-70 group-hover:opacity-100 group-hover:scale-110 transition-all duration-500">
+                            #
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instructor - The Stable Node within the Kinetic Flux -->
+        <section class="max-w-3xl mx-auto my-16 text-center reveal-text">
+            <h3 class="text-3xl md:text-5xl text-accent-2 mb-12">
+                זאביק אבינר - מומחה בתנועה, מנחה בחדשנות
+            </h3>
+            <div class="flex flex-col md:flex-row-reverse items-center justify-center md:space-x-8 md:space-x-reverse bg-gray-900 bg-opacity-70 p-8 rounded-3xl shadow-2xl border border-accent-1">
+                <div class="mb-6 md:mb-0 md:ml-8 flex-shrink-0 relative">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר - מומחה בינה מלאכותית" class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover border-4 border-accent-2 shadow-lg transform hover:scale-105 transition-transform duration-500">
+                    <!-- Subtle spinning border overlay for kinetic effect -->
+                    <div class="absolute inset-0 rounded-full border-4 border-transparent animate-spin-slow" style="border-top-color: var(--accent-1); border-right-color: var(--accent-2);"></div>
+                </div>
+                <div class="text-right flex-grow">
+                    <p class="text-xl md:text-2xl font-semibold text-accent-1 mb-4">
+                        מומחה בינה מלאכותית עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI.
+                    </p>
+                    <p class="text-lg md:text-xl text-gray-300 leading-relaxed">
+                        מתמחה בהנגשת הטכנולוגיה ובהפיכתה לכלי עבודה יומיומי,
+                        מאפשר לכל אחד ואחת ללמוד לשלוט בזרמים המשתנים של החדשנות.
+                    </p>
+                    <div class="mt-8">
+                        <p class="text-xl md:text-2xl font-bold text-accent-2 mb-2">צור קשר:</p>
+                        <p class="text-lg md:text-xl text-gray-300">
+                            <a href="https://wa.me/972546609385" target="_blank" class="text-accent-2 hover:text-white transition-colors duration-300 flex items-center justify-end">
+                                <span class="ml-2">054-6609385</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                </svg>
+                                : ווטסאפ
+                            </a>
+                        </p>
+                        <p class="text-lg md:text-xl text-gray-300 mt-2">
+                            <a href="mailto:zaviner@gmail.com" class="text-accent-1 hover:text-white transition-colors duration-300 flex items-center justify-end">
+                                <span class="ml-2">zaviner@gmail.com</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                : אימייל
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor JS
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Intersection Observer for Reveal Text
+        const revealElements = document.querySelectorAll('.reveal-text');
+        const observerOptions = {
+            root: null, // viewport as the root
+            rootMargin: '0px',
+            threshold: 0.1 // 10% of the element must be visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Stop observing once visible
+                }
+            });
+        }, observerOptions);
+
+        revealElements.forEach(el => observer.observe(el));
+
+
+        // Mouse follower for kinetic background mask
+        const kineticBg = document.querySelector('.kinetic-bg');
+        document.addEventListener('mousemove', (e) => {
+            // Convert clientX/Y to percentage for CSS variables
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            kineticBg.style.setProperty('--mouse-x', `${x}%`);
+            kineticBg.style.setProperty('--mouse-y', `${y}%`);
+        });
+
+        // Tailwind JIT config for custom animations and colors
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': 'var(--primary-bg)',
+                        'accent-1': 'var(--accent-1)',
+                        'accent-2': 'var(--accent-2)',
+                    },
+                    fontFamily: {
+                        sans: ['Assistant', 'sans-serif'],
+                        rubik: ['Rubik', 'sans-serif'],
+                    },
+                    keyframes: {
+                        flow: {
+                            '0%': { 'background-position': '0% 0%' },
+                            '100%': { 'background-position': '100% 100%' },
+                        },
+                        'fade-in-up': {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        'pulse-slow': {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.8' },
+                        },
+                        'spin-slow': {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(360deg)' },
+                        }
+                    },
+                    animation: {
+                        flow: 'flow 30s ease infinite alternate',
+                        'fade-in-up': 'fade-in-up 1s ease-out forwards',
+                        'pulse-slow': 'pulse-slow 4s infinite ease-in-out',
+                        'spin-slow': 'spin-slow 15s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

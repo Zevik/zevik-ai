@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - הפרש הכחול של ה-AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&family=Rubik:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Tailwind Configuration for Der Blaue Reiter feel */
+        :root {
+            --color-der-blaue-rider-blue: #0A1128; /* Deep spiritual blue, main background */
+            --color-der-blaue-rider-yellow: #FFC400; /* Vibrant expressive yellow */
+            --color-der-blaue-rider-red: #DD571C; /* Earthy red/orange */
+            --color-der-blaue-rider-green: #2E8B57; /* Forest green */
+            --color-der-blaue-rider-white: #FFFFFF;
+            --color-der-blaue-rider-black: #000000;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Alef', sans-serif;
+            background-color: var(--color-der-blaue-rider-blue);
+            color: var(--color-der-blaue-rider-white);
+            overflow-x: hidden; /* Prevent horizontal scroll from overflowing elements */
+            cursor: none; /* Hide default cursor */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Rubik', sans-serif;
+        }
+        .text-der-blaue-blue { color: var(--color-der-blaue-rider-blue); }
+        .bg-der-blaue-blue { background-color: var(--color-der-blaue-rider-blue); }
+        .text-der-blaue-yellow { color: var(--color-der-blaue-rider-yellow); }
+        .bg-der-blaue-yellow { background-color: var(--color-der-blaue-rider-yellow); }
+        .text-der-blaue-red { color: var(--color-der-blaue-rider-red); }
+        .bg-der-blaue-red { background-color: var(--color-der-blaue-rider-red); }
+        .text-der-blaue-green { color: var(--color-der-blaue-rider-green); }
+        .bg-der-blaue-green { background-color: var(--color-der-blaue-rider-green); }
+        .text-der-blaue-white { color: var(--color-der-blaue-rider-white); }
+        .bg-der-blaue-white { background-color: var(--color-der-blaue-rider-white); }
+
+        /* Custom Cursor Styling - MANDATORY High Contrast */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--color-der-blaue-rider-white); /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark, high-opacity shadow */
+            pointer-events: none; /* Allows clicks to pass through */
+            z-index: 9999; /* Always on top */
+            transform: translate(-50%, -50%); /* Center cursor on mouse */
+            transition: transform 0.1s ease-out, width 0.1s ease-out, height 0.1s ease-out, border-color 0.1s ease-out, box-shadow 0.1s ease-out;
+        }
+        /* Cursor interaction states */
+        .cursor-active #custom-cursor {
+            width: 40px;
+            height: 40px;
+            border-color: var(--color-der-blaue-rider-yellow); /* Change color on hover */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 10px var(--color-der-blaue-rider-yellow); /* Add glow */
+        }
+
+        /* Abstract Background Shapes - for parallax */
+        .parallax-layer {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+            transform: translateZ(0); /* Force hardware acceleration */
+            will-change: transform; /* Optimize for animation */
+        }
+        .shape-1 {
+            top: -10%; left: -5%;
+            width: 120vw; height: 120vh;
+            background: radial-gradient(circle at 10% 10%, rgba(10,17,40,0.8) 0%, transparent 70%);
+            /* mix-blend-mode for artistic background elements (not text/cursor) */
+            mix-blend-mode: screen; 
+        }
+        .shape-2 {
+            bottom: -10%; right: -5%;
+            width: 120vw; height: 120vh;
+            background: radial-gradient(circle at 90% 90%, rgba(255,196,0,0.15) 0%, transparent 60%);
+            transform: scale(1.1);
+        }
+        .shape-3 {
+            top: 20%; left: 30%;
+            width: 80px; height: 80px;
+            background-color: var(--color-der-blaue-rider-red);
+            opacity: 0.3;
+            border-radius: 50%;
+            transform: rotate(45deg);
+        }
+        .shape-4 {
+            bottom: 10%; left: 10%;
+            width: 150px; height: 100px;
+            background-color: var(--color-der-blaue-rider-green);
+            opacity: 0.2;
+            transform: skew(-20deg) rotate(10deg);
+        }
+        .shape-5 {
+            top: 5%; right: 5%;
+            width: 200px; height: 200px;
+            background: linear-gradient(45deg, rgba(255,196,0,0.5), rgba(10,17,40,0.5));
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            opacity: 0.2;
+        }
+
+        /* General container styling for content readability against abstract background */
+        .content-section {
+            position: relative;
+            z-index: 10;
+            padding: 4rem 1rem;
+            margin: 0 auto;
+            max-width: 1200px;
+            background-color: rgba(10,17,40,0.6); /* Slightly transparent dark blue */
+            backdrop-filter: blur(5px);
+            border-radius: 1rem;
+            margin-bottom: 4rem;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            transform: translateZ(0); /* Force hardware acceleration */
+            will-change: transform, opacity; /* Optimize for animation */
+        }
+
+        /* Specific styles for artistic elements */
+        .hero-title {
+            text-shadow: 4px 4px var(--color-der-blaue-rider-yellow), 8px 8px var(--color-der-blaue-rider-red);
+            line-height: 1.1;
+            letter-spacing: -0.05em;
+            transform: rotate(-3deg);
+            margin-bottom: 2rem;
+        }
+        .hero-subtitle {
+            text-shadow: 2px 2px rgba(0,0,0,0.5);
+            font-weight: 500;
+        }
+
+        /* Content elements with expressive shapes/colors */
+        .service-card {
+            background-color: var(--color-der-blaue-rider-blue);
+            border: 2px solid var(--color-der-blaue-rider-yellow);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 8px 8px 0px var(--color-der-blaue-rider-red);
+            transition: all 0.3s ease-in-out;
+        }
+        .service-card:hover {
+            transform: translateY(-5px) translateX(-5px) scale(1.02);
+            box-shadow: 12px 12px 0px var(--color-der-blaue-rider-green);
+            background-color: rgba(10,17,40,0.8);
+        }
+        .expertise-chip {
+            background-color: rgba(255,196,0,0.2);
+            border: 1px solid var(--color-der-blaue-rider-yellow);
+            border-radius: 9999px; /* Pill shape */
+            padding: 0.5rem 1rem;
+            margin: 0.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--color-der-blaue-rider-yellow);
+            transition: all 0.2s ease-in-out;
+        }
+        .expertise-chip:hover {
+            background-color: var(--color-der-blaue-rider-yellow);
+            color: var(--color-der-blaue-rider-blue);
+            transform: translateY(-2px) rotate(2deg);
+        }
+
+        /* Zevik's image container */
+        .zevik-image-container {
+            border: 5px solid var(--color-der-blaue-rider-yellow);
+            box-shadow: 0 0 20px var(--color-der-blaue-rider-red);
+            transform: rotate(5deg) scale(0.9);
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease-in-out;
+        }
+        .zevik-image-container:hover {
+            transform: rotate(0deg) scale(1);
+            box-shadow: 0 0 30px var(--color-der-blaue-rider-green);
+        }
+
+        /* Contact info styling */
+        .contact-info a {
+            color: var(--color-der-blaue-rider-yellow);
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.2s ease-in-out;
+        }
+        .contact-info a:hover {
+            color: var(--color-der-blaue-rider-red);
+        }
+
+        /* High Contrast Text Mandate: Default text color is light on dark background. */
+        /* Specific overrides for sections with different backgrounds if any */
+        .bg-der-blaue-yellow .high-contrast-text,
+        .bg-der-blaue-yellow .text-der-blaue-white { /* Ensure white text on yellow turns dark */
+            color: var(--color-der-blaue-rider-blue) !important;
+        }
+        .bg-der-blaue-yellow .text-der-blaue-yellow { /* Ensure yellow text on yellow turns dark */
+            color: var(--color-der-blaue-rider-blue) !important;
+        }
+
+        /* Keyframe for subtle floating animation */
+        @keyframes float {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            50% { transform: translate(-52%, -48%) rotate(2deg); }
+            100% { transform: translate(-50%, -50%) rotate(0deg); }
+        }
+        .floating-shape {
+            animation: float 8s ease-in-out infinite;
+        }
+
+        /* Scroll reveal styles */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .scroll-reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-der-blaue-blue high-contrast-text">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-layer shape-1" style="transform: translate(calc(-5% + var(--parallax-x) * 0.05), calc(-10% + var(--parallax-y) * 0.05));"></div>
+    <div class="parallax-layer shape-2" style="transform: translate(calc(-5% + var(--parallax-x) * -0.08), calc(-10% + var(--parallax-y) * -0.08));"></div>
+    <div class="parallax-layer shape-3 floating-shape" style="transform: translate(calc(30vw + var(--parallax-x) * 0.02), calc(20vh + var(--parallax-y) * 0.02)) rotate(45deg);"></div>
+    <div class="parallax-layer shape-4 floating-shape" style="transform: translate(calc(10vw + var(--parallax-x) * -0.03), calc(10vh + var(--parallax-y) * -0.03)) skew(-20deg) rotate(10deg);"></div>
+    <div class="parallax-layer shape-5 floating-shape" style="transform: translate(calc(5vw + var(--parallax-x) * 0.06), calc(5vh + var(--parallax-y) * 0.06)) rotate(0deg);"></div>
+
+
+    <!-- Main Content Wrapper -->
+    <main class="relative z-10 p-4 md:p-8 min-h-screen flex flex-col justify-start items-center">
+
+        <!-- Hero Section -->
+        <section class="content-section text-center py-16 md:py-24 max-w-4xl scroll-reveal">
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-black text-der-blaue-white hero-title">
+                למדו לשלוט בבינה המלאכותית
+                <br>
+                <span class="text-der-blaue-yellow block mt-4">העתיד הוא עכשיו</span>
+            </h1>
+            <p class="text-xl md:text-2xl mt-8 text-der-blaue-white hero-subtitle">
+                הפרש הכחול של המחר: AI נגיש, מעשי, מרהיב.
+                <br>
+                מסע אל חדשנות שמעצבת את העולם - צעד אחר צעד, בקצב שלכם.
+            </p>
+            <a href="#contact" class="inline-block mt-12 px-8 py-4 bg-der-blaue-yellow text-der-blaue-blue text-2xl font-bold rounded-full hover:bg-der-blaue-red hover:text-der-blaue-white transition-all duration-300 transform hover:scale-105 shadow-lg">
+                הצטרפו למסע האומנותי
+            </a>
+        </section>
+
+        <!-- Mission/Vision Section -->
+        <section class="content-section max-w-3xl text-center py-12 md:py-16 scroll-reveal">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-der-blaue-yellow mb-8">
+                לפרוץ דרך עם AI - האומנות שמאחורי הקוד
+            </h2>
+            <p class="text-lg md:text-xl leading-relaxed mb-6">
+                בינה מלאכותית אינה רק טכנולוגיה, היא כלי ליצירה, לשחרור הפוטנציאל האנושי.
+                אנו מאמינים בהנגשת הכוח המופלא הזה לכל אחד ואחת -
+                <strong class="text-der-blaue-yellow">להפוך את ה-AI לנגיש, מוחשי וישים</strong>
+                לכולם, מהתחלה ועד רמה מתקדמת.
+            </p>
+            <p class="text-lg md:text-xl leading-relaxed italic text-der-blaue-white opacity-90">
+                "כשם שהאומנים של הפרש הכחול ביקשו לבטא את הנסתר שמעבר למציאות, כך אנו חושפים את עולמות ה-AI - לא רק כטכנולוגיה, אלא כהבעה אמנותית של העתיד."
+            </p>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section class="content-section max-w-4xl py-12 md:py-16 scroll-reveal">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-der-blaue-red mb-10 text-center">
+                למי מיועד המסע היצירתי?
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="service-card bg-der-blaue-red/70 border-der-blaue-yellow text-center scroll-reveal">
+                    <h3 class="text-2xl font-bold text-der-blaue-white mb-3">מגלי עולם חדש</h3>
+                    <p class="text-der-blaue-white">מתחילים המשתוקקים להכיר את נפלאות ה-AI, ללא ידע מוקדם.</p>
+                </div>
+                <div class="service-card bg-der-blaue-green/70 border-der-blaue-yellow text-center scroll-reveal">
+                    <h3 class="text-2xl font-bold text-der-blaue-white mb-3">יוצרי מחר</h3>
+                    <p class="text-der-blaue-white">אנשי מקצוע המבקשים לשלב AI בעבודתם, לשפר תהליכים ולחדש.</p>
+                </div>
+                <div class="service-card bg-der-blaue-blue/70 border-der-blaue-yellow text-center scroll-reveal">
+                    <h3 class="text-2xl font-bold text-der-blaue-white mb-3">מנהיגי חזון</h3>
+                    <p class="text-der-blaue-white">מנהלים וארגונים המעוניינים להעצים צוותים ולהטמיע AI אסטרטגית.</p>
+                </div>
+                <div class="service-card bg-der-blaue-yellow/70 border-der-blaue-blue text-center text-der-blaue-blue scroll-reveal">
+                    <h3 class="text-2xl font-bold text-der-blaue-blue mb-3">פורצי דרך מתקדמים</h3>
+                    <p class="text-der-blaue-blue">למפתחים ומומחים שרוצים לפתח פרויקטים מורכבים מבוססי AI.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Areas Section -->
+        <section class="content-section max-w-4xl py-12 md:py-16 scroll-reveal">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-der-blaue-green mb-10 text-center">
+                תחומי האומנות הדיגיטלית שלנו
+            </h2>
+            <div class="flex flex-wrap justify-center items-center">
+                <div class="expertise-chip scroll-reveal">יצירת טקסטים ותוכן</div>
+                <div class="expertise-chip scroll-reveal">בניית אפליקציות חכמות</div>
+                <div class="expertise-chip scroll-reveal">פיתוח אתרים מבוססי AI</div>
+                <div class="expertise-chip scroll-reveal">ניתוח נתונים ומחקר</div>
+                <div class="expertise-chip scroll-reveal">יצירת תמונות ואומנות</div>
+                <div class="expertise-chip scroll-reveal">אוטומציה של תהליכים</div>
+                <div class="expertise-chip scroll-reveal">מוצרי AI חדשניים</div>
+            </div>
+        </section>
+
+        <!-- Services Offered Section -->
+        <section class="content-section max-w-3xl py-12 md:py-16 scroll-reveal">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-der-blaue-yellow mb-10 text-center">
+                שירותים המעצבים את המחר
+            </h2>
+            <div class="space-y-8">
+                <div class="service-card hover:bg-der-blaue-blue/80 scroll-reveal">
+                    <h3 class="text-3xl font-bold text-der-blaue-yellow mb-2">סדנאות קבוצתיות: הבעה משותפת</h3>
+                    <p class="text-lg leading-relaxed">
+                        מסעות למידה מעשיים וממוקדים, המשלבים תיאוריה עם התנסות. צרו, נסו, גלו יחד את הכוח המשתנה של ה-AI בסביבה תומכת ומעוררת השראה.
+                    </p>
+                </div>
+                <div class="service-card hover:bg-der-blaue-blue/80 scroll-reveal">
+                    <h3 class="text-3xl font-bold text-der-blaue-yellow mb-2">שיעורים פרטיים: סדנת אמן אישית</h3>
+                    <p class="text-lg leading-relaxed">
+                        חניכה אחד על אחד, המותאמת באופן מושלם לקצב ולצרכים הייחודיים שלכם. נצייר יחד את מסלול ההתפתחות האישי שלכם בעולם ה-AI.
+                    </p>
+                </div>
+                <div class="service-card hover:bg-der-blaue-blue/80 scroll-reveal">
+                    <h3 class="text-3xl font-bold text-der-blaue-yellow mb-2">הרצאות לארגונים: פתיחת אופקים חדשים</h3>
+                    <p class="text-lg leading-relaxed">
+                        הרצאות מרתקות לצוותים, החושפות את הפוטנציאל העצום של ה-AI לעסקים. השראה וכלים מעשיים לפתיחת עולמות יצירה וחדשנות בארגון.
+                    </p>
+                </div>
+                <div class="service-card hover:bg-der-blaue-blue/80 scroll-reveal">
+                    <h3 class="text-3xl font-bold text-der-blaue-yellow mb-2">ייעוץ ופיתוח פרויקטים: בניית יצירות מופת</h3>
+                    <p class="text-lg leading-relaxed">
+                        ליווי מקצועי מתחילתו ועד סופו של פרויקט AI - משלב הרעיון ועד למימוש. נהפוך את החזון שלכם למציאות דיגיטלית פורצת דרך.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Zevik Aviner Section -->
+        <section class="content-section max-w-4xl py-12 md:py-16 text-center scroll-reveal">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-der-blaue-red mb-10">
+                זאביק אבינר - המדריך במסע האומנותי
+            </h2>
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
+                <div class="shrink-0 zevik-image-container w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden mx-auto md:mx-0 scroll-reveal">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר, מומחה בינה מלאכותית" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500">
+                </div>
+                <div class="flex-grow text-right md:text-right scroll-reveal">
+                    <p class="text-xl md:text-2xl font-bold mb-4 text-der-blaue-yellow">
+                        אמן הבינה המלאכותית
+                    </p>
+                    <p class="text-lg leading-relaxed mb-6">
+                        זאביק אבינר הוא מומחה בינה מלאכותית בעל ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI.
+                        בדומה לאמני הפרש הכחול שחיפשו לבטא רגש עמוק באמצעות צבע וצורה, זאביק מתמחה בהנגשת הטכנולוגיה ובהפיכתה
+                        לכלי עבודה יומיומי, יצירתי ופורץ דרך. הוא רואה ב-AI פלטפורמה לאומנות, לפתרון בעיות ולביטוי עצמי,
+                        והוא ידריך אתכם בנתיב הזה, בביטחון ובהשראה.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="content-section max-w-2xl py-12 md:py-16 text-center scroll-reveal">
+            <h2 class="text-4xl md:text-5xl font-extrabold text-der-blaue-yellow mb-10">
+                התחברו לעתיד עכשיו
+            </h2>
+            <p class="text-xl md:text-2xl mb-8 leading-relaxed">
+                מוכנים לצייר את העתיד שלכם עם AI? צרו קשר ישירות עם זאביק אבינר.
+            </p>
+            <div class="contact-info space-y-4 text-2xl md:text-3xl font-bold">
+                <p>
+                    <a href="https://wa.me/972546609385" target="_blank" rel="noopener noreferrer">
+                        ווטסאפ: 054-6609385
+                    </a>
+                </p>
+                <p>
+                    <a href="mailto:zaviner@gmail.com">
+                        אימייל: zaviner@gmail.com
+                    </a>
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        const speed = 0.2; // Adjust for smoother or snappier movement
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * speed;
+            cursorY += (mouseY - cursorY) * speed;
+            cursor.style.left = `${cursorX}px`;
+            cursor.style.top = `${cursorY}px`;
+            requestAnimationFrame(animateCursor);
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Add active state to cursor on hoverable elements
+        const hoverableElements = document.querySelectorAll('a, button, .service-card, .expertise-chip, .zevik-image-container');
+        hoverableElements.forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-active'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-active'));
+        });
+
+        animateCursor(); // Start cursor animation
+
+        // Parallax Scrolling Logic (mouse-based for background shapes)
+        const parallaxSpeed = 0.05; // Base speed, individual layers will scale this
+
+        function updateParallax() {
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            const centerX = viewportWidth / 2;
+            const centerY = viewportHeight / 2;
+            const parallaxX = (mouseX - centerX) * parallaxSpeed;
+            const parallaxY = (mouseY - centerY) * parallaxSpeed;
+
+            // Update CSS custom properties for parallax effect in background layers
+            document.body.style.setProperty('--parallax-x', `${parallaxX}px`);
+            document.body.style.setProperty('--parallax-y', `${parallaxY}px`);
+
+            requestAnimationFrame(updateParallax);
+        }
+
+        updateParallax(); // Start parallax animation
+
+        // Scroll Reveal Logic
+        const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Optional: Stop observing once visible if elements shouldn't animate again
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.2, // Trigger when 20% of the element is visible
+            rootMargin: '0px 0px -50px 0px' // Start slightly earlier
+        });
+
+        scrollRevealElements.forEach(el => {
+            observer.observe(el);
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מפענח העתיד: AI - זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles for Deconstructivism */
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #0d0d0d; /* Very dark background */
+            color: #e0e0e0; /* Light text */
+            overflow-x: hidden; /* Prevent horizontal scroll from transforms */
+            cursor: none; /* Hide default cursor */
+        }
+
+        /* Custom Cursor Styling - MANDATORY High Contrast */
+        .custom-cursor {
+            position: fixed;
+            width: 24px; /* Increased size for visibility */
+            height: 24px; /* Increased size for visibility */
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%); /* Center the cursor */
+            border: 2px solid #ffffff; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8); /* Dark shadow */
+            transition: width 0.2s ease-out, height 0.2s ease-out, border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+            will-change: transform; /* Optimize animation */
+        }
+        .custom-cursor.active { /* Example for interactive elements */
+            width: 36px;
+            height: 36px;
+            border-color: #22d3ee; /* Cyan accent */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8), 0 0 15px rgba(34, 211, 238, 0.6); /* Glow effect */
+        }
+
+        /* Deconstructivism specific styles */
+        .fragment {
+            position: absolute;
+            opacity: 0;
+            transform: scale(0.8) rotateY(45deg);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            will-change: opacity, transform;
+            cursor: pointer;
+        }
+        .fragment.visible {
+            opacity: 1;
+            transform: scale(1) rotateY(0deg);
+        }
+
+        .text-fragment {
+            font-family: 'Rajdhani', sans-serif;
+            line-height: 1.2;
+        }
+
+        .section-block {
+            padding: 2.5rem; /* Equivalent to p-10 */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(15, 23, 42, 0.6); /* Slate-900 with transparency */
+            backdrop-filter: blur(8px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        }
+        .section-block:hover {
+            transform: translateY(-5px) rotate(1deg);
+            box-shadow: 0 0 40px rgba(34, 211, 238, 0.4);
+        }
+
+        .decon-line {
+            position: absolute;
+            background-color: #22d3ee; /* Cyan */
+            opacity: 0.3;
+            transition: all 0.5s ease;
+            pointer-events: none;
+            will-change: transform, opacity;
+        }
+
+        /* Keyframes for the background grid animation */
+        @keyframes deconstructGrid {
+            0% { transform: rotate(0deg) scale(1) translateX(0) translateY(0); opacity: 0.1; }
+            50% { transform: rotate(5deg) scale(1.05) translateX(10px) translateY(10px); opacity: 0.15; }
+            100% { transform: rotate(0deg) scale(1) translateX(0) translateY(0); opacity: 0.1; }
+        }
+
+        .decon-bg-grid {
+            position: fixed;
+            top: -100px;
+            left: -100px;
+            width: 120vw;
+            height: 120vh;
+            background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            animation: deconstructGrid 15s infinite alternate ease-in-out;
+            pointer-events: none;
+            opacity: 0.1;
+        }
+
+        /* Specific styles for Zevik's image container */
+        .zevik-image-container {
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+        }
+        .zevik-image-container:hover {
+            transform: scale(1.05) rotate(-3deg);
+            opacity: 0.95;
+        }
+    </style>
+</head>
+<body class="min-h-screen relative p-8 md:p-16 lg:p-24 overflow-hidden">
+
+    <!-- Tailwind CSS CDN -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Assistant', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                    },
+                    colors: {
+                        'dark-void': '#0d0d0d',
+                        'ai-cyan': '#22d3ee',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Deconstructed Background Grid -->
+    <div class="decon-bg-grid"></div>
+
+    <!-- Main Content Wrapper - Relative to enable absolute positioning of fragments -->
+    <div id="art-container" class="relative w-full h-full min-h-[calc(100vh-6rem)] md:min-h-[calc(100vh-8rem)] lg:min-h-[calc(100vh-12rem)] z-10">
+
+        <!-- Central AI Core - Abstract Visual -->
+        <div id="ai-core" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 bg-gradient-to-br from-ai-cyan to-sky-700 rounded-full opacity-70 blur-xl mix-blend-screen animate-pulse z-0"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 bg-gradient-to-tl from-indigo-500 to-purple-600 rounded-full opacity-60 blur-2xl mix-blend-screen animate-pulse animation-delay-1000 z-0"></div>
+
+        <!-- Main Title Fragments -->
+        <div id="title-fragment-1" class="fragment visible text-6xl md:text-8xl font-rajdhani font-extrabold text-ai-cyan leading-none top-1/4 right-[5%] transform rotate-3 origin-top-right text-shadow-lg z-20" data-content="למדו">
+            <span class="block relative group">
+                למדו
+                <span class="absolute right-0 -bottom-2 w-0 h-1 bg-ai-cyan group-hover:w-full transition-all duration-300"></span>
+            </span>
+        </div>
+        <div id="title-fragment-2" class="fragment visible text-5xl md:text-7xl font-rajdhani font-bold text-gray-100 leading-none top-[38%] left-[10%] transform -rotate-6 origin-bottom-left text-shadow-lg z-20" data-content="לשלוט בבינה מלאכותית">
+            <span class="block relative group">
+                לשלוט בבינה מלאכותית
+                <span class="absolute right-0 -bottom-2 w-0 h-1 bg-gray-100 group-hover:w-full transition-all duration-300"></span>
+            </span>
+        </div>
+        <div id="title-fragment-3" class="fragment visible text-4xl md:text-6xl font-rajdhani font-light text-gray-400 leading-none top-[55%] right-[20%] transform rotate-1 origin-top-right z-20" data-content="העתיד הוא עכשיו">
+            <span class="block relative group">
+                העתיד הוא עכשיו
+                <span class="absolute right-0 -bottom-2 w-0 h-1 bg-gray-400 group-hover:w-full transition-all duration-300"></span>
+            </span>
+        </div>
+
+        <!-- Core Message Fragment -->
+        <div id="core-message" class="fragment visible section-block text-center text-xl md:text-2xl font-bold text-ai-cyan p-6 md:p-8 transform rotate-2 top-[70%] left-[5%] md:left-[15%] w-64 md:w-80 lg:w-96 z-30" data-content="הפיכת AI לנגיש וישים לכולם - מהתחלה ועד רמה מתקדמת. כלים מעשיים שניתן ליישם מיד בעבודה ובחיים.">
+            הפיכת AI לנגיש וישים לכולם<br/>
+            כלים מעשיים לחיים ולעבודה.
+        </div>
+
+        <!-- Zevik Aviner - The Guide Fragment -->
+        <div id="zevik-guide" class="fragment visible section-block flex flex-col items-center top-[10%] left-[50%] -translate-x-1/2 w-64 md:w-80 lg:w-96 transform -rotate-2 z-30 interactive-element">
+            <h2 class="text-3xl font-rajdhani font-bold text-ai-cyan mb-4">המנחה</h2>
+            <div class="zevik-image-container relative w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden mb-4 border-2 border-ai-cyan shadow-lg hover:shadow-2xl hover:border-sky-400 transition-all duration-300">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר, מומחה בינה מלאכותית" class="object-cover w-full h-full scale-105 hover:scale-100 transition-transform duration-300">
+            </div>
+            <p class="text-lg text-center text-gray-200">
+                <span class="font-bold text-xl block">זאביק אבינר</span><br/>
+                מומחה בינה מלאכותית.<br/>
+                מפתח פרויקטים, אפליקציות ומערכות מבוססות AI.<br/>
+                מנגיש טכנולוגיה, הופך אותה לכלי עבודה יומיומי.
+            </p>
+        </div>
+
+        <!-- Target Audience Fragments -->
+        <div id="target-1" class="fragment visible section-block p-4 md:p-6 text-sm md:text-base top-[40%] right-[5%] w-56 md:w-64 transform rotate-4 origin-bottom-right z-20 interactive-element">
+            <h3 class="text-xl font-rajdhani font-semibold text-ai-cyan mb-2">מתחילים</h3>
+            <p class="text-gray-200">לשער הכניסה לעולם ה-AI, ללא ידע מוקדם.</p>
+        </div>
+        <div id="target-2" class="fragment visible section-block p-4 md:p-6 text-sm md:text-base top-[5%] left-[25%] w-56 md:w-64 transform -rotate-3 origin-top-left z-20 interactive-element">
+            <h3 class="text-xl font-rajdhani font-semibold text-ai-cyan mb-2">אנשי מקצוע</h3>
+            <p class="text-gray-200">להטמעת AI בעבודה, ייעול תהליכים.</p>
+        </div>
+        <div id="target-3" class="fragment visible section-block p-4 md:p-6 text-sm md:text-base top-[75%] right-[25%] w-56 md:w-64 transform rotate-1 origin-bottom-right z-20 interactive-element">
+            <h3 class="text-xl font-rajdhani font-semibold text-ai-cyan mb-2">מנהלים וארגונים</h3>
+            <p class="text-gray-200">הדרכות צוות, חדשנות אסטרטגית.</p>
+        </div>
+        <div id="target-4" class="fragment visible section-block p-4 md:p-6 text-sm md:text-base top-[20%] right-[30%] w-56 md:w-64 transform rotate-7 origin-top-right z-20 interactive-element">
+            <h3 class="text-xl font-rajdhani font-semibold text-ai-cyan mb-2">רמה מתקדמת</h3>
+            <p class="text-gray-200">פיתוח פרויקטים מבוססי AI, ליווי צמוד.</p>
+        </div>
+
+        <!-- Expertise Areas Fragments -->
+        <div id="expertise-1" class="fragment visible section-block p-4 md:p-6 text-sm md:text-base bottom-[5%] left-[5%] w-56 md:w-64 transform -rotate-5 origin-bottom-left z-20 interactive-element">
+            <h3 class="text-xl font-rajdhani font-semibold text-ai-cyan mb-2">תוכן חכם</h3>
+            <p class="text-gray-200">יצירת טקסטים, מאמרים, קריאייטיב.</p>
+        </div>
+        <div id="expertise-2" class="fragment visible section-block p-4 md:p-6 text-sm md:text-base top-[55%] left-[30%] w-56 md:w-64 transform rotate-3 origin-top-left z-20 interactive-element">
+            <h3 class="text-xl font-rajdhani font-semibold text-ai-cyan mb-2">אפליקציות חכמות</h3>
+            <p class="text-gray-200">בניית כלים המשלבים AI.</p>
+        </div>
+        <div id="expertise-3" class="fragment visible section-block p-4 md:p-6 text-sm md:text-base top-[15%] left-[70%] w-56 md:w-64 transform rotate-9 origin-top-right z-20 interactive-element">
+            <h3 class="text-xl font-rajdhani font-semibold text-ai-cyan mb-2">אתרי AI</h3>
+            <p class="text-gray-200">פיתוח נוכחות דיגיטלית חכמה.</p>
+        </div>
+        <div id="expertise-4" class="fragment visible section-block p-4 md:p-6 text-sm md:text-base bottom-[10%] right-[20%] w-56 md:w-64 transform -rotate-2 origin-bottom-right z-20 interactive-element">
+            <h3 class="text-xl font-rajdhani font-semibold text-ai-cyan mb-2">ניתוח נתונים</h3>
+            <p class="text-gray-200">הפקת תובנות עמוקות ממספרים.</p>
+        </div>
+        <div id="expertise-5" class="fragment visible section-block p-4 md:p-6 text-sm md:text-base top-[80%] left-[70%] w-56 md:w-64 transform rotate-6 origin-bottom-right z-20 interactive-element">
+            <h3 class="text-xl font-rajdhani font-semibold text-ai-cyan mb-2">אומנות AI</h3>
+            <p class="text-gray-200">יצירת תמונות, ויזואליה חדשנית.</p>
+        </div>
+        <div id="expertise-6" class="fragment visible section-block p-4 md:p-6 text-sm md:text-base bottom-[20%] left-[40%] w-56 md:w-64 transform -rotate-8 origin-bottom-left z-20 interactive-element">
+            <h3 class="text-xl font-rajdhani font-semibold text-ai-cyan mb-2">אוטומציה</h3>
+            <p class="text-gray-200">ייעול תהליכים בעזרת AI.</p>
+        </div>
+
+        <!-- Services Offered Fragments -->
+        <div id="service-1" class="fragment visible section-block p-4 md:p-6 text-sm md:text-base top-[2%] right-[60%] w-56 md:w-64 transform rotate-5 origin-top-right z-20 interactive-element">
+            <h3 class="text-xl font-rajdhani font-semibold text-ai-cyan mb-2">סדנאות קבוצתיות</h3>
+            <p class="text-gray-200">מעשיות, ממוקדות, לקבוצות קטנות וגדולות.</p>
+        </div>
+        <div id="service-2" class="fragment visible section-block p-4 md:p-6 text-sm md:text-base top-[60%] right-[60%] w-56 md:w-64 transform -rotate-4 origin-top-left z-20 interactive-element">
+            <h3 class="text-xl font-rajdhani font-semibold text-ai-cyan mb-2">שיעורים פרטיים</h3>
+            <p class="text-gray-200">התאמה אישית לצרכים ולקצב שלך.</p>
+        </div>
+        <div id="service-3" class="fragment visible section-block p-4 md:p-6 text-sm md:text-base bottom-[30%] left-[10%] w-56 md:w-64 transform rotate-2 origin-bottom-left z-20 interactive-element">
+            <h3 class="text-xl font-rajdhani font-semibold text-ai-cyan mb-2">הרצאות לארגונים</h3>
+            <p class="text-gray-200">פתיחת אופקים, השראה לצוותים.</p>
+        </div>
+        <div id="service-4" class="fragment visible section-block p-4 md:p-6 text-sm md:text-base top-[30%] left-[60%] w-56 md:w-64 transform -rotate-7 origin-top-right z-20 interactive-element">
+            <h3 class="text-xl font-rajdhani font-semibold text-ai-cyan mb-2">ייעוץ ופיתוח</h3>
+            <p class="text-gray-200">ליווי מקצועי לפרויקטים מבוססי AI.</p>
+        </div>
+
+
+        <!-- Contact Information Fragments - Initially subtle, highlight on hover -->
+        <a href="https://wa.me/972546609385" target="_blank" class="fragment visible text-2xl font-rajdhani text-gray-400 hover:text-ai-cyan transition-colors duration-300 top-[90%] right-[10%] transform rotate-2 z-40 interactive-element">
+            <span class="block relative group">
+                וואטסאפ: 054-6609385
+                <span class="absolute right-0 -bottom-1 w-0 h-0.5 bg-ai-cyan group-hover:w-full transition-all duration-300"></span>
+            </span>
+        </a>
+        <a href="mailto:zaviner@gmail.com" target="_blank" class="fragment visible text-2xl font-rajdhani text-gray-400 hover:text-ai-cyan transition-colors duration-300 bottom-[5%] left-[25%] transform -rotate-3 z-40 interactive-element">
+            <span class="block relative group">
+                אימייל: zaviner@gmail.com
+                <span class="absolute right-0 -bottom-1 w-0 h-0.5 bg-ai-cyan group-hover:w-full transition-all duration-300"></span>
+            </span>
+        </a>
+
+        <!-- Interactive Lines (connect on hover) -->
+        <div id="line-1" class="decon-line absolute h-0.5 w-0"></div>
+        <div id="line-2" class="decon-line absolute h-0.5 w-0"></div>
+        <div id="line-3" class="decon-line absolute h-0.5 w-0"></div>
+
+    </div>
+
+    <!-- JavaScript for interactivity and custom cursor -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const artContainer = document.getElementById('art-container');
+            const aiCore = document.getElementById('ai-core');
+            const fragments = document.querySelectorAll('.fragment');
+            const interactiveElements = document.querySelectorAll('.interactive-element');
+            const customCursor = document.createElement('div');
+            customCursor.classList.add('custom-cursor');
+            document.body.appendChild(customCursor);
+
+            // Hide the actual cursor, show custom
+            document.body.style.cursor = 'none';
+
+            // Custom cursor movement
+            document.addEventListener('mousemove', e => {
+                customCursor.style.left = `${e.clientX}px`;
+                customCursor.style.top = `${e.clientY}px`;
+
+                // Slight AI core parallax effect relative to mouse
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                const moveX = (e.clientX - centerX) * 0.02;
+                const moveY = (e.clientY - centerY) * 0.02;
+                aiCore.style.transform = `translate(-50%, -50%) translateX(${moveX}px) translateY(${moveY}px)`;
+            });
+
+            // Cursor interaction with interactive elements
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => customCursor.classList.add('active'));
+                el.addEventListener('mouseleave', () => customCursor.classList.remove('active'));
+            });
+
+            // Initial fragment visibility (already set by 'visible' class)
+            // Can add more complex entrance animation here if needed
+
+            // Deconstructive connection lines on fragment hover
+            const deconLines = [];
+            for(let i=1; i<=3; i++) {
+                deconLines.push(document.getElementById(`line-${i}`));
+            }
+
+            let activeLines = [];
+
+            fragments.forEach(fragment => {
+                fragment.addEventListener('mouseenter', (e) => {
+                    // Try to connect 1-2 random fragments to the hovered one
+                    activeLines.forEach(line => {
+                        line.style.width = '0';
+                        line.style.height = '0';
+                        line.style.opacity = '0';
+                    });
+                    activeLines = [];
+
+                    const hoveredRect = e.target.getBoundingClientRect();
+                    const hoveredCenterX = hoveredRect.left + hoveredRect.width / 2;
+                    const hoveredCenterY = hoveredRect.top + hoveredRect.height / 2;
+
+                    const nonHoveredFragments = Array.from(fragments).filter(f => f !== e.target);
+
+                    for (let i = 0; i < Math.min(2, nonHoveredFragments.length); i++) {
+                        const randomIndex = Math.floor(Math.random() * nonHoveredFragments.length);
+                        const targetFragment = nonHoveredFragments[randomIndex];
+                        const targetRect = targetFragment.getBoundingClientRect();
+                        const targetCenterX = targetRect.left + targetRect.width / 2;
+                        const targetCenterY = targetRect.top + targetRect.height / 2;
+
+                        const dx = targetCenterX - hoveredCenterX;
+                        const dy = targetCenterY - hoveredCenterY;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+
+                        const line = deconLines[i];
+                        if (line) {
+                            line.style.left = `${hoveredCenterX}px`;
+                            line.style.top = `${hoveredCenterY}px`;
+                            line.style.width = `${distance}px`;
+                            line.style.height = `2px`; // Ensure it's a visible line
+                            line.style.transform = `rotate(${angle}deg)`;
+                            line.style.transformOrigin = `0 50%`;
+                            line.style.opacity = '0.7';
+                            activeLines.push(line);
+                        }
+                    }
+                });
+
+                fragment.addEventListener('mouseleave', () => {
+                    activeLines.forEach(line => {
+                        line.style.width = '0';
+                        line.style.height = '0';
+                        line.style.opacity = '0';
+                    });
+                    activeLines = [];
+                });
+            });
+
+            // Simple fragment text reveal on click/tap
+            fragments.forEach(frag => {
+                const originalText = frag.innerHTML;
+                const hiddenContent = frag.dataset.content; // Assuming data-content stores more info
+                if (!hiddenContent) return; // Skip if no extra content
+
+                frag.addEventListener('click', (e) => {
+                    // This is a placeholder for more complex deconstructive reveal
+                    // For now, it just toggles a subtle background change and text glow
+                    e.currentTarget.classList.toggle('bg-sky-800');
+                    e.currentTarget.classList.toggle('shadow-sky-500');
+                });
+            });
+
+            // Random fragment rotation on load for a dynamic feel
+            fragments.forEach(fragment => {
+                const randomRotate = Math.random() * 8 - 4; // -4 to 4 degrees
+                const randomTranslateX = Math.random() * 20 - 10; // -10 to 10 pixels
+                const randomTranslateY = Math.random() * 20 - 10; // -10 to 10 pixels
+
+                // Ensure initial transform is not overridden, but augmented
+                let currentTransform = fragment.style.transform || '';
+                fragment.style.transform = `${currentTransform} rotate(${randomRotate}deg) translateX(${randomTranslateX}px) translateY(${randomTranslateY}px)`;
+            });
+
+        });
+    </script>
+</body>
+</html>

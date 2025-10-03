@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>טבע דומם של תודעה אלגוריתמית</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Heebo', sans-serif;
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            background-color: #0d0c1d; /* Deep space dark blue */
+        }
+        .custom-cursor-inner, .custom-cursor-outer {
+            position: fixed;
+            pointer-events: none;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: width 0.2s ease-out, height 0.2s ease-out, background-color 0.2s ease-out;
+        }
+        .custom-cursor-inner {
+            width: 8px;
+            height: 8px;
+            background-color: #e0f2fe; /* Light blue */
+        }
+        .custom-cursor-outer {
+            width: 32px;
+            height: 32px;
+            border: 2px solid #e0f2fe; /* Light blue border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+        }
+        /* Styles for artistic elements */
+        .parallax-layer {
+            position: fixed; /* Fixed for true parallax against scroll */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            will-change: transform;
+        }
+        /* Specific still life element styles */
+        .still-life-element {
+            position: absolute;
+            opacity: 0; /* Initially hidden, fade in with JS */
+            transition: opacity 1s ease-in-out, transform 0.5s ease-out;
+            will-change: transform, opacity;
+            z-index: 10; /* Ensure content is above parallax layers */
+        }
+        .still-life-element.visible {
+            opacity: 1;
+        }
+
+        /* Keyframes for glowing effect */
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px #e0f2fe; }
+            50% { text-shadow: 0 0 15px #a7f3d0, 0 0 20px #a7f3d0; }
+            100% { text-shadow: 0 0 5px #e0f2fe; }
+        }
+        .glow-text {
+            animation: glow 3s infinite ease-in-out;
+        }
+
+        /* Subtle animation for background gradient */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animated-gradient {
+            background: linear-gradient(-45deg, #0d0c1d, #1a2a47, #0d0c1d, #2f1d47);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        /* Custom scrollbar for artistic feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a2a47;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a7f3d0;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #e0f2fe;
+        }
+    </style>
+</head>
+<body class="text-right text-gray-200 min-h-screen relative overflow-y-scroll" style="scroll-behavior: smooth;">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor-outer" class="custom-cursor-outer"></div>
+    <div id="custom-cursor-inner" class="custom-cursor-inner"></div>
+
+    <!-- Parallax Background Layers -->
+    <div id="bg-layer-deep" class="parallax-layer animated-gradient z-[-4]"></div>
+    <div id="bg-layer-mid" class="parallax-layer z-[-3] flex items-center justify-center pointer-events-none">
+        <!-- Abstract digital patterns, faint and large -->
+        <div class="w-full h-full bg-[radial-gradient(#1a2a47_1px,transparent_1px)] bg-[length:40px_40px] opacity-10"></div>
+    </div>
+    <div id="bg-layer-front" class="parallax-layer z-[-2] flex items-center justify-center pointer-events-none">
+        <!-- More defined, but still subtle, circuit-like patterns -->
+        <div class="w-full h-full bg-[radial-gradient(#a7f3d0_1px,transparent_1px)] bg-[length:60px_60px] opacity-[0.03]"></div>
+    </div>
+
+    <!-- Main Content Wrapper (Still Life Composition) -->
+    <div class="relative z-10 p-8 md:p-16 lg:p-24" style="min-height: 400vh;">
+        <!-- The min-height is critical for the scroll-based absolute positioning of elements -->
+
+        <!-- Title / Core AI Essence -->
+        <h1 class="still-life-element text-5xl md:text-7xl lg:text-8xl font-rubik font-bold text-white text-center mt-20 md:mt-32 glow-text absolute inset-x-0 top-[15vh] mx-auto w-fit">
+            טבע דומם של תודעה אלגוריתמית
+        </h1>
+        <p class="still-life-element text-lg md:text-xl text-center max-w-3xl mx-auto mt-4 text-gray-300 absolute inset-x-0 top-[30vh] mx-auto w-fit">
+            קומפוזיציה דיגיטלית המפצחת את סודות הבינה המלאכותית
+        </p>
+
+        <!-- Section 1: Core Message -->
+        <div id="core-message" class="still-life-element absolute top-[60vh] md:top-[70vh] right-[10%] md:right-[15%] max-w-xs md:max-w-md bg-gradient-to-br from-[#1a2a47]/70 to-[#0d0c1d]/70 p-6 rounded-xl shadow-xl border border-[#a7f3d0]/20 hover:scale-105 transition-transform duration-300 backdrop-blur-sm">
+            <h2 class="text-3xl font-rubik text-[#a7f3d0] mb-4">השראה קדמונית, יצירה חדשה</h2>
+            <p class="text-base leading-relaxed text-gray-300">
+                בליבת הקומפוזיציה הזו, נחשף סוד הקוד – הפיכת הבינה המלאכותית מחידה לרז נגיש, מכוח אצור לכלי מעצב. כאן, בין הצללים והאורות הדיגיטליים, אנו לומדים לא רק להבין, אלא ליצור. מניצני התודעה האלגוריתמית ועד פסגות היצירה – כלים, תובנות, ויישום מיידי המעצב את העבודה והחיים.
+            </p>
+        </div>
+
+        <!-- Section 2: Target Audience -->
+        <div id="target-audience" class="still-life-element absolute top-[110vh] md:top-[120vh] left-[10%] md:left-[15%] max-w-xs md:max-w-md bg-gradient-to-bl from-[#1a2a47]/70 to-[#0d0c1d]/70 p-6 rounded-xl shadow-xl border border-[#e0f2fe]/20 hover:scale-105 transition-transform duration-300 backdrop-blur-sm">
+            <h2 class="text-3xl font-rubik text-[#e0f2fe] mb-4">מבקשי המפתח הדיגיטלי</h2>
+            <ul class="list-none space-y-2 text-base text-gray-300">
+                <li><span class="text-[#e0f2fe] font-bold">◄</span> הניצבים בפתח – המעוניינים לטבול את אצבעותיהם הראשונות בעולם המשתנה.</li>
+                <li><span class="text-[#e0f2fe] font-bold">◄</span> המעצבים והמנהיגים – השואפים לשזור קוד חדש במרקם עבודתם.</li>
+                <li><span class="text-[#e0f2fe] font-bold">◄</span> האמנים והאדריכלים – החולמים לפסל פרויקטים בבינת המכונה.</li>
+            </ul>
+        </div>
+
+        <!-- Section 3: Areas of Expertise (as floating glyphs/orbs) -->
+        <div id="expertise-container" class="still-life-element absolute top-[180vh] md:top-[190vh] inset-x-0 mx-auto w-fit text-center">
+            <h2 class="text-4xl font-rubik text-white mb-8 glow-text">גווני יצירה אלגוריתמית</h2>
+            <div class="flex flex-wrap justify-center gap-6 max-w-5xl mx-auto">
+                <div class="still-life-element group relative flex flex-col items-center p-4 bg-gradient-to-tr from-[#2f1d47]/70 to-[#1a2a47]/70 rounded-full w-36 h-36 justify-center shadow-lg border border-[#a7f3d0]/30 hover:shadow-2xl hover:border-[#a7f3d0] transition-all duration-300 backdrop-blur-sm">
+                    <span class="text-5xl text-[#a7f3d0] mb-2">💬</span>
+                    <p class="text-xs text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute bottom-4">יצירת לחישות קוד</p>
+                    <p class="text-sm text-white font-bold absolute top-1/2 -translate-y-1/2 group-hover:opacity-0 transition-opacity duration-300">טקסטים</p>
+                </div>
+                <div class="still-life-element group relative flex flex-col items-center p-4 bg-gradient-to-tr from-[#2f1d47]/70 to-[#1a2a47]/70 rounded-full w-36 h-36 justify-center shadow-lg border border-[#a7f3d0]/30 hover:shadow-2xl hover:border-[#a7f3d0] transition-all duration-300 backdrop-blur-sm">
+                    <span class="text-5xl text-[#a7f3d0] mb-2">⚙️</span>
+                    <p class="text-xs text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute bottom-4">אריגת רשתות חשיבה</p>
+                    <p class="text-sm text-white font-bold absolute top-1/2 -translate-y-1/2 group-hover:opacity-0 transition-opacity duration-300">אפליקציות</p>
+                </div>
+                <div class="still-life-element group relative flex flex-col items-center p-4 bg-gradient-to-tr from-[#2f1d47]/70 to-[#1a2a47]/70 rounded-full w-36 h-36 justify-center shadow-lg border border-[#a7f3d0]/30 hover:shadow-2xl hover:border-[#a7f3d0] transition-all duration-300 backdrop-blur-sm">
+                    <span class="text-5xl text-[#a7f3d0] mb-2">🌐</span>
+                    <p class="text-xs text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute bottom-4">בניית ממדים דיגיטליים</p>
+                    <p class="text-sm text-white font-bold absolute top-1/2 -translate-y-1/2 group-hover:opacity-0 transition-opacity duration-300">אתרים</p>
+                </div>
+                <div class="still-life-element group relative flex flex-col items-center p-4 bg-gradient-to-tr from-[#2f1d47]/70 to-[#1a2a47]/70 rounded-full w-36 h-36 justify-center shadow-lg border border-[#a7f3d0]/30 hover:shadow-2xl hover:border-[#a7f3d0] transition-all duration-300 backdrop-blur-sm">
+                    <span class="text-5xl text-[#a7f3d0] mb-2">📊</span>
+                    <p class="text-xs text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute bottom-4">פיענוח צפנים נסתרים</p>
+                    <p class="text-sm text-white font-bold absolute top-1/2 -translate-y-1/2 group-hover:opacity-0 transition-opacity duration-300">נתונים</p>
+                </div>
+                <div class="still-life-element group relative flex flex-col items-center p-4 bg-gradient-to-tr from-[#2f1d47]/70 to-[#1a2a47]/70 rounded-full w-36 h-36 justify-center shadow-lg border border-[#a7f3d0]/30 hover:shadow-2xl hover:border-[#a7f3d0] transition-all duration-300 backdrop-blur-sm">
+                    <span class="text-5xl text-[#a7f3d0] mb-2">🎨</span>
+                    <p class="text-xs text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute bottom-4">חישוף מראות חדשים</p>
+                    <p class="text-sm text-white font-bold absolute top-1/2 -translate-y-1/2 group-hover:opacity-0 transition-opacity duration-300">אמנות</p>
+                </div>
+                <div class="still-life-element group relative flex flex-col items-center p-4 bg-gradient-to-tr from-[#2f1d47]/70 to-[#1a2a47]/70 rounded-full w-36 h-36 justify-center shadow-lg border border-[#a7f3d0]/30 hover:shadow-2xl hover:border-[#a7f3d0] transition-all duration-300 backdrop-blur-sm">
+                    <span class="text-5xl text-[#a7f3d0] mb-2">🔄</span>
+                    <p class="text-xs text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute bottom-4">עיצוב זרימות תודעה</p>
+                    <p class="text-sm text-white font-bold absolute top-1/2 -translate-y-1/2 group-hover:opacity-0 transition-opacity duration-300">אוטומציה</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Services -->
+        <div id="services-offered" class="still-life-element absolute top-[260vh] md:top-[270vh] right-[10%] md:right-[15%] max-w-xs md:max-w-md bg-gradient-to-br from-[#1a2a47]/70 to-[#0d0c1d]/70 p-6 rounded-xl shadow-xl border border-[#e0f2fe]/20 hover:scale-105 transition-transform duration-300 backdrop-blur-sm">
+            <h2 class="text-3xl font-rubik text-[#e0f2fe] mb-4">מסלולי התחקות</h2>
+            <ul class="list-none space-y-3 text-base text-gray-300">
+                <li><span class="text-[#a7f3d0] font-bold text-xl ml-2">◆</span> <strong class="text-white">סדנאות קבוצתיות:</strong> מפגשים לפיענוח קולקטיבי.</li>
+                <li><span class="text-[#a7f3d0] font-bold text-xl ml-2">◆</span> <strong class="text-white">שיעורים פרטיים:</strong> מסע אישי אל עומק הסוד.</li>
+                <li><span class="text-[#a7f3d0] font-bold text-xl ml-2">◆</span> <strong class="text-white">הרצאות לארגונים:</strong> פתיחת אופקים, הצצה לעתיד.</li>
+                <li><span class="text-[#a7f3d0] font-bold text-xl ml-2">◆</span> <strong class="text-white">ייעוץ ופיתוח:</strong> ליווי יצירתי, מהרעיון עד להתגשמות.</li>
+            </ul>
+        </div>
+
+        <!-- Section 5: The Guide (Zevik Aviner) -->
+        <div id="the-guide" class="still-life-element absolute top-[320vh] md:top-[330vh] left-[10%] md:left-[15%] max-w-xs md:max-w-md bg-gradient-to-bl from-[#1a2a47]/70 to-[#0d0c1d]/70 p-6 rounded-xl shadow-xl border border-[#a7f3d0]/20 hover:scale-105 transition-transform duration-300 backdrop-blur-sm text-center">
+            <h2 class="text-3xl font-rubik text-[#a7f3d0] mb-4">המאסטרו הדיגיטלי</h2>
+            <div class="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-2 border-[#e0f2fe]">
+                <img src="https://link.zevikaviner.com/zevik" alt="דיוקן דיגיטלי של זאביק אבינר" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#1a2a47] to-transparent opacity-50"></div>
+            </div>
+            <p class="text-base leading-relaxed text-gray-300 mb-4">
+                במרכז הקומפוזיציה, ניצב זאביק אבינר – האמן מאחורי הקוד, מומחה בינה מלאכותית. שנותיו ארוגות באלפי פרויקטים ומערכות, והוא הגשר בין המורכב לפשוט, בין הרעיון ליישום. הוא לא רק מלמד, הוא מנגיש. לא רק מנחה, הוא מעצב עתיד.
+            </p>
+            <div class="mt-6 border-t border-[#2f1d47] pt-4 flex flex-col items-center">
+                <p class="text-lg text-white font-rubik mb-2">דרכי יצירת קשר:</p>
+                <a href="https://wa.me/972546609385" target="_blank" class="flex items-center text-[#e0f2fe] hover:text-[#a7f3d0] transition-colors duration-200 mb-2">
+                    <span class="ml-2">054-6609385</span> 📞
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="flex items-center text-[#e0f2fe] hover:text-[#a7f3d0] transition-colors duration-200">
+                    <span class="ml-2">zaviner@gmail.0com</span> ✉️
+                </a>
+            </div>
+        </div>
+
+        <!-- End of content / digital artifact -->
+        <div class="still-life-element text-center text-gray-500 text-sm pb-20 mx-auto w-fit absolute inset-x-0 bottom-0 top-[380vh] md:top-[390vh]">
+            <p>קומפוזיציה דיגיטלית מאת זאביק אבינר © 2023. כל הזכויות שמורות ליקום האלגוריתמי.</p>
+        </div>
+
+    </div>
+
+    <script>
+        // Custom Cursor JS
+        const cursorInner = document.getElementById('custom-cursor-inner');
+        const cursorOuter = document.getElementById('custom-cursor-outer');
+        let mouseX = 0, mouseY = 0;
+        let innerX = 0, innerY = 0;
+        let outerX = 0, outerY = 0;
+
+        document.addEventListener('mousemove', e => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            innerX += (mouseX - innerX) * 0.1;
+            innerY += (mouseY - innerY) * 0.1;
+            cursorInner.style.left = `${innerX}px`;
+            cursorInner.style.top = `${innerY}px`;
+
+            outerX += (mouseX - outerX) * 0.05;
+            outerY += (mouseY - outerY) * 0.05;
+            cursorOuter.style.left = `${outerX}px`;
+            cursorOuter.style.top = `${outerY}px`;
+
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Parallax and Scroll-triggered visibility JS
+        const deepLayer = document.getElementById('bg-layer-deep');
+        const midLayer = document.getElementById('bg-layer-mid');
+        const frontLayer = document.getElementById('bg-layer-front');
+        const stillLifeElements = document.querySelectorAll('.still-life-element');
+
+        function applyParallax() {
+            const scrollPos = window.pageYOffset;
+            deepLayer.style.transform = `translateY(${scrollPos * 0.05}px)`; // Slower
+            midLayer.style.transform = `translateY(${scrollPos * 0.1}px)`;    // Medium
+            frontLayer.style.transform = `translateY(${scrollPos * 0.15}px)`; // Faster
+        }
+
+        function checkVisibility() {
+            const viewportHeight = window.innerHeight;
+            stillLifeElements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                // If element is in viewport (partially or fully)
+                if (rect.top < viewportHeight * 0.9 && rect.bottom > viewportHeight * 0.1) {
+                    element.classList.add('visible');
+                } else {
+                    element.classList.remove('visible'); // Remove if out of view
+                }
+            });
+        }
+
+        window.addEventListener('scroll', () => {
+            applyParallax();
+            checkVisibility();
+        });
+
+        // Initial check on load
+        window.addEventListener('load', () => {
+            applyParallax();
+            checkVisibility();
+        });
+
+        // Cursor hover effects for interactive elements
+        stillLifeElements.forEach(el => {
+            // Check if the element is one of the main interactive content blocks or the expertise glyphs
+            if (el.id === 'core-message' || el.id === 'target-audience' || el.id === 'services-offered' || el.id === 'the-guide' || el.classList.contains('group')) {
+                el.addEventListener('mouseenter', () => {
+                    cursorOuter.style.width = '48px';
+                    cursorOuter.style.height = '48px';
+                    cursorInner.style.backgroundColor = '#a7f3d0'; /* Change inner cursor color on hover */
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursorOuter.style.width = '32px';
+                    cursorOuter.style.height = '32px';
+                    cursorInner.style.backgroundColor = '#e0f2fe'; /* Revert inner cursor color */
+                });
+            }
+        });
+    </script>
+</body>
+</html>

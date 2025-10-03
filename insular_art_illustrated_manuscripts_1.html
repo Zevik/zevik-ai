@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אומנות השליטה: דרכי הבינה המלאכותית</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Hebrew and artistic flair -->
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;700&family=Noto+Serif+Hebrew:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles to blend with Tailwind for the illuminated manuscript feel */
+        body {
+            font-family: 'Noto Serif Hebrew', serif;
+            background-color: #FDF5E6; /* Parchment-like background */
+            color: #3e2723; /* Dark brown text */
+            cursor: none; /* Hide default cursor to use custom one */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Frank Ruhl Libre', serif;
+            color: #5d4037; /* Slightly darker brown for headings */
+        }
+
+        /* Custom scrollbar for artistic touch */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1e0c6;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8d6e63;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6d4c41;
+        }
+
+        /* Initial state for reveal animations */
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+        }
+        .reveal-item.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Border / Frame for manuscript style */
+        .manuscript-frame {
+            position: relative;
+            padding: 2rem;
+            margin: 2rem auto;
+            background: rgba(255, 255, 255, 0.7); /* Slightly lighter inner background for readability */
+            border: 2px solid #8d6e63; /* Darker brown border */
+            box-shadow: 0 0 0 8px #d7ccc8, /* Lighter inner frame */
+                        0 0 0 10px #8d6e63; /* Outer dark frame */
+            max-width: 900px; /* Max width for content blocks */
+            border-radius: 8px; /* Slight rounding */
+        }
+        .manuscript-frame::before, .manuscript-frame::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border: 1px dashed #a1887f; /* Dotted line detail */
+            pointer-events: none;
+            border-radius: 8px;
+        }
+        .manuscript-frame::before {
+            transform: scale(0.98);
+        }
+        .manuscript-frame::after {
+            transform: scale(1.02);
+        }
+
+        /* Custom cursor style - MANDATORY high visibility */
+        #custom-cursor {
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(255,255,255,0.9); /* Light border, visible on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow, visible on light backgrounds */
+            transform: translate(-50%, -50%); /* Center cursor */
+            pointer-events: none; /* Ensure it doesn't interfere with clicks */
+            z-index: 9999; /* Always on top */
+            position: fixed; /* Keep it with the viewport */
+            border-radius: 50%; /* Make it circular */
+            transition: transform 0.1s ease-out, opacity 0.1s ease-out; /* Smooth movement */
+        }
+
+        /* Decorative initial letter style for RTL */
+        .initial-cap::first-letter {
+            float: right; /* For RTL, initial cap on right */
+            font-size: 4em; /* Much larger */
+            line-height: 0.8;
+            font-family: 'Frank Ruhl Libre', serif;
+            color: #b8860b; /* Gold-like color */
+            margin-right: 0.1em;
+            padding-left: 0.05em;
+            text-shadow: 2px 2px 3px rgba(0,0,0,0.3);
+        }
+
+        /* General link style for manuscript */
+        a {
+            color: #8d6e63;
+            text-decoration: none;
+            border-bottom: 1px solid #8d6e63;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+        a:hover {
+            color: #b8860b; /* Gold on hover */
+            border-bottom-color: #b8860b;
+        }
+
+        /* Parallax background elements */
+        .parallax-bg-layer {
+            position: fixed;
+            top: 0;
+            right: 0; /* Adjust for RTL */
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -2; /* Behind main content, behind scrollable background */
+            background-repeat: repeat; /* Changed to repeat for patterns */
+            background-size: auto; /* Adjust as needed */
+            transform: translateZ(0); /* Enable hardware acceleration */
+        }
+
+        /* Specific patterns for layers using base64 SVG */
+        /* Pattern 1: Faint geometric lines in gold-like color */
+        #bg-pattern-1 {
+            background-image: url('data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h40v40H0z" fill="%23FDF5E6"/><path d="M0 0L40 40M0 40L40 0" stroke="%23B8860B" stroke-opacity="0.05" stroke-width="0.5"/></svg>');
+            background-size: 40px;
+            opacity: 0.8; /* Base opacity for the pattern */
+        }
+        /* Pattern 2: Subtle circles and squares in a darker earth tone */
+        #bg-pattern-2 {
+            background-image: url('data:image/svg+xml;utf8,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h60v60H0z" fill="%23FDF5E6"/><circle cx="30" cy="30" r="10" fill="none" stroke="%238d6e63" stroke-opacity="0.03" stroke-width="0.5"/><rect x="15" y="15" width="30" height="30" fill="none" stroke="%238d6e63" stroke-opacity="0.03" stroke-width="0.5"/></svg>');
+            background-size: 60px;
+            opacity: 0.8;
+            transform: scale(1.05); /* Start slightly larger for more noticeable parallax */
+        }
+    </style>
+</head>
+<body class="overflow-y-scroll antialiased leading-relaxed">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div id="bg-pattern-1" class="parallax-bg-layer" data-speed="0.05"></div>
+    <div id="bg-pattern-2" class="parallax-bg-layer" data-speed="0.1"></div>
+
+    <div class="relative min-h-screen p-4 sm:p-8 lg:p-12 z-10">
+        <!-- Main Title Section -->
+        <section class="manuscript-frame text-center my-16 reveal-item max-w-4xl mx-auto">
+            <h1 class="text-6xl sm:text-7xl lg:text-8xl font-bold mb-4 text-[#B8860B] drop-shadow-lg leading-tight">אומנות השליטה</h1>
+            <h2 class="text-4xl sm:text-5xl lg:text-6xl font-medium mb-8 text-stone-800">דרכי הבינה המלאכותית</h2>
+            <p class="text-lg sm:text-xl lg:text-2xl text-stone-700 initial-cap">
+                שערי העתיד נפתחים בפניכם, בהנחיית זאביק אבינר – המדריך לארץ הידע החדשה.
+            </p>
+        </section>
+
+        <!-- Central Message Section -->
+        <section class="manuscript-frame my-16 reveal-item">
+            <h3 class="text-3xl sm:text-4xl font-bold mb-6 text-stone-800 text-center">קריאת תיגר על הסודות העתיקים</h3>
+            <p class="text-lg sm:text-xl text-stone-700 leading-relaxed initial-cap">
+                בכל דור ודור מתגלים שערים חדשים אל ממלכות ידע נסתרות. בימים אלה, אנו עומדים בפתחו של עידן הבינה המלאכותית – כוח אדיר המעצב מחדש את גורל האנושות. המשימה שלנו היא להפוך את הכוח הזה לנגיש, למוחשי ולישים לכל אדם ואדם. מלימוד יסודות קדומים, דרך פריצת דרך ביישומים מעשיים, ועד לפסגות היצירה המתקדמת – כאן תמצאו את המפתח ליישום מיידי, שיעצב את עבודתכם, יחזק את חייכם ויפתח אופקים חדשים.
+            </p>
+            <p class="text-lg sm:text-xl text-stone-700 leading-relaxed mt-4">
+                הידע שתצברו אינו רק תיאורטי; הוא כלי מעשי, חרב ומגן בידכם, שיאפשר לכם לשלוט בכוחות הבינה ולנתבם לטובתכם. העתיד אינו ממתין – הוא כאן, ועלינו ללמוד לשלוט בו.
+            </p>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section class="manuscript-frame my-16 reveal-item">
+            <h3 class="text-3xl sm:text-4xl font-bold mb-6 text-stone-800 text-center">למי נגלה את דרכי החוכמה?</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-lg sm:text-xl text-stone-700">
+                <div class="p-4 bg-amber-50 rounded-lg shadow-inner border border-amber-200">
+                    <h4 class="font-bold text-xl sm:text-2xl mb-2 text-stone-800">מתלמדים ראשונים</h4>
+                    <p>אשר מבקשים להאיר את נתיבם בעולם ה-AI, ללמוד את השפה החדשה ולצעוד את צעדיהם הראשונים בעולם מרתק זה.</p>
+                </div>
+                <div class="p-4 bg-amber-50 rounded-lg shadow-inner border border-amber-200">
+                    <h4 class="font-bold text-xl sm:text-2xl mb-2 text-stone-800">אומני מקצוע</h4>
+                    <p>השואפים לשלב את כוחות הבינה במלאכת ידם, לייעל תהליכים ולפרוץ גבולות חדשים בתחומם.</p>
+                </div>
+                <div class="p-4 bg-amber-50 rounded-lg shadow-inner border border-amber-200">
+                    <h4 class="font-bold text-xl sm:text-2xl mb-2 text-stone-800">מנהיגי חזון וארגונים</h4>
+                    <p>המבקשים להנחות את צוותיהם אל העידן החדש, להקנות להם כלים חדשניים ולהבטיח את עתיד הארגון.</p>
+                </div>
+                <div class="p-4 bg-amber-50 rounded-lg shadow-inner border border-amber-200">
+                    <h4 class="font-bold text-xl sm:text-2xl mb-2 text-stone-800">לשולטים במלאכה</h4>
+                    <p>אלו המחפשים פיתוח פרויקטים עמוקים ומרחיקי לכת בבינה מלאכותית, בניית פתרונות מורכבים וחדשניים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Areas of Expertise Section -->
+        <section class="manuscript-frame my-16 reveal-item">
+            <h3 class="text-3xl sm:text-4xl font-bold mb-6 text-stone-800 text-center">מגילות הידע: תחומי השליטה בבינה המלאכותית</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-lg text-stone-700">
+                <ul class="list-none space-y-3">
+                    <li class="flex items-center">
+                        <span class="text-[#B8860B] text-2xl ml-2 leading-none">★</span>
+                        <span>אמנות יצירת טקסטים ותכנים חדשים</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-[#B8860B] text-2xl ml-2 leading-none">★</span>
+                        <span>בניית אפליקציות חכמות ובעלות רוח</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-[#B8860B] text-2xl ml-2 leading-none">★</span>
+                        <span>אריגת אתרים מבוססי בינה מלאכותית</span>
+                    </li>
+                </ul>
+                <ul class="list-none space-y-3">
+                    <li class="flex items-center">
+                        <span class="text-[#B8860B] text-2xl ml-2 leading-none">★</span>
+                        <span>פענוח נתונים וחקירת סודות המידע</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-[#B8860B] text-2xl ml-2 leading-none">★</span>
+                        <span>יצירת תמונות ואמנות דיגיטלית</span>
+                    </li>
+                    <li class="flex items-center">
+                        <span class="text-[#B8860B] text-2xl ml-2 leading-none">★</span>
+                        <span>הטבעת אוטומציה בתהליכי חיי היומיום</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Services Offered Section -->
+        <section class="manuscript-frame my-16 reveal-item">
+            <h3 class="text-3xl sm:text-4xl font-bold mb-6 text-stone-800 text-center">דרכים להארה: השירותים המוצעים</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-lg sm:text-xl text-stone-700">
+                <div class="p-6 bg-indigo-50 border border-indigo-200 rounded-xl shadow-md transform hover:scale-[1.02] transition-transform duration-300">
+                    <h4 class="font-bold text-2xl sm:text-3xl mb-3 text-indigo-800">סדנאות קבוצתיות</h4>
+                    <p>מעגלי למידה מעשיים וממוקדים, בהם נחשפים סודות הבינה בקבוצה. חוויה משותפת של גילוי והתפתחות.</p>
+                </div>
+                <div class="p-6 bg-indigo-50 border border-indigo-200 rounded-xl shadow-md transform hover:scale-[1.02] transition-transform duration-300">
+                    <h4 class="font-bold text-2xl sm:text-3xl mb-3 text-indigo-800">שיעורים פרטיים</h4>
+                    <p>מסע אישי ומותאם לכל תלמיד, בהתאם לרמתו וצרכיו המיוחדים. ליווי צמוד אל עומקי הידע.</p>
+                </div>
+                <div class="p-6 bg-indigo-50 border border-indigo-200 rounded-xl shadow-md transform hover:scale-[1.02] transition-transform duration-300">
+                    <h4 class="font-bold text-2xl sm:text-3xl mb-3 text-indigo-800">הרצאות לארגונים</h4>
+                    <p>פתיחת אופקים חדשים לצוותים, והכנה מעמיקה לעתיד המגיע במהירות. השראה והכוונה מעשית.</p>
+                </div>
+                <div class="p-6 bg-indigo-50 border border-indigo-200 rounded-xl shadow-md transform hover:scale-[1.02] transition-transform duration-300">
+                    <h4 class="font-bold text-2xl sm:text-3xl mb-3 text-indigo-800">ייעוץ ופיתוח פרויקטים</h4>
+                    <p>ליווי מקצועי צמוד בהגשמת חזונות מבוססי AI, מתכנון ראשוני ועד ליישום מלא ומוצלח.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide Section -->
+        <section class="manuscript-frame my-16 reveal-item text-center">
+            <h3 class="text-3xl sm:text-4xl font-bold mb-8 text-stone-800">המדריך: זאביק אבינר</h3>
+            <div class="flex flex-col md:flex-row items-center justify-center md:space-x-reverse md:space-x-8">
+                <div class="mb-6 md:mb-0 w-40 h-40 md:w-48 md:h-48 flex-shrink-0">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר, מדריך הבינה המלאכותית"
+                         class="rounded-full border-4 border-[#B8860B] shadow-lg w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500 transform hover:scale-105"
+                         style="filter: sepia(0.5) brightness(0.9);">
+                </div>
+                <div class="text-lg sm:text-xl text-stone-700 max-w-lg md:text-right">
+                    <p class="initial-cap mb-4">
+                        זאביק אבינר, מגלה הנסתרות של הבינה המלאכותית, הוא בעל ניסיון עשיר באריגת פרויקטים, אפליקציות ומערכות מבוססות AI. דרכו היא להפוך את הטכנולוגיה, שנראית לעיתים כקסם, לכלי עבודה יומיומי ונגיש לכולם. הוא מומחה בהנגשת ידע מורכב בצורה בהירה ומעשית, ומזמין אתכם למסע אל עתיד של יכולות חדשות.
+                    </p>
+                    <div class="mt-6 text-xl sm:text-2xl font-bold text-indigo-800">
+                        <p class="mb-2">ליצירת קשר עם המדריך:</p>
+                        <p>ווטסאפ: <a href="https://wa.me/972546609385" target="_blank" class="hover:text-[#B8860B] transition-colors">054-6609385</a></p>
+                        <p>אימייל: <a href="mailto:zaviner@gmail.com" target="_blank" class="hover:text-[#B8860B] transition-colors">zaviner@gmail.com</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Custom Cursor JavaScript
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        // Parallax Scrolling JavaScript
+        const parallaxLayers = document.querySelectorAll('.parallax-bg-layer');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            parallaxLayers.forEach(layer => {
+                const speed = parseFloat(layer.dataset.speed); // Get speed from data attribute
+                layer.style.transform = `translateY(${scrollY * speed}px)`;
+            });
+        });
+
+        // Intersection Observer for reveal animations
+        const revealItems = document.querySelectorAll('.reveal-item');
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.2 // Trigger when 20% of the item is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Optionally, stop observing once visible if animation should only happen once
+                    // observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        revealItems.forEach(item => {
+            observer.observe(item);
+        });
+    </script>
+</body>
+</html>

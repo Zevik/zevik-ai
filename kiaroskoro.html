@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הבזקי תבונה באפלה: זאביק אבינר - מנחה הדרך ב-AI</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Chiaroscuro feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;700&family=Open+Sans+Hebrew:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles for the immersive experience */
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            font-family: 'Open Sans Hebrew', sans-serif;
+            color: #d1d5db; /* Default light gray text for contrast */
+            background-color: #030712; /* Very dark, almost black background */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Frank Ruhl Libre', serif;
+            color: #f3f4f6; /* Lighter text for headings */
+        }
+
+        /* Chiaroscuro-inspired fixed background with subtle animation */
+        .chiaroscuro-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 60% 40%, rgba(30,30,30,0.4) 0%, rgba(0,0,0,0.8) 50%, rgba(0,0,0,1) 100%);
+            z-index: -1; /* Ensure background is behind content */
+            animation: breathe-bg 60s infinite alternate ease-in-out; /* Subtle breathing animation */
+        }
+
+        @keyframes breathe-bg {
+            0% {
+                background: radial-gradient(circle at 60% 40%, rgba(30,30,30,0.4) 0%, rgba(0,0,0,0.8) 50%, rgba(0,0,0,1) 100%);
+            }
+            50% {
+                background: radial-gradient(circle at 40% 60%, rgba(30,30,30,0.3) 0%, rgba(0,0,0,0.9) 60%, rgba(0,0,0,1) 100%);
+            }
+            100% {
+                background: radial-gradient(circle at 60% 40%, rgba(30,30,30,0.4) 0%, rgba(0,0,0,0.8) 50%, rgba(0,0,0,1) 100%);
+            }
+        }
+
+        /* Custom Cursor Styling - MANDATORY High Contrast */
+        #custom-cursor {
+            position: fixed;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            pointer-events: none; /* Crucial: allows clicking elements beneath the cursor */
+            z-index: 9999; /* Always on top of everything */
+            transition: transform 0.15s ease-out, opacity 0.2s ease-out, box-shadow 0.2s ease-out;
+            border: 2px solid #FFFFFF; /* White border for visibility on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), /* Dark shadow for visibility on light backgrounds */
+                        0 0 15px rgba(255, 255, 255, 0.4); /* Subtle glow effect */
+            transform: translate(-50%, -50%) scale(1); /* Center the cursor */
+            opacity: 0.9;
+        }
+        #custom-cursor.active {
+            transform: translate(-50%, -50%) scale(1.2); /* Grow on interaction */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8),
+                        0 0 25px rgba(255, 255, 255, 0.7); /* Brighter glow on interaction */
+            opacity: 1;
+        }
+
+        /* Chiaroscuro "light reveal" effect for content sections */
+        .light-reveal-initial {
+            opacity: 0;
+            filter: blur(10px);
+            transform: translateY(20px) scale(0.98);
+            transition: opacity 1s ease-out, filter 1s ease-out, transform 1s ease-out;
+        }
+        .light-reveal-active {
+            opacity: 1;
+            filter: blur(0px);
+            transform: translateY(0) scale(1);
+        }
+
+        /* Hover effect for individual interactive text elements */
+        .interactive-light {
+            transition: opacity 0.6s ease-out, filter 0.6s ease-out, transform 0.6s ease-out, text-shadow 0.6s ease-out;
+            opacity: 0.7; /* Start slightly dim */
+            filter: blur(2px);
+        }
+        .interactive-light:hover {
+            opacity: 1;
+            filter: blur(0px);
+            transform: scale(1.02);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.7); /* Stronger glow on hover */
+        }
+
+        /* Specific styles for Zevik's image to fit Chiaroscuro */
+        .zevik-image {
+            filter: grayscale(80%) brightness(70%); /* Desaturate and darken */
+            transition: filter 0.8s ease-out;
+        }
+        .zevik-image:hover {
+            filter: grayscale(0%) brightness(100%); /* Full color and brightness on hover */
+        }
+    </style>
+</head>
+<body class="cursor-none text-right"> <!-- Hide default cursor, enforce RTL text alignment -->
+    <div class="chiaroscuro-bg"></div>
+
+    <!-- Custom Cursor Element -->
+    <div id="custom-cursor"></div>
+
+    <main class="relative z-10 min-h-screen flex flex-col justify-start items-center p-8 sm:p-12 md:p-16 lg:p-24 overflow-hidden">
+
+        <!-- Main Title / Opening Statement -->
+        <section class="max-w-4xl w-full my-16 text-center light-reveal-initial" data-delay="0">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight text-white drop-shadow-lg interactive-light">
+                הבזקי תבונה באפלה:
+                <br>
+                מסע אל לב הבינה המלאכותית
+            </h1>
+            <p class="text-xl sm:text-2xl text-gray-300 mb-8 interactive-light">
+                ממעמקי הצללים, האור נדלק.
+                <br>
+                אנו פורשים שבילים להבנה, להאיר את הלא-ידוע.
+            </p>
+        </section>
+
+        <!-- Core Message: AI Accessibility -->
+        <section class="max-w-3xl w-full my-16 light-reveal-initial" data-delay="200">
+            <h2 class="text-3xl sm:text-4xl font-semibold mb-6 text-gray-100 interactive-light">האור שבקצות אצבעותיך</h2>
+            <p class="text-lg sm:text-xl leading-relaxed text-gray-400 interactive-light">
+                בנקודת המפגש בין צל לאור, בין הלא-ידוע לבהיר, אנו הופכים את הבינה המלאכותית לא רק לחידה, כי אם לכוח בידך – מראשיתו, כהד חרישי, ועד פסגות יצירה, כזרקור בוהק. כלים אלו, כפיסות אור, יהפכו את המחר להיום. אנו מנגישים את הפלא, מפרקים את המסתורין, ומעניקים לך את המפתח לשלוט בו.
+            </p>
+        </section>
+
+        <!-- Target Audience: Who is called to the light? -->
+        <section class="max-w-3xl w-full my-16 light-reveal-initial" data-delay="400">
+            <h2 class="text-3xl sm:text-4xl font-semibold mb-6 text-gray-100 interactive-light">למי נקרא לצאת מהצללים?</h2>
+            <div class="space-y-6 text-gray-400 text-lg sm:text-xl">
+                <p class="interactive-light">
+                    <span class="text-yellow-300 font-bold">»</span> למחפשי הגילוי הראשון: אלו המתחילים במסעם, סקרנים להכיר את העולם המופלא של ה-AI.
+                </p>
+                <p class="interactive-light">
+                    <span class="text-yellow-300 font-bold">»</span> לבעלי המקצוע המבקשים להאיר את דרכם: להטמיע כלים חכמים בעבודתם ולפרוץ דרך.
+                </p>
+                <p class="interactive-light">
+                    <span class="text-yellow-300 font-bold">»</span> למנהיגים ולארגונים: המבקשים לנתב אור חדש לצוותיהם ולהוביל לחדשנות.
+                </p>
+                <p class="interactive-light">
+                    <span class="text-yellow-300 font-bold">»</span> לחלוצים המעמיקים: המבקשים לפסל עתיד מואר במו ידיהם בפיתוח פרויקטים מבוססי AI.
+                </p>
+            </div>
+        </section>
+
+        <!-- Expertise Areas: Paths of revelation -->
+        <section class="max-w-3xl w-full my-16 light-reveal-initial" data-delay="600">
+            <h2 class="text-3xl sm:text-4xl font-semibold mb-6 text-gray-100 interactive-light">בנתיבי האור נגלה:</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-lg sm:text-xl text-gray-400">
+                <p class="interactive-light"><span class="text-emerald-300 font-bold">❖</span> ליצור סיפורים מליבת הדממה וטקסטים מבריקים.</p>
+                <p class="interactive-light"><span class="text-emerald-300 font-bold">❖</span> לבנות מציאויות וירטואליות ואפליקציות חכמות.</p>
+                <p class="interactive-light"><span class="text-emerald-300 font-bold">❖</span> לארוג רשתות חשיבה ופיתוח אתרים מבוססי AI.</p>
+                <p class="interactive-light"><span class="text-emerald-300 font-bold">❖</span> לפענח את לחשי הנתונים ולחקור תובנות עמוקות.</p>
+                <p class="interactive-light"><span class="text-emerald-300 font-bold">❖</span> לצייר חזיונות מתוך הריק וליצור אמנות דיגיטלית.</p>
+                <p class="interactive-light"><span class="text-emerald-300 font-bold">❖</span> לפסל תהליכים נשכחים למכניזם זוהר באמצעות אוטומציה.</p>
+            </div>
+        </section>
+
+        <!-- Services Offered: Gates to light -->
+        <section class="max-w-3xl w-full my-16 light-reveal-initial" data-delay="800">
+            <h2 class="text-3xl sm:text-4xl font-semibold mb-6 text-gray-100 interactive-light">השערים לאור:</h2>
+            <div class="space-y-6 text-lg sm:text-xl text-gray-400">
+                <p class="interactive-light">
+                    <span class="text-purple-300 font-bold">► סדנאות קבוצתיות</span> - מפגשי התמרה מעשיים, שבהם יחד נפרוץ את החשכה ונחשל את כלי העתיד.
+                </p>
+                <p class="interactive-light">
+                    <span class="text-purple-300 font-bold">► שיעורים פרטיים</span> - פנס אישי במבוך הידע, מותאם במדויק לקצב ולצרכים הייחודיים שלך.
+                </p>
+                <p class="interactive-light">
+                    <span class="text-purple-300 font-bold">► הרצאות לארגונים</span> - הבזקי תובנה המרחיבים אופקים ומדליקים ניצוץ של חדשנות בצוותים שלמים.
+                </p>
+                <p class="interactive-light">
+                    <span class="text-purple-300 font-bold">► ייעוץ ופיתוח פרויקטים</span> - ליווי צמוד מקצועי, להאיר את הדרך וללוות אותך בפריצת הדרך שלך.
+                </p>
+            </div>
+        </section>
+
+        <!-- The Guide: Zevik Aviner -->
+        <section class="max-w-3xl w-full my-16 light-reveal-initial flex flex-col items-center text-center" data-delay="1000">
+            <div class="mb-8 p-4 bg-gray-900 bg-opacity-50 rounded-lg shadow-xl interactive-light flex flex-col md:flex-row items-center justify-center">
+                <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="zevik-image w-32 h-32 md:w-48 md:h-48 rounded-full object-cover border-4 border-gray-700 shadow-lg mb-4 md:mb-0 md:ml-6" />
+                <div class="md:text-right text-center">
+                    <h2 class="text-3xl sm:text-4xl font-semibold mb-4 text-gray-100 interactive-light">זאביק אבינר – נווט האור</h2>
+                    <p class="text-lg sm:text-xl leading-relaxed text-gray-400 interactive-light">
+                        אמן אלגוריתמים, בעל ניסיון רב בהפיכת ערפילים דיגיטליים למפת דרכים בהירה. מומחה בהנגשת הפלא, והפיכתו למגדלור יומיומי בעולמך. זאביק מאיר את הדרך מהצללים אל היכולת המעשית, צעד אחר צעד.
+                    </p>
+                </div>
+            </div>
+            <!-- Contact Information - revealed with delay -->
+            <div class="mt-8 text-xl sm:text-2xl text-yellow-300 font-bold light-reveal-initial" data-delay="1200">
+                <p class="mb-2 interactive-light">ליצירת קשר עם נווט האור:</p>
+                <p class="mb-2 interactive-light">ווטסאפ: <a href="tel:054-6609385" class="hover:text-white transition-colors duration-300">054-6609385</a></p>
+                <p class="interactive-light">אימייל: <a href="mailto:zaviner@gmail.com" class="hover:text-white transition-colors duration-300">zaviner@gmail.com</a></p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // JavaScript for Custom Cursor Interaction
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        // Add 'active' class to cursor on hover over interactive elements
+        // This covers links, buttons, and elements with the 'interactive-light' class
+        document.querySelectorAll('a, button, input[type="submit"], .interactive-light, .zevik-image').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+
+        // JavaScript for Chiaroscuro "light-reveal" on scroll/visibility
+        const revealElements = document.querySelectorAll('.light-reveal-initial');
+
+        // Intersection Observer options for controlling when elements become visible
+        const observerOptions = {
+            root: null, // Use the viewport as the root
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = parseInt(entry.target.dataset.delay || '0');
+                    setTimeout(() => {
+                        entry.target.classList.remove('light-reveal-initial');
+                        entry.target.classList.add('light-reveal-active');
+                    }, delay);
+                    observer.unobserve(entry.target); // Stop observing once the element is revealed
+                }
+            });
+        }, observerOptions);
+
+        // Attach the observer to all initially hidden elements
+        revealElements.forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

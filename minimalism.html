@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>העתיד אינו ממתין. הוא כאן.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        assistant: ['Assistant', 'sans-serif'],
+                    },
+                    colors: {
+                        'ai-dark': '#0a0a0a',
+                        'ai-light': '#f0f0f0',
+                        'ai-accent': '#00bcd4', // A subtle cyan/teal for accent, representing tech/AI
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            cursor: none;
+            font-family: 'Assistant', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            margin: 0;
+            overflow: hidden;
+            background-color: var(--ai-dark);
+            height: 100vh;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF;
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8);
+            transition: transform 0.1s ease-out, opacity 0.3s ease;
+            transform: translate(-50%, -50%);
+            opacity: 1;
+        }
+
+        .custom-cursor.hovering {
+            transform: translate(-50%, -50%) scale(1.5);
+            opacity: 0.7;
+            border-color: var(--ai-accent);
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.5), 0 0 15px rgba(0,188,212,0.6);
+        }
+
+        .section-fade-in {
+            opacity: 0;
+            transition: opacity 1.5s ease-out, transform 1.5s ease-out;
+            transform: translateY(50px);
+        }
+
+        .section-fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .zevik-image {
+            filter: grayscale(80%) brightness(120%) contrast(100%);
+            transition: filter 0.5s ease-in-out;
+        }
+        .zevik-image:hover {
+            filter: grayscale(0%) brightness(100%) contrast(100%);
+        }
+
+        .interactive-word {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .interactive-word:hover {
+            color: var(--ai-accent);
+            transform: translateY(-5px);
+        }
+
+        .interactive-word::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: 0;
+            width: 0%;
+            height: 1px;
+            background-color: var(--ai-accent);
+            transition: width 0.3s ease-out;
+        }
+
+        .interactive-word:hover::after {
+            width: 100%;
+        }
+
+        .concept-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .concept-card:hover {
+            transform: translateY(-10px);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-ai-dark text-ai-light font-assistant min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div id="custom-cursor" class="custom-cursor"></div>
+
+    <div id="experience-container" class="relative w-full h-full max-w-5xl mx-auto flex flex-col items-center justify-center text-center">
+
+        <h1 id="main-title" class="text-4xl sm:text-5xl md:text-7xl font-light leading-snug mb-8 text-ai-light section-fade-in">
+            העתיד אינו ממתין. הוא כאן.
+        </h1>
+        <p id="sub-title" class="text-xl sm:text-2xl md:text-3xl font-extralight text-gray-400 mb-12 section-fade-in">
+            האם נשלוט בו, או נישלט על ידו?
+        </p>
+
+        <div id="ai-gate" class="text-3xl sm:text-4xl md:text-5xl font-semibold text-ai-accent cursor-pointer hover:scale-105 transition-all duration-500 section-fade-in">
+            <span class="interactive-word p-2">השער לבינה המלאכותית נפתח</span>
+        </div>
+
+        <div id="revealed-content" class="absolute inset-0 flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-1000 bg-ai-dark z-10 p-4 overflow-auto">
+
+            <div class="mb-16 section-fade-in flex flex-col items-center">
+                <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="zevik-image w-32 h-32 md:w-40 md:h-40 rounded-full mx-auto mb-6 shadow-lg object-cover">
+                <h2 class="text-3xl md:text-4xl font-semibold text-ai-light mb-4">
+                    זאביק אבינר <span class="text-ai-accent"></span>
+                </h2>
+                <p class="text-lg md:text-xl font-light text-gray-300 max-w-2xl px-4">
+                    המנחה הדרך. המומחה המנגיש את הבלתי נתפס.<br>
+                    מפתח, חוקר, ומספר סיפורים בעולם ה-AI המשתנה ללא הרף.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-4xl text-right px-4 mb-16">
+                <div class="concept-card p-6 rounded-lg shadow-xl hover:shadow-2xl flex flex-col items-start text-right section-fade-in">
+                    <h3 class="text-xl font-medium text-ai-accent mb-3">מילים חכמות</h3>
+                    <p class="text-gray-300 text-sm">יצירת טקסטים, סיפורים, ותוכן מרתק בכוח ה-AI. לשחרר את הכתיבה.</p>
+                </div>
+                <div class="concept-card p-6 rounded-lg shadow-xl hover:shadow-2xl flex flex-col items-start text-right section-fade-in">
+                    <h3 class="text-xl font-medium text-ai-accent mb-3">קוד יצירתי</h3>
+                    <p class="text-gray-300 text-sm">בניית אפליקציות חכמות ואתרים מתקדמים. חדשנות בפיתוח.</p>
+                </div>
+                <div class="concept-card p-6 rounded-lg shadow-xl hover:shadow-2xl flex flex-col items-start text-right section-fade-in">
+                    <h3 class="text-xl font-medium text-ai-accent mb-3">תובנות עמוקות</h3>
+                    <p class="text-gray-300 text-sm">ניתוח נתונים, מחקר, וגילוי מגמות נסתרות. להבין מעבר לגלוי.</p>
+                </div>
+                <div class="concept-card p-6 rounded-lg shadow-xl hover:shadow-2xl flex flex-col items-start text-right section-fade-in">
+                    <h3 class="text-xl font-medium text-ai-accent mb-3">אמנות חדשה</h3>
+                    <p class="text-gray-300 text-sm">יצירת תמונות, קונספטים, ואמנות ויזואלית פורצת דרך. לדמיין ולבנות.</p>
+                </div>
+                <div class="concept-card p-6 rounded-lg shadow-xl hover:shadow-2xl flex flex-col items-start text-right section-fade-in">
+                    <h3 class="text-xl font-medium text-ai-accent mb-3">זמן משוחרר</h3>
+                    <p class="text-gray-300 text-sm">אוטומציה של תהליכים משעממים ומורכבים. להתמקד בעיקר.</p>
+                </div>
+                <div class="concept-card p-6 rounded-lg shadow-xl hover:shadow-2xl flex flex-col items-start text-right section-fade-in">
+                    <h3 class="text-xl font-medium text-ai-accent mb-3">הדרכה אישית</h3>
+                    <p class="text-gray-300 text-sm">סדנאות, שיעורים פרטיים, וייעוץ מותאם אישית. לשלוט ב-AI, צעד אחר צעד.</p>
+                </div>
+            </div>
+
+            <div class="mt-8 mb-8 text-center section-fade-in">
+                <p class="text-lg md:text-xl font-light text-gray-400 mb-4">
+                    רוצים להצטרף למסע?
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a href="https://wa.me/972546609385" class="text-ai-accent text-lg md:text-xl font-medium hover:underline transition-colors duration-300 flex items-center gap-2" style="direction: ltr;">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.52 3.4 1.48 4.85l-1.57 5.75 5.86-1.54c1.4.77 2.94 1.18 4.54 1.18 5.46 0 9.91-4.45 9.91-9.91-.01-5.46-4.46-9.91-9.92-9.91zM17.43 15.93c-.15.22-.57.28-1.08.06-.52-.22-.64-.32-.91-.43-.27-.11-.59-.22-.92.22-.32.44-.64.44-.95.11-.32-.32-.67-.32-1.28-.73-.61-.43-1.02-1.04-1.35-1.56-.32-.51-.04-.8.22-1.06.25-.25.57-.61.85-.92.28-.32.32-.57.22-.75-.11-.2-.61-.52-.8-.73-.2-.22-.32-.22-.59-.22-.27 0-.57.06-.85.06-.28 0-.52.11-.7.38-.18.27-.67.66-.67 1.61 0 .95.7 1.86.8 1.99.11.13 1.35 2.07 3.28 2.87 1.93.8 2.45.66 2.9.61.45-.05.95-.38 1.08-.65.13-.27.13-.51.09-.61-.05-.11-.15-.17-.32-.25z"/></svg>
+                        <span style="direction: ltr;">054-6609385</span>
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="text-ai-accent text-lg md:text-xl font-medium hover:underline transition-colors duration-300 flex items-center gap-2" style="direction: ltr;">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        <span style="direction: ltr;">zaviner@gmail.com</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        const interactiveElements = document.querySelectorAll('.interactive-word, .concept-card, a');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseover', () => cursor.classList.add('hovering'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const initialSections = document.querySelectorAll('#main-title, #sub-title, #ai-gate');
+            initialSections.forEach((section, index) => {
+                setTimeout(() => {
+                    section.classList.add('is-visible');
+                }, index * 400 + 500);
+            });
+        });
+
+        const aiGate = document.getElementById('ai-gate');
+        const mainTitle = document.getElementById('main-title');
+        const subTitle = document.getElementById('sub-title');
+        const revealedContent = document.getElementById('revealed-content');
+
+        aiGate.addEventListener('click', () => {
+            mainTitle.classList.remove('is-visible');
+            subTitle.classList.remove('is-visible');
+            aiGate.classList.remove('is-visible');
+            
+            mainTitle.style.opacity = '0';
+            subTitle.style.opacity = '0';
+            aiGate.style.opacity = '0';
+            aiGate.style.pointerEvents = 'none';
+
+            setTimeout(() => {
+                revealedContent.style.opacity = '1';
+                revealedContent.style.pointerEvents = 'auto';
+
+                const revealedSections = revealedContent.querySelectorAll('.section-fade-in');
+                revealedSections.forEach((section, index) => {
+                    setTimeout(() => {
+                        section.classList.add('is-visible');
+                    }, index * 300 + 100);
+                });
+
+            }, 800);
+        });
+    </script>
+</body>
+</html>

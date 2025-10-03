@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הארה דיגיטלית: שולטים בבינה המלאכותית</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'thangka-deep-blue': '#0A1C40', /* Very dark blue, almost black */
+                        'thangka-royal-blue': '#1A3E73',
+                        'thangka-gold': '#FFD700',
+                        'thangka-red': '#A32A2A',
+                        'thangka-green': '#2B7A0C',
+                        'thangka-white': '#F0F0F0',
+                        'thangka-off-white': '#E0E0D0',
+                        'thangka-purple': '#4A1A5B', /* Added for depth and spiritual feel */
+                        'thangka-dark-purple': '#2D0F38',
+                    },
+                    fontFamily: {
+                        'frank-ruhl-libre': ['"Frank Ruhl Libre"', 'serif'],
+                        'rubik': ['Rubik', 'sans-serif'],
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        pulseSlow: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.03)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        }
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 1s ease-out forwards',
+                        'pulse-slow': 'pulseSlow 3s infinite ease-in-out',
+                        'fade-in': 'fadeIn 1s ease-out forwards',
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;700&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Rubik', sans-serif;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Frank Ruhl Libre', serif;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.5); /* Gold glow */
+        }
+
+        .cursor-custom {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: width 0.2s ease, height 0.2s ease, border-width 0.2s ease;
+            border: 2px solid #FFFFFF; /* High contrast border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* High contrast shadow */
+            transform: translate(-50%, -50%); /* Center the cursor */
+        }
+
+        .cursor-custom.hovered {
+            width: 40px;
+            height: 40px;
+            border-width: 4px;
+        }
+
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            pointer-events: none;
+            background-size: cover;
+            background-position: center center;
+            opacity: 0.1;
+        }
+        
+        .mandala-petal-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px; /* Base size */
+            height: 100px; /* Base size */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease-in-out;
+            cursor: pointer;
+            border: 1px solid theme('colors.thangka-gold');
+            background-color: theme('colors.thangka-royal-blue');
+            box-shadow: 0 0 5px rgba(255, 215, 0, 0.3);
+            border-radius: 1rem;
+            padding: 1rem;
+            text-align: center;
+            z-index: 5;
+        }
+        @media (min-width: 768px) {
+            .mandala-petal-wrapper {
+                width: 300px; /* md size */
+                height: 150px; /* md size */
+            }
+        }
+        .mandala-petal-wrapper:hover {
+            transform: translate(-50%, -50%) scale(1.05) var(--initial-rotation) var(--final-rotation);
+            box-shadow: 0 0 20px theme('colors.thangka-gold');
+            background-color: theme('colors.thangka-purple');
+            z-index: 10;
+        }
+
+        /* Positions for 6 petals */
+        .petal-1 { transform: translate(-50%, -50%) rotate(0deg) translateX(150px) rotate(0deg); }
+        .petal-2 { transform: translate(-50%, -50%) rotate(60deg) translateX(150px) rotate(-60deg); }
+        .petal-3 { transform: translate(-50%, -50%) rotate(120deg) translateX(150px) rotate(-120deg); }
+        .petal-4 { transform: translate(-50%, -50%) rotate(180deg) translateX(150px) rotate(-180deg); }
+        .petal-5 { transform: translate(-50%, -50%) rotate(240deg) translateX(150px) rotate(-240deg); }
+        .petal-6 { transform: translate(-50%, -50%) rotate(300deg) translateX(150px) rotate(-300deg); }
+
+        @media (min-width: 768px) {
+            .petal-1 { transform: translate(-50%, -50%) rotate(0deg) translateX(250px) rotate(0deg); }
+            .petal-2 { transform: translate(-50%, -50%) rotate(60deg) translateX(250px) rotate(-60deg); }
+            .petal-3 { transform: translate(-50%, -50%) rotate(120deg) translateX(250px) rotate(-120deg); }
+            .petal-4 { transform: translate(-50%, -50%) rotate(180deg) translateX(250px) rotate(-180deg); }
+            .petal-5 { transform: translate(-50%, -50%) rotate(240deg) translateX(250px) rotate(-240deg); }
+            .petal-6 { transform: translate(-50%, -50%) rotate(300deg) translateX(250px) rotate(-300deg); }
+        }
+        /* Custom scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: theme('colors.thangka-gold');
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            z-index: 1000;
+            animation: bounce 2s infinite;
+            transition: opacity 0.3s ease;
+        }
+
+        .scroll-indicator.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .scroll-indicator::after {
+            content: '↓'; /* Down arrow */
+            color: theme('colors.thangka-deep-blue');
+            font-size: 24px;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen bg-thangka-deep-blue text-thangka-off-white font-rubik overflow-x-hidden">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="cursor-custom"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-layer bg-thangka-royal-blue" style="transform: translateY(0px);" data-speed="0.05">
+        <div class="absolute inset-0 bg-gradient-to-br from-thangka-royal-blue to-thangka-dark-purple opacity-30"></div>
+    </div>
+    <div class="parallax-layer bg-contain bg-no-repeat bg-center" style="transform: translateY(0px); opacity: 0.05;" data-speed="0.1">
+        <!-- SVG for a subtle mandala-like pattern -->
+        <svg class="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" fill="none" stroke="currentColor" stroke-width="0.1" style="color: var(--thangka-gold);">
+            <circle cx="50" cy="50" r="40" opacity="0.2"/>
+            <path d="M50 10 L60 40 L90 50 L60 60 L50 90 L40 60 L10 50 L40 40 Z" opacity="0.2"/>
+            <circle cx="50" cy="50" r="20" opacity="0.3"/>
+            <circle cx="50" cy="50" r="10" opacity="0.4"/>
+        </svg>
+    </div>
+    <div class="parallax-layer bg-contain bg-no-repeat bg-left-top" style="transform: translateY(0px); opacity: 0.03;" data-speed="0.2">
+        <!-- Another SVG for abstract patterns -->
+        <svg class="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice" fill="none" stroke="currentColor" stroke-width="0.1" style="color: var(--thangka-red);">
+            <path d="M10 10 Q50 0 90 10 T90 50 Q100 50 90 90 T50 90 Q0 90 10 50 T10 10 Z" opacity="0.1"/>
+            <path d="M30 30 L70 30 L70 70 L30 70 Z" opacity="0.15"/>
+        </svg>
+    </div>
+
+    <!-- Scroll indicator -->
+    <a href="#about" id="scroll-indicator" class="scroll-indicator"></a>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 p-8 md:p-16 max-w-7xl mx-auto min-h-screen flex flex-col">
+
+        <!-- Header/Intro Section -->
+        <section class="text-center mb-24 mt-16 md:mt-0 relative w-full flex flex-col items-center flex-grow justify-center">
+            <h1 class="text-6xl md:text-8xl font-frank-ruhl-libre font-bold leading-tight drop-shadow-lg animate-fade-in-up text-thangka-gold" style="animation-delay: 0.2s;">
+                המסע אל הארה דיגיטלית
+            </h1>
+            <h2 class="text-3xl md:text-5xl font-rubik mt-4 md:mt-8 leading-relaxed text-thangka-off-white animate-fade-in-up" style="animation-delay: 0.4s;">
+                למדו לשלוט בבינה המלאכותית - העתיד הוא עכשיו
+            </h2>
+            <p class="mt-8 md:mt-12 max-w-3xl text-lg md:text-xl leading-loose animate-fade-in-up text-thangka-white opacity-90" style="animation-delay: 0.6s;">
+                בעידן שבו הקדמה הטכנולוגית דומה לנהר שוצף, הבינה המלאכותית היא המפתח לזרימה בחכמה. אנו מזמינים אתכם למסע עמוק של גילוי, שבו נפרש יחד את סודות ה-AI, נהפוך כלים מורכבים לנגישים, ונעצים אתכם ליצור, לחדש ולהוביל. זהו לא רק לימוד - זוהי טרנספורמציה.
+            </p>
+            <a href="#about" class="mt-10 px-8 py-3 bg-thangka-gold text-thangka-deep-blue text-xl font-bold rounded-full hover:bg-thangka-off-white transition duration-300 transform hover:scale-105 shadow-lg animate-fade-in-up" style="animation-delay: 0.8s;">
+                צאו למסע
+            </a>
+        </section>
+
+        <!-- About Section - The Core Message -->
+        <section id="about" class="my-24 md:my-32 text-center max-w-4xl mx-auto">
+            <h2 class="text-5xl md:text-6xl font-frank-ruhl-libre mb-12 text-thangka-gold">
+                הפיכת הבלתי נודע לנגיש: האמת הפשוטה של ה-AI
+            </h2>
+            <div class="relative p-8 md:p-12 bg-thangka-royal-blue rounded-3xl shadow-2xl border-2 border-thangka-gold transform rotate-3 scale-95 origin-center transition-all duration-500 hover:rotate-0 hover:scale-100 hover:shadow-thangka-gold">
+                <p class="text-xl md:text-2xl leading-relaxed text-thangka-white mb-6 animate-fade-in">
+                    המסר המרכזי שלנו הוא פשוט וברור: הבינה המלאכותית אינה מיועדת רק למעטים. היא כוח עוצמתי שניתן לרתום אותו לשיפור חיי היומיום והקריירה של כל אחד ואחת.
+                </p>
+                <p class="text-lg md:text-xl leading-relaxed text-thangka-off-white animate-fade-in" style="animation-delay: 0.2s;">
+                    אנו מפרקים את המורכבות, מציעים כלים מעשיים ושיטות עבודה שניתן ליישם מיד. בין אם אתם עושים את צעדיכם הראשונים או מחפשים להעמיק את שליטתכם, אצלנו תמצאו את הדרך להפוך את ה-AI לבעל ברית חזק בעולמכם.
+                </p>
+                <div class="absolute inset-0 bg-gradient-to-tr from-thangka-royal-blue to-thangka-purple opacity-20 rounded-3xl"></div>
+            </div>
+        </section>
+
+        <!-- Target Audience Section - Paths to Enlightenment -->
+        <section class="my-24 md:my-32 text-center max-w-5xl mx-auto">
+            <h2 class="text-5xl md:text-6xl font-frank-ruhl-libre mb-16 text-thangka-gold">
+                מי נמצאי הדרך?
+            </h2>
+            <div class="grid md:grid-cols-2 gap-12 text-right">
+                <div class="p-8 bg-thangka-purple rounded-xl shadow-xl border border-thangka-red transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:border-thangka-gold">
+                    <h3 class="text-3xl font-frank-ruhl-libre mb-4 text-thangka-gold">המתחילים והסקרנים</h3>
+                    <p class="text-lg leading-loose text-thangka-off-white">
+                        לכל מי שמעוניין להכיר את עולם ה-AI, להבין את יסודותיו ולפרוץ את מחסום הפחד מטכנולוגיה חדשה. אנו נלווה אתכם צעד אחר צעד אל תוך הלא נודע.
+                    </p>
+                </div>
+                <div class="p-8 bg-thangka-royal-blue rounded-xl shadow-xl border border-thangka-red transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:border-thangka-gold">
+                    <h3 class="text-3xl font-frank-ruhl-libre mb-4 text-thangka-gold">אנשי המקצוע והמחדשים</h3>
+                    <p class="text-lg leading-loose text-thangka-off-white">
+                        למי שמחפש להטמיע את כוחה של הבינה המלאכותית בתחומו, לייעל תהליכים, לשדרג מיומנויות וליצור יתרון תחרותי בעבודתו.
+                    </p>
+                </div>
+                <div class="p-8 bg-thangka-royal-blue rounded-xl shadow-xl border border-thangka-red transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:border-thangka-gold">
+                    <h3 class="text-3xl font-frank-ruhl-libre mb-4 text-thangka-gold">מנהלים וארגונים</h3>
+                    <p class="text-lg leading-loose text-thangka-off-white">
+                        למובילים ואנשי חזון המעוניינים להטמיע תרבות AI בארגונם, להכשיר צוותים ולפתוח אופקים חדשים של יעילות וחדשנות.
+                    </p>
+                </div>
+                <div class="p-8 bg-thangka-purple rounded-xl shadow-xl border border-thangka-red transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:border-thangka-gold">
+                    <h3 class="text-3xl font-frank-ruhl-libre mb-4 text-thangka-gold">מפתחי פרויקטים מתקדמים</h3>
+                    <p class="text-lg leading-loose text-thangka-off-white">
+                        למי שכבר בקיא ומחפש לצלול עמוק יותר, לפתח פרויקטים מורכבים, לייצר פתרונות מותאמים אישית ולדחוף את גבולות היכולת של ה-AI.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Specializations Section - The Mandala of AI Wisdom -->
+        <section class="my-24 md:my-32 text-center w-full">
+            <h2 class="text-5xl md:text-6xl font-frank-ruhl-libre mb-16 text-thangka-gold">
+                פרח הלוטוס של התמחות ה-AI
+            </h2>
+            <div class="relative w-full max-w-4xl aspect-square mx-auto flex items-center justify-center">
+                <!-- Central core -->
+                <div class="absolute w-40 h-40 md:w-56 md:h-56 bg-thangka-gold rounded-full flex items-center justify-center shadow-xl border-4 border-thangka-white text-thangka-deep-blue text-2xl font-bold p-4 text-center z-10">
+                    <span class="text-3xl md:text-4xl">ליבת הבינה המלאכותית</span>
+                </div>
+
+                <!-- Petals (specializations) - Adjusted positioning -->
+                <div class="absolute w-full h-full flex justify-center items-center">
+                    <div class="mandala-petal-wrapper petal-1" style="--initial-rotation: rotate(0deg) translateX(150px); --final-rotation: rotate(0deg);">
+                        <div class="flex flex-col items-center">
+                            <h3 class="text-xl md:text-2xl font-frank-ruhl-libre text-thangka-gold mb-2">יצירת טקסטים ותוכן</h3>
+                            <p class="text-sm md:text-base text-thangka-off-white hidden">לכתוב, לערוך ולייצר רעיונות חדשים במהירות.</p>
+                        </div>
+                    </div>
+                    <div class="mandala-petal-wrapper petal-2" style="--initial-rotation: rotate(60deg) translateX(150px); --final-rotation: rotate(-60deg);">
+                        <div class="flex flex-col items-center">
+                            <h3 class="text-xl md:text-2xl font-frank-ruhl-libre text-thangka-gold mb-2">בניית אפליקציות חכמות</h3>
+                            <p class="text-sm md:text-base text-thangka-off-white hidden">לפתח כלים ואוטומציות המבוססים על AI.</p>
+                        </div>
+                    </div>
+                    <div class="mandala-petal-wrapper petal-3" style="--initial-rotation: rotate(120deg) translateX(150px); --final-rotation: rotate(-120deg);">
+                        <div class="flex flex-col items-center">
+                            <h3 class="text-xl md:text-2xl font-frank-ruhl-libre text-thangka-gold mb-2">פיתוח אתרים מבוססי AI</h3>
+                            <p class="text-sm md:text-base text-thangka-off-white hidden">לשלב AI באתרים כדי לשפר חווית משתמש.</p>
+                        </div>
+                    </div>
+                    <div class="mandala-petal-wrapper petal-4" style="--initial-rotation: rotate(180deg) translateX(150px); --final-rotation: rotate(-180deg);">
+                        <div class="flex flex-col items-center">
+                            <h3 class="text-xl md:text-2xl font-frank-ruhl-libre text-thangka-gold mb-2">ניתוח נתונים ומחקר</h3>
+                            <p class="text-sm md:text-base text-thangka-off-white hidden">לחשוף תובנות מנתונים במהירות וביעילות.</p>
+                        </div>
+                    </div>
+                    <div class="mandala-petal-wrapper petal-5" style="--initial-rotation: rotate(240deg) translateX(150px); --final-rotation: rotate(-240deg);">
+                        <div class="flex flex-col items-center">
+                            <h3 class="text-xl md:text-2xl font-frank-ruhl-libre text-thangka-gold mb-2">יצירת תמונות ואומנות</h3>
+                            <p class="text-sm md:text-base text-thangka-off-white hidden">להפיק ויזואליים מרהיבים בעזרת AI גנרטיבי.</p>
+                        </div>
+                    </div>
+                    <div class="mandala-petal-wrapper petal-6" style="--initial-rotation: rotate(300deg) translateX(150px); --final-rotation: rotate(-300deg);">
+                        <div class="flex flex-col items-center">
+                            <h3 class="text-xl md:text-2xl font-frank-ruhl-libre text-thangka-gold mb-2">אוטומציה של תהליכים</h3>
+                            <p class="text-sm md:text-base text-thangka-off-white hidden">לייעל משימות חוזרות ולפנות זמן יקר.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-8 text-lg text-thangka-off-white">
+                כל "עלה כותרת" בפרח הלוטוס מייצג תחום התמחות שבו תוכלו לשלוט. <br>רחפו מעל כל אחד כדי לגלות את העושר הטמון בו.
+            </p>
+        </section>
+
+
+        <!-- Services Section - Offerings on the Path -->
+        <section class="my-24 md:my-32 text-center max-w-5xl mx-auto">
+            <h2 class="text-5xl md:text-6xl font-frank-ruhl-libre mb-16 text-thangka-gold">
+                הצעות הדרך: כלים לצמיחה
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-thangka-purple p-6 rounded-xl shadow-xl border border-thangka-green transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:border-thangka-gold flex flex-col items-center text-center">
+                    <div class="text-5xl mb-4 text-thangka-gold">⚙️</div>
+                    <h3 class="text-2xl font-frank-ruhl-libre mb-3 text-thangka-gold">סדנאות קבוצתיות</h3>
+                    <p class="text-base leading-relaxed text-thangka-off-white">
+                        מעשיות וממוקדות, ללמידה משותפת והפריה הדדית בקבוצות קטנות ואינטימיות.
+                    </p>
+                </div>
+                <div class="bg-thangka-royal-blue p-6 rounded-xl shadow-xl border border-thangka-green transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:border-thangka-gold flex flex-col items-center text-center">
+                    <div class="text-5xl mb-4 text-thangka-gold">🧑‍🏫</div>
+                    <h3 class="text-2xl font-frank-ruhl-libre mb-3 text-thangka-gold">שיעורים פרטיים</h3>
+                    <p class="text-base leading-relaxed text-thangka-off-white">
+                        ליווי אישי והתאמה מלאה לרמה, לקצב ולצרכים הייחודיים שלכם.
+                    </p>
+                </div>
+                <div class="bg-thangka-purple p-6 rounded-xl shadow-xl border border-thangka-green transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:border-thangka-gold flex flex-col items-center text-center">
+                    <div class="text-5xl mb-4 text-thangka-gold">🏢</div>
+                    <h3 class="text-2xl font-frank-ruhl-libre mb-3 text-thangka-gold">הרצאות לארגונים</h3>
+                    <p class="text-base leading-relaxed text-thangka-off-white">
+                        פתיחת אופקים חדשים לצוותים, העצמת עובדים והכנה לעתיד מבוסס AI.
+                    </p>
+                </div>
+                <div class="bg-thangka-royal-blue p-6 rounded-xl shadow-xl border border-thangka-green transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl hover:border-thangka-gold flex flex-col items-center text-center">
+                    <div class="text-5xl mb-4 text-thangka-gold">💡</div>
+                    <h3 class="text-2xl font-frank-ruhl-libre mb-3 text-thangka-gold">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-base leading-relaxed text-thangka-off-white">
+                        ליווי מקצועי בתכנון, פיתוח והטמעת פתרונות AI חדשניים.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instructor Section - The Guiding Light -->
+        <section class="my-24 md:my-32 text-center max-w-4xl mx-auto" id="instructor">
+            <h2 class="text-5xl md:text-6xl font-frank-ruhl-libre mb-16 text-thangka-gold">
+                זאביק אבינר: המדריך במסע
+            </h2>
+            <div class="bg-thangka-dark-purple p-8 md:p-12 rounded-xl shadow-2xl border-2 border-thangka-gold flex flex-col md:flex-row items-center gap-8">
+                <div class="flex-shrink-0">
+                    <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="w-48 h-48 md:w-64 md:h-64 object-cover rounded-full border-4 border-thangka-gold shadow-xl animate-pulse-slow">
+                </div>
+                <div class="text-right flex-grow">
+                    <h3 class="text-4xl font-frank-ruhl-libre mb-4 text-thangka-gold">זאביק אבינר</h3>
+                    <p class="text-xl leading-relaxed text-thangka-white mb-6">
+                        מומחה בינה מלאכותית עם ניסיון עשיר ויוצא דופן בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI פורצות דרך. זאביק מתמחה באומנות ההנגשה של טכנולוגיות מורכבות, ורואה בהן כלים יומיומיים שיכולים לשנות את עולמנו. הוא המורה הרוחני לעידן הדיגיטלי, שידריך אתכם בבטחה אל עבר שליטה והבנה עמוקה של ה-AI.
+                    </p>
+                    <div class="text-lg text-thangka-off-white">
+                        <p class="mb-2"><strong><span class="text-thangka-gold">ווטסאפ:</span></strong> <a href="https://wa.me/972546609385" class="text-thangka-white hover:text-thangka-gold transition-colors duration-200">054-6609385</a></p>
+                        <p><strong><span class="text-thangka-gold">אימייל:</span></strong> <a href="mailto:zaviner@gmail.com" class="text-thangka-white hover:text-thangka-gold transition-colors duration-200">zaviner@gmail.com</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="mt-24 pb-8 text-center text-sm text-thangka-off-white opacity-70">
+            <p>&copy; 2023 הארה דיגיטלית - כל הזכויות שמורות. נבנה באהבה על ידי AI.</p>
+        </footer>
+
+    </div> <!-- End Main Content Wrapper -->
+
+    <script>
+        // JavaScript for Custom Cursor
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        const clickableElements = document.querySelectorAll('a, button, .mandala-petal-wrapper, .scroll-indicator');
+        clickableElements.forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('hovered'));
+        });
+
+        // JavaScript for Parallax Scrolling
+        document.addEventListener('scroll', () => {
+            const scrollY = window.pageYOffset;
+            document.querySelectorAll('.parallax-layer').forEach(layer => {
+                const speed = parseFloat(layer.dataset.speed);
+                layer.style.transform = `translateY(${scrollY * speed}px)`;
+            });
+
+            // Hide/show scroll indicator
+            const scrollIndicator = document.getElementById('scroll-indicator');
+            if (scrollY > 100) {
+                scrollIndicator.classList.add('hidden');
+            } else {
+                scrollIndicator.classList.remove('hidden');
+            }
+        });
+
+        // JavaScript for Mandala Petals (reveal text on hover)
+        const mandalaPetals = document.querySelectorAll('.mandala-petal-wrapper');
+        mandalaPetals.forEach(petal => {
+            const p = petal.querySelector('p'); // Get the paragraph inside the petal
+            
+            petal.addEventListener('mouseenter', () => {
+                if (p) p.classList.remove('hidden'); // Show paragraph on hover
+            });
+
+            petal.addEventListener('mouseleave', () => {
+                if (p) p.classList.add('hidden'); // Hide paragraph on mouse leave
+            });
+
+            // Initialize: hide paragraph text on load
+            if (p) p.classList.add('hidden');
+        });
+
+    </script>
+</body>
+</html>

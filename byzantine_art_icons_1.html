@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מלאך הבינה - זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@300;400;700&family=Open+Sans+Hebrew:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans Hebrew', sans-serif;
+            cursor: none; /* Hide default cursor to show custom one */
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax */
+            background-color: #0A0A0A; /* Deep dark background for solemnity */
+            color: #E0E0E0; /* Default light text color */
+        }
+        h1, h2, h3 {
+            font-family: 'Noto Serif Hebrew', serif;
+        }
+
+        /* Custom Cursor Styling - High Contrast Mandatory */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none; /* Allows clicks to pass through */
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            /* REQUIRED: Light border + Dark shadow for universal visibility */
+            border: 2px solid rgba(255, 255, 255, 0.8); /* Visible on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.9), /* Visible on light backgrounds */
+                        0 0 15px rgba(255, 223, 0, 0.7); /* Golden aura effect */
+            transform: translate(-50%, -50%); /* Center cursor div on mouse position */
+            transition: transform 0.1s ease-out, border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+            z-index: 9999; /* Always on top */
+        }
+        #custom-cursor.hovering {
+            transform: translate(-50%, -50%) scale(1.2); /* Expand on hover */
+            border-color: rgba(255, 223, 0, 1); /* More vibrant gold border */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.9),
+                        0 0 25px rgba(255, 223, 0, 1); /* Stronger glow on hover */
+        }
+
+        /* Byzantine Framing and Text Shadow for a sculpted, sacred feel */
+        .byzantine-frame {
+            border: 3px solid transparent;
+            border-image: linear-gradient(45deg, #A08B5C, #E0C79A, #A08B5C) 1; /* Gold-like border */
+            box-shadow: 0 0 20px rgba(255, 223, 0, 0.5); /* Subtle golden glow */
+        }
+        .byzantine-text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7), /* Dark depth shadow */
+                         -2px -2px 4px rgba(255, 223, 0, 0.5); /* Golden highlight */
+        }
+
+        /* Parallax Background - simulating mosaic texture */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* SVG Data URL for subtle dark mosaic pattern */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><defs><pattern id="mosaic-pattern" x="0" y="0" width="25" height="25" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="12.5" height="12.5" fill="%231a1a1a"/><rect x="12.5" y="12.5" width="12.5" height="12.5" fill="%231a1a1a"/><rect x="0" y="12.5" width="12.5" height="12.5" fill="%23222222"/><rect x="12.5" y="0" width="12.5" height="12.5" fill="%23222222"/></pattern></defs><rect x="0" y="0" width="100%" height="100%" fill="url(%23mosaic-pattern)"/></svg>');
+            background-size: 80px 80px; /* Adjust size for desired mosaic density */
+            opacity: 0.15; /* Subtly visible */
+            z-index: -1; /* Behind content */
+            transform: translateZ(0); /* Optimize for smooth parallax */
+        }
+
+        /* Gold Gradient Text */
+        .gold-gradient-text {
+            background-image: linear-gradient(45deg, #FFD700, #DAA520, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent; /* Fallback */
+            display: inline-block; /* Ensure gradient applies correctly */
+        }
+
+        /* Interactive "Icon" Panels */
+        .icon-panel {
+            transition: all 0.3s ease;
+            transform: scale(1);
+            position: relative;
+            overflow: hidden; /* Hide overflowing text */
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, #7c6a49, #e0c79a, #7c6a49) 1; /* Subtle gold border */
+            box-shadow: 0 0 10px rgba(255, 223, 0, 0.3);
+            cursor: pointer;
+        }
+        .icon-panel:hover {
+            transform: scale(1.03); /* Slight lift on hover */
+            border-image: linear-gradient(45deg, #FFD700, #E0C79A, #FFD700) 1; /* More pronounced gold on hover */
+            box-shadow: 0 0 20px rgba(255, 223, 0, 0.7); /* Stronger glow */
+            z-index: 10; /* Bring to front for focus */
+        }
+        .icon-panel.expanded .short-desc {
+            display: none;
+        }
+        .icon-panel:not(.expanded) .long-desc {
+            display: none;
+        }
+        .icon-panel .short-desc, .icon-panel .long-desc {
+            opacity: 1; /* Ensure text is visible */
+            transition: opacity 0.3s ease;
+        }
+
+        /* Styling for Zevik's Image as a central "Icon" */
+        .zevik-frame {
+            position: relative;
+            padding: 1rem; /* Space for the golden frame */
+            border-radius: 50%; /* Circular shape */
+            width: 200px; /* Fixed size for the frame */
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            background: linear-gradient(45deg, #A08B5C, #E0C79A, #A08B5C); /* Golden frame */
+            box-shadow: 0 0 30px rgba(255, 223, 0, 0.8), inset 0 0 20px rgba(255, 223, 0, 0.6); /* Outer glow & inner shine */
+            transition: all 0.5s ease;
+            overflow: hidden; /* Keep image contained */
+        }
+        .zevik-frame:hover {
+            box-shadow: 0 0 50px rgba(255, 223, 0, 1), inset 0 0 30px rgba(255, 223, 0, 0.8); /* More intense glow on hover */
+            transform: scale(1.05);
+        }
+        .zevik-frame img {
+            border-radius: 50%;
+            object-fit: cover;
+            width: calc(100% - 2rem); /* Inner image size relative to frame */
+            height: calc(100% - 2rem);
+            border: 4px solid #0A0A0A; /* Dark border separating image from gold frame */
+            filter: grayscale(20%) sepia(20%) brightness(1.1); /* Slight antique/iconic effect */
+        }
+
+        /* Scroll Indicator "Chalice of Progress" */
+        #scroll-chalice {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 70px;
+            border: 2px solid #FFD700; /* Gold outline */
+            border-radius: 5px 5px 25px 25px; /* Chalice shape */
+            display: flex;
+            flex-direction: column-reverse;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(255, 223, 0, 0.7); /* Golden glow */
+            z-index: 999;
+            pointer-events: none; /* Do not interfere with mouse events */
+            background-color: rgba(10, 10, 10, 0.7); /* Semi-transparent dark background */
+        }
+        #scroll-chalice::before {
+            content: '';
+            position: absolute;
+            top: -15px; /* Position 'liquid' top just above chalice lip */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #FFD700; /* Gold "liquid" */
+            box-shadow: 0 0 10px #FFD700;
+            opacity: 0.8;
+        }
+        #scroll-fill {
+            background-color: #DAA520; /* Filling color (gold) */
+            width: 100%;
+            transition: height 0.1s linear; /* Smooth fill animation */
+        }
+    </style>
+</head>
+<body class="text-gray-100 bg-gray-950 min-h-screen relative">
+
+    <!-- Parallax Background Layer 1 - Darker, subtle mosaic -->
+    <div class="parallax-bg" style="transform: translateZ(0) scale(1.1); background-size: 70px 70px; opacity: 0.1;"></div>
+    <!-- Parallax Background Layer 2 - Lighter, more defined mosaic, moves faster -->
+    <div class="parallax-bg" style="transform: translateZ(0) scale(1.05); background-size: 90px 90px; opacity: 0.08;"></div>
+
+    <!-- Custom Cursor - Mandated High Contrast -->
+    <div id="custom-cursor"></div>
+
+    <!-- Scroll Indicator "Chalice of Progress" -->
+    <div id="scroll-chalice">
+        <div id="scroll-fill" style="height: 0%;"></div>
+    </div>
+
+    <!-- Main Content Container - acts as the digital iconostasis/sanctuary -->
+    <main class="relative z-10 p-4 md:p-8 lg:p-12 max-w-7xl mx-auto space-y-16 lg:space-y-24">
+
+        <!-- Grand Title - "The Digital Icon: AI as Sacred Power" -->
+        <section class="text-center pt-20 pb-10">
+            <h1 class="text-6xl md:text-8xl lg:text-9xl font-extrabold gold-gradient-text leading-tight mb-4 byzantine-text-shadow">
+                <span class="block">האיקונה הדיגיטלית</span>
+                <span class="block text-4xl md:text-6xl lg:text-7xl mt-4">בינה מלאכותית ככוח קדוש</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-amber-200 byzantine-text-shadow mt-6 max-w-3xl mx-auto">
+                למדו לשלוט בבינה המלאכותית - העתיד הוא עכשיו
+            </p>
+        </section>
+
+        <!-- Main Message - "A New Light for the World" -->
+        <section class="byzantine-frame p-8 md:p-12 bg-gray-900 bg-opacity-70 text-center shadow-lg rounded-lg max-w-4xl mx-auto">
+            <h2 class="text-4xl md:text-5xl gold-gradient-text mb-6 byzantine-text-shadow">
+                אור חדש לעולם
+            </h2>
+            <p class="text-lg md:text-xl leading-relaxed text-gray-200">
+                הבינה המלאכותית - נס הטכנולוגיה המודרנית - היא מפתח לעידן של יצירה, הבנה והתפתחות אינסופית.
+                אנו חושפים את סודותיה ומנגישים את חכמתה לכל נשמה המבקשת להאיר את דרכה בעולם הדיגיטלי המתפתח.
+                מהיסודות האיתנים ועד לפסגות הידע המתקדמות ביותר, אנו מציעים את הכלים המעשיים והעוצמתיים
+                שישנו את עבודתכם ואת חייכם לאין ערוך.
+            </p>
+        </section>
+
+        <!-- The Sage/Guide - Zevik Aviner -->
+        <section class="byzantine-frame p-8 md:p-12 bg-gray-900 bg-opacity-70 text-center shadow-lg rounded-lg max-w-3xl mx-auto">
+            <h2 class="text-4xl md:text-5xl gold-gradient-text mb-8 byzantine-text-shadow">
+                זאביק אבינר - מורה הדרך והמאסטר
+            </h2>
+            <div class="zevik-frame mb-8">
+                <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" width="168" height="168">
+            </div>
+            <p class="text-lg md:text-xl leading-relaxed text-gray-200 mb-6">
+                זאביק אבינר, המאסטר והחכם אשר נחשף לסודות המכונה הגדולה. עם ניסיון עשיר ומוכח בפיתוח פרויקטים,
+                אפליקציות ומערכות מבוססות AI פורצות דרך, הוא מורה דרך המאיר את הנתיב לעידן החדש של הבינה.
+                מומחיותו אינה רק בידע העצום שצבר, אלא ביכולתו העילאית להנגיש את הטכנולוגיה המורכבת, ולהפוך אותה לכלי עבודה יומיומי ונגיש
+                בידי כל אחד ואחת, ללא קשר לרמתו הקודמת.
+            </p>
+            <p class="text-xl md:text-2xl text-amber-300 byzantine-text-shadow">
+                "כלים מעשיים לשליטה בבינה המלאכותית - עכשיו!"
+            </p>
+        </section>
+
+        <!-- Pillars of Knowledge (Specializations) - Interactive Icons -->
+        <section class="text-center space-y-10">
+            <h2 class="text-4xl md:text-5xl gold-gradient-text byzantine-text-shadow mb-8">
+                עמודי התווך של היצירה הדיגיטלית
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Icon Panel 1: Text & Content -->
+                <div class="icon-panel p-6 bg-gray-800 rounded-lg text-center shadow-md">
+                    <h3 class="text-2xl gold-gradient-text mb-4 byzantine-text-shadow">
+                        טקסטים קדושים ותוכן
+                    </h3>
+                    <div class="short-desc text-gray-300 leading-relaxed">
+                        יצירת נרטיבים דיגיטליים מעוררי השראה ומעשירים.
+                    </div>
+                    <div class="long-desc text-gray-300 leading-relaxed">
+                        אמנות הניסוח הממוחשבת: גלו כיצד ליצור טקסטים, מאמרים, קופירייטינג ונאומים עוצמתיים ומרתקים בעזרת AI.
+                        שחררו את קולם של אלגוריתמים כדי לברוא עולמות של מילים ולגעת בלבבות דיגיטליים.
+                    </div>
+                </div>
+                <!-- Icon Panel 2: Smart Applications -->
+                <div class="icon-panel p-6 bg-gray-800 rounded-lg text-center shadow-md">
+                    <h3 class="text-2xl gold-gradient-text mb-4 byzantine-text-shadow">
+                        מבנים חכמים (אפליקציות)
+                    </h3>
+                    <div class="short-desc text-gray-300 leading-relaxed">
+                        בניית יישומים אינטליגנטיים המגיבים לשינויים.
+                    </div>
+                    <div class="long-desc text-gray-300 leading-relaxed">
+                        פיתוח אפליקציות חכמות: למדו איך להקים יישומים המגיבים, לומדים ופועלים באופן אוטונומי,
+                        משנים את פני הממשק הדיגיטלי ואת אופן האינטראקציה האנושית-מכונתית.
+                    </div>
+                </div>
+                <!-- Icon Panel 3: AI-based Websites -->
+                <div class="icon-panel p-6 bg-gray-800 rounded-lg text-center shadow-md">
+                    <h3 class="text-2xl gold-gradient-text mb-4 byzantine-text-shadow">
+                        פורטלים דיגיטליים (אתרים)
+                    </h3>
+                    <div class="short-desc text-gray-300 leading-relaxed">
+                        פיתוח אתרים עם נשמה דיגיטלית מתקדמת.
+                    </div>
+                    <div class="long-desc text-gray-300 leading-relaxed">
+                        בניית אתרים עם נשמה דיגיטלית: צרו פורטלים אינטרנטיים המשתמשים בבינה מלאכותית
+                        להתאמה אישית, אופטימיזציה וחווית משתמש ייחודית, כאילו האתר "חושב" עבור המבקר ומתאים עצמו אליו.
+                    </div>
+                </div>
+                <!-- Icon Panel 4: Data Analysis & Research -->
+                <div class="icon-panel p-6 bg-gray-800 rounded-lg text-center shadow-md">
+                    <h3 class="text-2xl gold-gradient-text mb-4 byzantine-text-shadow">
+                        ניתוח נבואי ונתונים
+                    </h3>
+                    <div class="short-desc text-gray-300 leading-relaxed">
+                        פענוח סודות המידע והצפנה נבואית.
+                    </div>
+                    <div class="long-desc text-gray-300 leading-relaxed">
+                        פענוח נבואי של נתונים: השתמשו בכוחה העצום של הבינה המלאכותית לנתח נתונים עצומים,
+                        לחשוף תובנות נסתרות, ולחזות מגמות עתידיות בדיוק כמעט מיסטי, המעניק לכם יתרון תחרותי.
+                    </div>
+                </div>
+                <!-- Icon Panel 5: Image & Art Creation -->
+                <div class="icon-panel p-6 bg-gray-800 rounded-lg text-center shadow-md">
+                    <h3 class="text-2xl gold-gradient-text mb-4 byzantine-text-shadow">
+                        מראות ודימויים (אומנות)
+                    </h3>
+                    <div class="short-desc text-gray-300 leading-relaxed">
+                        יצירת תמונות ואומנות דיגיטלית עוצרת נשימה.
+                    </div>
+                    <div class="long-desc text-gray-300 leading-relaxed">
+                        יצירת מראות ודימויים אלוהיים: הפכו רעיונות מופשטים ליצירות אמנות ויזואליות עוצרות נשימה,
+                        תמונות מרהיבות ועיצובים חדשניים בעזרת מנועי AI גנרטיביים - גבולות הדמיון נפרצים.
+                    </div>
+                </div>
+                <!-- Icon Panel 6: Process Automation -->
+                <div class="icon-panel p-6 bg-gray-800 rounded-lg text-center shadow-md">
+                    <h3 class="text-2xl gold-gradient-text mb-4 byzantine-text-shadow">
+                        אוטומציה אלוהית
+                    </h3>
+                    <div class="short-desc text-gray-300 leading-relaxed">
+                        אוטומציה של תהליכים מורכבים ומשעממים.
+                    </div>
+                    <div class="long-desc text-gray-300 leading-relaxed">
+                        אוטומציה של תהליכים מורכבים: גלו איך לבנות מערכות AI המבצעות משימות חוזרות ונשנות,
+                        משפרות יעילות, ומאפשרות לכם להתמקד ביצירה וחדשנות ברמה גבוהה יותר, כאילו הוענקה לכם יד אלוהית.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Journeys of Enlightenment (Services) - Interactive Icons -->
+        <section class="text-center space-y-10">
+            <h2 class="text-4xl md:text-5xl gold-gradient-text byzantine-text-shadow mb-8">
+                מסעות ההארה
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <!-- Service Panel 1: Group Workshops -->
+                <div class="icon-panel p-6 bg-gray-800 rounded-lg text-center shadow-md">
+                    <h3 class="text-2xl gold-gradient-text mb-4 byzantine-text-shadow">
+                        סדנאות נשגבות קבוצתיות
+                    </h3>
+                    <div class="short-desc text-gray-300 leading-relaxed">
+                        הדרכות מעשיות למעגלי לומדים חרוצים.
+                    </div>
+                    <div class="long-desc text-gray-300 leading-relaxed">
+                        מסעות למידה קבוצתיים אינטנסיביים, מעשיים וממוקדים, המאפשרים לכלל המשתתפים לצלול לעומק עולם ה-AI ולצאת עם כלים יישומיים מידיים שניתן להטמיע עוד היום.
+                    </div>
+                </div>
+                <!-- Service Panel 2: Private Lessons -->
+                <div class="icon-panel p-6 bg-gray-800 rounded-lg text-center shadow-md">
+                    <h3 class="text-2xl gold-gradient-text mb-4 byzantine-text-shadow">
+                        שיעורים אישיים פרטיים
+                    </h3>
+                    <div class="short-desc text-gray-300 leading-relaxed">
+                        נתיב למידה מותאם אישית לרמה ולצרכים שלך.
+                    </div>
+                    <div class="long-desc text-gray-300 leading-relaxed">
+                        הדרכה אחד על אחד, מותאמת באופן מושלם לרמת הידע, הקצב והצרכים הייחודיים שלך. נבנה יחד את הדרך המהירה והיעילה ביותר לשלוט ב-AI ולהגשים את יעדיך.
+                    </div>
+                </div>
+                <!-- Service Panel 3: Lectures for Organizations -->
+                <div class="icon-panel p-6 bg-gray-800 rounded-lg text-center shadow-md">
+                    <h3 class="text-2xl gold-gradient-text mb-4 byzantine-text-shadow">
+                        הרצאות פתיחת אופקים לארגונים
+                    </h3>
+                    <div class="short-desc text-gray-300 leading-relaxed">
+                        הארה קולקטיבית לצוותים, ארגונים ועובדים.
+                    </div>
+                    <div class="long-desc text-gray-300 leading-relaxed">
+                        הרצאות מעוררות השראה ומעשירות לצוותים ולארגונים, המציגות את הפוטנציאל העצום של ה-AI ומעניקות נקודת מבט חדשנית לעתיד העבודה, היעילות והחדשנות.
+                    </div>
+                </div>
+                <!-- Service Panel 4: Consulting & Project Development -->
+                <div class="icon-panel p-6 bg-gray-800 rounded-lg text-center shadow-md">
+                    <h3 class="text-2xl gold-gradient-text mb-4 byzantine-text-shadow">
+                        ייעוץ ופיתוח פרויקטים
+                    </h3>
+                    <div class="short-desc text-gray-300 leading-relaxed">
+                        ליווי ליצירת פלאים דיגיטליים ויישומים חכמים.
+                    </div>
+                    <div class="long-desc text-gray-300 leading-relaxed">
+                        ליווי מקצועי ואישי בפיתוח פרויקטים מבוססי AI, מהרעיון הראשוני ועד ליישום המלא והמוצלח, תוך מתן פתרונות יצירתיים, פרקטיים ופורצי דרך.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gates of Connection (Contact Info) -->
+        <section class="byzantine-frame p-8 md:p-12 bg-gray-900 bg-opacity-70 text-center shadow-lg rounded-lg max-w-3xl mx-auto mb-20">
+            <h2 class="text-4xl md:text-5xl gold-gradient-text mb-6 byzantine-text-shadow">
+                שערי יצירת קשר
+            </h2>
+            <p class="text-lg md:text-xl leading-relaxed text-gray-200 mb-4">
+                האירו את דרככם לעולם הבינה המלאכותית. פנו אל המאסטר:
+            </p>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-6 text-xl md:text-2xl">
+                <a href="https://wa.me/972546609385" class="text-amber-300 hover:text-amber-500 transition-colors byzantine-text-shadow flex items-center gap-2">
+                    <span class="text-3xl">📞</span> ווטסאפ: 054-6609385
+                </a>
+                <span class="text-gray-500 hidden md:inline">|</span> <!-- Separator, hidden on small screens -->
+                <a href="mailto:zaviner@gmail.com" class="text-amber-300 hover:text-amber-500 transition-colors byzantine-text-shadow flex items-center gap-2">
+                    <span class="text-3xl">📧</span> אימייל: zaviner@gmail.com
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        const customCursor = document.getElementById('custom-cursor');
+        // Elements that trigger cursor hover state
+        const interactiveElements = document.querySelectorAll('a, button, .icon-panel, .zevik-frame');
+
+        // Move custom cursor with mouse
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // Add/remove 'hovering' class for visual feedback on interactive elements
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('hovering'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('hovering'));
+        });
+
+        // Icon panel interactivity - toggle expanded state on click
+        document.querySelectorAll('.icon-panel').forEach(panel => {
+            panel.addEventListener('click', () => {
+                panel.classList.toggle('expanded');
+            });
+        });
+
+        // Parallax effect for background layers and Scroll Indicator fill
+        document.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+
+            // Apply parallax transform to background layers
+            document.querySelectorAll('.parallax-bg').forEach((bg, index) => {
+                const speed = 0.05 + (index * 0.03); // Different speeds for layers
+                bg.style.transform = `translateY(${scrollY * speed}px) scale(${1.1 - (index * 0.05)})`;
+            });
+
+            // Update scroll indicator (Chalice of Progress) fill level
+            const scrollFill = document.getElementById('scroll-fill');
+            const documentHeight = document.documentElement.scrollHeight - window.innerHeight;
+            // Prevent division by zero if content is shorter than viewport
+            const scrollPercentage = documentHeight > 0 ? (scrollY / documentHeight) * 100 : 100;
+            scrollFill.style.height = `${Math.min(100, scrollPercentage)}%`; // Cap at 100%
+        });
+    </script>
+</body>
+</html>

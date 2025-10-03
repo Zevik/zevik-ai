@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>רוחות הבינה המלאכותית: המסע אל שליטה בעולם החדש</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700&family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles and Google Fonts integration */
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #0A192F; /* Deep midnight blue, evoking Arctic night */
+            color: #E0F2F7; /* Light icy blue for text */
+            cursor: none; /* Hide default cursor to use custom one */
+            overflow-x: hidden; /* Prevent horizontal scroll for parallax effects */
+        }
+        h1, h2, h3, h4, strong {
+            font-family: 'Heebo', sans-serif;
+            font-weight: 900;
+        }
+        /* Custom selection color for accessibility/aesthetics */
+        ::selection {
+            background-color: #81E6D9; /* Teal-ish highlight */
+            color: #0A192F;
+        }
+
+        /* Custom Cursor Styling - High Contrast Mandatory */
+        #custom-cursor {
+            border: 2px solid #E0F2F7; /* Light icy blue border for visibility on dark */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for visibility on light */
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease-out, width 0.1s ease-out, height 0.1s ease-out, background-color 0.1s ease-out;
+            transform: translate(-50%, -50%); /* Center cursor */
+            will-change: transform; /* Optimize for smooth animation */
+        }
+        /* Style for interactive elements to ensure cursor feedback */
+        .interactive-element {
+            cursor: none; /* Keep default cursor hidden */
+        }
+        .interactive-element:hover ~ #custom-cursor {
+            width: 2.5rem; /* Enlarge cursor */
+            height: 2.5rem;
+            background-color: rgba(224, 242, 247, 0.2); /* Subtle glow effect on hover */
+        }
+
+        /* Organic Shapes - simulating carved elements (Inuit Art Style) */
+        .carved-block {
+            background-color: rgba(10, 25, 47, 0.7); /* Semi-transparent dark blue */
+            border-radius: 60% 40% 70% 30% / 30% 70% 30% 70%; /* Organic, blob-like initial shape */
+            padding: 2.5rem;
+            backdrop-filter: blur(8px); /* Frosted glass effect for depth */
+            border: 1px solid rgba(224, 242, 247, 0.1); /* Subtle icy border */
+            transition: all 0.5s ease-in-out; /* Smooth transition for shape change */
+            position: relative; /* For z-indexing and positioning */
+        }
+        .carved-block:hover {
+            border-radius: 40% 60% 40% 60% / 60% 40% 60% 40%; /* Transform shape on hover */
+            background-color: rgba(10, 25, 47, 0.9); /* Darker on hover */
+            transform: translateY(-8px); /* Lift effect */
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4); /* Deeper shadow */
+        }
+
+        /* Special styling for contact elements as carved circles */
+        .carved-contact {
+            background-color: rgba(224, 242, 247, 0.1);
+            border-radius: 50%; /* Circular form */
+            padding: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0.5rem;
+            transition: all 0.4s ease;
+            text-decoration: none; /* Remove underline for links */
+            color: #E0F2F7; /* Ensure text is light */
+        }
+        .carved-contact:hover {
+            background-color: rgba(224, 242, 247, 0.3);
+            transform: scale(1.08); /* Slight enlargement */
+            box-shadow: 0 0 20px rgba(224, 242, 247, 0.3); /* Glowing effect */
+        }
+
+        /* Parallax Background Layers - creating depth for arctic landscape */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            will-change: transform; /* Optimize for animation */
+            background-size: cover; /* Ensure background fills */
+        }
+        /* Base deep sky */
+        .layer-1 { background: linear-gradient(to bottom, #0A192F 0%, #0A192F 50%, #173A6B 100%); z-index: -4; }
+        /* Distant icy mountains/waves - using SVG data URL */
+        .layer-2 { background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%230F2038" fill-opacity="0.8" d="M0,64L48,80C96,96,192,128,288,149.3C384,171,480,181,576,160C672,139,768,85,864,85.3C960,85,1056,139,1152,149.3C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom center; opacity: 0.6; z-index: -3; }
+        /* Closer ice formations/waves - using SVG data URL */
+        .layer-3 { background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%231E40AF" fill-opacity="0.5" d="M0,160L48,138.7C96,117,192,75,288,74.7C384,75,480,117,576,149.3C672,181,768,203,864,192C960,181,1056,139,1152,106.7C1248,75,1344,53,1392,42.7L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom center; opacity: 0.4; z-index: -2; }
+        /* Subtle northern lights-like glow */
+        .layer-4-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 80% 20%, rgba(30, 64, 175, 0.2) 0%, transparent 50%),
+                        radial-gradient(circle at 20% 70%, rgba(224, 242, 247, 0.1) 0%, transparent 50%);
+            opacity: 0.8;
+            animation: pulseGlow 15s infinite alternate ease-in-out; /* Slow pulsing animation */
+            z-index: -1; /* Closest background layer, just behind content */
+            pointer-events: none;
+        }
+
+        @keyframes pulseGlow {
+            0% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.02); }
+            100% { opacity: 0.8; transform: scale(1); }
+        }
+
+        /* Scroll reveal animation for content blocks */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px); /* Start slightly below final position */
+            transition: opacity 1s ease-out, transform 1s ease-out; /* Smooth transition */
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0); /* Move to final position */
+        }
+
+        /* Zaavik's image styling - embodying the guide */
+        .zaavik-image-container {
+            border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%; /* Initial oval/blob effect */
+            overflow: hidden; /* Ensures image stays within rounded borders */
+            display: inline-block;
+            box-shadow: 0 0 20px rgba(224, 242, 247, 0.2); /* Subtle glow */
+            transition: all 0.6s ease-in-out; /* Smooth shape and shadow transition */
+        }
+        .zaavik-image-container:hover {
+            border-radius: 30% 70% 30% 70% / 70% 30% 70% 30%; /* Shape transforms on hover */
+            box-shadow: 0 0 30px rgba(224, 242, 247, 0.4); /* More prominent glow */
+            transform: scale(1.05); /* Slight enlargement */
+        }
+        .zaavik-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Crop image to fit container */
+            filter: grayscale(80%) brightness(120%); /* Arctic, ancient feel */
+            transition: filter 0.6s ease; /* Smooth filter transition */
+        }
+        .zaavik-image:hover {
+            filter: grayscale(0%) brightness(100%); /* Reveals original color on hover, like wisdom revealed */
+        }
+
+    </style>
+</head>
+<body class="selection:bg-teal-300 selection:text-blue-900">
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-layer layer-1" id="parallax-bg-layer-1"></div>
+    <div class="parallax-layer layer-2" id="parallax-bg-layer-2"></div>
+    <div class="parallax-layer layer-3" id="parallax-bg-layer-3"></div>
+    <div class="layer-4-glow" id="parallax-bg-layer-4-glow"></div>
+
+
+    <main class="relative z-10 min-h-screen p-8 lg:p-16 flex flex-col items-center justify-center">
+
+        <!-- Introduction - The Great Iceberg of Knowledge -->
+        <section class="carved-block max-w-4xl text-center mb-24 lg:mb-32 scroll-reveal" style="z-index: 10;">
+            <h1 class="text-4xl lg:text-6xl font-extrabold mb-8 leading-tight text-white drop-shadow-lg interactive-element">
+                רוחות הבינה המלאכותית: <br class="hidden sm:block"> המסע אל שליטה בעולם החדש
+            </h1>
+            <p class="text-lg lg:text-xl leading-relaxed max-w-2xl mx-auto text-gray-200">
+                בעולם שנולד מחדש, שבו בינה מלאכותית היא כוח הטבע העצום, <strong class="text-teal-300">זאביק אבינר</strong> הוא המנחה, השאמאן של הידע.
+                הוא חושף את סודותיה, מנגיש את עוצמתה, ומלמד אותך לא רק לשרוד, אלא לשגשג בנוף הדיגיטלי האינסופי.
+                <br>
+                <em class="block mt-4 text-sm text-gray-400">העתיד הוא עכשיו - בואו נחצוב אותו יחד.</em>
+            </p>
+        </section>
+
+        <!-- Target Audience - Who Will Join the Journey? -->
+        <section class="max-w-6xl w-full my-24 lg:my-32">
+            <h2 class="text-3xl lg:text-5xl text-center mb-16 text-white drop-shadow-md scroll-reveal interactive-element">
+                מי יצטרף למסע?
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 justify-items-center">
+                <div class="carved-block w-full max-w-sm scroll-reveal interactive-element p-6">
+                    <h3 class="text-xl lg:text-2xl text-teal-300 mb-4">הציידים החדשים</h3>
+                    <p class="text-md lg:text-lg text-gray-300">
+                        אלה שזה עתה גילו את אופק ה-AI, ומבקשים להבין את רוחותיו הראשונות - כלים בסיסיים, עקרונות ראשוניים.
+                    </p>
+                </div>
+                <div class="carved-block w-full max-w-sm scroll-reveal interactive-element p-6" style="margin-top: 50px;">
+                    <h3 class="text-xl lg:text-2xl text-teal-300 mb-4">אמני המלאכה</h3>
+                    <p class="text-md lg:text-lg text-gray-300">
+                        בעלי מקצוע המבקשים לחרוט את AI בלב עשייתם, להפוך כלים מסורתיים לחדשניים, ולייעל תהליכי עבודה.
+                    </p>
+                </div>
+                <div class="carved-block w-full max-w-sm scroll-reveal interactive-element p-6" style="margin-top: -30px;">
+                    <h3 class="text-xl lg:text-2xl text-teal-300 mb-4">מנהיגי השבט</h3>
+                    <p class="text-md lg:text-lg text-gray-300">
+                        ארגונים ומנהלים המבקשים להוביל את קהילתם אל העתיד, לחשוף את AI לצוותיהם ולבנות אסטרטגיה טכנולוגית.
+                    </p>
+                </div>
+                <div class="carved-block w-full max-w-sm scroll-reveal interactive-element p-6" style="margin-top: 20px;">
+                    <h3 class="text-xl lg:text-2xl text-teal-300 mb-4">החורטים המתקדמים</h3>
+                    <p class="text-md lg:text-lg text-gray-300">
+                        אלה שכבר מכירים את הקרח, ומבקשים לפתח פרויקטים עמוקים, ליצור פסלים חיים של AI, ולחקור גבולות חדשים.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Specialties - The Language of Spirits -->
+        <section class="max-w-5xl w-full my-24 lg:my-32">
+            <h2 class="text-3xl lg:text-5xl text-center mb-16 text-white drop-shadow-md scroll-reveal interactive-element">
+                שפת הרוחות: תחומי השליטה של AI
+            </h2>
+            <div class="flex flex-wrap justify-center gap-6 lg:gap-8">
+                <div class="carved-block scroll-reveal interactive-element p-5 text-center text-lg lg:text-xl text-white bg-blue-700 bg-opacity-40 hover:bg-opacity-60" style="border-radius: 40% 60% 50% 50% / 50% 50% 60% 40%;">יצירת קולות וסיפורים</div>
+                <div class="carved-block scroll-reveal interactive-element p-5 text-center text-lg lg:text-xl text-white bg-teal-700 bg-opacity-40 hover:bg-opacity-60" style="margin-top: 30px; border-radius: 60% 40% 40% 60% / 40% 60% 50% 50%;">בניית כלים חכמים</div>
+                <div class="carved-block scroll-reveal interactive-element p-5 text-center text-lg lg:text-xl text-white bg-blue-700 bg-opacity-40 hover:bg-opacity-60" style="border-radius: 50% 50% 60% 40% / 60% 40% 50% 50%;">חריטת שערים דיגיטליים</div>
+                <div class="carved-block scroll-reveal interactive-element p-5 text-center text-lg lg:text-xl text-white bg-teal-700 bg-opacity-40 hover:bg-opacity-60" style="margin-top: -20px; border-radius: 40% 60% 50% 50% / 50% 50% 60% 40%;">פענוח עקבות נתונים</div>
+                <div class="carved-block scroll-reveal interactive-element p-5 text-center text-lg lg:text-xl text-white bg-blue-700 bg-opacity-40 hover:bg-opacity-60" style="border-radius: 60% 40% 40% 60% / 40% 60% 50% 50%;">פיסול דימויים וחזיונות</div>
+                <div class="carved-block scroll-reveal interactive-element p-5 text-center text-lg lg:text-xl text-white bg-teal-700 bg-opacity-40 hover:bg-opacity-60" style="margin-top: 10px; border-radius: 50% 50% 60% 40% / 60% 40% 50% 50%;">הזרמת נהרות התהליכים</div>
+            </div>
+        </section>
+
+        <!-- Services - Paths of the Journey -->
+        <section class="max-w-4xl w-full my-24 lg:my-32">
+            <h2 class="text-3xl lg:text-5xl text-center mb-16 text-white drop-shadow-md scroll-reveal interactive-element">
+                נתיבי המסע: איך נגיע אל השליטה?
+            </h2>
+            <div class="flex flex-col items-center space-y-8">
+                <div class="carved-block w-full max-w-xl scroll-reveal interactive-element p-8 flex flex-col md:flex-row-reverse items-center gap-6" style="border-radius: 50% 50% 50% 50% / 60% 40% 60% 40%;">
+                    <div class="text-4xl text-teal-400 mb-4 md:mb-0 md:mr-4">👥</div>
+                    <div class="text-center md:text-right">
+                        <h3 class="text-2xl text-teal-300 mb-2">מעגלי למידה קבוצתיים</h3>
+                        <p class="text-lg text-gray-300">סדנאות מעשיות, חווייתיות וממוקדות, ללמידה משותפת וחשיפה לכלים חדשים.</p>
+                    </div>
+                </div>
+                <div class="carved-block w-full max-w-xl scroll-reveal interactive-element p-8 flex flex-col md:flex-row-reverse items-center gap-6" style="border-radius: 60% 40% 60% 40% / 50% 50% 50% 50%;">
+                    <div class="text-4xl text-blue-400 mb-4 md:mb-0 md:mr-4">👤</div>
+                    <div class="text-center md:text-right">
+                        <h3 class="text-2xl text-blue-300 mb-2">ליווי אישי - אחד על אחד</h3>
+                        <p class="text-lg text-gray-300">התאמה אישית לרמה ולצרכים שלך, לטיפוח כישורי AI באופן ממוקד ועמוק.</p>
+                    </div>
+                </div>
+                <div class="carved-block w-full max-w-xl scroll-reveal interactive-element p-8 flex flex-col md:flex-row-reverse items-center gap-6" style="border-radius: 50% 50% 50% 50% / 40% 60% 40% 60%;">
+                    <div class="text-4xl text-teal-400 mb-4 md:mb-0 md:mr-4">🗣️</div>
+                    <div class="text-center md:text-right">
+                        <h3 class="text-2xl text-teal-300 mb-2">סיפורים לאוזן השבט</h3>
+                        <p class="text-lg text-gray-300">הרצאות פותחות אופקים לארגונים וצוותים, להבנת כוחה ופוטנציאלה של הבינה המלאכותית.</p>
+                    </div>
+                </div>
+                <div class="carved-block w-full max-w-xl scroll-reveal interactive-element p-8 flex flex-col md:flex-row-reverse items-center gap-6" style="border-radius: 40% 60% 40% 60% / 50% 50% 50% 50%;">
+                    <div class="text-4xl text-blue-400 mb-4 md:mb-0 md:mr-4">🛠️</div>
+                    <div class="text-center md:text-right">
+                        <h3 class="text-2xl text-blue-300 mb-2">בניית מזבחות חדשים</h3>
+                        <p class="text-lg text-gray-300">ייעוץ ופיתוח פרויקטים מבוססי AI, ליווי מקצועי מהרעיון עד ליישום המלא.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide - Zaavik Aviner -->
+        <section class="max-w-4xl w-full my-24 lg:my-32 relative text-center">
+            <h2 class="text-3xl lg:text-5xl mb-16 text-white drop-shadow-md scroll-reveal interactive-element">
+                המדריך: זאביק אבינר - השאמאן של הידע
+            </h2>
+            <div class="flex flex-col lg:flex-row-reverse items-center justify-center gap-12 lg:gap-20">
+                <div class="zaavik-image-container w-64 h-64 lg:w-80 lg:h-80 flex-shrink-0 scroll-reveal interactive-element">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר" class="zaavik-image">
+                </div>
+                <div class="carved-block text-lg lg:text-xl text-gray-200 p-8 flex-grow scroll-reveal interactive-element" style="border-radius: 70% 30% 60% 40% / 40% 60% 70% 30%;">
+                    <p class="mb-4">
+                        עם ניסיון שנחצב בקרח ובידע עמוק כים, זאביק מכיר כל סדק וכל פסגה בעולם ה-AI.
+                        הוא אינו רק מלמד, אלא מעניק את המפתחות לשליטה אמיתית,
+                        הופך טכנולוגיה מורכבת לכלי יומיומי בידיך.
+                    </p>
+                    <p>
+                        מומחיותו בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI,
+                        מעניקה לו את היכולת להנגיש את הטכנולוגיה
+                        ולהפוך אותה לכוח שישנה את אופן עבודתך וחייך.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact - Sound of Connection -->
+        <section class="max-w-3xl w-full my-24 lg:my-32 text-center">
+            <h2 class="text-3xl lg:text-5xl mb-16 text-white drop-shadow-md scroll-reveal interactive-element">
+                צליל הקשר: שביל התקשורת עם זאביק
+            </h2>
+            <div class="flex flex-wrap justify-center gap-6 scroll-reveal">
+                <a href="https://wa.me/972546609385" target="_blank" rel="noopener noreferrer" class="carved-contact text-xl lg:text-2xl text-white interactive-element hover:text-teal-300">
+                    <span class="ml-2">054-6609385</span> 📞
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="carved-contact text-xl lg:text-2xl text-white interactive-element hover:text-blue-300">
+                    <span class="ml-2">zaviner@gmail.com</span> ✉️
+                </a>
+            </div>
+            <p class="text-gray-400 text-sm mt-8">
+                למדו לשלוט בבינה המלאכותית - העתיד הוא עכשיו
+            </p>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor JS - Enhances interaction and artistic feel
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        // Enlarge cursor on interactive elements for visual feedback
+        document.querySelectorAll('.interactive-element').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.width = '2.5rem';
+                cursor.style.height = '2.5rem';
+                cursor.style.backgroundColor = 'rgba(224, 242, 247, 0.2)'; /* Light glow */
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.style.width = '1.5rem';
+                cursor.style.height = '1.5rem';
+                cursor.style.backgroundColor = 'transparent'; /* Reset to original */
+            });
+        });
+
+        // Parallax Scroll JS - Creates a sense of depth and movement
+        const parallaxBgLayer1 = document.getElementById('parallax-bg-layer-1');
+        const parallaxBgLayer2 = document.getElementById('parallax-bg-layer-2');
+        const parallaxBgLayer3 = document.getElementById('parallax-bg-layer-3');
+        const parallaxBgLayer4Glow = document.getElementById('parallax-bg-layer-4-glow');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            // Layers move at different speeds to create the parallax effect
+            if (parallaxBgLayer1) parallaxBgLayer1.style.transform = `translateY(${scrollY * 0.05}px)`;
+            if (parallaxBgLayer2) parallaxBgLayer2.style.transform = `translateY(${scrollY * 0.15}px)`;
+            if (parallaxBgLayer3) parallaxBgLayer3.style.transform = `translateY(${scrollY * 0.25}px)`;
+            if (parallaxBgLayer4Glow) parallaxBgLayer4Glow.style.transform = `translateY(${scrollY * 0.02}px)`; // Very subtle movement for glow
+        });
+
+        // Scroll Reveal Animation JS - Elements appear as they enter the viewport
+        const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
+
+        const observerOptions = {
+            root: null, /* relative to the viewport */
+            rootMargin: '0px',
+            threshold: 0.1 /* 10% of the element must be visible to trigger */
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Stop observing once visible to prevent re-triggering
+                }
+            });
+        }, observerOptions);
+
+        scrollRevealElements.forEach(el => {
+            observer.observe(el);
+        });
+
+    </script>
+</body>
+</html>

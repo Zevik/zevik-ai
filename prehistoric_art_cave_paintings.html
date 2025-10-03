@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>המערה הדיגיטלית: הלהבה של ה-AI | זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Noto+Serif+Hebrew:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles */
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: #0c0a09; /* Stone-950 */
+            color: #d6d3d1; /* Stone-200 */
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll due to transforms */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Noto Serif Hebrew', serif;
+            color: #fcd34d; /* Amber-300 for headings */
+        }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            width: 28px; /* Slightly larger */
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid #fcd34d; /* Amber border */
+            box-shadow: 0 0 0 2px rgba(12, 10, 9, 0.9), /* Stone-950 dark shadow */
+                        0 0 10px rgba(252, 211, 77, 0.4); /* Amber glow */
+            transform: translate(-50%, -50%); /* Center cursor */
+            transition: transform 0.1s ease-out, width 0.2s ease, height 0.2s ease;
+            will-change: transform, width, height;
+            background-color: rgba(252, 211, 77, 0.1); /* Subtle internal glow */
+        }
+
+        /* Cursor interaction */
+        a:hover + #custom-cursor, button:hover + #custom-cursor, .interactive:hover + #custom-cursor {
+            width: 40px;
+            height: 40px;
+            box-shadow: 0 0 0 2px rgba(12, 10, 9, 0.9),
+                        0 0 15px rgba(252, 211, 77, 0.6);
+            background-color: rgba(252, 211, 77, 0.2);
+        }
+
+        /* Background layers - simulating cave depth */
+        .cave-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            will-change: transform, opacity;
+        }
+        .cave-layer-deep {
+            z-index: -10;
+            background: radial-gradient(circle at 50% 50%, rgba(20, 15, 13, 0.9) 0%, rgba(12, 10, 9, 1) 70%); /* Darker center, blacker edges */
+        }
+        .cave-layer-middle {
+            z-index: -9;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><defs><filter id="f" x="0" y="0" width="100" height="100"><feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="3" result="t"/><feDiffuseLighting in="t" lighting-color="rgb(20,20,20)" surfaceScale="5" result="dl"><feDistantLight azimuth="225" elevation="45"/></feDiffuseLighting><feComposite in="SourceGraphic" in2="dl" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/></filter></defs><rect width="100" height="100" fill="rgba(12,10,9,0.2)"/><rect width="100" height="100" fill="none" filter="url(%23f)"/></svg>') repeat;
+            opacity: 0.1; /* Subtle overlay */
+            filter: grayscale(100%);
+            transform: scale(1.1); /* Slightly larger to enhance parallax illusion */
+        }
+        .cave-layer-front {
+            z-index: -8;
+            background: radial-gradient(ellipse at 50% 50%, rgba(10, 8, 7, 0.1) 0%, transparent 70%); /* Faint vignette */
+            opacity: 0.3;
+        }
+
+        /* Content scroll effects for parallax */
+        .parallax-section {
+            position: relative;
+            z-index: 10; /* Ensure content is above fixed backgrounds */
+            padding-block: 8rem; /* py-32 */
+            background-color: rgba(12, 10, 9, 0.6); /* Slightly transparent background for sections */
+            border-block: 1px solid rgba(252, 211, 77, 0.1);
+            backdrop-filter: blur(2px); /* Soften background behind content */
+            -webkit-backdrop-filter: blur(2px);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5); /* Inner shadow for cave effect */
+        }
+
+        /* Specific styles for artistic layout */
+        .cave-heading {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+            transform: rotate(-3deg);
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 20;
+            line-height: 1.2;
+        }
+
+        .cave-paragraph {
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            max-width: 80ch;
+        }
+
+        .cave-card {
+            background-color: rgba(20, 15, 13, 0.8); /* Stone-900 with transparency */
+            border: 1px solid rgba(252, 211, 77, 0.2);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .cave-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.6), 0 0 15px rgba(252, 211, 77, 0.3);
+        }
+        .cave-card::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle at center, rgba(252, 211, 77, 0.2) 0%, transparent 70%);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+        }
+        .cave-card:hover::before {
+            transform: rotate(135deg) scale(1.5);
+            opacity: 0;
+        }
+
+        .glyph-icon {
+            color: #ef4444; /* Red-500 */
+            width: 48px;
+            height: 48px;
+            margin-bottom: 1rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: #fcd34d; /* Amber-300 */
+            color: #1c1917; /* Stone-800 */
+            padding: 1rem 2.5rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            transform: rotate(-1deg);
+        }
+        .cta-button:hover {
+            background-color: #fbbf24; /* Amber-400 */
+            transform: translateY(-2px) rotate(-1deg) scale(1.03);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+        }
+        .cta-button:active {
+            transform: translateY(1px) rotate(-1deg);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        }
+
+        .zevik-image-container {
+            border: 2px solid #ef4444; /* Red-500 border */
+            border-radius: 50%;
+            padding: 5px;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+            transform: rotate(5deg) scale(1.05); /* Artistic rotation */
+            transition: transform 0.3s ease;
+            display: inline-block; /* To allow transform on the container */
+        }
+        .zevik-image-container:hover {
+            transform: rotate(-5deg) scale(1.1);
+        }
+        .zevik-image {
+            border-radius: 50%;

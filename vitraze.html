@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - מְפַעְנְחִים אֶת הָעָתִיד: AI בְּרַאי הַוִּיטְרָאז'</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles for the stained glass effect */
+        body {
+            font-family: 'Heebo', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax */
+            cursor: none; /* Hide default cursor */
+            background: radial-gradient(circle at top left, #2c0a3f, #0a011a); /* Deep, rich background */
+        }
+
+        h1, h2, h3 {
+            font-family: 'Rubik', sans-serif;
+        }
+
+        /* Custom Cursor Styling - MANDATORY High Contrast */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out, width 0.1s ease-out, height 0.1s ease-out, background-color 0.1s ease-out; /* Smooth follow and size changes */
+            /* REQUIRED HIGH CONTRAST TECHNIQUE */
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark, high-opacity shadow */
+        }
+        .custom-cursor.active {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.2); /* Subtle glow on interaction */
+        }
+
+        /* Stained Glass Background Layers */
+        .stained-glass-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            perspective: 1000px; /* For 3D parallax effect */
+        }
+
+        .pane {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.3); /* Base dark transparent for lead lines */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle internal border */
+            filter: saturate(1.2); /* Enhance colors */
+            transform-style: preserve-3d;
+        }
+
+        /* Specific pane styles for aesthetic variety and parallax layers */
+        .pane-1 {
+            width: 150vw; height: 150vh; top: -20vh; left: -20vw;
+            background: linear-gradient(135deg, rgba(68, 11, 107, 0.3) 0%, rgba(26, 4, 43, 0.3) 100%);
+            transform: rotate(20deg) translateZ(-10px) scale(1.1);
+            transform-origin: top left;
+        }
+        .pane-2 {
+            width: 120vw; height: 120vh; top: -10vh; left: 60vw;
+            background: linear-gradient(45deg, rgba(11, 68, 86, 0.3) 0%, rgba(4, 26, 43, 0.3) 100%);
+            transform: rotate(-30deg) translateZ(-20px) scale(1.2);
+            transform-origin: top right;
+        }
+        .pane-3 {
+            width: 180vw; height: 180vh; bottom: -30vh; right: -40vw;
+            background: linear-gradient(225deg, rgba(107, 11, 26, 0.3) 0%, rgba(43, 4, 4, 0.3) 100%);
+            transform: rotate(10deg) translateZ(-30px) scale(1.3);
+            transform-origin: bottom left;
+        }
+
+        /* Content section specific styles */
+        .content-section {
+            background-color: rgba(10, 1, 26, 0.85); /* Slightly lighter background for readability */
+            border: 2px solid rgba(255, 255, 255, 0.1); /* "Lead" frame */
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5); /* Deep shadow */
+            padding: 2.5rem; /* Equivalent to p-10 */
+            margin: 1rem; /* Equivalent to m-4 */
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Responsive adjustments for "stained glass" panes */
+        @media (min-width: 768px) {
+            .pane-1 { width: 80vw; height: 80vh; top: -10vh; left: -10vw; transform: rotate(15deg) translateZ(-10px) scale(1.1); }
+            .pane-2 { width: 60vw; height: 60vh; top: 0vh; left: 50vw; transform: rotate(-20deg) translateZ(-20px) scale(1.2); }
+            .pane-3 { width: 90vw; height: 90vh; bottom: -15vh; right: -20vw; transform: rotate(5deg) translateZ(-30px) scale(1.3); }
+        }
+
+        /* Specific section background colors for the stained glass effect */
+        .section-intro {
+            background: linear-gradient(145deg, rgba(78, 25, 127, 0.9) 0%, rgba(30, 8, 50, 0.9) 100%);
+        }
+        .section-message {
+            background: linear-gradient(135deg, rgba(25, 78, 127, 0.9) 0%, rgba(8, 30, 50, 0.9) 100%);
+        }
+        .section-audience {
+            background: linear-gradient(155deg, rgba(78, 127, 25, 0.9) 0%, rgba(30, 50, 8, 0.9) 100%);
+        }
+        .section-expertise {
+            background: linear-gradient(165deg, rgba(127, 25, 78, 0.9) 0%, rgba(50, 8, 30, 0.9) 100%);
+        }
+        .section-services {
+            background: linear-gradient(175deg, rgba(25, 127, 127, 0.9) 0%, rgba(8, 50, 50, 0.9) 100%);
+        }
+        .section-guide {
+            background: linear-gradient(185deg, rgba(127, 78, 25, 0.9) 0%, rgba(50, 30, 8, 0.9) 100%);
+        }
+        .section-contact {
+            background: linear-gradient(195deg, rgba(78, 25, 25, 0.9) 0%, rgba(30, 8, 8, 0.9) 100%);
+        }
+
+        /* Special text effect for titles */
+        .stained-title {
+            text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3), 0px 0px 20px rgba(100, 200, 255, 0.2);
+            -webkit-text-stroke: 1px rgba(0,0,0,0.5); /* simulate lead lines */
+            color: #E0E0E0; /* Light color for contrast */
+        }
+
+        /* Specific styles for lists to ensure readability and "pane" feel */
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        ul li {
+            position: relative;
+            padding-right: 1.5rem; /* Space for custom bullet */
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+            text-shadow: 0 0 5px rgba(0,0,0,0.5); /* Subtle depth */
+        }
+
+        ul li::before {
+            content: '✦'; /* Star/diamond for "glass shard" effect */
+            position: absolute;
+            right: 0;
+            color: #FFD700; /* Gold-like color */
+            font-size: 1.2em;
+            line-height: 1;
+            top: 0.1em;
+            filter: drop-shadow(0 0 3px rgba(255,215,0,0.7)); /* Glowing bullet */
+        }
+    </style>
+</head>
+<body class="text-white text-right leading-relaxed selection:bg-purple-600 selection:text-white">
+
+    <div class="custom-cursor"></div>
+
+    <!-- Stained Glass Background Elements - Parallax Layers -->
+    <div class="stained-glass-bg">
+        <div class="pane pane-1"></div>
+        <div class="pane pane-2"></div>
+        <div class="pane pane-3"></div>
+    </div>
+
+    <main class="relative z-10 p-4 md:p-8 max-w-5xl mx-auto space-y-16">
+
+        <!-- Header / Intro Pane -->
+        <section class="content-section rounded-3xl section-intro text-center md:text-right">
+            <h1 class="text-5xl md:text-7xl font-rubik font-bold mb-6 stained-title text-[#E0E0E0]">
+                מְפַעְנְחִים אֶת הָעָתִיד:<br> AI בְּרַאי הַוִּיטְרָאז'
+            </h1>
+            <p class="text-xl md:text-2xl font-heebo opacity-90 leading-loose mx-auto max-w-3xl">
+                ברוכים הבאים למסע אל לב הבינה המלאכותית – לא כטכנולוגיה מרוחקת, אלא כאומנות יומיומית. אנו מזמינים אתכם לחשוף את הפוטנציאל הגלום בה, פיסה אחר פיסה, כמו אור העובר דרך ויטראז' עתיק ויוצר מציאות חדשה ומופלאה.
+            </p>
+            <div class="mt-8">
+                <a href="#contact" class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                    הצטרפו למסע האור והדעת
+                </a>
+            </div>
+        </section>
+
+        <!-- Core Message Pane -->
+        <section class="content-section rounded-3xl section-message">
+            <h2 class="text-4xl md:text-5xl font-rubik font-bold mb-6 stained-title text-[#F0F0F0]">
+                אור לכולם: להפוך את AI לנגיש וישים
+            </h2>
+            <p class="text-lg md:text-xl opacity-90 leading-loose mb-6">
+                בעולם המשתנה במהירות, הבינה המלאכותית היא כבר לא מדע בדיוני, אלא כלי עוצמתי ונגיש לכל. המטרה שלנו היא לפזר את הערפל, לשבור את המיתוסים ולהפוך את ה-AI לשפה שכולם יכולים לדבר בה – מהצעדים הראשונים ועד לפיתוח פרויקטים מורכבים. אנו מאמינים כי כל אחד ואחת יכולים לרתום את עוצמת ה-AI לשיפור עבודתם וחייהם, עם כלים מעשיים שניתן ליישם באופן מיידי.
+            </p>
+            <p class="text-lg md:text-xl opacity-90 leading-loose">
+                כל שיעור, כל סדנה, הוא חלון חדש שנפתח אל עולם של אפשרויות. נלמד יחד לא רק "מה" ה-AI יכול לעשות, אלא "איך" להשתמש בו באופן יצירתי ואפקטיבי.
+            </p>
+        </section>
+
+        <!-- Target Audience Pane -->
+        <section class="content-section rounded-3xl section-audience">
+            <h2 class="text-4xl md:text-5xl font-rubik font-bold mb-6 stained-title text-[#F0F0F0]">
+                למי מיועד האור? קהל היעד שלנו
+            </h2>
+            <p class="text-lg md:text-xl opacity-90 leading-loose mb-6">
+                כמו ויטראז' המאיר פינות שונות, כך גם הדרכות ה-AI שלנו מותאמות למגוון רחב של אנשים וצרכים. כל פאנל ידע נבנה בקפידה כדי להאיר את דרכם של:
+            </p>
+            <ul class="text-lg md:text-xl opacity-90 space-y-4 pr-0">
+                <li><span class="font-bold text-yellow-300">המתחילים והמתחילות:</span> אלו המבקשים לגעת לראשונה בעולם המרתק של AI, להבין את יסודותיו ולפזר את החששות.</li>
+                <li><span class="font-bold text-blue-300">אנשי ונשות מקצוע:</span> המעוניינים לשלב AI בעבודתם, לייעל תהליכים ולפתוח אופקים חדשים של חדשנות.</li>
+                <li><span class="font-bold text-green-300">מנהלים, מנהלות וארגונים:</span> המחפשים להעצים את צוותיהם בידע ובכלים מתקדמים, וליצור יתרון תחרותי.</li>
+                <li><span class="font-bold text-red-300">מפתחים ויוזמים מתקדמים:</span> השואפים לצלול עמוק, לפתח פרויקטים מבוססי AI משלהם ולחצות את גבולות היכולת.</li>
+            </ul>
+        </section>
+
+        <!-- Areas of Expertise Pane -->
+        <section class="content-section rounded-3xl section-expertise">
+            <h2 class="text-4xl md:text-5xl font-rubik font-bold mb-6 stained-title text-[#F0F0F0]">
+                גווני היצירה: תחומי התמחות ב-AI
+            </h2>
+            <p class="text-lg md:text-xl opacity-90 leading-loose mb-6">
+                דרך עדשות הויטראז' של ה-AI, אנו מגלים אינסוף גוונים של יצירה וחדשנות. נצלול יחד למגוון רחב של תחומים, כל אחד מהם פותח צוהר לעולם חדש של אפשרויות:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-gray-800 bg-opacity-70 rounded-xl p-6 border border-purple-400 border-opacity-30 hover:scale-[1.02] transition duration-200">
+                    <h3 class="text-2xl font-rubik font-bold text-purple-300 mb-3">יצירת טקסטים ותוכן</h3>
+                    <p class="text-base opacity-80">לשחרר את כוח המילים: כתיבת מאמרים, פוסטים, קוד שיווקי ועוד, במהירות ובאיכות חסרת תקדים.</p>
+                </div>
+                <div class="bg-gray-800 bg-opacity-70 rounded-xl p-6 border border-blue-400 border-opacity-30 hover:scale-[1.02] transition duration-200">
+                    <h3 class="text-2xl font-rubik font-bold text-blue-300 mb-3">בניית אפליקציות חכמות</h3>
+                    <p class="text-base opacity-80">מחשבה וביצוע: פיתוח אפליקציות המשלבות AI לחווית משתמש מתקדמת ופתרונות חכמים.</p>
+                </div>
+                <div class="bg-gray-800 bg-opacity-70 rounded-xl p-6 border border-green-400 border-opacity-30 hover:scale-[1.02] transition duration-200">
+                    <h3 class="text-2xl font-rubik font-bold text-green-300 mb-3">פיתוח אתרים מבוססי AI</h3>
+                    <p class="text-base opacity-80">אתרים שחושבים קדימה: בניית פלטפורמות וורדפרס מתקדמות המשלבות בינה מלאכותית לייעול וחדשנות.</p>
+                </div>
+                <div class="bg-gray-800 bg-opacity-70 rounded-xl p-6 border border-yellow-400 border-opacity-30 hover:scale-[1.02] transition duration-200">
+                    <h3 class="text-2xl font-rubik font-bold text-yellow-300 mb-3">ניתוח נתונים ומחקר</h3>
+                    <p class="text-base opacity-80">הבנת העומק: חילוץ תובנות משמעותיות ממאגרי נתונים עצומים, לקבלת החלטות מושכלות.</p>
+                </div>
+                <div class="bg-gray-800 bg-opacity-70 rounded-xl p-6 border border-red-400 border-opacity-30 hover:scale-[1.02] transition duration-200">
+                    <h3 class="text-2xl font-rubik font-bold text-red-300 mb-3">יצירת תמונות ואומנות</h3>
+                    <p class="text-base opacity-80">הדמיון פוגש את האלגוריתם: יצירת דימויים ויזואליים עוצמתיים וייחודיים באמצעות AI.</p>
+                </div>
+                <div class="bg-gray-800 bg-opacity-70 rounded-xl p-6 border border-teal-400 border-opacity-30 hover:scale-[1.02] transition duration-200">
+                    <h3 class="text-2xl font-rubik font-bold text-teal-300 mb-3">אוטומציה של תהליכים</h3>
+                    <p class="text-base opacity-80">לשחרר זמן ואנרגיה: אוטומציה של משימות חוזרות ונשנות, לייעול זרימת העבודה והגדלת הפרודוקטיביות.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered Pane -->
+        <section class="content-section rounded-3xl section-services">
+            <h2 class="text-4xl md:text-5xl font-rubik font-bold mb-6 stained-title text-[#F0F0F0]">
+                מגוון שירותים: זכוכיות האור המנחות
+            </h2>
+            <p class="text-lg md:text-xl opacity-90 leading-loose mb-6">
+                כמו אור העובר דרך פריזמות שונות, כך גם הגישה שלנו להדרכת AI מציעה מגוון שירותים, כל אחד מהם מעוצב כדי להאיר את הדרך באופן מיטבי עבורכם:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-indigo-900 bg-opacity-70 rounded-xl p-6 border border-indigo-300 hover:shadow-2xl hover:border-indigo-500 transition duration-300 ease-in-out">
+                    <h3 class="text-3xl font-rubik font-bold text-indigo-200 mb-3">סדנאות קבוצתיות</h3>
+                    <p class="text-lg opacity-80">חלונות ידע נפתחים יחד. סדנאות מעשיות, חווייתיות וממוקדות, המעניקות כלים יישומיים והשראה קבוצתית.</p>
+                </div>
+                <div class="bg-violet-900 bg-opacity-70 rounded-xl p-6 border border-violet-300 hover:shadow-2xl hover:border-violet-500 transition duration-300 ease-in-out">
+                    <h3 class="text-3xl font-rubik font-bold text-violet-200 mb-3">שיעורים פרטיים</h3>
+                    <p class="text-lg opacity-80">מסלול אישי מותאם. ליווי פרטני, אחד על אחד, המותאם באופן מלא לרמה, לקצב ולצרכים הייחודיים שלכם.</p>
+                </div>
+                <div class="bg-sky-900 bg-opacity-70 rounded-xl p-6 border border-sky-300 hover:shadow-2xl hover:border-sky-500 transition duration-300 ease-in-out">
+                    <h3 class="text-3xl font-rubik font-bold text-sky-200 mb-3">הרצאות לארגונים</h3>
+                    <p class="text-lg opacity-80">השראה לצוות כולו. פתיחת אופקים, הצגת מגמות עתידיות והכשרה ראשונית לעובדי ומנהלי הארגון.</p>
+                </div>
+                <div class="bg-emerald-900 bg-opacity-70 rounded-xl p-6 border border-emerald-300 hover:shadow-2xl hover:border-emerald-500 transition duration-300 ease-in-out">
+                    <h3 class="text-3xl font-rubik font-bold text-emerald-200 mb-3">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-lg opacity-80">ליווי מקצועי מתחילתו ועד סופו. מפיתוח קונספט, דרך תכנון ועד למימוש פרויקטים מבוססי AI בפועל.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide Pane -->
+        <section class="content-section rounded-3xl section-guide">
+            <h2 class="text-4xl md:text-5xl font-rubik font-bold mb-6 stained-title text-[#F0F0F0]">
+                האדריכל של המחר: זאביק אבינר
+            </h2>
+            <div class="md:flex md:space-x-8 md:space-x-reverse items-center justify-center">
+                <div class="flex-shrink-0 mb-6 md:mb-0 text-center">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר - מומחה בינה מלאכותית" class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover mx-auto shadow-xl border-4 border-yellow-400 border-opacity-50">
+                </div>
+                <div class="md:flex-grow text-lg md:text-xl opacity-90 leading-loose">
+                    <p class="mb-4">
+                        מאחורי כל ויטראז' עומד אומן, ומאחורי מסע ה-AI הזה עומד <span class="font-bold text-yellow-300">זאביק אבינר</span>. מומחה בינה מלאכותית עם ניסיון עשיר בפיתוח ויישום פרויקטים, אפליקציות ומערכות מורכבות. זאביק אינו רק טכנולוג, אלא גם פדגוג – מומחה בהנגשת הטכנולוגיה המורכבת ביותר והפיכתה לכלי עבודה יומיומי, שכל אחד יכול לשלוט בו.
+                    </p>
+                    <p class="mb-4">
+                        בכל שיעור ובכל מפגש, זאביק חולק מניסיונו העצום, מבהיר מושגים סבוכים ומעניק כלים פרקטיים הממוקדים בתוצאות. הוא המדריך שיקח אתכם צעד אחר צעד, מפיסה אחת של ידע לשלם מרהיב של הבנה ויכולת.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Pane -->
+        <section id="contact" class="content-section rounded-3xl section-contact text-center">
+            <h2 class="text-4xl md:text-5xl font-rubik font-bold mb-6 stained-title text-[#F0F0F0]">
+                צור קשר: האור מחכה לכם
+            </h2>
+            <p class="text-lg md:text-xl opacity-90 leading-loose mb-8">
+                מוכנים לפענח את סודות ה-AI ולהצטרף למסע? אל תהססו ליצור קשר. אני כאן כדי לעזור לכם להאיר את עתידכם באמצעות בינה מלאכותית.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 md:space-x-reverse">
+                <a href="https://wa.me/972546609385" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-lg flex items-center justify-center min-w-[200px]">
+                    <svg class="w-6 h-6 ml-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2C6.54 2 2 6.54 2 12.04c0 1.5 0.38 2.94 1.1 4.2L2.06 22l5.8-1.55a9.982 9.982 0 004.18.99c5.5 0 9.96-4.46 9.96-9.96S17.54 2 12.04 2zm4.3 14.33a.6.6 0 01-.4.2.62.62 0 01-.4-.2c-.8-.4-2.8-1.7-3.2-1.9-.4-.2-.7-.2-.9.2-.2.4-.8 1-.9 1.2-.2.2-.4.2-.7.1-.6-.2-1.3-.4-2-.8a8.03 8.03 0 01-2.4-3c-.4-.7-.4-1-.1-1.3.1-.2.2-.4.4-.6.2-.2.4-.5.6-.7.2-.2.2-.4.1-.6-.1-.2-.6-.9-.8-1.1-.2-.2-.4-.2-.6-.2-.2 0-.4 0-.6.1-.2.1-.5.3-.8.6-.2.4-.6.8-.6 1.3 0 .4.3.9.7 1.3.4.4.8.8 1.2 1.1.4.4.8.6 1.3.8.7.4 1.4.7 2.1.9 1 .2 1.8.2 2.5.1.7-.1 1.2-.5 1.5-.7.4-.2.6-.4.8-.4.2-.1.5-.1.8.1.3.2.7.7.8 1.1.1.5.1.8 0 1.2z"/></svg>
+                    וואטסאפ: 054-6609385
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-lg flex items-center justify-center min-w-[200px]">
+                    <svg class="w-6 h-6 ml-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M2.929 4.38a.75.75 0 01-.12.721L1.173 7.828A4.502 4.502 0 000 11.25v2.25A2.75 2.75 0 002.75 16h14.5A2.75 2.75 0 0020 13.5v-2.25a4.502 4.502 0 00-1.173-3.277L17.191 5.1a.75.75 0 01-.12-.721L9.75 1.401V1c0-.276-.224-.5-.5-.5s-.5.224-.5.5v.401L2.929 4.38zM2.5 9a.5.5 0 000 1h15a.5.5 0 000-1H2.5zM2.75 12a.75.75 0 000 1.5h14.5a.75.75 0 000-1.5H2.75z" clip-rule="evenodd" /><path d="M10 17.5a.75.75 0 01-.75-.75V15h1.5v1.75c0 .414-.336.75-.75.75z" /></svg>
+                    אימייל: zaviner@gmail.com
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor JavaScript
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Add 'active' class on hover for interactive elements
+        document.addEventListener('mouseover', e => {
+            if (e.target.closest('a, button, [class*="hover:scale"]')) { // Check for common interactive elements and our specific custom hovers
+                cursor.classList.add('active');
+            }
+        });
+        document.addEventListener('mouseout', e => {
+            if (e.target.closest('a, button, [class*="hover:scale"]')) {
+                cursor.classList.remove('active');
+            }
+        });
+
+        // Parallax Effect JavaScript
+        const parallaxLayers = document.querySelectorAll('.stained-glass-bg .pane');
+        // Retrieve initial transform values to preserve rotations/scales
+        const initialTransforms = Array.from(parallaxLayers).map(layer => {
+            const style = window.getComputedStyle(layer);
+            return style.transform;
+        });
+        const speedFactors = [0.05, 0.1, 0.07]; // Different speeds for each layer
+
+        document.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            parallaxLayers.forEach((layer, index) => {
+                const translateY = scrollY * speedFactors[index];
+                // Apply translateY while preserving other transform properties
+                const currentTransform = initialTransforms[index];
+                // Regex to replace or append translateY; ensuring 3D context
+                const newTransform = currentTransform.replace(/translateY\(.*?px\)/, '') + ` translateY(${translateY}px)`;
+                layer.style.transform = newTransform;
+            });
+        });
+
+        // Initial set of parallax on load in case of scroll restoration
+        document.dispatchEvent(new Event('scroll'));
+    </script>
+</body>
+</html>

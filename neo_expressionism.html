@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - נאו-אקספרסיוניזם של AI</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;700&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Tailwind Configuration for Neo-Expressionism */
+        :root {
+            --color-primary-dark: #0F172A; /* Slate 900 */
+            --color-accent-red: #B7094C;
+            --color-accent-yellow: #FFD700;
+            --color-text-light: #F8F8F8;
+            --color-text-dark: #000000;
+            --color-background-muted: #1e293b; /* Slate 800 */
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Assistant', sans-serif;
+            color: var(--color-text-light);
+            background-color: var(--color-primary-dark);
+            overflow-x: hidden; /* Prevent horizontal scroll from aggressive elements */
+            cursor: none; /* Hide default cursor */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Rubik Mono One', monospace;
+            line-height: 1.1;
+        }
+        .custom-cursor {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: transparent;
+            border: 2px solid #FFFFFF; /* White border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Black shadow */
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out; /* Smooth follow */
+        }
+        /* Neo-Expressionist Button Style */
+        .btn-neo {
+            @apply relative block px-6 py-3 text-lg font-bold uppercase tracking-wider overflow-hidden;
+            border: 2px solid var(--color-accent-red);
+            background-color: var(--color-primary-dark);
+            color: var(--color-text-light);
+            transition: all 0.3s ease-in-out;
+            cursor: none; /* Inherit global cursor */
+        }
+        .btn-neo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-accent-red);
+            transition: left 0.3s ease-in-out;
+            z-index: -1;
+        }
+        .btn-neo:hover::before {
+            left: 0;
+        }
+        .btn-neo:hover {
+            color: var(--color-text-dark); /* Text dark on red hover */
+            border-color: var(--color-accent-red); /* Keep border consistent */
+            cursor: none; /* Inherit global cursor */
+        }
+
+        /* Add custom CSS for distorted shapes/lines for neo-expressionism */
+        .distorted-shape {
+            position: absolute;
+            background-color: rgba(255, 215, 0, 0.2); /* Yellow, semi-transparent */
+            transform: rotate(var(--rotate-deg, 0deg)) scaleX(var(--scale-x, 1)) skewX(var(--skew-x, 0deg));
+            z-index: -2;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+        .distorted-line {
+            position: absolute;
+            height: 2px;
+            background-color: var(--color-accent-red);
+            transform: rotate(var(--rotate-deg, 0deg));
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Specific styles for neo-expressionism */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 5px solid var(--color-accent-red); /* Harsh separator */
+        }
+        .section-title-neo {
+            @apply text-5xl md:text-7xl lg:text-8xl font-mono mb-8 text-center relative z-10;
+            color: var(--color-accent-yellow);
+            text-shadow: 4px 4px 0px var(--color-accent-red), 8px 8px 0px var(--color-primary-dark);
+        }
+        .section-content-wrapper {
+            @apply relative z-10 p-8 md:p-12 lg:p-16 max-w-7xl mx-auto;
+            background-color: rgba(15, 23, 42, 0.85); /* Slightly transparent background for readability */
+            backdrop-filter: blur(5px);
+            border: 3px solid var(--color-accent-red);
+            transition: all 0.8s ease-out; /* For JS animation */
+        }
+        .text-neon-glow {
+            text-shadow: 0 0 5px var(--color-accent-yellow), 0 0 10px var(--color-accent-red);
+        }
+
+        /* Responsive typography adjustments */
+        @media (max-width: 768px) {
+            .section-title-neo {
+                font-size: 3.5rem; /* Smaller on mobile */
+            }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-dark': 'var(--color-primary-dark)',
+                        'accent-red': 'var(--color-accent-red)',
+                        'accent-yellow': 'var(--color-accent-yellow)',
+                        'text-light': 'var(--color-text-light)',
+                        'text-dark': 'var(--color-text-dark)',
+                        'background-muted': 'var(--color-background-muted)',
+                    },
+                    fontFamily: {
+                        sans: ['Assistant', 'sans-serif'],
+                        mono: ['Rubik Mono One', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-primary-dark text-text-light font-sans leading-relaxed">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <main>
+        <!-- Hero Section - Introduction to AI and Zvi Aviner -->
+        <section id="hero" class="hero-section bg-primary-dark relative overflow-hidden">
+            <!-- Background elements - distorted shapes -->
+            <div class="distorted-shape w-48 h-48 top-1/4 left-1/4" style="--rotate-deg: 30deg; --scale-x: 1.2; --skew-x: 10deg;"></div>
+            <div class="distorted-shape w-64 h-32 bottom-1/4 right-1/4 bg-accent-red opacity-30" style="--rotate-deg: -20deg; --scale-x: 1.5; --skew-x: -15deg;"></div>
+            <div class="distorted-line w-full top-1/2 left-0" style="--rotate-deg: 5deg;"></div>
+            <div class="distorted-line w-1/2 bottom-1/4 right-1/4" style="--rotate-deg: -10deg; height: 3px; background-color: var(--color-accent-yellow);"></div>
+
+            <div class="section-content-wrapper text-center z-10 p-8 md:p-16 lg:p-20 border-accent-red max-w-4xl mx-auto">
+                <h1 class="section-title-neo mb-6 leading-tight">הדיגיטלי מתפרץ.<br>הבינה המלאכותית – האור והצל.</h1>
+                <p class="text-xl md:text-2xl mb-8 font-bold text-accent-yellow text-neon-glow">
+                    אנו עומדים על סף תהום, ומצד שני – על סף יצירה.
+                </p>
+                <p class="text-lg md:text-xl mb-12 max-w-3xl mx-auto">
+                    העידן החדש אינו ממתין. הוא דורש הבנה, שליטה, והעזה. זאביק אבינר, מדריך מתוך המבוך המלאכותי, פותח שערים אל עולם שמשנה הכל.
+                </p>
+                <a href="#services" class="btn-neo text-dark-text-light mx-auto mb-4 hover:border-accent-red hover:text-text-dark">
+                    פענחו את הצופן
+                </a>
+            </div>
+        </section>
+
+        <!-- About Zvi Aviner Section -->
+        <section id="about" class="bg-background-muted py-20 md:py-32 relative overflow-hidden border-b-4 border-accent-red">
+            <div class="distorted-shape w-64 h-64 top-0 right-0 bg-accent-yellow opacity-20" style="--rotate-deg: -45deg; --scale-x: 0.8; --skew-x: 20deg;"></div>
+            <div class="section-content-wrapper flex flex-col md:flex-row items-center gap-12 text-center md:text-right">
+                <div class="md:w-1/3 flex-shrink-0">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונת פורטרט של זאביק אבינר, מומחה בינה מלאכותית" class="w-48 h-48 md:w-64 md:h-64 rounded-full mx-auto md:mx-0 object-cover border-4 border-accent-red shadow-lg transform hover:scale-105 transition-transform duration-300 ease-in-out">
+                </div>
+                <div class="md:w-2/3">
+                    <h2 class="section-title-neo text-4xl md:text-5xl lg:text-6xl text-right mb-6 text-accent-yellow">זאביק אבינר: המצפן בעידן החדש</h2>
+                    <p class="text-lg md:text-xl mb-4 leading-relaxed">
+                        זאביק אינו רק מומחה; הוא ארכיטקט של פתרונות, מתרגם של שפות מכונה לשפת בני אדם. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק מנגיש את הלא נודע, הופך את הטכנולוגיה המורכבת לכלי עבודה יומיומי, מוחשי ושימושי. הוא בונה גשרים מעל תהומות הידע.
+                    </p>
+                    <p class="text-lg md:text-xl font-bold text-accent-red">
+                        הידע שלו – הכוח שלכם.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Message Section -->
+        <section id="message" class="bg-primary-dark py-20 md:py-32 relative overflow-hidden border-b-4 border-accent-red">
+            <div class="distorted-line w-full top-1/4 right-0" style="--rotate-deg: -7deg; height: 2px; background-color: var(--color-text-light);"></div>
+            <div class="distorted-shape w-32 h-32 bottom-1/2 left-1/4 bg-accent-red opacity-10" style="--rotate-deg: 40deg; --scale-x: 1; --skew-x: 5deg;"></div>
+
+            <div class="section-content-wrapper text-center">
+                <h2 class="section-title-neo text-4xl md:text-5xl lg:text-6xl mb-6 text-accent-yellow">לשלוט בתוהו ובוהו</h2>
+                <p class="text-xl md:text-2xl mb-8 leading-relaxed max-w-4xl mx-auto">
+                    המסר חד: הבינה המלאכותית אינה מיועדת רק למעטים. היא כוח שצריך להיות נגיש לכולם – מהתחלה ועד רמה מתקדמת. אנו מספקים כלים מעשיים שניתן ליישם מיד: בעבודה, בעסק, בחיים. נלמד איך להפוך את התיאוריה למציאות דרך פרקטיקה חסרת פשרות.
+                </p>
+                <div class="flex flex-wrap justify-center gap-6 mt-12">
+                    <div class="bg-accent-red p-6 rounded-lg shadow-xl border-2 border-accent-yellow w-full md:w-1/2 lg:w-1/3 text-text-dark transform hover:-translate-y-2 transition-transform duration-300">
+                        <h3 class="text-2xl font-mono mb-3 text-text-dark">לשבור את הקוד</h3>
+                        <p class="text-lg">הנגשת AI למתחילים מוחלטים. אין צורך בידע קודם.</p>
+                    </div>
+                    <div class="bg-accent-yellow p-6 rounded-lg shadow-xl border-2 border-accent-red w-full md:w-1/2 lg:w-1/3 text-text-dark transform hover:-translate-y-2 transition-transform duration-300">
+                        <h3 class="text-2xl font-mono mb-3 text-text-dark">להטמיע את החדש</h3>
+                        <p class="text-lg">פתרונות AI פרקטיים לאנשי מקצוע ולארגונים קיימים.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section id="audience" class="bg-background-muted py-20 md:py-32 relative overflow-hidden border-b-4 border-accent-red">
+            <div class="distorted-shape w-48 h-48 bottom-1/4 right-1/4 bg-text-light opacity-10" style="--rotate-deg: -15deg; --scale-x: 1.1; --skew-x: -8deg;"></div>
+            <div class="section-content-wrapper text-center">
+                <h2 class="section-title-neo text-4xl md:text-5xl lg:text-6xl mb-12 text-accent-yellow">למי נועד הכוח?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="p-6 bg-primary-dark border-2 border-accent-red rounded-lg shadow-xl text-text-light hover:scale-105 transition-transform duration-300">
+                        <h3 class="text-2xl font-mono mb-4 text-accent-yellow">המתחילים: סקרנות חסרת גבולות</h3>
+                        <p class="text-lg">אלו המעוניינים לצלול לעולם ה-AI בפעם הראשונה, ללא חשש מהמורכבות.</p>
+                    </div>
+                    <div class="p-6 bg-primary-dark border-2 border-accent-yellow rounded-lg shadow-xl text-text-light hover:scale-105 transition-transform duration-300">
+                        <h3 class="text-2xl font-mono mb-4 text-accent-red">המובילים: להטמיע בעשייה</h3>
+                        <p class="text-lg">אנשי מקצוע המבקשים לשלב AI בעבודתם ולשפר תהליכים.</p>
+                    </div>
+                    <div class="p-6 bg-primary-dark border-2 border-accent-red rounded-lg shadow-xl text-text-light hover:scale-105 transition-transform duration-300">
+                        <h3 class="text-2xl font-mono mb-4 text-accent-yellow">החזון: למנהלים וארגונים</h3>
+                        <p class="text-lg">הדרכות מותאמות לצוותים, לפתוח אופקים טכנולוגיים חדשים.</p>
+                    </div>
+                    <div class="p-6 bg-primary-dark border-2 border-accent-yellow rounded-lg shadow-xl text-text-light hover:scale-105 transition-transform duration-300">
+                        <h3 class="text-2xl font-mono mb-4 text-accent-red">היוצרים: פיתוח מתקדם</h3>
+                        <p class="text-lg">ברמה מתקדמת – ליווי ופיתוח פרויקטים מבוססי AI מורכבים.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Section -->
+        <section id="expertise" class="bg-primary-dark py-20 md:py-32 relative overflow-hidden border-b-4 border-accent-red">
+            <div class="distorted-line w-full bottom-1/3 left-0" style="--rotate-deg: 3deg; height: 3px; background-color: var(--color-accent-red);"></div>
+            <div class="distorted-shape w-56 h-24 top-1/4 left-1/4 bg-accent-yellow opacity-15" style="--rotate-deg: 15deg; --scale-x: 1.3; --skew-x: 7deg;"></div>
+            <div class="section-content-wrapper text-center">
+                <h2 class="section-title-neo text-4xl md:text-5xl lg:text-6xl mb-12 text-accent-yellow">תחומי ההתפרצות</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Cards for each expertise -->
+                    <div class="group p-6 bg-background-muted border-2 border-accent-red rounded-lg shadow-xl text-text-light transform hover:rotate-2 hover:scale-105 transition-all duration-300">
+                        <h3 class="text-2xl font-mono mb-3 text-accent-red group-hover:text-accent-yellow">מילים מתעוררות</h3>
+                        <p class="text-lg">יצירת טקסטים, תוכן, קמפיינים שיווקיים בכוח ה-AI.</p>
+                    </div>
+                    <div class="group p-6 bg-background-muted border-2 border-accent-yellow rounded-lg shadow-xl text-text-light transform hover:-rotate-2 hover:scale-105 transition-all duration-300">
+                        <h3 class="text-2xl font-mono mb-3 text-accent-yellow group-hover:text-accent-red">אפליקציות חושבות</h3>
+                        <p class="text-lg">בניית יישומים חכמים המקבלים החלטות ולומדים באופן אוטונומי.</p>
+                    </div>
+                    <div class="group p-6 bg-background-muted border-2 border-accent-red rounded-lg shadow-xl text-text-light transform hover:rotate-2 hover:scale-105 transition-all duration-300">
+                        <h3 class="text-2xl font-mono mb-3 text-accent-red group-hover:text-accent-yellow">רשתות נושמות</h3>
+                        <p class="text-lg">פיתוח אתרים המשלבים יכולות AI מתקדמות לחוויה דינמית.</p>
+                    </div>
+                    <div class="group p-6 bg-background-muted border-2 border-accent-yellow rounded-lg shadow-xl text-text-light transform hover:-rotate-2 hover:scale-105 transition-all duration-300">
+                        <h3 class="text-2xl font-mono mb-3 text-accent-yellow group-hover:text-accent-red">נתונים מדברים</h3>
+                        <p class="text-lg">ניתוח נתונים, מחקר, והפקת תובנות עמוקות בעזרת AI.</p>
+                    </div>
+                    <div class="group p-6 bg-background-muted border-2 border-accent-red rounded-lg shadow-xl text-text-light transform hover:rotate-2 hover:scale-105 transition-all duration-300">
+                        <h3 class="text-2xl font-mono mb-3 text-accent-red group-hover:text-accent-yellow">אומנות של מכונה</h3>
+                        <p class="text-lg">יצירת תמונות, גרפיקה ואומנות דיגיטלית באמצעות אלגוריתמים.</p>
+                    </div>
+                    <div class="group p-6 bg-background-muted border-2 border-accent-yellow rounded-lg shadow-xl text-text-light transform hover:-rotate-2 hover:scale-105 transition-all duration-300">
+                        <h3 class="text-2xl font-mono mb-3 text-accent-yellow group-hover:text-accent-red">תהליכים מתמזגים</h3>
+                        <p class="text-lg">אוטומציה חכמה של תהליכים עסקיים ותפעוליים מורכבים.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="bg-background-muted py-20 md:py-32 relative overflow-hidden border-b-4 border-accent-red">
+            <div class="distorted-shape w-32 h-64 top-1/2 left-0 bg-accent-red opacity-15" style="--rotate-deg: 90deg; --scale-x: 0.7; --skew-x: 10deg; transform-origin: top left;"></div>
+            <div class="distorted-line w-1/3 bottom-1/4 left-1/4" style="--rotate-deg: 15deg; height: 2px; background-color: var(--color-accent-yellow);"></div>
+            <div class="section-content-wrapper text-center">
+                <h2 class="section-title-neo text-4xl md:text-5xl lg:text-6xl mb-12 text-accent-yellow">פנינים של ידע, פטישים של עשייה</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="p-8 bg-primary-dark border-4 border-accent-red text-text-light shadow-2xl rounded-xl transition-all duration-300 hover:bg-accent-red hover:text-text-dark group">
+                        <h3 class="text-3xl font-mono mb-4 text-accent-yellow group-hover:text-text-dark">סדנאות קבוצתיות: הלהב המשותף</h3>
+                        <p class="text-lg mb-4">מעשיות, ממוקדות, אינטנסיביות. לצלול יחד לעומק הידע, לחדד מיומנויות וליצור יחד.</p>
+                        <ul class="list-none space-y-2 text-right">
+                            <li class="flex items-center justify-end group-hover:text-text-dark"><span class="ml-2 text-accent-red group-hover:text-text-dark">&#9679;</span>תכנים עדכניים</li>
+                            <li class="flex items-center justify-end group-hover:text-text-dark"><span class="ml-2 text-accent-red group-hover:text-text-dark">&#9679;</span>יישום מיידי</li>
+                            <li class="flex items-center justify-end group-hover:text-text-dark"><span class="ml-2 text-accent-red group-hover:text-text-dark">&#9679;</span>חוויה דינמית</li>
+                        </ul>
+                    </div>
+                    <div class="p-8 bg-primary-dark border-4 border-accent-yellow text-text-light shadow-2xl rounded-xl transition-all duration-300 hover:bg-accent-yellow hover:text-text-dark group">
+                        <h3 class="text-3xl font-mono mb-4 text-accent-red group-hover:text-text-dark">שיעורים פרטיים: פסל אישי</h3>
+                        <p class="text-lg mb-4">התאמה אישית מלאה לרמה, לקצב ולצרכים הייחודיים שלך. פיתוח ממוקד של היכולות שלך.</p>
+                        <ul class="list-none space-y-2 text-right">
+                            <li class="flex items-center justify-end group-hover:text-text-dark"><span class="ml-2 text-accent-yellow group-hover:text-text-dark">&#9679;</span>תוכנית מותאמת</li>
+                            <li class="flex items-center justify-end group-hover:text-text-dark"><span class="ml-2 text-accent-yellow group-hover:text-text-dark">&#9679;</span>קצב למידה אישי</li>
+                            <li class="flex items-center justify-end group-hover:text-text-dark"><span class="ml-2 text-accent-yellow group-hover:text-text-dark">&#9679;</span>מיקוד בפרויקטים</li>
+                        </ul>
+                    </div>
+                    <div class="p-8 bg-primary-dark border-4 border-accent-red text-text-light shadow-2xl rounded-xl transition-all duration-300 hover:bg-accent-red hover:text-text-dark group">
+                        <h3 class="text-3xl font-mono mb-4 text-accent-yellow group-hover:text-text-dark">הרצאות לארגונים: ניצוץ חדש</h3>
+                        <p class="text-lg mb-4">פתיחת אופקים, הצגת פוטנציאל, והנעת צוותים לקראת העתיד המונע ב-AI.</p>
+                        <ul class="list-none space-y-2 text-right">
+                            <li class="flex items-center justify-end group-hover:text-text-dark"><span class="ml-2 text-accent-red group-hover:text-text-dark">&#9679;</span>השראה וחדשנות</li>
+                            <li class="flex items-center justify-end group-hover:text-text-dark"><span class="ml-2 text-accent-red group-hover:text-text-dark">&#9679;</span>מודעות טכנולוגית</li>
+                            <li class="flex items-center justify-end group-hover:text-text-dark"><span class="ml-2 text-accent-red group-hover:text-text-dark">&#9679;</span>דיון פתוח</li>
+                        </ul>
+                    </div>
+                    <div class="p-8 bg-primary-dark border-4 border-accent-yellow text-text-light shadow-2xl rounded-xl transition-all duration-300 hover:bg-accent-yellow hover:text-text-dark group">
+                        <h3 class="text-3xl font-mono mb-4 text-accent-red group-hover:text-text-dark">ייעוץ ופיתוח פרויקטים: בניית מציאות</h3>
+                        <p class="text-lg mb-4">ליווי מקצועי ופיתוח בפועל של פרויקטים מורכבים מבוססי AI – מהרעיון עד ליישום.</p>
+                        <ul class="list-none space-y-2 text-right">
+                            <li class="flex items-center justify-end group-hover:text-text-dark"><span class="ml-2 text-accent-yellow group-hover:text-text-dark">&#9679;</span>אסטרטגיה וליווי</li>
+                            <li class="flex items-center justify-end group-hover:text-text-dark"><span class="ml-2 text-accent-yellow group-hover:text-text-dark">&#9679;</span>פיתוח אב-טיפוס</li>
+                            <li class="flex items-center justify-end group-hover:text-text-dark"><span class="ml-2 text-accent-yellow group-hover:text-text-dark">&#9679;</span>פתרונות קצה-לקצה</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action / Contact Section -->
+        <section id="contact" class="bg-primary-dark py-20 md:py-32 relative overflow-hidden">
+            <div class="distorted-line w-full top-1/2 left-0" style="--rotate-deg: -3deg; height: 4px; background-color: var(--color-accent-yellow);"></div>
+            <div class="distorted-shape w-48 h-48 bottom-0 left-0 bg-accent-red opacity-20" style="--rotate-deg: 60deg; --scale-x: 1.5; --skew-x: 15deg; transform-origin: bottom left;"></div>
+            <div class="section-content-wrapper text-center">
+                <h2 class="section-title-neo text-4xl md:text-5xl lg:text-6xl mb-8 text-accent-yellow">צרו קשר: הצעד הבא</h2>
+                <p class="text-xl md:text-2xl mb-12 max-w-3xl mx-auto">
+                    האם אתם מוכנים לפרוץ את הגבולות? ליצור מציאות חדשה?
+                    צרו קשר עוד היום ונתחיל לבנות את עתידכם בעולם הבינה המלאכותית.
+                </p>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-6">
+                    <a href="https://wa.me/972546609385" target="_blank" class="btn-neo bg-accent-red hover:bg-accent-yellow text-text-dark border-accent-red hover:border-accent-yellow">
+                        וואטסאפ: 054-6609385
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="btn-neo bg-accent-yellow hover:bg-accent-red text-text-dark border-accent-yellow hover:border-accent-red">
+                        אימייל: zaviner@gmail.com
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-text-dark py-8 text-center text-text-light text-sm border-t-4 border-accent-red">
+        <p>&copy; 2023 זאביק אבינר - מומחה בינה מלאכותית. כל הזכויות שמורות.</p>
+        <p class="text-xs mt-2 text-gray-400">עיצוב בהשראת נאו-אקספרסיוניזם דיגיטלי.</p>
+    </footer>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.querySelector('.custom-cursor');
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
+        const speed = 0.2; // Adjust for slower/faster cursor follow
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * speed;
+            cursorY += (mouseY - cursorY) * speed;
+            customCursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) scale(1) translate(-50%, -50%)`;
+            requestAnimationFrame(animateCursor);
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        animateCursor();
+
+        // Optional: Cursor scale/effect on hover over interactive elements
+        document.querySelectorAll('a, button, .btn-neo, .group').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                customCursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) scale(1.5) translate(-50%, -50%)`;
+                customCursor.style.border = '2px solid var(--color-accent-red)';
+                customCursor.style.boxShadow = '0 0 0 2px var(--color-accent-yellow)';
+            });
+            el.addEventListener('mouseleave', () => {
+                customCursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) scale(1) translate(-50%, -50%)`;
+                customCursor.style.border = '2px solid #FFFFFF';
+                customCursor.style.boxShadow = '0 0 0 2px rgba(0,0,0,0.8)';
+            });
+        });
+
+        // Parallax-like Scroll Effect for background shapes
+        document.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const shapes = document.querySelectorAll('.distorted-shape, .distorted-line');
+
+            shapes.forEach(shape => {
+                // Generate a random speed if not already set, or use a default range
+                const speed = parseFloat(shape.dataset.parallaxSpeed || (Math.random() * 0.3 + 0.1));
+                shape.dataset.parallaxSpeed = speed; // Store for consistent movement
+
+                // Apply translateY based on scroll and speed
+                shape.style.transform = `translateY(${scrollY * speed}px) rotate(var(--rotate-deg)) scaleX(var(--scale-x, 1)) skewX(var(--skew-x, 0))`;
+            });
+        });
+
+        // Initial setup for background shapes' random properties
+        document.querySelectorAll('.distorted-shape').forEach(shape => {
+            if (!shape.style.getPropertyValue('--rotate-deg')) { // Only apply if not already set via inline style
+                shape.style.setProperty('--rotate-deg', `${Math.random() * 90 - 45}deg`);
+            }
+            if (!shape.style.getPropertyValue('--scale-x')) {
+                shape.style.setProperty('--scale-x', `${Math.random() * 0.5 + 0.8}`);
+            }
+            if (!shape.style.getPropertyValue('--skew-x')) {
+                shape.style.setProperty('--skew-x', `${Math.random() * 20 - 10}deg`);
+            }
+        });
+        document.querySelectorAll('.distorted-line').forEach(line => {
+            if (!line.style.getPropertyValue('--rotate-deg')) {
+                line.style.setProperty('--rotate-deg', `${Math.random() * 30 - 15}deg`);
+            }
+        });
+
+        // Fade-in effect for sections on scroll (Neo-expressionist reveal)
+        const sections = document.querySelectorAll('section');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the section is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0) rotate(0deg)';
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            if (section.id !== 'hero') { // Apply initial hidden state to all but the hero section
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(50px) rotate(2deg)'; // Initial hidden state
+                observer.observe(section);
+            } else {
+                // Ensure hero section is visible immediately
+                section.style.opacity = '1';
+                section.style.transform = 'translateY(0) rotate(0deg)';
+            }
+        });
+
+    </script>
+</body>
+</html>

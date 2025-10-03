@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>בינה מלאכותית: אדריכלות המחר | זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Heebo', sans-serif;
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll from fixed elements */
+        }
+
+        /* Custom Cursor Styling - Default State */
+        .cursor-default-state {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #FFFFFF; /* White border for contrast */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+            transform: translate(-50%, -50%) scale(1);
+            transition: transform 0.15s ease-out, border-color 0.15s ease-out, box-shadow 0.15s ease-out;
+        }
+        /* Custom Cursor Styling - Hover State */
+        .cursor-hover-state {
+            transform: translate(-50%, -50%) scale(0.6);
+            border-color: #DC2626; /* Red border on hover */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 0 4px #DC2626; /* Red accent shadow */
+        }
+
+        /* Mondrian-esque Content Blocks */
+        .mondrian-block {
+            border: 4px solid black;
+            box-sizing: border-box; /* Ensure border is included in width/height */
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            line-height: 1.6;
+            transition: all 0.3s ease-in-out;
+            position: relative; /* For z-index to work correctly on hover */
+            z-index: 10; /* Default z-index for content blocks */
+        }
+        .mondrian-block-red { background-color: #DC2626; color: white; }
+        .mondrian-block-blue { background-color: #2563EB; color: white; }
+        .mondrian-block-yellow { background-color: #EAB308; color: white; }
+        .mondrian-block-black { background-color: #000000; color: white; }
+        .mondrian-block-white { background-color: #FFFFFF; color: #333333; }
+        .mondrian-block-gray { background-color: #F3F4F6; color: #333333; } /* Light gray */
+
+        .mondrian-block:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+            z-index: 20; /* Bring hovered block slightly forward */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased overflow-y-scroll" style="min-height: 200vh;">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="fixed pointer-events-none rounded-full z-[9999] -translate-x-1/2 -translate-y-1/2 cursor-default-state"></div>
+
+    <!-- Dynamic Mondrian Background - Fixed Position (z-[-1]) -->
+    <div id="mondrian-bg-layer" class="fixed inset-0 bg-gray-100 z-[-1] overflow-hidden">
+        <!-- These panels will animate via JS, giving a subtle parallax -->
+        <div class="mondrian-bg-panel absolute bg-red-600 opacity-70" style="width: 25vw; height: 35vh; top: 10vh; left: 15vw;"></div>
+        <div class="mondrian-bg-panel absolute bg-blue-600 opacity-70" style="width: 20vw; height: 25vh; bottom: 15vh; right: 10vw;"></div>
+        <div class="mondrian-bg-panel absolute bg-yellow-500 opacity-70" style="width: 18vw; height: 40vh; top: 30vh; right: 20vw;"></div>
+        <div class="mondrian-bg-panel absolute bg-black opacity-70" style="width: 10vw; height: 20vh; top: 5vh; right: 5vw;"></div>
+        <div class="mondrian-bg-panel absolute bg-white opacity-70 border-4 border-black" style="width: 30vw; height: 20vh; bottom: 5vh; left: 5vw;"></div>
+        <div class="mondrian-bg-panel absolute bg-blue-600 opacity-70" style="width: 12vw; height: 15vh; bottom: 40vh; left: 35vw;"></div>
+        <div class="mondrian-bg-panel absolute bg-black opacity-70" style="width: 8vw; height: 10vh; top: 60vh; left: 5vw;"></div>
+        <div class="mondrian-bg-panel absolute bg-red-600 opacity-70" style="width: 15vw; height: 20vh; bottom: 25vh; right: 40vw;"></div>
+    </div>
+
+    <!-- Main Content Container (z-10) -->
+    <div class="relative z-10 p-4 md:p-8 lg:p-16 max-w-screen-xl mx-auto min-h-screen grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 auto-rows-min">
+
+        <!-- Header / Main Title Block -->
+        <header class="mondrian-block mondrian-block-black lg:col-span-2 interactive-element py-12 md:py-16">
+            <h1 class="text-4xl md:text-6xl font-black mb-4 leading-tight">בינה מלאכותית: <br>אדריכלות העתיד</h1>
+            <p class="text-xl md:text-2xl font-light max-w-2xl">קווים, צבעים, קוד. הופכים את ה-AI לשפה ברורה, ישימה ונגישה לכולם.</p>
+        </header>
+
+        <!-- Intro Message Block -->
+        <section class="mondrian-block mondrian-block-white interactive-element row-span-2 md:row-span-1 py-8 md:py-12">
+            <h2 class="text-2xl md:text-3xl font-bold mb-4">המחר מתחיל היום</h2>
+            <p class="text-lg md:text-xl max-w-md">בעולם שנבנה מחדש מדי יום, הבינה המלאכותית היא המהנדס, האמן, וכלי הבנייה. לא עוד מסתורין - כי אם שפה חדשה, ברורה ומדויקת, שכל אחד ואחת יכולים לרכוש ולשלוט בה.</p>
+        </section>
+
+        <!-- Zevik Aviner Block -->
+        <section class="mondrian-block mondrian-block-blue interactive-element md:col-span-1 lg:col-span-1 py-8 md:py-12 flex flex-col items-center">
+            <h3 class="text-3xl md:text-4xl font-bold mb-4">האדריכל המנחה</h3>
+            <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover mb-4 border-4 border-white">
+            <p class="text-xl md:text-2xl font-semibold mb-2">זאביק אבינר</p>
+            <p class="text-base md:text-lg text-center max-w-xs">מומחה בינה מלאכותית עם ניסיון עשיר, מתמחה בהנגשת הטכנולוגיה והפיכתה לכלי עבודה יומיומי.</p>
+        </section>
+
+        <!-- Core Message Block -->
+        <section class="mondrian-block mondrian-block-yellow interactive-element md:col-span-1 lg:col-span-2 py-8 md:py-12">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">הפיכת AI לנגיש וישים</h2>
+            <p class="text-lg md:text-xl max-w-2xl">ממתחילים ועד אדריכלי AI מתקדמים - אנו מעניקים כלים מעשיים שניתן ליישם באופן מיידי בעבודה ובחיים האישיים. AI זה כאן, עכשיו.</p>
+        </section>
+
+        <!-- Services Section Title Block -->
+        <div class="mondrian-block mondrian-block-gray lg:col-span-3 py-6 md:py-8 interactive-element">
+            <h3 class="text-3xl md:text-4xl font-bold">מעבדות יצירה: המסלולים שלך לשליטה ב-AI</h3>
+        </div>
+
+        <!-- Services Blocks -->
+        <section class="mondrian-block mondrian-block-white interactive-element">
+            <h4 class="text-2xl md:text-3xl font-bold mb-2">סדנאות קבוצתיות</h4>
+            <p class="text-base md:text-lg">קבוצות סיעור מוחות - יצירה משותפת בלבנים של קוד, מעשיות וממוקדות.</p>
+        </section>
+        <section class="mondrian-block mondrian-block-red interactive-element">
+            <h4 class="text-2xl md:text-3xl font-bold mb-2">שיעורים פרטיים</h4>
+            <p class="text-base md:text-lg">מסלול אישי - צבעים מותאמים אישית לכישרון ולצרכים הייחודיים שלך.</p>
+        </section>
+        <section class="mondrian-block mondrian-block-white interactive-element">
+            <h4 class="text-2xl md:text-3xl font-bold mb-2">הרצאות לארגונים</h4>
+            <p class="text-base md:text-lg">חזון רחב - מפות דרכים לצוותים בעידן החדש, פתיחת אופקים והשראה.</p>
+        </section>
+        <section class="mondrian-block mondrian-block-blue interactive-element lg:col-span-2">
+            <h4 class="text-2xl md:text-3xl font-bold mb-2">ייעוץ ופיתוח פרויקטים</h4>
+            <p class="text-base md:text-lg">בניית מגדלים - ליווי מקצועי מפיתוח קונספט ועד למימוש פרויקטים מבוססי AI.</p>
+        </section>
+
+        <!-- Expertise Section Title Block -->
+        <div class="mondrian-block mondrian-block-gray lg:col-span-3 py-6 md:py-8 interactive-element">
+            <h3 class="text-3xl md:text-4xl font-bold">הקומפוזיציה המלאה: תחומי AI שאנו מחיים</h3>
+        </div>
+
+        <!-- Expertise Blocks -->
+        <section class="mondrian-block mondrian-block-white interactive-element">
+            <h4 class="text-2xl md:text-3xl font-bold mb-2">יצירת טקסטים ותוכן</h4>
+            <p class="text-base md:text-lg">קווים נרטיביים - יצירת שפה חדשה למותגים, כתיבה שיווקית ועוד.</p>
+        </section>
+        <section class="mondrian-block mondrian-block-black interactive-element">
+            <h4 class="text-2xl md:text-3xl font-bold mb-2">בניית אפליקציות חכמות</h4>
+            <p class="text-base md:text-lg">לב המערכת - פיתוח פתרונות חכמים מבוססי AI לכל פלטפורמה.</p>
+        </section>
+        <section class="mondrian-block mondrian-block-red interactive-element">
+            <h4 class="text-2xl md:text-3xl font-bold mb-2">פיתוח אתרים מבוססי AI</h4>
+            <p class="text-base md:text-lg">הממשק הוויזואלי - אתרים שמגיבים, לומדים ומתפתחים עם המשתמשים.</p>
+        </section>
+        <section class="mondrian-block mondrian-block-blue interactive-element lg:col-span-1">
+            <h4 class="text-2xl md:text-3xl font-bold mb-2">ניתוח נתונים ומחקר</h4>
+            <p class="text-base md:text-lg">הגיאומטריה הנסתרת - פענוח תבניות ליצירת תובנות עסקיות ומחקריות.</p>
+        </section>
+        <section class="mondrian-block mondrian-block-yellow interactive-element">
+            <h4 class="text-2xl md:text-3xl font-bold mb-2">יצירת תמונות ואומנות</h4>
+            <p class="text-base md:text-lg">הפלטה הדיגיטלית - AI כאמן שותף ביצירה חזותית מרהיבה.</p>
+        </section>
+        <section class="mondrian-block mondrian-block-black interactive-element">
+            <h4 class="text-2xl md:text-3xl font-bold mb-2">אוטומציה של תהליכים</h4>
+            <p class="text-base md:text-lg">תנועה זורמת - ייעול תהליכים מורכבים בפשטות וביעילות מדהימה.</p>
+        </section>
+
+        <!-- Contact Section -->
+        <footer class="mondrian-block mondrian-block-gray lg:col-span-3 py-10 md:py-16 interactive-element">
+            <h3 class="text-3xl md:text-4xl font-bold mb-6">נקודת המפגש: AI זה כאן ועכשיו.</h3>
+            <div class="flex flex-col md:flex-row gap-4 md:gap-8 justify-center items-center text-lg md:text-xl">
+                <a href="https://wa.me/972546609385" target="_blank" rel="noopener noreferrer" class="interactive-element text-blue-700 hover:text-blue-900 font-semibold flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.9 4.45-9.9 9.9 0 1.75.46 3.45 1.35 4.95L2 22l5.25-1.39c1.4-.78 2.97-1.2 4.79-1.2 5.46 0 9.9-4.45 9.9-9.9S17.5 2 12.04 2zm5.72 14.5l-.42-.25c-.5-.3-2.6-.9-3-.97-.42-.07-.72-.1-.99.1-.27.2-.68.82-.84.99-.17.17-.33.19-.62.08-.29-.11-1.23-.45-2.34-1.44-1.74-1.63-2.31-2.18-2.58-2.65-.27-.47-.03-.7-.2-.86-.17-.17-.4-.25-.56-.27-.15-.02-.32-.02-.49-.02h-.41c-.38 0-.97.14-1.32.49-.35.35-1.3 1.25-1.3 3.04 0 1.79 1.33 3.5 1.52 3.75.19.25 2.62 4 6.2 5.56 3.59 1.57 3.66 1.05 4.33.99.67-.07 2.05-.85 2.4-1.2.35-.35.6-1.04.25-1.64z"/></svg>
+                    <span>ווטסאפ: 054-6609385</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="interactive-element text-blue-700 hover:text-blue-900 font-semibold flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    <span>אימייל: zaviner@gmail.com</span>
+                </a>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        // Get all elements that should trigger a cursor hover state
+        const interactiveElements = document.querySelectorAll('.interactive-element, a, button');
+
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.remove('cursor-default-state');
+                cursor.classList.add('cursor-hover-state');
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('cursor-hover-state');
+                cursor.classList.add('cursor-default-state');
+            });
+        });
+
+        // Mondrian Background Parallax Logic
+        const bgPanels = document.querySelectorAll('.mondrian-bg-panel');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            bgPanels.forEach((panel, index) => {
+                // Apply a subtle parallax effect with varying speeds and directions
+                const speed = (index % 3 === 0) ? 0.04 : (index % 3 === 1) ? 0.06 : 0.08;
+                const directionY = (index % 2 === 0) ? 1 : -1; // Alternate vertical direction
+                const directionX = (index % 4 < 2) ? 0.5 : -0.5; // Alternate horizontal direction
+                panel.style.transform = `translateY(${scrollY * speed * directionY}px) translateX(${scrollY * speed * directionX}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

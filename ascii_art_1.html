@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Master - זאביק אבינר | שליטה בבינה המלאכותית</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS for ASCII art and overrides */
+        :root {
+            --primary-color: #32CD32; /* Lime Green */
+            --secondary-color: #00FFFF; /* Cyan */
+            --accent-color: #FF00FF; /* Fuchsia */
+            --bg-color: #0a0a0a; /* Almost Black */
+            --text-color: var(--primary-color);
+        }
+
+        body {
+            font-family: 'IBM Plex Mono', monospace;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll from ASCII effects */
+        }
+
+        /* Custom Cursor Styling - MANDATORY High Contrast Technique */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* Light border for visibility on dark */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 15px var(--secondary-color), inset 0 0 10px var(--secondary-color); /* Dark shadow for visibility on light + glow */
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: width 0.2s ease-out, height 0.2s ease-out, opacity 0.2s ease-out;
+            opacity: 0.8;
+        }
+        .custom-cursor.active {
+            width: 30px;
+            height: 30px;
+            opacity: 1;
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 25px var(--secondary-color), inset 0 0 15px var(--secondary-color);
+        }
+
+        /* ASCII Art background */
+        .ascii-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 200vh; /* Make it longer to enable continuous scroll animation */
+            overflow: hidden;
+            z-index: -1;
+            white-space: pre;
+            font-size: 0.75rem;
+            line-height: 0.9;
+            color: rgba(var(--primary-color), 0.05); /* Very subtle green */
+            animation: ascii-scroll 60s linear infinite;
+            direction: ltr; /* Ensure ASCII background scrolls LTR for visual effect */
+            pointer-events: none;
+        }
+
+        @keyframes ascii-scroll {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-100%); } /* Scrolls from bottom to top, creating an infinite loop */
+        }
+
+        /* Glitch effect for text elements on hover */
+        .glitch-text:hover {
+            animation: glitch 0.5s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); filter: hue-rotate(0deg); }
+            20% { transform: translate(-2px, 2px); filter: hue-rotate(90deg); }
+            40% { transform: translate(-2px, -2px); filter: hue-rotate(180deg); }
+            60% { transform: translate(2px, 2px); filter: hue-rotate(270deg); }
+            80% { transform: translate(2px, -2px); filter: hue-rotate(360deg); }
+            100% { transform: translate(0); filter: hue-rotate(0deg); }
+        }
+
+        /* Terminal-like button */
+        .terminal-btn {
+            @apply px-6 py-3 relative overflow-hidden group border-2 border-current text-current hover:text-white transition-colors duration-300 ease-in-out;
+        }
+        .terminal-btn::before {
+            content: '';
+            @apply absolute inset-0 block bg-current transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300 ease-in-out z-0;
+        }
+        .terminal-btn span {
+            @apply relative z-10;
+        }
+
+        /* ASCII header effect - ensures monospace and line-height */
+        .ascii-heading pre {
+            white-space: pre-wrap;
+            line-height: 1;
+            font-family: 'IBM Plex Mono', monospace;
+            text-align: center;
+        }
+
+        /* General sections styling */
+        section {
+            @apply py-16 px-4 md:px-8 lg:px-16 max-w-7xl mx-auto z-10 relative;
+            background-color: rgba(0,0,0,0.7); /* Slightly transparent background for sections */
+            border: 1px solid rgba(var(--primary-color), 0.2);
+            box-shadow: 0 0 20px rgba(var(--primary-color), 0.1);
+            margin-bottom: 4rem;
+        }
+        section:first-of-type { /* Hero does not have this margin */
+            margin-top: 0;
+        }
+        section:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .section-title {
+            @apply text-4xl md:text-5xl lg:text-6xl font-bold mb-8 text-center leading-tight;
+            color: var(--secondary-color);
+            text-shadow: 0 0 10px var(--secondary-color), 0 0 20px var(--secondary-color);
+        }
+
+        .subsection-title {
+            @apply text-3xl md:text-4xl font-bold mb-4 leading-tight;
+            text-shadow: 0 0 5px var(--primary-color);
+        }
+
+        /* Ensure consistent RTL direction for all content */
+        h1, h2, h3, p, div, a, ul, li {
+            direction: rtl;
+            text-align: right;
+        }
+        /* Override for specific centered elements */
+        .text-center {
+            text-align: center;
+        }
+        /* Specific override for Zevik's image (as it is not text) */
+        img {
+            direction: ltr; /* images don't have text direction */
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- ASCII Art Background (dynamic via JS) -->
+    <div class="ascii-background" id="ascii-bg"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 pt-16 pb-32">
+
+        <!-- Hero Section -->
+        <header class="text-center py-24 md:py-32 lg:py-48 px-4 relative overflow-hidden border-b-2 border-lime-400 shadow-lg shadow-lime-500/20">
+            <h1 class="text-6xl md:text-7xl lg:text-8xl font-bold mb-4 text-cyan-400 leading-tight glitch-text">
+                &lt;מערכת_בינה_מלאכותית&gt;
+            </h1>
+            <p class="text-3xl md:text-4xl lg:text-5xl mb-8 text-lime-400 glitch-text">
+                העתיד_הוא_עכשיו.exe
+            </p>
+            <div class="ascii-heading text-lg md:text-xl lg:text-2xl text-fuchsia-400 mt-12">
+                <pre>
+     _   _  _     _  _   _  _
+    | | | || |   | || | | || |
+    | |_| || | __| || |_| || | __
+    |  _  || |/ _` ||  _  || |/ _` |
+    | | | || | (_| || | | || | (_| |
+    |_| |_||_|\__,_||_| |_||_|\__,_|
+
+    &lt;קוד_פתיחה&gt;  להנגיש_AI_לכולם  &lt;/קוד_פתיחה&gt;
+                </pre>
+            </div>
+            <p class="text-xl md:text-2xl lg:text-3xl text-gray-300 mt-8 mb-12 max-w-4xl mx-auto">
+                הצטרפו למסע אל ליבת הבינה המלאכותית עם זאביק אבינר - מומחה שיעניק לכם את הכלים לפרוץ גבולות, לייצר חדשנות ולשלוט בעתיד הדיגיטלי.
+            </p>
+            <a href="#contact" class="terminal-btn text-lime-400 text-xl md:text-2xl animate-pulse">
+                <span>&gt; התחילו_ללמוד_AI_עכשיו()_</span>
+            </a>
+        </header>
+
+        <!-- Main Message Section -->
+        <section>
+            <h2 class="section-title">
+                &gt; ליבה_של_המסר &lt;
+            </h2>
+            <div class="text-lg md:text-xl lg:text-2xl leading-relaxed max-w-4xl mx-auto text-center">
+                <p class="mb-6 text-gray-200">
+                    <span class="text-lime-400">/** פונקציית_נגישות_AI(משתמש) */</span>
+                    משימתנו היא לפרק את המורכבות, להפוך את ה-AI לשפה ברורה ולידע יישומי. אנו מאמינים שלכל אחד ואחת מגיעה היכולת להבין, להשתמש ואף לבנות עם הכלים העוצמתיים של הבינה המלאכותית.
+                </p>
+                <p class="mb-6 text-gray-200">
+                    <span class="text-cyan-400">/** קוד_מבצעי(תוצאות_מיידיות) */</span>
+                    לא מדובר רק בתיאוריה. הקורסים, הסדנאות וההדרכות שלנו ממוקדים בכלים מעשיים, טכניקות עבודה מתקדמות ופיתוח חשיבה יצירתית שתאפשר לכם להטמיע AI באופן מיידי בעבודה, בעסק ובחיים האישיים.
+                </p>
+                <p class="text-gray-200">
+                    <span class="text-fuchsia-400">/** עתיד_נבנה(לכל_אחד) */</span>
+                    העתיד כבר כאן, והוא נכתב בקוד. בואו נכתוב אותו יחד, בשפה שלכם, בקצב שלכם, מהיסודות ועד לפרויקטים המתקדמים ביותר.
+                </p>
+            </div>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section>
+            <h2 class="section-title">
+                &gt; קהל_יעד.ממשק &lt;
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center text-lg md:text-xl leading-relaxed">
+                <div class="p-6 border-2 border-lime-400 shadow-md shadow-lime-500/20 bg-gray-900 transition-all duration-300 hover:scale-105 hover:shadow-lime-500/40">
+                    <p class="text-2xl font-bold mb-4 text-lime-400">&lt;מתחילים&gt;</p>
+                    <p class="text-gray-200">למי שרוצה לפענח את ה-AI מאפס. דלת הכניסה לעולם אינסופי של אפשרויות.</p>
+                </div>
+                <div class="p-6 border-2 border-cyan-400 shadow-md shadow-cyan-500/20 bg-gray-900 transition-all duration-300 hover:scale-105 hover:shadow-cyan-500/40">
+                    <p class="text-2xl font-bold mb-4 text-cyan-400">&lt;אנשי_מקצוע&gt;</p>
+                    <p class="text-gray-200">לשילוב AI בזרם העבודה הקיים, אופטימיזציה וקפיצת מדרגה בביצועים.</p>
+                </div>
+                <div class="p-6 border-2 border-fuchsia-400 shadow-md shadow-fuchsia-500/20 bg-gray-900 transition-all duration-300 hover:scale-105 hover:shadow-fuchsia-500/40">
+                    <p class="text-2xl font-bold mb-4 text-fuchsia-400">&lt;מנהלים_ו_ארגונים&gt;</p>
+                    <p class="text-gray-200">להכשרת צוותים, הטמעת חדשנות ויצירת יתרון תחרותי אסטרטגי.</p>
+                </div>
+                <div class="p-6 border-2 border-lime-400 shadow-md shadow-lime-500/20 bg-gray-900 transition-all duration-300 hover:scale-105 hover:shadow-lime-500/40">
+                    <p class="text-2xl font-bold mb-4 text-lime-400">&lt;מפתחי_AI_מתקדמים&gt;</p>
+                    <p class="text-gray-200">ליווי אישי בפיתוח פרויקטים מורכבים וחדשניים מבוססי AI.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Areas Section -->
+        <section>
+            <h2 class="section-title">
+                &gt; מודולי_התמחות &lt;
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-lg md:text-xl">
+                <div class="p-6 border-r-2 border-b-2 border-lime-400 bg-gray-900 hover:bg-gray-800 transition-colors duration-300">
+                    <h3 class="subsection-title text-lime-400">
+                        &lt;טקסט_ו_תוכן&gt;
+                    </h3>
+                    <p class="text-gray-300">יצירת תוכן שיווקי, מאמרים, קוד ואוטומציה של תהליכי כתיבה עם מודלי שפה מתקדמים.</p>
+                </div>
+                <div class="p-6 border-r-2 border-b-2 border-cyan-400 bg-gray-900 hover:bg-gray-800 transition-colors duration-300">
+                    <h3 class="subsection-title text-cyan-400">
+                        &lt;אפליקציות_חכמות&gt;
+                    </h3>
+                    <p class="text-gray-300">פיתוח אפליקציות ובוטים המשלבים יכולות AI לשיפור חווית המשתמש ופתרון בעיות.</p>
+                </div>
+                <div class="p-6 border-r-2 border-b-2 border-fuchsia-400 bg-gray-900 hover:bg-gray-800 transition-colors duration-300">
+                    <h3 class="subsection-title text-fuchsia-400">
+                        &lt;אתרי_AI&gt;
+                    </h3>
+                    <p class="text-gray-300">בניית אתרים אינטראקטיביים המשתמשים ב-AI להתאמה אישית, אופטימיזציה ועוד.</p>
+                </div>
+                <div class="p-6 border-r-2 border-b-2 border-lime-400 bg-gray-900 hover:bg-gray-800 transition-colors duration-300">
+                    <h3 class="subsection-title text-lime-400">
+                        &lt;ניתוח_נתונים_ו_מחקר&gt;
+                    </h3>
+                    <p class="text-gray-300">הפקת תובנות מנתונים באמצעות כלי AI, זיהוי מגמות וקבלת החלטות מבוססות.</p>
+                </div>
+                <div class="p-6 border-r-2 border-b-2 border-cyan-400 bg-gray-900 hover:bg-gray-800 transition-colors duration-300">
+                    <h3 class="subsection-title text-cyan-400">
+                        &lt;תמונות_ו_אומנות&gt;
+                    </h3>
+                    <p class="text-gray-300">יצירת גרפיקה, תמונות ואלמנטים ויזואליים חדשניים בעזרת מודלי AI גנרטיביים.</p>
+                </div>
+                <div class="p-6 border-r-2 border-b-2 border-fuchsia-400 bg-gray-900 hover:bg-gray-800 transition-colors duration-300">
+                    <h3 class="subsection-title text-fuchsia-400">
+                        &lt;אוטומציה_של_תהליכים&gt;
+                    </h3>
+                    <p class="text-gray-300">ייעול והטמעה של AI לאוטומציה של משימות חוזרות ושיפור יעילות תפעולית.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section>
+            <h2 class="section-title">
+                &gt; שירותים_זמינים &lt;
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-lg md:text-xl">
+                <div class="p-8 border-2 border-cyan-400 bg-gray-900 shadow-md shadow-cyan-500/20 hover:scale-[1.02] transition-transform duration-300">
+                    <h3 class="subsection-title text-cyan-400 mb-4">&lt;סדנאות_קבוצתיות&gt;</h3>
+                    <p class="text-gray-200 mb-4">
+                        פורמט אינטנסיבי וממוקד. ללמוד יחד, לתרגל יחד, ולקבל כלים מעשיים בהרכב קבוצתי דינמי.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-300">
+                        <li>מפגשים מעשיים</li>
+                        <li>פרויקטים קטנים</li>
+                        <li>למידה חווייתית</li>
+                    </ul>
+                </div>
+                <div class="p-8 border-2 border-fuchsia-400 bg-gray-900 shadow-md shadow-fuchsia-500/20 hover:scale-[1.02] transition-transform duration-300">
+                    <h3 class="subsection-title text-fuchsia-400 mb-4">&lt;שיעורים_פרטיים&gt;</h3>
+                    <p class="text-gray-200 mb-4">
+                        תוכנית לימודים המותאמת אישית לצרכים, לרמה ולשאיפות שלכם. קצב אישי, תוכן מותאם.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-300">
+                        <li>התאמה אישית</li>
+                        <li>התקדמות בקצב אישי</li>
+                        <li>פוקוס על יעדים אישיים</li>
+                    </ul>
+                </div>
+                <div class="p-8 border-2 border-lime-400 bg-gray-900 shadow-md shadow-lime-500/20 hover:scale-[1.02] transition-transform duration-300">
+                    <h3 class="subsection-title text-lime-400 mb-4">&lt;הרצאות_ל_ארגונים&gt;</h3>
+                    <p class="text-gray-200 mb-4">
+                        פתיחת אופקים והענקת ידע עדכני לצוותים ומנהלים. השראה, חדשנות וקריאה לפעולה.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-300">
+                        <li>השראה לצוותים</li>
+                        <li>ידע עדכני למנהלים</li>
+                        <li>פיתוח חשיבה עתידנית</li>
+                    </ul>
+                </div>
+                <div class="p-8 border-2 border-cyan-400 bg-gray-900 shadow-md shadow-cyan-500/20 hover:scale-[1.02] transition-transform duration-300">
+                    <h3 class="subsection-title text-cyan-400 mb-4">&lt;ייעוץ_ו_פיתוח_פרויקטים&gt;</h3>
+                    <p class="text-gray-200 mb-4">
+                        ליווי מקצועי ואישי משלב הרעיון ועד למימוש פרויקטי AI חדשניים.
+                    </p>
+                    <ul class="list-disc list-inside text-gray-300">
+                        <li>ליווי אסטרטגי</li>
+                        <li>מימוש טכני</li>
+                        <li>פתרונות מותאמים</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide Section -->
+        <section>
+            <h2 class="section-title">
+                &gt; המדריך: זאביק_אבינר &lt;
+            </h2>
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-12 max-w-5xl mx-auto">
+                <div class="flex-shrink-0 text-center">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר - מומחה בינה מלאכותית" class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover border-4 border-fuchsia-400 shadow-lg shadow-fuchsia-500/30 mb-6 mx-auto hover:scale-105 transition-transform duration-300">
+                    <p class="text-2xl font-bold text-fuchsia-400">&lt;מפעיל_מערכת&gt;</p>
+                </div>
+                <div class="text-lg md:text-xl leading-relaxed">
+                    <p class="mb-4 text-gray-200">
+                        <span class="text-lime-400">// זאביק_אבינר.פרופיל</span>
+                    </p>
+                    <p class="mb-4 text-gray-200">
+                        כאדריכל מערכות ומפתח פרויקטים מורכבים מבוססי AI, זאביק מביא עמו ניסיון עשיר ופרקטי אל עולם ההדרכה. הוא מומחה לא רק בבניית טכנולוגיה, אלא גם בפירוק המחסומים ובגשר בין המורכבות הטכנולוגית לבין הצורך האנושי להבין וליישם.
+                    </p>
+                    <p class="mb-4 text-gray-200">
+                        היכולת הייחודית של זאביק היא להפוך את ה-AI מכלי מרוחק ומהודר לכלי עבודה יומיומי, נגיש ורב עוצמה. הוא יוביל אתכם צעד אחר צעד, דרך תוכניות לימוד מותאמות וגישה מעשית, אל השליטה המלאה בכלים המתקדמים ביותר של הבינה המלאכותית.
+                    </p>
+                    <p class="text-gray-200">
+                        <span class="text-cyan-400">// פקודה: ללמוד_ממומחה</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="text-center">
+            <h2 class="section-title">
+                &gt; התחברות_לשרת &lt;
+            </h2>
+            <div class="max-w-xl mx-auto p-8 border-2 border-lime-400 shadow-lg shadow-lime-500/30 bg-gray-900 terminal-output-block">
+                <p class="text-lime-400 text-xl md:text-2xl mb-4">
+                    <span class="text-gray-500">[USER@AI-MASTER ~]$</span> ./contact_zavik.sh
+                </p>
+                <div class="mb-6">
+                    <p class="text-gray-200 text-lg md:text-xl">
+                        <span class="text-cyan-400">STATUS:</span> Connection_Established.
+                    </p>
+                    <p class="text-gray-200 text-lg md:text-xl">
+                        <span class="text-fuchsia-400">READY_FOR_INPUT:</span>
+                    </p>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <a href="https://wa.me/972546609385" target="_blank" class="terminal-btn bg-lime-400 text-black hover:text-white px-6 py-3 text-lg md:text-xl">
+                        <span>&gt; שלח_הודעה_ל_ווטסאפ(054-6609385)</span>
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="terminal-btn bg-cyan-400 text-black hover:text-white px-6 py-3 text-lg md:text-xl">
+                        <span>&gt; שלח_מייל_ל_zaviner@gmail.com()</span>
+                    </a>
+                </div>
+                <p class="text-gray-500 text-sm mt-8">
+                    <span class="text-lime-400">[SYSTEM]:</span> תודה על התעניינותכם. נחזור אליכם בהקדם.
+                </p>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Custom Cursor JS
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        document.addEventListener('mousedown', () => {
+            cursor.classList.add('active');
+        });
+
+        document.addEventListener('mouseup', () => {
+            cursor.classList.remove('active');
+        });
+
+        // ASCII Art Background JS - Generates random characters for background effect
+        const asciiBg = document.getElementById('ascii-bg');
+        const chars = '01#@%&^*()-+=/\\_<>[]{}.,;:`~`~!@#$%^&*()_+=-{}[]|:;"<>,.?/ABCDEFGHIJKLMNPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        const density = 0.0001; // Adjust density for character count
+        let resizeTimeout;
+
+        function generateAsciiBackground() {
+            if (!asciiBg) return;
+            asciiBg.innerHTML = '';
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight; // Using screenHeight as basis for line breaks
+            const numChars = Math.floor(screenWidth * screenHeight * density);
+
+            let asciiContent = '';
+            const charsPerLine = Math.floor(screenWidth / 10); // Rough estimate for characters that fit a line
+            for (let i = 0; i < numChars; i++) {
+                const char = chars[Math.floor(Math.random() * chars.length)];
+                asciiContent += char;
+                if (i > 0 && i % charsPerLine === 0) {
+                    asciiContent += '\n'; // Add line break to wrap content
+                }
+            }
+            asciiBg.textContent = asciiContent;
+
+            // Adjust font size for better effect on different screens
+            const baseFontSize = 0.75; // rem
+            if (screenWidth < 768) { // md breakpoint
+                asciiBg.style.fontSize = (baseFontSize * 0.8) + 'rem';
+                asciiBg.style.lineHeight = (baseFontSize * 0.9) + 'rem';
+            } else {
+                asciiBg.style.fontSize = baseFontSize + 'rem';
+                asciiBg.style.lineHeight = (baseFontSize * 1.2) + 'rem';
+            }
+        }
+
+        generateAsciiBackground(); // Initial generation
+
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(generateAsciiBackground, 200); // Debounce resize
+        });
+    </script>
+</body>
+</html>

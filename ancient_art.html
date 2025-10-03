@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר: לשלוט בבינה המלאכותית - העתיד נכתב עכשיו</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Google Fonts for a Mesopotamian aesthetic: Frank Ruhl Libre for titles, Assistant for body -->
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700&family=Frank+Ruhl+Libre:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS for Mesopotamian aesthetic and cursor */
+        :root {
+            --color-lapis: 26, 43, 69; /* Deep blue, like lapis lazuli (RGB for opacity) */
+            --color-gold: #D4AF37; /* Gold accent */
+            --color-terracotta: 160, 82, 45; /* Terracotta / burnt sienna (RGB for opacity) */
+            --color-sand: #FDF5E6; /* Light sand/cream */
+            --color-dark-blue: #0A1C2C; /* Even darker blue for background */
+        }
+
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: var(--color-dark-blue);
+            color: var(--color-sand);
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Frank Ruhl Libre', serif;
+            color: var(--color-gold); /* Ensure high contrast for headings */
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* White border for contrast on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast on light backgrounds */
+            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+            z-index: 9999;
+            transform: translate(-50%, -50%); /* Center cursor */
+        }
+        .custom-cursor.active {
+            transform: translate(-50%, -50%) scale(1.5); /* Scale on click/hover for visual feedback */
+        }
+
+        /* Mesopotamian Background Pattern - Ziggurat / Cuneiform inspired */
+        .mesopotamian-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(var(--color-lapis), 0.1) 0%, rgba(var(--color-lapis), 0) 70%),
+                linear-gradient(135deg, rgba(var(--color-terracotta), 0.05) 25%, transparent 25%),
+                linear-gradient(225deg, rgba(var(--color-terracotta), 0.05) 25%, transparent 25%),
+                linear-gradient(45deg, rgba(var(--color-terracotta), 0.05) 25%, transparent 25%),
+                linear-gradient(315deg, rgba(var(--color-terracotta), 0.05) 25%, var(--color-dark-blue) 25%);
+            background-size: 80px 80px;
+            background-position: 0 0, 40px 0, 40px 0, 0 40px, 0 40px;
+            opacity: 0.3;
+            transition: transform 0.2s ease-out; /* For parallax */
+        }
+
+        /* Text Block / Tablet Style */
+        .tablet-block {
+            background-color: rgba(var(--color-lapis), 0.6);
+            border: 2px solid rgb(var(--color-terracotta));
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3), inset 0 0 15px rgba(212, 175, 55, 0.1); /* Gold shadow */
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            transform: translateY(20px) scale(0.95); /* Initial state for animation */
+            opacity: 0;
+            transition: all 0.8s ease-out;
+            perspective: 1000px;
+        }
+        .tablet-block.is-visible {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+        .tablet-block:before {
+            content: '';
+            position: absolute;
+            top: -10px; right: -10px; bottom: -10px; left: -10px;
+            border: 1px solid var(--color-gold);
+            opacity: 0.2;
+            z-index: -1;
+        }
+
+        /* Section dividers inspired by ancient carvings */
+        .section-divider {
+            height: 4px;
+            background-color: rgb(var(--color-terracotta));
+            margin: 4rem auto;
+            width: 80%;
+            position: relative;
+            box-shadow: 0 0 8px rgba(var(--color-gold), 0.5);
+        }
+        .section-divider::before, .section-divider::after {
+            content: '';
+            position: absolute;
+            top: -8px; /* Adjusted to make triangles more pronounced */
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 12px 0 12px 20px; /* Top, Right, Bottom, Left */
+            border-color: transparent transparent transparent var(--color-gold);
+        }
+        .section-divider::before {
+            left: 0; /* Position on the left in RTL */
+            transform: scaleX(-1); /* Flip horizontally to point right */
+        }
+        .section-divider::after {
+            right: 0; /* Position on the right in RTL */
+            border-width: 12px 20px 12px 0; /* Top, Right, Bottom, Left */
+            border-color: transparent var(--color-gold) transparent transparent;
+        }
+
+        /* Animation for elements entering viewport */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Specific delay utilities for fade-in */
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+        .delay-400 { transition-delay: 0.4s; }
+        .delay-500 { transition-delay: 0.5s; }
+        .delay-600 { transition-delay: 0.6s; }
+        .delay-700 { transition-delay: 0.7s; }
+        .delay-800 { transition-delay: 0.8s; }
+
+        /* Styling for the hero section background "stars" / "ancient dust" */
+        .hero-stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .star {
+            position: absolute;
+            background-color: var(--color-sand);
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle 5s infinite ease-in-out;
+            pointer-events: none;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 0.8; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+
+        /* Contact Info Styling */
+        .contact-info a {
+            color: var(--color-sand); /* Ensure high contrast */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .contact-info a:hover {
+            color: var(--color-gold); /* Gold hover accent */
+        }
+        .contact-info p {
+            margin-bottom: 0.5rem;
+        }
+        .contact-info p:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Fixed contact button (bottom-left for RTL) */
+        .fixed-contact-button {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem; /* Left for RTL */
+            background-color: rgb(var(--color-terracotta));
+            color: var(--color-sand);
+            padding: 1rem 1.5rem;
+            border-radius: 9999px; /* Pill shape */
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 10px var(--color-gold);
+            transition: all 0.3s ease-in-out;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .fixed-contact-button:hover {
+            background-color: var(--color-gold);
+            color: var(--color-dark-blue);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6), 0 0 15px rgba(212, 175, 55, 0.8);
+        }
+        /* Icon for contact button (simple arrow for WhatsApp/Email direction) */
+        .fixed-contact-button svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            fill: currentColor;
+            transform: rotate(180deg); /* Arrow pointing right */
+        }
+
+        @media (max-width: 768px) {
+            .fixed-contact-button {
+                bottom: 1rem;
+                left: 1rem; /* Adjust for smaller screens */
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+</head>
+<body class="relative min-h-screen text-lg">
+
+    <div class="custom-cursor"></div>
+
+    <!-- Mesopotamian Background Layer (Parallax effect) -->
+    <div class="mesopotamian-bg" id="parallax-bg"></div>
+    <div class="hero-stars" id="hero-stars"></div>
+
+
+    <div class="relative z-10 container mx-auto p-4 sm:p-8 lg:p-12">
+
+        <!-- Header - A grand "Cuneiform Tablet" style title -->
+        <header class="text-center my-10 relative">
+            <h1 class="text-4xl sm:text-6xl font-bold leading-tight tablet-block fade-in mx-auto max-w-4xl pt-8 pb-4">
+                <span class="text-var(--color-gold)">פענוח סודות הבינה המלאכותית:</span><br>
+                <span class="text-var(--color-sand)">העתיד נכתב עכשיו</span>
+            </h1>
+            <p class="text-xl sm:text-2xl mt-4 max-w-3xl mx-auto text-var(--color-terracotta) fade-in delay-200" style="color: rgb(var(--color-terracotta))">
+                מסע אל לבוש של החדשנות - בהנחיית זאביק אבינר, המאסטר המודרני
+            </p>
+        </header>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 1: Core Message / Introduction -->
+        <section id="introduction" class="my-16 tablet-block fade-in">
+            <h2 class="text-3xl sm:text-4xl text-center mb-8 font-bold text-var(--color-gold)">להפוך את הנסתר לנגיש: כוחה של ה-AI בידיים שלך</h2>
+            <p class="mb-6 leading-relaxed text-var(--color-sand) text-right">
+                בעידן שבו הקדמה דוהרת, הבינה המלאכותית (AI) היא הכתב החדש שמעצב את עתידנו. היא אינה רק כלי למעטים, אלא שפה אוניברסלית המיועדת לכל מי שחפץ לפענח את סודותיה ולרתום את כוחה. כאן, אנו פותחים בפניך את השער לעולם מרתק זה, הופכים את המורכב לפשוט ואת התיאורטי למעשי.
+            </p>
+            <p class="leading-relaxed text-var(--color-sand) text-right">
+                מראשית הדרך ועד לרמות מורכבות של פיתוח פרויקטים, נלמד יחד כיצד ליישם את ה-AI באופן מיידי בחיי היומיום, בעבודה ובכל תחומי היצירה. זהו המסע שלך לשליטה אמיתית בכלי העוצמתי ביותר של המאה ה-21.
+            </p>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 2: Target Audience -->
+        <section id="audience" class="my-16 tablet-block fade-in">
+            <h2 class="text-3xl sm:text-4xl text-center mb-8 font-bold text-var(--color-gold)">למי מיועד המסע? נבחרת החוקרים והיוצרים</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-right">
+                <div class="bg-gray-800/50 p-6 rounded-lg border border-var(--color-terracotta) fade-in delay-100" style="border-color: rgb(var(--color-terracotta))">
+                    <h3 class="text-2xl font-bold mb-3 text-var(--color-gold)">המתחילים והסקרנים</h3>
+                    <p class="text-var(--color-sand)">למי שמעוניין להניח את היסודות, להבין את מושגי הליבה של ה-AI ולהצטרף למהפכה הדיגיטלית בלי ידע מוקדם.</p>
+                </div>
+                <div class="bg-gray-800/50 p-6 rounded-lg border border-var(--color-terracotta) fade-in delay-200" style="border-color: rgb(var(--color-terracotta))">
+                    <h3 class="text-2xl font-bold mb-3 text-var(--color-gold)">אנשי מקצוע ויזמים</h3>
+                    <p class="text-var(--color-sand)">לשילוב AI בכלים קיימים, שיפור תהליכי עבודה, או בניית יתרון תחרותי בעולם העסקים המשתנה במהירות.</p>
+                </div>
+                <div class="bg-gray-800/50 p-6 rounded-lg border border-var(--color-terracotta) fade-in delay-300" style="border-color: rgb(var(--color-terracotta))">
+                    <h3 class="text-2xl font-bold mb-3 text-var(--color-gold)">מנהלים וארגונים</h3>
+                    <p class="text-var(--color-sand)">להטמעת AI אסטרטגית בצוותים, להכשרת עובדים ולהבטחת חדשנות ארגונית מתמשכת.</p>
+                </div>
+                <div class="bg-gray-800/50 p-6 rounded-lg border border-var(--color-terracotta) fade-in delay-400" style="border-color: rgb(var(--color-terracotta))">
+                    <h3 class="text-2xl font-bold mb-3 text-var(--color-gold)">המפתחים המתקדמים</h3>
+                    <p class="text-var(--color-sand)">לפיתוח פרויקטים מותאמים אישית, יישום מודלים חדשניים ובניית פתרונות AI פורצי דרך.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 3: Areas of Expertise -->
+        <section id="expertise" class="my-16 tablet-block fade-in">
+            <h2 class="text-3xl sm:text-4xl text-center mb-8 font-bold text-var(--color-gold)">כתבי ה-AI: תחומי השליטה והיצירה</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 text-right">
+                <div class="border border-var(--color-gold) p-5 rounded-md hover:shadow-lg hover:shadow-var(--color-terracotta)/30 transition duration-300 fade-in delay-100">
+                    <h3 class="text-xl font-bold mb-2 text-var(--color-gold)">הסופר הדיגיטלי: יצירת טקסט ותוכן</h3>
+                    <p class="text-var(--color-sand) text-sm">ניסוח רעיונות, כתיבת מאמרים, שיווק דיגיטלי וכתיבת קוד באמצעות מודלים לשפה.</p>
+                </div>
+                <div class="border border-var(--color-gold) p-5 rounded-md hover:shadow-lg hover:shadow-var(--color-terracotta)/30 transition duration-300 fade-in delay-200">
+                    <h3 class="text-xl font-bold mb-2 text-var(--color-gold)">בנאי האפליקציות: פיתוח כלים חכמים</h3>
+                    <p class="text-var(--color-sand) text-sm">הפיכת רעיונות לאפליקציות AI שימושיות וחדשניות, בקלות ובמהירות.</p>
+                </div>
+                <div class="border border-var(--color-gold) p-5 rounded-md hover:shadow-lg hover:shadow-var(--color-terracotta)/30 transition duration-300 fade-in delay-300">
+                    <h3 class="text-xl font-bold mb-2 text-var(--color-gold)">אדריכל האתרים: AI בעולם הווירטואלי</h3>
+                    <p class="text-var(--color-sand) text-sm">בניית אתרים אינטראקטיביים ואוטונומיים, מבוססי בינה מלאכותית.</p>
+                </div>
+                <div class="border border-var(--color-gold) p-5 rounded-md hover:shadow-lg hover:shadow-var(--color-terracotta)/30 transition duration-300 fade-in delay-400">
+                    <h3 class="text-xl font-bold mb-2 text-var(--color-gold)">מפענח הנתונים: ניתוח ומחקר חכם</h3>
+                    <p class="text-var(--color-sand) text-sm">הפקת תובנות עמוקות מנתונים, זיהוי מגמות וחיזוי עתידי בעזרת AI.</p>
+                </div>
+                <div class="border border-var(--color-gold) p-5 rounded-md hover:shadow-lg hover:shadow-var(--color-terracotta)/30 transition duration-300 fade-in delay-500">
+                    <h3 class="text-xl font-bold mb-2 text-var(--color-gold)">אמן הדמיון: יצירת תמונות ואמנות</h3>
+                    <p class="text-var(--color-sand) text-sm">הפיכת רעיונות ויזואליים למציאות דיגיטלית, מגדילה ועד יצירות אמנות שלמות.</p>
+                </div>
+                <div class="border border-var(--color-gold) p-5 rounded-md hover:shadow-lg hover:shadow-var(--color-terracotta)/30 transition duration-300 fade-in delay-600">
+                    <h3 class="text-xl font-bold mb-2 text-var(--color-gold)">המהנדס האוטומטי: ייעול תהליכים</h3>
+                    <p class="text-var(--color-sand) text-sm">אוטומציה של משימות חוזרות ונשנות, שיפור יעילות והפניית משאבים ליצירה.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 4: Services Offered -->
+        <section id="services" class="my-16 tablet-block fade-in">
+            <h2 class="text-3xl sm:text-4xl text-center mb-8 font-bold text-var(--color-gold)">שירותי המאסטר: דרכי הלימוד והשליטה</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-right">
+                <div class="bg-var(--color-lapis)/70 p-6 rounded-lg border border-var(--color-gold) fade-in delay-100" style="background-color: rgba(var(--color-lapis), 0.7);">
+                    <h3 class="text-2xl font-bold mb-3 text-var(--color-gold)">סדנאות קבוצתיות: בית הספר של הסופרים החדשים</h3>
+                    <p class="text-var(--color-sand)">למידה משותפת בסביבה מעוררת השראה, עם דגש על יישום מעשי ופיתוח פרויקטים קטנים.</p>
+                </div>
+                <div class="bg-var(--color-lapis)/70 p-6 rounded-lg border border-var(--color-gold) fade-in delay-200" style="background-color: rgba(var(--color-lapis), 0.7);">
+                    <h3 class="text-2xl font-bold mb-3 text-var(--color-gold)">שיעורים פרטיים: הדרכה אישית מפי המאסטר</h3>
+                    <p class="text-var(--color-sand)">תוכנית לימודים מותאמת אישית לצרכיך, ברמתך ובקצב שלך. ליווי צמוד ואישי.</p>
+                </div>
+                <div class="bg-var(--color-lapis)/70 p-6 rounded-lg border border-var(--color-gold) fade-in delay-300" style="background-color: rgba(var(--color-lapis), 0.7);">
+                    <h3 class="text-2xl font-bold mb-3 text-var(--color-gold)">הרצאות לארגונים: לפתוח אופקים חדשים לצוותים</h3>
+                    <p class="text-var(--color-sand)">הצגת עולם ה-AI בפני צוותים ומנהלים, חשיפת הפוטנציאל העצום ודרכי הטמעתו.</p>
+                </div>
+                <div class="bg-var(--color-lapis)/70 p-6 rounded-lg border border-var(--color-gold) fade-in delay-400" style="background-color: rgba(var(--color-lapis), 0.7);">
+                    <h3 class="text-2xl font-bold mb-3 text-var(--color-gold)">ייעוץ ופיתוח פרויקטים: בניית המקדשים של העתיד</h3>
+                    <p class="text-var(--color-sand)">ליווי מקצועי ופיתוח פתרונות AI מותאמים אישית לעסקים ויוזמות, מהרעיון ועד הביצוע.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Section 5: The Instructor (Zaavik Aviner) -->
+        <section id="instructor" class="my-16 tablet-block flex flex-col md:flex-row items-center gap-8 fade-in text-right">
+            <div class="md:w-1/3 flex justify-center fade-in delay-100">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר, מומחה לבינה מלאכותית" class="w-48 h-48 sm:w-64 sm:h-64 rounded-full object-cover border-4 border-var(--color-gold) shadow-lg shadow-var(--color-terracotta)/50" style="box-shadow: 0 0 15px rgba(var(--color-terracotta), 0.5);">
+            </div>
+            <div class="md:w-2/3 fade-in delay-200">
+                <h2 class="text-3xl sm:text-4xl mb-4 font-bold text-var(--color-gold)">זאביק אבינר: המאסטר ומפענח העתיד</h2>
+                <p class="mb-4 leading-relaxed text-var(--color-sand)">
+                    זאביק אבינר אינו רק מומחה לבינה מלאכותית, הוא אדריכל של ידע ומורה דרך בעידן הדיגיטלי. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק הפך את משימתו להנגיש את הטכנולוגיה המהפכנית הזו לכל אחד ואחת.
+                </p>
+                <p class="mb-4 leading-relaxed text-var(--color-sand)">
+                    כישרונו טמון ביכולתו לפשט מושגים מורכבים ולהפוך אותם לכלים מעשיים ויומיומיים. דרך הדרכתו, המשתתפים לומדים לא רק את ה"מה" אלא גם את ה"איך" - כיצד לרתום את כוחה של ה-AI ליצירה, חדשנות ופתרון אתגרים בעולם המודרני.
+                </p>
+                <div class="mt-6 contact-info">
+                    <p class="text-xl font-bold text-var(--color-gold)">צור קשר:</p>
+                    <p>ווטסאפ: <a href="https://wa.me/972546609385" class="hover:text-var(--color-terracotta)" target="_blank" rel="noopener noreferrer">054-6609385</a></p>
+                    <p>אימייל: <a href="mailto:zaviner@gmail.com" class="hover:text-var(--color-terracotta)">zaviner@gmail.com</a></p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+    </div>
+
+    <!-- Fixed Contact Button (bottom-left for RTL) -->
+    <a href="https://wa.me/972546609385" target="_blank" rel="noopener noreferrer" class="fixed-contact-button fade-in delay-700">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z"/></svg>
+        <span>דבר איתי!</span>
+    </a>
+
+
+    <!-- Footer - Simple, elegant -->
+    <footer class="text-center py-8 mt-16 border-t border-var(--color-terracotta) text-var(--color-sand) text-sm opacity-80 fade-in delay-800" style="border-color: rgb(var(--color-terracotta))">
+        <p>&copy; 2024 זאביק אבינר - כל הזכויות שמורות. נבנה באהבה ובבינה מלאכותית.</p>
+    </footer>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        document.addEventListener('mousedown', () => cursor.classList.add('active'));
+        document.addEventListener('mouseup', () => cursor.classList.remove('active'));
+
+        // Parallax Effect for Background
+        const parallaxBg = document.getElementById('parallax-bg');
+        window.addEventListener('scroll', () => {
+            const scrollPos = window.pageYOffset;
+            parallaxBg.style.transform = `translateY(${scrollPos * 0.2}px) scale(1.1)`; // Slower movement, subtle scale for depth
+        });
+
+        // Intersection Observer for Fade-in Animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Stop observing once visible
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Generate hero section "stars" / "ancient dust"
+        const heroStarsContainer = document.getElementById('hero-stars');
+        function createStar() {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            star.style.width = star.style.height = `${Math.random() * 3 + 1}px`;
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.animationDelay = `${Math.random() * 5}s`;
+            star.style.animationDuration = `${Math.random() * 3 + 4}s`; // Vary animation duration
+            heroStarsContainer.appendChild(star);
+        }
+        for (let i = 0; i < 100; i++) { // Generate 100 stars
+            createStar();
+        }
+
+    </script>
+</body>
+</html>

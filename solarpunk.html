@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>בינה מלאכותית: אדריכלות עתיד ירוק</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #0d1a26; /* Deep dark blue for base */
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor */
+        }
+        .font-rubik {
+            font-family: 'Rubik Mono One', monospace;
+        }
+        /* Custom Solarpunk background glow */
+        .bg-solarpunk-glow {
+            animation: backgroundGlow 20s infinite alternate ease-in-out;
+            background: linear-gradient(135deg, #10313d, #1a4a4a, #2b6a60, #3d8f78, #10313d);
+            background-size: 400% 400%;
+        }
+
+        @keyframes backgroundGlow {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Content reveal animation */
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .reveal-element.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Specific styles for Solarpunk elements */
+        .solarpunk-card {
+            background: rgba(18, 51, 60, 0.6); /* Slightly transparent dark teal */
+            backdrop-filter: blur(8px);
+            border-radius: 2rem; /* More organic than sharp corners */
+            border: 1px solid rgba(6, 184, 182, 0.3); /* Subtle teal border */
+            box-shadow: 0 0 30px rgba(6, 184, 182, 0.2); /* Soft glow */
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            z-index: 1; /* Ensure content is above internal glow effects */
+        }
+
+        .solarpunk-card::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            right: -20%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, rgba(144, 238, 144, 0.1) 0%, rgba(144, 238, 144, 0) 70%); /* Light green glow */
+            transform: rotate(45deg);
+            z-index: 0;
+            pointer-events: none;
+        }
+         .solarpunk-card::after {
+            content: '';
+            position: absolute;
+            bottom: -20%;
+            left: -20%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, rgba(72, 209, 204, 0.1) 0%, rgba(72, 209, 204, 0) 70%); /* Teal glow */
+            transform: rotate(-45deg);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Styling for the Zevik image container */
+        .zevik-image-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: linear-gradient(45deg, #38b2ac, #6ee7b7); /* Teal to mint gradient */
+            padding: 5px; /* Creates a glowing border effect */
+            box-shadow: 0 0 20px rgba(110, 231, 183, 0.5); /* Soft glow */
+            z-index: 1; /* Ensure image is above card effects */
+        }
+        .zevik-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        /* Custom cursor style */
+        #custom-cursor {
+            width: 28px;
+            height: 28px;
+            border: 2px solid rgba(255,255,255,0.9); /* White border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Black shadow */
+            transition: transform 0.1s ease-out, background-color 0.2s ease-out; /* Smooth movement and color change */
+        }
+        #custom-cursor.active {
+            transform: scale(0.8) translate(-50%, -50%); /* Smaller on click */
+            background-color: rgba(100,200,255,0.2); /* Subtle blue fill on active */
+        }
+        /* Style for interactive elements (e.g., hover effects) */
+        .interactive-element {
+            cursor: none; /* Hide default cursor for interactive elements */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .interactive-element:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(6, 184, 182, 0.4);
+        }
+
+        /* Scroll indicator */
+        #scroll-indicator {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: rgba(144, 238, 144, 0.7); /* Light green */
+            font-size: 0.9rem;
+            animation: bounceScroll 2s infinite;
+            z-index: 50; /* Above most content but below cursor */
+        }
+        #scroll-indicator .arrow {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid rgba(144, 238, 144, 0.7); /* Light green */
+            margin-top: 5px;
+        }
+        @keyframes bounceScroll {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-5px) translateX(-50%);
+            }
+        }
+    </style>
+</head>
+<body class="text-right text-emerald-100 min-h-screen relative overflow-x-hidden">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="fixed rounded-full pointer-events-none transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-75 ease-out z-[9999]"></div>
+
+    <!-- Background Layer - Fixed and Animated -->
+    <div class="fixed inset-0 w-full h-full bg-solarpunk-glow z-[-1]"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 p-8 md:p-12 lg:p-16 max-w-7xl mx-auto">
+
+        <!-- Section 1: Awakening / Prologue -->
+        <section class="min-h-screen flex items-center justify-center flex-col text-center reveal-element">
+            <h1 class="text-6xl md:text-8xl font-rubik text-lime-300 drop-shadow-lg leading-tight mb-8">
+                אורות העתיד: <span class="block text-teal-300">בינה מלאכותית פורחת</span>
+            </h1>
+            <p class="text-xl md:text-3xl max-w-4xl text-emerald-200 leading-relaxed drop-shadow-md">
+                בעולם שבו טכנולוגיה וטבע שזורים זה בזה, AI הוא זרע הצמיחה. אנו נלווה אתכם במסע אל שליטה בבינה מלאכותית,
+                לא ככלי פשוט, אלא כשותף ליצירה, כזרז לשינוי חיובי ובר קיימא. העתיד אינו רק מגיע – הוא נבנה, ואתם האדריכלים.
+            </p>
+        </section>
+
+        <!-- Section 2: The Core / Vision -->
+        <section class="min-h-screen flex items-center justify-center flex-col text-center reveal-element">
+            <div class="solarpunk-card max-w-5xl">
+                <h2 class="text-5xl md:text-7xl font-rubik text-yellow-300 mb-8 leading-snug">
+                    למדו לשלוט בבינה המלאכותית <span class="block text-emerald-300">— העתיד הוא עכשיו</span>
+                </h2>
+                <p class="text-lg md:text-2xl text-emerald-100 leading-loose">
+                    הפיכת AI לנגיש וישים לכולם — מהתחלה ועד רמה מתקדמת.
+                    אנו מספקים לכם כלים מעשיים שניתן ליישם מיד בעבודה ובחיים,
+                    להאיץ חדשנות, לייעל תהליכים ולפתוח אופקים חדשים.
+                    זוהי ההזדמנות שלכם להפוך לחלק מהמהפכה הירוקה-טכנולוגית.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 3: The Architect / Zevik -->
+        <section class="min-h-screen flex items-center justify-center flex-col text-center reveal-element">
+            <h2 class="text-5xl md:text-7xl font-rubik text-lime-300 mb-12">
+                זאביק אבינר: <span class="block text-teal-300">אדריכל AI ומוביל חזון</span>
+            </h2>
+            <div class="solarpunk-card max-w-3xl flex flex-col md:flex-row items-center gap-8 md:gap-12">
+                <div class="zevik-image-container flex-shrink-0">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר - מומחה בינה מלאכותית">
+                </div>
+                <p class="text-lg md:text-xl text-emerald-100 leading-relaxed text-right">
+                    זאביק אבינר, אדריכל AI ומוביל חזון, מזמין אתכם להצטרף למסע מרתק.
+                    מניסיונו העשיר בפיתוח ויישום מערכות AI פורצות דרך, זאביק הפך למגדלור המאיר את הדרך
+                    בנתיבי הבינה המלאכותית. הוא לא רק מלמד – הוא מעצים, הוא מנגיש,
+                    והוא מעורר השראה, במטרה להפוך את הידע לכוח פעיל בידי כל אחד ואחת.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 4: The Blueprint / Specialties -->
+        <section class="min-h-screen flex items-center justify-center flex-col text-center reveal-element">
+            <h2 class="text-5xl md:text-7xl font-rubik text-yellow-300 mb-12">
+                זרעי הידע: <span class="block text-emerald-300">תחומי התמחות ב-AI</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl">
+                <div class="solarpunk-card reveal-element interactive-element">
+                    <h3 class="text-3xl md:text-4xl font-rubik text-lime-200 mb-4">יצירת טקסטים ותוכן</h3>
+                    <p class="text-md md:text-lg text-emerald-100">מילים נוצרות כזרמי נתונים חכמים, סיפורים פורחים.</p>
+                </div>
+                <div class="solarpunk-card reveal-element interactive-element">
+                    <h3 class="text-3xl md:text-4xl font-rubik text-lime-200 mb-4">בניית אפליקציות חכמות</h3>
+                    <p class="text-md md:text-lg text-emerald-100">אדריכלות דיגיטלית הפועלת בהרמוניה ובאינטואיציה.</p>
+                </div>
+                <div class="solarpunk-card reveal-element interactive-element">
+                    <h3 class="text-3xl md:text-4xl font-rubik text-lime-200 mb-4">פיתוח אתרים מבוססי AI</h3>
+                    <p class="text-md md:text-lg text-emerald-100">רשתות מידע נושמות ומתפתחות, מתאימות עצמן למשתמש.</p>
+                </div>
+                <div class="solarpunk-card reveal-element interactive-element">
+                    <h3 class="text-3xl md:text-4xl font-rubik text-lime-200 mb-4">ניתוח נתונים ומחקר</h3>
+                    <p class="text-md md:text-lg text-emerald-100">חשיפת תובנות עמוקות מתוך יער הנתונים הסבוך.</p>
+                </div>
+                <div class="solarpunk-card reveal-element interactive-element">
+                    <h3 class="text-3xl md:text-4xl font-rubik text-lime-200 mb-4">יצירת תמונות ואומנות</h3>
+                    <p class="text-md md:text-lg text-emerald-100">דמיון הופך למציאות דיגיטלית פורחת וחדשנית.</p>
+                </div>
+                <div class="solarpunk-card reveal-element interactive-element">
+                    <h3 class="text-3xl md:text-4xl font-rubik text-lime-200 mb-4">אוטומציה של תהליכים</h3>
+                    <p class="text-md md:text-lg text-emerald-100">תנו למערכות לצמוח ולייעל, פנו זמן ליצירה.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: The Pathways / Services -->
+        <section class="min-h-screen flex items-center justify-center flex-col text-center reveal-element">
+            <h2 class="text-5xl md:text-7xl font-rubik text-lime-300 mb-12">
+                נתיבי צמיחה: <span class="block text-teal-300">שירותי ההדרכה שלנו</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl">
+                <div class="solarpunk-card reveal-element interactive-element">
+                    <h3 class="text-3xl md:text-4xl font-rubik text-yellow-200 mb-4">סדנאות קבוצתיות</h3>
+                    <p class="text-md md:text-lg text-emerald-100">קהילות לומדות בצמיחה משותפת – מעשיות וממוקדות, בקבוצה.</p>
+                </div>
+                <div class="solarpunk-card reveal-element interactive-element">
+                    <h3 class="text-3xl md:text-4xl font-rubik text-yellow-200 mb-4">שיעורים פרטיים</h3>
+                    <p class="text-md md:text-lg text-emerald-100">נתיב מותאם אישית לפריחה אישית – לרמה ולצרכים הייחודיים שלך.</p>
+                </div>
+                <div class="solarpunk-card reveal-element interactive-element">
+                    <h3 class="text-3xl md:text-4xl font-rubik text-yellow-200 mb-4">הרצאות לארגונים</h3>
+                    <p class="text-md md:text-lg text-emerald-100">זריעת זרעי חדשנות בארגונכם – פתיחת אופקים והשראה לצוותים.</p>
+                </div>
+                <div class="solarpunk-card reveal-element interactive-element">
+                    <h3 class="text-3xl md:text-4xl font-rubik text-yellow-200 mb-4">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-md md:text-lg text-emerald-100">ליווי מקצועי להגשמת חזונות מבוססי AI – מהרעיון למימוש.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: The Connection / Epilogue -->
+        <section class="min-h-screen flex items-center justify-center flex-col text-center reveal-element">
+            <h2 class="text-5xl md:text-7xl font-rubik text-yellow-300 mb-12">
+                התחברו לעתיד: <span class="block text-emerald-300">צרו קשר עוד היום</span>
+            </h2>
+            <div class="solarpunk-card max-w-3xl p-10">
+                <p class="text-2xl md:text-3xl text-emerald-100 mb-6 leading-relaxed">
+                    המסע אל שליטה בבינה מלאכותית מתחיל בשיחה.
+                    אנו כאן כדי להדריך, להעצים ולבנות יחד איתכם עתיד ירוק וחכם יותר.
+                </p>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-6 mt-8">
+                    <a href="https://wa.me/972546609385" class="interactive-element text-xl md:text-2xl text-lime-200 hover:text-white transition-colors duration-300 bg-teal-600 hover:bg-teal-700 px-6 py-3 rounded-full shadow-lg" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-whatsapp"></i> ווטסאפ: 054-6609385
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="interactive-element text-xl md:text-2xl text-lime-200 hover:text-white transition-colors duration-300 bg-emerald-600 hover:bg-emerald-700 px-6 py-3 rounded-full shadow-lg">
+                        <i class="fas fa-envelope"></i> אימייל: zaviner@gmail.com
+                    </a>
+                </div>
+            </div>
+            <p class="mt-16 text-lg text-gray-400">
+                &copy; 2024 זאביק אבינר - כל הזכויות שמורות למאסטרים של AI.
+            </p>
+        </section>
+
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div id="scroll-indicator">
+        <span class="text-xs">גללו לגלות</span>
+        <div class="arrow"></div>
+    </div>
+
+    <!-- Font Awesome for Icons (WhatsApp, Email) -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    <script>
+        // Custom Cursor JavaScript
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+        document.addEventListener('mousedown', () => {
+            customCursor.classList.add('active');
+        });
+        document.addEventListener('mouseup', () => {
+            customCursor.classList.remove('active');
+        });
+
+        // Content Reveal on Scroll JavaScript
+        const revealElements = document.querySelectorAll('.reveal-element');
+        const scrollIndicator = document.getElementById('scroll-indicator');
+
+        const checkIfVisible = () => {
+            revealElements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                // Check if element is at least 30% visible in the viewport
+                if (rect.top < window.innerHeight * 0.7 && rect.bottom > window.innerHeight * 0.3) {
+                    element.classList.add('is-visible');
+                }
+            });
+
+            // Hide scroll indicator if near the bottom
+            const totalPageHeight = document.documentElement.scrollHeight;
+            const scrollPosition = window.scrollY + window.innerHeight;
+            if (scrollPosition > totalPageHeight - 300) { // Adjust threshold as needed
+                scrollIndicator.style.opacity = '0';
+                scrollIndicator.style.pointerEvents = 'none';
+            } else {
+                scrollIndicator.style.opacity = '1';
+                scrollIndicator.style.pointerEvents = 'auto';
+            }
+        };
+
+        window.addEventListener('scroll', checkIfVisible);
+        window.addEventListener('resize', checkIfVisible); // Re-check on resize
+        // Initial check for elements visible on load
+        checkIfVisible();
+    </script>
+</body>
+</html>

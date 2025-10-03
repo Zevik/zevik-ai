@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שליטה בבינה המלאכותית - העתיד הוא עכשיו</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Tailwind Configuration for specific colors and fonts */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        :root {
+            --primary-light: #2DD4BF; /* Teal 400 */
+            --primary-dark: #134E4A; /* Teal 900 */
+            --accent-light: #A78BFA; /* Violet 400 */
+            --accent-dark: #4C1D95; /* Violet 800 */
+            --bg-dark: #0A0A0A; /* Neutral 950 */
+            --text-light: #F0F0F0; /* White/Off-white */
+            --text-muted: #A0A0A0; /* Gray for subtle text */
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            cursor: none; /* Hide default cursor to use custom one */
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax */
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+        }
+
+        /* Custom Cursor Styling */
+        #custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: transparent;
+            border: 2px solid var(--text-light); /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+            pointer-events: none; /* Allows clicks on elements beneath */
+            transform: translate(-50%, -50%); /* Center the cursor */
+            z-index: 9999; /* Always on top */
+            transition: transform 0.1s ease-out, width 0.1s ease-out, height 0.1s ease-out, background-color 0.1s ease, border-color 0.1s ease;
+        }
+        .cursor-active #custom-cursor {
+            width: 30px;
+            height: 30px;
+            background-color: var(--primary-light);
+            border-color: var(--accent-light);
+            box-shadow: 0 0 0 2px var(--bg-dark), 0 0 15px var(--accent-light);
+        }
+
+        /* Parallax Backgrounds */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            will-change: transform;
+        }
+
+        .base-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1a0f2b 0%, #0a0a0a 100%);
+            z-index: -3; /* Farthest back */
+        }
+
+        /* Entry animation for content */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .reveal-on-scroll.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-light);
+            opacity: 0.7;
+            font-size: 0.8rem;
+            animation: pulse-scroll 2s infinite ease-in-out;
+            z-index: 100;
+            pointer-events: none; /* Ensure it doesn't block clicks */
+        }
+
+        .scroll-indicator .arrow {
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid var(--text-light);
+            margin-top: 5px;
+        }
+
+        @keyframes pulse-scroll {
+            0% { opacity: 0.7; transform: translateX(-50%) translateY(0); }
+            50% { opacity: 1; transform: translateX(-50%) translateY(-5px); }
+            100% { opacity: 0.7; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* Glowing text effect for certain elements */
+        .glowing-text {
+            text-shadow: 0 0 5px var(--primary-light), 0 0 10px var(--primary-light), 0 0 15px var(--primary-light), 0 0 20px var(--primary-light);
+        }
+
+        /* Interactive card effects */
+        .interactive-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .interactive-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, var(--primary-light) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 0;
+        }
+        .interactive-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 0 30px rgba(45, 212, 191, 0.6); /* primary-light with opacity */
+            background-color: rgba(19, 78, 74, 0.4); /* primary-dark with opacity */
+        }
+        .interactive-card:hover::before {
+            opacity: 0.2;
+        }
+        .interactive-card .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hover effect for Zevik's image */
+        #zevik-image-container {
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        #zevik-image {
+            transition: transform 0.5s ease, filter 0.5s ease;
+            transform-origin: center center;
+            backface-visibility: hidden;
+            border-radius: 50%; /* Ensure it stays circular */
+            box-shadow: 0 0 20px var(--accent-light);
+            filter: grayscale(80%) brightness(80%);
+            position: relative;
+            z-index: 2; /* Above holographic effect */
+        }
+
+        #zevik-image-container:hover #zevik-image {
+            transform: rotateY(10deg) scale(1.05);
+            filter: grayscale(0%) brightness(100%);
+            box-shadow: 0 0 40px var(--accent-light), 0 0 60px var(--accent-light);
+        }
+
+        #zevik-image-holographic-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 50% 50%, var(--accent-light) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        #zevik-image-container:hover #zevik-image-holographic-effect {
+            opacity: 0.3;
+        }
+
+        /* Mobile specific adjustments */
+        @media (max-width: 768px) {
+            .scroll-indicator {
+                bottom: 1rem;
+            }
+            #custom-cursor {
+                display: none; /* Hide custom cursor on touch devices */
+            }
+            h1 {
+                font-size: 3.5rem !important; /* Tailwind's text-6xl is smaller than 8xl, but this ensures a smaller base */
+            }
+            h2 {
+                font-size: 3rem !important;
+            }
+            .text-4xl, .text-5xl {
+                font-size: 2.5rem !important;
+            }
+            .text-2xl, .text-3xl {
+                font-size: 1.75rem !important;
+            }
+        }
+
+        /* Explicitly define Tailwind colors using CSS variables for dynamic content */
+        .text-var--primary-light { color: var(--primary-light); }
+        .text-var--primary-dark { color: var(--primary-dark); }
+        .text-var--accent-light { color: var(--accent-light); }
+        .text-var--accent-dark { color: var(--accent-dark); }
+        .text-var--bg-dark { color: var(--bg-dark); }
+        .text-var--text-light { color: var(--text-light); }
+        .text-var--text-muted { color: var(--text-muted); }
+        
+        .bg-var--primary-dark { background-color: var(--primary-dark); }
+        .bg-var--accent-dark { background-color: var(--accent-dark); }
+    </style>
+</head>
+<body class="antialiased leading-relaxed text-right">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Base Fixed Background -->
+    <div class="base-background"></div>
+
+    <!-- Parallax Layers -->
+    <!-- These images suggest abstract digital landscapes or neural networks -->
+    <div class="parallax-layer z-[-2]" id="parallax-layer-1" style="background-image: url('https://images.unsplash.com/photo-1579547623192-d6c568d4f404?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); opacity: 0.1;"></div>
+    <div class="parallax-layer z-[-1]" id="parallax-layer-2" style="background-image: url('https://images.unsplash.com/photo-1502101487850-84451954541e?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); opacity: 0.05;"></div>
+
+    <!-- Main Content Wrapper -->
+    <main class="relative z-10 min-h-screen p-8 lg:p-16 flex flex-col items-center justify-start text-center">
+
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator">
+            <span class="glowing-text">גללו למטה</span>
+            <div class="arrow"></div>
+        </div>
+
+        <!-- Section 1: Grand Opening - The Core Message -->
+        <section class="min-h-screen flex flex-col justify-center items-center text-center max-w-4xl mx-auto py-16 px-4 reveal-on-scroll">
+            <h1 class="text-6xl lg:text-8xl font-rajdhani text-var--text-light glowing-text leading-tight mb-8">
+                למדו לשלוט בבינה המלאכותית
+            </h1>
+            <p class="text-4xl lg:text-5xl font-rajdhani text-var--primary-light mb-12 animate-pulse">
+                העתיד הוא עכשיו.
+            </p>
+            <p class="text-lg lg:text-xl font-heebo max-w-2xl text-var--text-muted">
+                הכוח של AI אינו עוד מדע בדיוני. הוא כלי רב עוצמה המעצב את המציאות שלנו בכל רגע.
+                בואו נצא יחד למסע שבו תהפכו למאסטרים של החדשנות, תפתחו אפשרויות בלתי נתפסות
+                ותבנו את המחר - היום.
+            </p>
+        </section>
+
+        <!-- Section 2: The Gateway - AI Accessible to All -->
+        <section class="min-h-screen flex flex-col justify-center items-center max-w-6xl mx-auto py-16 px-4 reveal-on-scroll">
+            <h2 class="text-5xl lg:text-6xl font-rajdhani text-var--accent-light mb-10 glowing-text">
+                AI נגיש. AI ישים. לכולם.
+            </h2>
+            <p class="text-xl lg:text-2xl font-heebo max-w-3xl mb-16 text-var--text-muted">
+                מעולם לא היה קל יותר לפענח את סודות הבינה המלאכותית. אנו מציעים לכם שער כניסה לעולם שבו טכנולוגיה מורכבת הופכת לכלי עבודה יומיומי, החל מהצעדים הראשונים ועד לפיתוח פרויקטים מתקדמים.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full text-right">
+                <!-- Target Audience Modules -->
+                <div class="interactive-card bg-var--primary-dark/80 p-8 rounded-xl shadow-xl border border-var--primary-light/30">
+                    <div class="content">
+                        <h3 class="text-3xl font-rajdhani text-var--primary-light mb-4">חוקרי העולם החדש</h3>
+                        <p class="text-lg text-var--text-light opacity-80">
+                            למתחילים שמבקשים להבין את יסודות ה-AI, לגלות את העוצמה שבו, ולצעוד צעדים ראשונים בעולם הטכנולוגיה המשתנה.
+                        </p>
+                    </div>
+                </div>
+                <div class="interactive-card bg-var--primary-dark/80 p-8 rounded-xl shadow-xl border border-var--primary-light/30">
+                    <div class="content">
+                        <h3 class="text-3xl font-rajdhani text-var--primary-light mb-4">מפתחי המציאות</h3>
+                        <p class="text-lg text-var--text-light opacity-80">
+                            לאנשי מקצוע המעוניינים לשלב AI בתחומי עבודתם, לייעל תהליכים, לקבל תובנות חדשות ולפרוץ דרך בעשייה היומיומית.
+                        </p>
+                    </div>
+                </div>
+                <div class="interactive-card bg-var--primary-dark/80 p-8 rounded-xl shadow-xl border border-var--primary-light/30">
+                    <div class="content">
+                        <h3 class="text-3xl font-rajdhani text-var--primary-light mb-4">אדריכלי המחר</h3>
+                        <p class="text-lg text-var--text-light opacity-80">
+                            למנהלים, לארגונים ולצוותים המחפשים אסטרטגיה וכלים להטמעת AI בקנה מידה רחב, לחדשנות ארגונית ויתרון תחרותי.
+                        </p>
+                    </div>
+                </div>
+                <div class="interactive-card col-span-full md:col-start-2 bg-var--primary-dark/80 p-8 rounded-xl shadow-xl border border-var--primary-light/30">
+                    <div class="content">
+                        <h3 class="text-3xl font-rajdhani text-var--primary-light mb-4">פורצי הדרך הטכנולוגיים</h3>
+                        <p class="text-lg text-var--text-light opacity-80">
+                            למתקדמים - ליווי ופיתוח פרויקטים מבוססי AI, מהרעיון ועד המימוש, תוך שימוש בכלים ובטכנולוגיות המתקדמות ביותר.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Spheres of Influence - Specializations -->
+        <section class="min-h-screen flex flex-col justify-center items-center max-w-6xl mx-auto py-16 px-4 reveal-on-scroll">
+            <h2 class="text-5xl lg:text-6xl font-rajdhani text-var--accent-light mb-10 glowing-text">
+                לנווט במרחבי האינסוף של AI
+            </h2>
+            <p class="text-xl lg:text-2xl font-heebo max-w-3xl mb-16 text-var--text-muted">
+                הבינה המלאכותית פורצת גבולות בכל תחומי החיים. נדריך אתכם בנתיבים המרכזיים, נחשוף את הכלים העוצמתיים ביותר ונאפשר לכם לממש את הפוטנציאל הטמון בכל תחום.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
+                <!-- Specialization Modules -->
+                <div class="interactive-card bg-var--accent-dark/60 p-6 rounded-lg border border-var--accent-light/40">
+                    <div class="content">
+                        <h3 class="text-2xl font-rajdhani text-var--accent-light mb-3">יצירת טקסטים ותוכן</h3>
+                        <p class="text-base text-var--text-light opacity-80">
+                            ממאמרים ועד קמפיינים שיווקיים - ליצירת תוכן מבריק, מהיר ומותאם אישית.
+                        </p>
+                    </div>
+                </div>
+                <div class="interactive-card bg-var--accent-dark/60 p-6 rounded-lg border border-var--accent-light/40">
+                    <div class="content">
+                        <h3 class="text-2xl font-rajdhani text-var--accent-light mb-3">בניית אפליקציות חכמות</h3>
+                        <p class="text-base text-var--text-light opacity-80">
+                            מכלים פשוטים ועד מערכות מורכבות - לפיתוח יישומים פורצי דרך.
+                        </p>
+                    </div>
+                </div>
+                <div class="interactive-card bg-var--accent-dark/60 p-6 rounded-lg border border-var--accent-light/40">
+                    <div class="content">
+                        <h3 class="text-2xl font-rajdhani text-var--accent-light mb-3">פיתוח אתרים מבוססי AI</h3>
+                        <p class="text-base text-var--text-light opacity-80">
+                            לבניית חוויות אינטרנטיות דינמיות, מותאמות ואינטליגנטיות.
+                        </p>
+                    </div>
+                </div>
+                <div class="interactive-card bg-var--accent-dark/60 p-6 rounded-lg border border-var--accent-light/40">
+                    <div class="content">
+                        <h3 class="text-2xl font-rajdhani text-var--accent-light mb-3">ניתוח נתונים ומחקר</h3>
+                        <p class="text-base text-var--text-light opacity-80">
+                            להפקת תובנות עמוקות וקבלת החלטות מבוססות נתונים.
+                        </p>
+                    </div>
+                </div>
+                <div class="interactive-card bg-var--accent-dark/60 p-6 rounded-lg border border-var--accent-light/40">
+                    <div class="content">
+                        <h3 class="text-2xl font-rajdhani text-var--accent-light mb-3">יצירת תמונות ואומנות</h3>
+                        <p class="text-base text-var--text-light opacity-80">
+                            להגשמת חזונות ויזואליים, מעיצוב גרפי ועד אומנות דיגיטלית.
+                        </p>
+                    </div>
+                </div>
+                <div class="interactive-card bg-var--accent-dark/60 p-6 rounded-lg border border-var--accent-light/40">
+                    <div class="content">
+                        <h3 class="text-2xl font-rajdhani text-var--accent-light mb-3">אוטומציה של תהליכים</h3>
+                        <p class="text-base text-var--text-light opacity-80">
+                            לייעול ופישוט משימות חוזרות, לשחרור זמן יקר ולהתמקדות בעיקר.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Pathways to Mastery - Services Offered -->
+        <section class="min-h-screen flex flex-col justify-center items-center max-w-6xl mx-auto py-16 px-4 reveal-on-scroll">
+            <h2 class="text-5xl lg:text-6xl font-rajdhani text-var--primary-light mb-10 glowing-text">
+                הנתיבים שלך למצוינות ב-AI
+            </h2>
+            <p class="text-xl lg:text-2xl font-heebo max-w-3xl mb-16 text-var--text-muted">
+                אנו מציעים מגוון מסלולים המותאמים לצרכים הייחודיים שלכם - בין אם אתם מעדיפים למידה קבוצתית, אישית או ארגונית. בחרו את הדרך שלכם לשליטה בבינה המלאכותית.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 w-full text-right">
+                <!-- Service Modules -->
+                <div class="interactive-card bg-var--primary-dark/70 p-8 rounded-xl shadow-xl border border-var--accent-light/30">
+                    <div class="content">
+                        <h3 class="text-3xl font-rajdhani text-var--primary-light mb-4">סדנאות קבוצתיות - מעשי וממוקד</h3>
+                        <p class="text-lg text-var--text-light opacity-80">
+                            חוויה לימודית דינמית, המשלבת תיאוריה, הדגמות חיות ותרגול מעשי בסביבת למידה תומכת.
+                        </p>
+                    </div>
+                </div>
+                <div class="interactive-card bg-var--primary-dark/70 p-8 rounded-xl shadow-xl border border-var--accent-light/30">
+                    <div class="content">
+                        <h3 class="text-3xl font-rajdhani text-var--primary-light mb-4">שיעורים פרטיים - התאמה אישית מלאה</h3>
+                        <p class="text-lg text-var--text-light opacity-80">
+                            למידה פרטנית המותאמת לרמה, לקצב ולמטרות האישיות שלכם, למיצוי פוטנציאל מירבי.
+                        </p>
+                    </div>
+                </div>
+                <div class="interactive-card bg-var--primary-dark/70 p-8 rounded-xl shadow-xl border border-var--accent-light/30">
+                    <div class="content">
+                        <h3 class="text-3xl font-rajdhani text-var--primary-light mb-4">הרצאות לארגונים - השראה ופתיחת אופקים</h3>
+                        <p class="text-lg text-var--text-light opacity-80">
+                            הרצאות מרתקות המשלבות אתגרים ופתרונות, חושפות טרנדים ומעניקות השראה לצוותים.
+                        </p>
+                    </div>
+                </div>
+                <div class="interactive-card bg-var--primary-dark/70 p-8 rounded-xl shadow-xl border border-var--accent-light/30">
+                    <div class="content">
+                        <h3 class="text-3xl font-rajdhani text-var--primary-light mb-4">ייעוץ ופיתוח פרויקטים - ליווי מקצועי</h3>
+                        <p class="text-lg text-var--text-light opacity-80">
+                            שותפות מלאה בפיתוח פתרונות AI חדשניים, החל משלב הרעיון ועד הטמעת המערכת בפועל.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: The Guide - Zevik Aviner -->
+        <section class="min-h-screen flex flex-col justify-center items-center max-w-4xl mx-auto py-16 px-4 reveal-on-scroll">
+            <h2 class="text-5xl lg:text-6xl font-rajdhani text-var--accent-light mb-10 glowing-text">
+                המדריך: זאביק אבינר - מומחה הבינה המלאכותית
+            </h2>
+            <div class="flex flex-col lg:flex-row items-center gap-12 text-center lg:text-right">
+                <div id="zevik-image-container" class="relative w-64 h-64 flex-shrink-0">
+                    <img id="zevik-image" src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר - מומחה בינה מלאכותית" class="w-full h-full object-cover rounded-full">
+                    <div id="zevik-image-holographic-effect"></div>
+                </div>
+                <div class="flex-grow">
+                    <p class="text-xl lg:text-2xl font-heebo mb-8 text-var--text-muted">
+                        זאביק אבינר הוא לא רק מומחה לבינה מלאכותית, הוא אמן ההנגשה של עולם ה-AI. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מורכבות, זאביק הפך את משימתו להפוך את הטכנולוגיה העתידנית לכלי עבודה יומיומי ונגיש לכל אחד. הוא מביא את הידע העמוק ביותר, יחד עם גישה מעשית ויכולת להדריך כל אחד - מהמתחילים ועד למפתחים המנוסים - אל עבר שליטה מלאה בבינה המלאכותית.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Transmission Coordinates - Contact -->
+        <section class="min-h-screen flex flex-col justify-center items-center max-w-4xl mx-auto py-16 px-4 reveal-on-scroll">
+            <h2 class="text-5xl lg:text-6xl font-rajdhani text-var--primary-light mb-10 glowing-text">
+                צור קשר - התחל את המסע שלך
+            </h2>
+            <p class="text-xl lg:text-2xl font-heebo max-w-3xl mb-12 text-var--text-muted">
+                העתיד ממתין. צרו קשר עוד היום וגלו כיצד זאביק אבינר יכול להוביל אתכם אל עבר שליטה מלאה בעולם הבינה המלאכותית.
+            </p>
+            <div class="flex flex-col gap-6 text-2xl lg:text-3xl font-rajdhani text-var--text-light glowing-text">
+                <a href="https://wa.me/972546609385" target="_blank" class="hover:text-var--primary-light transition-colors duration-300">
+                    <span>ווטסאפ: 054-6609385</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="hover:text-var--primary-light transition-colors duration-300">
+                    <span>אימייל: zaviner@gmail.com</span>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom cursor logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // Add cursor-active class for interactive elements
+        document.querySelectorAll('a, button, .interactive-card, #zevik-image-container').forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('cursor-active'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('cursor-active'));
+        });
+
+        // Parallax scroll effect
+        const parallaxLayer1 = document.getElementById('parallax-layer-1');
+        const parallaxLayer2 = document.getElementById('parallax-layer-2');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            // Adjust these multipliers for desired parallax speed
+            parallaxLayer1.style.transform = `translateY(${scrollY * 0.15}px)`; // Slower
+            parallaxLayer2.style.transform = `translateY(${scrollY * 0.08}px)`; // Even slower
+        });
+
+        // Reveal content on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Stop observing once revealed to maintain state
+                }
+            });
+        }, { threshold: 0.1 }); // Trigger when 10% of the element is visible
+
+        document.querySelectorAll('.reveal-on-scroll').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Hide scroll indicator after some scrolling
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 150) { // If scrolled more than 150px
+                scrollIndicator.style.opacity = '0';
+                scrollIndicator.style.transition = 'opacity 0.5s ease-out';
+            } else {
+                scrollIndicator.style.opacity = '0.7';
+                scrollIndicator.style.transition = 'opacity 0.5s ease-in';
+            }
+        });
+
+        // Extend Tailwind config to recognize custom CSS variables for colors and fonts
+        // This is important for Tailwind to correctly generate classes like text-var--primary-light
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'var--primary-light': 'var(--primary-light)',
+                        'var--primary-dark': 'var(--primary-dark)',
+                        'var--accent-light': 'var(--accent-light)',
+                        'var--accent-dark': 'var(--accent-dark)',
+                        'var--bg-dark': 'var(--bg-dark)',
+                        'var--text-light': 'var(--text-light)',
+                        'var--text-muted': 'var(--text-muted)',
+                    },
+                    fontFamily: {
+                        heebo: ['Heebo', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - חשיפה לעולם הבינה המלאכותית</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;700&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS for Daguerreotype style */
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: #1a1a1a; /* Dark charcoal */
+            color: #e0e0e0; /* Off-white */
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Frank Ruhl Libre', serif;
+            color: #f0f0f0;
+            filter: sepia(0.1) contrast(1.1); /* Subtle sepia on headings */
+        }
+
+        /* Daguerreotype Plate Effect */
+        .daguerreotype-plate {
+            background-color: rgba(30, 30, 30, 0.85); /* Slightly lighter dark, semi-transparent */
+            border: 1px solid rgba(120, 120, 120, 0.2); /* Faded, subtle border */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5), inset 0 0 5px rgba(255, 255, 255, 0.05);
+            filter: sepia(0.2) contrast(1.1); /* General sepia for content blocks */
+            transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+            transform: translateY(20px) scale(0.98);
+            opacity: 0;
+        }
+
+        .daguerreotype-plate.is-visible {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+
+        /* Vignette Effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(ellipse at center, transparent 0%, transparent 60%, rgba(0,0,0,0.8) 100%);
+            z-index: 100; /* Above content, below cursor */
+        }
+
+        /* Film Grain Effect */
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 99; /* Below vignette, above content */
+            opacity: 0.05; /* Very subtle */
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAUVBMVEWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFN3mXAAAAF3RSTlMAAwQFBgcICQoLDQ4PEBESExQVFhcYGRoY9s8xAAAAOElEQVR4Xq3LzQEAAAQDsU/zZt2bA+B/gN9WSAkGg8FgMBgMBoPBYDAYDAaDwWAwGAwGg+GvCqG9c8k1Pq6VAAAAAElFTkSuQmCC'); /* Tiny noise pattern */
+            background-size: 2px 2px;
+            animation: grain 8s steps(10) infinite;
+        }
+
+        @keyframes grain {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -10%); }
+            20% { transform: translate(-15%, 10%); }
+            30% { transform: translate(7%, -8%); }
+            40% { transform: translate(-10%, 12%); }
+            50% { transform: translate(5%, -15%); }
+            60% { transform: translate(-12%, 8%); }
+            70% { transform: translate(8%, -7%); }
+            80% { transform: translate(-6%, 10%); }
+            90% { transform: translate(10%, -5%); }
+        }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #D1D5DB; /* Light gray border */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8); /* Dark, high-opacity shadow */
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out; /* Smooth follow */
+            z-index: 200; /* Always on top */
+        }
+
+        /* Image styling */
+        .zevik-image {
+            filter: grayscale(80%) sepia(40%) contrast(1.1);
+            border: 2px solid rgba(150, 150, 150, 0.2);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Contact link styling */
+        .contact-link {
+            display: inline-block;
+            transition: color 0.3s, transform 0.3s;
+            filter: brightness(1.2); /* Make it slightly stand out */
+        }
+        .contact-link:hover {
+            color: #F8F8F8; /* Brighter on hover */
+            transform: scale(1.05);
+            filter: brightness(1.5);
+        }
+
+        /* General link style for interaction */
+        a {
+            color: #d8b4fe; /* Desaturated purple for links */
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        a:hover {
+            color: #f0f0f0;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="grain-overlay"></div>
+    <div id="custom-cursor"></div>
+
+    <div class="container mx-auto px-4 py-16 min-h-screen relative z-10">
+
+        <!-- Title Section - Main Plate -->
+        <section class="daguerreotype-plate p-8 md:p-12 mb-20 max-w-4xl mx-auto text-center reveal-on-scroll">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                <span class="block mb-2 text-gray-300">חשיפה לעולם הבינה המלאכותית:</span>
+                <span class="block text-purple-200">למד לשלוט בעתיד, עכשיו.</span>
+            </h1>
+            <p class="text-lg md:text-xl leading-relaxed text-gray-300 max-w-2xl mx-auto">
+                בצללים העמוקים של העתיד, שם ניצבת הבינה המלאכותית כחידה, אנו חושפים את סודותיה. נגישותה אינה פריבילגיה, אלא זכות. מסע מתחילתו, דרך אבק הזמן, אל עבר הפסגות המוארות - כלים שיוטבעו בך, כאילו נצרבו על לוח מתכת, מוכנים ליישום בכל רגע.
+            </p>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section class="daguerreotype-plate p-8 md:p-10 mb-16 max-w-3xl mx-auto reveal-on-scroll">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6 text-center">מי יצעד אל תוך המסגרת הזו?</h2>
+            <ul class="space-y-4 text-lg md:text-xl text-gray-300 leading-relaxed list-none pr-0">
+                <li class="flex items-start md:items-center">
+                    <span class="text-purple-300 text-2xl md:text-3xl mr-3 leading-none opacity-70">&#9672;</span>
+                    <span class="flex-1">אלו שמביטים בסקרנות אל האור החדש - <b>מתחילים ומתחילות</b>.</span>
+                </li>
+                <li class="flex items-start md:items-center">
+                    <span class="text-purple-300 text-2xl md:text-3xl mr-3 leading-none opacity-70">&#9672;</span>
+                    <span class="flex-1">אלו שרוצים לחרוט את עתיד מקצועם - <b>אנשי ואנשות מקצוע</b>.</span>
+                </li>
+                <li class="flex items-start md:items-center">
+                    <span class="text-purple-300 text-2xl md:text-3xl mr-3 leading-none opacity-70">&#9672;</span>
+                    <span class="flex-1">מנהיגי דרך המבקשים להאיר נתיבים לצוותיהם - <b>מנהלים וארגונים</b>.</span>
+                </li>
+                <li class="flex items-start md:items-center">
+                    <span class="text-purple-300 text-2xl md:text-3xl mr-3 leading-none opacity-70">&#9672;</span>
+                    <span class="flex-1">החוקרים האמיצים שחודרים אל עומק היצירה - <b>ברמה מתקדמת</b>.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Areas of Expertise Section -->
+        <section class="daguerreotype-plate p-8 md:p-10 mb-16 max-w-3xl mx-auto reveal-on-scroll">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6 text-center">דרך העדשה הזו, אנו חושפים עולמות של יצירה:</h2>
+            <div class="grid md:grid-cols-2 gap-6 text-lg md:text-xl text-gray-300">
+                <p class="leading-relaxed">
+                    <span class="text-purple-300 text-xl font-bold block mb-1">המילה המעוצבת</span>
+                    יצירת טקסטים ותוכן באמצעות אלגוריתם חכם.
+                </p>
+                <p class="leading-relaxed">
+                    <span class="text-purple-300 text-xl font-bold block mb-1">האפליקציה המהבהבת</span>
+                    בניית יישומים חכמים המאירים ככוכבים.
+                </p>
+                <p class="leading-relaxed">
+                    <span class="text-purple-300 text-xl font-bold block mb-1">אתרים הנולדים מחשיבה עצמאית</span>
+                    פיתוח נוכחות דיגיטלית מבוססת AI.
+                </p>
+                <p class="leading-relaxed">
+                    <span class="text-purple-300 text-xl font-bold block mb-1">ניתוח נתונים וסודות נשכחים</span>
+                    פענוח מידע וגילוי תובנות עמוקות.
+                </p>
+                <p class="leading-relaxed">
+                    <span class="text-purple-300 text-xl font-bold block mb-1">תמונות ואמנות מפיקסלים</span>
+                    בריאת יצירות ויזואליות ייחודיות.
+                </p>
+                <p class="leading-relaxed">
+                    <span class="text-purple-300 text-xl font-bold block mb-1">תהליכים עתיקים, חיים חדשים</span>
+                    אוטומציה מופלאה למשימות יומיומיות.
+                </p>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="daguerreotype-plate p-8 md:p-10 mb-16 max-w-3xl mx-auto reveal-on-scroll">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6 text-center">אנו מזמינים אותך למסע זה במגוון דרכים:</h2>
+            <ul class="space-y-4 text-lg md:text-xl text-gray-300 leading-relaxed list-none pr-0">
+                <li class="flex items-start md:items-center">
+                    <span class="text-purple-300 text-2xl md:text-3xl mr-3 leading-none opacity-70">&#9672;</span>
+                    <span class="flex-1"><b>סדנאות קבוצתיות</b> - שם ניצור יחד תמונות ממוקדות.</span>
+                </li>
+                <li class="flex items-start md:items-center">
+                    <span class="text-purple-300 text-2xl md:text-3xl mr-3 leading-none opacity-70">&#9672;</span>
+                    <span class="flex-1"><b>שיעורים פרטיים</b> - חשיפה מותאמת אישית לרגע שלך.</span>
+                </li>
+                <li class="flex items-start md:items-center">
+                    <span class="text-purple-300 text-2xl md:text-3xl mr-3 leading-none opacity-70">&#9672;</span>
+                    <span class="flex-1"><b>הרצאות לארגונים</b> - להאיר אופקים חדשים לכלל הצוות.</span>
+                </li>
+                <li class="flex items-start md:items-center">
+                    <span class="text-purple-300 text-2xl md:text-3xl mr-3 leading-none opacity-70">&#9672;</span>
+                    <span class="flex-1"><b>ייעוץ ופיתוח פרויקטים</b> - להטביע את חותמך על פרויקטים פורצי דרך.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Instructor & Contact Section -->
+        <section class="daguerreotype-plate p-8 md:p-10 max-w-3xl mx-auto reveal-on-scroll">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6 text-center">מאחורי העדשה</h2>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר - מומחה בינה מלאכותית" class="zevik-image w-32 h-32 md:w-40 md:h-40 object-cover rounded-full flex-shrink-0">
+                <div class="text-center md:text-right text-lg md:text-xl text-gray-300">
+                    <p class="leading-relaxed mb-4">
+                        <b>זאביק אבינר</b> – אמן הבינה המלאכותית. עם ניסיון עשיר, הוא אינו רק מדריך, אלא מלווה, המפענח את סודות הטכנולוגיה ומנגיש אותה ככלי יומיומי, חותם את דרכו בתבונת הדורות הבאים.
+                    </p>
+                    <p class="leading-relaxed mb-2">
+                        אם תרצה לחשוף את התמונה הבאה, לחרוט את שאלותיך בלוח הזמן, או להתחיל מסע פרטי – צור קשר.
+                    </p>
+                    <p class="text-xl md:text-2xl font-bold text-purple-200">
+                        <span class="block mb-2">
+                            <a href="https://wa.me/972546609385" target="_blank" class="contact-link">ווטסאפ: 054-6609385</a>
+                        </span>
+                        <span class="block">
+                            <a href="mailto:zaviner@gmail.com" class="contact-link">אימייל: zaviner@gmail.com</a>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Custom Cursor JavaScript
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // Intersection Observer for reveal-on-scroll effect
+        const revealElements = document.querySelectorAll('.reveal-on-scroll');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Stop observing once visible
+                }
+            });
+        }, observerOptions);
+
+        revealElements.forEach(element => {
+            observer.observe(element);
+        });
+
+    </script>
+</body>
+</html>

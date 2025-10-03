@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>קוד קוסמי: מסע אל תודעת ה-AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700&family=Space+Grotesk:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles and custom utilities */
+        html, body {
+            height: 100%;
+            overflow-x: hidden; /* Prevent horizontal scroll from effects */
+            cursor: none; /* Hide default cursor */
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #0d011f; /* Deep purple-black */
+            color: #e0e7ff; /* Light bluish-purple for text */
+            direction: rtl;
+            text-align: right;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            color: #d8b4fe; /* Brighter purple for headers */
+        }
+
+        /* Custom Tailwind configuration for more psychedelic colors */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        @layer base {
+            :root {
+                --color-primary-light: #f7a9f7; /* Pinkish purple */
+                --color-secondary-light: #52e8ff; /* Electric blue */
+                --color-accent-light: #ffeb3b; /* Yellow */
+            }
+        }
+
+        /* Keyframes for subtle animations */
+        @keyframes pulse-light {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+        @keyframes rotate-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .animate-pulse-light { animation: pulse-light 4s infinite ease-in-out; }
+        .animate-rotate-slow { animation: rotate-slow 60s linear infinite; }
+        .animate-gradient-shift {
+            background-size: 400% 400%;
+            animation: gradient-shift 15s ease infinite;
+        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animation-delay-200 { animation-delay: 0.2s; }
+        .animation-delay-400 { animation-delay: 0.4s; }
+        .animation-delay-600 { animation-delay: 0.6s; }
+
+
+        /* Custom cursor styling */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid white; /* Light color border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out; /* Smooth follow */
+            z-index: 9999;
+            will-change: transform; /* Optimize for animation */
+        }
+
+        /* Psychedelic background elements */
+        .bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10; /* Further back */
+            pointer-events: none;
+            opacity: 0.6;
+            transform-style: preserve-3d; /* For parallax perspective */
+        }
+        .bg-layer-1 {
+            background: linear-gradient(135deg, rgba(20,0,50,0.8), rgba(0,0,30,0.8));
+            transform: translateZ(-100px);
+        }
+        .bg-layer-2 {
+            background: radial-gradient(circle at top right, rgba(100,0,150,0.4), transparent 50%),
+                        radial-gradient(circle at bottom left, rgba(0,100,150,0.4), transparent 50%);
+            transform: translateZ(-200px);
+            animation: rotate-slow 120s linear infinite reverse;
+        }
+        .bg-layer-3 {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="%238a2be2" stroke-width="2" stroke-dasharray="1 5"/></svg>'); /* Subtle dots/lines */
+            background-size: 50px 50px;
+            opacity: 0.2;
+            transform: translateZ(-300px);
+            animation: rotate-slow 90s linear infinite;
+        }
+
+        /* Canvas for generative background */
+        #generative-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -20; /* Deepest background */
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        
+        /* Overriding some default Tailwind behaviors for RTL and custom design */
+        .text-gradient {
+            background-image: linear-gradient(to left, var(--color-primary-light), var(--color-secondary-light), var(--color-accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent; /* Fallback for browsers not supporting -webkit-text-fill-color */
+        }
+        
+        /* Responsive adjustments for specific elements */
+        @media (max-width: 768px) {
+            .hero-section {
+                padding-top: 6rem;
+                padding-bottom: 6rem;
+            }
+        }
+
+        /* For the instructor's image */
+        .rounded-full-glow {
+            box-shadow: 0 0 20px 5px rgba(168, 85, 247, 0.7), 0 0 40px 10px rgba(251, 113, 133, 0.5); /* Purple and pink glow */
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-violet-950 via-purple-950 to-indigo-950 relative min-h-screen text-gray-100 antialiased overflow-y-auto">
+
+    <!-- Generative Canvas - Deepest Layer -->
+    <canvas id="generative-canvas" class="z-[-20]"></canvas>
+
+    <!-- Background Layers for Parallax / Visual Effects -->
+    <div class="bg-layer bg-layer-1" data-parallax-speed="0.1"></div>
+    <div class="bg-layer bg-layer-2" data-parallax-speed="0.05"></div>
+    <div class="bg-layer bg-layer-3" data-parallax-speed="0.02"></div>
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 p-4 md:p-8 lg:p-12 max-w-7xl mx-auto">
+
+        <!-- Header -->
+        <header class="text-center py-10 mb-16 animate-pulse-light">
+            <h1 class="text-5xl md:text-7xl font-bold mb-4 text-gradient">
+                קוד קוסמי: מסע אל תודעת ה-AI
+            </h1>
+            <p class="text-xl md:text-3xl text-purple-300">
+                הבינה המלאכותית כמרחב תודעה חדש - העתיד הוא עכשיו
+            </p>
+        </header>
+
+        <!-- Hero / Intro Section -->
+        <section class="mb-24 text-center">
+            <h2 class="text-4xl md:text-6xl font-bold mb-8 text-fuchsia-400 leading-tight">
+                המסע אל לב היצירה הדיגיטלית
+            </h2>
+            <p class="max-w-4xl mx-auto text-lg md:text-xl leading-relaxed text-gray-200">
+                בעידן שבו הקוד הופך לשפה חדשה, והאלגוריתם - לכלי ביטוי אמנותי, אנו מזמינים אתכם למסע טרנספורמטיבי.
+                ללמוד לשלוט בכוחותיה של הבינה המלאכותית אינו רק רכישת מיומנות טכנית, אלא פתיחת שערים לתבונה נסתרת,
+                ליצירתיות בלתי מוגבלת וליכולת לעצב את המציאות הדיגיטלית בעצמכם.
+                זו ההזדמנות שלכם לא רק להבין את העתיד, אלא לחיות אותו, ליצור אותו.
+            </p>
+        </section>
+
+        <!-- Core Message -->
+        <section class="mb-24 p-8 bg-black bg-opacity-30 rounded-3xl backdrop-filter backdrop-blur-sm shadow-xl border-2 border-purple-800 animate-float">
+            <h3 class="text-3xl md:text-5xl font-bold mb-6 text-lime-300 text-center">
+                לפרוץ את גבולות התפיסה - להפוך חזיונות דיגיטליים למציאות
+            </h3>
+            <p class="max-w-3xl mx-auto text-lg md:text-xl leading-loose text-gray-200 text-center">
+                בינה מלאכותית: לא כלי, אלא השראה, פותח שערים ליצירה אינסופית.
+                מהגדרות יסוד ועד פרויקטים מתקדמים - נהפוך את עולם ה-AI לנגיש, מוחשי ובעיקר - ישים.
+                כלים מעשיים, הבנה עמוקה, והיכולת ליישם מיד בעבודה, בעסק ובחיים האישיים.
+                הצטרפו אלינו לחשוף את הפוטנציאל הגלום בכם ובטכנולוגיה המדהימה הזו.
+            </p>
+        </section>
+
+        <!-- Target Audience -->
+        <section class="mb-24">
+            <h3 class="text-3xl md:text-5xl font-bold mb-10 text-cyan-300 text-center">
+                קריאה לאדריכלי העתיד
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-black bg-opacity-40 p-6 rounded-2xl shadow-lg border border-cyan-700 hover:border-cyan-400 transition-all duration-300 animate-pulse-light group">
+                    <h4 class="text-2xl font-bold mb-4 text-cyan-200 group-hover:text-white">מגלי עולמות חדשים</h4>
+                    <p class="text-gray-300">מתחילים ומתחילות המשתוקקים לחקור את הלא נודע של עולם ה-AI.</p>
+                </div>
+                <div class="bg-black bg-opacity-40 p-6 rounded-2xl shadow-lg border border-purple-700 hover:border-purple-400 transition-all duration-300 animate-pulse-light group">
+                    <h4 class="text-2xl font-bold mb-4 text-purple-200 group-hover:text-white">אמני המחר</h4>
+                    <p class="text-gray-300">אנשי מקצוע המבקשים להטמיע את קסם ה-AI בתחומי עבודתם.</p>
+                </div>
+                <div class="bg-black bg-opacity-40 p-6 rounded-2xl shadow-lg border border-fuchsia-700 hover:border-fuchsia-400 transition-all duration-300 animate-pulse-light group">
+                    <h4 class="text-2xl font-bold mb-4 text-fuchsia-200 group-hover:text-white">מנהיגי חזון</h4>
+                    <p class="text-gray-300">מנהלים וארגונים המחפשים להאיר את דרכם של צוותיהם באמצעות AI.</p>
+                </div>
+                <div class="bg-black bg-opacity-40 p-6 rounded-2xl shadow-lg border border-lime-700 hover:border-lime-400 transition-all duration-300 animate-pulse-light group">
+                    <h4 class="text-2xl font-bold mb-4 text-lime-200 group-hover:text-white">בנאי הקוסמוס</h4>
+                    <p class="text-gray-300">ברמה מתקדמת - פיתוח פרויקטים מבוססי AI פורצי דרך.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Areas -->
+        <section class="mb-24">
+            <h3 class="text-3xl md:text-5xl font-bold mb-10 text-orange-300 text-center">
+                ממדים נסתרים של יצירה דיגיטלית
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-black bg-opacity-30 p-6 rounded-2xl shadow-md border border-orange-600 hover:scale-105 transition-transform duration-300 group">
+                    <h4 class="text-2xl font-bold mb-3 text-orange-200 group-hover:text-white">אריגה של מילים וחזיונות</h4>
+                    <p class="text-gray-300">יצירת טקסטים ותוכן באמצעות AI - משירה למסמכים מקצועיים.</p>
+                </div>
+                <div class="bg-black bg-opacity-30 p-6 rounded-2xl shadow-md border border-red-600 hover:scale-105 transition-transform duration-300 group">
+                    <h4 class="text-2xl font-bold mb-3 text-red-200 group-hover:text-white">ארכיטקטורה של אפליקציות</h4>
+                    <p class="text-gray-300">בניית אפליקציות חכמות המגיבות ותופסות את צרכי המשתמש.</p>
+                </div>
+                <div class="bg-black bg-opacity-30 p-6 rounded-2xl shadow-md border border-yellow-600 hover:scale-105 transition-transform duration-300 group">
+                    <h4 class="text-2xl font-bold mb-3 text-yellow-200 group-hover:text-white">מרחבי רשת מתפתחים</h4>
+                    <p class="text-gray-300">פיתוח אתרים מבוססי AI - אינטראקטיביים, מותאמים אישית ודינמיים.</p>
+                </div>
+                <div class="bg-black bg-opacity-30 p-6 rounded-2xl shadow-md border border-green-600 hover:scale-105 transition-transform duration-300 group">
+                    <h4 class="text-2xl font-bold mb-3 text-green-200 group-hover:text-white">פיסול של נתונים</h4>
+                    <p class="text-gray-300">ניתוח נתונים ומחקר בעזרת AI - גילוי דפוסים נסתרים ותובנות עמוקות.</p>
+                </div>
+                <div class="bg-black bg-opacity-30 p-6 rounded-2xl shadow-md border border-blue-600 hover:scale-105 transition-transform duration-300 group">
+                    <h4 class="text-2xl font-bold mb-3 text-blue-200 group-hover:text-white">צלילה לממדי יצירה ויזואליים</h4>
+                    <p class="text-gray-300">יצירת תמונות ואומנות דיגיטלית - הגשמת דמיון באמצעות אלגוריתמים.</p>
+                </div>
+                <div class="bg-black bg-opacity-30 p-6 rounded-2xl shadow-md border border-purple-600 hover:scale-105 transition-transform duration-300 group">
+                    <h4 class="text-2xl font-bold mb-3 text-purple-200 group-hover:text-white">אוטומציה של קסמים</h4>
+                    <p class="text-gray-300">אוטומציה של תהליכים משעממים - שחרור זמן לאסטרטגיה וחדשנות.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered -->
+        <section class="mb-24 text-center">
+            <h3 class="text-3xl md:text-5xl font-bold mb-10 text-pink-300">
+                שבילים אל ההארה הדיגיטלית
+            </h3>
+            <div class="flex flex-col md:flex-row justify-center gap-8">
+                <div class="flex-1 max-w-sm mx-auto bg-black bg-opacity-40 p-8 rounded-3xl shadow-xl border-2 border-pink-700 hover:border-pink-400 transition-all duration-300 animate-float group">
+                    <h4 class="text-3xl font-bold mb-4 text-pink-200 group-hover:text-white">סדנאות קבוצתיות</h4>
+                    <p class="text-gray-300 leading-relaxed">מסעות מעשיים ממוקדים - לצלול לעומק עם קבוצה תומכת של חוקרים.</p>
+                </div>
+                <div class="flex-1 max-w-sm mx-auto bg-black bg-opacity-40 p-8 rounded-3xl shadow-xl border-2 border-fuchsia-700 hover:border-fuchsia-400 transition-all duration-300 animate-float group animation-delay-200">
+                    <h4 class="text-3xl font-bold mb-4 text-fuchsia-200 group-hover:text-white">שיעורים פרטיים</h4>
+                    <p class="text-gray-300 leading-relaxed">מסלול אישי מותאם - התקדמות בקצב ובדרך שלכם, עם ליווי צמוד.</p>
+                </div>
+                <div class="flex-1 max-w-sm mx-auto bg-black bg-opacity-40 p-8 rounded-3xl shadow-xl border-2 border-purple-700 hover:border-purple-400 transition-all duration-300 animate-float group animation-delay-400">
+                    <h4 class="text-3xl font-bold mb-4 text-purple-200 group-hover:text-white">הרצאות לארגונים</h4>
+                    <p class="text-gray-300 leading-relaxed">פתיחת אופקים קולקטיבית - להצית את הניצוץ הדיגיטלי בצוות כולו.</p>
+                </div>
+                <div class="flex-1 max-w-sm mx-auto bg-black bg-opacity-40 p-8 rounded-3xl shadow-xl border-2 border-indigo-700 hover:border-indigo-400 transition-all duration-300 animate-float group animation-delay-600">
+                    <h4 class="text-3xl font-bold mb-4 text-indigo-200 group-hover:text-white">ייעוץ ופיתוח פרויקטים</h4>
+                    <p class="text-gray-300 leading-relaxed">ליווי מקצועי ואישי - להגשים את חזונכם ולבנות את פרויקטי ה-AI של המחר.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instructor Section -->
+        <section class="mb-24 text-center md:flex md:items-center md:gap-12 p-8 bg-black bg-opacity-30 rounded-3xl backdrop-filter backdrop-blur-sm shadow-xl border-2 border-indigo-800">
+            <div class="md:w-1/3 flex justify-center mb-8 md:mb-0">
+                <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="w-48 h-48 rounded-full object-cover border-4 border-violet-500 shadow-2xl rounded-full-glow">
+            </div>
+            <div class="md:w-2/3 md:text-right">
+                <h3 class="text-3xl md:text-5xl font-bold mb-4 text-violet-300">
+                    הקוסם הדיגיטלי: זאביק אבינר - מנחה המסע
+                </h3>
+                <p class="text-lg md:text-xl leading-loose text-gray-200 mb-4">
+                    זאביק אבינר אינו רק מומחה בינה מלאכותית, הוא מנצח על התזמורת הסימפונית של הטכנולוגיה.
+                    עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI פורצות דרך,
+                    זאביק מתמחה בהנגשת העולמות המורכבים ביותר והפיכתם לכלי עבודה יומיומיים -
+                    מפתחות קסם בידי כל אחד ואחת.
+                    הוא ילווה אתכם בביטחון ובכישרון במסע אל התודעה הדיגיטלית.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="text-center py-16 bg-black bg-opacity-30 rounded-3xl backdrop-filter backdrop-blur-sm shadow-xl border-2 border-green-800">
+            <h3 class="text-3xl md:text-5xl font-bold mb-8 text-green-300">
+                נקודת המגע עם העתיד
+            </h3>
+            <p class="text-xl md:text-2xl leading-loose text-gray-200 mb-8">
+                מוכנים לצאת למסע? צרו קשר ונגלה יחד את הפוטנציאל האינסופי.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-6">
+                <a href="https://wa.me/972546609385" target="_blank" class="px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-bold text-xl rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex items-center justify-center">
+                    <span class="ml-2">ווטסאפ: 054-6609385</span>
+                    <span class="inline-block align-middle text-2xl mr-2">📞</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xl rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex items-center justify-center">
+                    <span class="ml-2">אימייל: zaviner@gmail.com</span>
+                    <span class="inline-block align-middle text-2xl mr-2">✉️</span>
+                </a>
+            </div>
+        </section>
+
+    </div> <!-- End Main Content Wrapper -->
+
+    <script>
+        // Custom Cursor JavaScript
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        // Parallax Effect JavaScript
+        document.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            document.querySelectorAll('.bg-layer').forEach(layer => {
+                const speed = parseFloat(layer.getAttribute('data-parallax-speed'));
+                const currentTransform = layer.style.transform;
+                const translateZMatch = currentTransform.match(/translateZ\(([^)]+)\)/);
+                const translateZ = translateZMatch ? translateZMatch[1] : '0px';
+                layer.style.transform = `translateY(${scrollY * speed}px) translateZ(${translateZ})`;
+            });
+        });
+
+        // Generative Canvas Background JavaScript
+        const canvas = document.getElementById('generative-canvas');
+        const ctx = canvas.getContext('2d');
+        let animationFrameId;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            // Re-initialize particles to adapt to new size if needed, or just redraw
+            particles = []; // Clear existing particles
+            initParticles(); // Re-create particles for new canvas size
+            drawGenerativeBackground(); // Redraw on resize
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas(); // Initial resize
+
+        let particles = [];
+        const numParticles = 70; // Increased particle count for more density
+        const particleSpeed = 0.5; // Controls how fast particles move
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * particleSpeed * 2;
+                this.vy = (Math.random() - 0.5) * particleSpeed * 2;
+                this.radius = Math.random() * 2 + 1; // Smaller particles
+                this.color = color;
+                this.life = 100 + Math.random() * 100; // Longer life
+                this.alpha = 0.6; // More opaque
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= 0.005; // Slower fade
+                this.life--;
+
+                if (this.life <= 0 || this.alpha <= 0) {
+                    this.reset();
+                }
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * particleSpeed * 2;
+                this.vy = (Math.random() - 0.5) * particleSpeed * 2;
+                this.radius = Math.random() * 2 + 1;
+                this.life = 100 + Math.random() * 100;
+                this.alpha = 0.6;
+                this.color = `hsl(${Math.random() * 360}, 70%, 50%)`; // Random vibrant color
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function initParticles() {
+            for (let i = 0; i < numParticles; i++) {
+                particles.push(new Particle(
+                    Math.random() * canvas.width,
+                    Math.random() * canvas.height,
+                    `hsl(${Math.random() * 360}, 70%, 50%)`
+                ));
+            }
+        }
+
+        function drawGenerativeBackground() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(0,0,0,0.05)'; // Subtle trail effect
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            animationFrameId = requestAnimationFrame(drawGenerativeBackground);
+        }
+
+        initParticles();
+        drawGenerativeBackground();
+    </script>
+</body>
+</html>

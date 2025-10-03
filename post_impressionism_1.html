@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>בינה מלאכותית - קנבס העתיד שלך | זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Assistant:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* הגדרות בסיסיות לגוף המסמך */
+        body {
+            font-family: 'Assistant', sans-serif;
+            overflow-x: hidden; /* מונע גלילה אופקית מפריטי פרלקס */
+            cursor: none; /* מסתיר את הסמן הדיפולטיבי */
+            background-color: #0F172A; /* צבע רקע בסיסי כהה */
+        }
+
+        /* סמן עכבר מותאם אישית - חובה נראות גבוהה */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none; /* מאפשר קליקים על אלמנטים שמתחתיו */
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* גבול לבן - נראה על רקע כהה */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* צל שחור - נראה על רקע בהיר */
+            transition: transform 0.1s ease-out, opacity 0.2s ease-in-out;
+            z-index: 9999;
+            transform: translate(-50%, -50%); /* ממקם את הסמן בדיוק במרכז העכבר */
+        }
+
+        /* שכבות רקע בסגנון פוסט-אימפרסיוניסטי */
+        .background-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* ממוקם מאחורי התוכן הראשי */
+            overflow: hidden;
+            opacity: 0.8;
+            filter: saturate(150%) brightness(120%); /* הגברת רוויה ובהירות לצבעים עזים */
+        }
+
+        .swirl-gradient-1 {
+            position: absolute;
+            width: 150vw;
+            height: 150vh;
+            background: radial-gradient(circle at 20% 80%, rgba(255, 193, 7, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(142, 36, 170, 0.3) 0%, transparent 50%);
+            animation: swirl1 30s infinite alternate ease-in-out;
+            opacity: 0.7;
+            mix-blend-mode: screen; /* יוצר אפקט של שכבות צבע מתמזגות, רק לרקע */
+        }
+        .swirl-gradient-2 {
+            position: absolute;
+            width: 120vw;
+            height: 120vh;
+            background: radial-gradient(circle at 70% 30%, rgba(76, 175, 80, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 30% 70%, rgba(229, 57, 53, 0.3) 0%, transparent 50%);
+            animation: swirl2 25s infinite alternate-reverse ease-in-out;
+            opacity: 0.6;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes swirl1 {
+            0% { transform: translate(-10%, -10%) rotate(0deg); }
+            50% { transform: translate(10%, 10%) rotate(180deg); }
+            100% { transform: translate(-10%, -10%) rotate(360deg); }
+        }
+
+        @keyframes swirl2 {
+            0% { transform: translate(10%, 10%) rotate(0deg); }
+            50% { transform: translate(-10%, -10%) rotate(-180deg); }
+            100% { transform: translate(10%, 10%) rotate(-360deg); }
+        }
+
+        /* אפקט פרלקס עבור קטעי תוכן */
+        .parallax-section {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* עיצוב אומנותי לקטעי תוכן */
+        .section-box {
+            background-color: rgba(30, 41, 59, 0.85); /* כחול כהה עם שקיפות */
+            border-radius: 1.5rem; /* פינות מעוגלות */
+            padding: 3rem;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(255, 193, 7, 0.2); /* צל אומנותי */
+            backdrop-filter: blur(8px); /* אפקט זכוכית חלבית */
+            -webkit-backdrop-filter: blur(8px);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .section-box:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(255, 193, 7, 0.4);
+        }
+
+        /* עיצוב טקסט */
+        h1, h2, h3 {
+            font-family: 'Amatic SC', cursive;
+            font-weight: 700;
+            color: #FFC107; /* צהוב עז */
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
+        }
+        p, li, a, div {
+            font-family: 'Assistant', sans-serif;
+            color: #E0E0E0; /* אפור בהיר לקריאות גבוהה */
+            line-height: 1.8;
+        }
+        a {
+            color: #4CAF50; /* ירוק לקישורים */
+            text-decoration: none;
+            transition: color 0.2s ease-in-out;
+        }
+        a:hover {
+            color: #FFC107; /* צהוב בריחוף */
+        }
+
+        /* עיצוב תמונות */
+        .post-impressionist-image {
+            border-radius: 1rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 0 4px #8E24AA; /* צל-מסגרת סגול אומנותי */
+            filter: contrast(120%) saturate(130%); /* הגברת צבעוניות וניגודיות */
+            transition: transform 0.3s ease-in-out;
+        }
+        .post-impressionist-image:hover {
+            transform: scale(1.02) rotate(1deg);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6), 0 0 0 6px #FFC107;
+        }
+
+        /* גדלי טקסט רספונסיביים */
+        .text-fluid-lg {
+            font-size: clamp(2.5rem, 8vw, 5rem); /* גודל גופן משתנה בהתאם לרוחב המסך */
+        }
+        .text-fluid-md {
+            font-size: clamp(1.5rem, 5vw, 3rem);
+        }
+        .text-fluid-sm {
+            font-size: clamp(1.125rem, 3vw, 1.5rem);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-[#0F172A] to-[#1E293B]">
+
+    <!-- סמן עכבר מותאם אישית -->
+    <div class="custom-cursor"></div>
+
+    <!-- שכבות רקע בסגנון פוסט-אימפרסיוניסטי עם תנועה -->
+    <div class="background-layer">
+        <div class="swirl-gradient-1"></div>
+        <div class="swirl-gradient-2"></div>
+    </div>
+
+    <!-- עוטף תוכן ראשי -->
+    <div id="content-wrapper" class="relative z-10 min-h-screen flex flex-col items-center p-4 sm:p-8 lg:p-12 opacity-0 transform translate-y-20">
+
+        <!-- קטע גיבור - קנבס העתיד -->
+        <section class="w-full max-w-4xl text-center mb-16 parallax-section" data-speed="0.8">
+            <h1 class="text-fluid-lg sm:text-7xl lg:text-8xl mt-12 mb-6 leading-tight">בינה מלאכותית - קנבס העתיד שלך</h1>
+            <p class="text-fluid-md sm:text-3xl lg:text-4xl text-gray-200 mb-8 max-w-3xl mx-auto">
+                למדו לשלוט בבינה המלאכותית - העתיד הוא עכשיו
+            </p>
+            <p class="text-fluid-sm sm:text-xl lg:text-2xl text-gray-300">
+                הפיכת רעיונות לכלי מציאותי. ללמוד, ליצור ולפרוץ דרך עם AI – הכל נגיש, הכל בר השגה.
+                <span class="block mt-2 font-bold text-yellow-300">העתיד כבר כאן, בואו נצייר אותו יחד.</span>
+            </p>
+            <div class="mt-10">
+                <a href="#contact" class="inline-block px-8 py-4 bg-[#FFC107] text-[#0F172A] text-xl font-bold rounded-full hover:bg-yellow-400 transform hover:scale-105 transition-all duration-300 shadow-lg">
+                    הצטרפו למסע האמנותי
+                </a>
+            </div>
+        </section>
+
+        <!-- תמונה 1: AI ככוח יצירתי -->
+        <section class="w-full max-w-3xl mb-16 parallax-section" data-speed="0.6">
+            <img src="https://source.unsplash.com/random/1000x600/?ai,generative-art,neural-network" alt="דימוי אומנותי של בינה מלאכותית ככוח יצירתי, עם צבעים עזים וצורות מופשטות המזכירות ציור פוסט-אימפרסיוניסטי" class="w-full post-impressionist-image">
+            <p class="text-center text-gray-400 text-sm mt-4">השראה יצירתית: AI ככוח מניע חדש בעולם האמנות והיצירה.</p>
+        </section>
+
+        <!-- קטע מסר מרכזי - מסע אל ליבת היצירה הדיגיטלית -->
+        <section class="w-full max-w-4xl section-box parallax-section" data-speed="0.7">
+            <h2 class="text-fluid-md text-4xl mb-6 text-center">מסע אל ליבת היצירה הדיגיטלית</h2>
+            <p class="text-lg mb-4">
+                בעולם המשתנה ללא הרף, בינה מלאכותית (AI) אינה עוד מדע בדיוני – היא מברשת הצבעים החדשה בידי האמן הדיגיטלי, הכלי שמעצב את המחר. אנו מאמינים כי שליטה ב-AI צריכה להיות נגישה לכל אחד ואחת, כמו לימוד ציור או נגינה.
+            </p>
+            <p class="text-lg">
+                המסע שלנו מתחיל בהנגשת העקרונות הבסיסיים ומגיע עד לפיתוח יישומים מורכבים. אנו מתמקדים בכלים מעשיים, כאלה שניתן ליישם באופן מיידי בחיי היומיום ובעבודה, להפוך רעיונות לכלי מציאותי ולצייר מציאות חדשה.
+            </p>
+        </section>
+
+        <!-- קהל יעד - למי מיועדת סדנת הציור הדיגיטלי הזו? -->
+        <section class="w-full max-w-4xl section-box parallax-section" data-speed="0.6">
+            <h2 class="text-fluid-md text-4xl mb-6 text-center">למי מיועדת סדנת הציור הדיגיטלי הזו?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg">
+                <div>
+                    <h3 class="text-2xl text-[#4CAF50] mb-2">אמנים חדשים בעולם ה-AI</h3>
+                    <p>למתחילים סקרנים המעוניינים לטבול את רגליהם בנהר החדשנות, להכיר את היסודות ולצייר את צעדיהם הראשונים בעולם ה-AI.</p>
+                </div>
+                <div>
+                    <h3 class="text-2xl text-[#4CAF50] mb-2">מקצוענים המבקשים להעצים</h3>
+                    <p>לאנשי ונשות מקצוע המעוניינים להטמיע כלים מבוססי AI בעבודתם, להפוך את המברשת הדיגיטלית לחלק בלתי נפרד מזרם העבודה.</p>
+                </div>
+                <div>
+                    <h3 class="text-2xl text-[#4CAF50] mb-2">מנהיגי חזון וארגונים</h3>
+                    <p>למנהלים, מנהלות וארגונים השואפים לפתוח אופקים חדשים לצוותים שלהם, להפוך אותם לחלוצי ציור העתיד הארגוני.</p>
+                </div>
+                <div>
+                    <h3 class="text-2xl text-[#4CAF50] mb-2">יוצרים מתקדמים ופורצי דרך</h3>
+                    <p>למי שחולם לפתח פרויקטים מורכבים מבוססי AI, לבנות גלריות אינטראקטיביות של חדשנות ולפרוץ את גבולות היצירה.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- תחומי התמחות - מברשות הצבעים שלנו -->
+        <section class="w-full max-w-4xl section-box parallax-section" data-speed="0.8">
+            <h2 class="text-fluid-md text-4xl mb-6 text-center">מברשות הצבעים שלנו: תחומי התמחות ב-AI</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-lg">
+                <div class="p-4 bg-[#1e293b] rounded-lg shadow-md hover:bg-[#2a3a50] transition-colors duration-200">
+                    <h3 class="text-xl text-[#FFC107] mb-2">פיסול מילים ותוכן</h3>
+                    <p>יצירת טקסטים, מאמרים, קופירייטינג – הפיכת רעיונות למילים מרתקות בעזרת AI.</p>
+                </div>
+                <div class="p-4 bg-[#1e293b] rounded-lg shadow-md hover:bg-[#2a3a50] transition-colors duration-200">
+                    <h3 class="text-xl text-[#FFC107] mb-2">ארכיטקטורה חכמה</h3>
+                    <p>בניית אפליקציות חכמות ואוטומציה לפתרונות יצירתיים ופרקטיים.</p>
+                </div>
+                <div class="p-4 bg-[#1e293b] rounded-lg shadow-md hover:bg-[#2a3a50] transition-colors duration-200">
+                    <h3 class="text-xl text-[#FFC107] mb-2">קנבס אינטרנטי</h3>
+                    <p>פיתוח אתרים מבוססי AI, המגיבים ומתפתחים עם המשתמשים.</p>
+                </div>
+                <div class="p-4 bg-[#1e293b] rounded-lg shadow-md hover:bg-[#2a3a50] transition-colors duration-200">
+                    <h3 class="text-xl text-[#FFC107] mb-2">ניתוח גוונים ונתונים</h3>
+                    <p>פיענוח עמוק של נתונים ומחקר, להפקת תובנות צבעוניות וברורות.</p>
+                </div>
+                <div class="p-4 bg-[#1e293b] rounded-lg shadow-md hover:bg-[#2a3a50] transition-colors duration-200">
+                    <h3 class="text-xl text-[#FFC107] mb-2">ציור דיגיטלי ואומנות</h3>
+                    <p>יצירת תמונות, איורים ואומנות ויזואלית פורצת דרך בעזרת מנועי AI.</p>
+                </div>
+                <div class="p-4 bg-[#1e293b] rounded-lg shadow-md hover:bg-[#2a3a50] transition-colors duration-200">
+                    <h3 class="text-xl text-[#FFC107] mb-2">תיאום תזמורתי</h3>
+                    <p>אוטומציה של תהליכים- לייעל, לייעל ולשחרר זמן ליצירה ולחדשנות.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- תמונה 2: AI מסייע ליצירתיות אנושית -->
+        <section class="w-full max-w-3xl mb-16 parallax-section" data-speed="0.7">
+            <img src="https://source.unsplash.com/random/1100x700/?human,ai-collaboration,future,digital-creation" alt="אדם עובד בשיתוף פעולה עם בינה מלאכותית, סביבת עבודה עתידנית עם נגיעות אומנותיות וצבעוניות." class="w-full post-impressionist-image">
+            <p class="text-center text-gray-400 text-sm mt-4">שילוב כוחות: בינה מלאכותית מאיצה את הפוטנציאל האנושי.</p>
+        </section>
+
+        <!-- שירותים מוצעים - גלריית השירותים שלנו -->
+        <section class="w-full max-w-4xl section-box parallax-section" data-speed="0.6">
+            <h2 class="text-fluid-md text-4xl mb-6 text-center">גלריית השירותים שלנו: ציירו את דרככם</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg">
+                <div class="p-6 bg-[#2a3a50] rounded-lg shadow-md hover:bg-[#3d4d63] transition-colors duration-200">
+                    <h3 class="text-2xl text-[#FFC107] mb-2">סדנאות קבוצתיות – סטודיו ליצירה</h3>
+                    <p>חוויה מעשית וממוקדת, ללמוד בקבוצה קטנה ולהחליף רעיונות באווירה יצירתית ודינמית.</p>
+                </div>
+                <div class="p-6 bg-[#2a3a50] rounded-lg shadow-md hover:bg-[#3d4d63] transition-colors duration-200">
+                    <h3 class="text-2xl text-[#FFC107] mb-2">שיעורים פרטיים – מסע אישי עם מנטור</h3>
+                    <p>התאמה אישית מלאה לרמה ולצרכים שלך, ליווי צמוד לפיתוח הפרויקט או היכולת הספציפית.</p>
+                </div>
+                <div class="p-6 bg-[#2a3a50] rounded-lg shadow-md hover:bg-[#3d4d63] transition-colors duration-200">
+                    <h3 class="text-2xl text-[#FFC107] mb-2">הרצאות לארגונים – פתיחת אופקים</h3>
+                    <p>השראה ומידע לצוותים שלמים, לפתוח את הראש לאפשרויות הבלתי נגמרות של AI.</p>
+                </div>
+                <div class="p-6 bg-[#2a3a50] rounded-lg shadow-md hover:bg-[#3d4d63] transition-colors duration-200">
+                    <h3 class="text-2xl text-[#FFC107] mb-2">ייעוץ ופיתוח פרויקטים – הגשמת חזון</h3>
+                    <p>ליווי מקצועי ואישי בפיתוח פרויקטים מבוססי AI, מהרעיון ועד למימוש.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- המדריך - המאסטר המנחה: זאביק אבינר -->
+        <section id="contact" class="w-full max-w-4xl section-box parallax-section" data-speed="0.9">
+            <h2 class="text-fluid-md text-4xl mb-6 text-center">המאסטר המנחה: זאביק אבינר</h2>
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-8 text-lg">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונת פורטרט של זאביק אבינר, מומחה בינה מלאכותית, עם חיוך מזמין." class="w-48 h-48 object-cover rounded-full shadow-lg border-4 border-[#FFC107] post-impressionist-image flex-shrink-0">
+                <div class="text-right">
+                    <p class="text-lg mb-4">
+                        <span class="font-bold text-[#FFC107]">זאביק אבינר</span> הוא לא רק מומחה בינה מלאכותית – הוא אמן בתחומו. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק הפך למנטור ומדריך מוביל, עם חזון ברור: להנגיש את טכנולוגיית ה-AI לכולם.
+                    </p>
+                    <p class="mb-4">
+                        כמו צייר המלמד את תלמידיו את סודות המלאכה, זאביק מתמחה בהפיכת טכנולוגיה מורכבת לכלי עבודה יומיומי, מעשי ומרגש. הוא מראה כיצד לראות את הפוטנציאל, כיצד לצבוע את העתיד בביטחון ובכישרון.
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center md:justify-end gap-4 mt-6">
+                        <a href="https://wa.me/972546609385" target="_blank" class="flex items-center justify-center gap-2 px-6 py-3 bg-[#4CAF50] text-white rounded-full hover:bg-green-600 transition-colors duration-300 shadow-lg text-base">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.046 2.37A9.877 9.877 0 002.37 12.045c0 1.956.495 3.868 1.45 5.51L2 22l4.632-1.217a9.897 9.897 0 005.414 1.393h.001A9.876 9.876 0 0021.722 12.045V12a9.876 9.876 0 00-9.676-9.675zM12.046 3.6A8.58 8.58 0 0120.62 12.045a8.58 8.58 0 01-8.575 8.575 8.544 8.544 0 01-4.636-1.341l-.29-.17-.297.078-3.085.808.825-3.003-.195-.314a8.541 8.541 0 01-1.332-4.57c0-4.73 3.845-8.575 8.575-8.575zM8.471 7.23a.81.81 0 00-.54.25c-.246.26-.595.733-.595 1.772s.61 2.057.697 2.193c.089.135 1.144 1.758 2.766 2.458 1.348.563 2.012.75 2.512.98.5.228.84.195 1.155.12.355-.08.977-.4 1.12-.765.143-.365.143-.675.1-.765-.043-.09-.157-.145-.33-.24-.173-.097-1.01-.5-1.17-.55-.16-.05-2.8-.93-3.23-.975-.43-.045-.74.15-.99.5-.25.35-.95 1.25-.975 1.28-.025.025-.05.025-.075.025a.25.25 0 01-.17-.07c-.09-.09-.2-.25-.33-.425z"/></svg>
+                            ווטסאפ: 054-6609385
+                        </a>
+                        <a href="mailto:zaviner@gmail.com" class="flex items-center justify-center gap-2 px-6 py-3 bg-[#E53935] text-white rounded-full hover:bg-red-600 transition-colors duration-300 shadow-lg text-base">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M2.003 5.884L10.05 11l-8.047 5.116A2 2 0 012 15V7a2 2 0 01.003-.116zM20 7v8c0 .116-.016.223-.047.33l-8.047-5.116 8.047-5.116zM22 17.003l-7.067-4.484L6.933 17.003H22zM2 6.997l7.067 4.484L17.067 6.997H2z"/></svg>
+                            אימייל: zaviner@gmail.com
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- כותרת תחתונה -->
+        <footer class="w-full max-w-4xl text-center mt-16 py-8 text-gray-400 border-t border-gray-700/50 parallax-section" data-speed="0.5">
+            <p>&copy; 2023 זאביק אבינר. כל הזכויות שמורות. נצבע בעתיד עם בינה מלאכותית.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // JavaScript עבור סמן עכבר מותאם אישית
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // JavaScript עבור אפקט פרלקס
+        const parallaxSections = document.querySelectorAll('.parallax-section');
+        window.addEventListener('scroll', () => {
+            parallaxSections.forEach(section => {
+                const speed = parseFloat(section.dataset.speed);
+                // חישוב מיקום אנכי להזזה, חלוקה גדולה יותר מורידה את עוצמת האפקט
+                const yPos = -window.scrollY * speed / 10;
+                section.style.transform = `translateY(${yPos}px)`;
+            });
+        });
+
+        // אנימציה עדינה בטעינת הדף עבור התוכן הראשי
+        window.onload = () => {
+            const contentWrapper = document.getElementById('content-wrapper');
+            // setTimeout מבטיח שהאנימציה תתרחש לאחר שהאלמנטים הוצגו וה-CSS יושם
+            setTimeout(() => {
+                contentWrapper.style.transition = 'opacity 1s ease-out, transform 1s ease-out';
+                contentWrapper.style.opacity = '1';
+                contentWrapper.style.transform = 'translateY(0)';
+            }, 100);
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - אמנות הבינה המלאכותית: לשלוט בעתיד</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Rubik:wght@300..900&display=swap" rel="stylesheet">
+    <style>
+        /* הגדרות בסיסיות של ארטה פוברה וצבעים */
+        :root {
+            --color-bg-dark: #1a1a1a;        /* רקע כהה, "חומר גלם" */
+            --color-bg-light: #f5f5f5;       /* רקע בהיר מנוגד */
+            --color-text-light: #e0e0e0;     /* טקסט בהיר על רקע כהה */
+            --color-text-dark: #333333;      /* טקסט כהה על רקע בהיר (אם יש) */
+            --color-accent-primary: #a3e635; /* הדגשה ראשית, "ניצוץ" AI */
+            --color-accent-secondary: #facc15; /* הדגשה משנית, "כלי" */
+            --font-display: 'Rubik', sans-serif;
+            --font-body: 'Assistant', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-text-light);
+            background-color: var(--color-bg-dark);
+            cursor: none; /* הסתרת סמן עכבר ברירת מחדל */
+            overflow-x: hidden; /* מניעת גלילה אופקית מבאגים פוטנציאליים של פריסה */
+            direction: rtl; /* כיווניות כללית מימין לשמאל */
+            text-align: right; /* יישור טקסט בסיסי לימין */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-display);
+            color: var(--color-text-light);
+            text-align: center; /* כותרות במרכז ברוב המקרים */
+        }
+
+        /* סמן עכבר מותאם אישית - חובה נראות גבוהה */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none; /* לא מפריע לאינטראקציה */
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* גבול בהיר */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* צל כהה לנראות על כל רקע */
+            z-index: 9999; /* תמיד מעל הכל */
+            transition: transform 0.1s ease-out, background-color 0.1s ease-out; /* תנועה חלקה */
+        }
+        #custom-cursor.active {
+            transform: scale(1.5); /* הגדלה במעבר מעל אלמנטים אינטראקטיביים */
+            background-color: var(--color-accent-primary); /* שינוי צבע הדגשה */
+        }
+
+        /* הפרדה בין סקשנים בסגנון ארטה פוברה */
+        .section-separator {
+            @apply w-1/3 h-1 bg-gradient-to-l from-var(--color-accent-primary) to-transparent mx-auto mt-16 mb-12;
+            filter: blur(1px); /* מראה מטושטש/לא מושלם */
+        }
+
+        /* כרטיסיות מידע בסגנון ארטה פוברה */
+        .arte-card {
+            @apply relative p-8 bg-var(--color-bg-light)/5 border border-var(--color-accent-primary) shadow-lg overflow-hidden flex flex-col justify-between items-end; /* יישור לימין של התוכן */
+            transform: rotateZ(calc(var(--angle) * 1deg)); /* הטיה אקראית קלה */
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            text-align: right; /* ודא שהטקסט בתוך הכרטיס מיושר לימין */
+        }
+        .arte-card:hover {
+            @apply border-var(--color-accent-secondary);
+            transform: rotateZ(0deg) scale(1.02); /* התיישרות והגדלה קלה במעבר עכבר */
+            z-index: 10;
+        }
+        .arte-card::before {
+            content: '';
+            @apply absolute inset-0 bg-gradient-to-br from-transparent via-var(--color-accent-primary)/10 to-transparent opacity-0;
+            transition: opacity 0.3s ease;
+            transform: rotate(-10deg) scale(1.5); /* הדגשה מטושטשת */
+        }
+        .arte-card:hover::before {
+            opacity: 1;
+        }
+
+        /* אפקט גליץ' על טקסט */
+        .glitch-text {
+            position: relative;
+            display: inline-block; /* כדי שהפסאודו-אלמנטים יהיו ממוקמים ביחס לטקסט */
+            animation: glitch-init 0.5s steps(2, end) forwards; /* הנפשת חשיפה ראשונית */
+        }
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text); /* שימוש בתוכן הטקסט המקורי */
+            position: absolute;
+            top: 0;
+            right: 0; /* מיושר לימין */
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden; /* הסתרת גליץ' חורג */
+            pointer-events: none; /* לא מפריע לקליקים */
+        }
+        .glitch-text::before {
+            color: var(--color-accent-primary);
+            animation: glitch-effect-1 2s infinite alternate-reverse;
+        }
+        .glitch-text::after {
+            color: var(--color-accent-secondary);
+            animation: glitch-effect-2 2.5s infinite alternate-reverse;
+        }
+
+        @keyframes glitch-init {
+            0% { opacity: 0; transform: translateY(-10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes glitch-effect-1 {
+            0% { transform: translate(-2px, 2px); }
+            20% { transform: translate(2px, -2px); }
+            40% { transform: translate(-3px, 0); }
+            60% { transform: translate(1px, 3px); }
+            80% { transform: translate(0, -2px); }
+            100% { transform: translate(-2px, 2px); }
+        }
+        @keyframes glitch-effect-2 {
+            0% { transform: translate(2px, -2px); }
+            25% { transform: translate(-1px, 3px); }
+            50% { transform: translate(3px, 1px); }
+            75% { transform: translate(-2px, -2px); }
+            100% { transform: translate(2px, -2px); }
+        }
+
+        /* אלמנטים לרקע פרלקס (Parallax) */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -2; /* מאחורי התוכן הראשי */
+            pointer-events: none; /* לא מפריע לקליקים */
+            opacity: 0.08; /* עדין מאוד */
+            filter: grayscale(100%) blur(2px) contrast(150%); /* מראה מיושן/מלוכלך */
+        }
+        #parallax-bg-2 {
+            z-index: -3; /* עמוק יותר ברקע */
+            opacity: 0.03; /* עדין עוד יותר */
+        }
+
+        /* נגישות: ודא שסגנונות מיקוד (focus) נראים */
+        button:focus, a:focus, input:focus, textarea:focus {
+            outline: 2px solid var(--color-accent-primary);
+            outline-offset: 3px;
+            border-radius: 4px;
+        }
+
+        /* תיקוני RTL ספציפיים כשצריך */
+        .text-right { text-align: right; }
+        .text-left { text-align: left; }
+        .mx-auto { margin-right: auto; margin-left: auto; } /* Tailwind מטפל בזה, אבל לוודא */
+
+        /* תיקון עבור SVG אייקונים עם text-align: right בתוך קישורים */
+        .inline-flex {
+            justify-content: center; /* מרכוז תוכן בתוך פלקס-בוקס */
+            align-items: center;
+        }
+        .inline-flex > svg {
+            margin-right: 0.5rem; /* רווח ימין לאייקון בתוך כפתור RTL */
+            margin-left: 0;
+        }
+
+    </style>
+</head>
+<body class="bg-var(--color-bg-dark) text-var(--color-text-light) antialiased overflow-x-hidden" style="scroll-behavior: smooth;">
+
+    <!-- סמן עכבר מותאם אישית -->
+    <div id="custom-cursor" class="pointer-events-none transition-all duration-100 ease-out"></div>
+
+    <!-- אלמנט רקע פרלקס 1 (דוגמה גיאומטרית עדינה) -->
+    <div id="parallax-bg-1" class="parallax-bg" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="transparent"/><circle cx="25" cy="25" r="5" fill="%23888"/><circle cx="75" cy="25" r="5" fill="%23888"/><circle cx="25" cy="75" r="5" fill="%23888"/><circle cx="75" cy="75" r="5" fill="%23888"/></svg>');"></div>
+    <!-- אלמנט רקע פרלקס 2 (טקסטורה מיושנת) -->
+    <div id="parallax-bg-2" class="parallax-bg" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="roughness"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" result="noise"/><feDiffuseLighting in="noise" lightingColor="%23fff" surfaceScale="2" result="light"><feDistantLight azimuth="225" elevation="45"/></feDiffuseLighting><feComposite in="light" in2="SourceGraphic" operator="arithmetic" k1="1" k2="0" k3="0" k4="0"/></filter><rect width="100" height="100" fill="%231a1a1a" filter="url(%23roughness)"/></svg>');"></div>
+
+    <!-- עוטף התוכן הראשי -->
+    <div class="relative z-0 min-h-screen flex flex-col items-center justify-center py-16 px-4 md:px-8 lg:px-16 overflow-hidden">
+
+        <!-- סקשן גיבור (Hero) -->
+        <section id="hero" class="text-center mb-24 max-w-4xl w-full">
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight glitch-text" data-text="אמנות הבינה המלאכותית">
+                אמנות הבינה המלאכותית
+            </h1>
+            <p class="text-xl md:text-2xl text-var(--color-text-light) mb-10 leading-relaxed font-light">
+                <span class="glitch-text" data-text="העתיד אינו עוד חידה, הוא חומר ביד היוצר.">העתיד אינו עוד חידה, הוא חומר ביד היוצר.</span><br>
+                <span class="glitch-text" data-text="למדו לשלוט בבינה המלאכותית – העתיד הוא עכשיו.">למדו לשלוט בבינה המלאכותית – העתיד הוא עכשיו.</span>
+            </p>
+            <a href="#services" class="inline-block px-8 py-4 bg-var(--color-accent-primary) text-var(--color-bg-dark) text-xl font-bold rounded-full hover:bg-var(--color-accent-secondary) transition-colors duration-300 relative overflow-hidden group">
+                <span class="relative z-10">התחילו ליצור היום</span>
+                <span class="absolute inset-0 bg-var(--color-accent-secondary) scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-right"></span>
+            </a>
+        </section>
+
+        <div class="section-separator"></div>
+
+        <!-- אודות זאביק -->
+        <section id="about" class="max-w-5xl w-full text-center mb-24 px-4 sm:px-0">
+            <h2 class="text-4xl md:text-5xl font-bold mb-12 text-var(--color-accent-primary) glitch-text" data-text="זאביק אבינר: המגלה">זאביק אבינר: המגלה</h2>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
+                <div class="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-var(--color-accent-primary) shadow-xl flex-shrink-0 relative group">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 ease-in-out">
+                    <div class="absolute inset-0 bg-var(--color-accent-primary)/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center text-4xl text-var(--color-bg-dark) font-bold">AI</div>
+                </div>
+                <div class="text-lg md:text-xl leading-relaxed text-right md:text-right">
+                    <p class="mb-6">
+                        בעולם שבו קוד נהפך לשירה ונתונים הופכים לחזיונות, זאביק אבינר הוא לא רק מומחה, אלא אמן. הוא לוקח את החומרים ה"עניים" של האלגוריתמים ומפיח בהם חיים, הופך אותם לכלים מעשיים ונגישים. ניסיונו העשיר בפיתוח פרויקטים ומערכות מבוססות AI הוא הבסיס למסע שבו הוא מוביל אתכם.
+                    </p>
+                    <p>
+                        זאביק מאמין שבינה מלאכותית היא לא רק טכנולוגיה עלית, אלא שפה חדשה שכל אחד יכול ללמוד ולשלוט בה. הוא המדריך שלכם לפרק את המורכבות, לחשוף את הפוטנציאל הגלום, ולבנות בעזרתה עתיד טוב יותר, פרויקט אחר פרויקט, שיעור אחר שיעור.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-separator"></div>
+
+        <!-- מסר מרכזי / פילוסופיה -->
+        <section id="philosophy" class="max-w-4xl w-full text-center mb-24 px-4 sm:px-0">
+            <h2 class="text-4xl md:text-5xl font-bold mb-12 text-var(--color-accent-primary) glitch-text" data-text="הנגשה: האמנות הגדולה">הנגשה: האמנות הגדולה</h2>
+            <p class="text-xl md:text-2xl leading-relaxed mb-6 font-light">
+                <span class="glitch-text" data-text="AI אינה מיועדת רק למעבדות מבריקות.">AI אינה מיועדת רק למעבדות מבריקות.</span><br>
+                <span class="glitch-text" data-text="היא כלי חזק לכל אחד, בכל מקום.">היא כלי חזק לכל אחד, בכל מקום.</span>
+            </p>
+            <p class="text-lg md:text-xl leading-relaxed text-var(--color-text-light)/80">
+                אנו מפרקים את החומות, הופכים מושגים מופשטים לכלים מוחשיים. ממתחילים סקרנים ועד מפתחי פרויקטים מתקדמים - המסע שלכם לשליטה ב-AI מתחיל כאן, עם כלים מעשיים שניתן ליישם מיד בעבודה ובחיים. זהו המימוש של ארטה פוברה בעולם הדיגיטלי: לקחת את המורכב, ולעשות אותו נגיש, אמיתי ושימושי.
+            </p>
+        </section>
+
+        <div class="section-separator"></div>
+
+        <!-- תחומי התמחות -->
+        <section id="expertise" class="max-w-6xl w-full text-center mb-24 px-4 sm:px-0">
+            <h2 class="text-4xl md:text-5xl font-bold mb-12 text-var(--color-accent-primary) glitch-text" data-text="חומרי הגלם שלנו">חומרי הגלם שלנו</h2>
+            <p class="text-xl md:text-2xl leading-relaxed mb-16 text-var(--color-text-light)/80">
+                אלו ה"פיסות" שאנו אוספים ומרכיבים יחד ליצירות חדשות בעזרת AI.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="arte-card" style="--angle: -2;">
+                    <h3 class="text-2xl font-bold mb-4 text-var(--color-accent-primary)">יצירת טקסטים ותוכן</h3>
+                    <p class="text-lg">הפכו רעיונות למילים, סיפורים למציאות. AI כשותפה לכתיבה.</p>
+                </div>
+                <div class="arte-card" style="--angle: 3;">
+                    <h3 class="text-2xl font-bold mb-4 text-var(--color-accent-primary)">בניית אפליקציות חכמות</h3>
+                    <p class="text-lg">הביאו אינטליגנציה ליישומים שלכם, פתרו בעיות אמיתיות.</p>
+                </div>
+                <div class="arte-card" style="--angle: -1;">
+                    <h3 class="text-2xl font-bold mb-4 text-var(--color-accent-primary)">פיתוח אתרים מבוססי AI</h3>
+                    <p class="text-lg">העניקו לאתר שלכם יכולות למידה והתאמה אישית.</p>
+                </div>
+                <div class="arte-card" style="--angle: 4;">
+                    <h3 class="text-2xl font-bold mb-4 text-var(--color-accent-primary)">ניתוח נתונים ומחקר</h3>
+                    <p class="text-lg">חשפו תובנות נסתרות ממידע גולמי, קבלו החלטות מבוססות AI.</p>
+                </div>
+                <div class="arte-card" style="--angle: -3;">
+                    <h3 class="text-2xl font-bold mb-4 text-var(--color-accent-primary)">יצירת תמונות ואומנות</h3>
+                    <p class="text-lg">הפכו דמיון למראה, צרו ויזואליות עוצרות נשימה בלחיצת כפתור.</p>
+                </div>
+                <div class="arte-card" style="--angle: 2;">
+                    <h3 class="text-2xl font-bold mb-4 text-var(--color-accent-primary)">אוטומציה של תהליכים</h3>
+                    <p class="text-lg">שחררו זמן יקר, תנו ל-AI לבצע את המשימות החוזרות.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-separator"></div>
+
+        <!-- שירותים מוצעים -->
+        <section id="services" class="max-w-5xl w-full text-center mb-24 px-4 sm:px-0">
+            <h2 class="text-4xl md:text-5xl font-bold mb-12 text-var(--color-accent-primary) glitch-text" data-text="הכלים שברשותכם">הכלים שברשותכם</h2>
+            <p class="text-xl md:text-2xl leading-relaxed mb-16 text-var(--color-text-light)/80">
+                כלים מגוונים, המותאמים אישית לכל מסע ורצון.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="arte-card border-var(--color-accent-secondary)" style="--angle: 1;">
+                    <h3 class="text-2xl font-bold mb-4 text-var(--color-accent-secondary)">סדנאות קבוצתיות</h3>
+                    <p class="text-lg">חוויה מעשית, ממוקדת ויעילה, ללמידה משותפת והתנסות מעשית.</p>
+                </div>
+                <div class="arte-card border-var(--color-accent-secondary)" style="--angle: -4;">
+                    <h3 class="text-2xl font-bold mb-4 text-var(--color-accent-secondary)">שיעורים פרטיים</h3>
+                    <p class="text-lg">מסלול אישי, התאמה מלאה לקצב, לרמה ולצרכים הייחודיים שלכם.</p>
+                </div>
+                <div class="arte-card border-var(--color-accent-secondary)" style="--angle: 3;">
+                    <h3 class="text-2xl font-bold mb-4 text-var(--color-accent-secondary)">הרצאות לארגונים</h3>
+                    <p class="text-lg">פתחו אופקים לצוותים שלכם, עוררו השראה והטמיעו חדשנות.</p>
+                </div>
+                <div class="arte-card border-var(--color-accent-secondary)" style="--angle: -2;">
+                    <h3 class="text-2xl font-bold mb-4 text-var(--color-accent-secondary)">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-lg">ליווי מקצועי ופרקטי, מהרעיון ועד למימוש מלא של פרויקטי AI.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-separator"></div>
+
+        <!-- קריאה לפעולה / יצירת קשר -->
+        <section id="contact" class="max-w-4xl w-full text-center px-4 sm:px-0">
+            <h2 class="text-4xl md:text-5xl font-bold mb-12 text-var(--color-accent-primary) glitch-text" data-text="צרו קשר: הצעד הראשון">צרו קשר: הצעד הראשון</h2>
+            <p class="text-xl md:text-2xl leading-relaxed mb-10 text-var(--color-text-light)/80">
+                המסע שלכם לשליטה ב-AI מתחיל בשיחה.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-6 mb-12">
+                <a href="https://wa.me/972546609385" target="_blank" class="inline-flex items-center justify-center px-6 py-3 bg-white text-green-600 text-xl font-bold rounded-full hover:scale-105 transition-transform duration-300 shadow-lg group">
+                    <svg class="w-8 h-8 mr-2 group-hover:animate-bounce" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 2.213.71 4.254 1.908 5.922L2.5 22.5l5.5-1.428C9.535 21.688 10.74 22 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm3.621 12.449c-.2-.099-.9-.444-1.3-.529-.4-.084-.691-.126-.983.126-.292.252-.767.529-.94.63-.173.101-.346.151-.64.05-.292-.101-1.235-.455-2.358-1.455-1.037-.893-1.739-1.996-1.94-2.348-.2-.352-.021-.543.105-.67.114-.112.252-.198.38-.282.129-.084.17-.126.252-.292.084-.168.042-.316-.021-.443-.063-.127-.565-1.353-.775-1.851-.21-.498-.42-.429-.565-.436-.127-.007-.275-.007-.421-.007-.146 0-.38.05-.583.252-.204.202-.777.755-.777 1.838 0 1.083.799 2.124.912 2.275.113.151 1.582 2.41 3.82 3.395 2.237.985 2.237.66 2.647.618.41-.042.9-.368 1.037-.67.13-.302.13-.559.091-.67z"/></svg>
+                    <span>שלחו הודעת ווטסאפ</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="inline-flex items-center justify-center px-6 py-3 bg-var(--color-accent-secondary) text-var(--color-bg-dark) text-xl font-bold rounded-full hover:scale-105 transition-transform duration-300 shadow-lg group">
+                    <svg class="w-8 h-8 mr-2 group-hover:animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12.713L20 7.82V17H4V7.82L12 12.713zm0-2.373L4 5.293V5h16v.293L12 10.34zm0-4.479c-2.761 0-5 2.239-5 5s2.239 5 5 5 5-2.239 5-5-2.239-5-5-5zm0 8c-1.656 0-3-1.344-3-3s1.344-3 3-3 3 1.344 3 3-1.344 3-3 3z"/></svg>
+                    <span>שלחו אימייל</span>
+                </a>
+            </div>
+            <p class="text-xl md:text-2xl font-bold text-var(--color-accent-primary)">
+                זאביק אבינר | מומחה בינה מלאכותית
+            </p>
+        </section>
+
+        <!-- הודעת זכויות יוצרים -->
+        <p class="mt-24 text-lg text-var(--color-text-light)/60">
+            © 2024. כל הזכויות שמורות לאמני הבינה המלאכותית.
+        </p>
+
+    </div> <!-- סוף עוטף התוכן הראשי -->
+
+    <script>
+        // לוגיקה של סמן עכבר מותאם אישית
+        const cursor = document.getElementById('custom-cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        const speed = 0.1; // חלקות התנועה
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * speed;
+            cursorY += (mouseY - cursorY) * speed;
+            cursor.style.transform = `translate3d(${cursorX - cursor.offsetWidth / 2}px, ${cursorY - cursor.offsetHeight / 2}px, 0)`;
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // אינטראקציה של סמן העכבר עם אלמנטים אינטראקטיביים
+        const interactiveElements = document.querySelectorAll('a, button, .arte-card');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+
+        // אפקט פרלקס (Parallax)
+        const parallaxBg1 = document.getElementById('parallax-bg-1');
+        const parallaxBg2 = document.getElementById('parallax-bg-2');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.pageYOffset;
+            parallaxBg1.style.transform = `translateY(-${scrollY * 0.1}px)`;
+            parallaxBg2.style.transform = `translateY(-${scrollY * 0.05}px)`;
+        });
+
+        // הטיה אקראית לכרטיסיות ארטה פוברה בעת הטעינה
+        document.querySelectorAll('.arte-card').forEach(card => {
+            const angle = (Math.random() - 0.5) * 6; // בין -3 ל-3 מעלות
+            card.style.setProperty('--angle', angle);
+        });
+
+    </script>
+</body>
+</html>

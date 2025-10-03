@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - אמנות ה-AI: הדרך להארה דיגיטלית</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&family=Heebo:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles */
+        body {
+            font-family: 'Heebo', sans-serif;
+            color: #d1d5db; /* Light gray for readability on dark backgrounds */
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            background-color: #0d0126; /* Deep cosmic background */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Frank Ruhl Libre', serif;
+            color: #ffda03; /* Saffron/gold for headings */
+        }
+
+        /* Custom cursor style - MANDATORY high-contrast technique */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* White border for visibility on dark */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 10px rgba(255, 218, 3, 0.7); /* Dark shadow for visibility on light, plus a gold glow */
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: width 0.2s ease, height 0.2s ease, border-radius 0.2s ease, box-shadow 0.2s ease;
+        }
+        .custom-cursor.grow {
+            width: 36px;
+            height: 36px;
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 15px rgba(255, 218, 3, 0.9);
+        }
+
+        /* Parallax Background Layers */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            z-index: -1; /* Place behind content */
+        }
+        .bg-layer-1 {
+            background-image: url('https://images.unsplash.com/photo-1555099962-4122d10df04e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); /* Abstract cosmic/digital pattern */
+            opacity: 0.2;
+        }
+        .bg-layer-2 {
+            background-image: url('https://images.unsplash.com/photo-1516259720498-386f7b98d25d?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); /* More detailed pattern, slightly closer */
+            opacity: 0.15;
+        }
+        .bg-layer-3 {
+            background-image: url('https://images.unsplash.com/photo-1510915228367-e6fa1050d408?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); /* Intricate circuit-like or mandala-like pattern */
+            opacity: 0.1;
+        }
+
+        /* Custom scroll indicator */
+        #scroll-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #ffda03;
+            font-size: 0.9rem;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+            z-index: 999;
+        }
+        #scroll-indicator .arrow {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid #ffda03;
+            margin-top: 5px;
+            animation: bounce 1.5s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Gradient overlay for content readability */
+        .content-overlay {
+            background: linear-gradient(180deg, rgba(13, 1, 38, 0.85) 0%, rgba(13, 1, 38, 0.95) 10%, rgba(13, 1, 38, 0.98) 90%, rgba(13, 1, 38, 0.85) 100%);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Artistic section styling - Mandalas and Auras */
+        .section-mandala {
+            position: relative;
+            padding: 4rem 0;
+            margin-bottom: 8rem;
+            background: rgba(0,0,0,0.4); /* Slightly dark background for contrast */
+            border-radius: 1rem;
+            box-shadow: 0 0 30px rgba(255,218,3,0.3);
+            transition: all 0.5s ease-in-out;
+            border: 1px solid rgba(255,218,3,0.1);
+        }
+        .section-mandala:hover {
+            box-shadow: 0 0 50px rgba(255,218,3,0.6), 0 0 15px rgba(100,255,255,0.4);
+            transform: translateY(-5px);
+        }
+        /* Inner aura effect for sections */
+        .section-mandala::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background: radial-gradient(circle at center, rgba(255,218,3,0.08) 0%, transparent 70%);
+            border-radius: 2rem;
+            z-index: -1;
+            transition: opacity 0.5s ease;
+            opacity: 0;
+        }
+        .section-mandala:hover::before {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-[#0d0126]">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-bg bg-layer-1" data-parallax-speed="0.1"></div>
+    <div class="parallax-bg bg-layer-2" data-parallax-speed="0.2"></div>
+    <div class="parallax-bg bg-layer-3" data-parallax-speed="0.3"></div>
+
+    <!-- Scroll Indicator -->
+    <div id="scroll-indicator">
+        <p>גללו למטה</p>
+        <div class="arrow"></div>
+    </div>
+
+    <!-- Main Content Wrapper with Overlay -->
+    <div class="relative min-h-screen content-overlay">
+        <div class="container mx-auto px-4 py-16 max-w-4xl text-center">
+
+            <!-- Hero Section: The AI Enlightenment -->
+            <header class="mb-24 pt-16">
+                <h1 class="text-6xl md:text-8xl font-extrabold mb-6 leading-tight text-white drop-shadow-[0_0_15px_rgba(255,218,3,0.8)]">
+                    <span class="block text-4xl md:text-5xl mb-4 text-[#FFD700]">אמנות ה-AI:</span>
+                    הדרך להארה דיגיטלית
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl mx-auto leading-relaxed">
+                    ברוכים הבאים למקדש הידע של זאביק אבינר - שבו הקוד פוגש את התודעה והאלגוריתם הופך לכלי הארה. למדו לשלוט בכוחות הבינה המלאכותית ולצייר את עתידכם בחוכמה דיגיטלית.
+                </p>
+                <a href="#contact" class="inline-block bg-[#ffda03] text-[#0d0126] hover:bg-[#ffeb3b] transition-all duration-300 ease-in-out py-4 px-10 rounded-full text-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105">
+                    התחילו את המסע שלכם
+                </a>
+            </header>
+
+            <!-- Core Message: The Unveiling of AI -->
+            <section id="core-message" class="section-mandala mb-24 px-8 md:px-12">
+                <h2 class="text-5xl md:text-6xl mb-8 text-[#ffda03] drop-shadow-[0_0_10px_rgba(255,218,3,0.6)]">
+                    הנגשת הכוח האלוהי של AI
+                </h2>
+                <p class="text-lg md:text-xl text-gray-200 leading-relaxed mb-6">
+                    המסר שלנו הוא ברית קדושה בין האדם למכונה. אנו מפרקים את המסתורין סביב הבינה המלאכותית והופכים אותה לכלי מעשי, נגיש ורב עוצמה עבור כולם - מהנצנוץ הראשון של הסקרנות ועד לפיתוח פרויקטים מתקדמים שמעצבים עולמות. אין צורך בניסיון קודם - רק רצון ללמוד ולצמוח.
+                </p>
+                <p class="text-lg md:text-xl text-gray-300 italic">
+                    "כמו יוגי המאחד את תודעתו עם היקום, כך תלמד לאחד את מחשבתך עם האינסוף הדיגיטלי."
+                </p>
+            </section>
+
+            <!-- Target Audience: Seekers of Wisdom -->
+            <section id="target-audience" class="section-mandala mb-24 px-8 md:px-12">
+                <h2 class="text-4xl md:text-5xl mb-8 text-[#ffda03]">
+                    מי מוזמן למסע?
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 text-right">
+                    <div class="p-6 bg-transparent rounded-lg border border-yellow-700/30 hover:border-yellow-500/50 transition-all duration-300">
+                        <h3 class="text-3xl font-bold mb-4 text-[#9c27b0]">מגלי עולם חדשים</h3>
+                        <p class="text-gray-300">מתחילים ומתחילות שרוצים לפתוח צוהר לעולם הקסום של ה-AI, להבין את יסודותיו ולדמיין את האפשרויות הבלתי נגמרות.</p>
+                    </div>
+                    <div class="p-6 bg-transparent rounded-lg border border-yellow-700/30 hover:border-yellow-500/50 transition-all duration-300">
+                        <h3 class="text-3xl font-bold mb-4 text-[#4caf50]">אמני הפרגמטיקה</h3>
+                        <p class="text-gray-300">אנשי ואנשות מקצוע המבקשים לשלב את כלי ה-AI בעבודתם היומיומית, לייעל תהליכים ולעלות רמה ביצירתיות וביעילות.</p>
+                    </div>
+                    <div class="p-6 bg-transparent rounded-lg border border-yellow-700/30 hover:border-yellow-500/50 transition-all duration-300">
+                        <h3 class="text-3xl font-bold mb-4 text-[#ff5722]">אדריכלי העתיד</h3>
+                        <p class="text-gray-300">מנהלים, מנהלות וארגונים המעוניינים להעניק לצוותיהם יתרון תחרותי, לפתוח אופקים חדשים ולבנות אסטרטגיה מבוססת AI.</p>
+                    </div>
+                    <div class="p-6 bg-transparent rounded-lg border border-yellow-700/30 hover:border-yellow-500/50 transition-all duration-300">
+                        <h3 class="text-3xl font-bold mb-4 text-[#2196f3]">יוצרי המציאות</h3>
+                        <p class="text-gray-300">ברמה המתקדמת, אלו השואפים לפתח פרויקטים פורצי דרך מבוססי AI, ליצור פתרונות חדשניים ולעצב את המציאות הדיגיטלית.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Fields of Expertise: The Eight Limbs of AI Yoga -->
+            <section id="expertise" class="section-mandala mb-24 px-8 md:px-12">
+                <h2 class="text-4xl md:text-5xl mb-8 text-[#ffda03]">
+                    תחומי ההתמחות: שמונת איברי יוגת ה-AI
+                </h2>
+                <p class="text-lg md:text-xl text-gray-200 mb-10">
+                    כמו איברי היוגה המובילים להארה, כך תחומי ההתמחות ב-AI מובילים לשליטה מלאה ביכולותיה. אנו ננווט אתכם דרך כלים ומיומנויות שיפתחו בפניכם עולמות:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="p-6 bg-transparent rounded-lg border border-purple-700/30 hover:border-purple-500/50 transition-all duration-300">
+                        <h3 class="text-2xl font-bold mb-3 text-[#f06292]">יצירת טקסטים ותוכן</h3>
+                        <p class="text-gray-300">הפיכת רעיונות למילים, סיפורים ותכנים מרתקים באמצעות מנועי שפה מתקדמים.</p>
+                    </div>
+                    <div class="p-6 bg-transparent rounded-lg border border-purple-700/30 hover:border-purple-500/50 transition-all duration-300">
+                        <h3 class="text-2xl font-bold mb-3 text-[#81c784]">בניית אפליקציות חכמות</h3>
+                        <p class="text-gray-300">פיתוח יישומים המבינים, מנתחים ומגיבים באופן חכם למשתמש ולסביבה.</p>
+                    </div>
+                    <div class="p-6 bg-transparent rounded-lg border border-purple-700/30 hover:border-purple-500/50 transition-all duration-300">
+                        <h3 class="text-2xl font-bold mb-3 text-[#ffb74d]">פיתוח אתרים מבוססי AI</h3>
+                        <p class="text-gray-300">בניית חוויות אינטרנטיות דינמיות, מותאמות אישית ואינטואיטיביות בעזרת AI.</p>
+                    </div>
+                    <div class="p-6 bg-transparent rounded-lg border border-purple-700/30 hover:border-purple-500/50 transition-all duration-300">
+                        <h3 class="text-2xl font-bold mb-3 text-[#4fc3f7]">ניתוח נתונים ומחקר</h3>
+                        <p class="text-gray-300">פענוח מסתורין הנתונים, גילוי תובנות עמוקות וקבלת החלטות מבוססות ידע.</p>
+                    </div>
+                    <div class="p-6 bg-transparent rounded-lg border border-purple-700/30 hover:border-purple-500/50 transition-all duration-300">
+                        <h3 class="text-2xl font-bold mb-3 text-[#e57373]">יצירת תמונות ואומנות</h3>
+                        <p class="text-gray-300">הפיכת רעיונות ויזואליים למציאות דיגיטלית - מאמנות מופשטת ועד עיצובים מורכבים.</p>
+                    </div>
+                    <div class="p-6 bg-transparent rounded-lg border border-purple-700/30 hover:border-purple-500/50 transition-all duration-300">
+                        <h3 class="text-2xl font-bold mb-3 text-[#a1887f]">אוטומציה של תהליכים</h3>
+                        <p class="text-gray-300">שחרור הזמן והאנרגיה באמצעות הפיכת משימות חוזרות לאוטומטיות וחכמות.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Services Offered: The Paths to Mastery -->
+            <section id="services" class="section-mandala mb-24 px-8 md:px-12">
+                <h2 class="text-4xl md:text-5xl mb-8 text-[#ffda03]">
+                    נתיבי ההדרכה: הדרכה, סדנאות ושיעורים פרטיים ללימוד AI
+                </h2>
+                <p class="text-lg md:text-xl text-gray-200 mb-10">
+                    אנו מציעים מגוון נתיבים להשגת שליטה ב-AI, כל אחד מותאם לצרכים ולשאיפות הייחודיות שלכם. בחרו את הדרך שלכם להארה:
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 text-right">
+                    <div class="p-8 bg-transparent rounded-lg border border-green-700/30 hover:border-green-500/50 transition-all duration-300">
+                        <h3 class="text-3xl font-bold mb-4 text-[#8bc34a]">סדנאות קבוצתיות - מעגלי ידע</h3>
+                        <p class="text-gray-300 mb-2">מסגרת מעשית וממוקדת, המאפשרת ללמוד ולתרגל ביחד עם קבוצת עמיתים.</p>
+                        <ul class="list-disc pr-6 text-gray-400">
+                            <li>למידה חווייתית והדדית</li>
+                            <li>תכנים מודולריים ומותאמים</li>
+                            <li>פרויקטים קבוצתיים מעוררי השראה</li>
+                        </ul>
+                    </div>
+                    <div class="p-8 bg-transparent rounded-lg border border-green-700/30 hover:border-green-500/50 transition-all duration-300">
+                        <h3 class="text-3xl font-bold mb-4 text-[#ffc107]">שיעורים פרטיים - מורה דרך אישי</h3>
+                        <p class="text-gray-300 mb-2">ליווי אישי ומותאם לצרכים, לקצב ולרמת הידע הייחודית שלכם.</p>
+                        <ul class="list-disc pr-6 text-gray-400">
+                            <li>תוכנית לימודים אישית</li>
+                            <li>התמקדות בתחומי עניין ספציפיים</li>
+                            <li>מענה מקיף לשאלות וקשיים</li>
+                        </ul>
+                    </div>
+                    <div class="p-8 bg-transparent rounded-lg border border-green-700/30 hover:border-green-500/50 transition-all duration-300">
+                        <h3 class="text-3xl font-bold mb-4 text-[#00bcd4]">הרצאות לארגונים - השראה קולקטיבית</h3>
+                        <p class="text-gray-300 mb-2">פתיחת אופקים חדשים לצוותים, העברת ידע עדכני והנעת עובדים לעבר עתיד ה-AI.</p>
+                        <ul class="list-disc pr-6 text-gray-400">
+                            <li>התאמה למטרות הארגון</li>
+                            <li>מצגות מרתקות ומעוררות מחשבה</li>
+                            <li>סדנאות מותאמות לצד ההרצאה</li>
+                        </ul>
+                    </div>
+                    <div class="p-8 bg-transparent rounded-lg border border-green-700/30 hover:border-green-500/50 transition-all duration-300">
+                        <h3 class="text-3xl font-bold mb-4 text-[#e91e63]">ייעוץ ופיתוח פרויקטים - ליווי יצירה</h3>
+                        <p class="text-gray-300 mb-2">ליווי מקצועי ואישי מתחילתו ועד סופו של פרויקט AI - מהרעיון ועד הביצוע.</p>
+                        <ul class="list-disc pr-6 text-gray-400">
+                            <li>תכנון אסטרטגי</li>
+                            <li>בחירת כלים וטכנולוגיות</li>
+                            <li>ביצוע ויישום בפועל</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- The Guide: Zeev Aviner - The Modern Guru -->
+            <section id="guide" class="section-mandala mb-24 px-8 md:px-12">
+                <h2 class="text-4xl md:text-5xl mb-8 text-[#ffda03]">
+                    המדריך: זאביק אבינר - מורה הדרך הדיגיטלי
+                </h2>
+                <div class="md:flex items-center justify-center gap-10">
+                    <div class="mb-8 md:mb-0 md:w-1/3">
+                        <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="rounded-full border-4 border-[#ffda03] shadow-lg w-48 h-48 mx-auto md:w-64 md:h-64 object-cover transform hover:scale-105 transition-all duration-300">
+                    </div>
+                    <div class="md:w-2/3 text-right">
+                        <p class="text-lg md:text-xl text-gray-200 leading-relaxed mb-6">
+                            זאביק אבינר הוא לא רק מומחה בינה מלאכותית, אלא גם מורה דרך בעל חזון. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק הפך את משימת חייו להנגיש את הטכנולוגיה המורכבת הזו. הוא מאמין שכל אחד ואחת יכולים לרתום את כוחה של הבינה המלאכותית ולהפוך אותה לכלי עבודה יומיומי, יצירתי ופורץ דרך. הצטרפו אליו למסע אל עבר השליטה הדיגיטלית.
+                        </p>
+                        <p class="text-xl md:text-2xl font-bold text-[#ffda03]">
+                            "העתיד אינו מגיע אלינו - אנו יוצרים אותו, כעת, בעזרת AI."
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact: The Oracle's Connection -->
+            <section id="contact" class="section-mandala px-8 md:px-12">
+                <h2 class="text-4xl md:text-5xl mb-8 text-[#ffda03]">
+                    שער לידע: צרו קשר עם המדריך
+                </h2>
+                <p class="text-lg md:text-xl text-gray-200 mb-8">
+                    מוכנים לצאת למסע אל עבר השליטה ב-AI? אל תהססו ליצור קשר. זאביק אבינר ממתין לחלוק עמכם את סודות הבינה המלאכותית.
+                </p>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-8 mb-8">
+                    <a href="https://wa.me/972546609385" target="_blank" class="flex items-center bg-[#25D366] text-white py-4 px-8 rounded-full text-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                        <svg class="w-8 h-8 ml-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.52 3.42 1.48 4.85l-1.5 5.48 5.61-1.47c1.37.79 2.92 1.25 4.32 1.25h.01c5.46 0 9.91-4.45 9.91-9.91s-4.45-9.91-9.91-9.91zm.04 18.06c-1.35 0-2.65-.39-3.77-1.15l-.27-.16-2.88.75.76-2.81-.17-.28c-.8-1.32-1.25-2.86-1.25-4.43 0-4.63 3.76-8.39 8.39-8.39 2.25 0 4.38.87 5.98 2.47s2.47 3.73 2.47 5.98c-.01 4.63-3.77 8.39-8.4 8.39zm4.27-5.52s-.2-.3-.55-.49c-.36-.19-2.1-.99-2.43-1.1s-.56-.16-.8.16c-.25.32-.97 1.1-1.19 1.34s-.44.27-.81.11c-1.17-.46-1.95-1.1-2.73-2.32-.78-1.22-1.24-2.43-1.24-2.58s-.1-.24-.1-.48c0-.24-.03-.45-.03-.64s0-.45.32-.82c.29-.33.65-.8.88-1.1c.23-.31.3-.26.47-.26.17 0 .37 0 .56 0s.54-.06.77.29c.23.36.23.85.16 1.1c-.08.27-.47.7-.63.85s-.35.34-.48.49c-.14.16-.27.35-.13.58.14.23.63.95.69 1.04.06.09 1.24 1.9 2.99 2.68.86.39 1.33.63 1.78.78.68.22 1.29.19 1.77.12.52-.08 1.62-.66 1.85-1.3c.23-.65.23-1.2.16-1.32-.07-.12-.26-.19-.55-.33z"/></svg>
+                        ווטסאפ: 054-6609385
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="flex items-center bg-[#EA4335] text-white py-4 px-8 rounded-full text-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                        <svg class="w-8 h-8 ml-3" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        אימייל: zaviner@gmail.com
+                    </a>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- JavaScript for custom cursor and parallax -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cursor = document.querySelector('.custom-cursor');
+            const parallaxLayers = document.querySelectorAll('.parallax-bg');
+            const body = document.body;
+            const scrollIndicator = document.getElementById('scroll-indicator');
+
+            // Custom Cursor Logic
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = `${e.clientX}px`;
+                cursor.style.top = `${e.clientY}px`;
+            });
+
+            document.addEventListener('mousedown', () => {
+                cursor.classList.add('grow');
+            });
+
+            document.addEventListener('mouseup', () => {
+                cursor.classList.remove('grow');
+            });
+
+            // Parallax Scroll Logic
+            window.addEventListener('scroll', () => {
+                let scrollY = window.scrollY;
+                parallaxLayers.forEach(layer => {
+                    const speed = parseFloat(layer.dataset.parallaxSpeed);
+                    layer.style.transform = `translateY(-${scrollY * speed}px)`;
+                });
+
+                // Hide scroll indicator after some scrolling
+                if (scrollY > window.innerHeight * 0.5) {
+                    scrollIndicator.style.opacity = '0';
+                } else {
+                    scrollIndicator.style.opacity = '0.7';
+                }
+            });
+
+            // Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - מומחה AI: שלטו בעתיד</title>
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'righteous': ['Righteous', 'sans-serif'],
+                        'rubik': ['Rubik', 'sans-serif'],
+                    },
+                    colors: {
+                        'memphis-pink': '#EC4899', // fuchsia-500
+                        'memphis-cyan': '#06B6D4', // cyan-500
+                        'memphis-yellow': '#FACC15', // yellow-400
+                        'memphis-blue': '#3B82F6', // blue-500
+                        'memphis-green': '#22C55E', // green-500
+                        'memphis-red': '#EF4444', // red-500
+                        'memphis-dark': '#1A1A1A',
+                        'memphis-light': '#F8F8F8',
+                    },
+                    keyframes: {
+                        'neon-pulse': {
+                            '0%, 100%': { transform: 'scale(1)', filter: 'brightness(1)' },
+                            '50%': { transform: 'scale(1.05)', filter: 'brightness(1.2)' },
+                        },
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+                            '25%': { transform: 'translateY(-10px) rotate(5deg)' },
+                            '50%': { transform: 'translateY(0) rotate(0deg)' },
+                            '75%': { transform: 'translateY(10px) rotate(-5deg)' },
+                        },
+                        'memphis-shape-float': {
+                            '0%, 100%': { transform: 'translate(var(--x-start), var(--y-start)) rotate(var(--r-start)) scale(var(--s-start))' },
+                            '50%': { transform: 'translate(var(--x-end), var(--y-end)) rotate(var(--r-end)) scale(var(--s-end))' },
+                        },
+                        'text-reveal-up': {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    },
+                    animation: {
+                        'neon-pulse': 'neon-pulse 2s ease-in-out infinite',
+                        'float': 'float 8s ease-in-out infinite',
+                        'memphis-shape-float': 'memphis-shape-float var(--animation-duration) ease-in-out infinite',
+                        'text-reveal-up': 'text-reveal-up 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards paused',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: #1A1A1A; /* memphis-dark */
+            color: #F8F8F8; /* memphis-light */
+            overflow-x: hidden; /* Prevent horizontal scroll from overflowing elements */
+            cursor: none; /* Hide default cursor */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Righteous', sans-serif;
+        }
+        /* Custom cursor style */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* White border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+            transform: translate(-50%, -50%);
+            z-index: 9999; /* Ensure it's always on top */
+            transition: width 0.2s ease-out, height 0.2s ease-out, border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+        }
+        #custom-cursor.active {
+            width: 30px;
+            height: 30px;
+            border-color: #EC4899; /* memphis-pink on hover */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 10px #EC4899; /* Pink glow */
+        }
+        .memphis-bg-pattern-dots {
+            background-image: radial-gradient(#3B82F6 1px, transparent 1px);
+            background-size: 8px 8px;
+        }
+        .memphis-bg-pattern-grid {
+            background-image: linear-gradient(to right, #22C55E 1px, transparent 1px),
+                              linear-gradient(to bottom, #22C55E 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .animate-on-scroll {
+            opacity: 0;
+        }
+        /* Stagger animation delays for text reveal */
+        .anim-delay-100 { animation-delay: 0.1s; }
+        .anim-delay-200 { animation-delay: 0.2s; }
+        .anim-delay-300 { animation-delay: 0.3s; }
+        .anim-delay-400 { animation-delay: 0.4s; }
+        .anim-delay-500 { animation-delay: 0.5s; }
+        .anim-delay-600 { animation-delay: 0.6s; }
+        .anim-delay-700 { animation-delay: 0.7s; }
+        .anim-delay-800 { animation-delay: 0.8s; }
+        .anim-delay-0 { animation-delay: 0s; } /* Explicit 0s for first elements in a group */
+    </style>
+</head>
+<body class="selection:bg-memphis-pink selection:text-white">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Dynamic Memphis Background Shapes -->
+    <div id="memphis-shapes-container" class="fixed inset-0 overflow-hidden z-[-1]"></div>
+
+    <!-- Main Content Wrapper -->
+    <div id="main-content" class="relative z-10 min-h-screen">
+
+        <!-- Hero Section -->
+        <section class="relative min-h-screen flex items-center justify-center p-8 lg:p-16 text-center overflow-hidden bg-memphis-dark">
+            <div class="relative max-w-5xl mx-auto z-20">
+                <h1 class="text-6xl lg:text-8xl font-righteous text-memphis-yellow mb-6 leading-tight animate-text-reveal-up animate-on-scroll">
+                    <span class="block">שלטו בעתיד.</span>
+                    <span class="block text-memphis-cyan">למדו AI.</span>
+                </h1>
+                <p class="text-xl lg:text-3xl text-memphis-light mb-10 max-w-3xl mx-auto font-rubik leading-relaxed anim-delay-200 animate-text-reveal-up animate-on-scroll">
+                    הבינה המלאכותית כאן - בואו נהפוך אותה לכלי העוצמתי שלכם.
+                    <br>הדרכה אישית, מעשית ופורצת דרך - מהבסיס ועד לקצה היכולת.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-6 anim-delay-400 animate-text-reveal-up animate-on-scroll">
+                    <a href="#contact" class="inline-block bg-memphis-pink text-white font-righteous text-xl px-10 py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 animate-neon-pulse">
+                        התחילו עכשיו!
+                    </a>
+                    <a href="#services" class="inline-block bg-memphis-cyan text-memphis-dark font-righteous text-xl px-10 py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                        הכירו את השירותים
+                    </a>
+                </div>
+            </div>
+
+            <!-- Decorative shapes in hero -->
+            <div class="absolute top-1/4 left-1/4 w-32 h-32 bg-memphis-red rounded-full opacity-50 blur-3xl animate-float anim-delay-100"></div>
+            <div class="absolute bottom-1/3 right-1/4 w-40 h-20 bg-memphis-yellow transform -skew-y-12 opacity-60 blur-3xl animate-float anim-delay-200"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border-8 border-memphis-blue rounded-full opacity-40 animate-spin-slow"></div>
+            <div class="absolute top-10 right-10 w-24 h-24 bg-memphis-green rounded-lg transform rotate-45 opacity-70 blur-2xl animate-float anim-delay-300"></div>
+        </section>
+
+        <!-- About Zevik Aviner Section -->
+        <section id="about" class="relative py-20 px-8 lg:px-16 bg-gradient-to-br from-memphis-cyan to-memphis-blue text-memphis-dark text-center overflow-hidden">
+            <h2 class="text-5xl lg:text-6xl font-righteous mb-12 animate-text-reveal-up animate-on-scroll">המדריך שלכם לעולם ה-AI</h2>
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="relative p-6 bg-memphis-light shadow-2xl rounded-3xl border-4 border-memphis-pink transform -rotate-3 hover:rotate-0 transition-transform duration-500 group animate-text-reveal-up animate-on-scroll anim-delay-200">
+                    <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="w-full h-80 object-cover rounded-2xl mb-6 border-4 border-memphis-blue transform group-hover:scale-105 transition-transform duration-500">
+                    <h3 class="text-4xl font-righteous text-memphis-pink mb-4">זאביק אבינר</h3>
+                    <p class="text-xl leading-relaxed text-gray-800">
+                        מומחה בינה מלאכותית עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות AI פורצות דרך.
+                        <br>המומחיות של זאביק היא לא רק בטכנולוגיה, אלא בהנגשתה ובהפיכתה לכלי עבודה יומיומי שיעצים כל אחד ואחת.
+                        <br>יחד, נפענח את סודות ה-AI ונסלול את הדרך לעתיד מבוסס ידע ויצירתיות.
+                    </p>
+                    <div class="absolute -top-4 -right-4 w-24 h-24 bg-memphis-yellow rounded-full animate-float anim-delay-400"></div>
+                    <div class="absolute -bottom-4 -left-4 w-16 h-16 bg-memphis-green transform rotate-45 border-4 border-memphis-red animate-float anim-delay-500"></div>
+                </div>
+                <div class="text-right p-6 rounded-3xl bg-memphis-dark text-memphis-light border-4 border-memphis-yellow shadow-2xl animate-text-reveal-up animate-on-scroll anim-delay-400">
+                    <h3 class="text-3xl lg:text-4xl font-righteous text-memphis-cyan mb-6">המסע שלכם למומחיות AI מתחיל כאן.</h3>
+                    <p class="text-lg lg:text-xl leading-relaxed mb-4">
+                        זאביק אבינר ילווה אתכם צעד אחר צעד, החל מהבנת המושגים הבסיסיים ביותר ועד לבנייה ויישום של פרויקטים מורכבים.
+                        בין אם אתם מתחילים, אנשי מקצוע המעוניינים לשדרג את יכולותיהם, או ארגונים המחפשים להטמיע AI -
+                        ההדרכה המעשית והממוקדת של זאביק תספק לכם את הכלים המדויקים להצלחה.
+                    </p>
+                    <ul class="list-disc list-inside text-lg lg:text-xl text-memphis-light space-y-3 mt-8 text-right">
+                        <li><strong class="text-memphis-yellow">נגישות:</strong> הפיכת AI למובן וקל ליישום.</li>
+                        <li><strong class="text-memphis-yellow">מעשיות:</strong> כלים וטכניקות שניתן ליישם באופן מיידי.</li>
+                        <li><strong class="text-memphis-yellow">התאמה אישית:</strong> ליווי מותאם לרמה ולצרכים שלכם.</li>
+                        <li><strong class="text-memphis-yellow">חדשנות:</strong> להישאר בחוד החנית של הטכנולוגיה.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="relative py-20 px-8 lg:px-16 bg-memphis-light text-memphis-dark overflow-hidden memphis-bg-pattern-dots">
+            <h2 class="text-5xl lg:text-6xl font-righteous text-center text-memphis-dark mb-16 animate-text-reveal-up animate-on-scroll">השירותים שלנו - הדרך שלכם לשלוט ב-AI</h2>
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="service-card p-8 bg-memphis-pink text-white rounded-3xl shadow-xl border-4 border-memphis-dark transform hover:rotate-2 transition-transform duration-300 animate-text-reveal-up animate-on-scroll anim-delay-0">
+                    <div class="text-6xl mb-4">💡</div>
+                    <h3 class="text-3xl font-righteous mb-4">סדנאות קבוצתיות</h3>
+                    <p class="text-lg leading-relaxed">
+                        סדנאות חוויתיות וממוקדות, ללמוד בקבוצה קטנה וליהנות מאינטראקציה ושיתוף ידע.
+                        נושאים מגוונים, כלים מעשיים ויישומים יומיומיים.
+                    </p>
+                </div>
+                <div class="service-card p-8 bg-memphis-cyan text-memphis-dark rounded-3xl shadow-xl border-4 border-memphis-dark transform hover:-rotate-2 transition-transform duration-300 animate-text-reveal-up animate-on-scroll anim-delay-100">
+                    <div class="text-6xl mb-4">👨‍🏫</div>
+                    <h3 class="text-3xl font-righteous mb-4">שיעורים פרטיים</h3>
+                    <p class="text-lg leading-relaxed">
+                        ליווי אישי ומותאם בדיוק לצרכים, לקצב ולרמה שלכם.
+                        העמקה בנושאים ספציפיים או בניית מסלול לימוד מקיף.
+                    </p>
+                </div>
+                <div class="service-card p-8 bg-memphis-yellow text-memphis-dark rounded-3xl shadow-xl border-4 border-memphis-dark transform hover:rotate-2 transition-transform duration-300 animate-text-reveal-up animate-on-scroll anim-delay-200">
+                    <div class="text-6xl mb-4">🎤</div>
+                    <h3 class="text-3xl font-righteous mb-4">הרצאות לארגונים</h3>
+                    <p class="text-lg leading-relaxed">
+                        פתיחת אופקים והעשרת הידע של צוותים ומנהלים בעולם ה-AI.
+                        הרצאות מרתקות המשלבות תיאוריה ודוגמאות מעשיות.
+                    </p>
+                </div>
+                <div class="service-card p-8 bg-memphis-red text-white rounded-3xl shadow-xl border-4 border-memphis-dark transform hover:-rotate-2 transition-transform duration-300 animate-text-reveal-up animate-on-scroll anim-delay-300">
+                    <div class="text-6xl mb-4">🛠️</div>
+                    <h3 class="text-3xl font-righteous mb-4">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-lg leading-relaxed">
+                        ליווי מקצועי בתכנון, פיתוח והטמעת פרויקטים מבוססי AI.
+                        הפיכת רעיונות לפתרונות חכמים ומוחשיים.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Areas Section -->
+        <section id="expertise" class="relative py-20 px-8 lg:px-16 bg-memphis-dark text-memphis-light overflow-hidden memphis-bg-pattern-grid">
+            <h2 class="text-5xl lg:text-6xl font-righteous text-center text-memphis-green mb-16 animate-text-reveal-up animate-on-scroll">תחומי התמחות - היכן ה-AI פוגש את היכולות שלכם</h2>
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div class="expertise-item bg-memphis-blue p-8 rounded-2xl shadow-xl border-4 border-memphis-yellow text-center transform hover:scale-105 transition-transform duration-300 animate-text-reveal-up animate-on-scroll anim-delay-0">
+                    <div class="text-5xl mb-4 text-white">✍️</div>
+                    <h3 class="text-2xl font-righteous text-white mb-2">יצירת טקסטים ותוכן</h3>
+                    <p class="text-lg leading-relaxed text-memphis-light">שחררו את כוחו של ה-AI לכתיבה יצירתית, שיווקית ועסקית.</p>
+                </div>
+                <div class="expertise-item bg-memphis-pink p-8 rounded-2xl shadow-xl border-4 border-memphis-cyan text-center transform hover:scale-105 transition-transform duration-300 animate-text-reveal-up animate-on-scroll anim-delay-100">
+                    <div class="text-5xl mb-4 text-white">📱</div>
+                    <h3 class="text-2xl font-righteous text-white mb-2">בניית אפליקציות חכמות</h3>
+                    <p class="text-lg leading-relaxed text-memphis-light">למדו איך להפוך רעיונות לאפליקציות חכמות ופונקציונליות.</p>
+                </div>
+                <div class="expertise-item bg-memphis-yellow p-8 rounded-2xl shadow-xl border-4 border-memphis-red text-center transform hover:scale-105 transition-transform duration-300 animate-text-reveal-up animate-on-scroll anim-delay-200">
+                    <div class="text-5xl mb-4 text-memphis-dark">🌐</div>
+                    <h3 class="text-2xl font-righteous text-memphis-dark mb-2">פיתוח אתרים מבוססי AI</h3>
+                    <p class="text-lg leading-relaxed text-memphis-dark">שדרגו את האתרים שלכם עם אינטליגנציה מלאכותית.</p>
+                </div>
+                <div class="expertise-item bg-memphis-green p-8 rounded-2xl shadow-xl border-4 border-memphis-pink text-center transform hover:scale-105 transition-transform duration-300 animate-text-reveal-up animate-on-scroll anim-delay-300">
+                    <div class="text-5xl mb-4 text-white">📊</div>
+                    <h3 class="text-2xl font-righteous text-white mb-2">ניתוח נתונים ומחקר</h3>
+                    <p class="text-lg leading-relaxed text-memphis-light">הפכו דאטה לתובנות משמעותיות באמצעות AI.</p>
+                </div>
+                <div class="expertise-item bg-memphis-red p-8 rounded-2xl shadow-xl border-4 border-memphis-blue text-center transform hover:scale-105 transition-transform duration-300 animate-text-reveal-up animate-on-scroll anim-delay-400">
+                    <div class="text-5xl mb-4 text-white">🎨</div>
+                    <h3 class="text-2xl font-righteous text-white mb-2">יצירת תמונות ואומנות</h3>
+                    <p class="text-lg leading-relaxed text-memphis-light">גלו את היצירתיות הבלתי מוגבלת של AI בגרפיקה ואמנות.</p>
+                </div>
+                <div class="expertise-item bg-memphis-cyan p-8 rounded-2xl shadow-xl border-4 border-memphis-yellow text-center transform hover:scale-105 transition-transform duration-300 animate-text-reveal-up animate-on-scroll anim-delay-500">
+                    <div class="text-5xl mb-4 text-memphis-dark">⚙️</div>
+                    <h3 class="text-2xl font-righteous text-memphis-dark mb-2">אוטומציה של תהליכים</h3>
+                    <p class="text-lg leading-relaxed text-memphis-dark">חסכו זמן וייעלו משימות בעזרת אוטומציה חכמה.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action / Contact Section -->
+        <section id="contact" class="relative py-20 px-8 lg:px-16 bg-gradient-to-tl from-memphis-pink to-memphis-red text-white text-center overflow-hidden">
+            <h2 class="text-5xl lg:text-6xl font-righteous mb-12 animate-text-reveal-up animate-on-scroll text-memphis-light">מוכנים לצלול לעתיד?</h2>
+            <p class="text-xl lg:text-2xl font-rubik leading-relaxed max-w-3xl mx-auto mb-10 anim-delay-200 animate-text-reveal-up animate-on-scroll text-memphis-light">
+                צרו קשר עוד היום ונתאים עבורכם את המסלול האידיאלי לשליטה בבינה המלאכותית.
+                <br>העתיד מתחיל עכשיו - והוא חכם יותר מאי פעם.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-6 anim-delay-400 animate-text-reveal-up animate-on-scroll">
+                <a href="https://wa.me/972546609385" target="_blank" class="inline-flex items-center justify-center bg-memphis-green text-memphis-dark font-righteous text-xl px-10 py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 animate-neon-pulse">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0iY3VycmVudENvbG9yIiB2aWV3Qm94PSIwIDAgMTYgMTYiPjxwYXRoIGQ9Ik0xMy42MDQgMi4zMzVsLS41NzYtLjQxTDEzLjA4LjkyMmEuNzcuNzcgMCAwIDAgLTEuMTgxLjMzOEwxMC45NDMgMi4zYz\-LjAwNy0uMDM3LS4wMzgtLjAzOC0uMDItLjA2Ni4wNC0uMDcyLjA4Mi0uMTIuMTA2LS4xMjcuMTM1LS4wNDQuMzU0LS4wMDYuNDY4LjM2MS4wNzguMjYuMTYuNTg1LjE5My44OTQuMDI4LjI2LS4wMS41MjUtLjEwNC43NzQtLjA2Ny4xNzUtLjE2Mi4zNTMtLjI1NC40ODNjLS4zMjUuNDUtLjY2Ny44NTItMS4wMjQgMS4xNS0uMzMzLjI4NS0uNjc1LjU0NS0xLjAxNy43NjEtLjQyNS4yNzUtLjkxOC40NjYtMS40NC41NDMtLjUyNy4wNzctMS4wNy4wNjYtMS42MTktLjA0My0uNTctLjExNC0xLjEyMy0uMzI4LTEuNjc2LS41MS0uNTUtLjE4My0xLjA1My0uMzUzLTEuNTU2LS40ODMtLjUtLjEzLTEuMDAzLS4xNi0xLjUtLjA5My0uNDguMDY3LS45NjIuMjYtMS40NDEuNTctLjQ1NS4yODUtLjg4Ny42MDEtMS4yODkuOTQ1LS4yNjguMjMtLjUxNi40NTEtLjY4LjYzNC0uMTg1LjIxLS4zLjMxOS0uMzIxLjU0NC0uMDguMDg1LS4xMTYuMjI3LS4xMTYuMzMyIDAgLjEwNi4wMzYuMjM3LjEyMy4zMzhhLjkuMS4xODJhLjMyOC4yMy40MDkuMTgyLjgwMi4yNzQuOTc4LjI3NC41MjUtLjAxIDEuMDU1LS4xOTUgMS41NTYtLjQzOC41MDktLjI0Mi45NjctLjQ3NiAxLjM3My0uNzA0LjQxOC0uMjM2LjgzNS0uNDQuOTQ3LS4zOTcuNjUzLjI4MyAxLjI1Mi41ODMgMS43MzcuOTk5LjQ4OS40MjQuODU1Ljg5NCAxLjE5OCAxLjQxNC4yMzcuMzUuMzkyLjY1My40ODEuOTYuMDk3LjMxMy4xMjguNjE4LjA5My45MjktLjA0LjM0OS0uMTg0LjY5OS0uNDA5IDEuMDE5LS4xOS4yNzQtLjQyNy41MTUtLjczNy43Mi0uMzMuMjIyLS42NTIuNDE2LS45NTIuNTYtLjMxNS4xNTgtLjU5OC4yNTctLjc1Mi4zODgtLjE3Mi4xMzItLjMyNi4zMDgtLjQyNy40NzItLjEwNi4xNy0uMTI4LjMzNy0uMTA2LjUxNi4wMjcuMTgzLjEwNy4zNTIuMjQzLjQ5Ny4xMzQuMTQ2LjMxLjI1Ni40OS4zNDEuMjUyLjExMy40OTEuMTgyLjY1My4yMy42MzYuMTQ3IDEuMjQyLjIxNyAxLjgwNi4yNi41NjMuMDQgMS4xMTYuMDMgMS42NTUtLjAzNi41NTctLjA2NyAxLjEtLjIxNyAxLjYzOC0uMzQyLjU0OC0uMTI1IDEuMDUyLS4zMTQgMS41NDUtLjQ0Ny40OTUtLjEzNC45ODMtLjE3IDEuNDg0LS4xMDkuNDkyLjA2Ljk3LjIzIDEuNDIuNDU0LjQ2My4yMzMuODg1LjQ4NCAxLjI4OC42NzguMzgyLjE4LjY4LjI5NC44NjcuMzUyLjIyNS4wNy40MDUuMTA1LjU2LjEwNC4yMy0uMDA0LjM1OC0uMDU0LjQzLS4xNy4wODEtLjEzLjE0My0uMjkyLjIwNC0uNDYuMDYzLS4xNjUuMDgtLjMyNy4wNDQtLjQ5Ny0uMDMzLS4xNi0uMTA2LS4zMDktLjE5My0uNDUyLS4wNzgtLjEyNi0uMTctLjIzOS0uMjg3LS4zOTktLjE2Ni0uMjI2LS4yODEtLjMyNy0uNDUtLjQ0Ni0uMTQ2LS4wOTYtLjI3NS0uMTctLjQwNS0uMjI4LS4wNi0uMDEtLjAxNy0uMDEzLS4xMTMtLjAwNS0uMTEzLjAwNy0uMjA2LjAzLS4yNjcuMDItLjA2LS4wMS0uMDktLjAyNC0uMDktLjA0NiAwLS4wMjcuMDE3LS4wNTUuMDU1LS4wOTguMDM1LS4wNC4wODItLjA3LjEyOC0uMDg1LjEyMi0uMDM4LjI2NS0uMDI1LjQyMS4wMzIuMTUzLjA1OC4zMDIuMTM1LjQ1MS4yNTcuMTg2LjE1LjM1MS4zMzcuNDg2LjUxMS4yODcuMzY1LjQwOC43NjkuMzM0IDEuMTUtLjA1Ny4zMDItLjI0Ni41NjgtLjUyOS43OTUtLjI1Ni4yMDYtLjU3Mi4zNDEtLjkuNDAyLS4zMjUuMDU3LS42NTcuMDU2LS45OTYtLjAwNC0uMzgzLS4wNjgtLjc0My0uMTg2LTEuMDc4LS4zNDctLjQ1OC0uMjE4LS44ODktLjQ3NC0xLjMwMy0uNjkzLS4yMjUtLjExMy0uNDQ4LS4yMTUtLjY1NS0uMjk0LS4zNC0uMTMtLjU5Mi0uMTcyLS42OTItLjE2LS.xTg4LjAyNC0uNDA4LjE1NC0uNTcuMjkzLS4yMjguMTkyLS40NDguMzk2LS42Ny41NTctLjIzOC4xNjktLjQ4Ny4zMjMtLjc0Mi40NjgtLjI3NS4xNi0uNTYyLjI2Ni0uODYxLjMxMS0uMzA0LjA0OC0uNjA1LjAzNS0uOTA5LS4wNDItLjQzNy0uMTEyLS44NTktLjMxMi0xLjI3LS41MS0uNDAyLS4xOTgtLjc4NS0uMzk1LTEuMTMyLS41ODgtLjIxMy0uMTItLjQxMy0uMjA4LS41ODYtLjI2NC0uMTcyLS4wNTQtLjI5MS0uMDYzLS4zNTQtLjA3OC0uMDcyLS4wMTYtLjExNi0uMDQ0LS4xNDgtLjA4NC0uMDMzLS4wNC0uMDQ0LS4wODItLjAzNi0uMTE4bC4wMS0uMDM0LjAxMS0uMDM1YS45NDIuOTQyIDAgMCAxIC4yNy0uNTE5Yy4xOTEtLjI3Ny4zOTUtLjUyLjU1Mi0uNzEuMTQ1LS4xNDIuMjk2LS4yNTguNDU0LS4zNDEuMTctLjA5LjM2My0uMTQ1LjU4LS4xNTUuNzYtLjAzNiAxLjQ0NC4xNiAyLjA2My42NDYuNDUzLjM1Ny44NjQuNzE4IDEuMDc1IDEuMDEuMTQ5LjIwNi4yMDkuMy4yMTQuMzA5LjAwMi4wMDMuMDA0LjAwNS4wMDguMDA3LjAzNi4wMjcuMTAxLjA1NC4xNTguMDU0YS41Ni41NiAwIDAgMCAuNDgyLS4zMjQuNDYuNDYgMCAwIDAgLjAyOC0uNTcgMS4wNzcgMS4wNzcgMCAwIDAtLjQ5NC0uNTI1IDEuNDg3IDEuNDg3IDAgMCAwLS42NDctLjI4NmMtLjItLjA0Mi0uNDA4LS4wNS0uNjIxLS4wMTMtLjI3Ny4wNDUtLjUzLjEwNS0uNzY4LjE2NS0uMzUyLjA5MS0uNjk3LjIwMy0xLjAzOS4zMDMtLjQwOC4xMTgtLjc5NC4yNC0xLjEyOC4zNDMtLjQzMy4xMzItLjY3OC4yMjYtLjc3OC4yNzQtLjE3Mi4wOS0uMzE1LjEzLS40NjIuMTQtLjE1Ny4wMS0uMjQ5LS4wMjctLjI5Ny0uMDc4LS4wMTQtLjAxOC0uMDI0LS4wMzctLjAzMS0uMDU0LS4wMTItLjAyNy0uMDE4LS4wNTctLjAyLS4wOWwtLjAwMi0uMDM3LjAwNC0uMDcyLjAxNC0uMTA2LjAxMi0uMDM1LjAyOS0uMDY3LjA1LS4wOTcuMDYtLjA4LjE0Mi0uMTg3LjE5OS0uMzIuMDc3LS4xNzUuMTAzLS4zNTEuMDctLjUxNi0uMDI1LS4xMi0uMDgtLjIzNy0uMTU4LS4zMzUtLjA5My0uMTE4LS4yMDMtLjIzMy0uMzUtLjM3NC0uMTM4LS4xMzQtLjMwMy0uMjg4LS40ODMtLjQ0Ny0uMTk0LS4xNzctLjQwOC0uMzMtLjU5Mi0uNDQ0LS4yMjctLjE0My0uNDY2LS4yMzItLjcxLS4yNTUtLjI1Mi0uMDI1LS41LS4wMTctLjczMS4wMzItLjIwNC4wNDQtLjM5NS4xMy0uNTY2LjIxNy0uMTcuMDktLjMyLjE5OC0uNDEuMzJjLS4wOTYuMTI4LS.MTY2LjI3Ni0uMjIzLjQzOC0uMDYuMTY1LS4wNzguMzQ2LS4wMzQuNTMzLjA0NC4xOC4xNC4zNC4yNzMuNDcuMTMzLjEzNi4yODkuMjU1LjQ3My4zNjcuNjExLjM4MiAxLjI1NC41NDYgMS43NzUuNTUyLjUwOC4wMDYgMS4wMTUtLjA1NCAxLjU0Mi0uMjUuNTI2LS4xOTUgMS4wNzYtLjQ2NyAxLjYwMy0uNzYzLjU1LS4zMDUgMS4wOTUtLjYzNiAxLjYwNS0uOTczLjUyMi0uMzQzIDEuMDItLjY0IDEuNDY2LS44OC40MzgtLjIzNS44MjUtLjM1NCAxLjE1LS4zNTUuMzQyLS4wMDIuNjQ1LjA5MS44NTcuMjM2LjI1LjE3LjQwNi4zMjYuNDg3LjQ3Ny4wODUuMTU4LjE1NS4zNTMuMjAxLjU0NC4wNDkuMjA1LjA1NS40MTMuMDEuNjE4LS4wMjUuMTc2LS4xMTcuMzUzLS4yNzguNDk3LS4xNDYuMTMtLjMxMi4yNDUtLjQ4NC4zMzdhMS4wNDUg1LjA0NSAwIDAgMS0uMzQuMTcxYy0uMDkuMDM2LS4xMjcuMDQ4LS4xMjcuMDQ4LS4yNzIuMDY3LS41Mi4xNDUtLjY1Ny4yMTgtLjE0My4wNzMtLjI3MS4xMjctLjM5NS4xNTctLjEyMS4wMjgtLjIyNy4wMzYtLjMxNy4wMjYtLjA5My0uMDEtLjEzNS0uMDQyLS4xNi0uMDktLjAyNC0uMDQzLS4wMzYtLjA4LS4wMzYtLjExNiAwLS4wNDIuMDE3LS4wNjcuMDM3LS4wOTIuMDE3LS4wMjcuMDM5LS4wNS4wNjEtLjA3Mi4wMjItLjAyMy4wNDctLjA0NC4wNzEtLjA2Ni4wOTgtLjA5My4yMjMtLjE5NC4zMDctLjI2OS4wODEtLjA3My4xNjgtLjEzNS4yNDctLjE4My4xNC0uMDgyLjI2Ny0uMTQyLjM4NS0uMThjLjE1Ni0uMDQ4LjMwNi0uMDg1LjQ1MS0uMTA5LjI5Mi0uMDQ4LjU2NC0uMDQuODI3LjAyMi4yOTcuMDczLjU2LjIxMS43NzguMzY2LjM3OC4yNzIuNjk4LjU5MS45NTcuODQ1LjIwNi4yMDYuMzMzLjM1Ni40MDMuNDU0LjA4NS4xNDQuMTM4LjI2LjE1Ny4zNDIuMDIuMDg4LjAwNy4xNzctLjAzNC4yNTQtLjAzNi4wNjQtLjA5NC4xMTEtLjE2Ni4xNDktLjA3OC4wNC0uMTU3LjA2NS0uMjM0LjA4My0uMTYzLjAzNi0uMzA0LjA0NC0uNDM1LjAyNy0uMTI3LS4wMTctLjI1Mi0uMDUyLS4zNjQtLjA5OC0uMTE1LS4wNDctLjIxOC0uMTA1LS4yOTctLjE3Ny0uMDc4LS4wNzItLjEyNy0uMTM3LS4xNDQtLjE4NWEuOTQyLjk0MiAwIDAgMC0uNDc1LS41OTVjLS4zMjktLjIyOC0uNTc3LS4yNzItLjczNS0uMTljLS4xNjYuMDk1LS4yNTQuMjk0LS4zLjU5LS4wNDUuMzItLjA1Mi42NS0uMDE3Ljk2LjA0LjM2NS4xODMuNjk1LjQyLjk2Mi4yNDQuMjc4LjU1Mi40OTQuOTEzLjY1Mi4zNjUuMTU5LjczNC4yNjEgMS4xMTMuMzA3LjUxNy4wNjEgMS4wMzQtLjAwNiAxLjUzLS4xOTQuNTA1LS4xODkgMS4wMDItLjQ3NiAxLjQ1NC0uODA3LjQ0NC0uMzI1Ljg0LS43MSAxLjE1LS45OTguNTQ2LS41MTEuOTc4LS44OTMgMS4yMTMtMS4wMi41MTItLjI2IDIuNDQ4LTEuNjg0IDIuNTAxLTEuNjgyLjA1NC4wMDEuMjg5LjQ4OS42NjcgMS4xNzcuMjI2LjQxNS4zOTYuNzY5LjQ2MyAxLjA0NS4wNjQuMjY2LjA1OC41MjQtLjAxNi43NDYtLjA2Mi4xOC0uMTczLjM0Ni0uMzMyLjQ3Mi0uMTcxLjEyLS4zNjYuMjEyLS41OTguMjg5LS4yMjcuMDc2LS41NzYuMTM1LS45Ny4xNzYtLjQxNC4wNDMtLjgyOC4wNDItMS4yNDcuMDE1LS43MTYtLjAzOC0xLjM5My0uMjYtMi4wMTktLjU1Ni0uNjM3LS.xOTgtMS4yMDYtLjY3Ni0xLjczNC0xLjA3NWwtLjYxMy0uNDY0Yy0uMzE2LS4yNDgtLjU4MS0uNDU0LS43MzUtLjQ5Ni0uMTQtLjAzNy0uMjczLS4wMTYtLjMyMy4wODQtLjAzLjA2LS4wMTguMTQ1LjAyNi4yMjEuMDQuMDc1LjEwMy4xNjIuMTk0LjI1LjA3Ny4wNzYuMTYuMTUuMjQuMjIuMTQzLjEyNy4yOTkuMjQ4LjQ2NS4zNDYuNjY1LjM4IDEuMzczLjY4NyAxLjk3OS44NjcuNi4xNzggMS4xNzcuMjE3IDEuNzY1LjEwNS41OTctLjExNSAxLjE1OC0uMzU0IDEuNjcxLS42NDIuNTE1LS4yOTUuMTAyOS0uNjE0IDEuNDU5LS45MDMuNDQ3LS4zMTIuODEzLS42MDMgMS4wNzMtLjgzNi40MTItLjMyNi43NjQtLjYwNyAxLjAxNi0xLjExIDIgLjk3NyA4LjU3NSAyLjk3NyA4LjkyOCAxMC42MjNDMi44OTQgOC4yNzkgOC43NzEgNS45MTEgMTEuOSAyLjc3eiIvPjwvc3ZnPg==" class="w-6 h-6 ml-2" />
+                    ווטסאפ: 054-6609385
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="inline-flex items-center justify-center bg-memphis-yellow text-memphis-dark font-righteous text-xl px-10 py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgZmlsbD0iY3VycmVudENvbG9yIiB2aWV3Qm94PSIwIDAgMTYgMTYiPjxwYXRoIGQ9Ik0xNiA3Ljk5OWMwLS4yMzctLjA5LS40NzUtLjI4LS42MTUtLjE5LS4xNDEtLjQ0LS4xNzQtLjY2LS4wODVsLTMuMDM2IDEuMjI0LTMuMzk1LTMuMzk1YzAtLjAwOC0uMDAyLS4wMTMtLjAwNC0uMDI3LS4wMDUtLjAyOC0uMDA5LS4wNDMtLjAyMi0uMDEzLS4wMi0uMDI3LS4wMy0uMDQ0LS4wMzQtLjAxOC0uMDA1LS4wMzItLjAwNi0uMDQzLS4wMDYtLjAxNCAwLS4wMjMgMC0uMDM2LjAwMi0uMDEuMDAyLS4wMi4wMDQtLjAzMi4wMDgtLjAxMy4wMDQtLjAyNy4wMS0uMDQxLjAxNS0uMDUzLjAxNy0uMDI2LjA3OC0uMDU4LjA3My0uMTAyLS4wMDItLjA0NC0uMDI2LS4wNzQtLjA3NS0uMDk4LS4wNDgtLjAyNS0uMTAzLS4wMzItLjE2My0uMDIybC01LjUxNi0uNDA4Yy0uMTkyLS4wMTQtLjM3My4wNDQtLjU1Ny4xODMtLjE4Mi4xMzktLjMxMy4zNi0uMzY2LjYwNy0uMDMyLjI0OC4wMzYuNDk2LjE5Mi42NzIuMTU3LjE3NS4zODcuMjc1LjYyNy4yNzFsLjI3OC0uMDE4Yy4wNi0uMDAzLjEwNS0uMDE0LjE0NS0uMDMxLjA0LS4wMTguMDctLjA0LjA5Mi0uMDY2LjAyMy0uMDI2LjA0MS0uMDU1LjA1NC0uMDg2LjAxNi0uMDMzLjAyNi0uMDY5LjAzLS4xMDVjLjAwNy0uMDM4LjAwNy0uMDc0LjAxLS4xMDctLjAwNS0uMDM0LS4wMTgtLjA2Ny0uMDM2LS4wOTUtLjAxOC0uMDI3LS4wNDUtLjA1LS4wNzMtLjA2OS0uMDI3LS4wMi0uMDctLjAzNC0uMTExLS4wNDUtLjA0Ni0uMDA5LS4wOTMtLjAxNi0uMTQyLS4wMjVsLS41NzctLjExOC0yLjk0NC0uMTY3Yy0uMi4wMDgtLjM5Mi4wOTMtLjU0Ni4yNDQtLjE1NC4xNTEtLjI0NC4zNTYtLjI1OC41NzktLjAxNS4yMjMuMDI4LjQ0Ny4xMy42MzUuMTAyLjE4OC4yNjQuMzMzLjQ1NC40NDlsMi45MTQuNzg2LTMuNjU4IDMuNjU5Yy0uMTI2LjExNS0uMjA2LjI2OC0uMjM2LjQzOS0uMDMuMTcxLjAwNy4zNDEuMDkyLjQ5LjA4Ny4xNDguMjI2LjI2My4zODYuMzIuMTYxLjA1Ny4zMy4wNjIuNDguMDJsLjkzNS0uMjMzIDMuNzE3LTEuNDUzYy4wMy4wMTUuMDU0LjAyOC4wNzEuMDM4LjAyLjAxMi4wMzcuMDIyLjA0OS4wMjguMDM4LjAxOC4wNy4wMjYuMDgyLjAyOC4wMi4wMDEuMDM4LjAwMi4wNTQuMDAyLjAyMiAwIC4wNDEtLjAwMi4wNi0uMDA3LjAxOC0uMDA2LjAzNS0uMDE0LjA1LS4wMjUuMDE2LS4wMTIuMDMtLjAyNi4wNDItLjA0LjAxMy0uMDE0LjAyNC0uMDI5LjAzMy0uMDQ1LjAyLS4wMzIuMDM1LS4wNjUuMDQ0LS4xLjAyLS4wNjYuMDI3LS4xMzQuMDIxLS.yMDMtLjAwNy0uMDcyLS4wMjctLjE0Mi0uMDYtLjIwNi0uMDMyLS4wNjUtLjA3Mi0uMTIyLS4xMjEtLjE3MWwtMi43Mi0yLjcyIDIuNjktMS4xNjMuNTM2LS4yMzMuNTQ0LS4yMzIgMS40Mi41NzIgMi42NzUtMS42ODJjLjI3LS4xNzUuNDM4LS40OTcuNDM4LS44NTR6Ii8+PC9zdmc>" class="w-6 h-6 ml-2" />
+                    אימייל: zaviner@gmail.com
+                </a>
+            </div>
+            <div class="mt-12 text-center text-memphis-light text-sm opacity-70">
+                <p>&copy; 2023 זאביק אבינר. כל הזכויות שמורות.</p>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('active'));
+        });
+
+        // Dynamic Memphis Background Shapes Logic
+        const shapesContainer = document.getElementById('memphis-shapes-container');
+        const colors = ['memphis-pink', 'memphis-cyan', 'memphis-yellow', 'memphis-blue', 'memphis-green', 'memphis-red'];
+        const numShapes = window.innerWidth > 768 ? 25 : 15; // More shapes on larger screens
+
+        function createMemphisShape() {
+            const shapeDiv = document.createElement('div');
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            const size = Math.random() * (window.innerWidth / 12) + 40; // Min 40px, max 12% of width
+            const left = Math.random() * 100; // % of viewport width
+            const top = Math.random() * 100; // % of viewport height
+            const rotation = Math.random() * 360;
+            const duration = Math.random() * 12 + 8; // 8-20 seconds
+            const delay = Math.random() * 6; // 0-6 seconds
+            const shapeType = Math.random();
+
+            let shapeClasses = `absolute bg-${randomColor} opacity-20`;
+
+            if (shapeType < 0.4) { // Circle
+                shapeClasses += ` rounded-full`;
+            } else if (shapeType < 0.8) { // Square/Rectangle, possibly skewed
+                shapeClasses += ` rounded-md transform rotate-${Math.round(rotation / 10) * 10} ${Math.random() > 0.5 ? '-skew-y-' + Math.round(Math.random() * 10 + 5) : ''}`;
+            } else { // Bordered/Dashed shape
+                const borderWidth = Math.random() * 3 + 1; // 1-4px
+                shapeClasses += ` border-[${borderWidth}px] border-dashed border-${randomColor} bg-transparent rounded-full`;
+            }
+
+            shapeDiv.className = `${shapeClasses} animate-memphis-shape-float`;
+            shapeDiv.style.width = `${size}px`;
+            shapeDiv.style.height = `${size}px`;
+            shapeDiv.style.left = `${left}vw`;
+            shapeDiv.style.top = `${top}vh`;
+            shapeDiv.style.setProperty('--animation-duration', `${duration}s`);
+            shapeDiv.style.animationDelay = `${delay}s`;
+
+            // Define start and end positions/rotations/scales for custom keyframe
+            const xStart = Math.random() * 30 - 15; // -15 to 15 vw offset
+            const yStart = Math.random() * 30 - 15; // -15 to 15 vh offset
+            const xEnd = Math.random() * 30 - 15;
+            const yEnd = Math.random() * 30 - 15;
+            const rStart = Math.random() * 360;
+            const rEnd = Math.random() * 360 + 360; // Ensure at least one full rotation
+            const sStart = Math.random() * 0.4 + 0.8; // 0.8 to 1.2
+            const sEnd = Math.random() * 0.4 + 0.8;
+
+            shapeDiv.style.setProperty('--x-start', `${xStart}vw`);
+            shapeDiv.style.setProperty('--y-start', `${yStart}vh`);
+            shapeDiv.style.setProperty('--r-start', `${rStart}deg`);
+            shapeDiv.style.setProperty('--s-start', `${sStart}`);
+            shapeDiv.style.setProperty('--x-end', `${xEnd}vw`);
+            shapeDiv.style.setProperty('--y-end', `${yEnd}vh`);
+            shapeDiv.style.setProperty('--r-end', `${rEnd}deg`);
+            shapeDiv.style.setProperty('--s-end', `${sEnd}`);
+
+            shapesContainer.appendChild(shapeDiv);
+        }
+
+        for (let i = 0; i < numShapes; i++) {
+            createMemphisShape();
+        }
+
+        // Intersection Observer for Text Reveal Animation
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.querySelectorAll('.animate-text-reveal-up').forEach(el => {
+                        el.style.animationPlayState = 'running';
+                    });
+                    // If the section itself is the animated element
+                    if (entry.target.classList.contains('animate-text-reveal-up')) {
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements with animate-on-scroll class
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+    </script>
+</body>
+</html>

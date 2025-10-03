@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - הארכיטקטורה של החלום הדיגיטלי</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700&family=Secular+One&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary-bg: #1a1a2e; /* Deep indigo */
+            --secondary-bg: #2a094e; /* Darker purple */
+            --accent-blue: #0f4c75; /* Steel blue */
+            --accent-green: #3B9A60; /* Forest green */
+            --light-text: #e0e0e0; /* Off-white */
+            --gold-accent: #ffcc29; /* Bright gold */
+        }
+        body {
+            font-family: 'Frank Ruhl Libre', serif;
+            background-color: var(--primary-bg);
+            color: var(--light-text);
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor */
+        }
+        h1, h2, .font-secular {
+            font-family: 'Secular One', sans-serif;
+        }
+        /* Custom scrollbar for aesthetic, if needed */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--secondary-bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-blue);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-green);
+        }
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+            border: 2px solid #FFFFFF; /* White border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+        }
+        .custom-cursor.active {
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .max-ernst-layer {
+            position: absolute;
+            opacity: 0.1;
+            filter: grayscale(100%) blur(1px);
+            pointer-events: none;
+            transition: transform 0.1s ease-out;
+        }
+        .max-ernst-shape-1 {
+            width: 200px;
+            height: 300px;
+            background: linear-gradient(45deg, #4A0E4E, #1F0854);
+            clip-path: polygon(50% 0%, 100% 30%, 80% 100%, 20% 100%, 0% 30%);
+            top: 10%;
+            right: 5%;
+        }
+        .max-ernst-shape-2 {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #0f4c75, #2B3A67);
+            clip-path: ellipse(50% 40% at 50% 50%);
+            bottom: 20%;
+            left: 10%;
+        }
+        .max-ernst-shape-3 {
+            width: 250px;
+            height: 100px;
+            background: linear-gradient(90deg, #1A1A2E, #3b82f6);
+            clip-path: polygon(0% 20%, 30% 0%, 100% 20%, 70% 100%, 0% 100%);
+            top: 50%;
+            left: 30%;
+        }
+        .bg-animated-grid {
+            background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            animation: grid-pulse 10s infinite alternate;
+        }
+        @keyframes grid-pulse {
+            0% { background-position: 0 0; opacity: 0.8; }
+            100% { background-position: 40px 40px; opacity: 1; }
+        }
+
+        .floating-element {
+            animation: float-up-down 8s ease-in-out infinite;
+        }
+        @keyframes float-up-down {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+        .fade-in {
+            animation: fadeIn 1.5s ease-out forwards;
+            opacity: 0;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    </style>
+</head>
+<body class="min-h-screen text-right overflow-y-auto">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="customCursor"></div>
+
+    <!-- Background Layers (Max Ernst Inspired - Abstract, Fragmented) -->
+    <div class="fixed inset-0 bg-gradient-to-br from-primary-bg to-secondary-bg z-[-2] bg-animated-grid"></div>
+    <div class="fixed inset-0 z-[-1] overflow-hidden">
+        <div class="max-ernst-layer max-ernst-shape-1" style="transform: translate(0, 0);"></div>
+        <div class="max-ernst-layer max-ernst-shape-2" style="transform: translate(0, 0);"></div>
+        <div class="max-ernst-layer max-ernst-shape-3" style="transform: translate(0, 0);"></div>
+        <!-- More floating abstract shapes -->
+        <div class="max-ernst-layer w-64 h-64 bg-accent-blue rounded-full bottom-[-50px] right-[-50px] opacity-10 blur-xl"></div>
+        <div class="max-ernst-layer w-48 h-48 bg-accent-green rounded-lg top-[-30px] left-[-30px] opacity-10 blur-xl transform rotate-45"></div>
+    </div>
+
+    <!-- Main Content Area - A Surreal Landscape -->
+    <div class="relative z-10 p-4 md:p-8 lg:p-12 min-h-screen flex flex-col items-center justify-center pt-20 pb-20">
+
+        <!-- Main Title - Floating, Majestic -->
+        <h1 class="font-secular text-5xl md:text-7xl lg:text-8xl text-light-text mb-12 text-center fade-in floating-element relative z-20" style="animation-delay: 0.5s;">
+            לשלוט בבינה המלאכותית:<br> הארכיטקטורה של החלום הדיגיטלי
+        </h1>
+
+        <!-- Introductory Passage - Poetic, Evocative -->
+        <div class="w-full max-w-4xl bg-black bg-opacity-30 backdrop-blur-sm p-6 md:p-10 rounded-xl shadow-lg mb-16 text-center reveal-on-scroll relative z-20">
+            <p class="text-xl md:text-2xl leading-relaxed text-light-text">
+                בעידן שבו צללים דיגיטליים רוקדים על קירות התודעה, והלחישות של אלגוריתמים מעצבות מציאות חדשה,
+                אנו עומדים בפני שער. שער אל ממלכה של יצירה, הבנה ושליטה.
+                זאביק אבינר, מדריך דרך בנבכי הלא-מודע הטכנולוגי, מזמין אתכם לפענח את סודות הבינה המלאכותית.
+            </p>
+        </div>
+
+        <!-- Central Message - Emergent, Core Idea -->
+        <div class="w-full max-w-3xl mb-16 flex flex-col md:flex-row items-center justify-center md:space-x-8 lg:space-x-12 reveal-on-scroll relative z-20">
+            <div class="md:w-1/2 p-6 bg-accent-blue bg-opacity-40 rounded-full shadow-xl text-center flex items-center justify-center h-48 md:h-64 floating-element" style="animation-delay: 1s;">
+                <p class="font-secular text-2xl md:text-3xl lg:text-4xl text-light-text leading-tight">
+                    הופכים את הבלתי-נתפס לישים.<br> ממסד הציפיות ועד בניית מגדלים של חדשנות.
+                </p>
+            </div>
+            <div class="md:w-1/2 p-6 mt-8 md:mt-0 bg-accent-green bg-opacity-40 rounded-full shadow-xl text-center flex items-center justify-center h-48 md:h-64 floating-element" style="animation-delay: 1.5s;">
+                <p class="font-secular text-2xl md:text-3xl lg:text-4xl text-light-text leading-tight">
+                    AI אינו רק כלי - הוא שפה חדשה,<br> פסל שמתעצב בידיים שלכם.
+                </p>
+            </div>
+        </div>
+
+        <!-- Target Audience & Expertise - Fragmented Constellations -->
+        <div class="w-full max-w-5xl mb-20 relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 reveal-on-scroll relative z-20">
+            <!-- Target Audience - Biomorphic Clusters -->
+            <div class="col-span-1 md:col-span-2 lg:col-span-1 bg-black bg-opacity-40 p-8 rounded-2xl shadow-xl floating-element" style="animation-delay: 2s;">
+                <h2 class="font-secular text-3xl text-gold-accent mb-6 text-center">פעימות קהל היעד</h2>
+                <ul class="space-y-4 text-xl text-light-text list-disc list-inside text-right">
+                    <li><span class="text-accent-blue">המתעוררים לקריאת העידן</span> - חוקרי עולם ה-AI מן היסוד.</li>
+                    <li><span class="text-accent-green">אדריכלי המחר בתחומם</span> - אנשי מקצוע המבקשים להטמיע בינה.</li>
+                    <li><span class="text-gold-accent">הרועים את עדרי האלגוריתמים</span> - מנהלים וארגונים המובילים צוותים.</li>
+                    <li><span class="text-accent-blue">מפסלי חזיונות AI מתקדמים</span> - ליווי ופיתוח פרויקטים מורכבים.</li>
+                </ul>
+            </div>
+
+            <!-- Areas of Expertise - Surreal Forms -->
+            <div class="col-span-1 md:col-span-2 lg:col-span-2 bg-black bg-opacity-40 p-8 rounded-2xl shadow-xl floating-element" style="animation-delay: 2.5s;">
+                <h2 class="font-secular text-3xl text-gold-accent mb-6 text-center">קונסטלציות התמחות</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xl text-light-text">
+                    <p class="flex items-center space-x-2 space-x-reverse"><span class="text-accent-blue text-3xl">•</span> לידת טקסטים מן הריק</p>
+                    <p class="flex items-center space-x-2 space-x-reverse"><span class="text-accent-green text-3xl">•</span> ארכיטקטורת יישומים חכמים</p>
+                    <p class="flex items-center space-x-2 space-x-reverse"><span class="text-gold-accent text-3xl">•</span> אריגת רשתות בינה (אתרים)</p>
+                    <p class="flex items-center space-x-2 space-x-reverse"><span class="text-accent-blue text-3xl">•</span> פענוח לחשי הנתונים</p>
+                    <p class="flex items-center space-x-2 space-x-reverse"><span class="text-accent-green text-3xl">•</span> קונסטרוקציות ויזואליות</p>
+                    <p class="flex items-center space-x-2 space-x-reverse"><span class="text-gold-accent text-3xl">•</span> מנגנוני אוטומציה סוריאליסטיים</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zevik Aviner - The Guide - A Central Figure -->
+        <div class="w-full max-w-4xl bg-black bg-opacity-50 backdrop-blur-sm p-8 rounded-2xl shadow-2xl flex flex-col md:flex-row items-center md:space-x-8 md:space-x-reverse mb-20 reveal-on-scroll relative z-20">
+            <div class="w-full md:w-1/3 flex justify-center mb-6 md:mb-0">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונת דיוקן של זאביק אבינר" class="rounded-full w-48 h-48 object-cover border-4 border-gold-accent shadow-lg animate-pulse">
+            </div>
+            <div class="w-full md:w-2/3 text-center md:text-right">
+                <h2 class="font-secular text-4xl text-gold-accent mb-4">האמן הדיגיטלי והמגשר: זאביק אבינר</h2>
+                <p class="text-xl leading-relaxed text-light-text mb-4">
+                    עם ניסיון כמפסל בטכנולוגיה, זאביק מנגיש את עולם ה-AI המורכב לכלי יצירה יומיומיים.
+                    הוא רואה את הפוטנציאל שבכל אלגוריתם, ומלמד כיצד להפוך נתונים ליצירות אמנות וחידושים מעשיים.
+                </p>
+                <p class="text-lg text-gray-300">
+                    מומחה בינה מלאכותית עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI.
+                </p>
+            </div>
+        </div>
+
+        <!-- Services & Contact - Interactive Portals -->
+        <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-8 mb-20 reveal-on-scroll relative z-20">
+            <!-- Services - Morphing Orbs -->
+            <div class="bg-black bg-opacity-40 p-8 rounded-2xl shadow-xl floating-element" style="animation-delay: 3s;">
+                <h2 class="font-secular text-3xl text-gold-accent mb-6 text-center">שערי השירותים</h2>
+                <div class="space-y-6">
+                    <a href="#" class="block p-4 bg-accent-blue bg-opacity-60 hover:bg-opacity-80 rounded-lg text-center text-xl font-bold text-light-text transform hover:scale-105 transition duration-300">
+                        מעבדות חשיבה קבוצתיות - מעשיות וממוקדות
+                    </a>
+                    <a href="#" class="block p-4 bg-accent-green bg-opacity-60 hover:bg-opacity-80 rounded-lg text-center text-xl font-bold text-light-text transform hover:scale-105 transition duration-300">
+                        מסעות אישיים בנבכי הבינה - התאמה פרטנית
+                    </a>
+                    <a href="#" class="block p-4 bg-primary-bg bg-opacity-60 hover:bg-opacity-80 rounded-lg text-center text-xl font-bold text-light-text transform hover:scale-105 transition duration-300">
+                        הרצאות - מראות למציאות AI לארגונים
+                    </a>
+                    <a href="#" class="block p-4 bg-gold-accent bg-opacity-60 hover:bg-opacity-80 rounded-lg text-center text-xl font-bold text-light-text transform hover:scale-105 transition duration-300">
+                        ליווי והגשמת פרויקטים-חזון
+                    </a>
+                </div>
+            </div>
+
+            <!-- Contact - Emergent Information -->
+            <div class="bg-black bg-opacity-40 p-8 rounded-2xl shadow-xl floating-element" style="animation-delay: 3.5s;">
+                <h2 class="font-secular text-3xl text-gold-accent mb-6 text-center">פתח שער ליצירה: צור קשר</h2>
+                <div class="text-2xl text-light-text space-y-4 text-center">
+                    <p class="hover:text-gold-accent transition duration-300">
+                        <span class="text-accent-blue">ווטסאפ:</span> <a href="https://wa.me/972546609385" target="_blank" class="underline">054-6609385</a>
+                    </p>
+                    <p class="hover:text-gold-accent transition duration-300">
+                        <span class="text-accent-green">אימייל:</span> <a href="mailto:zaviner@gmail.com" class="underline">zaviner@gmail.com</a>
+                    </p>
+                </div>
+                <p class="mt-8 text-center text-light-text text-lg">
+                    הזמן עכשיו את המסע שלך אל עתיד שבו אתה האדריכל של המציאות הדיגיטלית.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('customCursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+        document.addEventListener('mousedown', () => {
+            customCursor.classList.add('active');
+        });
+        document.addEventListener('mouseup', () => {
+            customCursor.classList.remove('active');
+        });
+
+        // Parallax Effect for Background Layers (Max Ernst inspired, subtle shifts)
+        const maxErnstLayers = document.querySelectorAll('.max-ernst-layer');
+        document.addEventListener('mousemove', (e) => {
+            const speed = 0.02; // How much the layer moves relative to mouse
+            maxErnstLayers.forEach((layer, index) => {
+                const x = (window.innerWidth - e.pageX * speed * (index + 1)) / 100;
+                const y = (window.innerHeight - e.pageY * speed * (index + 1)) / 100;
+                layer.style.transform = `translate(${x}px, ${y}px)`;
+            });
+        });
+
+        // Reveal on Scroll Logic
+        const revealElements = document.querySelectorAll('.reveal-on-scroll');
+        const options = {
+            threshold: 0.3 // Trigger when 30% of element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Stop observing once visible
+                }
+            });
+        }, options);
+
+        revealElements.forEach(element => {
+            observer.observe(element);
+        });
+
+        // Initial fade-in for title
+        document.querySelector('.fade-in').style.opacity = '1';
+        document.querySelector('.fade-in').style.transform = 'translateY(0)';
+
+    </script>
+</body>
+</html>

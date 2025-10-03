@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אומנות הבינה המלאכותית - דרכו של האומן המודרך</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700&family=Heebo:wght@300;404;500;700&display=swap" rel="stylesheet">
+    <style type="text/tailwindcss">
+        @layer base {
+            html {
+                font-family: 'Heebo', sans-serif;
+                scroll-behavior: smooth;
+                color: #f8f8f8; /* Default light text for dark backgrounds */
+            }
+            h1, h2, h3, h4, h5, h6 {
+                font-family: 'Frank Ruhl Libre', serif;
+                font-weight: 700;
+            }
+            body {
+                overflow-x: hidden; /* Prevent horizontal scroll from parallax */
+                cursor: none; /* Hide default cursor */
+                background-color: #1a1a1a; /* Dark background */
+            }
+            a {
+                color: #CD7F32; /* Bronze/gold link color */
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+            a:hover {
+                color: #E0B589;
+            }
+        }
+        
+        /* Custom Tailwind Theme - using existing colors for consistency */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        /* Custom styles for cursor */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            z-index: 9999;
+            transition: transform 0.1s ease-out;
+            border: 2px solid #FFFFFF; /* White border for visibility on dark */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for visibility on light */
+            transform: translate(-50%, -50%);
+        }
+
+        /* Keyframes for drawing effect on scroll */
+        .draw-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .draw-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .ancient-pattern-1 {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0z' fill='%23A0522D'/%3E%3Cpath d='M0 0 L50 50 L0 100 L100 100 L100 0 Z' fill='%23000000' /%3E%3C/svg%3E");
+            background-size: 50px 50px;
+            opacity: 0.05;
+        }
+
+        .ancient-pattern-2 {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h100v100H0z' fill='%23000000'/%3E%3Cpath d='M0 50 L50 0 L100 50 L50 100 Z' fill='%23A0522D' /%3E%3C/svg%3E");
+            background-size: 75px 75px;
+            opacity: 0.07;
+        }
+        .text-terracotta { color: #A0522D; }
+        .text-bronze { color: #CD7F32; }
+        .bg-terracotta { background-color: #A0522D; }
+        .bg-black-opac { background-color: rgba(0,0,0,0.7); }
+    </style>
+</head>
+<body class="bg-[#1a1a1a] text-gray-100 font-heebo">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="fixed inset-0 w-full h-full z-[-1] overflow-hidden">
+        <!-- Base Dark BG -->
+        <div class="absolute inset-0 bg-black opacity-90"></div>
+        
+        <!-- Pattern 1 -->
+        <div id="parallax-layer-1" class="absolute inset-0 ancient-pattern-1" style="transform: translateZ(0); transform: scale(1.1); will-change: transform;"></div>
+        
+        <!-- Pattern 2 -->
+        <div id="parallax-layer-2" class="absolute inset-0 ancient-pattern-2" style="transform: translateZ(0); transform: scale(1.05); will-change: transform;"></div>
+
+        <!-- Stylized Vase Silhouette - Large, subtle -->
+        <div id="parallax-layer-3" class="absolute bottom-[-100px] left-[-200px] w-[600px] h-[800px] md:w-[800px] md:h-[1000px] bg-terracotta opacity-[0.03] rounded-t-full rounded-b-[40%] origin-bottom-left" style="clip-path: polygon(0 0, 100% 0, 70% 100%, 30% 100%); transform: rotate(10deg) translateZ(0); will-change: transform;"></div>
+        <div id="parallax-layer-4" class="absolute top-[-100px] right-[-200px] w-[600px] h-[800px] md:w-[800px] md:h-[1000px] bg-terracotta opacity-[0.03] rounded-t-full rounded-b-[40%] origin-top-right" style="clip-path: polygon(0 0, 100% 0, 70% 100%, 30% 100%); transform: rotate(-10deg) translateZ(0); will-change: transform;"></div>
+
+    </div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 min-h-screen p-4 md:p-8 flex flex-col items-center max-w-7xl mx-auto">
+
+        <!-- Header - Stylized Title -->
+        <header class="w-full text-center py-10 md:py-20 bg-black-opac mb-12">
+            <h1 class="text-5xl md:text-7xl font-frank-ruhl-libre text-bronze leading-tight draw-in">
+                אומנות הבינה המלאכותית
+            </h1>
+            <h2 class="text-3xl md:text-5xl font-frank-ruhl-libre text-terracotta mt-4 draw-in" style="transition-delay: 0.2s;">
+                דרכו של האומן המודרך
+            </h2>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="max-w-4xl text-center mb-24 px-4 draw-in" id="hero-section">
+            <h3 class="text-4xl md:text-5xl font-frank-ruhl-libre text-white mb-6">הפרוזדור אל העתיד</h3>
+            <p class="text-xl md:text-2xl leading-relaxed text-gray-200">
+                בנבכי המיתוסים העתיקים, על חרסי כדים ואמפורות, נגלו סיפורים על אלים ובני אדם. כיום, אנו עומדים בפתח עידן חדש, שבו הבינה המלאכותית היא הכוח המעצב את עולמנו. זהו מסע ללמוד, לפסל וליצור בעזרת כלי האל-זמני הזה. אנו מזמינים אותך להיות חלק מיוצרי העתיד.
+            </p>
+            <div class="mt-12 text-center text-terracotta text-6xl animate-bounce">
+                &#8595;
+            </div>
+        </section>
+
+        <!-- Core Message Section -->
+        <section class="max-w-4xl mb-24 bg-black-opac p-8 rounded-lg shadow-xl border border-terracotta draw-in" style="transition-delay: 0.4s;">
+            <h3 class="text-4xl md:text-5xl font-frank-ruhl-libre text-bronze mb-6 text-center">מקורות הכוח בידך: הנגשת AI</h3>
+            <p class="text-xl md:text-2xl leading-relaxed text-gray-200">
+                אנו מאמינים כי ידע AI אינו נחלתם של בודדים, אלא כוח יצירה שכל אחד יכול לרתום. החל מהיסודות ועד לשיאים של פיתוח מתקדם - אנו פורצים את הדרך, צעד אחר צעד, בנתיב שיהפוך את הבינה המלאכותית לכלי יומיומי בעבודתך ובחייך. כלים מעשיים, ידע יישומי, והשראה לפעולה מידית.
+            </p>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section class="max-w-4xl mb-24 px-4 draw-in" style="transition-delay: 0.6s;">
+            <h3 class="text-4xl md:text-5xl font-frank-ruhl-libre text-white mb-8 text-center">פסיפס הלומדים: מי יתמסר לאומנות זו?</h3>
+            <div class="grid md:grid-cols-2 gap-12 text-center">
+                <div class="bg-black-opac p-6 rounded-lg shadow-md border border-terracotta draw-in" style="transition-delay: 0.8s;">
+                    <h4 class="text-2xl md:text-3xl font-frank-ruhl-libre text-terracotta mb-4">חניכי הפכחות</h4>
+                    <p class="text-lg md:text-xl text-gray-300">אלו הצמאים להכיר את סודות ה-AI מבראשית, ללא ידע מוקדם.</p>
+                </div>
+                <div class="bg-black-opac p-6 rounded-lg shadow-md border border-bronze draw-in" style="transition-delay: 1s;">
+                    <h4 class="text-2xl md:text-3xl font-frank-ruhl-libre text-bronze mb-4">בעלי המלאכה</h4>
+                    <p class="text-lg md:text-xl text-gray-300">אנשי מקצוע המבקשים לשלב את כוח ה-AI במלאכתם היומיומית ולייעל תהליכים.</p>
+                </div>
+                <div class="bg-black-opac p-6 rounded-lg shadow-md border border-bronze draw-in" style="transition-delay: 1.2s;">
+                    <h4 class="text-2xl md:text-3xl font-frank-ruhl-libre text-bronze mb-4">מנהיגי הלהקות</h4>
+                    <p class="text-lg md:text-xl text-gray-300">מנהלים וארגונים השואפים להאיר את דרך צוותיהם בידע חדש ולהוביל חדשנות.</p>
+                </div>
+                <div class="bg-black-opac p-6 rounded-lg shadow-md border border-terracotta draw-in" style="transition-delay: 1.4s;">
+                    <h4 class="text-2xl md:text-3xl font-frank-ruhl-libre text-terracotta mb-4">בוני המחר</h4>
+                    <p class="text-lg md:text-xl text-gray-300">אלו השואפים לפתח פרויקטים פורצי דרך מבוססי AI, לפסל את העתיד בידיהם.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Areas of Expertise Section -->
+        <section class="max-w-5xl mb-24 bg-black-opac p-8 rounded-lg shadow-xl border border-bronze draw-in" style="transition-delay: 1.6s;">
+            <h3 class="text-4xl md:text-5xl font-frank-ruhl-libre text-terracotta mb-8 text-center">כלי היצירה: תחומים שבהם נפסל את הבינה</h3>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="p-4 text-center border-b border-gray-700 draw-in" style="transition-delay: 1.8s;">
+                    <h4 class="text-2xl font-frank-ruhl-libre text-white mb-2">אדריכלות הטקסט</h4>
+                    <p class="text-lg text-gray-300">ליצירת תוכן כתוב, סיפורים ומסרים בקלות וביעילות.</p>
+                </div>
+                <div class="p-4 text-center border-b border-gray-700 draw-in" style="transition-delay: 2s;">
+                    <h4 class="text-2xl font-frank-ruhl-libre text-white mb-2">פיסול אפליקציות חכמות</h4>
+                    <p class="text-lg text-gray-300">לבניית יישומים אינטליגנטיים המשלבים AI חדשני.</p>
+                </div>
+                <div class="p-4 text-center border-b border-gray-700 draw-in" style="transition-delay: 2.2s;">
+                    <h4 class="text-2xl font-frank-ruhl-libre text-white mb-2">אריגת אתרים מתקדמים</h4>
+                    <p class="text-lg text-gray-300">פיתוח פלטפורמות דיגיטליות מבוססות בינה מלאכותית.</p>
+                </div>
+                <div class="p-4 text-center border-b border-gray-700 draw-in" style="transition-delay: 2.4s;">
+                    <h4 class="text-2xl font-frank-ruhl-libre text-white mb-2">פענוח המגילות</h4>
+                    <p class="text-lg text-gray-300">ניתוח נתונים, גילוי תובנות עמוקות וקבלת החלטות מושכלות.</p>
+                </div>
+                <div class="p-4 text-center border-b border-gray-700 draw-in" style="transition-delay: 2.6s;">
+                    <h4 class="text-2xl font-frank-ruhl-libre text-white mb-2">גלריית היצירה הדיגיטלית</h4>
+                    <p class="text-lg text-gray-300">ליצירת תמונות, אומנות ויזואלית ומדיה באמצעות AI.</p>
+                </div>
+                <div class="p-4 text-center border-b border-gray-700 draw-in" style="transition-delay: 2.8s;">
+                    <h4 class="text-2xl font-frank-ruhl-libre text-white mb-2">אוטומציה קסומה</h4>
+                    <p class="text-lg text-gray-300">ייעול והמרצת תהליכי עבודה בעזרת פתרונות AI אוטומטיים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="max-w-4xl mb-24 px-4 draw-in" style="transition-delay: 3s;">
+            <h3 class="text-4xl md:text-5xl font-frank-ruhl-libre text-white mb-8 text-center">סדנאות האומן: נתיבי הלימוד</h3>
+            <div class="grid md:grid-cols-2 gap-12 text-center">
+                <div class="bg-black-opac p-6 rounded-lg shadow-md border border-terracotta draw-in" style="transition-delay: 3.2s;">
+                    <h4 class="text-2xl md:text-3xl font-frank-ruhl-libre text-terracotta mb-4">סדנאות קבוצתיות</h4>
+                    <p class="text-lg md:text-xl text-gray-300">מעגלי ידע מעשיים, ממוקדים ומעוררי השראה ללימוד משותף.</p>
+                </div>
+                <div class="bg-black-opac p-6 rounded-lg shadow-md border border-bronze draw-in" style="transition-delay: 3.4s;">
+                    <h4 class="text-2xl md:text-3xl font-frank-ruhl-libre text-bronze mb-4">שיעורים פרטיים</h4>
+                    <p class="text-lg md:text-xl text-gray-300">ליווי אישי, מותאם ככפפה ליד, לרמתך ולשאיפותיך הייחודיות.</p>
+                </div>
+                <div class="bg-black-opac p-6 rounded-lg shadow-md border border-bronze draw-in" style="transition-delay: 3.6s;">
+                    <h4 class="text-2xl md:text-3xl font-frank-ruhl-libre text-bronze mb-4">הרצאות לארגונים</h4>
+                    <p class="text-lg md:text-xl text-gray-300">הצתה של ניצוץ הסקרנות והשראה לצוותים שלמים, לפתוח אופקים חדשים.</p>
+                </div>
+                <div class="bg-black-opac p-6 rounded-lg shadow-md border border-terracotta draw-in" style="transition-delay: 3.8s;">
+                    <h4 class="text-2xl md:text-3xl font-frank-ruhl-libre text-terracotta mb-4">ייעוץ ופיתוח פרויקטים</h4>
+                    <p class="text-lg md:text-xl text-gray-300">ליווי צמוד, מיזם אחר מיזם, עד להגשמת חזונכם הטכנולוגי.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide Section - Zevik Aviner -->
+        <section class="max-w-4xl mb-24 bg-black-opac p-8 rounded-lg shadow-xl border border-terracotta flex flex-col md:flex-row items-center gap-8 draw-in" style="transition-delay: 4s;">
+            <div class="md:w-1/3 flex-shrink-0">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונת דיוקן של זאביק אבינר" class="w-48 h-48 md:w-full md:h-auto object-cover rounded-full mx-auto md:mx-0 border-4 border-bronze shadow-lg">
+            </div>
+            <div class="md:w-2/3 text-center md:text-right">
+                <h3 class="text-4xl md:text-5xl font-frank-ruhl-libre text-bronze mb-4">זאביק אבינר - מורה הדרך</h3>
+                <h4 class="text-2xl md:text-3xl font-frank-ruhl-libre text-white mb-4">פניו של האומן המודרך</h4>
+                <p class="text-xl md:text-2xl leading-relaxed text-gray-200">
+                    זאביק אבינר, אומן הבינה המלאכותית, איש בעל ניסיון עשיר בפיתוח ויישום פרויקטים פורצי דרך. הוא מביא עמו לא רק ידע עצום, אלא גם את האומנות שבהנגשה - הפיכת הטכנולוגיה המורכבת לכלי זמין ויום-יומי לכל דורש. בהדרכתו, תגלו את הפוטנציאל הטמון ב-AI ותלמדו לרתום אותו לעשייה משמעותית.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="max-w-4xl bg-black-opac p-8 rounded-lg shadow-xl border border-bronze draw-in" style="transition-delay: 4.2s;">
+            <h3 class="text-4xl md:text-5xl font-frank-ruhl-libre text-terracotta mb-8 text-center">קשר עם האורקל: חבר אל הידע</h3>
+            <p class="text-xl md:text-2xl leading-relaxed text-gray-200 text-center mb-8">
+                אל תהססו לפנות, להציג שאלה, או לצאת למסע הלימוד המשותף.
+                <br>הבינה המלאכותית מחכה להתגלות בידיכם.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-6 text-2xl md:text-3xl font-frank-ruhl-libre">
+                <a href="https://wa.me/972546609385" target="_blank" class="text-bronze hover:text-white transition-colors duration-300">
+                    ווטסאפ: 054-6609385
+                </a>
+                <span class="text-gray-500 hidden md:inline-block">|</span>
+                <a href="mailto:zaviner@gmail.com" class="text-bronze hover:text-white transition-colors duration-300">
+                    אימייל: zaviner@gmail.com
+                </a>
+            </div>
+        </section>
+
+        <footer class="mt-20 py-8 text-center text-gray-500 text-sm">
+            &copy; <span id="current-year"></span> זאביק אבינר - כל הזכויות שמורות.
+        </footer>
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // Parallax Scrolling Logic
+        document.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            document.getElementById('parallax-layer-1').style.transform = `translateY(${scrollY * 0.05}px) translateZ(0) scale(1.1)`;
+            document.getElementById('parallax-layer-2').style.transform = `translateY(${scrollY * 0.08}px) translateZ(0) scale(1.05)`;
+            document.getElementById('parallax-layer-3').style.transform = `rotate(10deg) translateX(${scrollY * -0.07}px) translateY(${scrollY * 0.1}px) translateZ(0)`;
+            document.getElementById('parallax-layer-4').style.transform = `rotate(-10deg) translateX(${scrollY * 0.07}px) translateY(${scrollY * 0.05}px) translateZ(0)`;
+        });
+
+        // Scroll-triggered animations (Intersection Observer)
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Unobserve once animated
+                }
+            });
+        }, {
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        });
+
+        document.querySelectorAll('.draw-in').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Set current year for footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

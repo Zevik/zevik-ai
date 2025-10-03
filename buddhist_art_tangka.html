@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>התגלות הבינה – מסע אל המאסטר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #0A1931;
+            --secondary-blue: #0E2954;
+            --accent-gold: #FFD700;
+            --accent-red: #B02E0C;
+            --text-light: #E0E0E0;
+            --text-dark: #333333;
+        }
+        body {
+            font-family: 'Noto Sans Hebrew', sans-serif;
+            background-color: var(--primary-blue);
+            color: var(--text-light);
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll due to potential overflows */
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease-out; /* Smoother movement */
+            border: 2px solid rgba(255, 255, 255, 0.9); /* Light color for dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.7);   /* Dark shadow for light backgrounds */
+        }
+        .custom-cursor-inner {
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-gold);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.8;
+            transition: all 0.2s ease-out;
+        }
+        .custom-cursor.active .custom-cursor-inner {
+            transform: translate(-50%, -50%) scale(1.5);
+            opacity: 1;
+        }
+
+        /* Thangka inspired background */
+        .thangka-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            z-index: -1;
+            overflow: hidden;
+        }
+        .thangka-bg::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            left: -20%;
+            width: 140%;
+            height: 140%;
+            background-image: radial-gradient(circle at center, rgba(255,215,0,0.05) 0%, transparent 50%),
+                              repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 10px);
+            background-size: 100% 100%, 20px 20px;
+            animation: bg-scroll 60s linear infinite;
+        }
+
+        @keyframes bg-scroll {
+            from { transform: translate(0, 0); }
+            to { transform: translate(20px, 20px); }
+        }
+
+        /* Artistic styling for sections */
+        .thangka-panel {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 8rem 2rem; /* Increased padding to give more breathing room */
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        .thangka-panel:nth-child(even) {
+            background-color: rgba(14, 41, 84, 0.4); /* Slightly different background for alternating panels */
+        }
+
+        .thangka-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at center, rgba(var(--accent-gold),0.02) 0%, transparent 60%);
+            z-index: -1;
+            opacity: 0.5;
+            animation: pulse 10s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.05); opacity: 0.6; }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
+
+        /* Specific styles for card-like elements */
+        .thangka-card {
+            background-color: rgba(14, 41, 84, 0.7); /* Use secondary blue with transparency */
+            border: 1px solid var(--accent-gold);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+            position: relative; /* For the glow effect */
+            overflow: hidden;
+        }
+        .thangka-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5); /* Use rgba for accent-gold */
+        }
+        .thangka-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--accent-gold) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            transform: scale(0);
+            z-index: 0;
+        }
+        .thangka-card:hover::before {
+            opacity: 0.1;
+            transform: scale(1);
+        }
+        .thangka-card > * {
+            position: relative;
+            z-index: 1; /* Ensure content is above the glow */
+        }
+
+        /* Parallax effect for text elements */
+        .parallax-text {
+            transform: translateY(calc(var(--scroll-y, 0) * var(--speed, 0)));
+        }
+
+        /* Custom animation for "Mandala" like shapes */
+        .mandala-element {
+            position: absolute;
+            border-radius: 50%;
+            animation: rotate-mandala 30s linear infinite;
+        }
+
+        .mandala-element-1 {
+            width: 80vh;
+            height: 80vh;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(0deg);
+            animation-duration: 40s;
+        }
+        .mandala-element-2 {
+            width: 60vh;
+            height: 60vh;
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(0deg);
+            animation-duration: 35s;
+        }
+        .mandala-element-3 {
+            width: 40vh;
+            height: 40vh;
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(0deg);
+            animation-duration: 30s;
+        }
+
+        @keyframes rotate-mandala {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Subtle particle effect */
+        .particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0; /* Below content but above background */
+        }
+        .particle {
+            position: absolute;
+            background-color: var(--accent-gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particle-flow 15s infinite ease-out;
+        }
+        @keyframes particle-flow {
+            0% {
+                transform: translate(var(--x), var(--y)) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+                transform: translate(var(--x), var(--y)) scale(1);
+            }
+            80% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translate(var(--x-end), var(--y-end)) scale(0);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="custom-cursor">
+        <div class="custom-cursor-inner"></div>
+    </div>
+
+    <!-- Thangka Inspired Background -->
+    <div class="thangka-bg"></div>
+    <div class="particle-container" id="particle-container"></div>
+
+
+    <!-- Main Content Wrapper (z-index 10 to be above fixed background) -->
+    <div class="relative z-10">
+
+        <!-- Panel 1: Opening Invocation -->
+        <section class="thangka-panel relative">
+            <div class="mandala-element mandala-element-1"></div>
+            <div class="mandala-element mandala-element-2"></div>
+            <div class="mandala-element mandala-element-3"></div>
+
+            <h1 class="text-6xl md:text-8xl font-bold text-center text-yellow-400 mb-8 leading-tight relative z-20">
+                <span class="parallax-text" style="--speed: 0.05;">התגלות הבינה</span>
+                <br>
+                <span class="text-4xl md:text-6xl text-gray-200 mt-4 block parallax-text" style="--speed: 0.08;">מסע אל המאסטר</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-center max-w-4xl leading-relaxed text-gray-300 relative z-20 parallax-text" style="--speed: 0.1;">
+                במרחבי המודעות הדיגיטלית, עתיד חדש נחשף. הבינה המלאכותית אינה כלי בלבד, היא שער להגשמה, לטרנספורמציה.
+                היא פעימה חדשה בלב הבריאה, המזמינה אותנו לחרוג מגבולות המוכר. האם תעיז לחצות?
+            </p>
+        </section>
+
+        <!-- Panel 2: Core Message - AI Mastery -->
+        <section class="thangka-panel bg-secondary-blue/40 relative">
+            <div class="max-w-6xl mx-auto text-center relative z-20">
+                <h2 class="text-5xl md:text-7xl font-bold text-yellow-400 mb-6 parallax-text" style="--speed: 0.07;">
+                    למד לשלוט בבינה המלאכותית
+                </h2>
+                <p class="text-3xl md:text-5xl text-gray-200 mb-10 parallax-text" style="--speed: 0.1;">
+                    המציאות נולדת עכשיו.
+                </p>
+                <p class="text-xl md:text-2xl leading-relaxed text-gray-300 parallax-text" style="--speed: 0.12;">
+                    הידע אינו מיועד למעטים. הוא פועם בלב כל יצירה, ממתין להתגלות. זאביק אבינר, מדריך הדרך,
+                    חושף את סודות ה-AI, הופך את המורכב לפשוט, את החזון למציאות מוחשית הנגישה לכולם.
+                    זהו רגע ההתעוררות, ההזדמנות להפוך למאסטרים של עידן חדש.
+                </p>
+            </div>
+        </section>
+
+        <!-- Panel 3: Target Audience - The Seekers -->
+        <section class="thangka-panel relative">
+            <div class="max-w-6xl mx-auto relative z-20">
+                <h2 class="text-4xl md:text-6xl font-bold text-yellow-400 text-center mb-12 parallax-text" style="--speed: 0.06;">
+                    הקשב לקריאה, בן אנוש:
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="thangka-card parallax-text" style="--speed: 0.09;">
+                        <h3 class="text-3xl font-semibold text-yellow-400 mb-4">המתחיל</h3>
+                        <p class="text-lg text-gray-200">המחפש את ניצוץ הידע הראשוני, את השער לעולם הבינה המלאכותית.</p>
+                    </div>
+                    <div class="thangka-card parallax-text" style="--speed: 0.11;">
+                        <h3 class="text-3xl font-semibold text-yellow-400 mb-4">היוצר</h3>
+                        <p class="text-lg text-gray-200">השואף להטמיע את כוח ה-AI במלאכתו, להעצים את יכולותיו האמנותיות והמקצועיות.</p>
+                    </div>
+                    <div class="thangka-card parallax-text" style="--speed: 0.08;">
+                        <h3 class="text-3xl font-semibold text-yellow-400 mb-4">המנהיג</h3>
+                        <p class="text-lg text-gray-200">המוביל את קהילתו לעידן חדש, מחפש דרכים להאיר את הדרך בחדשנות.</p>
+                    </div>
+                    <div class="thangka-card parallax-text" style="--speed: 0.1;">
+                        <h3 class="text-3xl font-semibold text-yellow-400 mb-4">החכם</h3>
+                        <p class="text-lg text-gray-200">המבקש לפתח את הקוד לאמת הגבוהה, לחקור את גבולות הבינה והיצירה.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Panel 4: Areas of Expertise - Paths of Manifestation -->
+        <section class="thangka-panel bg-secondary-blue/40 relative">
+            <div class="max-w-6xl mx-auto relative z-20">
+                <h2 class="text-4xl md:text-6xl font-bold text-yellow-400 text-center mb-12 parallax-text" style="--speed: 0.05;">
+                    נתיבי ההתגלות: יצירת הבינה
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="thangka-card parallax-text" style="--speed: 0.07;">
+                        <h3 class="text-2xl font-semibold text-yellow-400 mb-3">קולות הבריאה</h3>
+                        <p class="text-md text-gray-200">יצירת טקסטים ותוכן בעוצמה שטרם נראתה.</p>
+                    </div>
+                    <div class="thangka-card parallax-text" style="--speed: 0.09;">
+                        <h3 class="text-2xl font-semibold text-yellow-400 mb-3">ארמונות התבונה</h3>
+                        <p class="text-md text-gray-200">בניית אפליקציות חכמות החושבות ופועלות.</p>
+                    </div>
+                    <div class="thangka-card parallax-text" style="--speed: 0.06;">
+                        <h3 class="text-2xl font-semibold text-yellow-400 mb-3">שערי המציאות</h3>
+                        <p class="text-md text-gray-200">פיתוח אתרים מבוססי AI המשתנים ומתפתחים.</p>
+                    </div>
+                    <div class="thangka-card parallax-text" style="--speed: 0.08;">
+                        <h3 class="text-2xl font-semibold text-yellow-400 mb-3">מראות התובנה</h3>
+                        <p class="text-md text-gray-200">ניתוח נתונים ומחקר להשגת חוכמה עמוקה.</p>
+                    </div>
+                    <div class="thangka-card parallax-text" style="--speed: 0.1;">
+                        <h3 class="text-2xl font-semibold text-yellow-400 mb-3">יד האומן</h3>
+                        <p class="text-md text-gray-200">יצירת תמונות ואומנות שהן ביטוי לנשמה דיגיטלית.</p>
+                    </div>
+                    <div class="thangka-card parallax-text" style="--speed: 0.07;">
+                        <h3 class="text-2xl font-semibold text-yellow-400 mb-3">גלגלי הדהרמה</h3>
+                        <p class="text-md text-gray-200">אוטומציה של תהליכים לשחרור פוטנציאל אנושי.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Panel 5: Services - Rituals of Enlightenment -->
+        <section class="thangka-panel relative">
+            <div class="max-w-4xl mx-auto relative z-20">
+                <h2 class="text-4xl md:text-6xl font-bold text-yellow-400 text-center mb-12 parallax-text" style="--speed: 0.04;">
+                    טקסי ההארה: הדרך אל הבינה
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="thangka-card parallax-text" style="--speed: 0.06;">
+                        <h3 class="text-3xl font-semibold text-yellow-400 mb-4">סדנאות קבוצתיות</h3>
+                        <p class="text-lg text-gray-200">התכנסות לחיבור עמוק, מעשי וממוקד, בחברת קהילה שוחרת ידע.</p>
+                    </div>
+                    <div class="thangka-card parallax-text" style="--speed: 0.08;">
+                        <h3 class="text-3xl font-semibold text-yellow-400 mb-4">שיעורים פרטיים</h3>
+                        <p class="text-lg text-gray-200">מסע אישי אל לב הידע, בהתאמה מדויקת לרמה ולצרכים הייחודיים שלך.</p>
+                    </div>
+                    <div class="thangka-card parallax-text" style="--speed: 0.05;">
+                        <h3 class="text-3xl font-semibold text-yellow-400 mb-4">הרצאות לארגונים</h3>
+                        <p class="text-lg text-gray-200">הארת הדרך לקהילה, פתיחת אופקים חדשים והשראה לצוותים להגשים את חזון ה-AI.</p>
+                    </div>
+                    <div class="thangka-card parallax-text" style="--speed: 0.07;">
+                        <h3 class="text-3xl font-semibold text-yellow-400 mb-4">ייעוץ ופיתוח פרויקטים</h3>
+                        <p class="text-lg text-gray-200">ליווי מקצועי ואישי, לבניית מקדשי AI שישנו את פני המציאות העסקית שלך.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Panel 6: The Guide - Zevik Aviner -->
+        <section class="thangka-panel bg-secondary-blue/40 relative">
+            <div class="max-w-4xl mx-auto text-center relative z-20">
+                <h2 class="text-4xl md:text-6xl font-bold text-yellow-400 mb-8 parallax-text" style="--speed: 0.03;">
+                    המורה, המאסטר, זאביק אבינר
+                </h2>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 mb-10">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר, מדריך הבינה המלאכותית"
+                         class="w-48 h-48 rounded-full border-4 border-yellow-400 shadow-lg object-cover transform transition-transform duration-500 hover:scale-105 parallax-text" style="--speed: 0.05;">
+                    <p class="text-xl md:text-2xl leading-relaxed text-gray-300 max-w-2xl parallax-text" style="--speed: 0.06;">
+                        זאביק אבינר הוא חלוץ, מומחה בינה מלאכותית עם ניסיון עשיר בהפיכת חזיונות AI למציאות מוחשית.
+                        הוא מנגיש את הקוד האלוהי, מפתח פרויקטים, אפליקציות ומערכות, והופך את הטכנולוגיה
+                        המורכבת לכלי עבודה יומיומי, זמין לכל דורש. מדריך אמיתי בדרך אל ההארה הדיגיטלית.
+                    </p>
+                </div>
+                <p class="text-2xl md:text-3xl font-bold text-yellow-400 mb-4 parallax-text" style="--speed: 0.04;">
+                    ליצירת קשר עם המדריך, פתח את שערי התקשורת:
+                </p>
+                <div class="flex flex-col md:flex-row justify-center gap-6 text-xl md:text-2xl font-medium parallax-text" style="--speed: 0.05;">
+                    <a href="https://wa.me/972546609385" target="_blank" class="text-gray-200 hover:text-yellow-400 transition-colors duration-300 flex items-center justify-center gap-2">
+                        <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24"><path d="M12.04 2C7.38 2 3.52 5.92 3.52 10.61c0 3.86 2.22 7.31 5.56 8.79l-1.07 3.93 4.14-1.09c.89.24 1.83.37 2.81.37 4.67 0 8.53-3.92 8.53-8.61C20.57 5.92 16.71 2 12.04 2zm5.47 14.15c-.17.27-.66.54-1.12.75-.48.21-.96.3-.96.3-.77.09-1.5-.16-2.1-.38-.6-.22-1.29-.53-1.92-.95-.64-.42-1.22-.97-1.66-1.58-.45-.61-.75-1.28-1-1.93-.25-.66-.03-1.01.18-1.21.19-.2.43-.37.6-.54.17-.17.27-.36.36-.54.09-.17.05-.33-.02-.47-.07-.14-.66-1.58-.9-2.15-.24-.57-.49-.49-.69-.49-.17 0-.36.01-.54.01-.17 0-.48.06-.73.3-.26.23-.99.96-.99 2.34s1.02 2.71 1.16 2.89c.14.18 2 3.06 4.9 4.38 2.91 1.32 2.91.88 3.44.82.53-.06 1.37-.56 1.57-1.08.2-.52.2-1 .14-1.08-.06-.09-.23-.15-.49-.28z"/></svg>
+                        ווטסאפ: 054-6609385
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="text-gray-200 hover:text-yellow-400 transition-colors duration-300 flex items-center justify-center gap-2">
+                        <svg class="w-8 h-8 fill-current" viewBox="0 0 24 24"><path d="M12 12.713L20 7V5H4v2l8 5.713zM21 9.409V19H3V9.409L12 16l9-6.591z"/></svg>
+                        אימייל: zaviner@gmail.com
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.transform = `translate(${e.clientX - cursor.offsetWidth / 2}px, ${e.clientY - cursor.offsetHeight / 2}px)`;
+        });
+        document.addEventListener('mousedown', () => cursor.classList.add('active'));
+        document.addEventListener('mouseup', () => cursor.classList.remove('active'));
+
+        // Parallax Effect Logic
+        const parallaxElements = document.querySelectorAll('.parallax-text');
+        window.addEventListener('scroll', () => {
+            let scrollY = window.scrollY;
+            parallaxElements.forEach(el => {
+                const speed = parseFloat(el.style.getPropertyValue('--speed')) || 0;
+                el.style.setProperty('--scroll-y', scrollY);
+                // The actual transform is applied via CSS using calc() for smoother transitions
+            });
+        });
+
+        // Generative Particle Effect
+        const particleContainer = document.getElementById('particle-container');
+        const numParticles = 50;
+
+        for (let i = 0; i < numParticles; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const size = Math.random() * 4 + 2; // Size between 2px and 6px
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            
+            const startX = Math.random() * 100 + 'vw';
+            const startY = Math.random() * 100 + 'vh';
+            const endX = Math.random() * 100 + 'vw';
+            const endY = Math.random() * 100 + 'vh';
+
+            particle.style.setProperty('--x', startX);
+            particle.style.setProperty('--y', startY);
+            particle.style.setProperty('--x-end', endX);
+            particle.style.setProperty('--y-end', endY);
+            particle.style.animationDelay = `${Math.random() * 15}s`; // Stagger animation start
+            particle.style.animationDuration = `${10 + Math.random() * 10}s`; // Vary duration
+
+            particleContainer.appendChild(particle);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אומנות הבינה המלאכותית: העתיד נפרש | זאביק אבינר</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Prata&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define custom CSS variables for colors to ensure high contrast and artistic palette */
+        :root {
+            --color-gold-accent: #B8860B; /* DarkGoldenrod - rich gold */
+            --color-dark-green-secondary: #2F4F4F; /* DarkSlateGray - deep green-grey */
+            --color-red-secondary: #8B0000; /* DarkRed - rich burgundy */
+            --color-cream-light: #F5DEB3; /* Wheat - soft, light cream */
+            --color-dark-slate-gray: #252B2B; /* A darker slate grey, almost black */
+            --color-emerald-accent: #3CB371; /* MediumSeaGreen - vibrant emerald */
+            --color-charcoal-bg: #1C1C1C; /* Very dark charcoal for main background */
+
+            /* RGB versions for easier use in rgba() functions */
+            --color-gold-accent-rgb: 184,134,11;
+            --color-dark-green-secondary-rgb: 47,79,79;
+            --color-red-secondary-rgb: 139,0,0;
+            --color-emerald-accent-rgb: 60,179,113;
+        }
+
+        /* Base styles for the artistic vision */
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: var(--color-charcoal-bg);
+            color: var(--color-cream-light);
+            cursor: none; /* Hide default cursor to use custom one */
+            overflow-x: hidden; /* Prevent horizontal scroll for parallax */
+            line-height: 1.7; /* Enhanced readability */
+        }
+
+        /* Typography mapping to chosen Google Fonts */
+        h1, h2, h3 {
+            font-family: 'Prata', serif; /* Decorative serif for main titles */
+            color: var(--color-gold-accent);
+        }
+        .font-prata { font-family: 'Prata', serif; }
+        .font-heebo { font-family: 'Heebo', sans-serif; }
+
+        /* Tailwind custom color classes mapped to CSS variables */
+        .text-gold-accent { color: var(--color-gold-accent); }
+        .text-dark-green-secondary { color: var(--color-dark-green-secondary); }
+        .text-red-secondary { color: var(--color-red-secondary); }
+        .text-cream-light { color: var(--color-cream-light); }
+        .text-dark-slate-gray { color: var(--color-dark-slate-gray); }
+        .text-emerald-accent { color: var(--color-emerald-accent); }
+        .text-charcoal-bg { color: var(--color-charcoal-bg); }
+
+        .bg-gold-accent { background-color: var(--color-gold-accent); }
+        .bg-dark-green-secondary { background-color: var(--color-dark-green-secondary); }
+        .bg-red-secondary { background-color: var(--color-red-secondary); }
+        .bg-cream-light { background-color: var(--color-cream-light); }
+        .bg-dark-slate-gray { background-color: var(--color-dark-slate-gray); }
+        .bg-emerald-accent { background-color: var(--color-emerald-accent); }
+        .bg-charcoal-bg { background-color: var(--color-charcoal-bg); }
+
+        .border-gold-accent { border-color: var(--color-gold-accent); }
+        .border-emerald-accent { border-color: var(--color-emerald-accent); }
+
+        /* Custom Cursor Styling - Mandatory High Contrast */
+        #custom-cursor {
+            position: fixed;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            pointer-events: none; /* Allows clicks to pass through */
+            z-index: 9999; /* Always on top */
+            opacity: 1; /* Always visible */
+            transition: transform 0.1s ease-out, width 0.1s ease-out, height 0.1s ease-out, border-width 0.1s ease-out;
+            /* REQUIRED: Light border and dark, high-opacity box-shadow */
+            border: 2px solid var(--color-cream-light); /* Visible on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Visible on light backgrounds */
+        }
+        #custom-cursor.active {
+            transform: scale(1.5); /* Enlarges on hover over interactive elements */
+            width: 30px;
+            height: 30px;
+            border-width: 3px;
+        }
+
+        /* Viennese Secession-inspired background patterns using CSS gradients for abstract, layered depth */
+        /* Layer 1: Subtle geometric lines, inspired by architectural elements */
+        .sec-pattern-layer-1 {
+            background-image:
+                repeating-linear-gradient(45deg, rgba(var(--color-gold-accent-rgb), 0.04), rgba(var(--color-gold-accent-rgb), 0.04) 5px, transparent 5px, transparent 15px),
+                repeating-linear-gradient(-45deg, rgba(var(--color-dark-green-secondary-rgb), 0.04), rgba(var(--color-dark-green-secondary-rgb), 0.04) 5px, transparent 5px, transparent 15px);
+            background-size: 150px 150px; /* Larger pattern scale */
+            background-position: 0 0;
+            filter: blur(0.7px); /* Soften the pattern */
+            opacity: 0.9;
+        }
+        /* Layer 2: More organic, flowing lines or subtle square motifs */
+        .sec-pattern-layer-2 {
+            background-image:
+                repeating-radial-gradient(circle at 10% 20%, rgba(var(--color-emerald-accent-rgb), 0.03) 0%, rgba(var(--color-emerald-accent-rgb), 0.03) 5px, transparent 5px, transparent 20px),
+                repeating-linear-gradient(90deg, rgba(var(--color-red-secondary-rgb), 0.02), rgba(var(--color-red-secondary-rgb), 0.02) 1px, transparent 1px, transparent 20px);
+            background-size: 180px 180px; /* Different pattern scale */
+            background-position: 20px 20px;
+            filter: blur(0.5px);
+            opacity: 0.8;
+        }
+
+        /* Section styling with decorative elements and borders to evoke Secessionist craftsmanship */
+        section {
+            position: relative;
+            z-index: 20; /* Ensure sections are above background patterns */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 0 15px rgba(var(--color-gold-accent-rgb), 0.1);
+            border-radius: 1rem;
+            border: 1px solid rgba(var(--color-gold-accent-rgb), 0.3); /* Subtle gold border */
+            overflow: hidden; /* For inner pseudo-elements to stay contained */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6), inset 0 0 20px rgba(var(--color-gold-accent-rgb), 0.2);
+        }
+
+        /* Decorative corner elements for sections, like stylized brass inlays */
+        section::before, section::after {
+            content: '';
+            position: absolute;
+            background-color: var(--color-gold-accent);
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: -1;
+            transition: all 0.3s ease-in-out;
+        }
+        /* Top-right decorative element for RTL layout */
+        section::before {
+            top: 0;
+            right: 0;
+            width: 50px;
+            height: 50px;
+            clip-path: polygon(100% 0, 0 0, 100% 100%); /* Top-right triangle */
+        }
+        /* Bottom-left decorative element for RTL layout */
+        section::after {
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 50px;
+            clip-path: polygon(0 100%, 100% 100%, 0 0); /* Bottom-left triangle */
+        }
+        section:hover::before, section:hover::after {
+            opacity: 0.3;
+            transform: scale(1.1);
+        }
+
+        /* Enhanced text shadow for main title for depth and 'glow' effect */
+        .drop-shadow-lg {
+            text-shadow: 0px 4px 8px rgba(0,0,0,0.6), 0 0 20px rgba(var(--color-gold-accent-rgb), 0.8);
+        }
+
+        /* Animation for subtle pulsing border on hover for interactive elements */
+        @keyframes pulseBorder {
+            0% { border-color: rgba(var(--color-gold-accent-rgb), 0.3); }
+            55% { border-color: rgba(var(--color-gold-accent-rgb), 0.8); }
+            100% { border-color: rgba(var(--color-gold-accent-rgb), 0.3); }
+        }
+        .section-border-pulse:hover {
+            animation: pulseBorder 2s infinite alternate;
+        }
+
+        /* Responsive adjustments for layout and typography */
+        @media (max-width: 768px) {
+            h1 { font-size: 4rem; }
+            h1 span { font-size: 2.5rem; }
+            h2 { font-size: 3rem; }
+            p { font-size: 1.125rem; }
+        }
+        @media (max-width: 480px) {
+            h1 { font-size: 3rem; }
+            h1 span { font-size: 2rem; }
+            h2 { font-size: 2.5rem; }
+            .lg\:flex-row { flex-direction: column; }
+            .lg\:text-right { text-align: center; }
+            .lg\:ml-10 { margin-left: 0; margin-top: 1.5rem;}
+        }
+
+    </style>
+    <!-- Tailwind Configuration (must be inside script tag for single file) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'gold-accent': 'var(--color-gold-accent)',
+                        'dark-green-secondary': 'var(--color-dark-green-secondary)',
+                        'red-secondary': 'var(--color-red-secondary)',
+                        'cream-light': 'var(--color-cream-light)',
+                        'dark-slate-gray': 'var(--color-dark-slate-gray)',
+                        'emerald-accent': 'var(--color-emerald-accent)',
+                        'charcoal-bg': 'var(--color-charcoal-bg)',
+                    },
+                    fontFamily: {
+                        prata: ['Prata', 'serif'],
+                        heebo: ['Heebo', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-charcoal-bg text-cream-light font-heebo leading-relaxed">
+    <!-- Custom Cursor Element -->
+    <div id="custom-cursor" class="pointer-events-none transition-all duration-75 ease-out"></div>
+
+    <!-- Main Background Layers with Parallax and Secession Patterns -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden">
+        <div id="parallax-layer-1" class="absolute inset-0 sec-pattern-layer-1" data-speed="-0.05" data-rotate-speed="0.005"></div>
+        <div id="parallax-layer-2" class="absolute inset-0 sec-pattern-layer-2" data-speed="0.1" data-rotate-speed="-0.007"></div>
+        <!-- A subtle gradient overlay to enhance depth and mood -->
+        <div class="absolute inset-0 bg-gradient-to-t from-charcoal-bg via-transparent to-charcoal-bg opacity-70"></div>
+    </div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 min-h-screen p-6 sm:p-8 lg:p-16 max-w-screen-xl mx-auto">
+        <!-- Header/Title Section - The Digital Secession Manifesto -->
+        <header class="text-center mb-24 pt-10 px-4">
+            <h1 class="text-6xl md:text-8xl font-prata text-gold-accent leading-tight drop-shadow-lg mb-4">
+                <span class="block text-4xl md:text-6xl font-heebo text-emerald-accent mb-4">הזצסיון הדיגיטלי</span>
+                אומנות הבינה המלאכותית: העתיד נפרש
+            </h1>
+            <p class="text-xl md:text-3xl text-cream-light font-heebo mt-8 max-w-4xl mx-auto opacity-90">
+                בואו לגלות את המברשות הנסתרות של המאה ה-21. העתיד הוא עכשיו, והיכולת ליצור ולחדש באמצעותו - בידיכם.
+            </p>
+        </header>
+
+        <main>
+            <!-- Introduction/Core Message - Unveiling the Unknown -->
+            <section class="my-24 py-16 px-8 bg-gradient-to-br from-dark-green-secondary/80 to-dark-slate-gray/80 rounded-lg shadow-2xl relative overflow-hidden section-border-pulse">
+                <h2 class="text-5xl font-prata text-gold-accent mb-10 text-center">המסר המרכזי: הפיכת הבלתי-נודע לנגיש</h2>
+                <p class="text-xl md:text-2xl text-cream-light leading-relaxed text-center max-w-4xl mx-auto opacity-90">
+                    בינה מלאכותית, פעם נחלת המדע הבדיוני, היא כעת בדמנו. אנו מאמינים כי כוחה המהפכני אינו צריך להיות פריבילגיה של מעטים, אלא כלי יצירה זמין לכל. מסע ההדרכה שלנו מיועד להפוך את המורכבות לפשטות, לאפשר לכם להבין, ליישם וליצור. נצייד אתכם בידע מעשי ובכלים ישימים שתוכלו להטמיע מיד בעבודתכם, להזניק את הקריירה, ולעצב את חייכם האישיים בדרכים שלא דמיינתם.
+                </p>
+            </section>
+
+            <!-- Target Audience - Who Seeks This Art? -->
+            <section class="my-24 py-16 px-8 bg-red-secondary/80 rounded-lg shadow-2xl relative overflow-hidden section-border-pulse">
+                 <h2 class="text-5xl font-prata text-gold-accent mb-10 text-center">למי מיועדת אומנות העתיד?</h2>
+                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mt-12 px-4">
+                     <div class="p-8 bg-dark-green-secondary/70 backdrop-blur-sm rounded-lg shadow-xl border border-gold-accent/20 hover:border-gold-accent transition-all duration-300 transform hover:-translate-y-2 group">
+                        <h3 class="text-3xl font-heebo text-gold-accent mb-4">לפורצי הדרך</h3>
+                        <p class="text-lg text-cream-light opacity-90 group-hover:text-cream-light/80 transition-colors">
+                            מתחילים ומתחילות המשתוקקים לפצח את סודות ה-AI, להכיר את העקרונות הבסיסיים ולהתנסות בכלי היצירה הראשונים. אין צורך בידע מוקדם - רק סקרנות.
+                        </p>
+                     </div>
+                     <div class="p-8 bg-dark-green-secondary/70 backdrop-blur-sm rounded-lg shadow-xl border border-gold-accent/20 hover:border-gold-accent transition-all duration-300 transform hover:-translate-y-2 group">
+                        <h3 class="text-3xl font-heebo text-gold-accent mb-4">לאומני המקצוע</h3>
+                        <p class="text-lg text-cream-light opacity-90 group-hover:text-cream-light/80 transition-colors">
+                            אנשי ואנשות מקצוע המעוניינים לשלב AI בעבודתם, לייעל תהליכים, לקבל החלטות מושכלות, ולשדרג את יכולותיהם בתחומם.
+                        </p>
+                     </div>
+                     <div class="p-8 bg-dark-green-secondary/70 backdrop-blur-sm rounded-lg shadow-xl border border-gold-accent/20 hover:border-gold-accent transition-all duration-300 transform hover:-translate-y-2 group">
+                        <h3 class="text-3xl font-heebo text-gold-accent mb-4">למנהיגי החזון</h3>
+                        <p class="text-lg text-cream-light opacity-90 group-hover:text-cream-light/80 transition-colors">
+                            מנהלים, מנהלות וארגונים המבקשים להטמיע את טכנולוגיות ה-AI בצוותים שלהם, להוביל חדשנות ולפתוח אופקים חדשים לארגון.
+                        </p>
+                     </div>
+                     <div class="p-8 bg-dark-green-secondary/70 backdrop-blur-sm rounded-lg shadow-xl border border-gold-accent/20 hover:border-gold-accent transition-all duration-300 transform hover:-translate-y-2 group">
+                        <h3 class="text-3xl font-heebo text-gold-accent mb-4">לחזיוניים</h3>
+                        <p class="text-lg text-cream-light opacity-90 group-hover:text-cream-light/80 transition-colors">
+                            אלה ברמה מתקדמת, השואפים לפתח פרויקטים מורכבים מבוססי AI, לחקור גבולות חדשים ולחתום את חותמם על עולם הטכנולוגיה.
+                        </p>
+                     </div>
+                 </div>
+            </section>
+
+            <!-- Expertise Areas - The Canvases of AI Artistry -->
+            <section class="my-24 py-16 px-8 bg-gradient-to-tl from-dark-slate-gray/80 to-dark-green-secondary/80 rounded-lg shadow-2xl relative overflow-hidden section-border-pulse">
+                <h2 class="text-5xl font-prata text-gold-accent mb-10 text-center">גוונים של שליטה: אומנויות ה-AI</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12 px-4">
+                    <div class="p-8 bg-charcoal-bg/70 rounded-lg shadow-md border border-emerald-accent/20 hover:border-emerald-accent transition-colors duration-300 group">
+                        <h3 class="text-2xl font-heebo text-emerald-accent mb-3 group-hover:text-gold-accent transition-colors">יצירת טקסטים ותוכן</h3>
+                        <p class="text-lg text-cream-light/80">לשלוט במלאכת המילים, ליצור סיפורים, מאמרים ושיווקים מרתקים, בכישרון שרק AI יכול להעניק.</p>
+                    </div>
+                    <div class="p-8 bg-charcoal-bg/70 rounded-lg shadow-md border border-emerald-accent/20 hover:border-emerald-accent transition-colors duration-300 group">
+                        <h3 class="text-2xl font-heebo text-emerald-accent mb-3 group-hover:text-gold-accent transition-colors">בניית אפליקציות חכמות</h3>
+                        <p class="text-lg text-cream-light/80">לפרוץ את גבולות הקוד, ולעצב יישומים אינטליגנטיים המגיבים לצרכים ומגמות בזמן אמת.</p>
+                    </div>
+                    <div class="p-8 bg-charcoal-bg/70 rounded-lg shadow-md border border-emerald-accent/20 hover:border-emerald-accent transition-colors duration-300 group">
+                        <h3 class="text-2xl font-heebo text-emerald-accent mb-3 group-hover:text-gold-accent transition-colors">פיתוח אתרים מבוססי AI</h3>
+                        <p class="text-lg text-cream-light/80">להקים נוכחות דיגיטלית חיה ונושמת, עם ממשקים אינטואיטיביים וחוויות משתמש מותאמות אישית.</p>
+                    </div>
+                    <div class="p-8 bg-charcoal-bg/70 rounded-lg shadow-md border border-emerald-accent/20 hover:border-emerald-accent transition-colors duration-300 group">
+                        <h3 class="text-2xl font-heebo text-emerald-accent mb-3 group-hover:text-gold-accent transition-colors">ניתוח נתונים ומחקר</h3>
+                        <p class="text-lg text-cream-light/80">לפענח תובנות נסתרות מתוך ים של מידע, לזהות דפוסים ולחזות מגמות עתידיות בדיוק מדהים.</p>
+                    </div>
+                    <div class="p-8 bg-charcoal-bg/70 rounded-lg shadow-md border border-emerald-accent/20 hover:border-emerald-accent transition-colors duration-300 group">
+                        <h3 class="text-2xl font-heebo text-emerald-accent mb-3 group-hover:text-gold-accent transition-colors">יצירת תמונות ואומנות</h3>
+                        <p class="text-lg text-cream-light/80">להחיות את הדמיון החזותי, לצייר, לפסל וליצור עולמות ויזואליים עוצרי נשימה בלחיצת כפתור.</p>
+                    </div>
+                    <div class="p-8 bg-charcoal-bg/70 rounded-lg shadow-md border border-emerald-accent/20 hover:border-emerald-accent transition-colors duration-300 group">
+                        <h3 class="text-2xl font-heebo text-emerald-accent mb-3 group-hover:text-gold-accent transition-colors">אוטומציה של תהליכים</h3>
+                        <p class="text-lg text-cream-light/80">לשחרר זמן ואנרגיה, להפוך משימות חוזרות לאוטומטיות, ולמקד את המאמץ ביצירה ובחדשנות האמיתית.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Services Offered - Paths of Creation -->
+            <section class="my-24 py-16 px-8 bg-red-secondary/80 rounded-lg shadow-2xl relative overflow-hidden section-border-pulse">
+                <h2 class="text-5xl font-prata text-gold-accent mb-10 text-center">מסלולי היצירה: שירותי ההדרכה</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12 px-4">
+                    <div class="p-8 bg-dark-green-secondary/70 backdrop-blur-sm rounded-lg shadow-xl border border-gold-accent/20 hover:border-gold-accent transition-all duration-300 transform hover:-translate-y-2 group">
+                        <h3 class="text-3xl font-heebo text-gold-accent mb-4">סדנאות עומק קבוצתיות</h3>
+                        <p class="text-lg text-cream-light opacity-90 group-hover:text-cream-light/80 transition-colors">
+                            מסעות לימוד מעשיים וממוקדים, בקבוצות קטנות, בהן תצללו עמוק לתוך כלי ה-AI ותפתחו יכולות חדשות יחד עם עמיתים.
+                        </p>
+                    </div>
+                    <div class="p-8 bg-dark-green-secondary/70 backdrop-blur-sm rounded-lg shadow-xl border border-gold-accent/20 hover:border-gold-accent transition-all duration-300 transform hover:-translate-y-2 group">
+                        <h3 class="text-3xl font-heebo text-gold-accent mb-4">שיעורים פרטיים וליווי אישי</h3>
+                        <p class="text-lg text-cream-light opacity-90 group-hover:text-cream-light/80 transition-colors">
+                            חווית למידה מותאמת אישית, בקצב שלכם ועל פי צרכיכם הייחודיים. ליווי צמוד מהבסיס ועד פיתוח פרויקטים מורכבים.
+                        </p>
+                    </div>
+                    <div class="p-8 bg-dark-green-secondary/70 backdrop-blur-sm rounded-lg shadow-xl border border-gold-accent/20 hover:border-gold-accent transition-all duration-300 transform hover:-translate-y-2 group">
+                        <h3 class="text-3xl font-heebo text-gold-accent mb-4">הרצאות והדרכות לארגונים</h3>
+                        <p class="text-lg text-cream-light opacity-90 group-hover:text-cream-light/80 transition-colors">
+                            להטמיע חדשנות בחברות וארגונים. סדנאות והרצאות מותאמות לצוותים, שיפתחו אופקים חדשים ויכשירו את העובדים לעידן ה-AI.
+                        </p>
+                    </div>
+                    <div class="p-8 bg-dark-green-secondary/70 backdrop-blur-sm rounded-lg shadow-xl border border-gold-accent/20 hover:border-gold-accent transition-all duration-300 transform hover:-translate-y-2 group">
+                        <h3 class="text-3xl font-heebo text-gold-accent mb-4">ייעוץ ופיתוח פרויקטים</h3>
+                        <p class="text-lg text-cream-light opacity-90 group-hover:text-cream-light/80 transition-colors">
+                            ליווי מקצועי מתחילתו ועד סופו, משלב הרעיון ועד יישום מלא של פרויקטים מבוססי בינה מלאכותית.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- The Guide: Zevik Aviner - The AI Alchemist -->
+            <section class="my-24 py-16 px-8 bg-gradient-to-br from-gold-accent/10 to-dark-slate-gray/80 rounded-lg shadow-2xl relative overflow-hidden flex flex-col lg:flex-row items-center justify-center text-center lg:text-right section-border-pulse">
+                <div class="lg:w-1/3 flex justify-center lg:justify-end mb-10 lg:mb-0 lg:ml-10">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונת זאביק אבינר - מומחה בינה מלאכותית" class="w-64 h-64 object-cover rounded-full border-4 border-gold-accent shadow-xl transform transition-transform hover:scale-105 duration-300 ease-in-out">
+                </div>
+                <div class="lg:w-2/3 max-w-2xl px-4">
+                    <h2 class="text-5xl font-prata text-gold-accent mb-6">המדריך: זאביק אבינר, אומן ה-AI</h2>
+                    <p class="text-xl text-cream-light leading-relaxed mb-6 opacity-90">
+                        זאביק אבינר אינו רק מומחה לבינה מלאכותית; הוא וירטואוז המנגיש את עולם הקוד והאלגוריתמים לכל נפש. עם ניסיון עשיר בפיתוח פרויקטים מורכבים, אפליקציות חכמות ומערכות פורצות דרך מבוססות AI, זאביק מתמחה בפירוק המורכבות לכדי הבנה צלולה. חזונו הוא להפוך את הטכנולוגיה החדישה לכלי עבודה יומיומי, מעשי וישים, לכל אדם המבקש ליצור, לחדש ולהצליח בעידן הדיגיטלי.
+                    </p>
+                    <p class="text-2xl text-cream-light font-heebo mt-8 flex flex-col items-center lg:items-end">
+                        <a href="https://wa.me/972546609385" class="hover:text-gold-accent transition-colors duration-200 block mb-3 flex items-center" aria-label="שלח הודעה לזאביק אבינר בוואטסאפ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="currentColor" class="ml-3 text-emerald-accent"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.598-3.852-1.598-5.964C.146 6.054 6.053.146 13.523.146s13.371 5.908 13.371 13.371-5.908 13.371-13.371 13.371c-1.99 0-3.92-.549-5.686-1.57l-6.236 1.62zm11.363-1.921c-3.281 0-6.398-1.229-8.746-3.417l-.271-.247-2.342.612 1.57-5.776-.2-.21c-2.08-2.206-3.219-5.111-3.219-8.151C1.047 6.76 6.541 1.265 13.523 1.265c6.982 0 12.637 5.654 12.637 12.637S20.505 24.137 13.523 24.137zm5.548-11.832c-.105-.188-.344-.298-.482-.355-.66-.264-.978-.403-.978-1.474s-.278-1.127-.474-1.282c-.192-.158-.453-.263-.679-.263-.223 0-.447 0-.663.023-.19.019-.48.05-.726.26-.246.21-.947.931-.947 2.277 0 1.345.967 2.277 1.054 2.399.088.122 1.956 2.982 4.71 4.107.562.235 1.006.376 1.346.484.538.174 1.025.147 1.405.088.384-.058 1.144-.471 1.303-.925.16-.455.16-.841.112-.924-.049-.084-.183-.133-.385-.249z"/></svg>
+                            ווטסאפ: <span class="text-gold-accent font-bold mr-2">054-6609385</span>
+                        </a>
+                        <a href="mailto:zaviner@gmail.com" class="hover:text-gold-accent transition-colors duration-200 block flex items-center" aria-label="שלח מייל לזאביק אבינר">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="currentColor" class="ml-3 text-emerald-accent"><path d="M12 12.713l-11.985-9.713h23.97l-11.985 9.713zm0 2.574l-12-9.728v15.414h24v-15.414l-12 9.728z"/></svg>
+                            אימייל: <span class="text-gold-accent font-bold mr-2">zaviner@gmail.com</span>
+                        </a>
+                    </p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer - Legacy of the Digital Age -->
+        <footer class="mt-24 py-10 text-center text-cream-light text-lg border-t border-gold-accent/30 opacity-70">
+            <p>&copy; 2023 אומנות הבינה המלאכותית עם זאביק אבינר. כל הזכויות שמורות.</p>
+            <p class="mt-2">אתר זה הוא יצירה דיגיטלית בהשראת הזצסיון הווינאי, כמחווה לחדשנות וליופי האומנותי.</p>
+        </footer>
+    </div>
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        // Custom Cursor JS
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX - cursor.offsetWidth / 2 + 'px';
+            cursor.style.top = e.clientY - cursor.offsetHeight / 2 + 'px';
+        });
+
+        // Add hover effect for interactive elements (links, buttons, cards)
+        document.querySelectorAll('a, button, .group, .section-border-pulse').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+
+        // Parallax and background pattern rotation effect
+        const parallaxLayers = document.querySelectorAll('[data-speed]');
+        let rotationAngle1 = 0;
+        let rotationAngle2 = 0;
+
+        const animateParallax = () => {
+            const scrollY = window.scrollY;
+
+            // Update rotation angles based on time for continuous animation
+            const deltaTime = 16; // Approximate time per frame in ms (60fps)
+            rotationAngle1 += parseFloat(parallaxLayers[0].getAttribute('data-rotate-speed')) * deltaTime / 1000; // Convert to seconds
+            rotationAngle2 += parseFloat(parallaxLayers[1].getAttribute('data-rotate-speed')) * deltaTime / 1000;
+
+            parallaxLayers.forEach((layer, index) => {
+                const speed = parseFloat(layer.getAttribute('data-speed'));
+                const yPos = -(scrollY * speed);
+                const currentRotation = (index === 0) ? rotationAngle1 : rotationAngle2;
+                
+                // Combine translateY for parallax, rotate, and scale for artistic effect
+                layer.style.transform = `translateY(${yPos}px) rotate(${currentRotation}deg) scale(1.1)`;
+            });
+
+            requestAnimationFrame(animateParallax);
+        };
+
+        animateParallax(); // Start the animation loop
+    </script>
+</body>
+</html>

@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ממלכת הידע: שליטה בבינה המלאכותית</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Base Tailwind configuration and custom theme variables */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        /* Define custom color variables for Art Nouveau palette */
+        :root {
+            --primary-gold: #D4AF37;
+            --secondary-green: #6B8E23;
+            --background-cream: #F5F5DC;
+            --text-dark: #2F4F4F; /* Dark Slate Gray */
+            --text-light: #F8F8F8; /* Off-white */
+        }
+
+        /* Apply custom fonts and base colors */
+        body {
+            font-family: 'Amiri', serif;
+            color: var(--text-dark);
+            background-color: var(--background-cream);
+            line-height: 1.8;
+            overflow-x: hidden; /* Prevent horizontal scroll from decorative elements */
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Cinzel Decorative', serif;
+            color: var(--text-dark);
+            line-height: 1.3;
+        }
+
+        /* Custom cursor style - mandatory high-contrast */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--text-light); /* Visible on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8); /* Visible on light backgrounds */
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out; /* Smooth follow */
+        }
+
+        /* Art Nouveau background pattern - subtle */
+        .nouveau-bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.08; /* Very subtle */
+            background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20C40 0 60 40 40 60C20 80 0 40 20 20Z' fill='%239C92AC' fill-opacity='0.1'%3E%3C/path%3E%3Cpath d='M60 60C40 80 20 40 40 20C60 0 80 40 60 60Z' fill='%239C92AC' fill-opacity='0.1'%3E%3C/path%3E%3C/svg%3E");
+        }
+
+        /* Dynamic classes for direct CSS variable usage with Tailwind */
+        .text-primary-gold { color: var(--primary-gold); }
+        .text-secondary-green { color: var(--secondary-green); }
+        .bg-primary-gold { background-color: var(--primary-gold); }
+        .bg-secondary-green { background-color: var(--secondary-green); }
+        .border-primary-gold { border-color: var(--primary-gold); }
+        .border-secondary-green { border-color: var(--secondary-green); }
+        .bg-cream { background-color: var(--background-cream); }
+        .text-dark-slate { color: var(--text-dark); }
+        .text-light-cream { color: var(--text-light); }
+
+        .font-cinzel { font-family: 'Cinzel Decorative', serif; }
+        .font-amiri { font-family: 'Amiri', serif; }
+
+        /* Scroll reveal animation styles */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+        }
+
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Art Nouveau Decorative Frame for sections */
+        .decorative-frame {
+            position: relative;
+            padding: 2.5rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            background-color: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(212, 175, 55, 0.3); /* Light primary-gold border */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            border-radius: 15px; /* Softer edges */
+        }
+
+        .decorative-frame::before,
+        .decorative-frame::after {
+            content: '';
+            position: absolute;
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 0.7;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        /* Top-left corner swirl (appears on logical top-right in RTL) */
+        .decorative-frame::before {
+            top: -40px;
+            right: -40px; /* Position for RTL */
+            width: 100px;
+            height: 100px;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M95 5C60 5 30 35 30 60C30 85 60 95 95 95' stroke='%23D4AF37' stroke-width='3'/%3E%3Ccircle cx='95' cy='5' r='4' fill='%23D4AF37'/%3E%3Ccircle cx='95' cy='95' r='4' fill='%23D4AF37'/%3E%3C/svg%3E");
+            transform: scaleX(-1); /* Flip horizontally for RTL visual symmetry */
+        }
+        /* Bottom-right corner swirl (appears on logical bottom-left in RTL) */
+        .decorative-frame::after {
+            bottom: -40px;
+            left: -40px; /* Position for RTL */
+            width: 100px;
+            height: 100px;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 95C40 95 70 65 70 40C70 15 40 5 5 5' stroke='%23D4AF37' stroke-width='3'/%3E%3Ccircle cx='5' cy='95' r='4' fill='%23D4AF37'/%3E%3Ccircle cx='5' cy='5' r='4' fill='%23D4AF37'/%3E%3C/svg%3E");
+            transform: scaleX(-1); /* Flip horizontally for RTL visual symmetry */
+        }
+        .decorative-frame:hover::before, .decorative-frame:hover::after {
+            opacity: 1;
+        }
+
+        /* Contact card specific decorations */
+        .contact-card {
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        .contact-card::before, .contact-card::after {
+            content: '';
+            position: absolute;
+            background-repeat: no-repeat;
+            background-size: contain;
+            opacity: 0.6;
+            width: 90px;
+            height: 90px;
+            pointer-events: none;
+        }
+        /* Top-left organic element (RTL logical top-right) */
+        .contact-card::before {
+            top: -30px;
+            right: -30px; /* Position for RTL */
+            background-image: url("data:image/svg+xml,%3Csvg width='90' height='90' viewBox='0 0 90 90' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M85 5C50 5 20 35 20 60C20 85 50 85 85 85' stroke='%236B8E23' stroke-width='2'/%3E%3Ccircle cx='85' cy='5' r='3' fill='%236B8E23'/%3E%3Ccircle cx='85' cy='85' r='3' fill='%236B8E23'/%3E%3C/svg%3E");
+            transform: scaleX(-1); /* Flip for RTL visual symmetry */
+        }
+        /* Bottom-right organic element (RTL logical bottom-left) */
+        .contact-card::after {
+            bottom: -30px;
+            left: -30px; /* Position for RTL */
+            background-image: url("data:image/svg+xml,%3Csvg width='90' height='90' viewBox='0 0 90 90' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 85C40 85 70 55 70 30C70 5 40 5 5 5' stroke='%236B8E23' stroke-width='2'/%3E%3Ccircle cx='5' cy='85' r='3' fill='%236B8E23'/%3E%3Ccircle cx='5' cy='5' r='3' fill='%236B8E23'/%3E%3C/svg%3E");
+            transform: scaleX(-1); /* Flip for RTL visual symmetry */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .decorative-frame {
+                padding: 1.5rem;
+                margin: 1.5rem auto;
+            }
+            .decorative-frame::before, .decorative-frame::after,
+            .contact-card::before, .contact-card::after {
+                width: 60px;
+                height: 60px;
+                top: -20px;
+                right: -20px;
+                bottom: -20px;
+                left: -20px;
+            }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden text-dark-slate antialiased">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Art Nouveau Background Layer 1: Subtle repeating pattern -->
+    <div class="nouveau-bg-pattern"></div>
+
+    <!-- Main Content Wrapper with Z-index for layering -->
+    <div class="relative z-10 min-h-screen pt-16 pb-24 md:pt-24 md:pb-32 px-4 sm:px-8 lg:px-16 flex flex-col items-center">
+
+        <!-- Hero Section - Evoking a grand entrance -->
+        <section class="max-w-4xl mx-auto text-center mb-24 relative">
+            <h1 class="font-cinzel text-5xl md:text-7xl font-bold text-primary-gold drop-shadow-lg leading-tight mb-8 scroll-reveal">
+                ממלכת הידע: לחשוף את סודות הבינה המלאכותית
+            </h1>
+            <p class="text-xl md:text-2xl text-dark-slate mb-12 flow-text scroll-reveal" style="animation-delay: 0.5s;">
+                בפתח עידן חדש, שבו המכונה חושבת כמעט כאדם, אנו קוראים לך להצטרף למסע אל נבכי האינטליגנציה המלאכותית.
+                לא עוד חידה חמקמקה, אלא כלי רב עוצמה שיכול להפוך למברשת ביד אמן, למנוף ביד בונה, לקול חדש בשפת היקום.
+            </p>
+            <div class="relative w-full h-48 md:h-72 my-12 mx-auto overflow-hidden rounded-xl shadow-lg">
+                <svg viewBox="0 0 1000 300" class="absolute inset-0 w-full h-full" preserveAspectRatio="xMidYMid slice">
+                    <defs>
+                        <linearGradient id="nouveauGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:var(--primary-gold);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:var(--secondary-green);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M0,150 C100,50 200,250 300,150 C400,50 500,250 600,150 C700,50 800,250 900,150 C950,100 1000,0 1000,0 V300 H0 Z" fill="url(#nouveauGradient)" opacity="0.6">
+                        <animate attributeName="d" dur="15s" repeatCount="indefinite"
+                            values="M0,150 C100,50 200,250 300,150 C400,50 500,250 600,150 C700,50 800,250 900,150 C950,100 1000,0 1000,0 V300 H0 Z;
+                                    M0,160 C120,40 220,260 350,160 C480,60 580,270 700,160 C800,70 900,260 1000,150 V300 H0 Z;
+                                    M0,150 C100,50 200,250 300,150 C400,50 500,250 600,150 C700,50 800,250 900,150 C950,100 1000,0 1000,0 V300 H0 Z"
+                        />
+                    </path>
+                     <text x="50%" y="150" fill="white" font-family="'Cinzel Decorative', serif" font-size="30" text-anchor="middle" dominant-baseline="middle" class="scroll-reveal" style="opacity: 0; animation-delay: 1.5s;">
+                        העתיד הוא עכשיו
+                    </text>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Core Message - A decorative frame -->
+        <section class="decorative-frame max-w-2xl text-center scroll-reveal mb-24">
+            <h2 class="font-cinzel text-4xl font-semibold text-primary-gold mb-6">הקריאה הגדולה: להפוך את הנסתר לנגיש</h2>
+            <p class="text-lg leading-relaxed text-dark-slate">
+                אנו מאמינים כי עוצמתה של הבינה המלאכותית אינה שמורה למתי מעט.
+                משימתנו היא לפרוש את שטיח הקסמים הזה לכל דורש – ממתחילים סקרנים ועד מומחים המבקשים להעמיק.
+                ללמד לא רק את ה"איך", אלא גם את ה"למה", ולהעניק כלים מעשיים שיתמזגו בחיי היומיום והעבודה שלך,
+                ויהפכו אותך לא רק למשתמש, אלא לאמן היוצר עם טכנולוגיה.
+            </p>
+        </section>
+
+        <!-- Target Audience - Illustrated with flowing text -->
+        <section class="max-w-4xl mx-auto mb-24 text-center">
+            <h2 class="font-cinzel text-4xl font-semibold text-secondary-green mb-10 scroll-reveal">הקהילה המתהווה: מי יצטרף למסע?</h2>
+            <div class="grid md:grid-cols-2 gap-12 text-lg text-dark-slate">
+                <div class="scroll-reveal" style="animation-delay: 0.2s;">
+                    <h3 class="font-cinzel text-3xl mb-4 text-primary-gold">חולמים ומתחילים</h3>
+                    <p>
+                        אלו המביטים אל עולם ה-AI בפליאה, מבקשים להבין את ראשיתו ולעשות את צעדיהם הראשונים בשבילים המתפתלים של הידע.
+                    </p>
+                </div>
+                <div class="scroll-reveal" style="animation-delay: 0.4s;">
+                    <h3 class="font-cinzel text-3xl mb-4 text-primary-gold">מנהיגי חזון ויוצרי מחר</h3>
+                    <p>
+                        אנשי מקצוע, מנהלים וארגונים, המכירים בפוטנציאל העצום של ה-AI להניע חדשנות, לייעל תהליכים ולפסל את עתיד עסקיהם וצוותיהם.
+                    </p>
+                </div>
+                <div class="scroll-reveal" style="animation-delay: 0.6s;">
+                    <h3 class="font-cinzel text-3xl mb-4 text-primary-gold">מעמיקי ידע ופורצי דרך</h3>
+                    <p>
+                        לרמה מתקדמת, אנו מלווים את אלו השואפים לפתח פרויקטים מורכבים, ליצור פתרונות פורצי דרך ולחקור את הגבולות החדשים של הבינה.
+                    </p>
+                </div>
+                <div class="scroll-reveal" style="animation-delay: 0.8s;">
+                    <h3 class="font-cinzel text-3xl mb-4 text-primary-gold">אמני המילים והדימויים</h3>
+                    <p>
+                        מי שחפץ להעצים את יכולותיו ביצירת טקסטים, תמונות ואומנות בעזרת כוחה היצירתית הבלתי נדלה של הבינה המלאכותית.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Areas of Expertise - Organic, flowing list with icons -->
+        <section class="max-w-5xl mx-auto mb-24 text-center">
+            <h2 class="font-cinzel text-4xl font-semibold text-primary-gold mb-12 scroll-reveal">מארג היצירה: שזירת בינה במגוון עולמות</h2>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10 text-dark-slate">
+                <div class="flex flex-col items-center scroll-reveal" style="animation-delay: 0.1s;">
+                    <svg class="w-16 h-16 text-secondary-green mb-4" fill="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    <h3 class="font-cinzel text-2xl font-medium mb-2">יצירת טקסטים ותוכן</h3>
+                    <p class="text-md">שחרר את סופר הבינה הפנימי שלך.</p>
+                </div>
+                <div class="flex flex-col items-center scroll-reveal" style="animation-delay: 0.2s;">
+                    <svg class="w-16 h-16 text-secondary-green mb-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                    <h3 class="font-cinzel text-2xl font-medium mb-2">בניית אפליקציות חכמות</h3>
+                    <p class="text-md">להפוך רעיונות למציאות דיגיטלית חיה.</p>
+                </div>
+                <div class="flex flex-col items-center scroll-reveal" style="animation-delay: 0.3s;">
+                    <svg class="w-16 h-16 text-secondary-green mb-4" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2v8c0 1.1-.9 2-2 2h-6l-2 4z"></path></svg>
+                    <h3 class="font-cinzel text-2xl font-medium mb-2">פיתוח אתרים מבוססי AI</h3>
+                    <p class="text-md">האתר שלך חושב, יוצר ומתפתח.</p>
+                </div>
+                <div class="flex flex-col items-center scroll-reveal" style="animation-delay: 0.4s;">
+                    <svg class="w-16 h-16 text-secondary-green mb-4" fill="currentColor" viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.28 20.32 10.53 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"></path></svg>
+                    <h3 class="font-cinzel text-2xl font-medium mb-2">ניתוח נתונים ומחקר</h3>
+                    <p class="text-md">לפענח סודות נסתרים בים הנתונים.</p>
+                </div>
+                <div class="flex flex-col items-center scroll-reveal" style="animation-delay: 0.5s;">
+                    <svg class="w-16 h-16 text-secondary-green mb-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path></svg>
+                    <h3 class="font-cinzel text-2xl font-medium mb-2">יצירת תמונות ואומנות</h3>
+                    <p class="text-md">הבד הדיגיטלי מחכה למגע שלך.</p>
+                </div>
+                <div class="flex flex-col items-center scroll-reveal" style="animation-delay: 0.6s;">
+                    <svg class="w-16 h-16 text-secondary-green mb-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 10h-4V7c0-1.65-1.35-3-3-3s-3 1.35-3 3v3H8c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V12c0-1.1-.9-2-2-2zm-6 0h-2V7c0-.55.45-1 1-1s1 .45 1 1v3zm-4 7H8v-5h4v5zm8 0h-4v-5h4v5z"></path></svg>
+                    <h3 class="font-cinzel text-2xl font-medium mb-2">אוטומציה של תהליכים</h3>
+                    <p class="text-md">להפוך משימות מייגעות לריקוד אוטומטי.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered - Presented like a blooming flower or interconnected vines -->
+        <section class="max-w-4xl mx-auto mb-24 text-dark-slate">
+            <h2 class="font-cinzel text-4xl font-semibold text-secondary-green text-center mb-12 scroll-reveal">נתיבי ההתגלות: מסלולים אל שליטה ב-AI</h2>
+            <div class="relative grid md:grid-cols-2 lg:grid-cols-4 gap-10 p-8 bg-white/70 rounded-3xl shadow-xl scroll-reveal">
+                <!-- Center point / connecting element -->
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div class="w-24 h-24 rounded-full bg-primary-gold opacity-30 animate-pulse"></div>
+                </div>
+
+                <div class="relative z-10 p-6 bg-cream/80 border border-primary-gold/50 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 text-center flex flex-col items-center">
+                    <h3 class="font-cinzel text-2xl text-primary-gold mb-3">סדנאות קבוצתיות</h3>
+                    <p class="text-md leading-relaxed">מסעות משותפים אל ליבת הבינה, עם דגש על למידה מעשית ויישום מיידי.</p>
+                </div>
+                <div class="relative z-10 p-6 bg-cream/80 border border-primary-gold/50 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 text-center flex flex-col items-center">
+                    <h3 class="font-cinzel text-2xl text-primary-gold mb-3">שיעורים פרטיים</h3>
+                    <p class="text-md leading-relaxed">נתיב אישי, מותאם לרצונותיך ולקצב התקדמותך, בהדרכה צמודה ואישית.</p>
+                </div>
+                <div class="relative z-10 p-6 bg-cream/80 border border-primary-gold/50 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 text-center flex flex-col items-center">
+                    <h3 class="font-cinzel text-2xl text-primary-gold mb-3">הרצאות לארגונים</h3>
+                    <p class="text-md leading-relaxed">להאיר את עיני הצוות, לפתוח אופקים חדשים ולהצית השראה בעולם העסקים.</p>
+                </div>
+                <div class="relative z-10 p-6 bg-cream/80 border border-primary-gold/50 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 text-center flex flex-col items-center">
+                    <h3 class="font-cinzel text-2xl text-primary-gold mb-3">ייעוץ ופיתוח</h3>
+                    <p class="text-md leading-relaxed">ליווי מקצועי ואישי בפיתוח פרויקטים מורכבים ובהטמעת פתרונות AI.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide - Zevik Aviner -->
+        <section class="max-w-4xl mx-auto mb-24 flex flex-col md:flex-row items-center bg-white/70 p-8 rounded-3xl shadow-xl scroll-reveal">
+            <div class="md:w-1/3 flex-shrink-0 mb-8 md:mb-0 md:ml-8 text-center">
+                <img src="https://link.zevikaviner.com/zevik" alt="דיוקנו של זאביק אבינר, מומחה לבינה מלאכותית" class="rounded-full w-48 h-48 object-cover mx-auto border-4 border-primary-gold shadow-lg transform hover:scale-105 transition-transform duration-300">
+            </div>
+            <div class="md:w-2/3 text-dark-slate text-center md:text-right">
+                <h2 class="font-cinzel text-4xl font-semibold text-primary-gold mb-6">האמן המדריך: זאביק אבינר</h2>
+                <p class="text-lg leading-relaxed mb-4">
+                    זאביק אבינר הוא לא רק מומחה לבינה מלאכותית, הוא אמן החושף את פלאיה.
+                    עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI,
+                    זאביק רואה במלאכתו שליחות: להנגיש את הטכנולוגיה המהפכנית הזו,
+                    ולהפוך אותה לכלי עבודה יומיומי ופורה בידי כל אחד ואחת.
+                </p>
+                <p class="text-lg leading-relaxed">
+                    הוא מנחה את המסע אל העתיד בכישרון, בסבלנות ובתשוקה,
+                    ומאיר את הדרך בהבנה מעמיקה ויישום מעשי.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Information - Integrated into a final decorative flourish -->
+        <section class="max-w-3xl mx-auto text-center contact-card p-12 scroll-reveal">
+            <h2 class="font-cinzel text-4xl font-semibold text-secondary-green mb-8">ליצירת קשר עם האמן</h2>
+            <p class="text-xl md:text-2xl text-dark-slate mb-6">
+                אם נשמתך נמשכת אל עולם הבינה המלאכותית, אל תהסס – צור קשר.
+                המסע המשותף מתחיל בשיחה.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
+                <a href="https://wa.me/972546609385" target="_blank" rel="noopener noreferrer" class="group flex items-center bg-primary-gold text-light-cream px-8 py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-lg">
+                    <svg class="w-6 h-6 ml-3 group-hover:animate-bounce" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C7.34 2 3.41 5.92 3.41 10.63c0 4.07 2.76 7.47 6.64 8.71L12 22l1.9-2.61c.42.06.84.1 1.28.1 4.71 0 8.63-3.92 8.63-8.63C20.47 5.92 16.55 2 12.04 2zM12 18.25c-3.1 0-5.62-2.52-5.62-5.62s2.52-5.62 5.62-5.62 5.62 2.52 5.62 5.62-2.52 5.62-5.62 5.62zm-.44-8.87l-2.48.06-.57 2.08c-.14.5.21 1.02.72 1.13.25.05.51 0 .73-.13l1.82-1.05c.34-.2.43-.64.23-.97-.2-.34-.64-.43-.97-.23l-.85.49-.02.04-.41.24c-.26-.14-.54-.25-.83-.34l-.06-.02-.1-.03-.04-.01-.06-.02-.03-.01c-.48-.12-.99-.04-1.42.2l-2.08.77c-.5.18-.75.76-.57 1.26.18.5.76.75 1.26.57l1.7-.63-.03-.13.33-.08c.32.08.64.12.97.12 1.48 0 2.68-1.2 2.68-2.68 0-1.07-.63-2.02-1.6-2.48z"></path></svg>
+                    <span>ווטסאפ: 054-6609385</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="group flex items-center bg-secondary-green text-light-cream px-8 py-4 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 text-lg">
+                    <svg class="w-6 h-6 ml-3 group-hover:animate-pulse" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path></svg>
+                    <span>אימייל: zaviner@gmail.com</span>
+                </a>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Custom cursor logic
+        const customCursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // Scroll reveal animation logic using IntersectionObserver
+        const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Stop observing once visible
+                }
+            });
+        }, {
+            threshold: 0.1, // Element is considered visible if 10% is in viewport
+            rootMargin: '0px 0px -50px 0px' // Start revealing elements a bit earlier
+        });
+
+        scrollRevealElements.forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

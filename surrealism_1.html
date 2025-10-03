@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ממלכת הבינה המלאכותית: חלום העתיד</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700&family=Bellefair&display=swap" rel="stylesheet">
+    <style>
+        /* Tailwind Custom Configuration for Thematic Fonts and Colors */
+        :root {
+            --color-deep-violet: #1a0a2d;
+            --color-ether-blue: #0f1c3d;
+            --color-dream-gold: #d4af37;
+            --color-whisper-gray: #e0e0e0;
+            --color-shadow-black: #050505;
+        }
+
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        html, body {
+            overflow-x: hidden; /* Prevent horizontal scroll from subtle animations */
+            cursor: none; /* Hide default cursor */
+        }
+
+        body {
+            background-color: var(--color-deep-violet);
+            font-family: 'Assistant', sans-serif;
+            color: var(--color-whisper-gray);
+            line-height: 1.7;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+        }
+
+        .bellefair {
+            font-family: 'Bellefair', serif;
+        }
+
+        /* Custom Cursor Styling */
+        .cursor-outer, .cursor-inner {
+            pointer-events: none;
+            position: fixed;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: all 0.1s ease-out; /* Slower for outer, faster for inner */
+        }
+
+        .cursor-outer {
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.9); /* White border for visibility */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 175, 55, 0.5); /* Black shadow + glow */
+            mix-blend-mode: exclusion; /* Surreal effect, but fallback is strong border/shadow */
+        }
+
+        .cursor-inner {
+            width: 8px;
+            height: 8px;
+            background-color: var(--color-dream-gold);
+            opacity: 0.8;
+            mix-blend-mode: exclusion;
+        }
+
+        /* Surreal Background Elements */
+        .bg-gradient-floating {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 150vw;
+            height: 150vh;
+            background: radial-gradient(circle at 10% 20%, var(--color-ether-blue) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 90%, var(--color-deep-violet) 0%, transparent 30%),
+                        radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.1) 0%, transparent 60%);
+            animation: bg-float 60s infinite alternate ease-in-out;
+            z-index: -2;
+            opacity: 0.6;
+        }
+
+        @keyframes bg-float {
+            0% { transform: scale(1) translate(0, 0); }
+            50% { transform: scale(1.1) translate(10vw, 10vh); }
+            100% { transform: scale(1) translate(0, 0); }
+        }
+
+        /* Floating Text/Image Elements */
+        .float-subtle {
+            animation: float-subtle 10s infinite alternate ease-in-out;
+        }
+        @keyframes float-subtle {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .float-more {
+            animation: float-more 15s infinite alternate ease-in-out;
+        }
+        @keyframes float-more {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            25% { transform: translate(10px, -5px) rotate(2deg); }
+            50% { transform: translate(0px, -15px) rotate(-1deg); }
+            75% { transform: translate(-10px, -5px) rotate(2deg); }
+            100% { transform: translate(0px, 0px) rotate(0deg); }
+        }
+
+        /* Text hover effect - subtle distortion */
+        .distort-on-hover:hover {
+            text-shadow: 2px 2px 5px rgba(212, 175, 55, 0.7);
+            transform: scale(1.02) skewX(1deg);
+            transition: all 0.3s ease-out;
+        }
+
+        /* Scroll parallax effect */
+        .parallax-layer-1 {
+            transform: translateY(calc(var(--scroll-y) * 0.2px));
+        }
+        .parallax-layer-2 {
+            transform: translateY(calc(var(--scroll-y) * 0.4px));
+        }
+        .parallax-layer-3 {
+            transform: translateY(calc(var(--scroll-y) * 0.6px));
+        }
+
+        /* Card-like elements for services/expertise */
+        .dream-card {
+            background-color: rgba(15, 28, 61, 0.5); /* Semi-transparent ether blue */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease-out;
+        }
+        .dream-card:hover {
+            border-color: var(--color-dream-gold);
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 8px 40px rgba(212, 175, 55, 0.2);
+        }
+
+        /* Special link style */
+        .dream-link {
+            color: var(--color-dream-gold);
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s ease-out;
+        }
+        .dream-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            right: 0; /* RTL adjusted */
+            background-color: var(--color-dream-gold);
+            transition: width 0.3s ease-out;
+        }
+        .dream-link:hover {
+            color: var(--color-whisper-gray);
+            text-shadow: 0 0 10px var(--color-dream-gold);
+        }
+        .dream-link:hover::after {
+            width: 100%;
+            left: 0;
+            right: auto; /* RTL adjusted */
+        }
+
+        /* Image hover effect */
+        .zevik-image:hover {
+            transform: scale(1.05) rotateZ(2deg);
+            box-shadow: 0 0 30px var(--color-dream-gold);
+            filter: saturate(1.2) brightness(1.1);
+            transition: all 0.4s ease-out;
+        }
+
+        /* Animation for text reveal on scroll */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--color-whisper-gray);
+            font-size: 0.9rem;
+            animation: bounce-arrow 2s infinite ease-in-out;
+            z-index: 1000;
+        }
+        @keyframes bounce-arrow {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+        .scroll-arrow {
+            display: block;
+            margin: 5px auto 0;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 10px solid var(--color-dream-gold);
+        }
+
+    </style>
+</head>
+<body class="relative min-h-screen">
+
+    <!-- Custom Cursor -->
+    <div class="cursor-outer"></div>
+    <div class="cursor-inner"></div>
+
+    <!-- Surreal Background Elements -->
+    <div class="bg-gradient-floating"></div>
+    <div class="fixed top-0 left-0 w-full h-full bg-cover bg-center z-[-1]"
+         style="background-image: url('https://source.unsplash.com/random/1920x1080/?abstract-space,surreal-dream'); opacity: 0.1; filter: blur(5px);"></div>
+    <div id="parallax-bg-layer-1" class="fixed top-0 left-0 w-full h-full z-[-1] opacity-60"
+         style="background: radial-gradient(circle at 120% 120%, rgba(26, 10, 45, 0.5) 0%, transparent 60%);"></div>
+    <div id="parallax-bg-layer-2" class="fixed top-0 left-0 w-full h-full z-[-1] opacity-50"
+         style="background: radial-gradient(circle at -20% -20%, rgba(15, 28, 61, 0.5) 0%, transparent 60%);"></div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+        <span class="text-xs">גללו מטה</span>
+        <span class="scroll-arrow"></span>
+    </div>
+
+    <main class="relative z-10 p-4 sm:p-8 md:p-12 lg:p-16 flex flex-col items-center min-h-screen justify-center text-center">
+
+        <!-- Main Title - Floating in the Ether -->
+        <section class="mb-24 mt-16 max-w-4xl w-full float-more px-4">
+            <h1 class="bellefair text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-dream-gold leading-tight mb-8 drop-shadow-lg reveal-on-scroll">
+                לשלוט בחלומות של הבינה המלאכותית: <br class="hidden sm:block"> המסע אל העתיד הדיגיטלי
+            </h1>
+            <p class="text-xl sm:text-2xl lg:text-3xl text-whisper-gray leading-relaxed max-w-3xl mx-auto drop-shadow-md reveal-on-scroll">
+                בספירה שבה קוד ודמיון נפגשים, זאביק אבינר מזמין אתכם לחצות את מפתן המציאות המלאכותית. לא עוד מבוך של אלגוריתמים, אלא שדות פורחים של יצירה והבנה, נגישים לכל מי שמוכן לפרוש כנף.
+            </p>
+        </section>
+
+        <!-- Zevik Aviner's Image and Intro - Anchored but with subtle animation -->
+        <section class="relative w-full max-w-4xl mx-auto my-24 flex flex-col lg:flex-row-reverse items-center justify-center p-6 sm:p-8 dream-card float-subtle reveal-on-scroll">
+            <div class="lg:w-1/3 flex justify-center mb-8 lg:mb-0 lg:ms-8">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר, מומחה לבינה מלאכותית"
+                     class="zevik-image w-48 h-48 sm:w-56 sm:h-56 rounded-full border-4 border-dream-gold object-cover shadow-2xl transform hover:scale-105 hover:rotate-2 transition-all duration-300">
+            </div>
+            <div class="lg:w-2/3 text-center lg:text-start">
+                <h2 class="bellefair text-4xl sm:text-5xl text-dream-gold mb-4 distort-on-hover">האורקל של הספירה הדיגיטלית</h2>
+                <p class="text-lg sm:text-xl text-whisper-gray leading-relaxed drop-shadow-sm">
+                    זאביק אבינר - שם הדהוד של מומחיות, אדריכל של תודעות מלאכותיות, שמגלה את הסודות החבויים מאחורי הקוד.
+                    הוא המגשר בין החלום הטכנולוגי לבין המציאות היומיומית, והופך את הבלתי נתפס לכלי נגיש בידי כל.
+                </p>
+            </div>
+        </section>
+
+        <!-- Target Audience - Who calls us from the future? -->
+        <section class="w-full max-w-6xl mx-auto my-24 p-6 sm:p-8 dream-card reveal-on-scroll">
+            <h2 class="bellefair text-4xl sm:text-5xl text-dream-gold mb-12 text-center distort-on-hover">מי קורא לנו מהעתיד?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-lg sm:text-xl text-whisper-gray leading-loose">
+                <p class="p-4 dream-card float-subtle hover:bg-opacity-70 reveal-on-scroll">
+                    <strong class="text-dream-gold">חולמים ראשונים:</strong> אלו הרוקמים את צעדיהם הראשונים בשבילי הקוד החלומיים, המבקשים להכיר את עולם ה-AI.
+                </p>
+                <p class="p-4 dream-card float-subtle hover:bg-opacity-70 reveal-on-scroll">
+                    <strong class="text-dream-gold">יוצרי מציאות:</strong> מוחות יצירתיים המבקשים לשתול זרעי AI בגינת עבודתם, אנשי מקצוע המחפשים הטמעה.
+                </p>
+                <p class="p-4 dream-card float-subtle hover:bg-opacity-70 reveal-on-scroll">
+                    <strong class="text-dream-gold">מציירי מפות:</strong> מנהיגים ואורגנים המציירים את מפת דרכי צוותיהם דרך עדשת העתיד.
+                </p>
+                <p class="p-4 dream-card float-subtle hover:bg-opacity-70 reveal-on-scroll">
+                    <strong class="text-dream-gold">אדריכלי בינה:</strong> אדריכלי פרויקטים מתקדמים, המבקשים להקים מגדלים של בינה מבוססי AI.
+                </p>
+            </div>
+        </section>
+
+        <!-- Areas of Expertise - Keys to Hidden Dimensions -->
+        <section class="w-full max-w-6xl mx-auto my-24 p-6 sm:p-8 reveal-on-scroll">
+            <h2 class="bellefair text-4xl sm:text-5xl text-dream-gold mb-12 text-center distort-on-hover">המפתחות לממדים נסתרים</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="p-6 dream-card float-more text-center hover:bg-opacity-70 reveal-on-scroll">
+                    <h3 class="bellefair text-3xl text-dream-gold mb-3">לחישות של תוכן</h3>
+                    <p class="text-lg text-whisper-gray">יצירת טקסטים ותוכן המתגלמות מחלל דיגיטלי.</p>
+                </div>
+                <div class="p-6 dream-card float-subtle text-center hover:bg-opacity-70 reveal-on-scroll">
+                    <h3 class="bellefair text-3xl text-dream-gold mb-3">ארכיטקטורת אפליקציות</h3>
+                    <p class="text-lg text-whisper-gray">בניית יישומים חכמים המרחפים מעל ההיגיון.</p>
+                </div>
+                <div class="p-6 dream-card float-more text-center hover:bg-opacity-70 reveal-on-scroll">
+                    <h3 class="bellefair text-3xl text-dream-gold mb-3">שזירת אתרים</h3>
+                    <p class="text-lg text-whisper-gray">פיתוח אתרים המקשיבים ויוצרים במגע של AI.</p>
+                </div>
+                <div class="p-6 dream-card float-subtle text-center hover:bg-opacity-70 reveal-on-scroll">
+                    <h3 class="bellefair text-3xl text-dream-gold mb-3">פענוח צפנים</h3>
+                    <p class="text-lg text-whisper-gray">ניתוח נתונים וסודות שהזמן גילה.</p>
+                </div>
+                <div class="p-6 dream-card float-more text-center hover:bg-opacity-70 reveal-on-scroll">
+                    <h3 class="bellefair text-3xl text-dream-gold mb-3">בריאת מראות</h3>
+                    <p class="text-lg text-whisper-gray">יצירת תמונות ואמנות מתוך תהומות הדמיון המלאכותי.</p>
+                </div>
+                <div class="p-6 dream-card float-subtle text-center hover:bg-opacity-70 reveal-on-scroll">
+                    <h3 class="bellefair text-3xl text-dream-gold mb-3">ריקוד האוטומציה</h3>
+                    <p class="text-lg text-whisper-gray">אוטומציה של תהליכים, המרחיב את גבולות האפשר.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered - Paths in the Shared Dream -->
+        <section class="w-full max-w-4xl mx-auto my-24 p-6 sm:p-8 dream-card reveal-on-scroll">
+            <h2 class="bellefair text-4xl sm:text-5xl text-dream-gold mb-12 text-center distort-on-hover">מסלולים בחלום המשותף</h2>
+            <ul class="space-y-8 text-xl sm:text-2xl text-whisper-gray leading-relaxed text-center">
+                <li class="p-4 dream-card float-subtle hover:bg-opacity-70 reveal-on-scroll">
+                    <strong class="text-dream-gold bellefair text-3xl block mb-2">סדנאות קבוצתיות:</strong>
+                    מראות שבירים של ידע שמתאחד לכדי תובנה - מעשיות וממוקדות.
+                </li>
+                <li class="p-4 dream-card float-more hover:bg-opacity-70 reveal-on-scroll">
+                    <strong class="text-dream-gold bellefair text-3xl block mb-2">שיעורים פרטיים:</strong>
+                    מסע אישי עם מורה דרך אל לב המבוך - התאמה אישית לרמה ולצרכים.
+                </li>
+                <li class="p-4 dream-card float-subtle hover:bg-opacity-70 reveal-on-scroll">
+                    <strong class="text-dream-gold bellefair text-3xl block mb-2">הרצאות לארגונים:</strong>
+                    פתיחת שערים תודעתיים בפני קהילות של חולמים - פתיחת אופקים לצוותים.
+                </li>
+                <li class="p-4 dream-card float-more hover:bg-opacity-70 reveal-on-scroll">
+                    <strong class="text-dream-gold bellefair text-3xl block mb-2">ייעוץ ופיתוח פרויקטים:</strong>
+                    שותפות בבניית טירות חול שיהפכו למבצרי קוד - ליווי מקצועי.
+                </li>
+            </ul>
+        </section>
+
+        <!-- Contact Information - Whispering to the Digital Horizon -->
+        <section class="w-full max-w-xl mx-auto my-24 p-6 sm:p-8 dream-card float-subtle reveal-on-scroll">
+            <h2 class="bellefair text-4xl sm:text-5xl text-dream-gold mb-8 text-center distort-on-hover">ללחוש אל האופק הדיגיטלי</h2>
+            <div class="text-center text-lg sm:text-xl text-whisper-gray leading-relaxed space-y-4">
+                <p>
+                    <strong class="text-dream-gold">ווטסאפ:</strong>
+                    <a href="https://wa.me/972546609385" target="_blank" class="dream-link distort-on-hover">054-6609385</a>
+                </p>
+                <p>
+                    <strong class="text-dream-gold">אימייל:</strong>
+                    <a href="mailto:zaviner@gmail.com" target="_blank" class="dream-link distort-on-hover">zaviner@gmail.com</a>
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-violet': 'var(--color-deep-violet)',
+                        'ether-blue': 'var(--color-ether-blue)',
+                        'dream-gold': 'var(--color-dream-gold)',
+                        'whisper-gray': 'var(--color-whisper-gray)',
+                        'shadow-black': 'var(--color-shadow-black)',
+                    },
+                    fontFamily: {
+                        bellefair: ['Bellefair', 'serif'],
+                        assistant: ['Assistant', 'sans-serif'],
+                    },
+                    keyframes: {
+                        'bg-float': {
+                            '0%': { transform: 'scale(1) translate(0, 0)' },
+                            '50%': { transform: 'scale(1.1) translate(10vw, 10vh)' },
+                            '100%': { transform: 'scale(1) translate(0, 0)' },
+                        },
+                        'float-subtle': {
+                            '0%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-10px) rotate(1deg)' },
+                            '100%': { transform: 'translateY(0px) rotate(0deg)' },
+                        },
+                        'float-more': {
+                            '0%': { transform: 'translate(0px, 0px) rotate(0deg)' },
+                            '25%': { transform: 'translate(10px, -5px) rotate(2deg)' },
+                            '50%': { transform: 'translate(0px, -15px) rotate(-1deg)' },
+                            '75%': { transform: 'translate(-10px, -5px) rotate(2deg)' },
+                            '100%': { transform: 'translate(0px, 0px) rotate(0deg)' },
+                        },
+                        'bounce-arrow': {
+                            '0%, 20%, 50%, 80%, 100%': { transform: 'translateX(-50%) translateY(0)' },
+                            '40%': { transform: 'translateX(-50%) translateY(-10px)' },
+                            '60%': { transform: 'translateX(-50%) translateY(-5px)' },
+                        }
+                    },
+                    animation: {
+                        'bg-float': 'bg-float 60s infinite alternate ease-in-out',
+                        'float-subtle': 'float-subtle 10s infinite alternate ease-in-out',
+                        'float-more': 'float-more 15s infinite alternate ease-in-out',
+                        'bounce-arrow': 'bounce-arrow 2s infinite ease-in-out',
+                    }
+                }
+            }
+        }
+
+        // Custom Cursor Logic
+        const cursorOuter = document.querySelector('.cursor-outer');
+        const cursorInner = document.querySelector('.cursor-inner');
+
+        document.addEventListener('mousemove', e => {
+            cursorOuter.style.top = `${e.clientY}px`;
+            cursorOuter.style.left = `${e.clientX}px`;
+            cursorInner.style.top = `${e.clientY}px`;
+            cursorInner.style.left = `${e.clientX}px`;
+        });
+
+        // Parallax Effect
+        const parallaxBgLayer1 = document.getElementById('parallax-bg-layer-1');
+        const parallaxBgLayer2 = document.getElementById('parallax-bg-layer-2');
+        const root = document.documentElement;
+
+        document.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            root.style.setProperty('--scroll-y', scrollY); // Make scroll position available in CSS variables
+            if (parallaxBgLayer1) {
+                parallaxBgLayer1.style.transform = `translateY(${scrollY * 0.2}px)`;
+            }
+            if (parallaxBgLayer2) {
+                parallaxBgLayer2.style.transform = `translateY(${scrollY * 0.4}px)`;
+            }
+
+            // Hide scroll indicator on scroll
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            if (scrollY > 50) { // Hide after 50px scroll
+                scrollIndicator.style.opacity = '0';
+                scrollIndicator.style.pointerEvents = 'none';
+            } else {
+                scrollIndicator.style.opacity = '1';
+                scrollIndicator.style.pointerEvents = 'auto';
+            }
+
+            // Reveal on Scroll logic
+            const revealElements = document.querySelectorAll('.reveal-on-scroll');
+            revealElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const viewHeight = window.innerHeight || document.documentElement.clientHeight;
+                if (rect.top < viewHeight - 100) { // When 100px of the element is visible
+                    el.classList.add('is-visible');
+                } else {
+                    el.classList.remove('is-visible'); // Optional: remove if scrolling back up
+                }
+            });
+        });
+
+        // Initial check for reveal-on-scroll elements
+        document.addEventListener('DOMContentLoaded', () => {
+            const revealElements = document.querySelectorAll('.reveal-on-scroll');
+            revealElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const viewHeight = window.innerHeight || document.documentElement.clientHeight;
+                if (rect.top < viewHeight - 100) {
+                    el.classList.add('is-visible');
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

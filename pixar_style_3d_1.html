@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מסע אל ליבת הבינה המלאכותית - זאביק אבינר</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&family=Rubik:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Base styles for a clean, immersive experience */
+        body {
+            font-family: 'Heebo', sans-serif; /* Primary font for readability */
+            background-color: #0d1117; /* Deep, dark background for depth */
+            color: #e0e0e0; /* Light text for high contrast */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            cursor: none; /* Hide default cursor */
+            scroll-behavior: smooth;
+            transition: opacity 1s ease-in; /* Smooth fade-in on load */
+            opacity: 0; /* Initial state for fade-in */
+        }
+
+        body.loaded {
+            opacity: 1; /* Final state after load */
+        }
+
+        /* Custom scrollbar for an artistic touch */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a202c; /* Dark track */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #4CAF50, #2196F3); /* Vibrant gradient thumb */
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, #388E3C, #1976D2); /* Darker gradient on hover */
+        }
+
+        /* Custom cursor styling - MANDATORY high-contrast technique */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* White border for dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for light backgrounds */
+            transition: transform 0.1s ease-out, width 0.1s ease-out, height 0.1s ease-out, background-color 0.1s ease-out;
+            z-index: 9999; /* Always on top */
+            transform: translate(-50%, -50%); /* Center the cursor on mouse position */
+            opacity: 1; /* Ensure visibility */
+            background-color: transparent; /* No fill by default */
+        }
+        .custom-cursor.hovered {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(76, 175, 80, 0.2); /* Subtle green fill on hover */
+            border-color: #4CAF50; /* Green border on hover */
+        }
+
+        /* Pixar-like bubble elements */
+        .pixar-bubble {
+            background: linear-gradient(135deg, #1f2a3a, #2c3e50); /* Dark, glossy base gradient */
+            border-radius: 3rem; /* Soft, rounded corners */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 3px 8px rgba(255, 255, 255, 0.2); /* Depth and subtle shine */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            perspective: 1000px; /* Enable 3D transforms */
+            padding: 2.5rem; /* Generous padding */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle edge highlight */
+            will-change: transform; /* Optimize animation performance */
+        }
+        .pixar-bubble:hover {
+            transform: translateY(-10px) rotateX(3deg) rotateY(3deg) scale(1.02); /* Pop out and subtly rotate */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), inset 0 5px 10px rgba(255, 255, 255, 0.3); /* Enhanced shadow on hover */
+            background: linear-gradient(135deg, #2c3e50, #1f2a3a); /* Subtle gradient shift */
+        }
+        .pixar-bubble p, .pixar-bubble h3 {
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); /* Soft shadow for text for better legibility */
+        }
+
+        /* Main titles with a vibrant, gradient, and shadowed style */
+        .pixar-title {
+            font-family: 'Rubik', sans-serif;
+            font-weight: 800; /* Extra bold */
+            font-size: 3.5rem; /* Large and impactful */
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.7), 0 0 15px rgba(255,255,255,0.3); /* Stronger shadow for depth */
+            background: linear-gradient(90deg, #4CAF50, #2196F3, #FFC107); /* Vibrant multi-color gradient */
+            -webkit-background-clip: text; /* Clip background to text shape */
+            -webkit-text-fill-color: transparent; /* Make text transparent to show gradient */
+            line-height: 1.2;
+            margin-bottom: 2rem;
+        }
+
+        /* Animated section separators for visual breaks */
+        .section-separator {
+            position: relative;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 8rem 0;
+            overflow: hidden;
+            width: 100%; /* Ensure it spans full width */
+        }
+        .section-separator::before,
+        .section-separator::after {
+            content: '';
+            position: absolute;
+            height: 2px;
+            width: 70%; /* Wider lines */
+            background: linear-gradient(to right, transparent, #4CAF50, #2196F3, transparent); /* Left-to-right glow */
+            opacity: 0.7;
+            animation: pulse-line 5s infinite ease-in-out alternate; /* Pulsing animation */
+            filter: blur(1px); /* Soft glow effect */
+        }
+        .section-separator::after {
+            background: linear-gradient(to left, transparent, #FFC107, #E91E63, transparent); /* Right-to-left glow */
+            animation: pulse-line 5s infinite ease-in-out alternate-reverse; /* Reversed animation direction */
+        }
+
+        @keyframes pulse-line {
+            0% { transform: scaleX(0.5); opacity: 0.3; }
+            50% { transform: scaleX(1); opacity: 1; }
+            100% { transform: scaleX(0.5); opacity: 0.3; }
+        }
+
+        /* Floating background elements for a dynamic, ethereal feel */
+        .floating-element {
+            position: fixed;
+            opacity: 0.07; /* Very subtle */
+            animation: float 20s infinite ease-in-out alternate; /* Slower, smoother float */
+            z-index: -2; /* Deepest layer */
+            pointer-events: none; /* Do not interfere with mouse */
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(20vw, 30vh) scale(1.1); } /* Larger movement range */
+            100% { transform: translate(0, 0) scale(1); }
+        }
+
+        .float-fast { animation-duration: 15s; animation-delay: 1s; }
+        .float-slow { animation-duration: 25s; animation-delay: 3s; }
+
+        /* Styling for the Zevik Aviner card and image */
+        .zevik-card {
+            background: linear-gradient(135deg, #1f2a3a, #2c3e50);
+            border-radius: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 3px 8px rgba(255, 255, 255, 0.2);
+            padding: 2.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            perspective: 1000px;
+            will-change: transform;
+        }
+
+        .zevik-card:hover {
+            transform: translateY(-15px) rotateX(5deg) rotateY(-5deg) scale(1.03); /* More pronounced pop and rotation */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), inset 0 7px 15px rgba(255, 255, 255, 0.4);
+        }
+
+        .zevik-image-container {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%; /* Circular image */
+            overflow: hidden;
+            border: 5px solid #4CAF50; /* Primary brand color border */
+            box-shadow: 0 0 0 5px #2196F3, 0 0 20px rgba(0,0,0,0.5); /* Secondary color glow effect */
+            margin: 0 auto 1.5rem auto;
+            transition: transform 0.5s ease-in-out;
+            will-change: transform;
+        }
+
+        .zevik-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensure image covers container */
+            object-position: center;
+            filter: grayscale(10%) brightness(1.1); /* Subtle stylistic filter for an artistic touch */
+            transition: transform 0.5s ease-in-out;
+            will-change: transform;
+        }
+
+        .zevik-card:hover .zevik-image-container {
+            transform: rotateY(15deg); /* 3D tilt on image container */
+        }
+
+        .zevik-card:hover .zevik-image-container img {
+            transform: scale(1.08); /* Slight zoom on image itself */
+        }
+
+        /* Parallax background effect with SVG shapes */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0d1117 0%, #1a202c 50%, #0d1117 100%); /* Subtle base gradient */
+            z-index: -1; /* Behind content, above floating elements */
+            overflow: hidden; /* Hide parallax layer overflow */
+        }
+        .parallax-layer {
+            position: absolute;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover; /* Cover the entire area */
+            opacity: 0.03; /* Very faint */
+            transition: transform 0.1s linear;
+            will-change: transform;
+        }
+
+        /* SVG data URLs for simple geometric patterns */
+        .parallax-layer.layer-1 {
+            width: 150%; height: 150%; top: -25%; left: -25%;
+            background-image: url('data:image/svg+xml,%3Csvg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M100 0 L200 50 L150 200 L50 200 L0 50 Z" fill="%234CAF50" fill-opacity="0.1"/%3E%3C/svg%3E'); /* Green abstract polygon */
+            transform: scale(0.9) rotate(20deg);
+        }
+        .parallax-layer.layer-2 {
+            width: 120%; height: 120%; top: -10%; left: -10%;
+            background-image: url('data:image/svg+xml,%3Csvg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="100" cy="100" r="80" fill="%232196F3" fill-opacity="0.1"/%3E%3C/svg%3E'); /* Blue abstract circle */
+            transform: scale(0.7) rotate(45deg);
+        }
+        .parallax-layer.layer-3 {
+            width: 130%; height: 130%; top: -15%; left: -15%;
+            background-image: url('data:image/svg+xml,%3Csvg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Crect x="20" y="20" width="160" height="160" rx="40" ry="40" fill="%23FFC107" fill-opacity="0.1"/%3E%3C/svg%3E'); /* Yellow abstract rounded square */
+            transform: scale(0.8) rotate(-10deg);
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 1024px) {
+            .pixar-title { font-size: 3rem; }
+            .pixar-bubble { padding: 2rem; border-radius: 2.5rem; }
+        }
+        @media (max-width: 768px) {
+            .pixar-title { font-size: 2.5rem; }
+            .pixar-bubble { padding: 1.5rem; border-radius: 2rem; }
+            .section-separator { margin: 6rem 0; }
+            .zevik-image-container { width: 120px; height: 120px; }
+        }
+        @media (max-width: 480px) {
+            .pixar-title { font-size: 2rem; }
+            .pixar-bubble { padding: 1rem; border-radius: 1.5rem; }
+            .section-separator { margin: 4rem 0; height: 80px; }
+            .section-separator::before, .section-separator::after { width: 90%; }
+        }
+    </style>
+</head>
+<body class="selection:bg-green-500 selection:text-white">
+
+    <div class="custom-cursor" id="customCursor"></div>
+
+    <!-- Parallax Background Layers - Visuals that shift with scroll, enhancing depth -->
+    <div class="parallax-bg" id="parallaxContainer">
+        <div class="parallax-layer layer-1"></div>
+        <div class="parallax-layer layer-2"></div>
+        <div class="parallax-layer layer-3"></div>
+    </div>
+
+    <!-- Floating Decorative Elements - Subtle, animated shapes to create a dynamic background -->
+    <div class="floating-element" style="top: 10%; left: 5%; width: 100px; height: 100px; background: rgba(76,175,80,0.1); border-radius: 50%;"></div>
+    <div class="floating-element float-fast" style="top: 30%; right: 10%; width: 80px; height: 80px; background: rgba(33,150,243,0.1); border-radius: 50%;"></div>
+    <div class="floating-element float-slow" style="bottom: 15%; left: 15%; width: 120px; height: 120px; background: rgba(255,193,7,0.1); border-radius: 60px;"></div>
+    <div class="floating-element float-fast" style="top: 60%; left: 25%; width: 70px; height: 70px; background: rgba(233,30,99,0.1); border-radius: 50%;"></div>
+    <div class="floating-element float-slow" style="bottom: 5%; right: 20%; width: 90px; height: 90px; background: rgba(76,175,80,0.1); border-radius: 50%;"></div>
+
+    <!-- Main Content Wrapper - All interactive and informative elements reside here -->
+    <div class="relative z-10 min-h-screen py-16 px-4 md:px-8 lg:px-16 flex flex-col justify-center items-center">
+
+        <!-- Grand Opening Title - The initial artistic statement -->
+        <section class="text-center mb-24 max-w-4xl mx-auto">
+            <h1 class="pixar-title text-4xl md:text-6xl lg:text-7xl leading-tight mb-8">
+                לשלוט בפלא הדיגיטלי:
+                <br>
+                המסע שלך עם זאביק אבינר אל עתיד ה-AI
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-200 leading-relaxed max-w-3xl mx-auto font-light">
+                בואו נצלול יחד אל עולם הבינה המלאכותית המרתק.
+                <br>
+                זאביק אבינר מזמין אתכם לגלות איך להפוך את ה-AI לכלי העבודה החזק ביותר שלכם -
+                <span class="font-medium text-green-400">העתיד הוא עכשיו.</span>
+            </p>
+        </section>
+
+        <div class="section-separator"></div>
+
+        <!-- Core Message - "The AI Seed" - Presented as a central floating idea -->
+        <section class="max-w-3xl mx-auto mb-24">
+            <div class="pixar-bubble text-center">
+                <h2 class="text-3xl md:text-4xl text-green-400 font-bold mb-6">
+                    הפיכת AI לנגיש וישים לכולם
+                </h2>
+                <p class="text-lg md:text-xl text-gray-300 leading-loose">
+                    מזרע רעיון ועד לפרי פיתוח מתקדם - אנו מאמינים שהכוח המהפכני של הבינה המלאכותית שייך לכל אחד ואחת.
+                    <br>
+                    בעזרת כלים מעשיים, סדנאות ממוקדות וליווי אישי, נהפוך את המורכב לפשוט ואת התיאוריה למציאות שתשנה את יומכם.
+                </p>
+            </div>
+        </section>
+
+        <div class="section-separator"></div>
+
+        <!-- Target Audience - "The Explorers" - Each audience type is a distinct "discovery pod" -->
+        <section class="max-w-5xl mx-auto mb-24 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="pixar-bubble text-center p-6">
+                <h3 class="text-2xl text-blue-400 font-semibold mb-4">הסקרנים החדשים</h3>
+                <p class="text-md text-gray-300">
+                    צעדים ראשונים בעולם הדיגיטלי - בואו להכיר את הקסם של ה-AI מאפס.
+                </p>
+            </div>
+            <div class="pixar-bubble text-center p-6">
+                <h3 class="text-2xl text-yellow-400 font-semibold mb-4">מקצוענים בתנופה</h3>
+                <p class="text-md text-gray-300">
+                    שדרגו את הקריירה עם כלי AI שניתן להטמיע בעבודה באופן מיידי.
+                </p>
+            </div>
+            <div class="pixar-bubble text-center p-6">
+                <h3 class="text-2xl text-red-400 font-semibold mb-4">מנהיגי המחר</h3>
+                <p class="text-md text-gray-300">
+                    ארגונים וצוותים - פתחו אופקים חדשים והובילו עם חדשנות AI.
+                </p>
+            </div>
+            <div class="pixar-bubble text-center p-6">
+                <h3 class="text-2xl text-purple-400 font-semibold mb-4">אדריכלי חזון</h3>
+                <p class="text-md text-gray-300">
+                    מרמת הרעיון ועד פיתוח פרויקטים מתקדמים מבוססי AI.
+                </p>
+            </div>
+        </section>
+
+        <div class="section-separator"></div>
+
+        <!-- Areas of Expertise - "The AI Realms" - Presented as distinct domains to explore -->
+        <section class="max-w-6xl mx-auto mb-24">
+            <h2 class="pixar-title text-center text-3xl md:text-5xl mb-12">
+                שערי הידע: תחומי מומחיות שנחקור יחד
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="pixar-bubble">
+                    <h3 class="text-2xl text-green-300 font-semibold mb-3">מילים מתעוררות: יצירת טקסטים ותוכן</h3>
+                    <p class="text-md text-gray-300">
+                        הפכו רעיונות למילים מרתקות, כתבו מאמרים, פוסטים וקמפיינים שובי לב בעזרת AI.
+                    </p>
+                </div>
+                <div class="pixar-bubble">
+                    <h3 class="text-2xl text-blue-300 font-semibold mb-3">מוחות דיגיטליים: בניית אפליקציות חכמות</h3>
+                    <p class="text-md text-gray-300">
+                        הקימו יישומים חדשניים שמבינים, לומדים ומגיבים - העתיד בכף ידכם.
+                    </p>
+                </div>
+                <div class="pixar-bubble">
+                    <h3 class="text-2xl text-yellow-300 font-semibold mb-3">גשרים וירטואליים: פיתוח אתרים מבוססי AI</h3>
+                    <p class="text-md text-gray-300">
+                        צרו חוויות אינטרנטיות שמתאימות עצמן למשתמש, אופטימליות ואינטואיטיביות.
+                    </p>
+                </div>
+                <div class="pixar-bubble">
+                    <h3 class="text-2xl text-red-300 font-semibold mb-3">לחשוף סודות: ניתוח נתונים ומחקר</h3>
+                    <p class="text-md text-gray-300">
+                        פענחו תובנות נסתרות, נתחו מידע מורכב וקבלו החלטות מבוססות נתונים.
+                    </p>
+                </div>
+                <div class="pixar-bubble">
+                    <h3 class="text-2xl text-purple-300 font-semibold mb-3">צבעים מהדהדים: יצירת תמונות ואומנות</h3>
+                    <p class="text-md text-gray-300">
+                        הפכו דמיון למציאות ויזואלית, צרו יצירות אומנות ותמונות מרהיבות בעזרת בינה מלאכותית.
+                    </p>
+                </div>
+                <div class="pixar-bubble">
+                    <h3 class="text-2xl text-teal-300 font-semibold mb-3">זרימה חלקה: אוטומציה של תהליכים</h3>
+                    <p class="text-md text-gray-300">
+                        חסכו זמן, ייעלו עבודה וקחו את הפרודוקטיביות לשלב הבא עם אוטומציה חכמה.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-separator"></div>
+
+        <!-- Services Offered - "The Journeys Ahead" - Each service as a distinct path -->
+        <section class="max-w-5xl mx-auto mb-24 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="pixar-bubble">
+                <h3 class="text-3xl text-green-400 font-bold mb-4">נתיבי גילוי: סדנאות קבוצתיות</h3>
+                <p class="text-lg text-gray-300 mb-2">
+                    הצטרפו למסע משותף! סדנאות מעשיות, ממוקדות וידידותיות, המשלבות ידע תיאורטי עם יישום מיידי.
+                    בסביבה תומכת ומעוררת השראה, נגלה יחד את עולמות ה-AI השונים.
+                </p>
+            </div>
+            <div class="pixar-bubble">
+                <h3 class="text-3xl text-blue-400 font-bold mb-4">מסעות אישיים: שיעורים פרטיים</h3>
+                <p class="text-lg text-gray-300 mb-2">
+                    הדרכה אישית ופרטנית, מותאמת בדיוק לרמה, לקצב ולצרכים הייחודיים שלכם.
+                    בין אם אתם מתחילים או מעוניינים להעמיק, אבנה עבורכם תוכנית שתשיג את מטרותיכם.
+                </p>
+            </div>
+            <div class="pixar-bubble">
+                <h3 class="text-3xl text-yellow-400 font-bold mb-4">אופקים חדשים: הרצאות לארגונים</h3>
+                <p class="text-lg text-gray-300 mb-2">
+                    פתחו צוהר לעתיד עבור הצוותים והעובדים שלכם.
+                    הרצאות מרתקות המשלבות השראה, ידע וכלים ראשוניים להטמעת AI בארגון.
+                </p>
+            </div>
+            <div class="pixar-bubble">
+                <h3 class="text-3xl text-red-400 font-bold mb-4">אדריכלות העתיד: ייעוץ ופיתוח פרויקטים</h3>
+                <p class="text-lg text-gray-300 mb-2">
+                    ליווי מקצועי ואישי בפיתוח רעיונות ופרויקטים מבוססי AI.
+                    החל משלב הקונספט ועד לביצוע מושלם - נבנה יחד את הפתרון החכם הבא.
+                </p>
+            </div>
+        </section>
+
+        <div class="section-separator"></div>
+
+        <!-- The Guide - Zevik Aviner - Presented as a central figure, a digital artisan -->
+        <section class="max-w-xl mx-auto mb-24">
+            <div class="zevik-card text-center">
+                <h2 class="text-3xl md:text-4xl text-yellow-300 font-bold mb-6">
+                    המדריך שלכם במסע: זאביק אבינר
+                </h2>
+                <div class="zevik-image-container">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר, מומחה בינה מלאכותית, מחייך ומזמין">
+                </div>
+                <p class="text-lg text-gray-300 leading-loose mb-4">
+                    זאביק אבינר הוא לא רק מומחה בינה מלאכותית - הוא אמן שמנגיש את הטכנולוגיה.
+                    עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק הפך את הפיכת הבינה המלאכותית לכלי עבודה יומיומי למשימת חייו.
+                    <br>
+                    הוא ילווה אתכם צעד אחר צעד, יהפוך את המורכב לפשוט ואת התיאוריה ליישום מעשי, ויצייד אתכם בידע וביטחון לשלוט בעתיד.
+                </p>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-4 mt-8">
+                    <a href="https://wa.me/972546609385" target="_blank" class="flex items-center text-green-300 hover:text-green-500 transition-colors duration-300 text-lg md:text-xl font-medium">
+                        <svg class="w-6 h-6 ml-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2.062 17.514l-.062.031c-.604.296-1.571.602-2.196.602-.451 0-.901-.157-.901-.762 0-.274.079-.472.247-.648.33-.35.795-.733 1.157-1.127l.031-.03c.531-.564.717-.991.782-1.393.064-.402.046-.777-.132-1.144-.177-.367-.478-.654-.863-.846-.118-.057-.235-.118-.351-.176-.554-.27-.887-.417-.887-1.011 0-.585.348-.958.857-1.141.492-.178.966-.179 1.411-.077.525.12.872.253 1.096.331l.031.01c.205.083.43.155.67.217.228.062.469.096.721.096.34 0 .68-.046 1.013-.138l.053-.014c.29-.079.57-.156.84-.233.208-.059.431-.088.67-.088.423 0 .848.163.848.74 0 .323-.112.553-.339.734-.339.273-.787.52-1.196.732-.204.103-.399.202-.584.295-.445.22-.725.35-.863.39-.142.044-.27.06-.386.06-.175 0-.293-.018-.35-.028-.056-.011-.116-.025-.175-.04l-.07-.02-.029-.011c-.347-.113-.679-.204-.984-.278-.29-.072-.56-.109-.81-.109-.594 0-1.122.284-1.285.805-.125.41-.097.807.091 1.139.18.318.47.58.83.743.088.04.195.08.324.12l.061.019c.394.12.868.27 1.258.46l.033.016c.361.18.679.317.918.425.263.119.508.204.664.254.12.038.225.06.315.06.13 0 .23-.007.3-.016.07-.008.134-.019.19-.033.454-.12.85-.23 1.096-.307.243-.078.487-.13.73-.13.433 0 .844.175.844.757 0 .38-.172.637-.47.828-.359.231-.767.433-1.18.608-.207.089-.41.171-.598.24l-.09.034c-.496.185-.853.308-1.025.361-.176.054-.287.078-.344.078-.073 0-.129-.009-.17-.015-.042-.007-.086-.016-.13-.028-.48-.127-.89-.253-1.178-.358z"/></svg>
+                        ווטסאפ: 054-6609385
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="flex items-center text-blue-300 hover:text-blue-500 transition-colors duration-300 text-lg md:text-xl font-medium">
+                        <svg class="w-6 h-6 ml-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12.713l-11.751-8.713h23.502l-11.751 8.713zm0 2.287l-12-9v14h24v-14l-12 9zm-.001-3l-12-9h24l-12 9z"/></svg>
+                        אימייל: zaviner@gmail.com
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('customCursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // Elements that make the cursor change on hover
+        const clickableElements = document.querySelectorAll('a, button, .pixar-bubble, .zevik-card');
+        clickableElements.forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('hovered'));
+        });
+
+        // Parallax Effect Logic for background layers
+        const parallaxContainer = document.getElementById('parallaxContainer');
+        const parallaxLayers = parallaxContainer.querySelectorAll('.parallax-layer');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.pageYOffset;
+
+            // Apply different speeds to layers for a realistic parallax effect
+            parallaxLayers.forEach((layer, index) => {
+                // Adjust speed multiplier for desired depth effect
+                const speed = 0.05 + (index * 0.03);
+                const yPos = -scrollY * speed;
+                layer.style.transform = `translateY(${yPos}px) ${layer.dataset.initialTransform || ''}`;
+            });
+        });
+
+        // Store initial transforms for parallax layers to combine with scroll transform
+        parallaxLayers.forEach(layer => {
+            layer.dataset.initialTransform = layer.style.transform;
+        });
+
+
+        // Body fade-in on load for a smooth artistic entrance
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+    </script>
+</body>
+</html>

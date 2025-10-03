@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - דה-סטייל: שולטים בבינה המלאכותית</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&family=Rubik:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS to blend with Tailwind and define de-style aesthetics */
+        :root {
+            --color-bg-dark: #0A0A0A;
+            --color-text-light: #F0F0F0;
+            --color-accent-cyan: #00FFFF;
+            --color-accent-magenta: #FF00FF;
+            --color-accent-lime: #00FF00;
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: var(--color-bg-dark);
+            color: var(--color-text-light);
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll from intentionally overflowing elements */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Heebo', sans-serif;
+            font-weight: 700;
+        }
+
+        /* Custom cursor styles (high-contrast mandated) */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--color-text-light); /* Light border for dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for light backgrounds */
+            transition: transform 0.1s ease-out; /* Smooth movement */
+            z-index: 9999; /* Always on top */
+            transform: translate(-50%, -50%); /* Center cursor */
+        }
+
+        /* De-style glitch background elements (positioned for RTL) */
+        .glitch-bg-element {
+            position: absolute;
+            background: linear-gradient(45deg, var(--color-accent-cyan), var(--color-accent-magenta));
+            opacity: 0.05;
+            animation: glitch-move 15s infinite alternate ease-in-out;
+            pointer-events: none;
+            z-index: -1; /* Above parallax, below content */
+        }
+
+        /* Specific styles for each glitch element */
+        .glitch-bg-element:nth-child(1) {
+            width: 300px; height: 150px; top: 10%; right: -5%; transform: rotate(15deg);
+            animation-delay: 0s;
+        }
+        .glitch-bg-element:nth-child(2) {
+            width: 200px; height: 100px; top: 30%; left: -10%; transform: rotate(-25deg);
+            animation-delay: 3s;
+        }
+        .glitch-bg-element:nth-child(3) {
+            width: 400px; height: 80px; bottom: 5%; right: -15%; transform: rotate(5deg);
+            animation-delay: 6s;
+            background: linear-gradient(135deg, var(--color-accent-lime), var(--color-accent-cyan));
+        }
+        .glitch-bg-element:nth-child(4) {
+            width: 150px; height: 250px; top: 50%; left: 10%; transform: rotate(45deg);
+            animation-delay: 9s;
+            background: linear-gradient(90deg, var(--color-accent-magenta), var(--color-accent-lime));
+        }
+
+        @keyframes glitch-move {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 0.05; }
+            25% { transform: translate(5vw, -3vw) scale(1.05) rotate(5deg); opacity: 0.07; }
+            50% { transform: translate(-2vw, 4vw) scale(1) rotate(-8deg); opacity: 0.04; }
+            75% { transform: translate(3vw, -2vw) scale(0.95) rotate(10deg); opacity: 0.06; }
+            100% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 0.05; }
+        }
+
+        /* Section reveal animation for scroll */
+        .section-hidden {
+            opacity: 0;
+            transform: translateY(50px) scale(0.98);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .section-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Glitch text effect for specific elements */
+        .glitch-text {
+            position: relative;
+            animation: glitch-animation 2.5s infinite linear alternate-reverse;
+            color: var(--color-accent-cyan);
+            font-weight: 900;
+        }
+
+        @keyframes glitch-animation {
+            0% {
+                text-shadow: 2px 0 0 var(--color-accent-lime), -2px 0 0 var(--color-accent-magenta);
+                transform: translateX(0px);
+            }
+            20% {
+                text-shadow: -2px 0 0 var(--color-accent-lime), 2px 0 0 var(--color-accent-magenta);
+                transform: translateX(-2px);
+            }
+            40% {
+                text-shadow: 2px 0 0 var(--color-accent-lime), -2px 0 0 var(--color-accent-magenta);
+                transform: translateX(2px);
+            }
+            60% {
+                text-shadow: -2px 0 0 var(--color-accent-lime), 2px 0 0 var(--color-accent-magenta);
+                transform: translateX(-1px);
+            }
+            80% {
+                text-shadow: 2px 0 0 var(--color-accent-lime), -2px 0 0 var(--color-accent-magenta);
+                transform: translateX(1px);
+            }
+            100% {
+                text-shadow: -2px 0 0 var(--color-accent-lime), 2px 0 0 var(--color-accent-magenta);
+                transform: translateX(0px);
+            }
+        }
+        
+        /* De-style overlapping / fragmented sections for services */
+        .section-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr); /* Default for mobile */
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) { /* md: */
+            .section-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) { /* lg: */
+            .section-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 4rem;
+            }
+        }
+
+        .service-card {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.03);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .service-card:hover {
+            border-color: var(--color-accent-cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            transform: translateY(-5px) scale(1.02);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0; /* RTL specific */
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--color-accent-magenta), transparent);
+            transform: translateX(100%); /* Start off-screen to the right for RTL */
+            transition: transform 0.5s ease-out;
+        }
+
+        .service-card:hover::before {
+            transform: translateX(0);
+        }
+
+        /* Parallax effect for the background image */
+        .parallax-bg {
+            background-image: url('https://images.unsplash.com/photo-1579783902677-27b526f4f2c8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80'); /* Abstract digital brain / network */
+            background-attachment: fixed;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2; /* Below glitch elements but above main background */
+            opacity: 0.1; /* Very subtle */
+        }
+        
+        /* Overlapping text section for visual interest */
+        .overlapping-text-wrapper {
+            position: relative;
+            padding: 4rem 0;
+        }
+        .overlapping-text-bg {
+            position: absolute;
+            top: 50%;
+            right: 0; /* RTL specific */
+            transform: translateY(-50%);
+            font-size: 15vw; /* Large, responsive text */
+            font-family: 'Heebo', sans-serif;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.03); /* Very subtle */
+            white-space: nowrap;
+            overflow: hidden;
+            pointer-events: none;
+            line-height: 1;
+            z-index: -1; /* Behind content */
+        }
+
+        /* Tailwind configuration for JIT (optional for CDN, but good practice) */
+        /* This ensures that custom colors defined with 'var(--)' are recognized by Tailwind's JIT. */
+        .tailwind-config {
+            @apply text-var-text-light;
+            @apply bg-var-bg-dark;
+            @apply text-var-accent-cyan;
+            @apply text-var-accent-magenta;
+            @apply text-var-accent-lime;
+        }
+
+    </style>
+</head>
+<body class="relative text-var(--color-text-light) leading-relaxed">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Glitch Background Elements (positioned for RTL) -->
+    <div class="glitch-bg-element" style="right: -5%;"></div>
+    <div class="glitch-bg-element" style="left: -10%;"></div>
+    <div class="glitch-bg-element" style="right: -15%;"></div>
+    <div class="glitch-bg-element" style="left: 10%;"></div>
+
+    <!-- Parallax Background -->
+    <div class="parallax-bg"></div>
+
+    <!-- Main Content Wrapper with Z-index to sit above backgrounds -->
+    <div class="relative z-10 min-h-screen flex flex-col justify-center items-center py-16 px-4 md:px-8 lg:px-16 overflow-hidden">
+
+        <!-- Hero Section -->
+        <section id="hero" class="w-full max-w-6xl text-center mb-24 section-hidden">
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight glitch-text relative z-10">
+                <span class="block">הקודמת מתפוררת,</span>
+                <span class="block text-var(--color-accent-magenta)">החדשה פורצת.</span>
+                <span class="block text-3xl md:text-4xl lg:text-5xl mt-6 text-var(--color-accent-cyan) font-light">למדו לשלוט בבינה המלאכותית - העתיד הוא עכשיו</span>
+            </h1>
+            <p class="text-lg md:text-xl lg:text-2xl mt-12 max-w-3xl mx-auto opacity-80 animate-pulse">
+                במציאות שנבנית מחדש בקוד ובאלגוריתמים, הידע הוא הכוח המרבי. הצטרפו למסע אל ליבת העתיד, שבו בינה מלאכותית אינה רק טכנולוגיה, אלא שפה חדשה שיש ללמוד.
+            </p>
+            <a href="#paths" class="inline-block mt-16 px-8 py-4 bg-var(--color-accent-cyan) text-var(--color-bg-dark) text-xl md:text-2xl font-bold rounded-full hover:bg-var(--color-accent-magenta) hover:text-var(--color-text-light) transition-all duration-300 transform hover:scale-105 shadow-lg relative overflow-hidden group">
+                <span class="relative z-10">פענחו את הקוד</span>
+                <span class="absolute top-0 right-full w-full h-full bg-var(--color-accent-lime) opacity-0 group-hover:right-0 group-hover:opacity-20 transition-all duration-500"></span>
+            </a>
+        </section>
+
+        <!-- Why AI Section -->
+        <section id="why-ai" class="w-full max-w-6xl mt-24 mb-24 section-hidden text-right">
+            <h2 class="text-4xl md:text-6xl font-black mb-12 text-var(--color-accent-cyan)">
+                הלחישות הדיגיטליות: למה AI עכשיו?
+            </h2>
+            <div class="md:flex md:space-x-8 md:space-x-reverse items-start">
+                <p class="text-lg md:text-xl leading-relaxed mb-8 md:mb-0 md:w-1/2">
+                    הבינה המלאכותית אינה עוד מדע בדיוני. היא פועמת בלב כל חדשנות, מעצבת את המחר ברגע זה. משיחות יומיומיות עם מודלי שפה, ועד לפיתוחים מהפכניים ברפואה ובמדע, ה-AI הוא הכוח המניע.
+                    הצורך לשלוט בה, לא רק לצרוך אותה, הפך לחיוני. אנו מזמינים אתכם להפסיק להיות רק צופים, ולהתחיל לברוא.
+                </p>
+                <div class="md:w-1/2 p-6 bg-gray-900 bg-opacity-30 border border-gray-700 rounded-lg shadow-xl relative overflow-hidden transform rotate-2 hover:rotate-0 transition-transform duration-300">
+                    <p class="text-var(--color-accent-magenta) text-xl mb-4 font-bold">"היקום הדיגיטלי מתעורר, ואיתו הפוטנציאל שלך."</p>
+                    <ul class="list-disc list-inside space-y-2 text-md md:text-lg">
+                        <li>למתחילים: פענוח שפת הקוד והלוגיקה הבסיסית של AI.</li>
+                        <li>למקצוענים: הטמעת AI ככלי יומיומי לשיפור פרודוקטיביות.</li>
+                        <li>למנהלים: אסטרטגיות AI לארגונים והובלה טכנולוגית.</li>
+                        <li>למתקדמים: בנייה ופיתוח פרויקטים מבוססי AI מאפס.</li>
+                    </ul>
+                    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-transparent to-var(--color-accent-lime) opacity-5 pointer-events-none"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services/Expertise Section -->
+        <section id="paths" class="w-full max-w-6xl mt-24 section-hidden text-center overlapping-text-wrapper">
+            <h2 class="text-4xl md:text-6xl font-black mb-16 text-var(--color-accent-magenta)">
+                ארכיטקטורות של חשיבה: מסלולים בבינה
+            </h2>
+            <div class="overlapping-text-bg">PATHWAYS</div>
+            <div class="section-grid text-right">
+                <div class="service-card p-6 md:p-8 rounded-xl">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-var(--color-accent-cyan)">מעבדות תודעה משותפת</h3>
+                    <p class="text-md md:text-lg text-gray-300 flex-grow">
+                        סדנאות קבוצתיות מעשיות, בהן אנו חושפים את עקרונות ה-AI דרך יישומים מיידיים. ללמוד יחד, לגלות יחד, וליצור יחד את העתיד.
+                    </p>
+                    <ul class="mt-4 text-sm text-gray-400 space-y-1">
+                        <li>יצירת טקסטים ותוכן חדשניים</li>
+                        <li>אוטומציה של תהליכים בעזרת AI</li>
+                    </ul>
+                </div>
+                <div class="service-card p-6 md:p-8 rounded-xl">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-var(--color-accent-cyan)">נתיבי התפתחות אישיים</h3>
+                    <p class="text-md md:text-lg text-gray-300 flex-grow">
+                        שיעורים פרטיים המותאמים אישית לקצב, לרמה ולשאיפות שלכם. הדרכה אחד על אחד, ממוקדת בדיוק בצרכים שלכם, לבניית בקיאות עמוקה.
+                    </p>
+                    <ul class="mt-4 text-sm text-gray-400 space-y-1">
+                        <li>פיתוח אתרים ואפליקציות חכמות</li>
+                        <li>ניתוח נתונים ומחקר מתקדם</li>
+                    </ul>
+                </div>
+                <div class="service-card p-6 md:p-8 rounded-xl">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-var(--color-accent-cyan)">תדרי שינוי לארגונים</h3>
+                    <p class="text-md md:text-lg text-gray-300 flex-grow">
+                        הרצאות והדרכות מותאמות אישית לצוותים ולארגונים. פתיחת אופקים, חשיפה לכלים ופוטנציאל, והטמעת תרבות AI חדשנית בסביבת העבודה.
+                    </p>
+                    <ul class="mt-4 text-sm text-gray-400 space-y-1">
+                        <li>הכשרת צוותים ליצירת אומנות ותמונות AI</li>
+                        <li>אסטרטגיות AI לעסקים</li>
+                    </ul>
+                </div>
+                <div class="service-card p-6 md:p-8 rounded-xl lg:col-span-full mx-auto md:w-3/4 lg:w-1/2">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-var(--color-accent-cyan)">אדריכלות חזון</h3>
+                    <p class="text-md md:text-lg text-gray-300 flex-grow">
+                        ייעוץ וליווי מקצועי בפיתוח פרויקטים מבוססי AI. מהרעיון ועד ליישום, אנו בונים את עתידכם הדיגיטלי יחד, בצורה יצירתית ומדויקת.
+                    </p>
+                    <ul class="mt-4 text-sm text-gray-400 space-y-1">
+                        <li>פיתוח פתרונות AI מותאמים אישית</li>
+                        <li>מחקר וחדשנות בתחומי AI ספציפיים</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instructor Section -->
+        <section id="instructor" class="w-full max-w-6xl mt-24 section-hidden text-center md:text-right">
+            <h2 class="text-4xl md:text-6xl font-black mb-12 text-var(--color-accent-cyan)">
+                האמן הנסתר: זאביק אבינר
+            </h2>
+            <div class="md:flex md:space-x-8 md:space-x-reverse items-center justify-center">
+                <div class="md:w-1/3 flex justify-center mb-8 md:mb-0">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר" class="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-var(--color-accent-magenta) shadow-lg transform hover:scale-105 transition-transform duration-300 object-cover object-center">
+                </div>
+                <div class="md:w-2/3 text-lg md:text-xl leading-relaxed">
+                    <p class="mb-4">
+                        זאביק אבינר אינו רק מומחה בינה מלאכותית – הוא מפענח, מתרגם ומנגיש את השפה המורכבת של העידן הדיגיטלי. עם ניסיון עשיר בפיתוח פרויקטים פורצי דרך, אפליקציות חכמות ומערכות מבוססות AI, זאביק מביא עמו ידע פרקטי עמוק.
+                    </p>
+                    <p class="text-var(--color-accent-lime) font-bold">
+                        מטרתו היא להפוך את הטכנולוגיה המהפכנית לכלי עבודה יומיומי, נגיש ושימושי, לכל אחד ואחת.
+                    </p>
+                    <p class="mt-8 text-sm text-gray-500 italic">"העתיד כבר כאן. אני רק מראה לכם את הדלת."</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="w-full max-w-6xl mt-24 mb-16 section-hidden text-center">
+            <h2 class="text-4xl md:text-6xl font-black mb-12 text-var(--color-accent-magenta) glitch-text">
+                התחברות לממשק
+            </h2>
+            <div class="bg-gray-900 bg-opacity-30 border border-gray-700 p-8 md:p-12 rounded-xl max-w-2xl mx-auto shadow-2xl relative overflow-hidden">
+                <p class="text-xl md:text-2xl mb-8 leading-loose">
+                    הצעד הראשון לשליטה בבינה המלאכותית מתחיל כאן. צרו קשר עוד היום.
+                </p>
+                <div class="space-y-6">
+                    <a href="https://wa.me/972546609385" target="_blank" class="block text-var(--color-accent-cyan) text-2xl md:text-3xl font-bold hover:text-var(--color-accent-lime) transition-colors duration-300 relative group">
+                        ווטסאפ: 054-6609385
+                        <span class="absolute right-0 bottom-0 h-0.5 w-0 bg-var(--color-accent-lime) group-hover:w-full transition-all duration-300"></span>
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="block text-var(--color-accent-cyan) text-2xl md:text-3xl font-bold hover:text-var(--color-accent-lime) transition-colors duration-300 relative group">
+                        אימייל: zaviner@gmail.com
+                        <span class="absolute right-0 bottom-0 h-0.5 w-0 bg-var(--color-accent-lime) group-hover:w-full transition-all duration-300"></span>
+                    </a>
+                </div>
+                <div class="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-var(--color-accent-cyan) to-transparent opacity-10 transform rotate-45 -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+                <div class="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tl from-var(--color-accent-magenta) to-transparent opacity-10 transform -rotate-45 translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Section Reveal on Scroll Logic (Intersection Observer)
+        const sections = document.querySelectorAll('section');
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.2 // Trigger when 20% of the section is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.remove('section-hidden');
+                    entry.target.classList.add('section-visible');
+                    // Optional: Unobserve after it becomes visible if animation only happens once
+                    // observer.unobserve(entry.target);
+                } else {
+                    // Optional: Re-hide if it leaves viewport, for repeat animation
+                    // entry.target.classList.remove('section-visible');
+                    // entry.target.classList.add('section-hidden');
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            section.classList.add('section-hidden'); // Ensure all sections start hidden
+            observer.observe(section);
+        });
+
+        // Tailwind config for custom colors using CSS variables
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'var-bg-dark': 'var(--color-bg-dark)',
+                        'var-text-light': 'var(--color-text-light)',
+                        'var-accent-cyan': 'var(--color-accent-cyan)',
+                        'var-accent-magenta': 'var(--color-accent-magenta)',
+                        'var-accent-lime': 'var(--color-accent-lime)',
+                    },
+                    fontFamily: {
+                        heebo: ['Heebo', 'sans-serif'],
+                        rubik: ['Rubik', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</body>
+</html>

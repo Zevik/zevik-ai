@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="overflow-x-hidden">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מכחול דיגיטלי: שליטה ב-AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700;900&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            cursor: none; /* Hide default cursor */
+            background-color: #0d0d0d; /* Dark canvas */
+            font-family: 'Heebo', sans-serif;
+            color: #e0e0e0; /* Light text for contrast */
+            overflow-x: hidden;
+        }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            pointer-events: none;
+            transition: transform 0.1s ease-out, width 0.1s ease-out, height 0.1s ease-out;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+        }
+
+        #custom-cursor.active {
+            width: 60px;
+            height: 60px;
+        }
+
+        .text-reveal {
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .text-reveal.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Action Painting elements (CSS for dynamic shapes) */
+        .paint-splash {
+            position: absolute;
+            background: linear-gradient(135deg, var(--color-start, #ff00ea), var(--color-end, #2c00ff));
+            animation: pulse 10s infinite alternate, float 20s infinite linear;
+            filter: blur(20px);
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.05); opacity: 0.4; }
+            100% { transform: scale(1); opacity: 0.3; }
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(10px, 15px); }
+            50% { transform: translate(0, 20px); }
+            75% { transform: translate(-10px, 15px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        /* Specific clip-paths for organic shapes */
+        .splash-1 { clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%); }
+        .splash-2 { clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
+        .splash-3 { clip-path: polygon(0% 15%, 15% 0%, 65% 0%, 100% 15%, 100% 85%, 85% 100%, 35% 100%, 0% 85%); }
+        .splash-4 { clip-path: circle(50% at 50% 50%); } /* A blob */
+        .splash-5 { clip-path: ellipse(40% 60% at 50% 50%); } /* An elongated blob */
+        .splash-6 { clip-path: polygon(74% 8%, 100% 41%, 86% 77%, 43% 100%, 0% 92%, 18% 54%, 39% 10%); }
+        .splash-7 { clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%); } /* An octagon-like shape */
+        .splash-8 { clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); } /* A star */
+
+        /* Text hover effect */
+        .interactive-text:hover {
+            color: #ffcc00; /* Yellow */
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.7);
+        }
+        .interactive-text {
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            left: unset; /* Override RTL default for fixed elements */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #ffffff;
+            opacity: 0.6;
+            transition: opacity 0.5s ease;
+            z-index: 50;
+        }
+        .scroll-indicator:hover {
+            opacity: 1;
+        }
+        .scroll-arrow {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 15px solid #ffffff;
+            margin-top: 5px;
+            animation: bounce 1.5s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-[#0d0d0d] via-[#1a1a1a] to-[#0d0d0d] min-h-screen text-white relative font-heebo">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="fixed border-2 border-white shadow-[0_0_0_2px_rgba(0,0,0,0.8)]"></div>
+
+    <!-- Action Painting Background Splashes -->
+    <div class="paint-splash splash-6 w-96 h-96 top-1/4 left-1/4" style="--color-start: #ff00e5; --color-end: #3300ff;"></div>
+    <div class="paint-splash splash-1 w-80 h-80 top-1/2 left-3/4" style="--color-start: #00eaff; --color-end: #00ff66;"></div>
+    <div class="paint-splash splash-7 w-72 h-72 bottom-1/4 right-1/3" style="--color-start: #ffcc00; --color-end: #ff6600;"></div>
+    <div class="paint-splash splash-2 w-64 h-64 top-1/3 right-1/4" style="--color-start: #cc00ff; --color-end: #ff0066;"></div>
+    <div class="paint-splash splash-5 w-1/3 h-1/3 top-[5%] left-[5%]" style="--color-start: #00ffcc; --color-end: #0066ff;"></div>
+    <div class="paint-splash splash-4 w-52 h-52 bottom-10 left-10" style="--color-start: #ff0099; --color-end: #ff66cc;"></div>
+    <div class="paint-splash splash-3 w-40 h-40 top-[70%] left-[10%]" style="--color-start: #00eaff; --color-end: #0066ff;"></div>
+    <div class="paint-splash splash-8 w-48 h-48 top-[10%] right-[10%]" style="--color-start: #ffcc00; --color-end: #ff6600;"></div>
+
+    <!-- Main Content - Dispersed and Artistic -->
+    <div class="relative z-10 p-8 min-h-screen overflow-hidden">
+
+        <!-- Title / Core Message -->
+        <h1 class="font-rubik text-5xl md:text-7xl font-black text-center mt-16 md:mt-24 leading-tight text-white interactive-text text-reveal"
+            style="color: #ff00e5;"
+            data-original-color="#ff00e5"
+            data-text="בינה מלאכותית: משיכות מכחול דיגיטליות אל העתיד">
+            בינה מלאכותית: משיכות מכחול דיגיטליות אל העתיד
+        </h1>
+        <p class="text-2xl md:text-3xl font-light text-center mt-6 max-w-4xl mx-auto interactive-text text-reveal"
+            style="color: #00eaff;"
+            data-original-color="#00eaff"
+            data-text="לשלוט ב-AI זה לגלות את הצייר שבך. ליצור, להמציא, להטביע חותם. העתיד אינו מחכה - הוא נוצר ברגע זה, בידיים שלך.">
+            לשלוט ב-AI זה לגלות את הצייר שבך. ליצור, להמציא, להטביע חותם. העתיד אינו מחכה - הוא נוצר ברגע זה, בידיים שלך.
+        </p>
+
+        <!-- Zevik Aviner - The Master Painter -->
+        <div class="absolute top-[40vh] left-[5%] md:left-[10%] w-[80vw] md:w-[40vw] max-w-lg p-6 bg-gradient-to-br from-purple-800 to-indigo-900 rounded-3xl shadow-2xl rotate-[-5deg] hover:rotate-[-2deg] transition-transform duration-500 interactive-text text-reveal"
+             data-original-color="#e0e0e0"
+             data-text="זאביק אבינר: המאסטרו של הפיקסל, המנטור שלך למסע ה-AI. עם ניסיון עשיר וכישרון נדיר להפוך קוד לאמנות, הוא יפתח לך שערים לעולם שעד כה דמיינת רק בחלומות. הגיע הזמן לקחת את המכחול הדיגיטלי.">
+            <h2 class="font-rubik text-4xl md:text-5xl font-bold mb-4 text-[#ffcc00] leading-tight">זאביק אבינר</h2>
+            <p class="text-xl md:text-2xl font-light leading-relaxed">
+                המאסטרו של הפיקסל, המנטור שלך למסע ה-AI.
+                עם ניסיון עשיר וכישרון נדיר להפוך קוד לאמנות, הוא יפתח לך שערים לעולם שעד כה דמיינת רק בחלומות.
+                הגיע הזמן לקחת את המכחול הדיגיטלי.
+            </p>
+            <!-- Zevik Image Placeholder -->
+            <div class="w-24 h-24 bg-gray-600 rounded-full mx-auto mt-6 relative overflow-hidden transform rotate-[-15deg] opacity-70">
+                <img src="https://link.zevikaviner.com/zevik" alt="דיוקן אומנותי של זאביק אבינר" class="absolute inset-0 w-full h-full object-cover grayscale opacity-80 transition-all duration-500 hover:grayscale-0 hover:opacity-100">
+            </div>
+        </div>
+
+        <!-- Audience - Abstracted as "Who Should Paint" -->
+        <div class="absolute top-[15vh] right-[10%] md:right-[5%] w-[80vw] md:w-[35vw] max-w-md p-5 bg-gradient-to-br from-green-700 to-cyan-800 rounded-2xl shadow-xl rotate-[8deg] hover:rotate-[5deg] transition-transform duration-500 interactive-text text-reveal"
+             data-original-color="#e0e0e0"
+             data-text="למי שרוצה לצבוע את המחר | לחולמים על חדשנות | לצוותים שרוצים לראות מעבר לפינה | למפתחים שהשמיים הם הגבול.">
+            <h3 class="font-rubik text-3xl font-bold mb-3 text-[#00ff66]">למי מיועדת היצירה?</h3>
+            <ul class="list-none space-y-2 text-lg">
+                <li class="relative pl-6 before:content-['⚡'] before:absolute before:right-0 before:text-2xl before:top-0 before:text-[#00ff66]">למי שרוצה לצבוע את המחר</li>
+                <li class="relative pl-6 before:content-['✨'] before:absolute before:right-0 before:text-2xl before:top-0 before:text-[#00ff66]">לחולמים על חדשנות</li>
+                <li class="relative pl-6 before:content-['💡'] before:absolute before:right-0 before:text-2xl before:top-0 before:text-[#00ff66]">לצוותים שרוצים לראות מעבר לפינה</li>
+                <li class="relative pl-6 before:content-['🚀'] before:absolute before:right-0 before:text-2xl before:top-0 before:text-[#00ff66]">למפתחים שהשמיים הם הגבול</li>
+            </ul>
+        </div>
+
+        <!-- Expertise Areas - Creative Acts -->
+        <div class="absolute top-[75vh] md:top-[60vh] right-[2%] md:right-[20%] w-[80vw] md:w-[38vw] max-w-lg p-5 bg-gradient-to-br from-red-800 to-orange-900 rounded-tl-full rounded-br-full shadow-2xl rotate-[3deg] hover:rotate-[0deg] transition-transform duration-500 interactive-text text-reveal"
+             data-original-color="#e0e0e0"
+             data-text="פיסול מילים | אדריכלות אפליקציות חכמות | ציור קווי קוד לאתרים | פתיחת דלתות נתונים | גלריית יצירות ויזואליות | כוריאוגרפיה של תהליכים.">
+            <h3 class="font-rubik text-3xl font-bold mb-4 text-[#ff6600]">משיכות מכחול מרכזיות</h3>
+            <div class="flex flex-wrap gap-3">
+                <span class="bg-red-700 px-3 py-1 rounded-full text-sm shadow-md">פיסול מילים</span>
+                <span class="bg-orange-700 px-3 py-1 rounded-full text-sm shadow-md">אדריכלות אפליקציות חכמות</span>
+                <span class="bg-amber-700 px-3 py-1 rounded-full text-sm shadow-md">ציור קווי קוד לאתרים</span>
+                <span class="bg-rose-700 px-3 py-1 rounded-full text-sm shadow-md">פתיחת דלתות נתונים</span>
+                <span class="bg-pink-700 px-3 py-1 rounded-full text-sm shadow-md">גלריית יצירות ויזואליות</span>
+                <span class="bg-fuchsia-700 px-3 py-1 rounded-full text-sm shadow-md">כוריאוגרפיה של תהליכים</span>
+            </div>
+        </div>
+
+        <!-- Services - Energetic Verbs -->
+        <div class="absolute top-[120vh] md:top-[110vh] left-[5%] md:left-[15%] w-[80vw] md:w-[40vw] max-w-lg p-6 bg-gradient-to-br from-blue-800 to-teal-900 rounded-3xl shadow-xl rotate-[-7deg] hover:rotate-[-4deg] transition-transform duration-500 interactive-text text-reveal"
+             data-original-color="#e0e0e0"
+             data-text="מפגשי יצירה קבוצתיים - סדנאות מעשיות וממוקדות | הנחיה אישית – אחד על אחד, התאמה לצרכים | הרצאות השראה לארגונים - פתיחת אופקים | סטודיו לפיתוח פרויקטים - ליווי מקצועי.">
+            <h3 class="font-rubik text-3xl font-bold mb-4 text-[#00eaff]">הקנבס שלך: אפשרויות יצירה</h3>
+            <ul class="list-none space-y-3 text-lg">
+                <li class="relative pr-8 before:content-['🎨'] before:absolute before:left-0 before:text-2xl before:top-0">מפגשי יצירה קבוצתיים - סדנאות מעשיות וממוקדות.</li>
+                <li class="relative pr-8 before:content-['🖌️'] before:absolute before:left-0 before:text-2xl before:top-0">הנחיה אישית – אחד על אחד, התאמה לצרכים.</li>
+                <li class="relative pr-8 before:content-['🗣️'] before:absolute before:left-0 before:text-2xl before:top-0">הרצאות השראה לארגונים - פתיחת אופקים.</li>
+                <li class="relative pr-8 before:content-['🛠️'] before:absolute before:left-0 before:text-2xl before:top-0">סטודיו לפיתוח פרויקטים - ליווי מקצועי.</li>
+            </ul>
+        </div>
+
+        <!-- Contact Info - Integrated -->
+        <div class="absolute top-[150vh] md:top-[140vh] right-[5%] md:right-[10%] w-[80vw] md:w-[30vw] max-w-sm p-4 bg-gradient-to-br from-gray-700 to-gray-800 rounded-xl shadow-xl rotate-[10deg] hover:rotate-[7deg] transition-transform duration-500 text-center interactive-text text-reveal"
+             data-original-color="#e0e0e0"
+             data-text="בוא ניצור יחד. ווטסאפ: 054-6609385 | אימייל: zaviner@gmail.com">
+            <h3 class="font-rubik text-3xl font-bold mb-2 text-[#ffcc00]">בוא ניצור יחד.</h3>
+            <p class="text-xl">
+                <a href="https://wa.me/972546609385" class="text-[#00eaff] hover:text-white transition-colors duration-300 block my-2">ווטסאפ: 054-6609385</a>
+                <a href="mailto:zaviner@gmail.com" class="text-[#00ff66] hover:text-white transition-colors duration-300 block my-2">אימייל: zaviner@gmail.com</a>
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator">
+        <p class="text-sm">גלול למטה</p>
+        <div class="scroll-arrow"></div>
+    </div>
+
+
+    <script>
+        const cursor = document.getElementById('custom-cursor');
+        const textElements = document.querySelectorAll('.interactive-text');
+        const paintSplashes = document.querySelectorAll('.paint-splash');
+
+        // Custom Cursor Movement
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+
+            // Trail effect (optional, simple version)
+            // Create a small dot that fades
+            const dot = document.createElement('div');
+            dot.className = 'absolute w-1 h-1 rounded-full bg-white opacity-50 pointer-events-none z-40';
+            dot.style.left = `${e.clientX}px`;
+            dot.style.top = `${e.clientY}px`;
+            document.body.appendChild(dot);
+            setTimeout(() => dot.remove(), 500); // Remove after 0.5s
+        });
+
+        // Cursor interaction with text elements
+        textElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('active');
+                cursor.style.backgroundColor = el.dataset.originalColor || 'currentColor'; // Change cursor color
+                cursor.style.opacity = '0.7';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('active');
+                cursor.style.backgroundColor = 'transparent';
+                cursor.style.opacity = '1';
+            });
+            el.addEventListener('click', () => {
+                // Flash effect on click
+                cursor.style.transform = 'translate(-50%, -50%) scale(2)';
+                setTimeout(() => {
+                    cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                }, 100);
+            });
+        });
+
+        // Scroll-based visibility for text elements (Action Painting reveal)
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.3 // visible when 30% of it is in viewport
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Only reveal once
+                }
+            });
+        }, observerOptions);
+
+        textElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // Dynamic background splash animation on scroll (subtle parallax)
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            paintSplashes.forEach((splash, index) => {
+                const speed = (index % 3 + 1) * 0.05; // Different speeds
+                splash.style.transform = `translateY(${scrollY * speed}px) rotate(${index * 5 + scrollY * 0.01}deg)`;
+            });
+
+            // Hide scroll indicator after some scroll
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            if (scrollY > 100) {
+                scrollIndicator.style.opacity = '0';
+            } else {
+                scrollIndicator.style.opacity = '0.6';
+            }
+        });
+
+        // Initial reveal for elements already in view on load
+        document.addEventListener('DOMContentLoaded', () => {
+            textElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    el.classList.add('visible');
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

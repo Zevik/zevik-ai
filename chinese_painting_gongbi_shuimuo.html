@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אמנות המכחול הדיגיטלי: שליטה בבינה המלאכותית</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@300;400;700&family=Miriam+Libre:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles for the Chinese painting aesthetic */
+        body {
+            font-family: 'Miriam Libre', sans-serif;
+            background-color: #f7f7f0; /* Off-white, like rice paper */
+            color: #333; /* Dark ink color */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            cursor: none; /* Hide default cursor */
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Noto Serif Hebrew', serif;
+            color: #1a1a1a; /* Deeper ink color for titles */
+        }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            border: 2px solid rgba(255, 255, 255, 0.9); /* Light border */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8); /* Dark shadow */
+            transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%); /* Center cursor element */
+        }
+
+        /* Ink Wash Background Effects */
+        .ink-wash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1; /* Behind content */
+            opacity: 0.6;
+        }
+        .ink-wash-1 {
+            background: radial-gradient(circle at top right, rgba(160, 180, 200, 0.1) 0%, transparent 60%);
+            transform: scale(1.2);
+        }
+        .ink-wash-2 {
+            background: radial-gradient(circle at bottom left, rgba(100, 120, 140, 0.1) 0%, transparent 70%);
+            transform: scale(1.1);
+        }
+        .ink-wash-3 {
+            background: linear-gradient(145deg, rgba(200, 200, 180, 0.05) 0%, transparent 50%);
+            transform: scale(1.3);
+        }
+
+        /* Specific section styling to break convention */
+        .art-segment {
+            position: relative;
+            margin-bottom: 8rem; /* Large vertical spacing */
+            padding: 4rem 0; /* Internal padding */
+            opacity: 0; /* Will be animated in */
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        .art-segment.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Subtle scroll indicators for exploration */
+        .scroll-hint {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #666;
+            font-size: 0.9rem;
+            animation: bounce 2s infinite;
+            z-index: 50; /* Above backgrounds, below cursor */
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        /* Specific styles for interactive elements to scale cursor */
+        a, button, [data-interactive] {
+            cursor: none; /* Ensure no default cursor */
+        }
+    </style>
+</head>
+<body class="selection:bg-teal-200 selection:text-gray-900">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="fixed rounded-full w-6 h-6 opacity-90 transition-all duration-150 ease-out transform -translate-x-1/2 -translate-y-1/2"></div>
+
+    <!-- Background Ink Washes (Parallax) -->
+    <div class="ink-wash ink-wash-1" data-parallax data-parallax-speed="-0.05"></div>
+    <div class="ink-wash ink-wash-2" data-parallax data-parallax-speed="-0.1"></div>
+    <div class="ink-wash ink-wash-3" data-parallax data-parallax-speed="-0.15"></div>
+
+    <!-- Main Content Canvas -->
+    <main class="relative z-10 min-h-screen pt-16 pb-32 overflow-hidden mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+
+        <!-- Initial Grand Statement / Scroll Unveiling -->
+        <section class="art-segment text-center mb-24 mt-24">
+            <h1 class="text-6xl sm:text-7xl lg:text-8xl font-bold leading-tight text-right drop-shadow-lg" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">
+                אמנות המכחול הדיגיטלי:<br>שליטה בבינה המלאכותית
+            </h1>
+            <h2 class="text-3xl sm:text-4xl mt-8 mb-16 text-gray-700 font-light max-w-3xl mx-auto leading-relaxed text-right">
+                נתיב אל העתיד הנפרש עתה, מכל טיפת דיו נולדת יצירה.
+            </h2>
+        </section>
+
+        <!-- Poetic Introduction - "The Core Message" -->
+        <section class="art-segment my-24 flex justify-end">
+            <div class="max-w-xl p-8 bg-white/70 backdrop-blur-sm shadow-xl rounded-lg text-right border-r-4 border-teal-500 hover:shadow-2xl transition-all duration-300">
+                <h3 class="text-4xl font-semibold mb-6">זרם הדיו הנצחי</h3>
+                <p class="text-lg leading-loose text-gray-800">
+                    במסורת הציור הסיני, כל משיחת מכחול היא עולם. כך גם הבינה המלאכותית - ככלי יצירה עתיק וחדשני, אנו פורשים את נתיביה, מנגישים את חוכמתה לכל יד, מהנבט ועד העץ הפורח. כלים מעשיים אלו ישתלבו בחיי יום-יום ובעבודה, ויציירו מציאות חדשה ומעשירה.
+                </p>
+            </div>
+        </section>
+
+        <!-- Target Audience - "The Journey is Open" -->
+        <section class="art-segment my-24 flex justify-start">
+            <div class="max-w-xl p-8 bg-white/70 backdrop-blur-sm shadow-xl rounded-lg text-right border-l-4 border-amber-500 hover:shadow-2xl transition-all duration-300">
+                <h3 class="text-4xl font-semibold mb-6">המסע פתוח לכל נפש חפצה:</h3>
+                <ul class="list-none space-y-4 text-lg leading-relaxed text-gray-800 pr-0">
+                    <li class="flex items-start">
+                        <span class="ml-3 text-2xl text-amber-600">•</span>
+                        <div>
+                            <strong class="text-xl font-bold">המתחילים:</strong> המבקשים לטבול את מכחולם בפעם הראשונה בנהר ה-AI.
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="ml-3 text-2xl text-amber-600">•</span>
+                        <div>
+                            <strong class="text-xl font-bold">היוצרים:</strong> אנשי מקצוע השואפים להטמיע את הבינה כחלק בלתי נפרד מנוף עבודתם.
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="ml-3 text-2xl text-amber-600">•</span>
+                        <div>
+                            <strong class="text-xl font-bold">המנהיגים:</strong> מנהלים וארגונים המחפשים להאיר נתיבים חדשים לצוותיהם.
+                        </div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="ml-3 text-2xl text-amber-600">•</span>
+                        <div>
+                            <strong class="text-xl font-bold">האמנים:</strong> ברמה מתקדמת, לפתח יצירות מופת ופרויקטים ייחודיים מבוססי בינה מלאכותית.
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Areas of Expertise - "Possibilities of the Digital Brush" -->
+        <section class="art-segment my-24 flex justify-end">
+            <div class="max-w-xl p-8 bg-white/70 backdrop-blur-sm shadow-xl rounded-lg text-right border-r-4 border-blue-500 hover:shadow-2xl transition-all duration-300">
+                <h3 class="text-4xl font-semibold mb-6">אפשרויות היצירה במכחול הדיגיטלי:</h3>
+                <ul class="list-none space-y-4 text-lg leading-relaxed text-gray-800 pr-0">
+                    <li class="flex items-start">
+                        <span class="ml-3 text-2xl text-blue-600">❖</span>
+                        <div><strong class="text-xl font-bold">אריגת סיפורים:</strong> יצירת טקסטים, תוכן ונרטיבים מרתקים.</div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="ml-3 text-2xl text-blue-600">❖</span>
+                        <div><strong class="text-xl font-bold">פיסול יישומים חכמים:</strong> בניית אפליקציות חכמות המגיבות לעולם.</div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="ml-3 text-2xl text-blue-600">❖</span>
+                        <div><strong class="text-xl font-bold">גינון דיגיטלי:</strong> פיתוח אתרים פורחים ומבוססי בינה מלאכותית.</div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="ml-3 text-2xl text-blue-600">❖</span>
+                        <div><strong class="text-xl font-bold">פענוח כתבי סתר:</strong> ניתוח נתונים, מחקר וגילוי תובנות חבויות.</div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="ml-3 text-2xl text-blue-600">❖</span>
+                        <div><strong class="text-xl font-bold">החייאת הדיו:</strong> יצירת תמונות, אומנות ונופים ויזואליים חדשים.</div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="ml-3 text-2xl text-blue-600">❖</span>
+                        <div><strong class="text-xl font-bold">ריקוד הברבורים המכני:</strong> אוטומציה של תהליכים ותנועה חלקה.</div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Services Offered - "Paths of Development" -->
+        <section class="art-segment my-24 flex justify-start">
+            <div class="max-w-xl p-8 bg-white/70 backdrop-blur-sm shadow-xl rounded-lg text-right border-l-4 border-purple-500 hover:shadow-2xl transition-all duration-300">
+                <h3 class="text-4xl font-semibold mb-6">דרכי ההתפתחות וההעמקה:</h3>
+                <ul class="list-none space-y-4 text-lg leading-relaxed text-gray-800 pr-0">
+                    <li class="flex items-start">
+                        <span class="ml-3 text-2xl text-purple-600">✹</span>
+                        <div><strong class="text-xl font-bold">מעגלי למידה משותפים:</strong> סדנאות קבוצתיות מעשיות וממוקדות, ללמוד ביחד.</div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="ml-3 text-2xl text-purple-600">✹</span>
+                        <div><strong class="text-xl font-bold">חניכה אישית:</strong> שיעורים פרטיים המותאמים אישית לנתיבך וקצבך.</div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="ml-3 text-2xl text-purple-600">✹</span>
+                        <div><strong class="text-xl font-bold">פתיחת אופקים לארגונים:</strong> הרצאות מעוררות השראה לצוותים, לפרוץ גבולות.</div>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="ml-3 text-2xl text-purple-600">✹</span>
+                        <div><strong class="text-xl font-bold">ליווי היצירה:</strong> ייעוץ ופיתוח פרויקטים, מזרע הרעיון ועד ליצירת המופת.</div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- The Guide - Zevik Aviner -->
+        <section class="art-segment my-24 flex flex-col items-center text-center">
+            <div class="max-w-2xl p-8 bg-white/70 backdrop-blur-sm shadow-xl rounded-lg text-right border-b-4 border-red-500 hover:shadow-2xl transition-all duration-300">
+                <h3 class="text-5xl font-bold mb-8 text-red-700">המורה, צייר הראייה הדיגיטלית</h3>
+                <div class="flex flex-col sm:flex-row items-center sm:items-start space-y-8 sm:space-y-0 sm:space-x-reverse sm:space-x-8">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה קטנה של זאביק אבינר" class="w-32 h-32 rounded-full object-cover shadow-lg border-2 border-gray-300 flex-shrink-0" style="filter: grayscale(20%);">
+                    <div class="text-lg leading-relaxed text-gray-800 text-center sm:text-right">
+                        <p class="mb-4">
+                            זאביק אבינר - המורה, צייר הראייה הדיגיטלית. במכחולו החכם, זאביק פורש נופים של אפשרויות, מנגיש את נהר הבינה המלאכותית לכל דורש, ומלמד את אמנות ההתמרה הטכנולוגית לחיי יום-יום.
+                        </p>
+                        <p>
+                            עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, הוא המדריך המושלם למסעך אל מעמקי ה-AI ואל פסגות היצירה הדיגיטלית.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Information - "The Flowing Spring" -->
+        <section class="art-segment my-24 flex justify-center text-center">
+            <div class="max-w-md p-8 bg-white/70 backdrop-blur-sm shadow-xl rounded-lg text-center border-t-4 border-green-500 hover:shadow-2xl transition-all duration-300">
+                <h3 class="text-4xl font-semibold mb-6">למשיכת המכחול הראשונה, או להעמקת היצירה:</h3>
+                <div class="space-y-4 text-xl text-gray-800">
+                    <p>
+                        <strong class="font-bold text-green-700">התחבר דרך ווצאפ:</strong>
+                        <a href="https://wa.me/972546609385" target="_blank" class="text-blue-600 hover:underline mx-2" data-interactive>054-6609385</a>
+                    </p>
+                    <p>
+                        <strong class="font-bold text-green-700">שלח מכתב דיו:</strong>
+                        <a href="mailto:zaviner@gmail.com" class="text-blue-600 hover:underline mx-2" data-interactive>zaviner@gmail.com</a>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Scroll Hint -->
+    <div class="scroll-hint">גלול מטה כדי לגלות עוד...</div>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        document.body.appendChild(cursor); // Ensure cursor is in body
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        // Add hover effects for interactive elements (e.g., scale cursor)
+        document.querySelectorAll('a, button, [data-interactive]').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('scale-150', 'opacity-100'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('scale-150', 'opacity-90'));
+        });
+
+        // Parallax Scrolling Logic
+        document.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            document.querySelectorAll('[data-parallax]').forEach(el => {
+                const speed = parseFloat(el.getAttribute('data-parallax-speed') || 0.3);
+                el.style.transform = `translateY(${scrolled * speed}px)`;
+            });
+
+            // Animate art segments into view
+            document.querySelectorAll('.art-segment').forEach(segment => {
+                const segmentTop = segment.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                if (segmentTop < windowHeight * 0.75) {
+                    segment.classList.add('visible');
+                }
+            });
+        });
+
+        // Initial check for visible segments on load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.art-segment').forEach(segment => {
+                const segmentTop = segment.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                if (segmentTop < windowHeight * 0.9) { // Make initial segments visible a bit higher up
+                    segment.classList.add('visible');
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

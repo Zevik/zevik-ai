@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אמנות הבינה המלאכותית - זאביק אבינר</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Hebrew support and artistic feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Rubik:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS and Tailwind overrides for the Lomography effect and interactivity */
+
+        /* Base styles for fonts and cursor */
+        .font-heebo { font-family: 'Heebo', sans-serif; }
+        .font-rubik { font-family: 'Rubik', sans-serif; }
+        body {
+            @apply cursor-none bg-gray-900 text-gray-200 font-heebo overflow-x-hidden;
+        }
+
+        /* Lomography Background Effect */
+        .lomography-bg {
+            background-image: url('https://images.unsplash.com/photo-1549646487-2101967262c5?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); /* Abstract tech image */
+            background-size: cover;
+            background-position: center;
+            /* Lomography filters: saturate, contrast, brightness for vividness; sepia/grayscale for retro feel; blur for dreaminess */
+            filter: saturate(150%) contrast(120%) brightness(80%) sepia(10%) grayscale(5%) blur(1px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Behind all content */
+        }
+        .vignette-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            /* Darken edges for vignette effect */
+            box-shadow: inset 0 0 200px rgba(0,0,0,0.8), inset 0 0 100px rgba(0,0,0,0.5);
+            z-index: 0; /* Above background, below content */
+            pointer-events: none; /* Allows interaction with content underneath */
+        }
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            /* Tiny base64 noise image for subtle film grain effect */
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAMAAAADCAYAAABWKkFgAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNMEdCbWNHdG5wNK5TczhQIiA+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczL2JpbmZ1bS8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiAgxmlnsOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiAgxmlnsOnhtcEJsYXNlPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcGFkZS8xLjAvIj4gPHhtcEJsYXNlOnByZXNlcnZlZExheWVyR3JvdXBOYW1lPkxheWVyIDE8L3htcEJsYXNlOnByZXNlcnZlZExheWVyR3JvdXBOYW1lPiA8eG1wTU06SW5zdGFuY2VJRD54bXAuaWlkOjc3MUI5QjU3QzU5NzExRTI4OUJFQTQxRjQyMDk3NURDPC94bXBNTTpJbnN0YW5jZUlEPiA8eG1wTU06RG9jdW1lbnRJRD54bXAuZGlkOjc3MUI5QjU4QzU5NzExRTI4OUJFQTQxRjQyMDk3NURDPC94bXBNTTpEb2N1bWVudFJELjY3MjBCNzc3MTBCQTZDNDBGNUIyNTY5Q0JDNDVCMzU1NDwvcXhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94cGFja2V0PjA2o87eAAAACXBIWXMAAAsSAAALEgHS3X78AAAAB3RJTUUH4wMbERIrL9BfEQAAACtJREFUeNpiYGBgoAEmqAHGAqIYGDAxMDAwAKECIAWcQAIwMzAwsAGAAAMAAQABgJcR6t0AAAAASUVORK5CYII=');
+            background-repeat: repeat;
+            opacity: 0.1; /* Subtle grain */
+            z-index: 1; /* Above vignette, below content */
+            pointer-events: none;
+        }
+
+        /* Custom High-Contrast Cursor (Mandatory requirement) */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+            border-radius: 50%;
+            pointer-events: none; /* Ensures cursor doesn't interfere with clicks */
+            transform: translate(-50%, -50%); /* Centers the cursor */
+            transition: transform 0.1s ease-out, width 0.1s ease-out, height 0.1s ease-out, border-color 0.1s ease-out, box-shadow 0.1s ease-out;
+            z-index: 9999; /* Always on top */
+        }
+        .custom-cursor.active {
+            width: 30px;
+            height: 30px;
+            border-color: #FFD700; /* Gold for active state */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.9); /* Darker shadow for active */
+        }
+
+        /* Custom Animations */
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 5px rgba(255, 255, 0, 0.4), 0 0 10px rgba(255, 255, 0, 0.2); }
+            50% { text-shadow: 0 0 15px rgba(255, 255, 0, 0.8), 0 0 25px rgba(255, 255, 0, 0.5); }
+        }
+        .animate-glow { animation: glow 4s infinite alternate; }
+
+        @keyframes pulse-light {
+            0%, 100% { opacity: 0.1; }
+            50% { opacity: 0.25; }
+        }
+        .animate-pulse-light { animation: pulse-light 6s infinite alternate; }
+        .animate-pulse-light-alt { animation: pulse-light 5s infinite alternate-reverse; }
+
+        @keyframes pulse-slow-alt {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.01); opacity: 0.45; }
+        }
+        .animate-pulse-slow-alt { animation: pulse-slow-alt 10s infinite ease-in-out; }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        .animate-fade-in { animation: fadeIn 2s ease-out forwards; }
+
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up { animation: fadeInUp 1.5s ease-out forwards; }
+
+        @keyframes zoomIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-zoom-in { animation: zoomIn 1.5s ease-out forwards; }
+
+        /* Initial state for scroll-reveal sections */
+        section {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Parallax effect - ensures elements are positioned for JS transform */
+        .parallax-element {
+            transform: translateY(0);
+            transition: transform 0.05s linear; /* Smoother JS movement */
+            will-change: transform; /* Optimize for animation */
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 cursor-none font-heebo overflow-x-hidden">
+    <!-- Lomography Background & Overlays -->
+    <div class="lomography-bg"></div>
+    <div class="vignette-overlay"></div>
+    <div class="grain-overlay"></div>
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="custom-cursor"></div>
+
+    <!-- Main Content Wrapper - set relative and positive z-index to be on top of overlays -->
+    <div class="relative z-10 min-h-screen p-8 lg:p-16 flex flex-col items-center">
+        <!-- Header: Evocative title and subtitle, with subtle animation -->
+        <header class="w-full text-center mb-16 lg:mb-24 relative parallax-element" data-speed="0.8">
+            <h1 class="text-5xl lg:text-7xl font-rubik text-yellow-300 drop-shadow-lg leading-tight mb-4 animate-glow">
+                <span class="block relative -top-2 left-2">העתיד הוא עכשיו</span>
+                <span class="block relative -bottom-2 right-2 text-white/90">למדו לשלוט בבינה המלאכותית</span>
+            </h1>
+            <p class="text-xl lg:text-2xl text-gray-300/80 font-heebo max-w-3xl mx-auto italic animate-fade-in-up">
+                מסע מרתק אל מעמקי היצירה הדיגיטלית והחדשנות האינסופית
+            </p>
+        </header>
+
+        <!-- Main Sections - designed like film frames or overlapping art pieces -->
+        <main class="w-full max-w-6xl space-y-24 lg:space-y-40">
+
+            <!-- Section 1: Core Message - presented as a glowing portal -->
+            <section class="relative bg-black/60 backdrop-blur-sm p-8 md:p-12 rounded-lg shadow-xl border-t-4 border-yellow-500 overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-yellow-800/20 to-transparent animate-pulse-light"></div>
+                <h2 class="text-4xl lg:text-5xl font-rubik text-yellow-400 mb-6 text-center animate-fade-in">
+                    לפצח את קוד המחר
+                </h2>
+                <p class="text-lg lg:text-xl leading-relaxed text-gray-200 italic mb-6">
+                    בעידן שבו הבינה המלאכותית מעצבת מחדש את גבולות היכולת האנושית, אנו מזמינים אתכם למסע טרנספורמטיבי.
+                    לא רק להבין, אלא ליצור. לא רק לצפות, אלא להוביל.
+                    זו ההזדמנות שלכם להפוך את הבלתי נתפס למעשי, ולהטביע את חותמכם בנוף הדיגיטלי המתפתח.
+                </p>
+                <p class="text-base lg:text-lg leading-relaxed text-gray-300 border-r-4 border-gray-500 pr-4 italic">
+                    <strong class="text-yellow-300">המסר המרכזי:</strong> הפיכת AI לנגיש וישים לכולם - מהתחלה ועד רמה מתקדמת. כלים מעשיים שניתן ליישם מיד בעבודה ובחיים.
+                </p>
+            </section>
+
+            <!-- Section 2: Target Audience - presented as different 'lenses' or 'perspectives' with parallax -->
+            <section class="relative grid md:grid-cols-2 gap-8 lg:gap-12">
+                <div class="bg-gradient-to-br from-purple-800/40 to-black/60 p-8 rounded-lg shadow-xl border-r-4 border-purple-500 relative overflow-hidden parallax-element" data-speed="0.7">
+                    <div class="absolute inset-0 bg-purple-700/10 animate-pulse-light-alt"></div>
+                    <h3 class="text-3xl font-rubik text-purple-300 mb-4">המגלים הראשונים</h3>
+                    <p class="text-lg text-gray-200 leading-relaxed">
+                        למתחילים.ות שסקרנותם בוערת, המעוניינים לצלול לתוך עולם ה-AI בפעם הראשונה.
+                        נפרוש בפניכם את המפה, נציג את הכלים הבסיסיים, ונחשוף את הקסם שמאחורי הטכנולוגיה. זוהי ההתחלה שלכם.
+                    </p>
+                </div>
+                <div class="bg-gradient-to-bl from-green-800/40 to-black/60 p-8 rounded-lg shadow-xl border-l-4 border-green-500 relative overflow-hidden parallax-element" data-speed="0.6">
+                    <div class="absolute inset-0 bg-green-700/10 animate-pulse-light-alt"></div>
+                    <h3 class="text-3xl font-rubik text-green-300 mb-4">האמנים הדיגיטליים</h3>
+                    <p class="text-lg text-gray-200 leading-relaxed">
+                        לאנשי.ות מקצוע המבקשים לשלב את כוחו של ה-AI בלב עבודתם.
+                        לשפר תהליכים, ליצור חדשנות, ולהפוך את העשייה היומיומית לחכמה ויעילה יותר. תנו לבינה המלאכותית לפתוח לכם דלתות יצירתיות חדשות.
+                    </p>
+                </div>
+                <div class="bg-gradient-to-tr from-red-800/40 to-black/60 p-8 rounded-lg shadow-xl border-t-4 border-red-500 relative overflow-hidden parallax-element" data-speed="0.8">
+                    <div class="absolute inset-0 bg-red-700/10 animate-pulse-light-alt"></div>
+                    <h3 class="text-3xl font-rubik text-red-300 mb-4">מובילי החזון</h3>
+                    <p class="text-lg text-gray-200 leading-relaxed">
+                        למנהלים.ות וארגונים המבינים שהעתיד הוא בינה מלאכותית, ומעוניינים להעצים את צוותיהם.
+                        אנו נבנה תוכניות הדרכה מותאמות שיפיחו רוח חדשה בארגון ויכינו אותו לאתגרי המחר.
+                    </p>
+                </div>
+                <div class="bg-gradient-to-tl from-blue-800/40 to-black/60 p-8 rounded-lg shadow-xl border-b-4 border-blue-500 relative overflow-hidden parallax-element" data-speed="0.5">
+                    <div class="absolute inset-0 bg-blue-700/10 animate-pulse-light-alt"></div>
+                    <h3 class="text-3xl font-rubik text-blue-300 mb-4">פורצי הדרך</h3>
+                    <p class="text-lg text-gray-200 leading-relaxed">
+                        למתקדמים.ות המחפשים לדחוף את הגבולות, לפתח פרויקטים מבוססי AI מורכבים, ולבנות את הדור הבא של הטכנולוגיה.
+                        הצטרפו אלינו ליצירת פתרונות פורצי דרך.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Section 3: Areas of Expertise - presented as a dynamic grid of 'digital canvases' -->
+            <section class="relative">
+                <h2 class="text-4xl lg:text-5xl font-rubik text-yellow-400 text-center mb-10 lg:mb-16 parallax-element" data-speed="0.7">
+                    תחומי יצירה אינסופיים
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                    <div class="bg-purple-900/50 p-6 rounded-lg shadow-md border-b-2 border-purple-400 hover:scale-105 transition-transform duration-300 group parallax-element" data-speed="0.9">
+                        <h4 class="text-2xl font-rubik text-purple-300 mb-2 group-hover:text-yellow-200">אדריכלות תוכן</h4>
+                        <p class="text-gray-300">יצירת טקסטים, מאמרים, קמפיינים ורעיונות בלחיצת כפתור.</p>
+                    </div>
+                    <div class="bg-blue-900/50 p-6 rounded-lg shadow-md border-b-2 border-blue-400 hover:scale-105 transition-transform duration-300 group parallax-element" data-speed="0.8">
+                        <h4 class="text-2xl font-rubik text-blue-300 mb-2 group-hover:text-yellow-200">אפליקציות חושבות</h4>
+                        <p class="text-gray-300">בניית אפליקציות חכמות שמבינות, מגיבות ולומדות.</p>
+                    </div>
+                    <div class="bg-green-900/50 p-6 rounded-lg shadow-md border-b-2 border-green-400 hover:scale-105 transition-transform duration-300 group parallax-element" data-speed="0.7">
+                        <h4 class="text-2xl font-rubik text-green-300 mb-2 group-hover:text-yellow-200">אתרים מהעתיד</h4>
+                        <p class="text-gray-300">פיתוח ושיפור אתרים באמצעות כלי AI מתקדמים.</p>
+                    </div>
+                    <div class="bg-red-900/50 p-6 rounded-lg shadow-md border-b-2 border-red-400 hover:scale-105 transition-transform duration-300 group parallax-element" data-speed="0.6">
+                        <h4 class="text-2xl font-rubik text-red-300 mb-2 group-hover:text-yellow-200">פענוח נתונים</h4>
+                        <p class="text-gray-300">ניתוח נתונים מורכבים והפקת תובנות עמוקות.</p>
+                    </div>
+                    <div class="bg-yellow-900/50 p-6 rounded-lg shadow-md border-b-2 border-yellow-400 hover:scale-105 transition-transform duration-300 group parallax-element" data-speed="0.5">
+                        <h4 class="text-2xl font-rubik text-yellow-300 mb-2 group-hover:text-yellow-200">ציור דיגיטלי אינסופי</h4>
+                        <p class="text-gray-300">יצירת תמונות, איורים ואומנות באמצעות מנועי AI.</p>
+                    </div>
+                    <div class="bg-teal-900/50 p-6 rounded-lg shadow-md border-b-2 border-teal-400 hover:scale-105 transition-transform duration-300 group parallax-element" data-speed="0.9">
+                        <h4 class="text-2xl font-rubik text-teal-300 mb-2 group-hover:text-yellow-200">אוטומציה חכמה</h4>
+                        <p class="text-gray-300">ייעול ואוטומציה של תהליכים עסקיים ומשימות יומיומיות.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 4: Services - presented as 'portals' or 'gateways' -->
+            <section class="relative">
+                <h2 class="text-4xl lg:text-5xl font-rubik text-yellow-400 text-center mb-10 lg:mb-16 parallax-element" data-speed="0.8">
+                    השירותים שלנו: נתיבים אל הידע
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+                    <div class="bg-gradient-to-br from-gray-800/70 to-black/80 p-8 rounded-lg shadow-xl border-t-4 border-gray-400 hover:border-yellow-500 transition-colors duration-300 group parallax-element" data-speed="0.7">
+                        <h3 class="text-3xl font-rubik text-gray-200 group-hover:text-yellow-300 mb-4">סדנאות קבוצתיות: קהילת יוצרים</h3>
+                        <p class="text-lg text-gray-300 leading-relaxed">
+                            ללמוד יחד, ליצור יחד. סדנאות מעשיות, ממוקדות ואינטראקטיביות, המאפשרות שיתוף ידע וצמיחה קבוצתית.
+                            חוויה שכולה למידה, עשייה והשראה הדדית.
+                        </p>
+                    </div>
+                    <div class="bg-gradient-to-bl from-gray-800/70 to-black/80 p-8 rounded-lg shadow-xl border-b-4 border-gray-400 hover:border-green-500 transition-colors duration-300 group parallax-element" data-speed="0.9">
+                        <h3 class="text-3xl font-rubik text-gray-200 group-hover:text-green-300 mb-4">שיעורים פרטיים: מפת דרכים אישית</h3>
+                        <p class="text-lg text-gray-300 leading-relaxed">
+                            ליווי אישי וצמוד, המותאם באופן מלא לרמה, לקצב ולצרכים הייחודיים שלכם.
+                            בין אם אתם מתחילים או בעלי ידע, נבנה יחד את הנתיב המושלם למטרות שלכם.
+                        </p>
+                    </div>
+                    <div class="bg-gradient-to-tr from-gray-800/70 to-black/80 p-8 rounded-lg shadow-xl border-l-4 border-gray-400 hover:border-blue-500 transition-colors duration-300 group parallax-element" data-speed="0.6">
+                        <h3 class="text-3xl font-rubik text-gray-200 group-hover:text-blue-300 mb-4">הרצאות לארגונים: השראה למנהיגות</h3>
+                        <p class="text-lg text-gray-300 leading-relaxed">
+                            פתיחת אופקים, העצמת צוותים והחדרת ידע עכשווי לעולם העסקי.
+                            הרצאות מרתקות ומעוררות מחשבה, המותאמות לצרכי הארגון ולמטרותיו.
+                        </p>
+                    </div>
+                    <div class="bg-gradient-to-tl from-gray-800/70 to-black/80 p-8 rounded-lg shadow-xl border-r-4 border-gray-400 hover:border-red-500 transition-colors duration-300 group parallax-element" data-speed="0.8">
+                        <h3 class="text-3xl font-rubik text-gray-200 group-hover:text-red-300 mb-4">ייעוץ ופיתוח פרויקטים: בניית המחר</h3>
+                        <p class="text-lg text-gray-300 leading-relaxed">
+                            ליווי מקצועי מפיתוח רעיון ראשוני ועד מימוש פרויקט AI מתקדם.
+                            נהפוך את הרעיונות שלכם למציאות טכנולוגית חזקה וחדשנית.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 5: The Guide - Ze'evik Aviner, with image and contact information -->
+            <section class="relative bg-black/70 backdrop-blur-sm p-8 md:p-12 rounded-lg shadow-2xl border-b-4 border-l-4 border-yellow-600 overflow-hidden text-center">
+                <div class="absolute inset-0 bg-gradient-to-tl from-yellow-900/30 to-transparent animate-pulse-slow-alt"></div>
+                <h2 class="text-4xl lg:text-5xl font-rubik text-yellow-400 mb-6 animate-fade-in">
+                    המדריך: זאביק אבינר - האמן שמאחורי הקוד
+                </h2>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-8 lg:gap-12 mb-8">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר" class="w-40 h-40 md:w-48 md:h-48 rounded-full border-4 border-yellow-500 shadow-lg object-cover mb-6 md:mb-0 transform hover:scale-105 transition-transform duration-300 animate-zoom-in">
+                    <p class="text-xl lg:text-2xl leading-loose text-gray-200 max-w-2xl font-heebo italic">
+                        זאביק אבינר, מומחה בינה מלאכותית עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI.
+                        מטרתו היא להנגיש את הטכנולוגיה המורכבת, ולהפוך אותה לכלי עבודה יומיומי ויצירתי בידיים שלכם.
+                        הוא המורה, המנטור והמנחה שלכם במסע המרתק אל עולם ה-AI.
+                    </p>
+                </div>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-6 mt-8">
+                    <a href="https://wa.me/972546609385" target="_blank" class="px-8 py-3 bg-green-600 hover:bg-green-700 text-white font-rubik text-xl rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 flex items-center gap-2">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91s4.45 9.91 9.91 9.91c1.7 0 3.3-.46 4.73-1.3l3.52 1.2-1.22-3.41c.96-1.42 1.48-3.05 1.48-4.7s-.52-3.28-1.48-4.7l1.22-3.41-3.52 1.2c-1.43-.84-3.03-1.3-4.73-1.3zm.04 1.77c4.6 0 8.24 3.64 8.24 8.24 0 1.58-.45 3.05-1.23 4.29l.7 1.94-1.99-.71c-1.12.78-2.5 1.2-3.92 1.2-4.6 0-8.24-3.64-8.24-8.24 0-4.6 3.64-8.24 8.24-8.24zm-1.87 3.32c-.37 0-.67.3-.67.67s.3.67.67.67c.37 0 .67-.3.67-.67s-.3-.67-.67-.67zm3.74 0c-.37 0-.67.3-.67.67s.3.67.67.67c.37 0 .67-.3.67-.67s-.3-.67-.67-.67zm-3.02 2.37h-.01s-1.04.28-1.5-.04c-.45-.33-.6-.73-.6-.73s-.08-.18 0-.35c.08-.17.2-.28.35-.38l.1-.06c.07-.05.14-.08.2-.12.18-.08.3-.12.38-.13.12 0 .15.02.26.04.14.02.2.03.26.03.32 0 .54-.03.73-.08.19-.05.37-.09.53-.13.33-.08.77-.18 1.1-.15.42.02.77.16.96.38.16.2.22.46.22.75 0 .28-.06.56-.2.8-.13.23-.33.45-.59.62-.25.17-.55.3-.87.4-.3.1-.6.18-.88.23l-.15.03c-.1 0-.17.02-.23.03l-.17.02z"/></svg>
+                        ווטסאפ
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-rubik text-xl rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 flex items-center gap-2">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12.713l-11.75 6.787 11.75 6.787 11.75-6.787-11.75-6.787zm0-2.345l-11.75 6.787 11.75 6.787 11.75-6.787-11.75-6.787zm0-2.345l-11.75 6.787 11.75 6.787 11.75-6.787-11.75-6.787zM0 6v12h24V6H0zm2 2l10 6 10-6v-.01L12 12 2 8z"/></svg>
+                        אימייל
+                    </a>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-24 lg:mt-32 w-full text-center text-gray-400 text-sm italic font-heebo animate-fade-in-up">
+            <p>&copy; 2023 זאביק אבינר - כל הזכויות שמורות. אמנות דיגיטלית בהשראת AI.</p>
+        </footer>
+    </div>
+
+    <!-- JavaScript for interactivity -->
+    <script>
+        // Custom Cursor Functionality
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+        document.addEventListener('mousedown', () => {
+            cursor.classList.add('active');
+        });
+        document.addEventListener('mouseup', () => {
+            cursor.classList.remove('active');
+        });
+        // Add 'active' class to cursor on hover over interactive elements
+        document.querySelectorAll('a, button, input[type="submit"], [role="button"], .group, .hover\\:scale-105').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+
+        // Parallax Scrolling Effect
+        const parallaxElements = document.querySelectorAll('.parallax-element');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            parallaxElements.forEach(el => {
+                const speed = parseFloat(el.dataset.speed);
+                // Adjust translation based on scroll position and speed
+                el.style.transform = `translateY(${scrollY * speed * -0.1}px)`;
+            });
+        });
+
+        // Scroll Reveal Animation for Sections
+        const sections = document.querySelectorAll('section');
+        const revealOnScroll = () => {
+            sections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                // Reveal section when it's partially visible (150px from bottom of viewport)
+                if (sectionTop < windowHeight - 150) {
+                    section.classList.add('is-visible');
+                } else {
+                    section.classList.remove('is-visible'); // Optionally hide when scrolled away
+                }
+            });
+        };
+        // Run on scroll and once on load
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll();
+    </script>
+</body>
+</html>

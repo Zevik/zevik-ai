@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - שליטה בבינה המלאכותית: העתיד הוא עכשיו</title>
+    <meta name="description" content="הפיכת AI לנגיש וישים לכולם - סדנאות, שיעורים פרטיים, הרצאות וייעוץ ממומחה AI.">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Assistant:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom Tailwind Configuration (for pastel colors and fonts) */
+        :root {
+            --pastel-purple: #e0bbe4; /* A soft, gentle purple */
+            --pastel-pink: #ffdae9;   /* A light, inviting pink */
+            --pastel-blue: #c7f2ef;   /* A calming, sky-like blue */
+            --pastel-green: #d1f7c4;  /* A fresh, muted green */
+            --pastel-yellow: #fffac2; /* A warm, creamy yellow */
+            --dark-charcoal: #36454F; /* A deep, rich charcoal for contrast */
+        }
+
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Assistant', sans-serif;
+            color: var(--dark-charcoal); /* Default body text color for high contrast */
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax */
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Amatic SC', cursive;
+            color: var(--dark-charcoal);
+            line-height: 1.2;
+        }
+
+        .text-pastel-purple { color: var(--pastel-purple); }
+        .bg-pastel-purple { background-color: var(--pastel-purple); }
+        .border-pastel-purple { border-color: var(--pastel-purple); }
+
+        .text-pastel-pink { color: var(--pastel-pink); }
+        .bg-pastel-pink { background-color: var(--pastel-pink); }
+        .border-pastel-pink { border-color: var(--pastel-pink); }
+
+        .text-pastel-blue { color: var(--pastel-blue); }
+        .bg-pastel-blue { background-color: var(--pastel-blue); }
+        .border-pastel-blue { border-color: var(--pastel-blue); }
+
+        .text-pastel-green { color: var(--pastel-green); }
+        .bg-pastel-green { background-color: var(--pastel-green); }
+        .border-pastel-green { border-color: var(--pastel-green); }
+
+        .text-pastel-yellow { color: var(--pastel-yellow); }
+        .bg-pastel-yellow { background-color: var(--pastel-yellow); }
+        .border-pastel-yellow { border-color: var(--pastel-yellow); }
+        
+        .text-dark-charcoal { color: var(--dark-charcoal); }
+        .bg-dark-charcoal { background-color: var(--dark-charcoal); }
+        
+        /* Custom cursor styles - High contrast mandated */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.9;
+            transition: transform 0.08s ease-out, width 0.15s ease, height 0.15s ease, opacity 0.15s ease;
+            transform: translate(-50%, -50%); /* Center the cursor */
+            border: 2px solid rgba(255, 255, 255, 0.9); /* Bright border for dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.7);   /* Dark shadow for light backgrounds */
+        }
+        
+        /* Interactive state for cursor */
+        #custom-cursor.active {
+            width: 38px;
+            height: 38px;
+            opacity: 1;
+            /* Further visual emphasis can be added here, e.g., a subtle glow */
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.8), 0 0 10px var(--pastel-pink);
+        }
+
+        /* Parallax Background Layers */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -2; /* Below content, above the very back layer */
+        }
+
+        .layer-0 { /* Base background color, farthest back */
+            background: linear-gradient(135deg, var(--pastel-blue) 0%, var(--pastel-purple) 100%);
+            z-index: -3; 
+        }
+
+        /* SVG backgrounds for a painted, organic feel */
+        .layer-1 {
+            background: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path fill="%23ffdae9" opacity="0.4" d="M0,50 C25,25 75,75 100,50 V100 H0 Z" /><path fill="%23d1f7c4" opacity="0.3" d="M0,60 C20,80 80,20 100,40 V0 H0 Z" /></svg>') no-repeat;
+            background-size: 150% 150%; /* Larger to allow for subtle movement */
+            background-position: 50% 50%;
+            transition: transform 0.1s ease-out; 
+        }
+
+        .layer-2 {
+            background: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><circle cx="20" cy="20" r="15" fill="%23fffac2" opacity="0.3" /><circle cx="80" cy="70" r="20" fill="%23c7f2ef" opacity="0.2" /><rect x="10" y="80" width="30" height="10" fill="%23e0bbe4" opacity="0.3" transform="rotate(15 25 85)"/></svg>') no-repeat;
+            background-size: 100% 100%;
+            background-position: 50% 50%;
+            transition: transform 0.1s ease-out; 
+        }
+
+        /* Styling for content containers to make them float on the pastel background */
+        .content-card {
+            background: rgba(255, 255, 255, 0.7); /* Semi-transparent white */
+            backdrop-filter: blur(8px); /* Frosted glass effect for depth */
+            border-radius: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Soft shadow */
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Animation for section titles - individual word reveal */
+        .section-title span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInRise 0.8s forwards paused; /* Start paused, trigger with JS */
+        }
+
+        @keyframes fadeInRise {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Artistic filter for Zevik's image */
+        .zevik-image {
+            filter: grayscale(20%) sepia(10%) brightness(105%) contrast(100%); /* Subtle artistic filter */
+            border: 4px solid var(--pastel-pink); /* A border in pastel pink */
+            box-shadow: 0 0 20px var(--pastel-purple); /* A soft glow in pastel purple */
+        }
+
+        /* Fade-in effect for elements on scroll */
+        .fade-in-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Style for links to make them more artistic and responsive to RTL */
+        a {
+            color: var(--dark-charcoal);
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            right: 0; /* Starts from right for RTL */
+            background-color: var(--pastel-pink);
+            transition: width 0.3s ease;
+        }
+
+        a:hover {
+            color: var(--pastel-purple); /* Changes color on hover */
+        }
+
+        a:hover::after {
+            width: 100%; /* Expands to full width */
+            left: 0; /* Ensures expansion from right to left */
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-layer layer-0"></div>
+    <div class="parallax-layer layer-1" id="parallax-layer-1"></div>
+    <div class="parallax-layer layer-2" id="parallax-layer-2"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 p-4 md:p-8 lg:p-12 max-w-7xl mx-auto min-h-screen flex flex-col justify-center">
+
+        <!-- Header - A gentle introduction -->
+        <header class="text-center mb-16 pt-20 fade-in-on-scroll">
+            <h1 class="text-6xl md:text-8xl font-bold mb-4 leading-tight text-dark-charcoal section-title">
+                <span>התעוררות</span> <span>הצבע</span> <span>-</span> <span>מסע</span> <span>אל</span> <span>עולם</span> <span>הבינה</span> <span>המלאכותית</span>
+            </h1>
+            <p class="text-xl md:text-2xl mt-4 max-w-3xl mx-auto text-dark-charcoal leading-relaxed">
+                כאן, עתידכם האמנותי והמקצועי מעוצב בידיים שלכם. זאביק אבינר מזמין אתכם לצייר את מחר.
+            </p>
+            <a href="#philosophy" class="inline-block mt-8 py-3 px-8 bg-pastel-pink text-dark-charcoal text-lg font-bold rounded-full hover:bg-pastel-purple transition-all duration-300 transform hover:scale-105 shadow-lg interactive-element">
+                התחילו לצייר את העתיד
+            </a>
+        </header>
+
+        <!-- Philosophy Section -->
+        <section id="philosophy" class="content-card fade-in-on-scroll">
+            <h2 class="text-5xl md:text-6xl font-bold mb-8 text-center text-dark-charcoal section-title">
+                <span>הבינה</span> <span>המלאכותית:</span> <span>מגע</span> <span>של</span> <span>קסם</span> <span>בכל</span> <span>יד</span>
+            </h2>
+            <p class="text-lg md:text-xl leading-loose text-dark-charcoal mb-6">
+                בעולם שבו הגבולות בין דמיון למציאות מטשטשים, הבינה המלאכותית היא המכחול החדש בידיים שלכם. אנו מאמינים כי AI אינה רק טכנולוגיה עילית השמורה ליחידי סגולה, אלא שפה יצירתית חובקת עולם- - פלטה עשירה של גוונים המאפשרת לכל אחד ואחת, ללא קשר לרקע או לניסיון, לצייר את החלומות המקצועיים והאישיים שלהם. אצלנו, הקוד הופך לפיגמנט, והאלגוריתם- - למנגינה.
+            </p>
+            <p class="text-lg md:text-xl leading-loose text-dark-charcoal">
+                מטרתנו היא להנגיש את הכוח הזה, לפרום את מסתרי ה-AI ולהפוך אותה לכלי מעשי, אלגנטי ובעיקר- - נגיש. בין אם אתם עושים את צעדיכם הראשונים בעולם הדיגיטלי או שאתם אמנים מנוסים המחפשים גוונים חדשים, כאן תמצאו את ההשראה, הידע והכלים להפוך את הרעיונות שלכם ליצירה פורצת דרך.
+            </p>
+        </section>
+
+        <!-- Specializations Section -->
+        <section id="specializations" class="content-card fade-in-on-scroll">
+            <h2 class="text-5xl md:text-6xl font-bold mb-8 text-center text-dark-charcoal section-title">
+                <span>גוונים</span> <span>של</span> <span>אינטליגנציה:</span> <span>הכלים</span> <span>שלכם</span> <span>ליצירה</span>
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="p-6 bg-pastel-pink rounded-xl shadow-md transform hover:scale-105 transition-transform duration-300 text-dark-charcoal">
+                    <h3 class="text-3xl font-bold mb-3">יצירת טקסטים ותוכן</h3>
+                    <p class="text-lg leading-relaxed">לרקום מילים, לספר סיפורים חדשים- - ה-AI כשותף יצירתי לכתיבה, שיווק וחדשנות לשונית.</p>
+                </div>
+                <div class="p-6 bg-pastel-yellow rounded-xl shadow-md transform hover:scale-105 transition-transform duration-300 text-dark-charcoal">
+                    <h3 class="text-3xl font-bold mb-3">בניית אפליקציות חכמות</h3>
+                    <p class="text-lg leading-relaxed">לבנות גשרים של חשיבה חדשנית- - כלים לפיתוח אפליקציות שמבינות, לומדות ומגיבות.</p>
+                </div>
+                <div class="p-6 bg-pastel-blue rounded-xl shadow-md transform hover:scale-105 transition-transform duration-300 text-dark-charcoal">
+                    <h3 class="text-3xl font-bold mb-3">פיתוח אתרים מבוססי AI</h3>
+                    <p class="text-lg leading-relaxed">לצייר קורי עכביש דיגיטליים חכמים- - אתרים אינטראקטיביים המשתנים ומתפתחים עם המשתמש.</p>
+                </div>
+                <div class="p-6 bg-pastel-green rounded-xl shadow-md transform hover:scale-105 transition-transform duration-300 text-dark-charcoal">
+                    <h3 class="text-3xl font-bold mb-3">ניתוח נתונים ומחקר</h3>
+                    <p class="text-lg leading-relaxed">לפענח את סודות המידע, לראות את הנסתר- - להפוך נתונים לידע מעשי ולהבין מגמות עתידיות.</p>
+                </div>
+                <div class="p-6 bg-pastel-purple rounded-xl shadow-md transform hover:scale-105 transition-transform duration-300 text-dark-charcoal">
+                    <h3 class="text-3xl font-bold mb-3">יצירת תמונות ואומנות</h3>
+                    <p class="text-lg leading-relaxed">להחיות דמיון, להפוך חלומות למציאות ויזואלית- - AI כשותף ליצירה חזותית מרהיבה.</p>
+                </div>
+                <div class="p-6 bg-pastel-pink rounded-xl shadow-md transform hover:scale-105 transition-transform duration-300 text-dark-charcoal">
+                    <h3 class="text-3xl font-bold mb-3">אוטומציה של תהליכים</h3>
+                    <p class="text-lg leading-relaxed">לשחרר את הזמן, לאפשר למחשבה לפרוח- - לייעל משימות חוזרות ולהתמקד במה שחשוב באמת.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="content-card fade-in-on-scroll">
+            <h2 class="text-5xl md:text-6xl font-bold mb-8 text-center text-dark-charcoal section-title">
+                <span>נתיבי</span> <span>למידה,</span> <span>שבילים</span> <span>של</span> <span>התפתחות</span>
+            </h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-pastel-blue p-8 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 text-dark-charcoal">
+                    <h3 class="text-4xl font-bold mb-4">סדנאות קבוצתיות</h3>
+                    <p class="text-xl leading-relaxed">
+                        סדנאות צבעוניות: יחד, יוצרים מציאות חדשה. למידה חווייתית וממוקדת, בקבוצות קטנות המאפשרות שיתוף ויצירה משותפת. צללו לעומק נושאים ספציפיים וצאו עם כלים מעשיים שניתן ליישם מיד.
+                    </p>
+                </div>
+                <div class="bg-pastel-green p-8 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 text-dark-charcoal">
+                    <h3 class="text-4xl font-bold mb-4">שיעורים פרטיים</h3>
+                    <p class="text-xl leading-relaxed">
+                        מכחול אישי: ליטוש הכישרון הייחודי שלך. ליווי אישי וצמוד, המותאם לרמה, לקצב ולמטרות הספציפיות שלכם. נבנה יחד תכנית מותאמת אישית שתביא אתכם לשליטה מלאה.
+                    </p>
+                </div>
+                <div class="bg-pastel-purple p-8 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 text-dark-charcoal">
+                    <h3 class="text-4xl font-bold mb-4">הרצאות לארגונים</h3>
+                    <p class="text-xl leading-relaxed">
+                        השראה פורצת דרך: פותחים אופקים לצוות שלכם. הרצאות מרתקות ומעוררות מחשבה, המותאמות לצרכים הייחודיים של כל ארגון. נחשוף את הפוטנציאל העצום של AI וכיצד ניתן לשלבו בארגון.
+                    </p>
+                </div>
+                <div class="bg-pastel-yellow p-8 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300 text-dark-charcoal">
+                    <h3 class="text-4xl font-bold mb-4">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-xl leading-relaxed">
+                        ליווי אמנותי: מהרעיון אל היצירה המוגמרת. מלווים אתכם מקרוב בפיתוח פרויקטים מבוססי AI, החל משלב הרעיון ועד ליישום מלא, תוך כדי הענקת ידע וניסיון עשיר.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Artist Section -->
+        <section id="instructor" class="content-card fade-in-on-scroll">
+            <h2 class="text-5xl md:text-6xl font-bold mb-8 text-center text-dark-charcoal section-title">
+                <span>האמן</span> <span>מאחורי</span> <span>הקוד:</span> <span>זאביק</span> <span>אבינר</span>
+            </h2>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8">
+                <div class="flex-shrink-0">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר, מומחה בינה מלאכותית" class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover zevik-image">
+                </div>
+                <div class="flex-grow text-center md:text-right">
+                    <h3 class="text-4xl font-bold mb-4 text-dark-charcoal">זאביק אבינר - מומחה בינה מלאכותית</h3>
+                    <p class="text-lg md:text-xl leading-loose text-dark-charcoal">
+                        זאביק אינו רק מומחה בינה מלאכותית, הוא מנצח תזמורת של אפשרויות, אמן שמפיח חיים באלגוריתמים. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, הוא רואה ב-AI לא רק טכנולוגיה, אלא שפה יצירתית חדשה.
+                    </p>
+                    <p class="text-lg md:text-xl leading-loose text-dark-charcoal mt-4">
+                        מטרתו היא להפוך את השפה הזו לנגישה לכל אחד, להעניק לכם את המכחולים הטובים ביותר כדי שתוכלו לצייר את עתידכם. הוא מתמחה בהנגשת הטכנולוגיה המורכבת והפיכתה לכלי עבודה יומיומי ומשמעותי לכל אדם וארגון.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="content-card fade-in-on-scroll text-center">
+            <h2 class="text-5xl md:text-6xl font-bold mb-8 text-dark-charcoal section-title">
+                <span>הצטרפו</span> <span>למסע:</span> <span>צרו</span> <span>קשר</span>
+            </h2>
+            <p class="text-xl md:text-2xl leading-loose text-dark-charcoal mb-8">
+                מוכנים להתחיל לצייר את עתידכם עם הבינה המלאכותית? אל תחכו- - צרו קשר עוד היום!
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-6 text-2xl md:text-3xl font-bold">
+                <a href="https://wa.me/972546609385" target="_blank" rel="noopener noreferrer" class="py-4 px-10 bg-pastel-green text-dark-charcoal rounded-full shadow-lg hover:bg-pastel-blue transition-all duration-300 transform hover:scale-105 interactive-element flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" class="text-dark-charcoal"><path d="M12.04 2.34c-5.32 0-9.66 4.34-9.66 9.66 0 1.92.58 3.73 1.58 5.27L2 22l5.44-1.42a9.58 9.58 0 005.15 1.4c5.33 0 9.67-4.34 9.67-9.66s-4.34-9.66-9.67-9.66zM17.47 16.48c-.16.27-.63.5-1.07.72-.73.37-1.44.62-2.18.82-.41.11-.79.17-1.15.17-.4 0-.73-.13-1.06-.26-.74-.29-1.57-.69-2.31-1.15-.49-.29-.93-.6-1.3-1.01-.83-.89-1.47-2.02-1.8-3.05-.12-.34-.14-.62-.14-.88 0-.25.07-.49.19-.68.15-.22.3-.32.48-.42.2-.1.45-.14.68-.14.2 0 .42.03.6.06.27.05.45.1.58.23.15.13.2.34.23.44.07.25.18.66.24.78.07.12.11.23.07.35-.04.14-.14.2-.23.28-.27.24-.55.57-.7.7-.09.11-.18.2-.18.32 0 .12.08.2.14.27.29.3.62.58.98.81.44.29.89.5 1.37.69.45.19.89.33 1.34.4.24.03.48.05.6.05.3 0 .5-.05.69-.15.22-.12.44-.24.62-.39.11-.08.22-.16.32-.23.11-.07.2-.1.3-.04.14.08.45.21.65.3.2.09.34.14.43.14.15 0 .28-.02.4-.04.28-.07.64-.26 1.1-.53.28-.18.46-.28.56-.3.12-.02.2-.02.26.08.08.1.08.3.04.47-.2.72-.46 1.48-.75 2.14z"/></svg>
+                    וואטסאפ: 054-6609385
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="py-4 px-10 bg-pastel-yellow text-dark-charcoal rounded-full shadow-lg hover:bg-pastel-pink transition-all duration-300 transform hover:scale-105 interactive-element flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor" class="text-dark-charcoal"><path d="M12 12.713L2.245 4.88c-.28-.23-.28-.59 0-.82l.95-.74c.28-.22.68-.22.95 0L12 10.707l7.81-6.73c.28-.22.68-.22.95 0l.95.74c.28.23.28.59 0 .82L12 12.713zm0 2.213L2.245 7.12c-.28-.23-.28-.59 0-.82l.95-.74c.28-.22.68-.22.95 0L12 13.047l7.81-6.73c.28-.22.68-.22.95 0l.95.74c.28.23.28.59 0 .82L12 14.926zM2 19h20V5H2v14z"/></svg>
+                    אימייל: zaviner@gmail.com
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center mt-16 pb-8 text-dark-charcoal text-lg opacity-80 fade-in-on-scroll">
+            <p>&copy; 2024 זאביק אבינר. כל הזכויות שמורות.</p>
+            <p class="mt-2">לצייר את העתיד, צבע אחר צבע.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        });
+
+        const interactiveElements = document.querySelectorAll('a, button, .interactive-element');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('active'));
+        });
+
+        // Parallax Effect for background layers (based on mouse movement)
+        const parallaxLayer1 = document.getElementById('parallax-layer-1');
+        const parallaxLayer2 = document.getElementById('parallax-layer-2');
+
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 20; // Range -10 to 10
+            const y = (e.clientY / window.innerHeight - 0.5) * 20; // Range -10 to 10
+
+            parallaxLayer1.style.transform = `translate(${x * 0.5}px, ${y * 0.5}px)`; // Slower movement
+            parallaxLayer2.style.transform = `translate(${x * -0.7}px, ${y * -0.7}px)`; // Faster, opposite movement
+        });
+        
+        // Scroll-based fade-in effect for sections
+        const fadeInElements = document.querySelectorAll('.fade-in-on-scroll');
+
+        const observerOptions = {
+            root: null, // relative to the viewport
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Stop observing once visible
+                }
+            });
+        }, observerOptions);
+
+        fadeInElements.forEach(element => {
+            observer.observe(element);
+        });
+
+        // Section Title word-by-word animation on visibility
+        document.addEventListener('DOMContentLoaded', () => {
+            const sectionTitleContainers = document.querySelectorAll('.section-title');
+
+            const titleObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const spans = entry.target.querySelectorAll('span');
+                        spans.forEach((span, index) => {
+                            span.style.animationDelay = `${index * 0.08}s`;
+                            span.style.animationPlayState = 'running'; // Start the animation
+                        });
+                        titleObserver.unobserve(entry.target); // Unobserve once animated
+                    }
+                });
+            }, { threshold: 0.7 }); // Trigger when 70% of the title is visible
+
+            sectionTitleContainers.forEach(container => {
+                titleObserver.observe(container);
+            });
+        });
+    </script>
+</body>
+</html>

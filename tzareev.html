@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>המטריצה נחשפת: AI – הטבעת הדיגיטלית החדשה</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cursor-size: 20px;
+            --accent-color: #008080; /* A deep, metallic teal for 'etching' */
+            --dark-bg: #0a0a0a;
+            --light-text: #f0f0f0;
+            --mid-gray: #333333;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: var(--dark-bg);
+            color: var(--light-text);
+            font-family: 'Heebo', sans-serif;
+            text-align: right;
+            cursor: none; /* Hide default cursor */
+        }
+
+        .rubik-mono {
+            font-family: 'Rubik Mono One', monospace;
+            letter-spacing: 0.05em;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+        }
+
+        .heebo {
+            font-family: 'Heebo', sans-serif;
+            line-height: 1.7;
+            text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--cursor-size);
+            height: var(--cursor-size);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out, border-color 0.1s ease-out, box-shadow 0.1s ease-out;
+            border: 2px solid rgba(255, 255, 255, 0.9); /* Light color for contrast */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8), /* Dark shadow for contrast */
+                        0 0 10px rgba(0, 255, 255, 0.7); /* Subtle glow for 'etching' */
+        }
+
+        .custom-cursor.active {
+            transform: translate(-50%, -50%) scale(1.2);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8),
+                        0 0 20px var(--accent-color);
+        }
+
+        /* Glitch effect for text - CSS only for subtle touches */
+        .glitch-text {
+            animation: text-shadow-pop-left 2s infinite alternate;
+        }
+
+        @keyframes text-shadow-pop-left {
+            0% {
+                text-shadow: 0 0 rgba(255,0,0,0), 0 0 rgba(0,255,0,0), 0 0 rgba(0,0,255,0);
+                transform: translateX(0) scale(1);
+            }
+            25% {
+                text-shadow: 1px 0 rgba(255,0,0,0.7), -1px 0 rgba(0,255,0,0.7), 0 1px rgba(0,0,255,0.7);
+                transform: translateX(-0.5px) scale(1.005);
+            }
+            50% {
+                text-shadow: -1px 0 rgba(255,0,0,0.7), 1px 0 rgba(0,255,0,0.7), 0 -1px rgba(0,0,255,0.7);
+                transform: translateX(0.5px) scale(1.005);
+            }
+            75% {
+                text-shadow: 0 1px rgba(255,0,0,0.7), 0 -1px rgba(0,255,0,0.7), 1px 0 rgba(0,0,255,0.7);
+                transform: translateX(-0.5px) scale(1.005);
+            }
+            100% {
+                text-shadow: 0 0 rgba(255,0,0,0), 0 0 rgba(0,255,0,0), 0 0 rgba(0,0,255,0);
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        .content-panel {
+            min-height: 100vh; /* Ensure each panel takes at least full viewport height */
+            padding: 4rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(circle at center, rgba(var(--mid-gray-rgb), 0.1) 0%, transparent 70%);
+            border-bottom: 1px solid rgba(var(--accent-rgb), 0.3);
+            overflow: hidden; /* For inner elements like Ze'evik's image */
+        }
+
+        .content-panel:first-of-type {
+            padding-top: 8rem; /* More space for the first panel */
+        }
+
+        .panel-inner {
+            width: 100%;
+            max-width: 1000px;
+            margin: auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .bg-gradient-noise {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, rgba(10,10,10,0.9) 100%);
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%239C92AC' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 0h30v15H0V0zm0 45h30v15H0V45zM30 15h30v15H30V15zm0 45h30v15H30V45z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        /* Special clipping for panels to give an "etched" look */
+        .clip-shape-1 {
+            clip-path: polygon(0 0, 100% 5%, 100% 100%, 5% 95%);
+        }
+        .clip-shape-2 {
+            clip-path: polygon(5% 0, 100% 0, 95% 100%, 0% 100%);
+        }
+        .clip-shape-3 {
+            clip-path: polygon(0 10%, 90% 0, 100% 90%, 10% 100%);
+        }
+
+        /* Animation for the Ze'evik image */
+        @keyframes reveal-image {
+            from {
+                opacity: 0;
+                transform: scale(0.8) rotate(5deg);
+                filter: blur(10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+                filter: blur(0);
+            }
+        }
+        .zevik-image {
+            animation: reveal-image 1.5s ease-out forwards;
+        }
+
+        /* Dynamic background effect with multiple layers */
+        .bg-glitch-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.05;
+            background-image: linear-gradient(45deg, rgba(0,255,255,0.1) 25%, transparent 25%),
+                              linear-gradient(-45deg, rgba(255,0,255,0.1) 25%, transparent 25%),
+                              linear-gradient(45deg, transparent 75%, rgba(255,255,0,0.1) 75%),
+                              linear-gradient(-45deg, transparent 75%, rgba(0,255,0,0.1) 75%);
+            background-size: 10px 10px;
+            animation: bg-shift 30s linear infinite alternate;
+            z-index: -2;
+        }
+
+        @keyframes bg-shift {
+            from { background-position: 0 0; }
+            to { background-position: 100% 100%; }
+        }
+
+        /* Overlay for a grittier texture */
+        .texture-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAABGdBTUEAALGOfPtRkwAAACBjSFJNAAB6JQAAgIMAAPn/AACA6AAAUggAAQR3AACz1QAAnScAAAPwMpgtAAABSlBMVEUAAAD///+srKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKywXJpWAAAAaXRSTlMAAQIDBAUGCAsNDxESFRYYGRobHB0eICEmKSswMTI0Njc4OTpBQkNETlBXWGFiZXR4fn+AhIeMjZCRkpOUlpeYmZqbnJ2foKKjpKaoqqywsrO1ubq7vL3Aw8fIyc3P0dLT1dfZ2t7k5+jq6/Dz9/n6+/3+E9DIdQAAAAFiS0dEAIgFHUgAAAAJcEhZcwAAAEAAABBAAcg5j/0AAAAHdElEQVRYw+3WSQ7AMAgFUU20eN9/6q1g94O4uU904KECeZ8vT7JdK11h807/W6/Jd+i/0f/R/yL/R/+L/hN9J/pN3kX+g/0P/h/8B/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lO8y7+D/h//H/wB/kv9lOPEAAAAAElFTkSuQmCC');
+            opacity: 0.07;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .rubik-mono {
+                font-size: 2.5rem;
+                letter-spacing: 0.03em;
+            }
+            .heebo {
+                font-size: 1rem;
+                line-height: 1.6;
+            }
+            .content-panel {
+                padding: 3rem 0.5rem;
+            }
+            .panel-inner {
+                padding: 0 1rem;
+            }
+            .clip-shape-1, .clip-shape-2, .clip-shape-3 {
+                clip-path: none; /* Simplify on small screens */
+            }
+        }
+
+        /* Custom scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0.7;
+            z-index: 50;
+            pointer-events: none;
+        }
+        .scroll-indicator::after {
+            content: '';
+            width: 2px;
+            height: 30px;
+            background-color: var(--accent-color);
+            animation: pulse-scroll 1.5s infinite;
+        }
+        @keyframes pulse-scroll {
+            0% { transform: scaleY(0.5); opacity: 0.5; }
+            50% { transform: scaleY(1); opacity: 1; }
+            100% { transform: scaleY(0.5); opacity: 0.5; }
+        }
+        .scroll-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-size: 0.8rem;
+            color: var(--accent-color);
+            margin-bottom: 5px;
+            animation: fade-out-scroll 5s forwards;
+            animation-delay: 5s;
+        }
+
+        @keyframes fade-out-scroll {
+            0% { opacity: 1; }
+            100% { opacity: 0; display: none; }
+        }
+
+        /* Make accent color usable in Tailwind */
+        .text-accent { color: var(--accent-color); }
+        .border-accent { border-color: var(--accent-color); }
+        .bg-accent { background-color: var(--accent-color); }
+        .shadow-accent-glow { box-shadow: 0 0 15px var(--accent-color); }
+
+        .image-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--accent-color);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.7);
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease-out;
+            cursor: pointer;
+        }
+        .image-container:hover {
+            transform: scale(1.05) rotate(2deg);
+            box-shadow: 0 0 25px var(--accent-color);
+        }
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(80%) brightness(1.2);
+            transition: filter 0.3s ease-out;
+        }
+        .image-container:hover img {
+            filter: grayscale(0%) brightness(1);
+        }
+
+        /* Define RGB values for accent and mid-gray for gradients */
+        :root {
+            --accent-rgb: 0, 128, 128; /* Teal */
+            --mid-gray-rgb: 51, 51, 51; /* Mid-gray */
+        }
+
+    </style>
+</head>
+<body class="bg-dark-bg text-light-text selection:bg-accent selection:text-dark-bg">
+
+    <div class="custom-cursor" id="custom-cursor"></div>
+    <div class="bg-glitch-layer"></div>
+    <div class="texture-overlay"></div>
+
+    <div class="relative z-0">
+        <!-- Panel 1: Main Title -->
+        <div class="content-panel bg-gradient-noise" id="panel-1">
+            <div class="panel-inner text-center max-w-2xl">
+                <h1 class="rubik-mono text-5xl md:text-7xl mb-4 text-accent glitch-text">המטריצה נחשפת</h1>
+                <h2 class="rubik-mono text-3xl md:text-5xl mb-8">AI – הטבעת הדיגיטלית החדשה.</h2>
+                <p class="heebo text-xl md:text-2xl opacity-80 leading-relaxed">לפנינו שחר של עידן שבו המחשבה לא רק מפעילה כלים, אלא מעצבת עולמות. AI אינה עוד בגדר מדע בדיוני, אלא הופכת לתצריב המגדיר את קווי המתאר של קיומנו. מי שמבין את שפתה, יפקד על העתיד.</p>
+            </div>
+        </div>
+
+        <!-- Panel 2: Message & Accessibility -->
+        <div class="content-panel clip-shape-1" id="panel-2">
+            <div class="panel-inner max-w-3xl">
+                <h3 class="rubik-mono text-4xl md:text-5xl mb-6 text-accent">לפקד על הקוד הנשמתי</h3>
+                <p class="heebo text-lg md:text-xl mb-6 opacity-90">בינה מלאכותית אינה כלי, היא תבנית מציאות חדשה. התהליך אינו תאורטי-הוא חריטה מעשית בלוח המציאות. מצעדים ראשונים ועד לביסוס אבני בניין מתקדמות, אנו חושפים את האלגוריתמים ומטביעים את יכולת הביצוע, צעד אחר צעד, תצריב אחר תצריב.</p>
+                <p class="heebo text-lg md:text-xl opacity-80">ידע זה, ברגע שייחרט, הופך לחלק בלתי נפרד מדרך פעולתך, ומעניק לך כוח חסר תקדים לצוֹר עתיד.</p>
+            </div>
+        </div>
+
+        <!-- Panel 3: Target Audience -->
+        <div class="content-panel clip-shape-2" id="panel-3">
+            <div class="panel-inner max-w-3xl">
+                <h3 class="rubik-mono text-4xl md:text-5xl mb-6 text-accent">מי יחקוק את העתיד?</h3>
+                <p class="heebo text-lg md:text-xl mb-4 opacity-90">מי שבנפשו חרוט הצורך להבין את המחר-בין אם הוא חוקר סקרן בתחילת דרכו, אדריכל מציאות המחפש כלים חדשים, מנהיג המבקש להוביל צוותים אל קצה החדשנות, או אומן קוד החותר לפיתוח פורץ דרך-ימצא כאן את עומק הידע והטכניקה.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm md:text-base mt-8">
+                    <div class="p-4 border border-accent/30 rounded-lg shadow-accent-glow/20">
+                        <p class="font-bold text-accent">חוקרים חדשים</p>
+                        <p class="heebo text-neutral-300">הצעד הראשון אל עולם ה-AI, חשיפת סודותיו.</p>
+                    </div>
+                    <div class="p-4 border border-accent/30 rounded-lg shadow-accent-glow/20">
+                        <p class="font-bold text-accent">אדריכלי מציאות</p>
+                        <p class="heebo text-neutral-300">אנשי מקצוע המטמיעים AI בעבודתם היומיומית.</p>
+                    </div>
+                    <div class="p-4 border border-accent/30 rounded-lg shadow-accent-glow/20">
+                        <p class="font-bold text-accent">מנהיגי חדשנות</p>
+                        <p class="heebo text-neutral-300">ארגונים וצוותים המחפשים פריצת דרך טכנולוגית.</p>
+                    </div>
+                    <div class="p-4 border border-accent/30 rounded-lg shadow-accent-glow/20">
+                        <p class="font-bold text-accent">אמני קוד</p>
+                        <p class="heebo text-neutral-300">פיתוח פרויקטים מבוססי AI ברמה המתקדמת ביותר.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel 4: Expertise Areas -->
+        <div class="content-panel bg-mid-gray/10" id="panel-4">
+            <div class="panel-inner max-w-4xl">
+                <h3 class="rubik-mono text-4xl md:text-5xl mb-6 text-accent">השדות בהם ה-AI מותירה את חותמה</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                    <div class="p-6 border border-neutral-700 rounded-lg transform hover:scale-105 transition-transform duration-300 bg-neutral-900/50 shadow-lg hover:shadow-accent-glow/30">
+                        <span class="text-5xl mb-3 block text-accent">📄</span>
+                        <h4 class="font-bold text-xl mb-2 heebo">הטקסט המתעורר</h4>
+                        <p class="text-neutral-300 text-sm heebo">יצירת נרטיבים, מאמרים ותכנים שמתעלים על המוכר.</p>
+                    </div>
+                    <div class="p-6 border border-neutral-700 rounded-lg transform hover:scale-105 transition-transform duration-300 bg-neutral-900/50 shadow-lg hover:shadow-accent-glow/30">
+                        <span class="text-5xl mb-3 block text-accent">💡</span>
+                        <h4 class="font-bold text-xl mb-2 heebo">היישום החכם</h4>
+                        <p class="text-neutral-300 text-sm heebo">בניית אפליקציות חושבות שמגיבות למציאות.</p>
+                    </div>
+                    <div class="p-6 border border-neutral-700 rounded-lg transform hover:scale-105 transition-transform duration-300 bg-neutral-900/50 shadow-lg hover:shadow-accent-glow/30">
+                        <span class="text-5xl mb-3 block text-accent">🌐</span>
+                        <h4 class="font-bold text-xl mb-2 heebo">המרחב הדיגיטלי החדש</h4>
+                        <p class="text-neutral-300 text-sm heebo">פיתוח אתרים שמתפתחים וחושבים.</p>
+                    </div>
+                    <div class="p-6 border border-neutral-700 rounded-lg transform hover:scale-105 transition-transform duration-300 bg-neutral-900/50 shadow-lg hover:shadow-accent-glow/30">
+                        <span class="text-5xl mb-3 block text-accent">📊</span>
+                        <h4 class="font-bold text-xl mb-2 heebo">פענוח הנתונים</h4>
+                        <p class="text-neutral-300 text-sm heebo">חשיפת תבניות וסודות מתוך ים המידע.</p>
+                    </div>
+                    <div class="p-6 border border-neutral-700 rounded-lg transform hover:scale-105 transition-transform duration-300 bg-neutral-900/50 shadow-lg hover:shadow-accent-glow/30">
+                        <span class="text-5xl mb-3 block text-accent">🎨</span>
+                        <h4 class="font-bold text-xl mb-2 heebo">האומנות האלגוריתמית</h4>
+                        <p class="text-neutral-300 text-sm heebo">יצירת דימויים ויזואליים שמעולם לא נראו.</p>
+                    </div>
+                    <div class="p-6 border border-neutral-700 rounded-lg transform hover:scale-105 transition-transform duration-300 bg-neutral-900/50 shadow-lg hover:shadow-accent-glow/30">
+                        <span class="text-5xl mb-3 block text-accent">⚙️</span>
+                        <h4 class="font-bold text-xl mb-2 heebo">ריקוד האוטומציה</h4>
+                        <p class="text-neutral-300 text-sm heebo">תהליכים שמתייעלים, מבוצעים בדיוק אין סופי.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel 5: Services Offered -->
+        <div class="content-panel clip-shape-3" id="panel-5">
+            <div class="panel-inner max-w-3xl">
+                <h3 class="rubik-mono text-4xl md:text-5xl mb-6 text-accent">מסלולי החריטה אל העתיד</h3>
+                <div class="flex flex-col gap-6">
+                    <div class="p-6 border border-accent/50 bg-neutral-900/70 rounded-br-3xl transform -rotate-1 hover:rotate-0 transition-transform duration-300 shadow-xl hover:shadow-accent-glow/40">
+                        <h4 class="font-bold text-2xl mb-2 heebo text-accent">מפגשי סדנה</h4>
+                        <p class="text-lg heebo text-neutral-200">התכנסות דינמית לחרוט ידע קולקטיבי - סדנאות מעשיות וממוקדות, המאפשרות התנסות עמוקה בכלים ומתודולוגיות חדשות.</p>
+                    </div>
+                    <div class="p-6 border border-accent/50 bg-neutral-900/70 rounded-tl-3xl transform rotate-1 hover:rotate-0 transition-transform duration-300 shadow-xl hover:shadow-accent-glow/40">
+                        <h4 class="font-bold text-2xl mb-2 heebo text-accent">הדרכה אישית</h4>
+                        <p class="text-lg heebo text-neutral-200">מסע עמוק, פרטני, החושף את הפוטנציאל האישי-התאמה מלאה לרמה ולצרכים הייחודיים שלך, למידה בקצב שלך.</p>
+                    </div>
+                    <div class="p-6 border border-accent/50 bg-neutral-900/70 rounded-br-3xl transform -rotate-1 hover:rotate-0 transition-transform duration-300 shadow-xl hover:shadow-accent-glow/40">
+                        <h4 class="font-bold text-2xl mb-2 heebo text-accent">חזון לארגונים</h4>
+                        <p class="text-lg heebo text-neutral-200">הטבעת מפת דרכים אסטרטגית לקבוצות מורכבות-הרצאות מעוררות השראה וסדנאות פנים-ארגוניות, פותחות אופקים חדשים לצוותים.</p>
+                    </div>
+                    <div class="p-6 border border-accent/50 bg-neutral-900/70 rounded-tl-3xl transform rotate-1 hover:rotate-0 transition-transform duration-300 shadow-xl hover:shadow-accent-glow/40">
+                        <h4 class="font-bold text-2xl mb-2 heebo text-accent">ליווי פרויקטים</h4>
+                        <p class="text-lg heebo text-neutral-200">שיתוף פעולה ביצירת פרויקטים פורצי דרך, חריטה משותפת של המחר-ייעוץ ופיתוח פרויקטים מבוססי AI, מליווי מקצועי ועד מימוש מלא.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel 6: The Guide & Contact -->
+        <div class="content-panel bg-gradient-noise" id="panel-6">
+            <div class="panel-inner max-w-xl text-center">
+                <h3 class="rubik-mono text-4xl md:text-5xl mb-8 text-accent">זאביק אבינר - המאסטר החורט</h3>
+                <div class="image-container mx-auto">
+                    <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="zevik-image">
+                </div>
+                <p class="heebo text-lg md:text-xl mb-8 opacity-90">אדריכל מציאות דיגיטלית, מומחה AI בעל ניסיון עשיר, שחקק את דרכו במורכבות האלגוריתמים. הוא המגשר, המתרגם, זה שהופך את השפה המסתורית של המכונה למפתחות מעשיים, מטביע ידע, ומדריך כל אחד לחרות את עתידו.</p>
+                <div class="flex flex-col md:flex-row justify-center gap-4 text-xl">
+                    <a href="https://wa.me/972546609385" target="_blank" class="heebo text-accent hover:underline flex items-center justify-center p-3 border border-accent/50 rounded-lg hover:bg-accent/10 transition-colors duration-300">
+                        <span class="ml-2">054-6609385</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-whatsapp"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="heebo text-accent hover:underline flex items-center justify-center p-3 border border-accent/50 rounded-lg hover:bg-accent/10 transition-colors duration-300">
+                        <span class="ml-2">zaviner@gmail.com</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="scroll-indicator" id="scroll-indicator">
+        <span class="scroll-text heebo">גללו למטה</span>
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        const speed = 0.15; // Cursor following speed
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * speed;
+            cursorY += (mouseY - cursorY) * speed;
+            cursor.style.transform = `translate(${cursorX - var_cursor_size_px/2}px, ${cursorY - var_cursor_size_px/2}px)`; // Adjusted for center
+            requestAnimationFrame(animateCursor);
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Get cursor size dynamically
+        const var_cursor_size = getComputedStyle(document.documentElement).getPropertyValue('--cursor-size');
+        const var_cursor_size_px = parseFloat(var_cursor_size.replace('px', ''));
+
+        // Start cursor animation
+        animateCursor();
+
+        // Add hover effect to interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, .image-container, [role="button"], [tabindex="0"]');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+
+        // Scroll indicator fade out
+        const scrollIndicator = document.getElementById('scroll-indicator');
+        let hasScrolled = false;
+        document.addEventListener('scroll', () => {
+            if (!hasScrolled) {
+                scrollIndicator.style.animationPlayState = 'running';
+                scrollIndicator.style.animationFillMode = 'forwards';
+                hasScrolled = true;
+            }
+        });
+
+        // Parallax effect for panels on scroll
+        const panels = document.querySelectorAll('.content-panel');
+        document.addEventListener('scroll', () => {
+            const scrollPosition = window.pageYOffset;
+            panels.forEach((panel, index) => {
+                const rect = panel.getBoundingClientRect();
+                // Calculate how much of the panel is in view
+                const viewportHeight = window.innerHeight;
+                const panelHeight = rect.height;
+                const panelTop = rect.top + window.pageYOffset;
+                const panelBottom = rect.bottom + window.pageYOffset;
+
+                // Adjust `translationRatio` to control parallax intensity
+                let translationRatio = 0;
+                if (panelTop < scrollPosition + viewportHeight && panelBottom > scrollPosition) {
+                    // Panel is in view
+                    const center = panelTop + panelHeight / 2;
+                    const distanceFromCenter = (scrollPosition + viewportHeight / 2) - center;
+                    translationRatio = distanceFromCenter / (viewportHeight + panelHeight) * 50; // Adjust multiplier for effect
+                }
+                
+                // Apply a slight transform for a subtle effect, only on relevant panels
+                if (index > 0 && index < panels.length - 1) { // Apply to middle panels
+                     panel.style.transform = `translateY(${translationRatio * (index % 2 === 0 ? 1 : -1)}px)`;
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

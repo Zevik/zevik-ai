@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מסע אל ה-AI - זאביק אבינר: לשלוט בזרם</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700&family=Frank+Ruhl+Libre:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Assistant', sans-serif;
+            overflow-x: hidden;
+            background-color: #0F172A; /* Slate 950 for base background */
+            cursor: none; /* Hide default cursor */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Frank Ruhl Libre', serif;
+        }
+
+        /* Custom Cursor Styling - High Contrast */
+        #custom-cursor {
+            position: fixed;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease, height 0.2s ease, border-width 0.2s ease;
+            border: 2px solid rgba(255, 255, 255, 0.9); /* Light color border */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8), /* Dark, high-opacity shadow */
+                        0 0 0 6px rgba(255, 255, 255, 0.2); /* Subtle glow */
+            /* Ensure visibility on all backgrounds: The border is visible on dark, the shadow on light */
+        }
+        #custom-cursor.active {
+            width: 32px;
+            height: 32px;
+            border-width: 3px;
+        }
+
+        /* Seascape Background Animations */
+        .seascape-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            pointer-events: none;
+        }
+
+        /* Layer 1: Deep Ocean Gradient */
+        .seascape-layer-1 {
+            background: linear-gradient(to bottom, #0F172A 0%, #17375E 50%, #1E508B 100%);
+            z-index: -3;
+        }
+
+        /* Layer 2: Subtle Wave Motion */
+        .seascape-layer-2 {
+            background-image: radial-gradient(circle at 50% 100%, rgba(30, 80, 139, 0.3) 0%, rgba(30, 80, 139, 0) 70%),
+                              radial-gradient(circle at 50% 0%, rgba(23, 55, 94, 0.3) 0%, rgba(23, 55, 94, 0) 70%);
+            background-size: 200% 200%;
+            animation: wave-motion 25s infinite ease-in-out alternate;
+            opacity: 0.7;
+            z-index: -2;
+        }
+
+        /* Layer 3: Light Ripples/Reflections */
+        .seascape-layer-3 {
+            background: rgba(255, 255, 255, 0.05); /* Subtle overlay for light */
+            mix-blend-mode: overlay; /* Use mix-blend-mode for aesthetic background elements only */
+            animation: light-ripple 40s infinite linear;
+            z-index: -1;
+        }
+        @keyframes wave-motion {
+            0% { transform: translateY(0) scaleX(1); opacity: 0.7; }
+            50% { transform: translateY(20px) scaleX(1.02); opacity: 0.8; }
+            100% { transform: translateY(0) scaleX(1); opacity: 0.7; }
+        }
+
+        @keyframes light-ripple {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+            25% { transform: scale(1.05) rotate(5deg); opacity: 0.6; }
+            50% { transform: scale(1.1) rotate(0deg); opacity: 0.7; }
+            75% { transform: scale(1.05) rotate(-5deg); opacity: 0.6; }
+            100% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+        }
+
+        /* Parallax effect for content sections if desired, though current background layers are already animated/fixed */
+        /* For true parallax on content, each section would need its own transform translateY property based on scroll */
+        /* For this artistic piece, the fixed background layers with subtle animations provide a strong sense of immersion */
+
+        /* Utility for high contrast text on a dark background */
+        .text-high-contrast {
+            color: #E0E7FF; /* Indigo-100 */
+        }
+        .bg-high-contrast-dark {
+            background-color: rgba(15, 23, 42, 0.8); /* Slate-900 with transparency */
+        }
+    </style>
+</head>
+<body class="text-white">
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="hidden md:block"></div>
+
+    <!-- Seascape Background Layers -->
+    <div class="seascape-layer seascape-layer-1"></div>
+    <div class="seascape-layer seascape-layer-2"></div>
+    <div class="seascape-layer seascape-layer-3"></div>
+
+    <!-- Main Content Wrapper -->
+    <main class="relative z-10 min-h-screen pt-16 pb-24 md:pt-24 md:pb-32 bg-fixed text-high-contrast">
+
+        <!-- Hero Section: Title & Tagline -->
+        <section class="container mx-auto px-4 py-24 text-center md:py-32 lg:py-48 relative overflow-hidden bg-high-contrast-dark rounded-xl shadow-2xl max-w-4xl mt-12 mb-24 backdrop-blur-sm">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight text-sky-300 drop-shadow-lg animate-fade-in-up">
+                לשלוט בזרם: ה-AI - אוקיינוס ההזדמנויות שלכם
+            </h1>
+            <p class="text-xl md:text-2xl leading-relaxed text-blue-200 drop-shadow-md animate-fade-in-up delay-200">
+                הבינה המלאכותית אינה גל חולף - היא המעמקים החדשים של החדשנות.<br>
+                אנו נצייד אתכם במפה ובמצפן למסע מרתק.
+            </p>
+        </section>
+
+        <!-- About AI / Core Message -->
+        <section class="container mx-auto px-4 py-16 md:py-24 max-w-3xl bg-high-contrast-dark rounded-xl shadow-xl mb-24 backdrop-blur-sm">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-teal-400">
+                צוללים לעומק: מסע אל לב ה-AI
+            </h2>
+            <div class="space-y-8 text-lg leading-relaxed text-blue-100">
+                <p>
+                    במעמקי הדיגיטל, עולם חדש נחשף. בינה מלאכותית, פעם נחלת המומחים, פורצת גבולות והופכת לכוח מניע בכל תחום. ב"מסע אל ה-AI" אנו מאמינים כי לכל אחד ואחת היכולת לנווט במימיו הסוערים, ולרתום את עוצמתו לשינוי וצמיחה.
+                </p>
+                <p>
+                    מהגל הראשון של ההבנה ועד לצלילה עמוקה לפרקטיקות מתקדמות - נלווה אתכם צעד אחר צעד. הכלים שתקבלו אינם רק ידע, אלא מנופים אמיתיים ליישום מיידי בעבודה, בחיים וביצירה. נפתח בפניכם את שערי האוקיינוס הדיגיטלי, ונלמד אתכם לא רק לשרוד, אלא לשגשג בו.
+                </p>
+            </div>
+        </section>
+
+        <!-- Target Audience / Who is this for -->
+        <section class="container mx-auto px-4 py-16 md:py-24 max-w-4xl bg-high-contrast-dark rounded-xl shadow-xl mb-24 backdrop-blur-sm">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-sky-400">
+                מי אתם, המגלים הבאים?
+            </h2>
+            <p class="text-lg leading-relaxed text-center mb-12 text-blue-100 max-w-2xl mx-auto">
+                בין אם אתם עומדים על שפת הים ומביטים אל האופק בציפייה, או מלחים ותיקים המחפשים נתיבים חדשים לשיט - "מסע אל ה-AI" מותאם עבורכם:
+            </p>
+            <div class="grid md:grid-cols-2 gap-10 text-lg">
+                <div class="bg-gray-800/60 p-8 rounded-lg shadow-inner border border-blue-700/50 hover:bg-gray-700/70 transition-all duration-300">
+                    <h3 class="text-3xl font-bold mb-4 text-teal-300">
+                        האופק - למתחילים
+                    </h3>
+                    <p class="text-blue-200">
+                        צלילה רכה לעולם ה-AI - גלו את המושגים הבסיסיים, את הכלים הראשוניים ואת הפוטנציאל העצום הטמון בו, ללא ידע מוקדם.
+                    </p>
+                </div>
+                <div class="bg-gray-800/60 p-8 rounded-lg shadow-inner border border-blue-700/50 hover:bg-gray-700/70 transition-all duration-300">
+                    <h3 class="text-3xl font-bold mb-4 text-teal-300">
+                        העוגן - לאנשי מקצוע
+                    </h3>
+                    <p class="text-blue-200">
+                        הניחו עוגן - הטמיעו כלי AI מתקדמים בעבודתכם, שפרו תהליכים, התייעלו והקדימו את הגל הבא בתחומכם.
+                    </p>
+                </div>
+                <div class="bg-gray-800/60 p-8 rounded-lg shadow-inner border border-blue-700/50 hover:bg-gray-700/70 transition-all duration-300">
+                    <h3 class="text-3xl font-bold mb-4 text-teal-300">
+                        הצי - למנהלים וארגונים
+                    </h3>
+                    <p class="text-blue-200">
+                        הובילו את הצי - ציידו את צוותיכם בידע ובכלים לניווט בשינוי הטכנולוגי, והבטיחו יתרון תחרותי.
+                    </p>
+                </div>
+                <div class="bg-gray-800/60 p-8 rounded-lg shadow-inner border border-blue-700/50 hover:bg-gray-700/70 transition-all duration-300">
+                    <h3 class="text-3xl font-bold mb-4 text-teal-300">
+                        מסעות חקר - למפתחים מתקדמים
+                    </h3>
+                    <p class="text-blue-200">
+                        צאו למסעות חקר - פיתוח פרויקטים חדשניים מבוססי AI, מהרעיון המופשט ועד למימוש הטכני המלא.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Areas -->
+        <section class="container mx-auto px-4 py-16 md:py-24 max-w-4xl bg-high-contrast-dark rounded-xl shadow-xl mb-24 backdrop-blur-sm">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-blue-400">
+                המעמקים שאנו חוקרים - תחומי ההתמחות ב-AI
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 text-center text-blue-100">
+                <div class="flex flex-col items-center p-6 bg-gray-800/60 rounded-lg shadow-inner border border-teal-700/50 hover:scale-105 transition-transform duration-300">
+                    <span class="text-5xl mb-4 text-teal-300">✍️</span>
+                    <h3 class="text-2xl font-bold mb-2">זרם המילים</h3>
+                    <p>יצירת טקסטים, תוכן שיווקי וסיפורים בלחיצת כפתור.</p>
+                </div>
+                <div class="flex flex-col items-center p-6 bg-gray-800/60 rounded-lg shadow-inner border border-teal-700/50 hover:scale-105 transition-transform duration-300">
+                    <span class="text-5xl mb-4 text-teal-300">📱</span>
+                    <h3 class="text-2xl font-bold mb-2">אדריכלות חכמה</h3>
+                    <p>בניית אפליקציות ובוטים אינטליגנטיים המגיבים לצרכים שלכם.</p>
+                </div>
+                <div class="flex flex-col items-center p-6 bg-gray-800/60 rounded-lg shadow-inner border border-teal-700/50 hover:scale-105 transition-transform duration-300">
+                    <span class="text-5xl mb-4 text-teal-300">🌐</span>
+                    <h3 class="text-2xl font-bold mb-2">נתיבי הרשת</h3>
+                    <p>פיתוח אתרים חדשניים המשלבים יכולות AI לחוויית משתמש משופרת.</p>
+                </div>
+                <div class="flex flex-col items-center p-6 bg-gray-800/60 rounded-lg shadow-inner border border-teal-700/50 hover:scale-105 transition-transform duration-300">
+                    <span class="text-5xl mb-4 text-teal-300">📊</span>
+                    <h3 class="text-2xl font-bold mb-2">מפות נתונים</h3>
+                    <p>ניתוח מידע מורכב והפיכתו לתובנות עסקיות ומחקריות.</p>
+                </div>
+                <div class="flex flex-col items-center p-6 bg-gray-800/60 rounded-lg shadow-inner border border-teal-700/50 hover:scale-105 transition-transform duration-300">
+                    <span class="text-5xl mb-4 text-teal-300">🎨</span>
+                    <h3 class="text-2xl font-bold mb-2">אמנות הגלים</h3>
+                    <p>יצירת תמונות, גרפיקות ואומנות דיגיטלית באמצעות בינה מלאכותית.</p>
+                </div>
+                <div class="flex flex-col items-center p-6 bg-gray-800/60 rounded-lg shadow-inner border border-teal-700/50 hover:scale-105 transition-transform duration-300">
+                    <span class="text-5xl mb-4 text-teal-300">⚙️</span>
+                    <h3 class="text-2xl font-bold mb-2">האוטומציה השקטה</h3>
+                    <p>ייעול תהליכים רוטיניים ושחרור זמן ליצירה וחדשנות.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered -->
+        <section class="container mx-auto px-4 py-16 md:py-24 max-w-4xl bg-high-contrast-dark rounded-xl shadow-xl mb-24 backdrop-blur-sm">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-teal-400">
+                מפרש חדש לכל מסע - השירותים שלנו
+            </h2>
+            <div class="grid md:grid-cols-2 gap-10 text-lg text-blue-100">
+                <div class="bg-gray-800/60 p-8 rounded-lg shadow-inner border border-sky-700/50 hover:bg-gray-700/70 transition-all duration-300">
+                    <h3 class="text-3xl font-bold mb-4 text-sky-300">
+                        סדנאות קבוצתיות
+                    </h3>
+                    <p>
+                        קבוצות קטנות, למידה מעשית, סביבת עבודה משותפת - בואו ליצור וללמוד יחד בסדנאות ממוקדות ואינטראקטיביות.
+                    </p>
+                </div>
+                <div class="bg-gray-800/60 p-8 rounded-lg shadow-inner border border-sky-700/50 hover:bg-gray-700/70 transition-all duration-300">
+                    <h3 class="text-3xl font-bold mb-4 text-sky-300">
+                        שיעורים פרטיים
+                    </h3>
+                    <p>
+                        התאמה אישית מלאה - הקצב, התוכן והמיקוד בדיוק לצרכים הייחודיים שלכם, מותאם לרמה ולשאיפות.
+                    </p>
+                </div>
+                <div class="bg-gray-800/60 p-8 rounded-lg shadow-inner border border-sky-700/50 hover:bg-gray-700/70 transition-all duration-300">
+                    <h3 class="text-3xl font-bold mb-4 text-sky-300">
+                        הרצאות והדרכות לארגונים
+                    </h3>
+                    <p>
+                        פתיחת אופקים, השראה וכלים מעשיים לצוותים, מותאם לאתגרי הארגון ולחזון העסקי שלו.
+                    </p>
+                </div>
+                <div class="bg-gray-800/60 p-8 rounded-lg shadow-inner border border-sky-700/50 hover:bg-gray-700/70 transition-all duration-300">
+                    <h3 class="text-3xl font-bold mb-4 text-sky-300">
+                        ייעוץ ופיתוח פרויקטים
+                    </h3>
+                    <p>
+                        ליווי מקצועי מפיתוח רעיון חדשני ועד מימוש מלא של פרויקט AI, לכל גודל ואתגר.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide - Zevik Aviner -->
+        <section class="container mx-auto px-4 py-16 md:py-24 max-w-3xl bg-high-contrast-dark rounded-xl shadow-xl mb-24 backdrop-blur-sm">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-blue-400">
+                הקברניט שלכם במסע - זאביק אבינר
+            </h2>
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-10 text-lg leading-relaxed">
+                <div class="flex-shrink-0 relative w-40 h-40 rounded-full overflow-hidden border-4 border-teal-500 shadow-xl group">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-teal-500/30 to-transparent"></div>
+                </div>
+                <div class="text-blue-100 md:text-right">
+                    <p class="mb-4">
+                        זאביק אבינר, דמות מובילה בנוף הבינה המלאכותית הישראלי, הוא לא רק מומחה טכני אלא גם מורה דרך מנוסה.
+                    </p>
+                    <p class="mb-4">
+                        עם עשרות שנים של ניסיון בפיתוח מערכות, אפליקציות ופרויקטים מבוססי AI, זאביק מתמחה בפישוט המורכב, בהנגשת הטכנולוגיה ובהפיכתה לכלי עבודה יומיומי ונגיש לכל.
+                    </p>
+                    <p>
+                        הוא המגדלור שיאיר את דרככם באוקיינוס ה-AI, ויבטיח שתגיעו ליעדכם בבטחה ובהצלחה.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="container mx-auto px-4 py-16 md:py-24 max-w-xl text-center bg-high-contrast-dark rounded-xl shadow-xl backdrop-blur-sm">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8 text-teal-400">
+                הצטרפו למסע - צרו קשר
+            </h2>
+            <p class="text-xl leading-relaxed mb-8 text-blue-100">
+                הגיע הזמן להפליג קדימה. צרו קשר עוד היום ונתחיל לתכנן את המסע המשותף שלכם לעבר שליטה בבינה המלאכותית.
+            </p>
+            <div class="space-y-6 text-2xl font-semibold">
+                <p class="flex items-center justify-center text-sky-200">
+                    <a href="https://wa.me/972546609385" target="_blank" class="flex items-center gap-3 text-sky-300 hover:text-sky-100 transition-colors duration-300">
+                        <span class="text-3xl">📞</span>
+                        ווטסאפ: 054-6609385
+                    </a>
+                </p>
+                <p class="flex items-center justify-center text-sky-200">
+                    <a href="mailto:zaviner@gmail.com" class="flex items-center gap-3 text-sky-300 hover:text-sky-100 transition-colors duration-300">
+                        <span class="text-3xl">✉️</span>
+                        אימייל: zaviner@gmail.com
+                    </a>
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        if (customCursor) { // Check if cursor exists (it's hidden on small screens)
+            document.addEventListener('mousemove', (e) => {
+                customCursor.style.left = `${e.clientX}px`;
+                customCursor.style.top = `${e.clientY}px`;
+            });
+
+            // Add hover effect for interactive elements (optional)
+            document.querySelectorAll('a, button, input[type="submit"], .group, .hover\\:scale-105').forEach(el => {
+                el.addEventListener('mouseenter', () => customCursor.classList.add('active'));
+                el.addEventListener('mouseleave', () => customCursor.classList.remove('active'));
+            });
+        }
+
+        // Simple Parallax for main content (optional, in addition to fixed background animation)
+        // This makes content elements shift slightly against the fixed background.
+        const mainContent = document.querySelector('main');
+        if (mainContent) {
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                // Adjust content slower than background for a subtle separation
+                mainContent.style.transform = `translateY(${scrollY * 0.1}px)`;
+            });
+        }
+
+        // Fade-in animation for sections on scroll
+        const faders = document.querySelectorAll('section');
+        const appearOptions = {
+            threshold: 0.2, // When 20% of the item is visible
+            rootMargin: "0px 0px -100px 0px" // Start animating 100px before bottom of viewport
+        };
+        const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return;
+                } else {
+                    entry.target.classList.add('animate-fade-in-up');
+                    appearOnScroll.unobserve(entry.target);
+                }
+            });
+        }, appearOptions);
+
+        faders.forEach(fader => {
+            fader.classList.add('opacity-0', 'translate-y-8', 'transition-all', 'duration-1000', 'ease-out');
+            appearOnScroll.observe(fader);
+        });
+
+        // Keyframe for fade-in-up, applied via JS for initial hidden state
+        const styleSheet = document.createElement("style");
+        styleSheet.type = "text/css";
+        styleSheet.innerText = `
+            @keyframes fade-in-up {
+                from { opacity: 0; transform: translateY(32px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .animate-fade-in-up {
+                animation: fade-in-up 1s ease-out forwards;
+            }
+            .delay-200 { animation-delay: 0.2s; }
+            .delay-400 { animation-delay: 0.4s; }
+            .delay-600 { animation-delay: 0.6s; }
+        `;
+        document.head.appendChild(styleSheet);
+    </script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - אמנות הבינה המלאכותית: העתיד שבידיים</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;700&family=Heebo:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Define Minoan-inspired colors as CSS variables */
+        :root {
+            --color-terracotta: #B95B30; /* Deeper terracotta */
+            --color-aegean-blue: #3A6D90; /* Aegean Blue */
+            --color-ochre-yellow: #DDAA00; /* Rich ochre yellow */
+            --color-cream: #FDF9F3; /* Soft cream for backgrounds */
+            --color-dark-brown: #4A3C33; /* Dark earthy brown for text */
+            --color-seafoam-green: #7FA79A; /* Soft green */
+        }
+
+        /* Apply custom fonts */
+        body {
+            font-family: 'Heebo', sans-serif;
+            color: var(--color-dark-brown);
+            overflow-x: hidden; /* Prevent horizontal scroll for parallax layers */
+            cursor: none; /* Hide default cursor */
+            background-color: var(--color-cream);
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Frank Ruhl Libre', serif;
+            color: var(--color-terracotta);
+        }
+
+        /* Tailwind custom colors setup (optional, for explicit usage) */
+        .bg-terracotta { background-color: var(--color-terracotta); }
+        .bg-aegean-blue { background-color: var(--color-aegean-blue); }
+        .bg-ochre-yellow { background-color: var(--color-ochre-yellow); }
+        .bg-cream { background-color: var(--color-cream); }
+        .bg-dark-brown { background-color: var(--color-dark-brown); }
+        .bg-seafoam-green { background-color: var(--color-seafoam-green); }
+
+        .text-terracotta { color: var(--color-terracotta); }
+        .text-aegean-blue { color: var(--color-aegean-blue); }
+        .text-ochre-yellow { color: var(--color-ochre-yellow); }
+        .text-cream { color: var(--color-cream); }
+        .text-dark-brown { color: var(--color-dark-brown); }
+        .text-seafoam-green { color: var(--color-seafoam-green); }
+
+        /* Custom Cursor Styling */
+        #custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease-out, opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+            border: 2px solid white; /* Ensures visibility on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Ensures visibility on light backgrounds */
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .interactive-element:hover ~ #custom-cursor {
+            transform: translate(-50%, -50%) scale(1.5);
+            background-color: var(--color-ochre-yellow);
+            opacity: 0.8;
+            border-color: var(--color-dark-brown);
+        }
+        
+        /* Parallax Container */
+        .parallax-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden; /* Important for parallax */
+            perspective: 1px; /* Enable 3D transform for parallax */
+            transform-style: preserve-3d;
+        }
+
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: cover;
+            background-position: center;
+            will-change: transform;
+        }
+
+        /* Parallax speed adjustments */
+        .parallax-bg-deep {
+            transform: translateZ(-1px) scale(2); /* Further back, scales up */
+        }
+        .parallax-bg-mid {
+            transform: translateZ(-0.5px) scale(1.5); /* Mid-ground */
+        }
+        .parallax-content {
+            transform: translateZ(0); /* Foreground */
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Minoan shapes - using pseudo-elements or direct SVG in CSS for artistry */
+        .minoan-spiral-overlay {
+            position: absolute;
+            top: -20%; right: -20%;
+            width: 80%; height: 80%;
+            background: radial-gradient(circle at 70% 30%, var(--color-ochre-yellow) 10%, transparent 10%),
+                        radial-gradient(circle at 70% 30%, var(--color-terracotta) 20%, transparent 20%),
+                        radial-gradient(circle at 70% 30%, var(--color-aegean-blue) 30%, transparent 30%);
+            background-size: 100% 100%;
+            border-radius: 50%;
+            opacity: 0.05;
+            transform: rotate(20deg);
+            z-index: -1;
+            animation: float-spiral 20s infinite ease-in-out alternate;
+        }
+        .minoan-wave-pattern {
+            position: absolute;
+            bottom: -10%; left: -10%;
+            width: 120%; height: 50%;
+            background: linear-gradient(100deg, var(--color-aegean-blue) 0%, var(--color-seafoam-green) 50%, transparent 100%);
+            mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1000 200" xmlns="http://www.w3.org/2000/svg"><path fill="black" d="M0,50 Q125,0 250,50 T500,50 T750,50 T1000,50 V200 H0 Z" /></svg>') repeat-x center / auto 100%;
+            opacity: 0.1;
+            z-index: -1;
+            animation: wave-motion 25s infinite linear alternate;
+        }
+        .minoan-labrys { /* Double Axe */
+            position: absolute;
+            width: 70px; height: 70px;
+            background-color: var(--color-terracotta);
+            -webkit-mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,0 L70,30 L100,30 L80,50 L100,70 L70,70 L50,100 L30,70 L0,70 L20,50 L0,30 L30,30 Z" fill="black"/></svg>') no-repeat center / contain;
+            mask: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50,0 L70,30 L100,30 L80,50 L100,70 L70,70 L50,100 L30,70 L0,70 L20,50 L0,30 L30,30 Z" fill="black"/></svg>') no-repeat center / contain;
+            opacity: 0.1;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        /* Animations for atmospheric effect */
+        @keyframes float-spiral {
+            0% { transform: translate(0, 0) rotate(20deg); }
+            50% { transform: translate(-10px, 10px) rotate(22deg); }
+            100% { transform: translate(0, 0) rotate(20deg); }
+        }
+        @keyframes wave-motion {
+            0% { background-position-x: 0; }
+            100% { background-position-x: 1000px; }
+        }
+
+        /* Scroll reveal animation */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s cubic-bezier(0.17, 0.67, 0.83, 0.67), transform 1s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Specific header styling to ensure contrast and artistic feel */
+        .site-header {
+            background-color: rgba(var(--color-cream-rgb), 0.9); /* Cream with transparency */
+            border-bottom: 2px solid var(--color-terracotta);
+        }
+
+        .highlight-text {
+            color: var(--color-ochre-yellow);
+        }
+        .border-accent {
+            border-color: var(--color-aegean-blue);
+        }
+        .bg-accent-light {
+            background-color: rgba(var(--color-aegean-blue-rgb), 0.05);
+        }
+    </style>
+</head>
+<body class="selection:bg-ochre-yellow selection:text-white">
+
+    <!-- Custom Cursor -->
+    <

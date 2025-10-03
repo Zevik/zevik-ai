@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פקודת האינטליגנציה הגדולה: חרות על לוחות העתיד</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;700;900&family=Heebo:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @layer base {
+            html {
+                font-family: 'Heebo', sans-serif;
+                cursor: none; /* Hide default cursor */
+            }
+            h1, h2, h3 {
+                font-family: 'Frank Ruhl Libre', serif;
+            }
+        }
+        body {
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax/elements */
+            background-color: #0d1a26; /* Deep blue-black fallback */
+        }
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease-out; /* Smooth movement */
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+        }
+        .custom-cursor.active {
+            transform: scale(1.5);
+            background-color: rgba(255, 255, 255, 0.2); /* Slight fill on interaction */
+        }
+
+        /* Custom Tailwind Configuration for Mesopotamian theme */
+        :root {
+            --color-meso-lapis: #102A43; /* Deep Blue */
+            --color-meso-terracotta: #A54A32; /* Earthy Red-Brown */
+            --color-meso-gold: #D4AF37; /* Gold */
+            --color-meso-sand: #F0EAD6; /* Light Sand */
+            --color-meso-stone: #8B817C; /* Grey Stone */
+        }
+
+        .bg-meso-lapis { background-color: var(--color-meso-lapis); }
+        .text-meso-lapis { color: var(--color-meso-lapis); }
+        .bg-meso-terracotta { background-color: var(--color-meso-terracotta); }
+        .text-meso-terracotta { color: var(--color-meso-terracotta); }
+        .bg-meso-gold { background-color: var(--color-meso-gold); }
+        .text-meso-gold { color: var(--color-meso-gold); }
+        .bg-meso-sand { background-color: var(--color-meso-sand); }
+        .text-meso-sand { color: var(--color-meso-sand); }
+        .bg-meso-stone { background-color: var(--color-meso-stone); }
+        .text-meso-stone { color: var(--color-meso-stone); }
+
+        .border-meso-gold { border-color: var(--color-meso-gold); }
+        .border-meso-terracotta { border-color: var(--color-meso-terracotta); }
+
+        .shadow-meso-dark { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06), inset 0 0 10px rgba(0,0,0,0.5); }
+        .shadow-meso-gold-glow { box-shadow: 0 0 15px rgba(212, 175, 55, 0.7); }
+
+        .tablet-border {
+            border: 3px solid #b87333; /* Bronze/copper color */
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            transition: transform 0.5s ease-in-out;
+        }
+        .tablet-border::before {
+            content: '';
+            position: absolute;
+            top: -5px; bottom: -5px; left: -5px; right: -5px;
+            border: 1px solid rgba(212, 175, 55, 0.5); /* Inner gold highlight */
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .text-shadow-meso {
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+        }
+
+        /* Parallax effect for deeper background elements */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -2; /* Deeper than main content */
+        }
+        .parallax-layer-1 {
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Ziggurat_of_Ur_-_Iraq_2004.jpg/1280px-Ziggurat_of_Ur_-_Iraq_2004.jpg'); /* A simplified ziggurat image */
+            background-repeat: no-repeat;
+            background-position: center bottom;
+            background-size: contain;
+            opacity: 0.05;
+        }
+        .parallax-layer-2 {
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Cuneiform_script_in_clay.jpg/1280px-Cuneiform_script_in_clay.jpg'); /* Cuneiform tablet texture */
+            background-repeat: repeat;
+            opacity: 0.02;
+            background-size: 300px;
+        }
+
+        /* Scroll Reveal Animation */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px) scale(0.9);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Text Character Reveal */
+        .text-reveal-char {
+            opacity: 0;
+            transform: translateY(10px);
+            display: inline-block;
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-meso-lapis text-meso-sand min-h-screen relative overflow-hidden">
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-layer parallax-layer-2" style="transform: translateY(var(--parallax-y-2));"></div>
+    <div class="parallax-layer parallax-layer-1" style="transform: translateY(var(--parallax-y-1));"></div>
+
+    <!-- Main Content Wrapper - with positive z-index -->
+    <div class="relative z-10 w-full min-h-screen p-4 md:p-8 flex flex-col items-center justify-center">
+
+        <!-- Grand Title Tablet -->
+        <section class="max-w-4xl mx-auto my-12 p-8 bg-meso-terracotta/90 rounded-lg shadow-2xl tablet-border scroll-reveal transform -rotate-2 hover:rotate-0 transition-transform duration-500">
+            <h1 class="text-4xl md:text-6xl text-meso-gold text-center leading-tight mb-6 text-shadow-meso">
+                פקודת האינטליגנציה הגדולה: חרות על לוחות העתיד
+            </h1>
+            <p class="text-lg md:text-xl text-meso-sand leading-relaxed text-center font-light mt-4 text-shadow-meso">
+                מזמן שחר ההבנה, רוח האינטליגנציה הגדולה נמסרת לכל יד. זאביק, מפרש החידות,
+                מגיש לוחות חוכמה ישימה, ממסד ההכרה ועד פסגת הביצוע,
+                למען חייכם ומלאכתכם.
+            </p>
+        </section>
+
+        <!-- The Guide's Proclamation -->
+        <section class="max-w-3xl mx-auto my-16 p-6 bg-meso-stone/80 rounded-xl shadow-2xl tablet-border scroll-reveal transform rotate-1 hover:rotate-0 transition-transform duration-500">
+            <div class="flex flex-col md:flex-row items-center gap-6">
+                <div class="w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-meso-gold flex-shrink-0 relative shadow-meso-gold-glow">
+                    <!-- Placeholder for Zevik Aviner's image -->
+                    <div class="w-full h-full bg-cover bg-center" style="background-image: url('https://link.zevikaviner.com/zevik'); background-position: center top 20%;"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+                </div>
+                <div class="flex-grow text-center md:text-right">
+                    <h2 class="text-3xl md:text-4xl text-meso-lapis font-bold mb-4 text-shadow-meso">זאביק אבינר - הכהן הגדול של האינטליגנציה</h2>
+                    <p class="text-base md:text-lg text-gray-800 leading-relaxed font-light text-shadow-meso">
+                        אדון הלוחות המדברים. מניסיונו העשיר בפסל פרויקטים וחזיונות,
+                        הוא מנגיש את סודותיה של הטכנולוגיה, הופך אותה
+                        לחרב ברוכה ולמחרשה בונה בידי כל אדם.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tablets of Wisdom - Target Audience -->
+        <section class="max-w-4xl mx-auto my-16 p-8 bg-meso-terracotta/90 rounded-lg shadow-2xl tablet-border scroll-reveal transform -rotate-3 hover:rotate-0 transition-transform duration-500">
+            <h3 class="text-3xl md:text-5xl text-meso-gold text-center mb-8 text-shadow-meso">למי נגלית חוכמה זו?</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-meso-sand text-lg md:text-xl text-shadow-meso">
+                <p class="border-b-2 border-meso-gold pb-3 mb-3 text-reveal-container">
+                    <span>ל</span><span>מ</span><span>ח</span><span>פ</span><span>ש</span><span>י</span> <span>ה</span><span>א</span><span>ו</span><span>ר</span> <span>ב</span><span>צ</span><span>ל</span><span>ל</span><span>י</span> <span>ה</span><span>ל</span><span>א</span><span>-</span><span>נ</span><span>ו</span><span>ד</span><span>ע</span> <span>(</span><span>מ</span><span>ת</span><span>ח</span><span>י</span><span>ל</span><span>י</span><span>ם</span><span>)</span>
+                </p>
+                <p class="border-b-2 border-meso-gold pb-3 mb-3 text-reveal-container">
+                    <span>ל</span><span>מ</span><span>ל</span><span>ו</span><span>מ</span><span>ד</span><span>י</span><span>ם</span> <span>ה</span><span>ר</span><span>ו</span><span>צ</span><span>י</span><span>ם</span> <span>ל</span><span>ע</span><span>צ</span><span>ב</span> <span>א</span><span>ת</span> <span>י</span><span>י</span><span>ע</span><span>ו</span><span>ד</span><span>ם</span> <span>ה</span><span>ח</span><span>ד</span><span>ש</span> <span>(</span><span>א</span><span>נ</span><span>ש</span><span>י</span> <span>מ</span><span>ק</span><span>צ</span><span>ו</span><span>ע</span><span>)</span>
+                </p>
+                <p class="border-b-2 border-meso-gold pb-3 mb-3 text-reveal-container">
+                    <span>ל</span><span>מ</span><span>נ</span><span>ה</span><span>י</span><span>ג</span><span>י</span><span>ם</span> <span>ה</span><span>א</span><span>ו</span><span>צ</span><span>ר</span><span>י</span><span>ם</span> <span>כ</span><span>ו</span><span>ח</span> <span>ב</span><span>ר</span><span>ו</span><span>ח</span><span>ם</span> <span>(</span><span>מ</span><span>נ</span><span>ה</span><span>ל</span><span>י</span><span>ם</span> <span>ו</span><span>א</span><span>ר</span><span>ג</span><span>ו</span><span>נ</span><span>י</span><span>ם</span><span>)</span>
+                </p>
+                <p class="border-b-2 border-meso-gold pb-3 mb-3 text-reveal-container">
+                    <span>ו</span><span>ל</span><span>ב</span><span>ו</span><span>נ</span><span>י</span> <span>ה</span><span>מ</span><span>ח</span><span>ר</span> <span>(</span><span>פ</span><span>י</span><span>ת</span><span>ו</span><span>ח</span> <span>פ</span><span>ר</span><span>ו</span><span>י</span><span>ק</span><span>ט</span><span>י</span><span>ם</span> <span>מ</span><span>ת</span><span>ק</span><span>ד</span><span>מ</span><span>י</span><span>ם</span><span>)</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- Tablets of Specialization -->
+        <section class="max-w-4xl mx-auto my-16 p-8 bg-meso-stone/80 rounded-lg shadow-2xl tablet-border scroll-reveal transform rotate-2 hover:rotate-0 transition-transform duration-500">
+            <h3 class="text-3xl md:text-5xl text-meso-lapis text-center mb-8 text-shadow-meso">לוחות ההתמחות הנשגבים:</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-meso-sand text-lg text-shadow-meso">
+                <div class="p-4 bg-meso-lapis/70 rounded-md border-b-2 border-meso-gold hover:bg-meso-lapis/90 transition-colors duration-300">
+                    <p class="font-bold text-meso-gold mb-2">עיצוב פקודות וכתבי הגות</p>
+                    <p class="text-sm text-gray-200">(יצירת טקסטים ותוכן)</p>
+                </div>
+                <div class="p-4 bg-meso-lapis/70 rounded-md border-b-2 border-meso-gold hover:bg-meso-lapis/90 transition-colors duration-300">
+                    <p class="font-bold text-meso-gold mb-2">בניית כלים חושבים</p>
+                    <p class="text-sm text-gray-200">(בניית אפליקציות חכמות)</p>
+                </div>
+                <div class="p-4 bg-meso-lapis/70 rounded-md border-b-2 border-meso-gold hover:bg-meso-lapis/90 transition-colors duration-300">
+                    <p class="font-bold text-meso-gold mb-2">הקמת ממלכות וירטואליות</p>
+                    <p class="text-sm text-gray-200">(פיתוח אתרים מבוססי AI)</p>
+                </div>
+                <div class="p-4 bg-meso-lapis/70 rounded-md border-b-2 border-meso-gold hover:bg-meso-lapis/90 transition-colors duration-300">
+                    <p class="font-bold text-meso-gold mb-2">פענוח רשומות עתיקות וצפנים</p>
+                    <p class="text-sm text-gray-200">(ניתוח נתונים ומחקר)</p>
+                </div>
+                <div class="p-4 bg-meso-lapis/70 rounded-md border-b-2 border-meso-gold hover:bg-meso-lapis/90 transition-colors duration-300">
+                    <p class="font-bold text-meso-gold mb-2">בריאת צורות ואומנות אלוהית</p>
+                    <p class="text-sm text-gray-200">(יצירת תמונות ואומנות)</p>
+                </div>
+                <div class="p-4 bg-meso-lapis/70 rounded-md border-b-2 border-meso-gold hover:bg-meso-lapis/90 transition-colors duration-300">
+                    <p class="font-bold text-meso-gold mb-2">ריקוד התהליכים והאלות</p>
+                    <p class="text-sm text-gray-200">(אוטומציה של תהליכים)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pathways of Learning - Services -->
+        <section class="max-w-3xl mx-auto my-16 p-8 bg-meso-terracotta/90 rounded-lg shadow-2xl tablet-border scroll-reveal transform -rotate-1 hover:rotate-0 transition-transform duration-500">
+            <h3 class="text-3xl md:text-5xl text-meso-gold text-center mb-8 text-shadow-meso">דרכי ההתקדשות והלמידה:</h3>
+            <div class="space-y-6 text-meso-sand text-lg text-shadow-meso">
+                <p class="p-4 bg-meso-lapis/60 rounded-md border-r-4 border-meso-gold hover:bg-meso-lapis/80 transition-colors duration-300">
+                    <span class="font-bold text-meso-gold">טקסי חניכה קבוצתיים</span> - מעשיים וממוקדים
+                </p>
+                <p class="p-4 bg-meso-lapis/60 rounded-md border-r-4 border-meso-gold hover:bg-meso-lapis/80 transition-colors duration-300">
+                    <span class="font-bold text-meso-gold">הדרכה אישית למבקשי אמת</span> - התאמה לדרך הייחודית
+                </p>
+                <p class="p-4 bg-meso-lapis/60 rounded-md border-r-4 border-meso-gold hover:bg-meso-lapis/80 transition-colors duration-300">
+                    <span class="font-bold text-meso-gold">משא ארגוני לממלכות גדולות</span> - פתיחת אופקים לצוותים
+                </p>
+                <p class="p-4 bg-meso-lapis/60 rounded-md border-r-4 border-meso-gold hover:bg-meso-lapis/80 transition-colors duration-300">
+                    <span class="font-bold text-meso-gold">ייעוץ ובניית עולמות</span> - ליווי מקצועי עד להגשמה
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Tablet -->
+        <section class="max-w-2xl mx-auto my-16 p-6 bg-meso-stone/80 rounded-xl shadow-2xl tablet-border scroll-reveal transform rotate-3 hover:rotate-0 transition-transform duration-500">
+            <h3 class="text-3xl md:text-5xl text-meso-lapis text-center mb-6 text-shadow-meso">ליצירת קשר עם המורה הגדול:</h3>
+            <div class="text-center text-lg md:text-xl space-y-4 text-shadow-meso">
+                <p>
+                    <span class="font-bold text-meso-gold">מגילת תקשורת מידית:</span>
+                    <a href="https://wa.me/972546609385" target="_blank" class="text-meso-lapis hover:text-meso-terracotta transition-colors duration-300 block">
+                        054-6609385
+                    </a>
+                </p>
+                <p>
+                    <span class="font-bold text-meso-gold">כתב אשנב אלקטרוני:</span>
+                    <a href="mailto:zaviner@gmail.com" class="text-meso-lapis hover:text-meso-terracotta transition-colors duration-300 block">
+                        zaviner@gmail.com
+                    </a>
+                </p>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'meso-lapis': '#102A43',
+                        'meso-terracotta': '#A54A32',
+                        'meso-gold': '#D4AF37',
+                        'meso-sand': '#F0EAD6',
+                        'meso-stone': '#8B817C',
+                    },
+                    fontFamily: {
+                        heebo: ['Heebo', 'sans-serif'],
+                        frankRuhlLibre: ['Frank Ruhl Libre', 'serif'],
+                    },
+                }
+            }
+        }
+
+        // Custom Cursor Logic
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        document.addEventListener('mousedown', () => cursor.classList.add('active'));
+        document.addEventListener('mouseup', () => cursor.classList.remove('active'));
+
+        // Scroll Reveal Logic
+        const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Trigger text reveal for all text-reveal-containers within the revealed element
+                    const textRevealContainers = entry.target.querySelectorAll('.text-reveal-container');
+                    textRevealContainers.forEach(container => revealText(container));
+                    observer.unobserve(entry.target); // Only reveal once
+                }
+            });
+        }, observerOptions);
+
+        scrollRevealElements.forEach(el => observer.observe(el));
+
+        // Text Character Reveal Logic
+        function revealText(container) {
+            const chars = container.querySelectorAll('span'); // Select all direct span children
+            chars.forEach((char, index) => {
+                // Ensure char has the correct class to be affected by CSS
+                char.classList.add('text-reveal-char');
+                setTimeout(() => {
+                    char.style.opacity = '1';
+                    char.style.transform = 'translateY(0)';
+                }, index * 50); // Delay each character
+            });
+        }
+
+        // Parallax Effect
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+
+            parallaxLayers.forEach((layer, index) => {
+                const speed = 0.05 + (index * 0.02); // Adjust speed for different layers
+                const yPos = -(scrollY * speed);
+                layer.style.setProperty('--parallax-y-' + (index + 1), yPos + 'px');
+            });
+        });
+
+        // Initial parallax position on load
+        window.dispatchEvent(new Event('scroll'));
+
+    </script>
+</body>
+</html>

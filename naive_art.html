@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מסע הבינה המלאכותית של זאביק - אמנות נאיבית דיגיטלית</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Varela+Round&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles to embed Naïve Art principles */
+        body {
+            font-family: 'Varela Round', sans-serif; /* A bit rounded, friendly */
+            background-color: #f0f8ff; /* AliceBlue - soft sky */
+            overflow-x: hidden; /* Prevent horizontal scrolling from skewed elements */
+            cursor: none; /* Hide default cursor */
+        }
+        h1, h2, h3 {
+            font-family: 'Kalam', cursive; /* More hand-drawn for titles */
+            font-weight: 700;
+        }
+
+        /* Custom cursor styling (MANDATORY High-Contrast) */
+        #custom-cursor {
+            position: fixed;
+            width: 28px; /* Slightly larger */
+            height: 28px;
+            border-radius: 50%;
+            pointer-events: none; /* Allows clicks on elements beneath */
+            transform: translate(-50%, -50%);
+            z-index: 9999; /* Always on top */
+            transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+            /* High-contrast styling: white border + dark shadow */
+            border: 2px solid #FFFFFF; /* White border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for visibility on white */
+            background-color: transparent; /* Initially transparent, can change on hover */
+        }
+
+        /* Basic animation classes for scroll reveal */
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(50px) scale(0.9);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .reveal-item.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Naïve Art specific shapes/styles */
+        .naive-cloud {
+            background: linear-gradient(135deg, #FFFFFF, #f0f8ff);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            filter: drop-shadow(4px 4px 8px rgba(0,0,0,0.1));
+            padding: 2.5rem; /* Ensure enough padding for text */
+        }
+        .naive-star {
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            filter: drop-shadow(3px 3px 6px rgba(0,0,0,0.15));
+        }
+        .naive-bubble {
+            border-radius: 50% / 60% 60% 40% 40%; /* General rounded shape */
+            position: relative;
+            filter: drop-shadow(3px 3px 6px rgba(0,0,0,0.1));
+            /* Specific tail for speech bubble */
+            border-bottom-left-radius: 20px; /* Adjust to prevent sharp corners on tail side */
+            border-bottom-right-radius: 20px;
+        }
+        /* Common style for the speech bubble tail */
+        .naive-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -15px; /* Position the tail below the bubble */
+            width: 0;
+            height: 0;
+            border-top: 15px solid; /* Color inherited or set by specific class */
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.05));
+        }
+        /* Specific tail positions/rotations for RTL layout */
+        .contact-bubble::after {
+            left: auto; /* Override default left:0 */
+            right: 20px; /* Position tail on the right side */
+            transform: rotate(30deg); /* Rotate for a playful angle */
+            border-top-color: #fcf6bd; /* Match section-color-1 */
+        }
+        .audience-bubble::after {
+            left: auto; /* Override default left:0 */
+            right: 20px; /* Position tail on the right side */
+            transform: rotate(30deg);
+            border-top-color: #a7e9af; /* Match section-color-2 */
+        }
+        .services-bubble::after {
+            left: auto;
+            right: 20px;
+            transform: rotate(30deg);
+            border-top-color: #ffb7b2; /* Match section-color-4 */
+        }
+
+        /* Colors for different sections (high contrast with text ensured) */
+        .section-color-1 { background-color: #fcf6bd; /* Light yellow */ color: #4a2c00; /* Dark brown for text */ }
+        .section-color-2 { background-color: #a7e9af; /* Light green */ color: #1a4d2e; /* Dark green for text */ }
+        .section-color-3 { background-color: #a7d9f7; /* Light blue */ color: #0f3f62; /* Dark blue for text */ }
+        .section-color-4 { background-color: #ffb7b2; /* Light red/pink */ color: #6b1e1e; /* Dark red for text */ }
+        .section-color-5 { background-color: #e0bfe7; /* Light purple */ color: #3d1b4a; /* Dark purple for text */ }
+
+        /* General content styling with Naïve feel */
+        .content-block-skew {
+            transform: rotate(calc(var(--rotation-deg) * 1deg));
+            margin-bottom: 8rem; /* Extra space for skew and potential overlapping */
+            transition: transform 0.5s ease-out; /* Smooth rotation on reveal */
+        }
+    </style>
+</head>
+<body class="bg-[#f0f8ff] text-gray-800 antialiased overflow-x-hidden">
+
+    <div id="custom-cursor"></div>
+
+    <main class="relative z-10 p-4 md:p-8 lg:p-12 max-w-7xl mx-auto flex flex-col items-center">
+
+        <!-- Initial Greeting Canvas -->
+        <section class="relative w-full text-center my-16 md:my-24 reveal-item">
+            <div class="relative inline-block naive-cloud text-gray-800 text-right pr-20 md:pr-32 py-10 md:py-16 pl-10 md:pl-16 shadow-xl"
+                 style="background: linear-gradient(135deg, #FFEFBA, #FFE0BB); border-radius: 70% 30% 70% 30% / 60% 40% 60% 40%; max-width: 900px; width: fit-content; margin: 0 auto;">
+                <h1 class="text-5xl md:text-7xl mb-4 text-orange-700 leading-tight">המסע המופלא אל<br>עולם הבינה המלאכותית</h1>
+                <p class="text-xl md:text-3xl text-orange-600 leading-relaxed font-semibold">בואו נצייר את העתיד ביחד!</p>
+                <div class="absolute top-10 left-10 w-24 h-24 bg-yellow-400 naive-star -rotate-12"></div>
+                <div class="absolute bottom-5 right-5 w-16 h-16 bg-blue-400 naive-star rotate-6"></div>
+            </div>
+            <p class="text-xl md:text-2xl mt-8 px-4 max-w-2xl mx-auto text-center leading-loose reveal-item" style="transition-delay: 0.5s;">
+                בינה מלאכותית זה לא רק למדענים חכמים. זה כמו קסם שיכול לעזור לכולנו, כל יום, בעבודה ובבית. זאביק יראה לכם את הדרך בכיף ובקלות!
+            </p>
+        </section>
+
+        <!-- Ze'evik's Introduction - A Friendly Portrait -->
+        <section class="relative w-full max-w-4xl mx-auto my-16 md:my-24 reveal-item" style="transition-delay: 1s;">
+            <div class="relative p-6 md:p-10 rounded-3xl shadow-2xl flex flex-col md:flex-row-reverse items-center justify-center gap-8 md:gap-12 content-block-skew section-color-1" style="--rotation-deg: -3; width: 95%;">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר, מומחה לבינה מלאכותית" 
+                     class="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-yellow-500 shadow-lg object-cover">
+                <div class="text-center md:text-right flex-grow">
+                    <h2 class="text-4xl md:text-5xl text-yellow-800 mb-4">המדריך שלנו: <span class="whitespace-nowrap">זאביק אבינר</span></h2>
+                    <p class="text-lg md:text-xl leading-relaxed text-yellow-800">
+                        המדריך שלנו, זאביק אבינר, הוא קוסם אמיתי של AI! הוא בנה המון דברים מדהימים ומחכה ללמד אתכם איך להפוך את הבינה המלאכותית לחבר הכי טוב שלכם.
+                        בואו לגלות איך הוא הופך טכנולוגיה מורכבת לכלי יומיומי פשוט וכיפי!
+                    </p>
+                </div>
+            </div>
+            <div class="absolute -bottom-10 right-0 md:right-auto md:left-20 text-yellow-800 text-lg md:text-xl naive-bubble contact-bubble p-4 md:p-6 shadow-md section-color-1" style="max-width: 300px; transform: rotate(5deg);">
+                <p>צרו קשר ונתחיל לצייר את הפרויקט הבא שלכם:</p>
+                <p class="font-bold mt-2">וואטסאפ: 054-6609385</p>
+                <p class="font-bold">מייל: zaviner@gmail.com</p>
+            </div>
+        </section>
+
+        <!-- Who is this journey for? - Audience as playful characters -->
+        <section class="relative w-full max-w-5xl mx-auto my-16 md:my-24 reveal-item" style="transition-delay: 1.5s;">
+            <div class="relative p-6 md:p-10 rounded-3xl shadow-2xl content-block-skew section-color-2" style="--rotation-deg: 2; width: 95%;">
+                <h2 class="text-4xl md:text-5xl text-green-800 mb-8 text-center">למי המסע הזה מתאים?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-items-center">
+                    <div class="naive-bubble audience-bubble bg-white text-center p-6 rounded-full shadow-lg relative h-48 w-48 flex items-center justify-center section-color-2" style="transform: rotate(-5deg);">
+                        <p class="text-lg md:text-xl font-semibold text-green-700">לסקרנים שרוצים לגלות עולם חדש!</p>
+                    </div>
+                    <div class="naive-bubble audience-bubble bg-white text-center p-6 rounded-full shadow-lg relative h-48 w-48 flex items-center justify-center section-color-2" style="transform: rotate(3deg);">
+                        <p class="text-lg md:text-xl font-semibold text-green-700">למקצוענים שרוצים כלים חדשים בארגז!</p>
+                    </div>
+                    <div class="naive-bubble audience-bubble bg-white text-center p-6 rounded-full shadow-lg relative h-48 w-48 flex items-center justify-center section-color-2" style="transform: rotate(-2deg);">
+                        <p class="text-lg md:text-xl font-semibold text-green-700">למנהלים שרוצים להדליק את הצוות!</p>
+                    </div>
+                    <div class="naive-bubble audience-bubble bg-white text-center p-6 rounded-full shadow-lg relative h-48 w-48 flex items-center justify-center section-color-2" style="transform: rotate(4deg);">
+                        <p class="text-lg md:text-xl font-semibold text-green-700">ולאמנים שרוצים ליצור פרויקטים מיוחדים!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Magic / Specialties - Illustrated tools -->
+        <section class="relative w-full max-w-5xl mx-auto my-16 md:my-24 reveal-item" style="transition-delay: 2s;">
+            <div class="relative p-6 md:p-10 rounded-3xl shadow-2xl content-block-skew section-color-3" style="--rotation-deg: -4; width: 95%;">
+                <h2 class="text-4xl md:text-5xl text-blue-800 mb-8 text-center">קסמים שאפשר לעשות עם AI:</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+                    <!-- Item 1: Text & Content -->
+                    <div class="relative flex flex-col items-center p-6 bg-blue-100 rounded-2xl shadow-md transform hover:scale-105 transition-transform duration-300" style="width: 250px; height: 250px;">
+                        <div class="w-24 h-24 bg-blue-300 rounded-full flex items-center justify-center text-4xl text-blue-800 mb-4 shadow-inner">📝</div>
+                        <p class="text-lg font-semibold text-blue-700 text-center">לכתוב סיפורים וטקסטים</p>
+                        <div class="absolute top-4 right-4 text-sm text-blue-600">✍️</div>
+                    </div>
+                    <!-- Item 2: Smart Apps -->
+                    <div class="relative flex flex-col items-center p-6 bg-blue-100 rounded-2xl shadow-md transform hover:scale-105 transition-transform duration-300" style="width: 250px; height: 250px;">
+                        <div class="w-24 h-24 bg-blue-300 rounded-full flex items-center justify-center text-4xl text-blue-800 mb-4 shadow-inner">📱</div>
+                        <p class="text-lg font-semibold text-blue-700 text-center">לבנות אפליקציות חכמות</p>
+                        <div class="absolute bottom-4 left-4 text-sm text-blue-600">💡</div>
+                    </div>
+                    <!-- Item 3: Images & Art -->
+                    <div class="relative flex flex-col items-center p-6 bg-blue-100 rounded-2xl shadow-md transform hover:scale-105 transition-transform duration-300" style="width: 250px; height: 250px;">
+                        <div class="w-24 h-24 bg-blue-300 rounded-full flex items-center justify-center text-4xl text-blue-800 mb-4 shadow-inner">🎨</div>
+                        <p class="text-lg font-semibold text-blue-700 text-center">ליצור תמונות ואומנות</p>
+                        <div class="absolute top-8 left-8 text-sm text-blue-600">🖼️</div>
+                    </div>
+                    <!-- Item 4: Data Analysis -->
+                    <div class="relative flex flex-col items-center p-6 bg-blue-100 rounded-2xl shadow-md transform hover:scale-105 transition-transform duration-300" style="width: 250px; height: 250px;">
+                        <div class="w-24 h-24 bg-blue-300 rounded-full flex items-center justify-center text-4xl text-blue-800 mb-4 shadow-inner">📊</div>
+                        <p class="text-lg font-semibold text-blue-700 text-center">לעשות סדר בנתונים</p>
+                        <div class="absolute bottom-8 right-8 text-sm text-blue-600">📈</div>
+                    </div>
+                    <!-- Item 5: Automation -->
+                    <div class="relative flex flex-col items-center p-6 bg-blue-100 rounded-2xl shadow-md transform hover:scale-105 transition-transform duration-300" style="width: 250px; height: 250px;">
+                        <div class="w-24 h-24 bg-blue-300 rounded-full flex items-center justify-center text-4xl text-blue-800 mb-4 shadow-inner">⚙️</div>
+                        <p class="text-lg font-semibold text-blue-700 text-center">להפוך עבודה לפשוטה (אוטומציה)</p>
+                        <div class="absolute top-4 left-4 text-sm text-blue-600">✅</div>
+                    </div>
+                    <!-- Item 6: AI Websites -->
+                    <div class="relative flex flex-col items-center p-6 bg-blue-100 rounded-2xl shadow-md transform hover:scale-105 transition-transform duration-300" style="width: 250px; height: 250px;">
+                        <div class="w-24 h-24 bg-blue-300 rounded-full flex items-center justify-center text-4xl text-blue-800 mb-4 shadow-inner">🌐</div>
+                        <p class="text-lg font-semibold text-blue-700 text-center">לפתח אתרים מדהימים</p>
+                        <div class="absolute bottom-4 right-4 text-sm text-blue-600">✨</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered - Paths to learn -->
+        <section class="relative w-full max-w-5xl mx-auto my-16 md:my-24 reveal-item" style="transition-delay: 2.5s;">
+            <div class="relative p-6 md:p-10 rounded-3xl shadow-2xl content-block-skew section-color-4" style="--rotation-deg: 1; width: 95%;">
+                <h2 class="text-4xl md:text-5xl text-red-800 mb-8 text-center">איך נצא למסע?</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-items-center">
+                    <div class="naive-bubble services-bubble bg-white text-center p-6 rounded-2xl shadow-lg relative h-48 w-48 flex items-center justify-center section-color-4" style="transform: rotate(3deg);">
+                        <p class="text-lg md:text-xl font-semibold text-red-700">סדנאות כיפיות לקבוצות</p>
+                    </div>
+                    <div class="naive-bubble services-bubble bg-white text-center p-6 rounded-2xl shadow-lg relative h-48 w-48 flex items-center justify-center section-color-4" style="transform: rotate(-2deg);">
+                        <p class="text-lg md:text-xl font-semibold text-red-700">שיעורים אישיים רק בשבילכם</p>
+                    </div>
+                    <div class="naive-bubble services-bubble bg-white text-center p-6 rounded-2xl shadow-lg relative h-48 w-48 flex items-center justify-center section-color-4" style="transform: rotate(4deg);">
+                        <p class="text-lg md:text-xl font-semibold text-red-700">הרצאות מעוררות השראה לארגונים</p>
+                    </div>
+                    <div class="naive-bubble services-bubble bg-white text-center p-6 rounded-2xl shadow-lg relative h-48 w-48 flex items-center justify-center section-color-4" style="transform: rotate(-1deg);">
+                        <p class="text-lg md:text-xl font-semibold text-red-700">ליווי פרויקטים מהרעיון עד הביצוע</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Call to Action - Simple and direct -->
+        <section class="relative w-full text-center my-16 md:my-24 reveal-item" style="transition-delay: 3s;">
+            <div class="relative inline-block naive-cloud text-gray-800 text-center px-10 py-10 md:py-16 pl-10 md:pl-16 shadow-xl"
+                 style="background: linear-gradient(135deg, #CCEFFF, #AADDFF); border-radius: 40% 60% 40% 60% / 50% 50% 50% 50%; max-width: 800px; width: fit-content; margin: 0 auto;">
+                <h2 class="text-4xl md:text-5xl mb-4 text-blue-700 leading-tight">בואו נתחיל את המסע הקסום!</h2>
+                <p class="text-xl md:text-3xl text-blue-600 leading-relaxed font-semibold mb-6">צרו קשר היום ונגלה יחד את כוחה של הבינה המלאכותית.</p>
+                <a href="https://wa.me/972546609385" target="_blank" class="inline-block bg-green-500 hover:bg-green-600 text-white text-2xl md:text-3xl py-4 px-8 rounded-full shadow-lg transform hover:scale-105 transition-transform duration-300 font-bold">
+                    לשלוח הודעה בזאביק!
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor JavaScript
+        document.addEventListener('DOMContentLoaded', () => {
+            const cursor = document.getElementById('custom-cursor');
+            let mouseX = 0, mouseY = 0;
+            let cursorX = 0, cursorY = 0;
+            const speed = 0.2; // Smoothing factor for cursor movement
+
+            function animateCursor() {
+                // Interpolate cursor position for smooth movement
+                cursorX += (mouseX - cursorX) * speed;
+                cursorY += (mouseY - cursorY) * speed;
+
+                cursor.style.left = cursorX + 'px';
+                cursor.style.top = cursorY + 'px';
+
+                requestAnimationFrame(animateCursor);
+            }
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            // Add hover effects for interactive elements to change cursor size/color
+            const interactiveElements = document.querySelectorAll('a, button, [role="button"], .transform.hover\\:scale-105, .naive-bubble');
+            interactiveElements.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursor.style.width = '40px';
+                    cursor.style.height = '40px';
+                    cursor.style.backgroundColor = 'rgba(255,255,255,0.3)'; // Subtle fill on hover
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursor.style.width = '28px';
+                    cursor.style.height = '28px';
+                    cursor.style.backgroundColor = 'transparent';
+                });
+            });
+
+            animateCursor(); // Start the animation loop
+        });
+
+        // Scroll Reveal JavaScript
+        document.addEventListener('DOMContentLoaded', () => {
+            const revealItems = document.querySelectorAll('.reveal-item');
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Stop observing once visible
+                    }
+                });
+            }, {
+                threshold: 0.1, // Trigger when 10% of the item is visible
+                rootMargin: '0px 0px -50px 0px' // Start slightly before it hits the bottom
+            });
+
+            revealItems.forEach(item => {
+                observer.observe(item);
+            });
+        });
+    </script>
+</body>
+</html>

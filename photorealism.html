@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - הארכיטקט של העתיד | שליטה ב-AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Tailwind Configuration for Hebrew Fonts & Colors */
+        :root {
+            --color-futurism-dark: #0A0A0E;
+            --color-futurism-cyan: #00F0FF;
+            --color-futurism-purple: #A020F0;
+            --color-text-light: #E0E0E0;
+            --color-text-dark: #1A1A22;
+        }
+
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: var(--color-futurism-dark);
+            color: var(--color-text-light);
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden;
+            direction: rtl; /* Ensure RTL for all content */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Rubik Mono One', monospace;
+            color: var(--color-futurism-cyan);
+            text-shadow: 0 0 5px var(--color-futurism-cyan), 0 0 10px var(--color-futurism-cyan);
+            direction: rtl;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999; /* Always on top */
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            transition: width 0.2s ease-out, height 0.2s ease-out, background-color 0.2s ease-out, transform 0.1s linear;
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark, high-opacity shadow */
+            transform: translate(-50%, -50%); /* Center the cursor */
+        }
+
+        .custom-cursor.active {
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .section-heading {
+            text-align: center;
+            font-size: 3.5rem; /* Larger font for impact */
+            margin-bottom: 4rem;
+            position: relative;
+            padding-bottom: 1rem;
+            color: var(--color-futurism-cyan);
+            line-height: 1.2;
+        }
+
+        .section-heading::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 50%;
+            transform: translateX(50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to left, var(--color-futurism-cyan), var(--color-futurism-purple));
+            box-shadow: 0 0 8px var(--color-futurism-cyan), 0 0 15px var(--color-futurism-purple);
+            animation: pulse-line 3s infinite alternate;
+        }
+
+        @keyframes pulse-line {
+            0% { width: 80px; opacity: 0.7; }
+            50% { width: 120px; opacity: 1; }
+            100% { width: 80px; opacity: 0.7; }
+        }
+
+        /* Text reveal animation */
+        .text-reveal-container {
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .text-reveal-char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(100%);
+            animation: text-slide-up 0.8s forwards;
+            animation-delay: var(--delay);
+        }
+
+        @keyframes text-slide-up {
+            to {
+                opacity: 1;
+                transform: translateY(0%);
+            }
+        }
+
+        /* Scrollbar styling for futurism */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--color-futurism-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, var(--color-futurism-cyan), var(--color-futurism-purple));
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, var(--color-futurism-cyan), var(--color-text-light));
+        }
+
+        /* Canvas background styling */
+        #futurism-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: radial-gradient(circle at center, rgba(16, 16, 20, 0.9) 0%, rgba(10, 10, 14, 1) 100%);
+        }
+
+        /* General link styling */
+        a {
+            color: var(--color-futurism-cyan);
+            text-decoration: none;
+            position: relative;
+            padding-bottom: 2px;
+            transition: color 0.3s ease;
+        }
+        a::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to left, var(--color-futurism-cyan), var(--color-futurism-purple));
+            transition: width 0.3s ease;
+        }
+        a:hover {
+            color: var(--color-futurism-purple);
+        }
+        a:hover::after {
+            width: 100%;
+            right: unset;
+            left: 0;
+        }
+
+        /* Specific styles for card backgrounds */
+        .card-bg {
+            background: rgba(160, 32, 240, 0.1); /* Purple transparent */
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--color-futurism-purple);
+            box-shadow: 0 0 15px rgba(160, 32, 240, 0.5);
+            transition: all 0.3s ease-in-out;
+        }
+        .card-bg:hover {
+            background: rgba(0, 240, 255, 0.1); /* Cyan transparent */
+            border: 1px solid var(--color-futurism-cyan);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.7);
+            transform: translateY(-5px);
+        }
+
+        .bg-gradient-futurism {
+            background: linear-gradient(135deg, var(--color-futurism-purple) 0%, var(--color-futurism-cyan) 100%);
+        }
+
+        /* Hero section specific alignment for RTL */
+        .hero-section {
+            display: flex;
+            flex-direction: row-reverse; /* For image left, text right */
+            align-items: center;
+            gap: 4rem;
+        }
+        @media (max-width: 768px) {
+            .hero-section {
+                flex-direction: column-reverse; /* Stack on mobile */
+                text-align: center;
+            }
+            .hero-text {
+                align-items: center; /* Center text for mobile */
+            }
+        }
+
+        /* Animation for section content */
+        .animate-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animate-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="custom-cursor" id="custom-cursor"></div>
+    <canvas id="futurism-canvas"></canvas>
+
+    <header class="relative z-10 p-8 text-center">
+        <nav class="flex justify-center mb-8">
+            <ul class="flex space-x-8 space-x-reverse text-xl font-semibold">
+                <li><a href="#hero" class="hover:text-futurism-purple transition-colors duration-300">התחלה</a></li>
+                <li><a href="#journey" class="hover:text-futurism-purple transition-colors duration-300">המסע</a></li>
+                <li><a href="#audience" class="hover:text-futurism-purple transition-colors duration-300">קהל יעד</a></li>
+                <li><a href="#toolkit" class="hover:text-futurism-purple transition-colors duration-300">ארגז הכלים</a></li>
+                <li><a href="#services" class="hover:text-futurism-purple transition-colors duration-300">שירותים</a></li>
+                <li><a href="#about" class="hover:text-futurism-purple transition-colors duration-300">המנחה</a></li>
+                <li><a href="#contact" class="hover:text-futurism-purple transition-colors duration-300">יצירת קשר</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="relative z-10 max-w-7xl mx-auto px-8 py-16">
+
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-screen flex items-center justify-center pt-16 pb-24 hero-section">
+            <div class="w-full md:w-1/2 flex flex-col items-end hero-text text-right animate-in">
+                <h1 class="text-6xl md:text-7xl lg:text-8xl leading-tight mb-6 text-right">
+                    זאביק אבינר - <br><span class="text-futurism-purple block">הארכיטקט של העתיד</span>
+                </h1>
+                <p class="text-2xl md:text-3xl lg:text-4xl text-text-light mb-8 max-w-lg">
+                    הדרכות AI פורצות דרך: <span class="text-futurism-cyan font-bold">לשלוט בבינה המלאכותית</span>, לא להישלט על ידה.
+                </p>
+                <div class="text-lg md:text-xl text-text-light mb-12 max-w-xl">
+                    <p class="mb-4">
+                        בעולם שנע במהירות הבזק, הבינה המלאכותית היא לא רק כלי, היא השפה החדשה. זאביק אבינר מזמין אתכם למסע אל לב הפוטנציאל הבלתי מוגבל של AI.
+                    </p>
+                    <p>
+                        הצטרפו אלינו ותלמדו לפצח את הקוד, לבנות את המחר, ולהפוך את הדמיון למציאות דיגיטלית. <span class="text-futurism-cyan font-semibold">העתיד כבר כאן - בואו לשלוט בו.</span>
+                    </p>
+                </div>
+                <a href="#contact" class="px-10 py-4 text-xl font-bold bg-gradient-futurism text-white rounded-full shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                    התחילו את המסע עכשיו!
+                </a>
+            </div>
+            <div class="w-full md:w-1/2 flex justify-start items-center p-8 animate-in delay-200">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונת זאביק אבינר - מומחה בינה מלאכותית" class="rounded-full w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 object-cover border-4 border-futurism-cyan shadow-xl shadow-futurism-purple/50 transform hover:scale-105 transition-transform duration-500 hover:rotate-3">
+            </div>
+        </section>
+
+        <!-- The Journey Towards Intelligence -->
+        <section id="journey" class="py-24 animate-in">
+            <h2 class="section-heading animate-in">המסע אל עבר הבינה</h2>
+            <p class="text-center text-xl md:text-2xl lg:text-3xl mb-12 max-w-4xl mx-auto leading-relaxed animate-in delay-200">
+                הבינה המלאכותית אינה מדע בדיוני. היא מנוע הצמיחה של המאה ה-21. אנו כאן כדי להנגיש אותה, לפשט את המורכב, ולהעניק לכם כלים פרקטיים שישנו את דרך העבודה והחיים שלכם.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-16 text-center animate-in delay-400">
+                <div class="p-8 card-bg rounded-2xl flex flex-col items-center justify-center h-full text-lg">
+                    <h3 class="text-futurism-cyan text-3xl mb-4">הנגשה</h3>
+                    <p>לפצח את הקוד, להבין את המורכב. AI לכולם.</p>
+                </div>
+                <div class="p-8 card-bg rounded-2xl flex flex-col items-center justify-center h-full text-lg">
+                    <h3 class="text-futurism-cyan text-3xl mb-4">כלים מעשיים</h3>
+                    <p>ידע שאפשר ליישם מיד - בעבודה, בעסקים, בחיים.</p>
+                </div>
+                <div class="p-8 card-bg rounded-2xl flex flex-col items-center justify-center h-full text-lg">
+                    <h3 class="text-futurism-cyan text-3xl mb-4">בניית עתיד</h3>
+                    <p>מקורסי מבוא למתחילים ועד פיתוח פרויקטים מתקדמים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Who Builds the Future? -->
+        <section id="audience" class="py-24 animate-in">
+            <h2 class="section-heading animate-in">מי בונה את העתיד?</h2>
+            <p class="text-center text-xl md:text-2xl mb-12 max-w-4xl mx-auto leading-relaxed animate-in delay-200">
+                מי שרואה את האופק הדיגיטלי ומעז לחצות אותו. המסלולים שלנו מותאמים לכם, בכל שלב של המסע:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-16 text-right animate-in delay-400">
+                <div class="p-8 card-bg rounded-2xl flex flex-col justify-start text-lg">
+                    <h3 class="text-futurism-cyan text-3xl mb-4">הסקרנים</h3>
+                    <p class="text-text-light">מתחילים ללא רקע, שרוצים להבין את הבסיס ולצלול לעולם החדש של AI, בצעדים בטוחים ומונחים.</p>
+                </div>
+                <div class="p-8 card-bg rounded-2xl flex flex-col justify-start text-lg">
+                    <h3 class="text-futurism-cyan text-3xl mb-4">המובילים</h3>
+                    <p class="text-text-light">אנשי מקצוע המעוניינים לשדרג את ארגז הכלים שלהם ולהטמיע AI בעבודתם היומיומית, לייעל תהליכים ולהגביר חדשנות.</p>
+                </div>
+                <div class="p-8 card-bg rounded-2xl flex flex-col justify-start text-lg">
+                    <h3 class="text-futurism-cyan text-3xl mb-4">המנהיגים</h3>
+                    <p class="text-text-light">מנהלים וארגונים השואפים להעצים את הצוותים ולשלב חדשנות טכנולוגית אסטרטגית, תוך הבנה עמוקה של הפוטנציאל.</p>
+                </div>
+                <div class="p-8 card-bg rounded-2xl flex flex-col justify-start text-lg">
+                    <h3 class="text-futurism-cyan text-3xl mb-4">החדשנים</h3>
+                    <p class="text-text-light">מפתחים ויזמים המחפשים ליווי בפיתוח פרויקטים מורכבים מבוססי AI, מהרעיון ועד למימוש מלא.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Master's Toolkit -->
+        <section id="toolkit" class="py-24 animate-in">
+            <h2 class="section-heading animate-in">ארגז הכלים של המאסטר</h2>
+            <p class="text-center text-xl md:text-2xl mb-12 max-w-4xl mx-auto leading-relaxed animate-in delay-200">
+                היכולות שתרכשו אצלנו הן המפתח לכלכלה הדיגיטלית. אנו מתמחים בתחומים שיעצבו את מחר:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-16 text-right animate-in delay-400">
+                <div class="p-8 card-bg rounded-2xl text-lg">
+                    <h3 class="text-futurism-cyan text-3xl mb-4">ארכיטקטורת תוכן</h3>
+                    <p>יצירה אוטומטית וחכמה של טקסטים, מאמרים, קמפיינים שיווקיים ועוד.</p>
+                </div>
+                <div class="p-8 card-bg rounded-2xl text-lg">
+                    <h3 class="text-futurism-cyan text-3xl mb-4">אפליקציות חכמות</h3>
+                    <p>בניית מערכות אינטראקטיביות ויישומים המבוססים על למידת מכונה מתקדמת.</p>
+                </div>
+                <div class="p-8 card-bg rounded-2xl text-lg">
+                    <h3 class="text-futurism-cyan text-3xl mb-4">אתרי עתיד</h3>
+                    <p>פיתוח פלטפורמות וורדפרס עם יכולות AI מובנות, לחוויית משתמש חכמה ודינמית.</p>
+                </div>
+                <div class="p-8 card-bg rounded-2xl text-lg">
+                    <h3 class="text-futurism-cyan text-3xl mb-4">מודיעין נתונים</h3>
+                    <p>ניתוח מעמיק וחיזוי מגמות באמצעות אלגוריתמים מתקדמים, לקבלת החלטות מבוססות.</p>
+                </div>
+                <div class="p-8 card-bg rounded-2xl text-lg">
+                    <h3 class="text-futurism-cyan text-3xl mb-4">אמנות אלגוריתמית</h3>
+                    <p>יצירת תמונות, גרפיקה ואמנות דיגיטלית פורצת גבולות באמצעות בינה מלאכותית.</p>
+                </div>
+                <div class="p-8 card-bg rounded-2xl text-lg">
+                    <h3 class="text-futurism-cyan text-3xl mb-4">אוטומציה קיצונית</h3>
+                    <p>ייעול תהליכים עסקיים ותפעוליים באמצעות פתרונות AI מותאמים אישית וחכמים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Paths of Transformation -->
+        <section id="services" class="py-24 animate-in">
+            <h2 class="section-heading animate-in">נתיבי ההתמרה</h2>
+            <p class="text-center text-xl md:text-2xl mb-12 max-w-4xl mx-auto leading-relaxed animate-in delay-200">
+                אנו מציעים מגוון מסלולים המעוצבים להאיץ את התפתחותכם ולשדרג את יכולותיכם בתחום הבינה המלאכותית:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-16 text-right animate-in delay-400">
+                <div class="p-8 card-bg rounded-2xl text-lg">
+                    <h3 class="text-futurism-cyan text-3xl mb-4">סדנאות פורצות דרך</h3>
+                    <p>קבוצות קטנות, מעשיות, ממוקדות מטרה - שם תלמדו ליישם ולפעול במודל של התנסות ולמידה.</p>
+                </div>
+                <div class="p-8 card-bg rounded-2xl text-lg">
+                    <h3 class="text-futurism-cyan text-3xl mb-4">שיעורים פרטיים אישיים</h3>
+                    <p>חניכה צמודה, בקצב שלכם, מותאמת בדיוק לצרכים וליעדים הייחודיים שלכם בתחום.</p>
+                </div>
+                <div class="p-8 card-bg rounded-2xl text-lg">
+                    <h3 class="text-futurism-cyan text-3xl mb-4">הרצאות חשיפה לארגונים</h3>
+                    <p>הצצה מרתקת אל עולם ה-AI עבור צוותים, השראה ופתיחת אופקים טכנולוגיים חדשים.</p>
+                </div>
+                <div class="p-8 card-bg rounded-2xl text-lg">
+                    <h3 class="text-futurism-cyan text-3xl mb-4">ייעוץ ופיתוח פרויקטים</h3>
+                    <p>ליווי אסטרטגי וטכני בפיתוח מיזמים מורכבים מבוססי AI, מהרעיון ועד לביצוע הסופי.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Oracle: Zevik Aviner -->
+        <section id="about" class="py-24 animate-in">
+            <h2 class="section-heading animate-in">האורקל: זאביק אבינר</h2>
+            <div class="flex flex-col md:flex-row-reverse items-center justify-center gap-12 mt-16 animate-in delay-200">
+                <div class="w-full md:w-1/3 flex justify-center">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונת זאביק אבינר - מומחה בינה מלאכותית" class="rounded-full w-72 h-72 object-cover border-4 border-futurism-purple shadow-xl shadow-futurism-cyan/50 transform hover:scale-105 transition-transform duration-500 hover:-rotate-3">
+                </div>
+                <div class="w-full md:w-2/3 text-right text-lg leading-relaxed">
+                    <p class="mb-6 text-xl md:text-2xl text-text-light">
+                        זאביק אבינר אינו רק מומחה AI, הוא חלוץ. עם ניסיון עשיר בהובלת פרויקטים חדשניים, פיתוח אפליקציות ומערכות מבוססות בינה מלאכותית, זאביק הפך למגדלור עבור אלפים.
+                    </p>
+                    <p class="mb-6 text-xl md:text-2xl text-text-light">
+                        משימתו: להפוך את המורכב לבהיר, את העתיד לנגיש, ואת ה-AI לכלי יומיומי בידיים שלכם. הצטרפו למסע בהנהגתו של מי שמכיר את עתיד הטכנולוגיה מבפנים, ומביא עמו ידע פרקטי וניסיון עשיר.</p>
+                    <p class="text-futurism-cyan font-bold text-xl md:text-2xl">
+                        היכנסו לעידן הבינה המלאכותית עם המדריך הטוב ביותר.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-24 animate-in">
+            <h2 class="section-heading animate-in">התחברו לעתיד עוד היום!</h2>
+            <p class="text-center text-xl md:text-2xl mb-12 max-w-4xl mx-auto leading-relaxed animate-in delay-200">
+                מוכנים לפרוץ דרך? צרו קשר עם זאביק אבינר ותתחילו את המסע שלכם לשליטה בבינה המלאכותית.
+            </p>
+            <div class="flex flex-col items-center justify-center gap-8 mt-16 animate-in delay-400">
+                <a href="https://wa.me/972546609385" target="_blank" class="flex items-center space-x-4 space-x-reverse px-8 py-4 bg-gradient-futurism text-white text-2xl font-bold rounded-full shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                    <span>וואטסאפ: 054-6609385</span>
+                    <!-- Add a simple WhatsApp icon, e.g., a circle with W -->
+                    <span class="inline-block w-8 h-8 bg-white text-futurism-purple rounded-full flex items-center justify-center font-bold text-base">WA</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="flex items-center space-x-4 space-x-reverse px-8 py-4 bg-gradient-futurism text-white text-2xl font-bold rounded-full shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                    <span>אימייל: zaviner@gmail.com</span>
+                    <!-- Add a simple Email icon, e.g., a circle with @ -->
+                    <span class="inline-block w-8 h-8 bg-white text-futurism-purple rounded-full flex items-center justify-center font-bold text-base">@</span>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="relative z-10 text-center py-12 text-gray-400 text-sm">
+        <p>&copy; 2024 זאביק אבינר. כל הזכויות שמורות. הארכיטקט של העתיד.</p>
+    </footer>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+        document.addEventListener('mousedown', () => {
+            customCursor.classList.add('active');
+        });
+        document.addEventListener('mouseup', () => {
+            customCursor.classList.remove('active');
+        });
+
+        // Canvas Particle Background (Lightweight)
+        const canvas = document.getElementById('futurism-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const particleCount = 100;
+        const maxDistance = 120; // Max distance for lines between particles
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles(); // Re-initialize particles on resize
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x || Math.random() * canvas.width;
+                this.y = y || Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random() * 0.8 + 0.2;
+                this.color = `rgba(0, 240, 255, ${this.opacity})`; // Cyan
+                if (Math.random() > 0.5) { // Mix with some purple
+                    this.color = `rgba(160, 32, 240, ${this.opacity})`; // Purple
+                }
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width || this.x < 0) this.speedX *= -1;
+                if (this.y > canvas.height || this.y < 0) this.speedY *= -1;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear entire canvas
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                // Connect particles with lines
+                for (let j = i; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < maxDistance) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(0, 240, 255, ${Math.max(0, (1 - distance / maxDistance) * 0.5)})`;
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        resizeCanvas(); // Initial setup
+        animateParticles(); // Start animation
+
+        // Intersection Observer for scroll animations
+        const animateInElements = document.querySelectorAll('.animate-in');
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Optional: Unobserve after animating to save resources if elements don't need re-animating
+                    // observer.unobserve(entry.target);
+                } else {
+                    // Optional: remove is-visible class if you want elements to re-animate on scroll back
+                    // entry.target.classList.remove('is-visible');
+                }
+            });
+        }, {
+            threshold: 0.1, // Trigger when 10% of the element is visible
+            rootMargin: '0px 0px -50px 0px' // Offset to trigger a bit sooner
+        });
+
+        animateInElements.forEach(element => {
+            observer.observe(element);
+        });
+
+        // Initial check for elements already in viewport on page load
+        animateInElements.forEach(element => {
+            if (element.getBoundingClientRect().top < window.innerHeight) {
+                element.classList.add('is-visible');
+            }
+        });
+
+    </script>
+</body>
+</html>

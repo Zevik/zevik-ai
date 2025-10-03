@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Control Console - Zevik Aviner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Hebrew:wght@400;700&family=Secular+One&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Pixel Art Styling */
+        body {
+            font-family: 'IBM Plex Sans Hebrew', sans-serif;
+            background-color: #0d1117; /* Dark charcoal */
+            color: #e6edf3; /* Light gray */
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Secular One', sans-serif;
+        }
+
+        /* Custom High-Contrast Cursor */
+        #custom-cursor {
+            position: fixed;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #a7f3d0; /* Light green border */
+            box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.8), 0 0 10px rgba(16, 185, 129, 0.6); /* Dark shadow, inner glow */
+            border-radius: 2px; /* Slight roundness for pixel feel */
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.05s ease-out, width 0.1s ease-out, height 0.1s ease-out, border-radius 0.1s ease-out, box-shadow 0.1s ease-out;
+            will-change: transform, width, height, border-radius;
+        }
+
+        #custom-cursor.active {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            border-color: #34d399;
+            box-shadow: 0 0 0 3px rgba(6, 95, 70, 0.9), 0 0 15px rgba(52, 211, 153, 0.8);
+        }
+
+        /* Scanline Overlay for CRT effect */
+        .scanline-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0%,
+                rgba(0, 0, 0, 0.1) 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 9998;
+        }
+
+        /* Pixel grid background effect */
+        .pixel-grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 20px 20px;
+            animation: grid-pulse 15s infinite alternate ease-in-out;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @keyframes grid-pulse {
+            0% { background-size: 20px 20px; opacity: 0.1; }
+            50% { background-size: 25px 25px; opacity: 0.05; }
+            100% { background-size: 20px 20px; opacity: 0.1; }
+        }
+
+        /* Glitch effect for text on hover (Tailwind classes will handle most, this for custom animation) */
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+        }
+        .glitch-text:hover {
+            animation: glitch 0.3s infinite alternate;
+        }
+
+        @keyframes glitch {
+            0% {
+                transform: translateX(0);
+                text-shadow: 2px 0px #ff00ff, -2px 0px #00ffff;
+            }
+            33% {
+                transform: translateX(-2px);
+                text-shadow: -2px 0px #ff00ff, 2px 0px #00ffff;
+            }
+            66% {
+                transform: translateX(2px);
+                text-shadow: 2px 0px #ff00ff, -2px 0px #00ffff;
+            }
+            100% {
+                transform: translateX(0);
+                text-shadow: -2px 0px #ff00ff, 2px 0px #00ffff;
+            }
+        }
+
+        /* General component styling for pixel art feel */
+        .pixel-box {
+            background-color: rgba(17, 24, 39, 0.85); /* Slightly transparent dark blue-gray */
+            border: 2px solid #3b82f6; /* Blue border */
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3), 0 0 10px rgba(59, 130, 246, 0.2); /* Inner glow */
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.2s ease-in-out;
+            position: relative;
+            overflow: hidden;
+            text-align: right; /* Ensure content is right-aligned inside pixel-box */
+        }
+        .pixel-box:hover {
+            border-color: #60a5fa; /* Lighter blue on hover */
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.4), 0 0 15px rgba(96, 165, 250, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Scroll indicator (like a loading bar) */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            right: 0; /* Position on the right for RTL */
+            height: 4px;
+            background-color: #10b981; /* Green progress bar */
+            width: 0%;
+            z-index: 999;
+            box-shadow: 0 0 5px #10b981, 0 0 10px #10b981;
+        }
+
+        /* Parallax effect for sections */
+        .parallax-section {
+            position: relative;
+            overflow: hidden;
+            padding: 4rem 0;
+        }
+
+        .parallax-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            will-change: transform;
+            z-index: -2; /* Behind the content, but above the pixel grid */
+            opacity: 0.1;
+            filter: grayscale(100%) brightness(50%); /* Dims and desaturates background images */
+        }
+        .parallax-bg.layer-1 { background-image: url('https://picsum.photos/seed/ai-circuit/1600/900'); transform: scale(1.1); }
+        .parallax-bg.layer-2 { background-image: url('https://picsum.photos/seed/ai-code/1600/900'); transform: scale(1.1); }
+        .parallax-bg.layer-3 { background-image: url('https://picsum.photos/seed/ai-matrix/1600/900'); transform: scale(1.1); }
+        .parallax-bg.layer-4 { background-image: url('https://picsum.photos/seed/ai-data/1600/900'); transform: scale(1.1); }
+    </style>
+</head>
+<body>
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Scanline Overlay -->
+    <div class="scanline-overlay"></div>
+
+    <!-- Pixel Grid Background -->
+    <div class="pixel-grid-bg"></div>
+
+    <!-- Scroll Progress Indicator -->
+    <div id="scroll-progress"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 min-h-screen flex flex-col items-center p-4 md:p-8">
+
+        <!-- Title Section - Entry Point -->
+        <section id="intro" class="w-full max-w-4xl text-center py-16 px-4 md:px-8 bg-gray-900 bg-opacity-70 border-4 border-emerald-500 shadow-lg shadow-emerald-700/50 mb-16 relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-emerald-900 to-gray-900 opacity-20"></div>
+            <div class="relative z-10">
+                <h1 class="text-5xl md:text-7xl font-bold text-emerald-400 mb-4 tracking-wider leading-tight glitch-text">
+                    <span class="block">קפסולת ידע</span>
+                    <span class="block text-3xl md:text-5xl text-indigo-400 mt-2">בינה מלאכותית - העתיד כבר כאן</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-200 mt-6 max-w-2xl mx-auto leading-relaxed">
+                    ברוכים הבאים לממשק הייעודי לשליטה בעידן הדיגיטלי החדש. כאן, המורכבות הופכת לבהירות, והטכנולוגיה - לכלי יומיומי.
+                </p>
+                <div class="mt-10">
+                    <a href="#core-message" class="inline-block px-8 py-3 text-lg md:text-xl font-bold bg-indigo-600 text-white border-2 border-indigo-400 hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-md shadow-indigo-500/50 glitch-text">
+                        הפעל מערכת: התחל אימון
+                    </a>
+                </div>
+            </div>
+            <div class="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-emerald-500 to-transparent opacity-30 animate-pulse"></div>
+        </section>
+
+        <!-- Core Message Section -->
+        <section id="core-message" class="parallax-section w-full max-w-4xl py-12 px-4 md:px-8 text-center bg-gray-900 bg-opacity-80 border-2 border-indigo-500 shadow-md shadow-indigo-500/50 mb-16 relative overflow-hidden">
+            <div class="parallax-bg layer-1" data-speed="0.1"></div>
+            <div class="relative z-10">
+                <h2 class="text-4xl md:text-5xl font-bold text-indigo-400 mb-6 glitch-text">
+                    <span class="block">לפצח את קוד המחר:</span>
+                    <span class="block text-2xl md:text-3xl text-gray-300 mt-2">AI נגיש, מעשי, מותאם אישית.</span>
+                </h2>
+                <p class="text-lg md:text-xl text-gray-100 max-w-3xl mx-auto leading-relaxed">
+                    הבינה המלאכותית היא כבר לא מדע בדיוני - היא מציאות יומיומית המעצבת את עתידנו. אנו מאמינים שלכל אחד ואחת מגיעה הזדמנות לשלוט בה, ליישם אותה ולרתום אותה לצרכיו. הדרך שלך לשליטה מתחילה כאן, צעד אחר צעד, פיקסל אחר פיקסל.
+                </p>
+                <a href="#target-audience" class="inline-block mt-8 px-6 py-2 text-md font-bold bg-emerald-600 text-white border-2 border-emerald-400 hover:bg-emerald-700 transition-all duration-300 transform hover:scale-105 shadow-sm shadow-emerald-500/50 glitch-text">
+                    פרוטוקול גישה
+                </a>
+            </div>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section id="target-audience" class="parallax-section w-full max-w-4xl py-12 px-4 md:px-8 bg-gray-900 bg-opacity-80 border-2 border-emerald-500 shadow-md shadow-emerald-500/50 mb-16 relative overflow-hidden">
+            <div class="parallax-bg layer-2" data-speed="0.2"></div>
+            <div class="relative z-10">
+                <h2 class="text-4xl md:text-5xl font-bold text-emerald-400 mb-8 text-center glitch-text">
+                    <span class="block">משתמשי קצה:</span>
+                    <span class="block text-2xl md:text-3xl text-gray-300 mt-2">למי נבנתה מערכת האימון?</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-right">
+                    <div class="pixel-box bg-gray-800 hover:bg-gray-700">
+                        <h3 class="text-2xl font-bold text-indigo-300 mb-3">משתמשים רגילים: שער הכניסה</h3>
+                        <p class="text-gray-200">למתחילים, סקרנים, ולכל מי שרוצה להכיר את עולם ה-AI מאפס. נבנה יחד את הבסיס להבנה ושימוש.</p>
+                    </div>
+                    <div class="pixel-box bg-gray-800 hover:bg-gray-700">
+                        <h3 class="text-2xl font-bold text-indigo-300 mb-3">מפתחי מערכות: שדרוג ארסנל</h3>
+                        <p class="text-gray-200">לאנשי מקצוע המעוניינים להטמיע AI בעבודה השוטפת, לשפר תהליכים ולייעל ביצועים.</p>
+                    </div>
+                    <div class="pixel-box bg-gray-800 hover:bg-gray-700">
+                        <h3 class="text-2xl font-bold text-indigo-300 mb-3">אדמיניסטרטורים וארגונים: הובלת השינוי</h3>
+                        <p class="text-gray-200">למנהלים וצוותים המחפשים הדרכה מקיפה, פתיחת אופקים והכשרה מעשית למהפכת ה-AI.</p>
+                    </div>
+                    <div class="pixel-box bg-gray-800 hover:bg-gray-700">
+                        <h3 class="text-2xl font-bold text-indigo-300 mb-3">אדריכלי פרויקטים: בניית המחר</h3>
+                        <p class="text-gray-200">למתקדמים - ליווי ופיתוח פרויקטים מבוססי AI, מהרעיון ועד למימוש מלא.</p>
+                    </div>
+                </div>
+                <a href="#expertise" class="inline-block mt-8 px-6 py-2 text-md font-bold bg-indigo-600 text-white border-2 border-indigo-400 hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-sm shadow-indigo-500/50 glitch-text">
+                    תחומי התמחות
+                </a>
+            </div>
+        </section>
+
+        <!-- Expertise Section -->
+        <section id="expertise" class="parallax-section w-full max-w-4xl py-12 px-4 md:px-8 bg-gray-900 bg-opacity-80 border-2 border-indigo-500 shadow-md shadow-indigo-500/50 mb-16 relative overflow-hidden">
+            <div class="parallax-bg layer-3" data-speed="0.15"></div>
+            <div class="relative z-10">
+                <h2 class="text-4xl md:text-5xl font-bold text-indigo-400 mb-8 text-center glitch-text">
+                    <span class="block">מודולים פעילים:</span>
+                    <span class="block text-2xl md:text-3xl text-gray-300 mt-2">כישורי ליבה דיגיטליים</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-right">
+                    <div class="pixel-box p-4 border-emerald-400 bg-gray-800 hover:bg-gray-700">
+                        <h3 class="text-xl font-bold text-emerald-300 mb-2">יצירת טקסטים ותוכן</h3>
+                        <p class="text-gray-200 text-sm">הפקת תוכן איכותי, שיווקי ויצירתי בעזרת כלי AI מתקדמים.</p>
+                    </div>
+                    <div class="pixel-box p-4 border-emerald-400 bg-gray-800 hover:bg-gray-700">
+                        <h3 class="text-xl font-bold text-emerald-300 mb-2">בניית אפליקציות חכמות</h3>
+                        <p class="text-gray-200 text-sm">פיתוח ואינטגרציה של AI באפליקציות לשיפור חווית המשתמש והפונקציונליות.</p>
+                    </div>
+                    <div class="pixel-box p-4 border-emerald-400 bg-gray-800 hover:bg-gray-700">
+                        <h3 class="text-xl font-bold text-emerald-300 mb-2">פיתוח אתרים מבוססי AI</h3>
+                        <p class="text-gray-200 text-sm">בניית אתרים דינמיים ואינטליגנטיים המשלבים יכולות AI לשיפור ביצועים.</p>
+                    </div>
+                    <div class="pixel-box p-4 border-emerald-400 bg-gray-800 hover:bg-gray-700">
+                        <h3 class="text-xl font-bold text-emerald-300 mb-2">ניתוח נתונים ומחקר</h3>
+                        <p class="text-gray-200 text-sm">הפקת תובנות מורכבות ממאגרי נתונים באמצעות כלים אנליטיים מבוססי AI.</p>
+                    </div>
+                    <div class="pixel-box p-4 border-emerald-400 bg-gray-800 hover:bg-gray-700">
+                        <h3 class="text-xl font-bold text-emerald-300 mb-2">יצירת תמונות ואומנות</h3>
+                        <p class="text-gray-200 text-sm">שחרור היצירתיות עם AI ליצירת גרפיקה, איורים ואמנות דיגיטלית.</p>
+                    </div>
+                    <div class="pixel-box p-4 border-emerald-400 bg-gray-800 hover:bg-gray-700">
+                        <h3 class="text-xl font-bold text-emerald-300 mb-2">אוטומציה של תהליכים</h3>
+                        <p class="text-gray-200 text-sm">ייעול וזירוז תהליכים עסקיים ותפעוליים באמצעות אוטומציה חכמה.</p>
+                    </div>
+                </div>
+                <a href="#services" class="inline-block mt-8 px-6 py-2 text-md font-bold bg-emerald-600 text-white border-2 border-emerald-400 hover:bg-emerald-700 transition-all duration-300 transform hover:scale-105 shadow-sm shadow-emerald-500/50 glitch-text">
+                    אופני הטמעה
+                </a>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="parallax-section w-full max-w-4xl py-12 px-4 md:px-8 bg-gray-900 bg-opacity-80 border-2 border-emerald-500 shadow-md shadow-emerald-500/50 mb-16 relative overflow-hidden">
+            <div class="parallax-bg layer-4" data-speed="0.25"></div>
+            <div class="relative z-10">
+                <h2 class="text-4xl md:text-5xl font-bold text-emerald-400 mb-8 text-center glitch-text">
+                    <span class="block">מנגנוני למידה:</span>
+                    <span class="block text-2xl md:text-3xl text-gray-300 mt-2">הדרך שלכם לשליטה</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-right">
+                    <div class="pixel-box bg-gray-800 hover:bg-gray-700">
+                        <h3 class="text-2xl font-bold text-indigo-300 mb-3">סדנאות קבוצתיות: מסע מודרך</h3>
+                        <p class="text-gray-200">סדנאות מעשיות וממוקדות, ללמוד בקבוצה קטנה, להחליף רעיונות ולתרגל יחד את כלי ה-AI.</p>
+                    </div>
+                    <div class="pixel-box bg-gray-800 hover:bg-gray-700">
+                        <h3 class="text-2xl font-bold text-indigo-300 mb-3">שיעורים פרטיים: אפיון אישי</h3>
+                        <p class="text-gray-200">התאמה אישית של תכנית הלימודים לרמה, לצרכים ולפרויקטים הספציפיים שלכם.</p>
+                    </div>
+                    <div class="pixel-box bg-gray-800 hover:bg-gray-700">
+                        <h3 class="text-2xl font-bold text-indigo-300 mb-3">הרצאות לארגונים: השראה תפעולית</h3>
+                        <p class="text-gray-200">הרצאות מרתקות ופותחות אופקים לצוותים, מנהלים וארגונים המעוניינים להבין את עומק מהפכת ה-AI.</p>
+                    </div>
+                    <div class="pixel-box bg-gray-800 hover:bg-gray-700">
+                        <h3 class="text-2xl font-bold text-indigo-300 mb-3">ייעוץ ופיתוח פרויקטים: ליווי מקצועי</h3>
+                        <p class="text-gray-200">מלווים אתכם מקונספט ועד מימוש מלא של פרויקטים מבוססי בינה מלאכותית, עם דגש על פתרונות פרקטיים.</p>
+                    </div>
+                </div>
+                <a href="#instructor" class="inline-block mt-8 px-6 py-2 text-md font-bold bg-indigo-600 text-white border-2 border-indigo-400 hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-sm shadow-indigo-500/50 glitch-text">
+                    הכירו את המדריך הראשי
+                </a>
+            </div>
+        </section>
+
+        <!-- Instructor Section -->
+        <section id="instructor" class="w-full max-w-4xl py-12 px-4 md:px-8 text-center bg-gray-900 bg-opacity-80 border-4 border-indigo-500 shadow-lg shadow-indigo-700/50 mb-16 relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-indigo-900 to-gray-900 opacity-20"></div>
+            <div class="relative z-10">
+                <h2 class="text-4xl md:text-5xl font-bold text-indigo-400 mb-8 glitch-text">
+                    <span class="block">זאביק אבינר - המדריך הראשי:</span>
+                    <span class="block text-2xl md:text-3xl text-gray-300 mt-2">נווט המידע, מפענח הקוד</span>
+                </h2>
+                <div class="flex flex-col md:flex-row-reverse items-center md:items-start gap-8 text-right">
+                    <div class="flex-shrink-0 w-32 h-32 md:w-48 md:h-48 relative border-4 border-emerald-400 shadow-md shadow-emerald-500/50 overflow-hidden">
+                        <img src="https://link.zevikaviner.com/zevik" alt="תמונת זאביק אבינר - מומחה בינה מלאכותית" class="w-full h-full object-cover object-center transform scale-105 hover:scale-110 transition-transform duration-300 filter grayscale hover:grayscale-0">
+                        <div class="absolute inset-0 border-4 border-emerald-700 opacity-50 pointer-events-none"></div>
+                    </div>
+                    <div class="flex-grow">
+                        <p class="text-lg md:text-xl text-gray-100 leading-relaxed mb-6">
+                            זאביק אבינר, ארכיטקט מערכות דיגיטליות ומפתח אלגוריתמים עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI. הוא מתמחה בהנגשת מורכבויות ה-AI לשפה מעשית ושימושית, והפיכתה לכלי עבודה יומיומי. ביחד, נהפוך את עולם ה-AI לכלי העבודה החדש שלכם.
+                        </p>
+                        <a href="#contact" class="inline-block mt-8 px-6 py-2 text-md font-bold bg-emerald-600 text-white border-2 border-emerald-400 hover:bg-emerald-700 transition-all duration-300 transform hover:scale-105 shadow-sm shadow-emerald-500/50 glitch-text">
+                            יצירת קשר
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute bottom-0 right-0 w-full h-8 bg-gradient-to-l from-indigo-500 to-transparent opacity-30 animate-pulse"></div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="w-full max-w-4xl py-12 px-4 md:px-8 text-center bg-gray-900 bg-opacity-80 border-4 border-emerald-500 shadow-lg shadow-emerald-700/50 relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-emerald-900 to-gray-900 opacity-20"></div>
+            <div class="relative z-10">
+                <h2 class="text-4xl md:text-5xl font-bold text-emerald-400 mb-8 glitch-text">
+                    <span class="block">ערוצי תקשורת מאובטחים:</span>
+                    <span class="block text-2xl md:text-3xl text-gray-300 mt-2">צרו קשר והתחילו את המסע</span>
+                </h2>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-6">
+                    <a href="https://wa.me/972546609385" target="_blank" class="pixel-box flex items-center bg-gray-800 hover:bg-gray-700 px-6 py-3 border-emerald-400 glitch-text">
+                        <span class="text-3xl text-emerald-400 mr-4">&#128241;</span> <!-- Pixel phone icon -->
+                        <span class="text-xl md:text-2xl text-white">ווטסאפ: 054-6609385</span>
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="pixel-box flex items-center bg-gray-800 hover:bg-gray-700 px-6 py-3 border-indigo-400 glitch-text">
+                        <span class="text-3xl text-indigo-400 mr-4">&#128231;</span> <!-- Pixel envelope icon -->
+                        <span class="text-xl md:text-2xl text-white">אימייל: zaviner@gmail.com</span>
+                    </a>
+                </div>
+                <p class="text-md text-gray-400 mt-8">
+                    מערכת זו נוצרה באהבה ובקוד פתוח. ייתכן שישנם פיקסלים שובבים.
+                </p>
+            </div>
+        </section>
+
+    </div> <!-- End Main Content Wrapper -->
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        document.addEventListener('mousedown', () => {
+            customCursor.classList.add('active');
+        });
+
+        document.addEventListener('mouseup', () => {
+            customCursor.classList.remove('active');
+        });
+
+        // Hide custom cursor when mouse leaves document body
+        document.body.addEventListener('mouseenter', () => customCursor.style.display = 'block');
+        document.body.addEventListener('mouseleave', () => customCursor.style.display = 'none');
+
+
+        // Scroll Progress Indicator
+        const scrollProgress = document.getElementById('scroll-progress');
+        window.addEventListener('scroll', () => {
+            const totalHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = document.documentElement.scrollTop;
+            const progress = (scrolled / totalHeight) * 100;
+            scrollProgress.style.width = `${progress}%`;
+        });
+
+        // Parallax Effect
+        document.addEventListener('scroll', function() {
+            const parallaxBgElements = document.querySelectorAll('.parallax-bg');
+            parallaxBgElements.forEach(el => {
+                const speed = parseFloat(el.getAttribute('data-speed'));
+                const yPos = -window.scrollY * speed;
+                el.style.transform = `translateY(${yPos}px) scale(1.1)`; // Maintain scale for background image fill
+            });
+        });
+
+        // Simple Smooth Scroll for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Initial check for scroll progress on load
+        window.dispatchEvent(new Event('scroll'));
+    </script>
+</body>
+</html>

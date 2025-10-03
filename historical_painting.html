@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - מומחה בינה מלאכותית: אומנות ה-AI</title>
+    <meta name="description" content="מסע אלגורי אל פסגת הידע הדיגיטלי בהנחיית זאביק אבינר. למדו לשלוט בבינה המלאכותית - העתיד הוא עכשיו.">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts for Art Style -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=David+Libre:wght@400;700&family=Frank+Ruhl+Libre:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom CSS Variables and Base Styles for Art Style: ציור היסטורי */
+        :root {
+            --primary-gold: #D4AF37; /* A rich, antique gold for accents */
+            --dark-charcoal: #1A1A1A; /* Deep, almost black charcoal */
+            --deep-burgundy: #5C001F; /* A dark, rich red reminiscent of old paintings */
+            --soft-beige: #F5F5DC; /* Off-white for readable text on dark background */
+        }
+        body {
+            font-family: 'Frank Ruhl Libre', serif; /* Elegant serif for body text */
+            background-color: var(--dark-charcoal);
+            color: var(--soft-beige);
+            cursor: none; /* Hide default cursor for custom implementation */
+            text-rendering: optimizeLegibility; /* Better text rendering */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden; /* Prevent horizontal scroll due to parallax or animations */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'David Libre', serif; /* Bold serif for headings */
+            color: var(--primary-gold);
+        }
+
+        /* Custom Scrollbar for artistic touch */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--dark-charcoal);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--deep-burgundy);
+            border-radius: 6px;
+            border: 2px solid var(--primary-gold);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-gold);
+        }
+
+        /* High-Contrast Custom Cursor (MANDATORY IMPLEMENTATION) */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark, high-opacity shadow */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out, opacity 0.3s ease-out;
+            will-change: transform, opacity;
+        }
+        .custom-cursor-inner {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998; /* Below outer cursor */
+            background-color: rgba(212, 175, 55, 0.4); /* Primary gold, slightly transparent */
+            border-radius: 50%;
+            width: 8px;
+            height: 8px;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out, opacity 0.3s ease-out;
+            will-change: transform, opacity;
+        }
+        .cursor-link-hover {
+            transform: translate(-50%, -50%) scale(1.8); /* Enlarge outer cursor */
+            opacity: 0.7;
+        }
+        .cursor-link-hover-inner {
+            transform: translate(-50%, -50%) scale(0.5); /* Shrink inner cursor */
+            background-color: rgba(255, 255, 255, 0.8); /* Change inner cursor color */
+        }
+
+        /* Parallax Background Effect for Immersive Feel */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* A background image evocative of old masters, abstract AI */
+            background-image: url('https://images.unsplash.com/photo-1596496660144-67e3a9c73b06?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+            background-size: cover;
+            background-position: center;
+            background-attachment: scroll; /* Controlled by JS for parallax */
+            z-index: -1; /* Place behind content */
+            /* Filters to achieve 'Historical Painting' look */
+            filter: grayscale(80%) brightness(40%) contrast(120%) sepia(20%) saturate(150%);
+            opacity: 0.8;
+            will-change: transform; /* Optimize for smooth animation */
+        }
+
+        /* Overlays for depth and atmosphere (Chiaroscuro effect) */
+        .overlay-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Above parallax bg, below content */
+            /* Radial gradient to darken edges, focus light on center */
+            background: radial-gradient(circle at center, rgba(26,26,26,0) 0%, rgba(26,26,26,0.1) 30%, rgba(26,26,26,0.6) 70%, rgba(26,26,26,0.9) 100%);
+            pointer-events: none; /* Allow interaction with elements below */
+        }
+        .overlay-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Same as gradient */
+            /* Tiny base64 encoded noise texture for canvas/aged paper feel */
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAAXNSR0IArs4c6QAAAHBJREFUGFdjZeAH+P7//z8DSQAwHwHCDwF4QjC4wT90kC9Dk01h/Gf/gX/IQCQDC+h/Bh0A9P//f4A0BAaA+jF0oN/h2+f/B8S/f39A2kAEAP3v3/+D+n/C/h/g+v+//wOZAIDB+v8Akwj9FQC8Dq5JqP3sAAAAAElFTkSuQmCC');
+            opacity: 0.05; /* Very subtle */
+            pointer-events: none;
+            filter: contrast(150%); /* Enhance texture */
+        }
+
+        /* Custom Keyframe Animations (Triggered by JS on scroll or directly) */
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slide-up {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes zoom-in {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.03); opacity: 1; }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        @keyframes swing {
+            0% { transform: rotate(0deg); }
+            20% { transform: rotate(15deg); }
+            40% { transform: rotate(-10deg); }
+            60% { transform: rotate(5deg); }
+            80% { transform: rotate(-5deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        /* Tailwind-like utility classes for custom animations */
+        .animate-fade-in { animation: fade-in 1.5s ease-out forwards; opacity: 0; } /* opacity 0 initially, filled by forwards */
+        .animate-slide-up { animation: slide-up 1.2s ease-out forwards; opacity: 0; transform: translateY(30px); }
+        .animate-fade-in-delay { animation: fade-in 1.5s ease-out 0.8s forwards; opacity: 0; } /* Delayed fade-in */
+        .animate-zoom-in { animation: zoom-in 1s ease-out forwards; opacity: 0; transform: scale(0.95); }
+        .animate-pulse { animation: pulse 2s infinite ease-in-out; }
+        .group-hover\:animate-bounce:hover svg { animation: bounce 0.6s ease-in-out; } /* SVG bounce on hover */
+        .group-hover\:animate-swing:hover svg { animation: swing 0.8s ease-in-out; } /* SVG swing on hover */
+    </style>
+</head>
+<body class="overflow-x-hidden">
+    <!-- Custom Cursor Elements -->
+    <div class="custom-cursor"></div>
+    <div class="custom-cursor-inner"></div>
+
+    <!-- Immersive Background Elements -->
+    <div class="parallax-bg" id="parallax-bg"></div>
+    <div class="overlay-gradient"></div>
+    <div class="overlay-texture"></div>
+
+    <!-- Main Content Wrapper with z-index to be on top -->
+    <div class="relative z-10 min-h-screen flex flex-col items-center py-16 px-4 sm:px-8 md:px-12 lg:px-24">
+
+        <!-- Header: Grand Title and Subtitle -->
+        <header class="w-full text-center mb-16 max-w-4xl opacity-0 animate-fade-in">
+            <h1 class="text-6xl md:text-8xl font-bold leading-tight mb-4 text-primary-gold drop-shadow-lg">
+                למדו לשלוט בבינה המלאכותית
+            </h1>
+            <p class="text-3xl md:text-4xl leading-relaxed text-soft-beige mt-6 mb-8 border-b-2 border-primary-gold/50 pb-4 opacity-0 animate-slide-up">
+                <span class="font-bold">העתיד הוא עכשיו</span> – והידע בידיכם
+            </p>
+            <p class="text-xl md:text-2xl leading-relaxed text-soft-beige mt-6 opacity-0 animate-fade-in-delay">
+                מסע אלגורי אל פסגת הידע הדיגיטלי, בהנחיית זאביק אבינר - האמן והמנטור של עידן הבינה.
+            </p>
+        </header>
+
+        <!-- Main Content Area: Evokes ancient scrolls or grand panels -->
+        <main class="w-full max-w-5xl bg-dark-charcoal bg-opacity-70 backdrop-blur-sm rounded-lg shadow-xl p-8 md:p-12 mb-16 border border-primary-gold/30 opacity-0 animate-zoom-in">
+
+            <!-- Section: The Grand Overture / Main Message -->
+            <section class="mb-12 border-b border-primary-gold/50 pb-8 opacity-0 animate-slide-up" data-animation-delay="0.5s">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-primary-gold drop-shadow-md">
+                    הפיכת הנסתר לנגיש – אומנות ה-AI
+                </h2>
+                <p class="text-xl md:text-2xl leading-relaxed text-soft-beige mb-4 opacity-90">
+                    בעידן שבו הקוד הוא המכחול והבינה המלאכותית היא הבד הבלתי מוגבל, אנו פותחים שערי ידע. משיטה יחידה ועד יצירת מופת דיגיטלית – הופכים את ה-AI לכלי יומיומי, מעשי וישים, המגשר בין החזון למציאות.
+                </p>
+                <p class="text-lg md:text-xl leading-relaxed text-soft-beige opacity-80">
+                    זהו קריאתו של העתיד, ואנו המדריכים במבוך האלגוריתמים – מעניקים כלים ליצירה, חדשנות והנהגה.
+                </p>
+            </section>
+
+            <!-- Section: The Seekers / Target Audience -->
+            <section class="mb-12 border-b border-primary-gold/50 pb-8 opacity-0 animate-slide-up" data-animation-delay="0.8s">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-primary-gold drop-shadow-md">
+                    האומנים שבדרך – קהל היעד
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-soft-beige opacity-90">
+                    <div class="p-4 border border-primary-gold/20 rounded-md bg-dark-charcoal/30 hover:bg-dark-charcoal/50 transition duration-300">
+                        <h3 class="text-2xl font-bold mb-2 text-primary-gold">
+                            המתחילים והסקרנים
+                        </h3>
+                        <p class="text-lg leading-relaxed">
+                            אלו המבקשים לטבול את רגליהם בנהר הזרם הדיגיטלי, להבין את יסודות הבינה המלאכותית ולגלות את קסמיה הראשוניים.
+                        </p>
+                    </div>
+                    <div class="p-4 border border-primary-gold/20 rounded-md bg-dark-charcoal/30 hover:bg-dark-charcoal/50 transition duration-300">
+                        <h3 class="text-2xl font-bold mb-2 text-primary-gold">
+                            מנהיגי המחר
+                        </h3>
+                        <p class="text-lg leading-relaxed">
+                            מנהלים וארגונים השואפים לצייד את צוותיהם בחניתות ידע חדשות, ולהוביל את ארגונם אל חזית הטכנולוגיה.
+                        </p>
+                    </div>
+                    <div class="p-4 border border-primary-gold/20 rounded-md bg-dark-charcoal/30 hover:bg-dark-charcoal/50 transition duration-300">
+                        <h3 class="text-2xl font-bold mb-2 text-primary-gold">
+                            אדריכלי המציאות
+                        </h3>
+                        <p class="text-lg leading-relaxed">
+                            אנשי מקצוע המעוניינים לשלב AI בבסיס עבודתם, לייעל תהליכים ולפסל פתרונות חדשניים בתחומם.
+                        </p>
+                    </div>
+                    <div class="p-4 border border-primary-gold/20 rounded-md bg-dark-charcoal/30 hover:bg-dark-charcoal/50 transition duration-300">
+                        <h3 class="text-2xl font-bold mb-2 text-primary-gold">
+                            לבלתי מוגבלים
+                        </h3>
+                        <p class="text-lg leading-relaxed">
+                            מפתחים וחזיוניים ברמה מתקדמת, המבקשים להגות, לתכנן ולממש פרויקטים מורכבים ופורצי דרך מבוססי AI.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: The Disciplines of Mastery -->
+            <section class="mb-12 border-b border-primary-gold/50 pb-8 opacity-0 animate-slide-up" data-animation-delay="1.1s">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-primary-gold drop-shadow-md">
+                    תחומי התמחות – צבעי המכחול הדיגיטלי
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-soft-beige opacity-90">
+                    <div class="p-3 border border-primary-gold/10 rounded-sm hover:bg-primary-gold/10 transition duration-300">
+                        <h3 class="text-xl font-bold mb-1 text-primary-gold">
+                            פיסול מילים ותוכן
+                        </h3>
+                        <p class="text-base leading-relaxed">
+                            ללמוד ליצור טקסטים, סיפורים ותכנים מרתקים בעזרת AI.
+                        </p>
+                    </div>
+                    <div class="p-3 border border-primary-gold/10 rounded-sm hover:bg-primary-gold/10 transition duration-300">
+                        <h3 class="text-xl font-bold mb-1 text-primary-gold">
+                            אריגת אפליקציות חכמות
+                        </h3>
+                        <p class="text-base leading-relaxed">
+                            בניית מערכות ואפליקציות המפענחות ומגיבות לעולם.
+                        </p>
+                    </div>
+                    <div class="p-3 border border-primary-gold/10 rounded-sm hover:bg-primary-gold/10 transition duration-300">
+                        <h3 class="text-xl font-bold mb-1 text-primary-gold">
+                            הקמת אתרי AI
+                        </h3>
+                        <p class="text-base leading-relaxed">
+                            יצירת פלטפורמות דיגיטליות מונעות בינה מלאכותית.
+                        </p>
+                    </div>
+                    <div class="p-3 border border-primary-gold/10 rounded-sm hover:bg-primary-gold/10 transition duration-300">
+                        <h3 class="text-xl font-bold mb-1 text-primary-gold">
+                            פענוח נתונים
+                        </h3>
+                        <p class="text-base leading-relaxed">
+                            גילוי תובנות עמוקות מתוך ים המידע בעזרת AI.
+                        </p>
+                    </div>
+                    <div class="p-3 border border-primary-gold/10 rounded-sm hover:bg-primary-gold/10 transition duration-300">
+                        <h3 class="text-xl font-bold mb-1 text-primary-gold">
+                            בריאת תמונות ואומנות
+                        </h3>
+                        <p class="text-base leading-relaxed">
+                            הפיכת רעיונות ויזואליים למציאות דיגיטלית מרהיבה.
+                        </p>
+                    </div>
+                    <div class="p-3 border border-primary-gold/10 rounded-sm hover:bg-primary-gold/10 transition duration-300">
+                        <h3 class="text-xl font-bold mb-1 text-primary-gold">
+                            תזמור אוטומציה
+                        </h3>
+                        <p class="text-base leading-relaxed">
+                            להפוך תהליכים ידניים לבלט אוטומטי ויעיל באמצעות AI.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: The Alchemist's Offerings / Services -->
+            <section class="mb-12 border-b border-primary-gold/50 pb-8 opacity-0 animate-slide-up" data-animation-delay="1.4s">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-primary-gold drop-shadow-md">
+                    היצע הסדנאות – כלים ליצירה
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-soft-beige opacity-90">
+                    <div class="p-4 border border-primary-gold/20 rounded-md bg-deep-burgundy/20 hover:bg-deep-burgundy/40 transition duration-300">
+                        <h3 class="text-2xl font-bold mb-2 text-primary-gold">
+                            סדנאות קבוצתיות – המעבדה המשותפת
+                        </h3>
+                        <p class="text-lg leading-relaxed">
+                            סדנאות מעשיות, ממוקדות ואינטנסיביות, שבהן תלמדו בצוותא את רזי ה-AI ותפתחו פרויקטים בזמן אמת.
+                        </p>
+                    </div>
+                    <div class="p-4 border border-primary-gold/20 rounded-md bg-deep-burgundy/20 hover:bg-deep-burgundy/40 transition duration-300">
+                        <h3 class="text-2xl font-bold mb-2 text-primary-gold">
+                            שיעורים פרטיים – חניכה אישית
+                        </h3>
+                        <p class="text-lg leading-relaxed">
+                            מסלול לימודים מותאם אישית, שנבנה במיוחד עבורכם – לרמה, לקצב ולצרכים הייחודיים שלכם.
+                        </p>
+                    </div>
+                    <div class="p-4 border border-primary-gold/20 rounded-md bg-deep-burgundy/20 hover:bg-deep-burgundy/40 transition duration-300">
+                        <h3 class="text-2xl font-bold mb-2 text-primary-gold">
+                            הרצאות לארגונים – הארה קולקטיבית
+                        </h3>
+                        <p class="text-lg leading-relaxed">
+                            הרצאות מרתקות ופורצות דרך שיחשפו את צוותיכם לעוצמת ה-AI ויפתחו אופקים חדשים של חדשנות.
+                        </p>
+                    </div>
+                    <div class="p-4 border border-primary-gold/20 rounded-md bg-deep-burgundy/20 hover:bg-deep-burgundy/40 transition duration-300">
+                        <h3 class="text-2xl font-bold mb-2 text-primary-gold">
+                            ייעוץ ופיתוח פרויקטים – משיחת מכחול למציאות
+                        </h3>
+                        <p class="text-lg leading-relaxed">
+                            ליווי מקצועי צמוד משלב הרעיון ועד למימוש פרויקטים מורכבים מבוססי בינה מלאכותית, תוך העברת ידע מעמיקה.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: The Master / Zevik Aviner -->
+            <section class="mb-12 opacity-0 animate-slide-up" data-animation-delay="1.7s">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-primary-gold drop-shadow-md text-center">
+                    זאביק אבינר – המדריך
+                </h2>
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
+                    <div class="md:w-1/3 flex justify-center">
+                        <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-primary-gold shadow-lg object-cover grayscale hover:grayscale-0 transition-all duration-500">
+                    </div>
+                    <div class="md:w-2/3 text-soft-beige opacity-90 text-center md:text-right">
+                        <p class="text-xl md:text-2xl leading-relaxed mb-4">
+                            זאביק אבינר הוא אמן, אדריכל וחלוץ בתחום הבינה המלאכותית. עם ניסיון עשיר שפיתח אינספור פרויקטים, אפליקציות ומערכות מבוססות AI, הוא מביא עמו ידע שאין שני לו.
+                        </p>
+                        <p class="text-lg md:text-xl leading-relaxed mb-4">
+                            שליחותו היא להפוך את הטכנולוגיה המורכבת לנגישה, לשבור את מחסומי הפחד ולהפוך את כוחה של הבינה המלאכותית לכלי יומיומי לכל אחד ואחת. הוא המדריך שלכם אל העידן החדש.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer: Call to Action and Contact Information -->
+        <footer class="w-full text-center mt-12 mb-8 max-w-4xl text-soft-beige opacity-90">
+            <p class="text-2xl md:text-3xl font-bold mb-6 text-primary-gold animate-pulse">
+                הצטרפו למסע הידע – צרו קשר עוד היום
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-6 text-xl md:text-2xl">
+                <a href="https://wa.me/972546609385" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center gap-2 p-3 bg-deep-burgundy text-soft-beige rounded-full shadow-lg hover:bg-primary-gold hover:text-dark-charcoal transition-all duration-300 no-underline group">
+                    <svg class="w-6 h-6 fill-current group-hover:animate-bounce" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12.04 2C6.58 2 2.1 6.48 2.1 11.94c0 1.76.46 3.44 1.35 4.96L2 22l5.12-1.35c1.47.88 3.16 1.34 4.88 1.34 5.46 0 9.94-4.48 9.94-9.94S17.5 2 12.04 2zm5.72 14.54a.79.79 0 01-.86.32c-.3-.08-1.5-.67-1.74-.75-.25-.09-.43-.13-.62.13-.19.27-.72.75-.88.92-.16.17-.32.19-.59.08-.26-.1-.97-.36-1.85-.92-.69-.45-1.15-.76-1.46-1.26-.31-.5-.03-.77.22-1.01.22-.22.49-.52.75-.78.26-.26.35-.43.43-.59.08-.17.04-.3-.02-.43-.06-.13-.62-1.48-.86-2.02-.25-.53-.49-.45-.66-.46-.16-.02-.34-.02-.52-.02-.19 0-.49.07-.75.34-.26.26-1 1-1 2.45 0 1.45 1.02 2.83 1.16 3.01.14.18 1.96 3 4.75 4.22 2.79 1.22 2.79.82 3.29.77.5-.05 1.62-.66 1.86-1.3-.24-.64.08-.75.17-.93.09-.17.2-.66.13-.75z" />
+                    </svg>
+                    <span class="font-bold">ווטסאפ:</span> 054-6609385
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="flex items-center justify-center gap-2 p-3 bg-deep-burgundy text-soft-beige rounded-full shadow-lg hover:bg-primary-gold hover:text-dark-charcoal transition-all duration-300 no-underline group">
+                    <svg class="w-6 h-6 fill-current group-hover:animate-swing" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 2l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z" />
+                    </svg>
+                    <span class="font-bold">אימייל:</span> zaviner@gmail.com
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.querySelector('.custom-cursor');
+        const cursorInner = document.querySelector('.custom-cursor-inner');
+        const interactiveElements = document.querySelectorAll('a, button, input[type="submit"], .group, [tabindex="0"], [role="button"]');
+
+        document.addEventListener('mousemove', e => {
+            cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+            cursorInner.style.transform = `translate(${e.clientX}px, ${e.clientY}px) translate(-50%, -50%)`;
+        });
+
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('cursor-link-hover');
+                cursorInner.classList.add('cursor-link-hover-inner');
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('cursor-link-hover');
+                cursorInner.classList.remove('cursor-link-hover-inner');
+            });
+        });
+
+        // Parallax Scroll Effect for background
+        const parallaxBg = document.getElementById('parallax-bg');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            parallaxBg.style.transform = `translateY(${scrollY * 0.2}px)`; // Adjust 0.2 for desired parallax speed
+        });
+
+        // Entrance Animations triggered by Intersection Observer
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Check for specific animation classes and apply delay
+                    if (entry.target.classList.contains('animate-fade-in') ||
+                        entry.target.classList.contains('animate-slide-up') ||
+                        entry.target.classList.contains('animate-fade-in-delay') ||
+                        entry.target.classList.contains('animate-zoom-in')) {
+
+                        // Apply the animation by removing the initial opacity/transform and letting the CSS keyframe take over
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'none';
+
+                        // For elements with a data-animation-delay attribute
+                        const delay = entry.target.dataset.animationDelay;
+                        if (delay) {
+                            entry.target.style.animationDelay = delay;
+                        }
+                    }
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, observerOptions);
+
+        // Select all elements that should animate on scroll
+        const animatableElements = document.querySelectorAll(
+            '.animate-fade-in, .animate-slide-up, .animate-fade-in-delay, .animate-zoom-in'
+        );
+
+        animatableElements.forEach(el => {
+            // Set initial state for animations via JS to prevent FOUC before observer kicks in
+            if (el.classList.contains('animate-fade-in') || el.classList.contains('animate-fade-in-delay')) {
+                el.style.opacity = '0';
+            }
+            if (el.classList.contains('animate-slide-up')) {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+            }
+            if (el.classList.contains('animate-zoom-in')) {
+                el.style.opacity = '0';
+                el.style.transform = 'scale(0.95)';
+            }
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

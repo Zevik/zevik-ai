@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<title>הסיפור של ג'שוע</title>
+<style>
+  body { font-family: Arial, sans-serif; line-height: 1.8; padding: 2rem; background-color: #f0f0f0; }
+  .story-text { 
+    color: transparent; 
+    transition: color 0.5s ease-in-out; /* אנימציה חלקה לשינוי צבע */
+  }
+  .story-text.visible {
+    color: #333; /* צבע טקסט כשגלוי */
+  }
+  .toggle-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 2rem; /* גודל האייקון */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+  }
+</style>
+</head>
+<body>
+
+<button id="toggleStory" class="toggle-button">🖕</button>
+
+<div class="story-text" id="joshuaStory">
+  <h1>הסיפור של ג'שוע מתקוע</h1>
+  <p>
+    ג'שוע היה אדם שקט ומתבודד, שגר בקצה הכפר תקוע. הוא בנה את ביתו הקטן מאבנים מקומיות, ממש על מורדות הגבעה הצופה אל המדבר הפרוש. רוב ימיו בילה ג'שוע בעבודת אדמה צנועה, מגדל עשבי תיבול ותבלינים נדירים שהיו ידועים בסגולותיהם המרפאות.
+  </p>
+  <p>
+    השמש הלוהטת של יהודה צרבה את עורו, והרוחות המדבריות ליטפו את שערותיו המאפירות. עיניו של ג'שוע היו תמיד מביטות אל האופק, מחפשות אחר סימנים, אולי של גשם, אולי של מבקר מזדמן, אך לרוב רק את השלווה האינסופית של המרחבים הפתוחים.
+  </p>
+  <p>
+    למרות בדידותו, ג'שוע לא היה בודד באמת. הוא דיבר עם האדמה, עם העצים הבודדים שצמחו בסביבה, ועם בעלי החיים הקטנים שהיו באים לבקר בארובת ביתו. הוא האמין שלכל דבר יש נשמה, וכי הקשבה שקטה יכולה לגלות סודות עתיקים שנשכחו.
+  </p>
+  <p>
+    בערבים, לאור עששית קטנה, ג'שוע נהג לכתוב ביומנו. הוא תיעד את מחשבותיו, את חלומותיו, ואת התצפיות שלו על כוכבי השמיים שמעל תקוע, שהיו נראים כיהלומים נוצצים על קטיפה שחורה. לעיתים רחוקות, היה מגיע אליו תושב מהכפר, לבקש עצה או עזרה בצמח מרפא, וג'שוע תמיד קיבל אותם בסבר פנים יפות ובשקט אופייני לו.
+  </p>
+  <p>
+    הוא היה איש של מעט מילים, אבל ליבו היה מלא חוכמה וטוב לב. הסיפורים על ג'שוע, האיש שהמדבר לחש לו סודות, עברו מפה לאוזן בתקוע, והפכו אותו לאגדה שקטה וחיה, שרק מי שהיה מוכן להקשיב בלב פתוח יכול היה לגלות את מלוא עומקה.
+  </p>
+</div>
+
+<script>
+  const storyDiv = document.getElementById('joshuaStory');
+  const toggleButton = document.getElementById('toggleStory');
+
+  toggleButton.addEventListener('click', () => {
+    storyDiv.classList.toggle('visible');
+  });
+</script>
+
+</body>
+</html>

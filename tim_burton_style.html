@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>החתול השחור - יצירת מופת דיגיטלית בסגנון טים ברטון</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700&family=Frank+Ruhl+Libre:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #1a1a1a; /* Dark charcoal */
+            color: #f0f0f0; /* Off-white */
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Frank Ruhl Libre', serif;
+            line-height: 1.2;
+        }
+        .custom-cursor {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+            border: 2px solid #FFFFFF; /* High contrast border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* High contrast shadow */
+            z-index: 9999;
+            position: fixed;
+            will-change: transform;
+            opacity: 0; /* Hidden initially, shown on mousemove */
+        }
+
+        /* Tim Burtonesque elements */
+        .burton-shape {
+            position: absolute;
+            opacity: 0.3;
+            filter: invert(100%);
+            z-index: -2; /* Below main content, above fixed background */
+            pointer-events: none;
+            will-change: transform, opacity;
+        }
+        .burton-moon {
+            width: 150px;
+            height: 150px;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            box-shadow: 0 0 20px 5px rgba(240, 240, 240, 0.5);
+            top: 10%;
+            left: 5%;
+            transform: scaleX(0.8); /* Elongated */
+        }
+        .burton-tree {
+            width: 250px;
+            height: 400px;
+            background-color: transparent;
+            border-radius: 0 0 50% 50%;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%231a1a1a' d='M50 0 L30 30 L40 30 L20 60 L30 60 L10 90 L20 90 L0 100 L100 100 L80 90 L90 90 L70 60 L80 60 L60 30 L70 30 Z'/%3E%3C/svg%3E"); /* Simple jagged tree */
+            background-size: cover;
+            bottom: -50px;
+            right: 10%;
+        }
+
+        .parallax-bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -10;
+            pointer-events: none;
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            will-change: transform;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-[#1a1a1a] text-[#f0f0f0]">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div id="parallax-bg-1" class="parallax-bg-layer bg-[url('https://source.unsplash.com/random/1920x1080/?dark,forest,night')] opacity-20"></div>
+    <div id="parallax-bg-2" class="parallax-bg-layer bg-[url('https://source.unsplash.com/random/1920x1080/?spooky,cemetery,fog')] opacity-10" style="background-blend-mode: overlay; background-color: rgba(0,0,0,0.5);"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 min-h-screen p-8 lg:p-16 overflow-hidden">
+
+        <!-- Tim Burtonesque Static Elements -->
+        <div class="burton-shape burton-moon top-[5%] left-[5%] xl:top-[10%] xl:left-[10%]"></div>
+        <div class="burton-shape w-[200px] h-[300px] bg-no-repeat bg-contain bottom-[-50px] left-[0] bg-[url('https://source.unsplash.com/random/200x300/?cat,silhouette')]"></div>
+        <div class="burton-shape w-[250px] h-[350px] bg-no-repeat bg-contain top-[-50px] right-[0] bg-[url('https://source.unsplash.com/random/250x350/?gothic,castle,spire')]"></div>
+
+        <header class="text-center mb-20 fade-in">
+            <h1 class="text-6xl md:text-8xl font-bold text-[#f0f0f0] mt-12 mb-4 drop-shadow-lg leading-tight">
+                החתול השחור
+            </h1>
+            <p class="text-2xl md:text-3xl text-[#b8a6d1] mt-4 max-w-3xl mx-auto drop-shadow">
+                מסע אפל אל נבכי נשמתו של החתול הביתי
+            </p>
+        </header>
+
+        <main class="max-w-4xl mx-auto space-y-24">
+
+            <!-- Section 1: The Enigma of the Cat -->
+            <section class="flex flex-col lg:flex-row items-center lg:items-start gap-12 p-8 bg-[#2a2a2a] bg-opacity-80 rounded-3xl shadow-2xl relative fade-in">
+                <div class="lg:w-1/2 flex-shrink-0">
+                    <img src="https://source.unsplash.com/random/600x800/?cat,black,mysterious" alt="חתול שחור מסתורי עם עיניים נוצצות בחושך, יושב על רקע של צללים עצים"
+                         class="rounded-xl shadow-lg border-4 border-[#4a2d5e] w-full h-auto object-cover max-h-[600px] transform rotate-[-2deg] hover:rotate-0 transition-transform duration-500 ease-in-out">
+                </div>
+                <div class="lg:w-1/2 text-right">
+                    <h2 class="text-5xl font-bold mb-6 text-[#b8a6d1] drop-shadow">העיניים שרואות הכל</h2>
+                    <p class="text-lg leading-relaxed mb-6 text-[#d0d0d0]">
+                        בלילות חשוכים, כשרוחות לוחשות בין הענפים העירומים, עיניו של החתול הן מגדלור סודי. הן לא רק משקפות את הירח הקפוא, אלא גם את סודות העולם הנשכחים. יצורים עתיקים וחוכמה שאין לה גבול חבויים שם, בתוך הגולות הזוהרות הללו, המשנות צורה כזיכרון חולף.
+                    </p>
+                    <p class="text-md leading-relaxed text-[#c0c0c0] italic">
+                        "הוא לא רק רואה- הוא מבין. והבנתו שקטה, עמוקה, ולעולם אינה נשכחת."
+                    </p>
+                </div>
+            </section>
+
+            <!-- Section 2: The Silent Wanderer -->
+            <section class="flex flex-col lg:flex-row-reverse items-center lg:items-start gap-12 p-8 bg-[#2a2a2a] bg-opacity-80 rounded-3xl shadow-2xl relative fade-in">
+                <div class="lg:w-1/2 flex-shrink-0">
+                    <img src="https://source.unsplash.com/random/600x800/?feline,night,shadows" alt="חתול בית כהה מתגנב בצללים של רחוב עתיק תחת אור ירח חיוור, עשן קל עולה מאחוריו"
+                         class="rounded-xl shadow-lg border-4 border-[#2d5e5e] w-full h-auto object-cover max-h-[600px] transform rotate-[3deg] hover:rotate-0 transition-transform duration-500 ease-in-out">
+                </div>
+                <div class="lg:w-1/2 text-right">
+                    <h2 class="text-5xl font-bold mb-6 text-[#b8a6d1] drop-shadow">המהלכים השקטים</h2>
+                    <p class="text-lg leading-relaxed mb-6 text-[#d0d0d0]">
+                        רגליו הקטיפתיות חומקות על פני האדמה, כמעט ללא קול. כל צעד הוא לחש, כל קפיצה היא שיר סודי. הם רוקדים בריק, בין עולמות גלויים ונסתרים, מציצנות קטנות אל המסתורין שהחיים שומרים לעצמם. תנועתם היא שירה, ללא מילים, אך עם עומק של אלף סיפורים עתיקים.
+                    </p>
+                    <p class="text-md leading-relaxed text-[#c0c0c0] italic">
+                        "צללים רודפים צללים, והחתול הוא המאסטר של שניהם."
+                    </p>
+                </div>
+            </section>
+
+            <!-- Section 3: The Guardian of Secrets -->
+            <section class="p-10 bg-[#2a2a2a] bg-opacity-80 rounded-3xl shadow-2xl relative fade-in text-center">
+                <h2 class="text-5xl font-bold mb-8 text-[#b8a6d1] drop-shadow">הלחישות מן העבר</h2>
+                <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch mb-10">
+                    <div class="flex-1 p-6 border-4 border-[#4a2d5e] rounded-xl transform rotate-[-1deg] hover:rotate-0 transition-transform duration-500 ease-in-out bg-[#1f1f1f] shadow-inner">
+                        <h3 class="text-3xl font-bold mb-4 text-[#f0f0f0]">הנוכחות הסמויה</h3>
+                        <p class="text-lg text-[#d0d0d0]">
+                            החתול אינו דורש דבר, ובכל זאת הוא מקבל הכל. נוכחותו היא כמו רוח רפאים חמימה, צל נעים המרחף מעל חיינו. הוא שומע את מחשבותינו הנסתרות וצופה בחלומותינו, אך לעולם לא יגלה. הוא השומר השקט של סודות המשפחה, הקטן ביותר והחכם מכולם.
+                        </p>
+                    </div>
+                    <div class="flex-1 p-6 border-4 border-[#2d5e5e] rounded-xl transform rotate-[2deg] hover:rotate-0 transition-transform duration-500 ease-in-out bg-[#1f1f1f] shadow-inner">
+                        <h3 class="text-3xl font-bold mb-4 text-[#f0f0f0]">המורשת העתיקה</h3>
+                        <p class="text-lg text-[#d0d0d0]">
+                            בדממה שבין נהימה לגרגור, מסתתרת מורשת של אלפי שנים. פרעונים סגדו להם, מכשפות לחשו להם, והם נותרו כפי שהיו - יצורים של עצמאות מלכותית. כל תנועה, כל מבט, כל התכרבלות נושאת את משקל ההיסטוריה והכבוד העצמי, ירושה מן העבר הרחוק.
+                        </p>
+                    </div>
+                </div>
+                <img src="https://source.unsplash.com/random/1200x600/?cat,ancient,ruins" alt="חתול אפור יושב בין עתיקות הרוסות ומונומנטים עתיקים, אור ירח מאיר את סביבתו"
+                     class="rounded-xl shadow-lg border-4 border-[#b8a6d1] mx-auto mt-10 max-w-full h-auto object-cover transform scale-x-[0.98] hover:scale-x-100 transition-transform duration-500 ease-in-out">
+            </section>
+
+        </main>
+
+        <footer class="text-center mt-24 py-12 text-lg text-[#b8a6d1] fade-in">
+            <p>&copy; 2023 יצירה דיגיטלית בהשראת הנסתר והמופלא. כל הזכויות שמורות לצללי הלילה והחתולים.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Custom Cursor
+        const customCursor = document.getElementById('custom-cursor');
+        let cursorX = 0, cursorY = 0;
+        let mouseX = 0, mouseY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            customCursor.style.opacity = 1; // Show cursor on mousemove
+        });
+
+        function animateCursor() {
+            // Lerp the cursor position for a smoother effect
+            cursorX += (mouseX - cursorX) * 0.1;
+            cursorY += (mouseY - cursorY) * 0.1;
+
+            // Apply transform for performance
+            customCursor.style.transform = `translate3d(${cursorX - customCursor.offsetWidth / 2}px, ${cursorY - customCursor.offsetHeight / 2}px, 0)`;
+
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Parallax Scrolling Effect
+        const parallaxBg1 = document.getElementById('parallax-bg-1');
+        const parallaxBg2 = document.getElementById('parallax-bg-2');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+
+            // Adjust these factors for different speeds
+            parallaxBg1.style.transform = `translateY(${scrollY * 0.3}px)`;
+            parallaxBg2.style.transform = `translateY(${scrollY * 0.6}px)`;
+        });
+
+        // Fade-in on scroll (Intersection Observer)
+        const fadeInElements = document.querySelectorAll('.fade-in');
+
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.2 // Trigger when 20% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Stop observing once it's visible
+                }
+            });
+        }, observerOptions);
+
+        fadeInElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // Initial check for elements already in viewport on load
+        document.addEventListener('DOMContentLoaded', () => {
+            fadeInElements.forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight) {
+                    el.classList.add('is-visible');
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

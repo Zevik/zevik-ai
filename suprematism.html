@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הקואורדינטות החדשות: שליטה ב-AI</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - IBM Plex Sans Hebrew -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Hebrew:wght@200;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Suprematist Color Palette & Font */
+        :root {
+            --color-black: #000000;
+            --color-white: #FFFFFF;
+            --color-gray-900: #1a1a1a;
+            --color-gray-800: #333333;
+            --color-gray-700: #4d4d4d;
+            --color-gray-200: #e0e0e0;
+            --color-gray-100: #f5f5f5;
+            --color-red-600: #dc2626; /* A strong accent red */
+            --color-blue-600: #2563eb; /* A strong accent blue */
+        }
+        body {
+            font-family: 'IBM Plex Sans Hebrew', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            cursor: none; /* Hide default cursor */
+        }
+
+        /* Custom Cursor Styling - High Contrast Mandatory */
+        .custom-cursor {
+            border: 2px solid var(--color-white); /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+            mix-blend-mode: normal !important; /* Ensure visibility on all backgrounds */
+        }
+
+        /* Suprematist Animations & Transitions */
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .slide-in-right {
+            transform: translateX(100%);
+            opacity: 0;
+            animation: slideInRight 0.8s ease-out forwards;
+        }
+        @keyframes slideInRight {
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .slide-in-left {
+            transform: translateX(-100%);
+            opacity: 0;
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+        @keyframes slideInLeft {
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .rotate-scale-in {
+            transform: scale(0) rotate(90deg);
+            opacity: 0;
+            animation: rotateScaleIn 1s ease-out forwards;
+        }
+        @keyframes rotateScaleIn {
+            to { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        /* Tailwind overrides for specific elements or custom classes */
+        .suprematist-text-block {
+            background-color: var(--color-black); /* Dark background for text blocks */
+            color: var(--color-white); /* Light text for readability */
+            padding: 2rem;
+            border: 1px solid var(--color-red-600); /* Red accent border */
+            box-shadow: 0 0 20px rgba(0,0,0,0.5); /* Subtle shadow for depth */
+        }
+
+        .suprematist-link {
+            color: var(--color-red-600);
+            text-decoration: none;
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+        .suprematist-link:hover {
+            color: var(--color-white);
+            background-color: var(--color-red-600);
+        }
+
+        /* Specific styles for the generative shapes */
+        .generative-shape {
+            position: absolute;
+            background-color: var(--color-gray-700);
+            opacity: 0.1;
+            z-index: -2; /* Below main background elements */
+            transition: transform 0.1s ease-out, opacity 0.5s ease;
+            pointer-events: none;
+            will-change: transform; /* Optimize for animation */
+        }
+        .generative-shape.rect {
+            width: var(--size);
+            height: var(--size-alt);
+        }
+        .generative-shape.square {
+            width: var(--size);
+            height: var(--size);
+        }
+        .generative-shape.line {
+            height: 2px;
+            width: var(--size);
+            background-color: var(--color-blue-600);
+            opacity: 0.2;
+        }
+
+        /* Keyframes for background parallax squares */
+        @keyframes bg-square-1 {
+            0% { transform: translate(-50%, -50%) scale(1) rotate(45deg); }
+            50% { transform: translate(-55%, -45%) scale(1.05) rotate(50deg); }
+            100% { transform: translate(-50%, -50%) scale(1) rotate(45deg); }
+        }
+        @keyframes bg-square-2 {
+            0% { transform: translate(-50%, -50%) scale(1) rotate(-12deg); }
+            50% { transform: translate(-40%, -58%) scale(1.1) rotate(-18deg); }
+            100% { transform: translate(-50%, -50%) scale(1) rotate(-12deg); }
+        }
+        @keyframes bg-square-3 {
+            0% { transform: translate(-50%, -50%) scale(1) rotate(30deg); }
+            50% { transform: translate(-55%, -62%) scale(0.95) rotate(35deg); }
+            100% { transform: translate(-50%, -50%) scale(1) rotate(30deg); }
+        }
+        .bg-square-1 { animation: bg-square-1 20s infinite alternate ease-in-out; }
+        .bg-square-2 { animation: bg-square-2 25s infinite alternate ease-in-out; }
+        .bg-square-3 { animation: bg-square-3 18s infinite alternate ease-in-out; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-black to-gray-900 text-white min-h-screen relative font-thin">
+
+    <!-- Suprematist Background Elements - Fixed and Animated for depth -->
+    <div class="fixed inset-0 overflow-hidden z-[-1]">
+        <!-- Main dynamic background shapes, ensuring transform origins are handled for animation -->
+        <div class="absolute w-[80vw] h-[80vw] sm:w-[50vw] sm:h-[50vw] bg-gray-800 opacity-20 top-1/2 left-1/2 bg-square-1" style="transform-origin: center;"></div>
+        <div class="absolute w-[60vw] h-[60vw] sm:w-[40vw] sm:h-[40vw] bg-red-600 opacity-15 top-1/4 left-3/4 bg-square-2" style="transform-origin: center;"></div>
+        <div class="absolute w-[40vw] h-[40vw] sm:w-[30vw] sm:h-[30vw] bg-blue-600 opacity-10 bottom-1/4 right-3/4 bg-square-3" style="transform-origin: center;"></div>
+        <div class="absolute w-[200px] h-2 bg-white opacity-5 rotate-45 top-[10%] left-[5%]"></div>
+        <div class="absolute w-[300px] h-3 bg-red-600 opacity-10 -rotate-30 bottom-[5%] right-[10%]"></div>
+        <div class="absolute w-[150px] h-[150px] bg-gray-700 opacity-10 rounded-full top-[80%] left-[20%]"></div>
+    </div>
+
+    <!-- Generative Shapes Container -->
+    <div id="generative-shapes-container" class="fixed inset-0 z-[-2] pointer-events-none"></div>
+
+    <!-- Main Content Wrapper -->
+    <main class="relative z-10 p-4 md:p-8 flex flex-col items-center justify-center min-h-screen bg-black bg-opacity-30">
+
+        <!-- Header - The New Coordinates -->
+        <section class="max-w-4xl w-full text-center mb-16 mt-8 fade-in" style="animation-delay: 0.2s;">
+            <h1 class="text-5xl md:text-7xl font-bold mb-4 text-white drop-shadow-lg leading-tight">
+                הקואורדינטות החדשות: <span class="text-red-600">שליטה ב-AI</span>
+            </h1>
+            <p class="text-2xl md:text-3xl text-gray-200 mb-8 font-light">
+                לפרק את המורכב, לבנות את הפשוט. AI – <span class="text-blue-600">מלבני בסיס ליצירה אינסופית.</span>
+            </p>
+            <p class="text-xl md:text-2xl text-gray-300 font-normal">
+                כלים מדויקים. פעולה מידית. <span class="text-red-600 font-bold">העתיד נבנה עכשיו.</span>
+            </p>
+        </section>
+
+        <!-- The Architect - Zevik Aviner Introduction -->
+        <section class="max-w-4xl w-full grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 relative">
+            <div class="md:col-span-2 suprematist-text-block slide-in-right" style="animation-delay: 0.6s;">
+                <h2 class="text-3xl font-bold mb-4 text-red-600">הארכיטקט: זאביק אבינר</h2>
+                <p class="text-xl leading-relaxed">
+                    נקודת המפגש בין צורה ותוכן. מומחה AI עם ניסיון עשיר בבניית קונסטרוקציות AI מורכבות.
+                    המפתח להנגשת הטכנולוגיה והפיכתה לכלי עבודה יומיומי. הארכיטקט שלך בעולם החדש.
+                </p>
+                <div class="mt-6 flex flex-col md:flex-row gap-4 items-start md:items-center text-lg">
+                    <a href="https://wa.me/972546609385" target="_blank" class="suprematist-link flex items-center gap-2">
+                        <span class="text-2xl">📱</span> ווטסאפ: 054-6609385
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="suprematist-link flex items-center gap-2">
+                        <span class="text-2xl">📧</span> אימייל: zaviner@gmail.com
+                    </a>
+                </div>
+            </div>
+            <div class="md:col-span-1 flex justify-center items-center rotate-scale-in" style="animation-delay: 0.8s;">
+                <div class="relative w-48 h-48 md:w-64 md:h-64 bg-gray-700 p-2 border-2 border-blue-600 shadow-lg flex items-center justify-center overflow-hidden">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר - מומחה בינה מלאכותית" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500 ease-in-out">
+                    <div class="absolute inset-0 border-4 border-white opacity-20"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Target Audience - Paths to Every Point -->
+        <section class="max-w-4xl w-full mb-16 fade-in" style="animation-delay: 1s;">
+            <h2 class="text-4xl font-bold mb-8 text-blue-600 text-center">מסלולים לכל נקודה במרחב המשתנה:</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-xl">
+                <div class="suprematist-text-block slide-in-left" style="animation-delay: 1.2s;">
+                    <h3 class="font-bold text-red-600 mb-2">מקו ההתחלה הטהור</h3>
+                    <p class="text-gray-200">למתחילים המעוניינים להכיר את עולם ה-AI מאפס, לבנות את היסודות.</p>
+                </div>
+                <div class="suprematist-text-block slide-in-right" style="animation-delay: 1.4s;">
+                    <h3 class="font-bold text-red-600 mb-2">דרך הצורות היישומיות</h3>
+                    <p class="text-gray-200">לאנשי מקצוע המבקשים להטמיע AI בעבודתם וליצור פתרונות פרקטיים.</p>
+                </div>
+                <div class="suprematist-text-block slide-in-left" style="animation-delay: 1.6s;">
+                    <h3 class="font-bold text-red-600 mb-2">אל המערכים האסטרטגיים</h3>
+                    <p class="text-gray-200">למנהלים וארגונים המחפשים הדרכות לצוותים, להובלת טרנספורמציה דיגיטלית.</p>
+                </div>
+                <div class="suprematist-text-block slide-in-right" style="animation-delay: 1.8s;">
+                    <h3 class="font-bold text-red-600 mb-2">עד פיתוח הקונסטרוקציות המורכבות</h3>
+                    <p class="text-gray-200">למתקדמים - פיתוח פרויקטים מבוססי AI, יצירת פתרונות פורצי דרך.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Areas - Constituent Forms -->
+        <section class="max-w-4xl w-full mb-16 fade-in" style="animation-delay: 2s;">
+            <h2 class="text-4xl font-bold mb-8 text-red-600 text-center">הצורות המרכיבות את אינטליגנציית המחר:</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-xl">
+                <div class="suprematist-text-block p-4 border-blue-600 slide-in-left" style="animation-delay: 2.2s;">
+                    <h3 class="font-bold text-gray-100 mb-1">טקסט כווקטור</h3>
+                    <p class="text-gray-300 text-base">יצירת תוכן ממוקד</p>
+                </div>
+                <div class="suprematist-text-block p-4 border-white slide-in-right" style="animation-delay: 2.4s;">
+                    <h3 class="font-bold text-gray-100 mb-1">אפליקציות כרשת</h3>
+                    <p class="text-gray-300 text-base">בניית פתרונות חכמים</p>
+                </div>
+                <div class="suprematist-text-block p-4 border-red-600 slide-in-left" style="animation-delay: 2.6s;">
+                    <h3 class="font-bold text-gray-100 mb-1">אתרים כמשטח</h3>
+                    <p class="text-gray-300 text-base">פיתוח ממשקים דינמיים</p>
+                </div>
+                <div class="suprematist-text-block p-4 border-blue-600 slide-in-right" style="animation-delay: 2.8s;">
+                    <h3 class="font-bold text-gray-100 mb-1">נתונים כמסה</h3>
+                    <p class="text-gray-300 text-base">ניתוח עמוק ומחקר</p>
+                </div>
+                <div class="suprematist-text-block p-4 border-white slide-in-left" style="animation-delay: 3s;">
+                    <h3 class="font-bold text-gray-100 mb-1">אמנות כהבעה</h3>
+                    <p class="text-gray-300 text-base">יצירה ויזואלית פורצת דרך</p>
+                </div>
+                <div class="suprematist-text-block p-4 border-red-600 slide-in-right" style="animation-delay: 3.2s;">
+                    <h3 class="font-bold text-gray-100 mb-1">אוטומציה כתנועה</h3>
+                    <p class="text-gray-300 text-base">ייעול תהליכים</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered - Knowledge Expansion Arrays -->
+        <section class="max-w-4xl w-full mb-20 fade-in" style="animation-delay: 3.4s;">
+            <h2 class="text-4xl font-bold mb-8 text-blue-600 text-center">מערכים להרחבת הידע:</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-xl">
+                <div class="suprematist-text-block p-6 border-white slide-in-left" style="animation-delay: 3.6s;">
+                    <h3 class="font-bold text-red-600 mb-2">סדנאות בניה קבוצתיות</h3>
+                    <p class="text-gray-200">חוויה מעשית, ממוקדת לבניית ידע משותף ב-AI.</p>
+                </div>
+                <div class="suprematist-text-block p-6 border-blue-600 slide-in-right" style="animation-delay: 3.8s;">
+                    <h3 class="font-bold text-red-600 mb-2">שיעורים פרטיים</h3>
+                    <p class="text-gray-200">קווי מסלול אישיים, מותאמים לרמה ולצרכים הייחודיים שלך.</p>
+                </div>
+                <div class="suprematist-text-block p-6 border-red-600 slide-in-left" style="animation-delay: 4s;">
+                    <h3 class="font-bold text-red-600 mb-2">הרצאות לארגונים</h3>
+                    <p class="text-gray-200">פתיחת אופקים והשראה לצוותים, בניית בסיס להבנת ה-AI.</p>
+                </div>
+                <div class="suprematist-text-block p-6 border-white slide-in-right" style="animation-delay: 4.2s;">
+                    <h3 class="font-bold text-red-600 mb-2">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-gray-200">ליווי מקצועי צמוד, מהקונספט ועד הגשמת חזון מבוסס AI.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer / Contact Reinforcement -->
+        <footer class="max-w-4xl w-full text-center py-8 fade-in" style="animation-delay: 4.5s;">
+            <p class="text-xl text-gray-300 mb-4">
+                ליצירת קשר עם הארכיטקט ובניית העתיד המשותף:
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-4 text-2xl">
+                <a href="https://wa.me/972546609385" target="_blank" class="suprematist-link font-bold flex items-center gap-2 justify-center">
+                    <span class="text-3xl">📱</span> ווטסאפ: 054-6609385
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="suprematist-link font-bold flex items-center gap-2 justify-center">
+                    <span class="text-3xl">📧</span> אימייל: zaviner@gmail.com
+                </a>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- JavaScript for Custom Cursor, Generative Shapes, and Parallax -->
+    <script>
+        // Custom Cursor Implementation
+        const cursor = document.createElement('div');
+        cursor.classList.add('custom-cursor', 'absolute', 'rounded-full', 'pointer-events-none', 'z-[9999]');
+        cursor.style.cssText = 'width: 24px; height: 24px; transform: translate(-50%, -50%); transition: transform 0.1s ease-out;';
+        document.body.appendChild(cursor);
+
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        // Generative Suprematist Shapes with Parallax
+        const generativeShapesContainer = document.getElementById('generative-shapes-container');
+        const numShapes = 30; // Number of generative shapes
+        const shapeTypes = ['rect', 'square', 'line'];
+        const colors = ['var(--color-gray-700)', 'var(--color-red-600)', 'var(--color-blue-600)', 'var(--color-white)'];
+
+        function createGenerativeShape() {
+            const shape = document.createElement('div');
+            shape.classList.add('generative-shape');
+            const type = shapeTypes[Math.floor(Math.random() * shapeTypes.length)];
+            shape.classList.add(type);
+
+            const size = Math.random() * 100 + 20; // 20-120px
+            const sizeAlt = Math.random() * 80 + 20; // for rect height
+
+            shape.style.setProperty('--size', `${size}px`);
+            shape.style.setProperty('--size-alt', `${sizeAlt}px`);
+
+            let bgColor = colors[Math.floor(Math.random() * colors.length)];
+            let opacity = Math.random() * 0.2 + 0.05; // 0.05 to 0.25
+            if (type === 'line') {
+                bgColor = 'var(--color-blue-600)';
+                opacity = Math.random() * 0.3 + 0.1;
+            }
+
+            shape.style.backgroundColor = bgColor;
+            shape.style.opacity = opacity;
+
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * document.body.scrollHeight; // Span entire scrollable height
+            const rotation = Math.random() * 180 - 90; // -90 to 90 degrees
+
+            shape.style.left = `${x}px`;
+            shape.style.top = `${y}px`;
+            
+            // Store initial rotation to combine with dynamic parallax translation
+            shape.dataset.initialRotation = `rotate(${rotation}deg)`; 
+            shape.style.transform = shape.dataset.initialRotation; // Apply initial rotation
+
+            generativeShapesContainer.appendChild(shape);
+
+            // Assign a random depth for parallax effect
+            shape.dataset.depth = Math.random() * 0.2 + 0.1; // 0.1 to 0.3
+        }
+
+        for (let i = 0; i < numShapes; i++) {
+            createGenerativeShape();
+        }
+
+        // Mouse Parallax Effect for Generative Shapes
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+
+            generativeShapesContainer.querySelectorAll('.generative-shape').forEach(shape => {
+                const depth = parseFloat(shape.dataset.depth);
+
+                // Calculate parallax offset relative to the viewport center
+                const offsetX = (mouseX - window.innerWidth / 2) * depth;
+                const offsetY = (mouseY - window.innerHeight / 2) * depth;
+
+                // Combine initial rotation with dynamic translation for parallax
+                shape.style.transform = `${shape.dataset.initialRotation} translate(${offsetX}px, ${offsetY}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

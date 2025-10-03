@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>החתול הנמס: סימפוניה סוריאליסטית לפרווה וזמן</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Tailwind Configuration for Hebrew Fonts */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        :root {
+            --font-playfair: 'Playfair Display', serif;
+            --font-assistant: 'Assistant', sans-serif;
+            --dali-gold: #c2a786; /* Muted gold */
+            --dali-deep-blue: #2c3e50; /* Deep blue-gray */
+            --dali-red: #8b0000; /* Dark red */
+            --dali-shadow: rgba(0,0,0,0.6);
+            --dali-highlight: rgba(255,255,255,0.1);
+        }
+
+        body {
+            font-family: var(--font-assistant);
+            background-color: #0d0d0d; /* Very dark background */
+            color: #f0f0f0; /* Light text for contrast */
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll from elements moving off screen */
+            line-height: 1.8; /* More spacious line height for poetic text */
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3 {
+            font-family: var(--font-playfair);
+            color: var(--dali-gold);
+            text-shadow: 2px 2px 8px var(--dali-shadow), -2px -2px 8px var(--dali-highlight);
+        }
+
+        /* Custom Cursor Styling */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+            mix-blend-mode: normal; /* Ensure no mix-blend-mode, as forbidden */
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for visibility */
+        }
+        #custom-cursor.active {
+            width: 32px;
+            height: 32px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: var(--dali-red);
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 15px 5px rgba(255,0,0,0.4);
+        }
+        
+        /* Parallax Background */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            right: 0; /* RTL-friendly positioning */
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -2; /* Behind other fixed backgrounds */
+            transform: translateZ(0); /* Hardware acceleration */
+            will-change: transform;
+            opacity: 0.2; /* Subtle background */
+        }
+
+        .parallax-layer-1 {
+            background-image: url('https://source.unsplash.com/random/1920x1080/?dream,abstract'); /* Abstract dreamlike background */
+            opacity: 0.15;
+        }
+
+        .parallax-layer-2 {
+            background-image: url('https://source.unsplash.com/random/1920x1080/?night,sky'); /* Dark sky for depth */
+            opacity: 0.1;
+            z-index: -3;
+        }
+
+        /* General content styling */
+        .content-section {
+            background-color: rgba(13, 13, 13, 0.7); /* Slightly lighter background for content sections */
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(var(--dali-gold), 0.2);
+            box-shadow: 0 0 20px rgba(0,0,0,0.5), inset 0 0 10px rgba(255,255,255,0.05);
+            margin-bottom: 8rem; /* More space between sections */
+        }
+        
+        /* Dali-esque melting effect (subtle) - JavaScript controlled */
+        .melting-text {
+            /* Initial state */
+            text-shadow: 1px 1px 2px var(--dali-shadow), 2px 2px 3px var(--dali-shadow), 3px 3px 4px var(--dali-shadow), 4px 4px 5px rgba(0,0,0,0.5);
+            transition: filter 0.3s ease-out, text-shadow 0.3s ease-out; /* Smooth transition for melting */
+        }
+
+        /* Keyframe for subtle floating animation */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .float-animation {
+            animation: float 5s ease-in-out infinite;
+        }
+        .float-animation.delay-100 { animation-delay: 0.1s; }
+        .float-animation.delay-200 { animation-delay: 0.2s; }
+        .float-animation.delay-300 { animation-delay: 0.3s; }
+        .float-animation.delay-400 { animation-delay: 0.4s; }
+
+        /* Image distortion/hover effect */
+        .dali-img-container {
+            position: relative;
+            overflow: hidden;
+            border: 3px solid var(--dali-gold);
+            box-shadow: 0 0 25px var(--dali-red), 0 0 50px rgba(0,0,0,0.7);
+            transition: transform 0.5s ease-in-out;
+            perspective: 1000px; /* For 3D transforms */
+        }
+        .dali-img-container:hover {
+            transform: scale(1.03) rotateZ(1deg);
+        }
+        .dali-img {
+            transition: transform 0.7s ease-in-out, filter 0.7s ease-in-out;
+            filter: contrast(1.1) saturate(1.2) sepia(0.1);
+        }
+        .dali-img-container:hover .dali-img {
+            transform: scale(1.1) rotateX(5deg) rotateY(5deg);
+            filter: contrast(1.3) saturate(1.5) sepia(0.2) brightness(0.9);
+        }
+        
+        /* Tailwind JIT compilation for custom values */
+        .z-[-1] { z-index: -1; }
+        .z-[-2] { z-index: -2; }
+        .z-[-3] { z-index: -3; }
+
+    </style>
+</head>
+<body class="selection:bg-dali-red selection:text-white">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-bg parallax-layer-2" id="parallax-2"></div>
+    <div class="parallax-bg parallax-layer-1" id="parallax-1"></div>
+
+    <!-- Main Content Wrapper with z-index above backgrounds -->
+    <main class="relative z-10 p-4 sm:p-8 md:p-12 lg:p-16 min-h-screen flex flex-col items-center">
+
+        <!-- Header - Surreal Title -->
+        <header class="text-center my-16 md:my-24 max-w-4xl px-4">
+            <h1 class="text-5xl md:text-7xl font-playfair leading-tight mb-6 text-dali-gold float-animation">
+                החתול הנמס: <br class="md:hidden"> סימפוניה סוריאליסטית לפרווה וזמן
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 melting-text max-w-2xl mx-auto">
+                מסע אל מעמקי התודעה החתולית, בין מציאות חולפת לחלומות נצחיים.
+            </p>
+        </header>
+
+        <!-- Section 1: The Cat's Gaze -->
+        <section class="content-section max-w-5xl mx-auto p-8 md:p-12 rounded-3xl transform -rotate-1 shadow-2xl">
+            <h2 class="text-4xl md:text-5xl mb-8 text-center font-playfair text-dali-gold transform translate-y-2 float-animation delay-100">
+                עיני החתול - מראות הזמן הנמס
+            </h2>
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+                <div class="lg:w-1/2 flex justify-center order-2 lg:order-1">
+                    <div class="dali-img-container w-full max-w-md lg:max-w-none transform rotate-3 relative -bottom-4">
+                        <img src="https://source.unsplash.com/random/600x450/?cat,eyes"
+                             alt="תמונת תקריב של עיני חתול, המרמזות על עומק סוריאליסטי וזמן נמס."
+                             class="w-full h-auto rounded-xl shadow-lg dali-img">
+                        <div class="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-dali-deep-blue opacity-10"></div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 text-lg md:text-xl text-gray-200 leading-relaxed order-1 lg:order-2">
+                    <p class="mb-6 melting-text">
+                        הבט בעיניהם של בני המזלעות האצילים, ולא תמצא שם רק השתקפות של החדר, אלא מראות עתיקים המקפלים בתוכם יקומים שלמים.
+                        זוהי אמנות ההתבוננות, שבה כל מציאות מתמוססת אל תוך אחרת.
+                        שם, בין קשתית כתומה ואישון צר כסדק בנשמה, נמסות השעות והופכות לנהרות של זיכרון, זורמים אל נצח נשכח.
+                        הזמן עצמו רוקד בתוך האישונים הללו, מתעוות ומתרחב, כשלעיתים הוא מתקפל פנימה אל תוך ממדים חבויים,
+                        ולעיתים הוא משתפך החוצה כנוזל צמיגי.
+                    </p>
+                    <p class="melting-text">
+                        האם החתול זוכר את הפירמידות, או שהוא כבר צופה בתרבויות שעדיין לא קמו?
+                        בעיניו השלוות אך הכל-יודעות, טמונים סודות היקום, סודות שנמסים אל תוך השקט המהדהד של נוכחותו.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Cat Shadows and Subconscious -->
+        <section class="content-section max-w-5xl mx-auto p-8 md:p-12 rounded-3xl transform rotate-2 shadow-2xl">
+            <h2 class="text-4xl md:text-5xl mb-8 text-center font-playfair text-dali-gold transform -translate-y-2 float-animation delay-200">
+                צללים חתוליים - קווי המתאר של הלא-מודע
+            </h2>
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+                <div class="lg:w-1/2 text-lg md:text-xl text-gray-200 leading-relaxed">
+                    <p class="mb-6 melting-text">
+                        הצל של החתול אינו רק השתקפות של גופו, אלא ישות נפרדת, רודפת-חלומות, הנמתחת ומתכווצת בהתאם למצבי הרוח של הקוסמוס.
+                        הוא מתארך על הרצפה כנהר שחור המתפתל אל עבר האופק הלא-נודע,
+                        ולעיתים הוא מתקפל ומתגבש לצורות גיאומטריות בלתי אפשריות, מעין אדריכלות של הלא-מודע.
+                        הצל הזה הוא המפתח לדלתות הסמויות שבתת-ההכרה, שביל העובר בין הסדקים של המציאות היומיומית.
+                    </p>
+                    <p class="melting-text">
+                        כאשר החתול מתמתח, צלו נמתח עמו אל אורך בלתי נתפס, משקף חלום על חתול ענק המשתרע על פני כוכבים.
+                        כאשר הוא מתכרבל, צלו הופך למערבולת אפלה של סודות ושאלות,
+                        מעין מראה שבורה המרכיבה פאזל של נשמה.
+                        האם הצל הוא החתול האמיתי, או שהחתול הוא רק השתקפות ארצית של הצל הנצחי?
+                    </p>
+                </div>
+                <div class="lg:w-1/2 flex justify-center">
+                    <div class="dali-img-container w-full max-w-md lg:max-w-none transform -rotate-3 relative top-4">
+                        <img src="https://source.unsplash.com/random/600x450/?feline,shadow"
+                             alt="חתול המטיל צל ארוך ודרמטי על רקע סוריאליסטי, עם קווים מעוותים ומתמזגים."
+                             class="w-full h-auto rounded-xl shadow-lg dali-img">
+                        <div class="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-dali-red opacity-10"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The Fur's Texture - Landscapes of the Soul -->
+        <section class="content-section max-w-5xl mx-auto p-8 md:p-12 rounded-3xl transform rotate-1 shadow-2xl">
+            <h2 class="text-4xl md:text-5xl mb-8 text-center font-playfair text-dali-gold transform translate-y-2 float-animation delay-300">
+                טקסטורת הפרווה - נופי הנפש
+            </h2>
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+                <div class="lg:w-1/2 flex justify-center order-2 lg:order-1">
+                    <div class="dali-img-container w-full max-w-md lg:max-w-none transform -rotate-2 relative -bottom-2">
+                        <img src="https://source.unsplash.com/random/600x450/?cat,fur"
+                             alt="תקריב על פרוות חתול עם טקסטורות עשירות המשתלבות בצבעים חולמניים."
+                             class="w-full h-auto rounded-xl shadow-lg dali-img">
+                        <div class="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-dali-gold opacity-10"></div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 text-lg md:text-xl text-gray-200 leading-relaxed order-1 lg:order-2">
+                    <p class="mb-6 melting-text">
+                        מגע הפרווה אינו רק תחושה, אלא חוויה מישושית של נוף פנימי.
+                        כל שערה היא עמוד תווך במקדש נסתר, וכל תלתל הוא מערבולת קטנה של מחשבות חתוליות.
+                        הפרווה מתנהגת כסהרה, משנה את צבעיה וגווניה לא רק באור השמש, אלא באור הפנימי של הווייתה.
+                        כאשר ידה של האדם נוגעת בה, היא עוברת דרך יער של רגשות,
+                        דרכים מפותלות של שלווה, חשדנות עדינה וחוכמה עתיקה.
+                    </p>
+                    <p class="melting-text">
+                        דוגמת הפרווה, בין אם היא מנומרת, מפוספסת או אחידה,
+                        היא מפה של נשמה, יצירת אמנות טבעית המתארת את מסעות החתול דרך מבוכי התודעה והזמן.
+                        היא רכה כמשי, אך חזקה כזכרונות עתיקים, מכילה בתוכה את חום השמש ואת קרירות הירח.
+                        זהו שטיח ארוג בחוטים של חלומות, שכל נגיעה בו חושפת פינה נסתרת בנצח.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer - Concluding thought -->
+        <footer class="text-center mt-24 pb-12 max-w-3xl px-4">
+            <p class="text-xl md:text-2xl text-gray-400 font-playfair melting-text float-animation delay-400">
+                וכך, החתול ממשיך לרחף, נמס אל תוך הנצח, עד שיתגלה שוב, בפינה נשכחת של חלום.
+            </p>
+        </footer>
+
+    </main>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // Add hover effect for cursor on interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, .content-section, .dali-img-container, h1, h2, h3, p'); // Added p for more interaction
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('active'));
+        });
+
+        // Parallax Scrolling Logic
+        const parallax1 = document.getElementById('parallax-1');
+        const parallax2 = document.getElementById('parallax-2');
+
+        const updateParallax = () => {
+            let scrollPosition = window.pageYOffset;
+
+            // Move parallax layers at different speeds
+            // Negative values for elements moving slower than scroll, giving depth
+            parallax1.style.transform = `translateY(${scrollPosition * -0.1}px) translateZ(0)`;
+            parallax2.style.transform = `translateY(${scrollPosition * -0.05}px) translateZ(0)`;
+        };
+
+        window.addEventListener('scroll', updateParallax);
+        // Initial call to set parallax position if page loads scrolled
+        updateParallax();
+
+        // "Melting" text effect based on scroll position
+        const meltingTexts = document.querySelectorAll('.melting-text');
+        const applyMeltingEffect = () => {
+            const viewportHeight = window.innerHeight;
+
+            meltingTexts.forEach(text => {
+                const rect = text.getBoundingClientRect();
+                
+                // Only apply effect if element is somewhat visible in the viewport
+                if (rect.top < viewportHeight && rect.bottom > 0) {
+                    const center = rect.top + rect.height / 2;
+                    const distanceFromViewportCenter = Math.abs(viewportHeight / 2 - center);
+                    const activationZone = viewportHeight * 0.75; // Effect is stronger closer to edges of this zone
+                    
+                    let progress = 0;
+                    if (distanceFromViewportCenter > viewportHeight / 4) { // Start effect when element is further from center
+                        progress = Math.min(1, (distanceFromViewportCenter - viewportHeight / 4) / (activationZone / 2));
+                    }
+                    
+                    const blur = progress * 1.5; // Max 1.5px blur
+                    const shadowOffset = progress * 4; // Max 4px offset
+
+                    text.style.filter = `blur(${blur}px)`;
+                    text.style.textShadow = `
+                        ${shadowOffset}px ${shadowOffset}px ${shadowOffset * 2}px rgba(0,0,0,0.7),
+                        -${shadowOffset}px -${shadowOffset}px ${shadowOffset * 2}px rgba(255,255,255,0.1)
+                    `;
+                } else {
+                     // Reset styles if element is completely out of view
+                     text.style.filter = 'none';
+                     text.style.textShadow = 'initial'; // Reset to default CSS value
+                }
+            });
+        };
+
+        window.addEventListener('scroll', applyMeltingEffect);
+        window.addEventListener('resize', applyMeltingEffect); // Re-evaluate on resize
+        applyMeltingEffect(); // Apply on initial load
+    </script>
+</body>
+</html>

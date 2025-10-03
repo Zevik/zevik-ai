@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>בינה מלאכותית: אומנות השליטה והיצירה - זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@300;400;500;700&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles */
+        body {
+            cursor: none; /* Hide default cursor */
+            font-family: 'Noto Serif Hebrew', serif;
+            color: #d1d5db; /* gray-300 */
+            background-color: #0a0a0a; /* A very dark black, almost charcoal */
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+
+        /* Charcoal textured background (fixed, behind content) */
+        .charcoal-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="4" height="4" viewBox="0 0 4 4"><filter id="a"><feTurbulence baseFrequency="0.9" numOctaves="1" result="b"/><feColorMatrix in="b" type="matrix" values="0 0 0 0 0, 0 0 0 0 0, 0 0 0 0 0, 0 0 0 0 -1" result="c"/><feBlend in="SourceGraphic" in2="c" mode="darken"/></filter><rect width="4" height="4" fill="%231a1a1a"/><rect width="4" height="4" fill="%230a0a0a" filter="url(%23a)" opacity="0.8"/></svg>');
+            background-size: cover;
+            opacity: 0.9;
+            z-index: -1;
+            filter: grayscale(100%) contrast(120%);
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* White border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+            transform: translate(-50%, -50%);
+            transition: width 0.1s ease-out, height 0.1s ease-out, opacity 0.2s ease-out;
+            z-index: 9999;
+            filter: blur(0.5px); /* Soften the edge for charcoal feel */
+            opacity: 0.8;
+        }
+
+        .custom-cursor.active {
+            width: 32px;
+            height: 32px;
+            opacity: 1;
+        }
+
+        /* Text reveal effect (on scroll) */
+        .reveal-text {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+            filter: blur(2px);
+        }
+        .reveal-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+        }
+
+        /* Zevik's image styling */
+        .zevik-image {
+            filter: grayscale(100%) contrast(150%) brightness(80%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease-in-out;
+            mix-blend-mode: luminosity; /* Blends better with charcoal, but might be tricky */
+        }
+        .zevik-image:hover {
+            transform: scale(1.03);
+            filter: grayscale(80%) contrast(140%) brightness(90%);
+        }
+
+        /* Scroll-based opacity/blur for major sections */
+        .scroll-effect-section {
+            opacity: 0.2;
+            filter: blur(5px);
+            transition: opacity 1s ease-out, filter 1s ease-out;
+        }
+        .scroll-effect-section.visible {
+            opacity: 1;
+            filter: blur(0);
+        }
+
+        /* Custom text styles to emulate charcoal */
+        .charcoal-heading {
+            font-family: 'Rubik', sans-serif;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5), -1px -1px 1px rgba(255,255,255,0.1);
+            letter-spacing: 0.05em;
+            line-height: 1.2;
+        }
+        .charcoal-text {
+            text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.3);
+            line-height: 1.8;
+        }
+
+        /* Irregular line/divider effect */
+        .charcoal-divider {
+            height: 1px;
+            background: repeating-linear-gradient(to left,
+                rgba(255,255,255,0.1) 0px,
+                rgba(255,255,255,0.1) 2px,
+                transparent 2px,
+                transparent 5px
+            );
+            width: 70%;
+            margin-right: auto;
+            margin-left: auto;
+            opacity: 0.6;
+        }
+
+        /* Interactive contact links */
+        .contact-link {
+            transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
+            color: #9ca3af; /* gray-400 */
+        }
+        .contact-link:hover {
+            color: #ffffff; /* white */
+            text-shadow: 0 0 8px rgba(255,255,255,0.5);
+        }
+    </style>
+</head>
+<body class="overflow-y-auto min-h-screen">
+    <div class="charcoal-background"></div>
+    <div class="custom-cursor" id="custom-cursor"></div>
+
+    <main class="relative z-10 p-8 sm:p-12 md:p-16 lg:p-20 max-w-6xl mx-auto flex flex-col gap-24 sm:gap-32 md:gap-40">
+
+        <!-- Initial Title and Intro -->
+        <section class="min-h-[80vh] flex flex-col items-center justify-center text-center">
+            <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold mb-8 text-gray-100 charcoal-heading reveal-text" data-delay="0.1">
+                בינה מלאכותית: <br>אומנות השליטה והיצירה
+            </h1>
+            <p class="text-xl sm:text-2xl md:text-3xl text-gray-300 max-w-4xl leading-relaxed charcoal-text reveal-text" data-delay="0.3">
+                מכחול הפחם הדיגיטלי - עתידך מתגלה עכשיו.<br>הרישום מתחיל, המציאות נצבעת.
+            </p>
+        </section>
+
+        <!-- Zevik Aviner - The Artist/Guide -->
+        <section class="flex flex-col md:flex-row-reverse items-center justify-center md:gap-16 scroll-effect-section min-h-[60vh] p-4 sm:p-8">
+            <div class="flex-shrink-0 mb-8 md:mb-0 md:mr-12 w-48 h-48 sm:w-64 sm:h-64 rounded-full overflow-hidden border border-gray-700 shadow-lg relative">
+                <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="zevik-image absolute inset-0 w-full h-full object-cover">
+            </div>
+            <div class="text-right max-w-2xl reveal-text" data-delay="0.2">
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-gray-100 charcoal-heading">זאביק אבינר - האמן המנחה</h2>
+                <p class="text-lg sm:text-xl text-gray-300 mb-4 charcoal-text">
+                    במרחבי האפלה והאור, בין קווים מטושטשים לנקודות אור חדות - שם, זאביק אבינר, אמן הבינה המלאכותית, מצייר את נתיב הידע.
+                    הוא אינו מלמד קוד, הוא מנחה אותך לרשום את עתידך, להפוך את המורכב לפשוט, את הבלתי נתפס למעשי.
+                    בכל משיכת מכחול דיגיטלי, זאביק חושף את הפוטנציאל הטמון בכל אחד ואחת, ומראה כיצד לשלוט בכלי היצירה העוצמתי ביותר של המאה ה-21.
+                </p>
+            </div>
+        </section>
+
+        <div class="charcoal-divider my-20 reveal-text" data-delay="0.1"></div>
+
+        <!-- Core Message - Digital Charcoal -->
+        <section class="text-center max-w-4xl mx-auto scroll-effect-section p-4 sm:p-8">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-gray-100 charcoal-heading reveal-text" data-delay="0.1">
+                הפחם הדיגיטלי בידיים שלך
+            </h2>
+            <p class="text-lg sm:text-xl text-gray-300 leading-relaxed charcoal-text reveal-text" data-delay="0.3">
+                AI נגיש, מעשי, משנה חיים. מברוא הקו הראשון ועד יצירת מופת דיגיטלית - הכוח בידך.
+                אנחנו מאמינים שבינה מלאכותית היא לא רק טכנולוגיה, אלא שפה חדשה שאותה כל אחד יכול ללמוד לדבר.
+                זוהי האומנות של יצירת עתיד טוב יותר, מודע יותר, ויעיל יותר.
+            </p>
+        </section>
+
+        <div class="charcoal-divider my-20 reveal-text" data-delay="0.1"></div>
+
+        <!-- Target Audience - Layers of Engagement -->
+        <section class="text-right max-w-4xl mx-auto scroll-effect-section p-4 sm:p-8">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-gray-100 charcoal-heading reveal-text" data-delay="0.1">
+                למי נועדה יצירה זו?
+            </h2>
+            <ul class="text-lg sm:text-xl text-gray-300 space-y-4 charcoal-text">
+                <li class="reveal-text" data-delay="0.2">
+                    <span class="text-gray-500 text-2xl pl-2">-</span> למי שמרגיש את הגירוד להתחיל ולגלות את עולם ה-AI.
+                </li>
+                <li class="reveal-text" data-delay="0.3">
+                    <span class="text-gray-500 text-2xl pl-2">-</span> למי שמבקש לחדד את הקו המקצועי ולהטמיע AI בעבודתו היומיומית.
+                </li>
+                <li class="reveal-text" data-delay="0.4">
+                    <span class="text-gray-500 text-2xl pl-2">-</span> למנהיגים שרוצים להניע את הצוותים שלהם אל הקדמה ולהוביל את הארגון בעידן החדש.
+                </li>
+                <li class="reveal-text" data-delay="0.5">
+                    <span class="text-gray-500 text-2xl pl-2">-</span> ולמובילים שמבקשים לצייר פרויקטים פורצי דרך מבוססי AI, מהקונספט ועד לביצוע.
+                </li>
+            </ul>
+        </section>
+
+        <div class="charcoal-divider my-20 reveal-text" data-delay="0.1"></div>
+
+        <!-- Areas of Expertise - Strokes of Creation -->
+        <section class="text-right max-w-4xl mx-auto scroll-effect-section p-4 sm:p-8">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-gray-100 charcoal-heading reveal-text" data-delay="0.1">
+                קווי המיתאר של היצירה
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 text-lg sm:text-xl text-gray-300 charcoal-text">
+                <div class="reveal-text" data-delay="0.2">
+                    <h3 class="font-semibold text-gray-200 mb-2">רישום טקסטים ותוכן</h3>
+                    <p class="text-gray-400">סיפורים חדשים נרקמים במשיכות מכחול דיגיטליות, מהירות ומדויקות.</p>
+                </div>
+                <div class="reveal-text" data-delay="0.3">
+                    <h3 class="font-semibold text-gray-200 mb-2">פיסול אפליקציות חכמות</h3>
+                    <p class="text-gray-400">תלת-ממד של פונקציונליות ויופי, מותאמות בדיוק לצרכים שלך.</p>
+                </div>
+                <div class="reveal-text" data-delay="0.4">
+                    <h3 class="font-semibold text-gray-200 mb-2">קונסטרוקציה של אתרים מבוססי AI</h3>
+                    <p class="text-gray-400">יסודות דינמיים ואינטראקטיביים לעולם מקוון שמתפתח ומשתנה.</p>
+                </div>
+                <div class="reveal-text" data-delay="0.5">
+                    <h3 class="font-semibold text-gray-200 mb-2">ניתוח נתונים ומחקר</h3>
+                    <p class="text-gray-400">חשיפת צורות ודפוסים נסתרים מתוך ים של מידע, באמצעות עין חדה.</p>
+                </div>
+                <div class="reveal-text" data-delay="0.6">
+                    <h3 class="font-semibold text-gray-200 mb-2">יצירת תמונות ואומנות</h3>
+                    <p class="text-gray-400">פחם דיגיטלי לדיוקנאות של העתיד - ללא גבולות לדמיון.</p>
+                </div>
+                <div class="reveal-text" data-delay="0.7">
+                    <h3 class="font-semibold text-gray-200 mb-2">אוטומציה של תהליכים</h3>
+                    <p class="text-gray-400">רישום ריקוד האלגוריתמים המשחרר זמן ומפנה אותך ליצירה אמיתית.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="charcoal-divider my-20 reveal-text" data-delay="0.1"></div>
+
+        <!-- Services Offered - The Artist's Toolkit -->
+        <section class="text-right max-w-4xl mx-auto scroll-effect-section p-4 sm:p-8">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-gray-100 charcoal-heading reveal-text" data-delay="0.1">
+                כלים בארגז האמן
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 text-lg sm:text-xl text-gray-300 charcoal-text">
+                <div class="reveal-text" data-delay="0.2">
+                    <h3 class="font-semibold text-gray-200 mb-2">סדנאות קבוצתיות</h3>
+                    <p class="text-gray-400">סקיצות משותפות - גילוי ויישום יחד, בסביבה מעוררת השראה ומעשית.</p>
+                </div>
+                <div class="reveal-text" data-delay="0.3">
+                    <h3 class="font-semibold text-gray-200 mb-2">שיעורים פרטיים</h3>
+                    <p class="text-gray-400">פורטרט אישי - מסע מותאם אל עומק הידע, בקצב שלך ועל פי צרכיך.</p>
+                </div>
+                <div class="reveal-text" data-delay="0.4">
+                    <h3 class="font-semibold text-gray-200 mb-2">הרצאות לארגונים</h3>
+                    <p class="text-gray-400">תערוכת השראה - פתיחת אופקים חדשים לצוותים, והכנה לעידן ה-AI.</p>
+                </div>
+                <div class="reveal-text" data-delay="0.5">
+                    <h3 class="font-semibold text-gray-200 mb-2">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-gray-400">ליווי מלא - הפיכת חזון למציאות מצוירת, משלב הרעיון ועד למימוש.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="charcoal-divider my-20 reveal-text" data-delay="0.1"></div>
+
+        <!-- Contact - The Artist's Signature -->
+        <section class="text-center max-w-2xl mx-auto scroll-effect-section p-4 sm:p-8">
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-gray-100 charcoal-heading reveal-text" data-delay="0.1">
+                ליצירת קשר עם האמן
+            </h2>
+            <p class="text-lg sm:text-xl text-gray-300 mb-6 charcoal-text reveal-text" data-delay="0.3">
+                לרישום שיעור, לבחינת פרויקט חדש, או לציור משותף של עתידך עם בינה מלאכותית:
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 sm:gap-8 text-xl sm:text-2xl font-bold reveal-text" data-delay="0.5">
+                <a href="https://wa.me/972546609385" class="contact-link" target="_blank">ווטסאפ: 054-6609385</a>
+                <span class="text-gray-600 hidden sm:block">|</span>
+                <a href="mailto:zaviner@gmail.com" class="contact-link">אימייל: zaviner@gmail.com</a>
+            </div>
+            <p class="text-sm text-gray-600 mt-8 reveal-text" data-delay="0.7">
+                זאביק אבינר - מומחה בינה מלאכותית
+            </p>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        const interactiveElements = document.querySelectorAll('a, button, input[type="submit"], .contact-link'); // Add more selectors as needed
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('active'));
+        });
+
+        // Scroll Reveal Logic for text elements
+        const revealElements = document.querySelectorAll('.reveal-text');
+        const options = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.2 // percentage of element visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = parseFloat(entry.target.dataset.delay) || 0;
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, delay * 1000);
+                    observer.unobserve(entry.target); // Unobserve once visible
+                }
+            });
+        }, options);
+
+        revealElements.forEach(el => {
+            observer.observe(el);
+        });
+
+
+        // Scroll Reveal Logic for full sections (opacity/blur)
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                } else {
+                    entry.target.classList.remove('visible'); // Allow re-fade if user scrolls away
+                }
+            });
+        }, {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.3 // Section needs to be 30% visible
+        });
+
+        document.querySelectorAll('.scroll-effect-section').forEach(section => {
+            sectionObserver.observe(section);
+        });
+
+        // Initialize visibility for elements already in viewport on load
+        window.addEventListener('load', () => {
+            revealElements.forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight) {
+                    const delay = parseFloat(el.dataset.delay) || 0;
+                    setTimeout(() => {
+                        el.classList.add('visible');
+                    }, delay * 1000);
+                }
+            });
+            document.querySelectorAll('.scroll-effect-section').forEach(section => {
+                if (section.getBoundingClientRect().top < window.innerHeight) {
+                    section.classList.add('visible');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

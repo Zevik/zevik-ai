@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>בינה מלאכותית: חום היוצר, תבונה הנבנית</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700&family=Frank+Ruhl+Libre:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Define custom CSS variables for easy theme management and encaustic feel */
+        :root {
+            --primary-bg: #261A1D; /* Deep, rich, dark brown-red, like dried wax */
+            --secondary-bg: #4F2E31; /* Slightly lighter, more translucent layer */
+            --accent-color-light: #FBEBD6; /* Creamy light, like wax highlights */
+            --accent-color-dark: #A57C5B; /* Muted earthy brown-orange */
+            --highlight-pigment: #E0A75B; /* Vibrant gold/amber, like a rich pigment pop */
+        }
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--accent-color-light);
+            overflow-x: hidden; /* Prevent horizontal scroll for parallax effects */
+            cursor: none; /* Hide default cursor to use custom one */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        h1, h2, h3 {
+            font-family: 'Frank Ruhl Libre', serif;
+            font-weight: 700;
+        }
+
+        /* Custom Cursor Styling - MANDATORY High Contrast */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none; /* Allows clicks to pass through */
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* Bright white border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark, high-opacity shadow */
+            transition: transform 0.1s ease-out, width 0.1s ease-out, height 0.1s ease-out, background-color 0.1s ease-out;
+            z-index: 9999; /* Always on top */
+            transform: translate(-50%, -50%); /* Centers the cursor on the mouse position */
+            will-change: transform; /* Optimize for smooth animation */
+        }
+        /* State for when cursor hovers over interactive elements */
+        #custom-cursor.active {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(224, 167, 91, 0.3); /* Soft, translucent pigment glow */
+        }
+
+        /* Encaustic-like background layers - fixed and layered for depth */
+        .wax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            /* mix-blend-mode: overlay; This is used cautiously, only for fixed background textures */
+            filter: blur(50px) opacity(0.5); /* Soft blur and transparency for melting effect */
+            transform: translateZ(0); /* Hardware acceleration */
+            will-change: transform, opacity;
+        }
+
+        /* Specific layer styling with gradients and animations for organic movement */
+        .wax-layer-1 {
+            background: radial-gradient(circle at 10% 20%, var(--secondary-bg) 0%, rgba(38, 26, 29, 0) 70%);
+            transform: scale(1.5) translateX(-10%) translateY(-10%);
+            animation: waxMovement1 40s infinite alternate ease-in-out;
+            z-index: -3;
+        }
+        .wax-layer-2 {
+            background: radial-gradient(circle at 90% 80%, var(--accent-color-dark) 0%, rgba(38, 26, 29, 0) 70%);
+            transform: scale(1.3) translateX(10%) translateY(10%);
+            animation: waxMovement2 50s infinite alternate ease-in-out;
+            z-index: -2;
+        }
+        .wax-layer-3 {
+            background: radial-gradient(circle at 50% 50%, var(--highlight-pigment) 0%, rgba(38, 26, 29, 0) 80%);
+            transform: scale(1.1);
+            filter: blur(80px) opacity(0.3);
+            animation: waxMovement3 60s infinite alternate ease-in-out;
+            z-index: -1;
+        }
+
+        /* Keyframe animations for subtle, flowing background movement */
+        @keyframes waxMovement1 {
+            from { transform: scale(1.5) translateX(-10%) translateY(-10%); }
+            to { transform: scale(1.6) translateX(10%) translateY(10%); }
+        }
+        @keyframes waxMovement2 {
+            from { transform: scale(1.3) translateX(10%) translateY(10%); }
+            to { transform: scale(1.4) translateX(-10%) translateY(-10%); }
+        }
+        @keyframes waxMovement3 {
+            from { transform: scale(1.1) translateX(0%) translateY(0%); }
+            to { transform: scale(1.2) translateX(5%) translateY(-5%); }
+        }
+
+        /* Parallax and Scroll Reveal for content sections */
+        .parallax-section {
+            position: relative;
+            z-index: 10; /* Ensure content is above background layers */
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1.5s ease-out, transform 1.5s ease-out; /* Smooth transition for reveal */
+            will-change: opacity, transform;
+        }
+        .parallax-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Styling for Zevik's image, mimicking a framed wax impression */
+        #zevik-image {
+            object-fit: cover;
+            border-radius: 50%; /* Circular image */
+            border: 4px solid var(--highlight-pigment); /* Pigment-colored border */
+            box-shadow: 0 0 20px rgba(224, 167, 91, 0.5), 0 0 50px rgba(224, 167, 91, 0.2); /* Soft glow */
+            transform: rotate(-3deg); /* Slightly artistic, melted tilt */
+            transition: transform 0.3s ease;
+        }
+        #zevik-image:hover {
+            transform: rotate(0deg) scale(1.05); /* Interactive hover effect */
+        }
+
+        /* Ensure high contrast for selected text */
+        .selection\:bg-accent-color-dark::selection {
+            background-color: var(--accent-color-dark);
+        }
+        .selection\:text-white::selection {
+            color: white;
+        }
+    </style>
+</head>
+<body class="selection:bg-accent-color-dark selection:text-white">
+    <!-- Custom Cursor Element -->
+    <div id="custom-cursor"></div>
+
+    <!-- Encaustic Background Layers (fixed behind content) -->
+    <div class="wax-layer wax-layer-1"></div>
+    <div class="wax-layer wax-layer-2"></div>
+    <div class="wax-layer wax-layer-3"></div>
+
+    <!-- Main Content Wrapper - Gradient overlay on top of fixed backgrounds -->
+    <div class="relative min-h-screen pt-16 pb-32 overflow-hidden px-4 sm:px-8 lg:px-16" style="background: linear-gradient(180deg, rgba(38,26,29,0.7) 0%, rgba(38,26,29,0.9) 20%, rgba(38,26,29,0.95) 80%, rgba(38,26,29,0.7) 100%);">
+
+        <!-- Title Section - Central, bold, evocative -->
+        <section class="max-w-4xl mx-auto my-24 text-center parallax-section">
+            <h1 class="text-6xl sm:text-7xl lg:text-8xl font-bold leading-tight text-accent-color-light tracking-wide drop-shadow-lg" style="text-shadow: 0 0 15px var(--highlight-pigment);">
+                בינה מלאכותית: <br>חום היוצר, תבונה הנבנית.
+            </h1>
+            <p class="mt-8 text-2xl sm:text-3xl text-gray-200 leading-relaxed max-w-2xl mx-auto">
+                <span class="block relative py-4 px-6 bg-secondary-bg bg-opacity-70 rounded-3xl shadow-xl backdrop-blur-sm">
+                    שעווה חמה של בינה: עתידנו נצבע עכשיו. למדו לשלוט בבינה המלאכותית – העתיד הוא עכשיו.
+                </span>
+            </p>
+        </section>
+
+        <!-- Main Message - Artistically rephrased -->
+        <section class="max-w-3xl mx-auto my-32 text-right parallax-section">
+            <h2 class="text-5xl font-bold mb-8 text-highlight-pigment drop-shadow-md">מסר נמסך מן העומק</h2>
+            <div class="relative bg-secondary-bg bg-opacity-80 p-8 sm:p-12 rounded-2xl shadow-2xl backdrop-blur-sm border border-highlight-pigment border-opacity-30">
+                <p class="text-xl sm:text-2xl leading-loose text-gray-100">
+                    כמו שכבות שעווה נמסות זו לתוך זו, אנו חושפים את עומק הבינה המלאכותית. מן הניצוץ הראשון של רעיון ועד ליצירה מורכבת – כלים בידכם, להטביע חותם בעולמנו המשתנה. זו לא רק למידה, זו התמרה – הפיכת AI לנגיש וישים לכולם, מהתחלה ועד רמה מתקדמת, עם כלים מעשיים שניתן ליישם מיד בעבודה ובחיים.
+                </p>
+                <!-- Decorative blurred circles, like pigment blobs -->
+                <div class="absolute -bottom-8 -left-8 w-24 h-24 bg-highlight-pigment rounded-full opacity-30 blur-xl"></div>
+                <div class="absolute -top-8 -right-8 w-20 h-20 bg-accent-color-dark rounded-full opacity-20 blur-xl"></div>
+            </div>
+        </section>
+
+        <!-- Target Audience - Presented as distinct layers -->
+        <section class="max-w-4xl mx-auto my-32 parallax-section">
+            <h2 class="text-5xl font-bold mb-12 text-center text-highlight-pigment drop-shadow-md">למי מיועד חום היצירה הזה?</h2>
+            <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+                <div class="bg-secondary-bg bg-opacity-70 p-8 rounded-3xl shadow-xl backdrop-blur-sm border border-accent-color-dark border-opacity-50 text-right">
+                    <h3 class="text-3xl font-bold mb-4 text-accent-color-light">המתחילים המגששים:</h3>
+                    <p class="text-xl leading-relaxed text-gray-200">
+                        בואו לגעת בבינה, להרגיש את חום המנוע. לכל מי שרוח סקרנותו בוערת, למי שחפץ להתיך את הישן ולפסל את החדש.
+                    </p>
+                </div>
+                <div class="bg-secondary-bg bg-opacity-70 p-8 rounded-3xl shadow-xl backdrop-blur-sm border border-accent-color-dark border-opacity-50 text-right">
+                    <h3 class="text-3xl font-bold mb-4 text-accent-color-light">המקצוענים השואפים:</h3>
+                    <p class="text-xl leading-relaxed text-gray-200">
+                        להטמיע את הבינה כזרם דם חדש בעורקי העשייה שלכם. להפוך את הידע לכוח מעשי ויומיומי.
+                    </p>
+                </div>
+                <div class="bg-secondary-bg bg-opacity-70 p-8 rounded-3xl shadow-xl backdrop-blur-sm border border-accent-color-dark border-opacity-50 text-right">
+                    <h3 class="text-3xl font-bold mb-4 text-accent-color-light">מנהיגים וארגונים:</h3>
+                    <p class="text-xl leading-relaxed text-gray-200">
+                        להאיר נתיבים חדשים לצוותים, להבעיר את שלהבת החדשנות. להוביל עם תובנה ובינה.
+                    </p>
+                </div>
+                <div class="bg-secondary-bg bg-opacity-70 p-8 rounded-3xl shadow-xl backdrop-blur-sm border border-accent-color-dark border-opacity-50 text-right">
+                    <h3 class="text-3xl font-bold mb-4 text-accent-color-light">האדריכלים המתקדמים:</h3>
+                    <p class="text-xl leading-relaxed text-gray-200">
+                        לבנות פרויקטים אדירים, לפסל את עתיד הבינה. להעמיק, ליצור ולפרוץ דרך.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Areas of Expertise - Emphasizing tools as pigments -->
+        <section class="max-w-5xl mx-auto my-32 text-center parallax-section">
+            <h2 class="text-5xl font-bold mb-12 text-highlight-pigment drop-shadow-md">אילו צבעים נמסכים באש שלנו?</h2>
+            <div class="grid md:grid-cols-3 gap-6 lg:gap-8 justify-center">
+                <div class="flex flex-col items-center bg-secondary-bg bg-opacity-70 p-6 rounded-2xl shadow-xl backdrop-blur-sm border border-highlight-pigment border-opacity-20 text-center transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-4xl text-highlight-pigment mb-3">🎨</div>
+                    <h3 class="text-2xl font-bold mb-2 text-accent-color-light">מילות קסם</h3>
+                    <p class="text-base text-gray-200">ליצור טקסטים, לטוות סיפורים, להעיר תוכן מנמנומו.</p>
+                </div>
+                <div class="flex flex-col items-center bg-secondary-bg bg-opacity-70 p-6 rounded-2xl shadow-xl backdrop-blur-sm border border-highlight-pigment border-opacity-20 text-center transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-4xl text-highlight-pigment mb-3">✨</div>
+                    <h3 class="text-2xl font-bold mb-2 text-accent-color-light">יציקת רעיונות לאפליקציות</h3>
+                    <p class="text-base text-gray-200">להצית מערכות חכמות, להרגיש את הדופק הדיגיטלי.</p>
+                </div>
+                <div class="flex flex-col items-center bg-secondary-bg bg-opacity-70 p-6 rounded-2xl shadow-xl backdrop-blur-sm border border-highlight-pigment border-opacity-20 text-center transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-4xl text-highlight-pigment mb-3">🕸️</div>
+                    <h3 class="text-2xl font-bold mb-2 text-accent-color-light">אריגת רשתות חכמות</h3>
+                    <p class="text-base text-gray-200">לבנות אתרים עם תודעה, חלונות לעולם חדש.</p>
+                </div>
+                <div class="flex flex-col items-center bg-secondary-bg bg-opacity-70 p-6 rounded-2xl shadow-xl backdrop-blur-sm border border-highlight-pigment border-opacity-20 text-center transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-4xl text-highlight-pigment mb-3">🔍</div>
+                    <h3 class="text-2xl font-bold mb-2 text-accent-color-light">פענוח נסתר</h3>
+                    <p class="text-base text-gray-200">לנתח נתונים, לחשוף תובנות מעומק המידע.</p>
+                </div>
+                <div class="flex flex-col items-center bg-secondary-bg bg-opacity-70 p-6 rounded-2xl shadow-xl backdrop-blur-sm border border-highlight-pigment border-opacity-20 text-center transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-4xl text-highlight-pigment mb-3">🖼️</div>
+                    <h3 class="text-2xl font-bold mb-2 text-accent-color-light">מכחול דיגיטלי</h3>
+                    <p class="text-base text-gray-200">לצייר תמונות, לפסל אמנות, להפיח חיים ביצירה.</p>
+                </div>
+                <div class="flex flex-col items-center bg-secondary-bg bg-opacity-70 p-6 rounded-2xl shadow-xl backdrop-blur-sm border border-highlight-pigment border-opacity-20 text-center transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-4xl text-highlight-pigment mb-3">⚙️</div>
+                    <h3 class="text-2xl font-bold mb-2 text-accent-color-light">אוטומציה זורמת</h3>
+                    <p class="text-base text-gray-200">להשיל משימות חוזרות, לשחרר את היצירתיות.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered - Flowing narrative with subtle icons -->
+        <section class="max-w-3xl mx-auto my-32 text-right parallax-section">
+            <h2 class="text-5xl font-bold mb-12 text-highlight-pigment drop-shadow-md text-center">כיצד ניצוק את הידע הזה?</h2>
+            <div class="space-y-8">
+                <div class="flex items-start bg-secondary-bg bg-opacity-80 p-6 rounded-2xl shadow-xl backdrop-blur-sm border border-accent-color-dark border-opacity-40">
+                    <span class="text-5xl text-highlight-pigment ml-6">🔥</span>
+                    <div>
+                        <h3 class="text-3xl font-bold mb-2 text-accent-color-light">סדנאות עתירות חום</h3>
+                        <p class="text-xl leading-relaxed text-gray-200">
+                            מפגשים קבוצתיים, בהם השעווה נמסה תחת אצבעות כולם, חוויה מעשית ממוקדת שתהפוך אתכם לאמני בינה.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-start bg-secondary-bg bg-opacity-80 p-6 rounded-2xl shadow-xl backdrop-blur-sm border border-accent-color-dark border-opacity-40">
+                    <span class="text-5xl text-highlight-pigment ml-6">✨</span>
+                    <div>
+                        <h3 class="text-3xl font-bold mb-2 text-accent-color-light">שיעורים פרטיים, עיצוב אישי</h3>
+                        <p class="text-xl leading-relaxed text-gray-200">
+                            כמו אמן הבונה פסל יחיד – התאמה מלאה לרמה, לרצון ולחלום שלכם. מסע אישי לעומק הבינה.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-start bg-secondary-bg bg-opacity-80 p-6 rounded-2xl shadow-xl backdrop-blur-sm border border-accent-color-dark border-opacity-40">
+                    <span class="text-5xl text-highlight-pigment ml-6">💡</span>
+                    <div>
+                        <h3 class="text-3xl font-bold mb-2 text-accent-color-light">הרצאות לארגונים, הצתת ניצוצות</h3>
+                        <p class="text-xl leading-relaxed text-gray-200">
+                            לפתוח אופקים חדשים, להבעיר השראה וחדשנות בלבבות הצוותים שלכם. חוויה משנה תודעה.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex items-start bg-secondary-bg bg-opacity-80 p-6 rounded-2xl shadow-xl backdrop-blur-sm border border-accent-color-dark border-opacity-40">
+                    <span class="text-5xl text-highlight-pigment ml-6">🤝</span>
+                    <div>
+                        <h3 class="text-3xl font-bold mb-2 text-accent-color-light">ייעוץ וליווי בפרויקטים</h3>
+                        <p class="text-xl leading-relaxed text-gray-200">
+                            יד מנחה בתהליך היצירה, תמיכה מקצועית בבניית פרויקטים אדירים שמשנים את פני המציאות.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide - Zevik Aviner, presented as "The Caster" -->
+        <section class="max-w-4xl mx-auto my-32 text-center parallax-section">
+            <h2 class="text-5xl font-bold mb-12 text-highlight-pigment drop-shadow-md">היוצק: זאביק אבינר</h2>
+            <div class="relative bg-secondary-bg bg-opacity-90 p-8 sm:p-10 rounded-3xl shadow-3xl backdrop-blur-md border border-accent-color-dark border-opacity-50 flex flex-col items-center">
+                <img id="zevik-image" src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר, מומחה בינה מלאכותית" class="w-40 h-40 sm:w-48 sm:h-48 mb-8 -mt-20 z-10 transition-all duration-500 ease-in-out">
+                <p class="text-xl sm:text-2xl leading-loose text-gray-100 text-right">
+                    מאחורי חום השעווה, מאחורי אש היצירה, עומד היוצק: <strong>זאביק אבינר</strong>.
+                    מומחה בינה מלאכותית, אמן הנגישות, שזרם של ניסיון עשיר בוער בעורקיו. הוא לא רק בונה פרויקטים ואפליקציות – הוא מתיך טכנולוגיה, משחרר אותה מכבליה, והופך אותה לכלי זורם ושימושי, ממש כמו שעווה חמה המקבלת צורה חדשה בידי אמן.
+                </p>
+                <!-- Decorative blurred circles -->
+                <div class="absolute -bottom-10 right-10 w-32 h-32 bg-accent-color-dark rounded-full opacity-40 blur-xl"></div>
+                <div class="absolute -top-10 left-10 w-28 h-28 bg-highlight-pigment rounded-full opacity-30 blur-xl"></div>
+            </div>
+        </section>
+
+        <!-- Contact Section - The "Wax Seal" -->
+        <section class="max-w-2xl mx-auto my-32 text-center parallax-section">
+            <h2 class="text-5xl font-bold mb-12 text-highlight-pigment drop-shadow-md">חותם השעווה: צרו קשר</h2>
+            <div class="relative bg-secondary-bg bg-opacity-80 p-8 sm:p-12 rounded-3xl shadow-2xl backdrop-blur-sm border border-highlight-pigment border-opacity-30">
+                <p class="text-xl sm:text-2xl leading-loose text-gray-100 mb-8">
+                    רוצים להצית את הבינה המלאכותית בחייכם? לחרוט את חותמכם בעתיד? צרו קשר, השעווה חמה, מוכנה ליצירה.
+                </p>
+                <div class="space-y-6">
+                    <a href="https://wa.me/972546609385" class="block text-2xl sm:text-3xl text-accent-color-light hover:text-highlight-pigment transition-colors duration-300">
+                        📞 וואטסאפ: 054-6609385
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="block text-2xl sm:text-3xl text-accent-color-light hover:text-highlight-pigment transition-colors duration-300">
+                        ✉️ אימייל: zaviner@gmail.com
+                    </a>
+                </div>
+                <div class="absolute -bottom-6 left-6 w-20 h-20 bg-highlight-pigment rounded-full opacity-20 blur-lg"></div>
+            </div>
+        </section>
+
+    </div> <!-- End Main Content Wrapper -->
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+
+        // Move cursor with mouse
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // Add 'active' class to cursor when hovering over interactive elements
+        const allInteractiveElements = document.querySelectorAll('a, button, [role="button"], img, input, textarea'); // General interactive elements
+        allInteractiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                customCursor.classList.add('active');
+            });
+            el.addEventListener('mouseleave', () => {
+                customCursor.classList.remove('active');
+            });
+        });
+
+        // Scroll Reveal / Parallax Logic
+        const parallaxSections = document.querySelectorAll('.parallax-section');
+
+        const observerOptions = {
+            root: null, // observe against the viewport
+            rootMargin: '0px',
+            threshold: 0.1 // trigger when 10% of the item is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Stop observing once it's visible
+                }
+            });
+        }, observerOptions);
+
+        // Attach observer to each section
+        parallaxSections.forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>רישום העתיד: דיו דיגיטלי ושליטה ב-AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Display:wght@400;700&family=Rubik:wght@300;400;700&family=Varela+Round&display=swap" rel="stylesheet">
+    <style>
+        /* Tailwind configuration for custom fonts and colors */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        html {
+            cursor: none; /* Hide default cursor */
+        }
+
+        .custom-cursor {
+            pointer-events: none; /* Allow clicks through the cursor */
+            z-index: 9999; /* Ensure it's always on top */
+            position: fixed;
+            top: 0;
+            left: 0;
+            border-radius: 50%;
+            width: 20px; /* Base size */
+            height: 20px;
+            border: 2px solid #FFFFFF; /* High contrast border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 0 4px rgba(255, 255, 255, 0.2); /* High contrast shadow, with a subtle glow */
+            transition: width 0.2s ease-out, height 0.2s ease-out, transform 0.1s ease-out, background-color 0.2s ease-out;
+            transform: translate(-50%, -50%); /* Center the cursor */
+            will-change: transform, width, height, background-color;
+            /* Initial state */
+            background-color: transparent;
+        }
+        .custom-cursor.hovered {
+            width: 30px;
+            height: 30px;
+            background-color: rgba(165, 42, 42, 0.4); /* Sepia ink color */
+            border-color: rgba(255,255,255,0.7);
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 0 6px rgba(165, 42, 42, 0.4);
+        }
+
+        /* Ink Bleed effect for hoverable elements */
+        .ink-bleed-container {
+            position: relative;
+            display: inline-block;
+            transition: color 0.3s ease;
+        }
+
+        .ink-bleed-container::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: 0; /* RTL adjusted */
+            width: 0%;
+            height: 2px;
+            background: linear-gradient(to left, #A52A2A, rgba(165, 42, 42, 0.3)); /* Sepia ink color */
+            transition: width 0.3s ease-out;
+        }
+
+        .ink-bleed-container:hover::after {
+            width: 100%;
+            left: 0;
+        }
+        .ink-bleed-container:hover {
+             color: #A52A2A; /* Change text color on hover */
+        }
+
+        /* Custom fonts for Tailwind */
+        :root {
+            --font-noto-serif-display: 'Noto Serif Display', serif;
+            --font-rubik: 'Rubik', sans-serif;
+            --font-varela-round: 'Varela Round', sans-serif;
+        }
+
+        .font-noto { font-family: var(--font-noto-serif-display); }
+        .font-rubik { font-family: var(--font-rubik); }
+        .font-varela { font-family: var(--font-varela-round); }
+
+        /* General styles for the ink sketch aesthetic */
+        body {
+            background-color: #F8F8F8; /* Light paper color */
+            color: #222; /* Dark ink color */
+        }
+
+        /* Subtle background texture (optional, can be complex with CSS-only) */
+        /* For a real paper texture, an SVG or image would be better, but we stick to code */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 1% 1%, rgba(0,0,0,0.02) 1px, transparent 1px),
+                              radial-gradient(circle at 99% 99%, rgba(0,0,0,0.02) 1px, transparent 1px),
+                              repeating-linear-gradient(0deg, rgba(0,0,0,0.01) 0, rgba(0,0,0,0.01) 1px, transparent 1px, transparent 100px);
+            opacity: 0.8;
+            z-index: -10;
+            pointer-events: none;
+        }
+
+        /* Basic animation for elements */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Specific styles for the Zevik image - polaroid/sketch photo feel */
+        .zevik-photo {
+            filter: grayscale(80%) sepia(30%) contrast(110%);
+            border: 4px solid #F0F0F0;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1), -5px -5px 15px rgba(255,255,255,0.7);
+            transition: all 0.3s ease-in-out;
+            transform: rotate(2deg); /* slight tilt */
+        }
+        .zevik-photo:hover {
+            transform: rotate(-3deg) scale(1.03);
+            box-shadow: 8px 8px 20px rgba(0,0,0,0.15), -8px -8px 20px rgba(255,255,255,0.8);
+        }
+
+        /* Generative ink particles */
+        .ink-particle {
+            position: fixed;
+            background-color: rgba(165, 42, 42, 0.1); /* Very subtle ink color */
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: inkFloat var(--duration) ease-in-out infinite alternate;
+            z-index: -5;
+        }
+
+        @keyframes inkFloat {
+            0% {
+                transform: translate(var(--x-start), var(--y-start)) scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                opacity: var(--opacity);
+                transform: translate(var(--x-mid), var(--y-mid)) scale(var(--scale));
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--x-end), var(--y-end)) scale(0.7);
+            }
+        }
+
+        /* Dynamic line drawing effect */
+        .sketch-line {
+            stroke-dasharray: var(--length);
+            stroke-dashoffset: var(--length);
+            animation: drawLine var(--duration) ease-out forwards;
+        }
+
+        @keyframes drawLine {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        noto: ['var(--font-noto-serif-display)'],
+                        rubik: ['var(--font-rubik)'],
+                        varela: ['var(--font-varela-round)'],
+                    },
+                    colors: {
+                        ink: {
+                            dark: '#222222',
+                            light: '#444444',
+                            sepia: '#A52A2A',
+                        },
+                        paper: {
+                            light: '#F8F8F8',
+                            medium: '#F0F0F0',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-paper-light text-ink-dark font-rubik leading-relaxed min-h-screen relative overflow-hidden">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="custom-cursor"></div>
+
+    <!-- Generative Ink Particles -->
+    <div id="ink-particles-container"></div>
+
+    <!-- Main Content Area -->
+    <main class="relative z-10 p-4 md:p-8 lg:p-12 xl:p-16 flex flex-col items-center justify-start min-h-screen">
+
+        <!-- Title Section -->
+        <section class="relative my-16 text-center w-full max-w-4xl fade-in-up" style="animation-delay: 0.2s;">
+            <h1 class="font-noto text-5xl md:text-7xl lg:text-8xl font-bold text-ink-dark leading-tight mt-10">
+                <span class="ink-bleed-container block">רישום העתיד:</span>
+                <span class="ink-bleed-container block mt-4 text-ink-sepia">דיו דיגיטלי ושליטה ב-AI</span>
+            </h1>
+            <p class="mt-8 text-xl md:text-2xl font-varela text-ink-light leading-relaxed max-w-3xl mx-auto">
+                היכן שמחשבה פוגשת מכחול וירטואלי – בינה מלאכותית ככלי ביטוי. אנו מזמינים אתכם למסע אל לב היצירה הדיגיטלית, ללמוד לא רק לתפעל, אלא לברוא.
+            </p>
+            <div class="absolute top-1/2 left-1/2 w-40 h-40 border border-ink-sepia rounded-full opacity-10 blur-sm -translate-x-1/2 -translate-y-1/2 rotate-12"></div>
+            <div class="absolute top-2/3 right-1/4 w-20 h-20 border-2 border-ink-light rounded-full opacity-5 blur-xs -rotate-6"></div>
+        </section>
+
+        <!-- Message & Philosophy -->
+        <section class="relative my-20 w-full max-w-5xl flex flex-wrap lg:flex-nowrap justify-center items-center gap-12 p-8 bg-paper-medium rounded-lg shadow-xl fade-in-up" style="animation-delay: 0.6s;">
+            <div class="lg:w-1/2 p-4 lg:p-8 border-b-2 lg:border-l-2 lg:border-b-0 border-ink-sepia/50">
+                <h2 class="font-noto text-4xl font-bold text-ink-sepia mb-6 ink-bleed-container">המסר המרכזי</h2>
+                <p class="text-xl font-rubik leading-loose text-ink-dark">
+                    אנו מאמינים כי AI אינה רק טכנולוגיה, אלא הרחבה של הדמיון האנושי – מכחול חדש בידי האמן. <br>
+                    ממתחילים ועד מתקדמים, נסייע לכם להפוך את המורכבות לפשטות, את הרעיון ליצירה מוגמרת. <br>
+                    כלים מעשיים, ישימים, המעצימים אתכם לשלוט בבינה המלאכותית לשיפור חייכם ועבודתכם.
+                </p>
+            </div>
+            <div class="lg:w-1/2 p-4 lg:p-8">
+                <h2 class="font-noto text-4xl font-bold text-ink-dark mb-6 ink-bleed-container">קהל היעד: יוצרי המחר</h2>
+                <ul class="space-y-4 text-xl font-varela text-ink-light list-disc pr-6">
+                    <li class="fade-in-up" style="animation-delay: 1.0s;">הצועדים הראשונים – אלו החושקים במבט ראשון על הדיו הדיגיטלי.</li>
+                    <li class="fade-in-up" style="animation-delay: 1.2s;">האדריכלים החדשים – אנשי מקצוע המבקשים לשלב AI בזרימת עבודתם.</li>
+                    <li class="fade-in-up" style="animation-delay: 1.4s;">מנהיגי המחר – מנהלים וארגונים השואפים להעצים את צוותיהם.</li>
+                    <li class="fade-in-up" style="animation-delay: 1.6s;">יוצרי הפרויקטים הנועזים – ברמה מתקדמת, לפיתוח פתרונות AI פורצי דרך.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Expertise Areas -->
+        <section class="relative my-20 w-full max-w-6xl p-8 bg-paper-medium rounded-lg shadow-xl fade-in-up" style="animation-delay: 2.0s;">
+            <h2 class="font-noto text-5xl font-bold text-ink-sepia text-center mb-12 ink-bleed-container">הדיו המגוון שלנו: מכחולים למגוון יצירות</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 text-center">
+                <div class="p-6 border border-ink-sepia/30 rounded-full bg-paper-light shadow-md hover:shadow-xl transition-all duration-300 fade-in-up" style="animation-delay: 2.2s;">
+                    <h3 class="font-varela text-2xl font-bold text-ink-dark mb-2 ink-bleed-container">יצירת טקסטים ותוכן</h3>
+                    <p class="text-ink-light">לשרטט סיפורים, מאמרים ורעיונות בלחיצת מכחול.</p>
+                </div>
+                <div class="p-6 border border-ink-sepia/30 rounded-full bg-paper-light shadow-md hover:shadow-xl transition-all duration-300 fade-in-up" style="animation-delay: 2.4s;">
+                    <h3 class="font-varela text-2xl font-bold text-ink-dark mb-2 ink-bleed-container">בניית אפליקציות חכמות</h3>
+                    <p class="text-ink-light">לברוא כלים אינטראקטיביים עם נגיעות של בינה.</p>
+                </div>
+                <div class="p-6 border border-ink-sepia/30 rounded-full bg-paper-light shadow-md hover:shadow-xl transition-all duration-300 fade-in-up" style="animation-delay: 2.6s;">
+                    <h3 class="font-varela text-2xl font-bold text-ink-dark mb-2 ink-bleed-container">פיתוח אתרים מבוססי AI</h3>
+                    <p class="text-ink-light">להפיח חיים דיגיטליים בדפי האינטרנט שלכם.</p>
+                </div>
+                <div class="p-6 border border-ink-sepia/30 rounded-full bg-paper-light shadow-md hover:shadow-xl transition-all duration-300 fade-in-up" style="animation-delay: 2.8s;">
+                    <h3 class="font-varela text-2xl font-bold text-ink-dark mb-2 ink-bleed-container">ניתוח נתונים ומחקר</h3>
+                    <p class="text-ink-light">לחשוף תובנות חבויות מבין קווי הנתונים.</p>
+                </div>
+                <div class="p-6 border border-ink-sepia/30 rounded-full bg-paper-light shadow-md hover:shadow-xl transition-all duration-300 fade-in-up" style="animation-delay: 3.0s;">
+                    <h3 class="font-varela text-2xl font-bold text-ink-dark mb-2 ink-bleed-container">יצירת תמונות ואומנות</h3>
+                    <p class="text-ink-light">ה-AI כפלטה וכמכחול ליצירות חזותיות.</p>
+                </div>
+                <div class="p-6 border border-ink-sepia/30 rounded-full bg-paper-light shadow-md hover:shadow-xl transition-all duration-300 fade-in-up" style="animation-delay: 3.2s;">
+                    <h3 class="font-varela text-2xl font-bold text-ink-dark mb-2 ink-bleed-container">אוטומציה של תהליכים</h3>
+                    <p class="text-ink-light">לייעל את זרימת העבודה במשיחות מכחול חכמות.</p>
+                </div>
+            </div>
+            <!-- Decorative SVG line -->
+            <svg class="absolute hidden lg:block -bottom-10 left-1/2 transform -translate-x-1/2 w-full max-w-2xl h-10 stroke-ink-sepia/30" viewBox="0 0 100 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 5 C 20 2 30 8 50 5 C 70 2 80 8 95 5" stroke-width="1" stroke-linecap="round" class="sketch-line"/>
+            </svg>
+        </section>
+
+        <!-- Services Offered -->
+        <section class="relative my-20 w-full max-w-5xl fade-in-up" style="animation-delay: 3.6s;">
+            <h2 class="font-noto text-5xl font-bold text-ink-dark text-center mb-12 ink-bleed-container">שירותים מוצעים: הסטודיו שלנו מחכה לכם</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="bg-paper-medium p-8 rounded-lg shadow-lg border-b-4 border-ink-sepia/50 hover:border-ink-sepia transition-all duration-300 fade-in-up" style="animation-delay: 3.8s;">
+                    <h3 class="font-varela text-3xl font-bold text-ink-dark mb-4 ink-bleed-container">סדנאות רישום קבוצתיות</h3>
+                    <p class="text-xl text-ink-light leading-relaxed">ללמוד יחד, לשתף רעיונות ולשרטט בצוות. סדנאות מעשיות המציתות השראה ומעניקות כלים חיוניים לשליטה ב-AI. חוויה דינמית וממוקדת.</p>
+                </div>
+                <div class="bg-paper-medium p-8 rounded-lg shadow-lg border-b-4 border-ink-sepia/50 hover:border-ink-sepia transition-all duration-300 fade-in-up" style="animation-delay: 4.0s;">
+                    <h3 class="font-varela text-3xl font-bold text-ink-dark mb-4 ink-bleed-container">שיעורים פרטיים בסטודיו</h3>
+                    <p class="text-xl text-ink-light leading-relaxed">מסלול אישי מותאם במיוחד עבורכם. עם מכחול אחד ביד, נתקדם בקצב שלכם, מהיסודות ועד לפרויקטים מורכבים. ליווי צמוד ואישי.</p>
+                </div>
+                <div class="bg-paper-medium p-8 rounded-lg shadow-lg border-b-4 border-ink-sepia/50 hover:border-ink-sepia transition-all duration-300 fade-in-up" style="animation-delay: 4.2s;">
+                    <h3 class="font-varela text-3xl font-bold text-ink-dark mb-4 ink-bleed-container">הרצאות השראה לארגונים</h3>
+                    <p class="text-xl text-ink-light leading-relaxed">פתיחת אופקים וזרעי רעיונות לצוותים. הרצאות מרתקות המשלבות תיאוריה ודוגמאות מעשיות, המעניקות מבט חדש על עולם ה-AI ויישומיו.</p>
+                </div>
+                <div class="bg-paper-medium p-8 rounded-lg shadow-lg border-b-4 border-ink-sepia/50 hover:border-ink-sepia transition-all duration-300 fade-in-up" style="animation-delay: 4.4s;">
+                    <h3 class="font-varela text-3xl font-bold text-ink-dark mb-4 ink-bleed-container">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-xl text-ink-light leading-relaxed">משרטוט הרעיון ועד ליצירה המוגמרת. ליווי מקצועי צמוד בפיתוח פרויקטים מבוססי AI, החל משלב התכנון ועד ליישום מלא.</p>
+                </div>
+            </div>
+            <div class="absolute -top-10 left-1/2 w-40 h-40 border-2 border-ink-sepia rounded-full opacity-15 blur-sm -translate-x-1/2 -rotate-12"></div>
+        </section>
+
+        <!-- Instructor Section -->
+        <section class="relative my-20 w-full max-w-4xl bg-paper-medium p-8 rounded-lg shadow-xl flex flex-col md:flex-row items-center md:items-start gap-10 fade-in-up" style="animation-delay: 4.8s;">
+            <div class="md:w-1/3 flex-shrink-0">
+                <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="w-48 h-48 md:w-full md:h-auto object-cover rounded-md mx-auto zevik-photo">
+            </div>
+            <div class="md:w-2/3 text-center md:text-right">
+                <h2 class="font-noto text-4xl font-bold text-ink-sepia mb-4 ink-bleed-container">האמן המנחה: זאביק אבינר</h2>
+                <p class="text-xl text-ink-dark leading-relaxed mb-6">
+                    עם ניסיון עשיר כאמן ומפתח, זאביק אבינר מנגיש את עולם ה-AI לא רק כטכנולוגיה, אלא כצבע על פלטה, ככלי ביטוי חסר גבולות. הוא מאסטר בשילוב יצירתיות ודיוק, ומזמין אתכם ללמוד ממנו איך להפוך את המחשב לסטודיו אישי. זאביק משרטט את הדרך להפוך את המורכב לפשוט, ואת הדמיון למציאות.
+                </p>
+                <div class="text-lg font-varela text-ink-light space-y-2">
+                    <p><strong class="text-ink-sepia">וואטסאפ:</strong> <span class="ink-bleed-container"><a href="https://wa.me/972546609385" target="_blank" class="hover:underline">054-6609385</a></span></p>
+                    <p><strong class="text-ink-sepia">אימייל:</strong> <span class="ink-bleed-container"><a href="mailto:zaviner@gmail.com" class="hover:underline">zaviner@gmail.com</a></span></p>
+                </div>
+            </div>
+            <div class="absolute -bottom-10 right-1/4 w-32 h-32 border border-ink-dark/10 rounded-full opacity-5 blur-xs rotate-6"></div>
+        </section>
+
+        <!-- Signature / Final Flourish -->
+        <footer class="mt-20 mb-10 text-center text-ink-light text-sm font-varela opacity-70 fade-in-up" style="animation-delay: 5.2s;">
+            <p>&copy; 2024 רישום העתיד. כל הזכויות שמורות ליצירה הדיגיטלית.</p>
+            <div class="mt-4 w-20 h-0.5 bg-ink-sepia/50 mx-auto rotate-1"></div>
+        </footer>
+
+    </main>
+
+    <script>
+        // Custom Cursor JavaScript
+        const cursor = document.getElementById('custom-cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        const speed = 0.2; // Adjust for smoother or faster follow
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * speed;
+            cursorY += (mouseY - cursorY) * speed;
+            cursor.style.transform = `translate3d(${cursorX}px, ${cursorY}px, 0) translate(-50%, -50%)`;
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Hover effects for the cursor
+        const hoverableElements = document.querySelectorAll('a, button, .ink-bleed-container, [role="button"]'); // Add more selectors as needed
+        hoverableElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+        });
+
+        // Generative Ink Particles (simplified)
+        const particlesContainer = document.getElementById('ink-particles-container');
+        const numParticles = 30; // Fewer for subtlety
+        for (let i = 0; i < numParticles; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('ink-particle');
+            const size = Math.random() * 8 + 2; // Size between 2px and 10px
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${Math.random() * 100}vw`;
+            particle.style.top = `${Math.random() * 100}vh`;
+
+            // Custom properties for animation
+            particle.style.setProperty('--duration', `${Math.random() * 10 + 10}s`);
+            particle.style.setProperty('--x-start', `${Math.random() * 20 - 10}px`);
+            particle.style.setProperty('--y-start', `${Math.random() * 20 - 10}px`);
+            particle.style.setProperty('--x-mid', `${Math.random() * 40 - 20}px`);
+            particle.style.setProperty('--y-mid', `${Math.random() * 40 - 20}px`);
+            particle.style.setProperty('--x-end', `${Math.random() * 20 - 10}px`);
+            particle.style.setProperty('--y-end', `${Math.random() * 20 - 10}px`);
+            particle.style.setProperty('--opacity', `${Math.random() * 0.4 + 0.1}`); // Low opacity
+            particle.style.setProperty('--scale', `${Math.random() * 0.5 + 0.5}`);
+
+            particlesContainer.appendChild(particle);
+        }
+
+        // Scroll-triggered Fade-in-Up and Draw Line effects
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of element is visible
+        };
+
+        const fadeInObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Apply immediate opacity/transform to prevent double-animation with CSS animation-delay
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-up').forEach(el => {
+            // Check if element has a style animation-delay, apply fade-in observer without it
+            const delay = parseFloat(el.style.animationDelay) || 0;
+            if (delay === 0) { // If no specific delay is set by inline style, observe it for immediate fade-in
+                 fadeInObserver.observe(el);
+            } else {
+                // For elements with animation-delay, let CSS handle it. Ensure initial state is hidden.
+                el.style.opacity = 0;
+                el.style.transform = 'translateY(20px)';
+            }
+        });
+
+        const drawLineObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const path = entry.target.querySelector('path');
+                    if (path) {
+                        const length = path.getTotalLength();
+                        entry.target.style.setProperty('--length', length);
+                        entry.target.style.setProperty('--duration', '2s'); // Duration of the drawing
+                        path.classList.add('sketch-line');
+                    }
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('svg.sketch-line').forEach(el => {
+            drawLineObserver.observe(el);
+        });
+
+    </script>
+</body>
+</html>

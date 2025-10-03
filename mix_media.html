@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - מנצח ה-AI</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom styles for mixed media effect and general layout */
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #0d0d1a; /* Deep dark background */
+            color: #e0e0e0; /* Light text for contrast */
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll from overflowing elements */
+        }
+
+        /* Custom cursor styling (required high-contrast technique) */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            pointer-events: none; /* Allows clicks to pass through */
+            z-index: 9999; /* Always on top */
+            transition: transform 0.1s ease-out, width 0.2s ease, height 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1rem;
+            color: #fff; /* Ensure text inside cursor is visible */
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast on light */
+            background-color: transparent;
+            transform: translate(-50%, -50%); /* Center cursor on mouse */
+        }
+
+        .custom-cursor.active {
+            transform: translate(-50%, -50%) scale(1.2);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Specific styles for mixed media layers */
+        .mixed-media-layer {
+            position: absolute;
+            opacity: 0.6;
+            filter: blur(1px);
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #4c0080 0%, #002b80 50%, #0d0d1a 100%);
+            width: 150vw;
+            height: 150vh;
+            position: fixed;
+            top: -25vh;
+            left: -25vw;
+            z-index: -2;
+            animation: gradientShift 15s ease infinite alternate;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        .glitch-text {
+            animation: glitch 1.5s infinite alternate;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 0.05em 0 0 #f0f, -0.05em -0.025em 0 #0ff, -0.025em 0.05em 0 #ff0; }
+            14% { text-shadow: -0.05em -0.025em 0 #f0f, 0.025em 0.025em 0 #0ff, -0.05em -0.05em 0 #ff0; }
+            28% { text-shadow: 0.025em 0.05em 0 #f0f, -0.05em 0 0 #0ff, 0.05em -0.025em 0 #ff0; }
+            42% { text-shadow: -0.025em -0.05em 0 #f0f, 0.05em 0.025em 0 #0ff, -0.025em 0.025em 0 #ff0; }
+            56% { text-shadow: 0.05em 0.025em 0 #f0f, -0.025em 0.05em 0 #0ff, -0.05em -0.025em 0 #ff0; }
+            70% { text-shadow: -0.05em 0 0 #f0f, 0.05em -0.025em 0 #0ff, 0.025em 0.05em 0 #ff0; }
+            84% { text-shadow: 0.025em -0.025em 0 #f0f, -0.025em -0.05em 0 #0ff, 0.05em 0 0 #ff0; }
+            100% { text-shadow: -0.025em 0.025em 0 #f0f, 0.05em 0 0 #0ff, -0.05em 0.05em 0 #ff0; }
+        }
+
+        /* For a frosted glass effect on some elements */
+        .backdrop-blur-custom {
+            backdrop-filter: blur(10px) saturate(150%);
+            -webkit-backdrop-filter: blur(10px) saturate(150%);
+        }
+
+        /* Hide scrollbar but allow scrolling */
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        
+        /* Ensure responsive font sizes with clamp */
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            line-height: 1.1;
+        }
+        h2 {
+            font-size: clamp(1.8rem, 5vw, 3.5rem);
+            line-height: 1.2;
+        }
+        h3 {
+            font-size: clamp(1.4rem, 4vw, 2.5rem);
+            line-height: 1.3;
+        }
+        p, li {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            line-height: 1.6;
+        }
+
+        .font-space-mono {
+            font-family: 'Space Mono', monospace;
+        }
+
+        .font-assistant {
+            font-family: 'Assistant', sans-serif;
+        }
+
+        /* Particles canvas for generative background */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Animation for section entry */
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+    </style>
+</head>
+<body class="font-assistant text-gray-200">
+
+    <!-- Generative Particles Canvas -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Global Background Gradient Layer -->
+    <div class="gradient-bg"></div>
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="custom-cursor"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 min-h-screen pb-40">
+        
+        <!-- Opening Statement / Hero Section - Mixed Media Collage -->
+        <section class="relative h-screen flex flex-col justify-center items-center text-center p-8 bg-black bg-opacity-30 backdrop-blur-sm">
+            <!-- Abstract background elements for mixed media -->
+            <div class="mixed-media-layer w-64 h-64 bg-purple-500 opacity-20 rounded-full left-1/4 top-1/4 animate-pulse blur-xl"></div>
+            <div class="mixed-media-layer w-96 h-96 bg-cyan-400 opacity-15 rounded-md right-1/4 bottom-1/4 animate-spin-slow blur-xl"></div>
+            <div class="mixed-media-layer w-48 h-48 bg-pink-500 opacity-25 rounded-xl left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 animate-bounce-slow blur-xl"></div>
+
+            <h1 class="text-white font-space-mono mb-4 glitch-text text-start md:text-center px-4">
+                בינה מלאכותית – לא סוד, אלא כוח בידיים שלך.
+            </h1>
+            <p class="text-xl md:text-2xl max-w-3xl text-gray-300 mb-8 font-light text-start md:text-center px-4">
+                העתיד אינו ממתין. הוא כאן, מורכב משכבות קוד, חזון, ואפשרויות בלתי נתפסות. בואו לפענח את הצפנים, ליצור את המחר.
+            </p>
+            <div class="text-xs text-gray-500 mt-12 animate-pulse">
+                גללו כדי לצלול עמוק יותר
+                <span class="block text-2xl mt-2">↓</span>
+            </div>
+        </section>
+
+        <!-- Instructor Section - Zevik Aviner -->
+        <section class="relative min-h-screen flex items-center justify-center p-8 py-20 fade-in-section" id="instructor-section">
+            <div class="mixed-media-layer w-1/3 h-full bg-blue-700 opacity-10 absolute right-0 top-0 parallax-element" data-speed="-0.2"></div>
+            <div class="mixed-media-layer w-1/4 h-1/2 bg-green-500 opacity-10 absolute left-1/4 bottom-0 parallax-element" data-speed="0.3"></div>
+
+            <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-center gap-12 bg-gray-900 bg-opacity-60 backdrop-blur-custom p-8 md:p-12 rounded-2xl shadow-lg relative z-20 border border-gray-700 hover:shadow-cyan-500/50 transition-all duration-300">
+                <div class="md:w-1/3 flex-shrink-0">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה קטנה של זאביק אבינר" class="rounded-full w-48 h-48 md:w-64 md:h-64 object-cover object-center border-4 border-cyan-400 shadow-xl mx-auto md:mr-0 hover:scale-105 transition-transform duration-300" />
+                </div>
+                <div class="md:w-2/3 text-center md:text-right">
+                    <h2 class="text-cyan-400 font-space-mono text-3xl md:text-5xl mb-4 leading-tight">זאביק אבינר</h2>
+                    <p class="text-lg md:text-xl text-gray-300 mb-6 leading-relaxed">
+                        המנצח על התזמורת הדיגיטלית, זאביק אבינר, יוליך אתכם דרך המבוך המרתק של ה-AI.
+                        מומחיות שנרכשה בפיתוח פרויקטים מתקדמים, מוגשת כעת בבהירות ונגישות, 
+                        ומעניקה לכם את הכלים להפוך רעיונות למציאות מבוססת בינה מלאכותית.
+                    </p>
+                    <div class="mt-6 flex flex-col items-center md:items-start text-gray-400">
+                        <a href="https://wa.me/972546609385" target="_blank" class="flex items-center space-x-2 space-x-reverse mb-2 text-lg hover:text-white transition-colors duration-200">
+                            <span>054-6609385</span>
+                            <span class="ml-2">📞</span>
+                        </a>
+                        <a href="mailto:zaviner@gmail.com" class="flex items-center space-x-2 space-x-reverse text-lg hover:text-white transition-colors duration-200">
+                            <span>zaviner@gmail.com</span>
+                            <span class="ml-2">✉️</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Target Audience Section - Fragmented Thoughts -->
+        <section class="relative py-20 px-8 min-h-screen flex items-center fade-in-section" id="audience-section">
+            <div class="absolute inset-0 mixed-media-layer bg-purple-700 opacity-5 blur-xl parallax-element" data-speed="0.15"></div>
+            <div class="absolute inset-0 mixed-media-layer bg-teal-500 opacity-5 blur-xl parallax-element" data-speed="-0.1"></div>
+
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-20">
+                <h2 class="col-span-full text-center text-white font-space-mono mb-12 text-4xl md:text-5xl glitch-text">
+                    למי מיועד המסע הדיגיטלי?
+                </h2>
+
+                <div class="target-card bg-gray-800 bg-opacity-70 backdrop-blur-custom p-6 rounded-xl shadow-lg border border-gray-700 hover:shadow-purple-500/50 hover:border-purple-500 transition-all duration-300 transform hover:-translate-y-2">
+                    <h3 class="text-purple-300 mb-3 font-bold text-2xl font-space-mono">הצעדים הראשונים</h3>
+                    <p class="text-gray-300">למתחילים.ות שרוצים.ות להכיר את עולם ה-AI - להתמודד עם הדהוד הנתונים, ולגלות את הפוטנציאל הטמון בו.</p>
+                </div>
+                <div class="target-card bg-gray-800 bg-opacity-70 backdrop-blur-custom p-6 rounded-xl shadow-lg border border-gray-700 hover:shadow-cyan-500/50 hover:border-cyan-500 transition-all duration-300 transform hover:-translate-y-2">
+                    <h3 class="text-cyan-300 mb-3 font-bold text-2xl font-space-mono">מקצוענים בתנועה</h3>
+                    <p class="text-gray-300">לאנשי.נשות מקצוע שמחפשים.ות להטמיע AI בעבודתם.ן - להפוך אלגוריתמים ליתרון תחרותי ממשי.</p>
+                </div>
+                <div class="target-card bg-gray-800 bg-opacity-70 backdrop-blur-custom p-6 rounded-xl shadow-lg border border-gray-700 hover:shadow-pink-500/50 hover:border-pink-500 transition-all duration-300 transform hover:-translate-y-2">
+                    <h3 class="text-pink-300 mb-3 font-bold text-2xl font-space-mono">מנהיגות העתיד</h3>
+                    <p class="text-gray-300">למנהלים.ות וארגונים שמבקשים.ות להקדים את הגל, להוביל את הצוות לעידן החדש של הבינה המלאכותית.</p>
+                </div>
+                <div class="target-card bg-gray-800 bg-opacity-70 backdrop-blur-custom p-6 rounded-xl shadow-lg border border-gray-700 hover:shadow-yellow-500/50 hover:border-yellow-500 transition-all duration-300 transform hover:-translate-y-2">
+                    <h3 class="text-yellow-300 mb-3 font-bold text-2xl font-space-mono">חולמי המחר</h3>
+                    <p class="text-gray-300">ברמה מתקדמת - למפתחי.ות פרויקטים וחולמים.ות שרוצים.ות לבנות מציאות חדשה מקוד וחזון.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Areas Section - Dynamic Grid of Sparks -->
+        <section class="relative py-20 px-8 min-h-screen flex items-center fade-in-section" id="expertise-section">
+            <div class="absolute inset-0 mixed-media-layer bg-red-500 opacity-5 blur-xl parallax-element" data-speed="-0.05"></div>
+            <div class="absolute inset-0 mixed-media-layer bg-lime-500 opacity-5 blur-xl parallax-element" data-speed="0.2"></div>
+
+            <div class="max-w-7xl mx-auto relative z-20">
+                <h2 class="text-center text-white font-space-mono mb-16 text-4xl md:text-5xl glitch-text">
+                    יצירת ניצוצות - תחומי התמחות
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="expertise-card bg-gray-800 bg-opacity-70 backdrop-blur-custom p-8 rounded-xl shadow-lg border border-gray-700 transform hover:scale-105 transition-all duration-300 hover:border-indigo-400 hover:shadow-indigo-400/50">
+                        <h3 class="text-indigo-300 mb-4 text-3xl font-space-mono">מילים חכמות</h3>
+                        <p class="text-gray-300">יצירת עולמות תוכן חדשים, מסרים מדויקים ושיווק יצירתי בעזרת AI.</p>
+                    </div>
+                    <div class="expertise-card bg-gray-800 bg-opacity-70 backdrop-blur-custom p-8 rounded-xl shadow-lg border border-gray-700 transform hover:scale-105 transition-all duration-300 hover:border-purple-400 hover:shadow-purple-400/50">
+                        <h3 class="text-purple-300 mb-4 text-3xl font-space-mono">אפליקציות חושבות</h3>
+                        <p class="text-gray-300">בניית אפליקציות חכמות המעניקות חיים לקוד ומייצרות פתרונות חדשניים.</p>
+                    </div>
+                    <div class="expertise-card bg-gray-800 bg-opacity-70 backdrop-blur-custom p-8 rounded-xl shadow-lg border border-gray-700 transform hover:scale-105 transition-all duration-300 hover:border-green-400 hover:shadow-green-400/50">
+                        <h3 class="text-green-300 mb-4 text-3xl font-space-mono">אתרים נושמים AI</h3>
+                        <p class="text-gray-300">פיתוח אתרים המשלבים AI לחוויה דינמית, אישית ובלתי נשכחת למשתמש.</p>
+                    </div>
+                    <div class="expertise-card bg-gray-800 bg-opacity-70 backdrop-blur-custom p-8 rounded-xl shadow-lg border border-gray-700 transform hover:scale-105 transition-all duration-300 hover:border-yellow-400 hover:shadow-yellow-400/50">
+                        <h3 class="text-yellow-300 mb-4 text-3xl font-space-mono">נתונים מספרים סיפור</h3>
+                        <p class="text-gray-300">ניתוח נתונים ומחקר - פענוח תובנות נסתרות והפיכתן לידע שימושי.</p>
+                    </div>
+                    <div class="expertise-card bg-gray-800 bg-opacity-70 backdrop-blur-custom p-8 rounded-xl shadow-lg border border-gray-700 transform hover:scale-105 transition-all duration-300 hover:border-orange-400 hover:shadow-orange-400/50">
+                        <h3 class="text-orange-300 mb-4 text-3xl font-space-mono">אמנות הקוד</h3>
+                        <p class="text-gray-300">יצירת תמונות ואמנות ויזואלית מרהיבה בעזרת כלי בינה מלאכותית.</p>
+                    </div>
+                    <div class="expertise-card bg-gray-800 bg-opacity-70 backdrop-blur-custom p-8 rounded-xl shadow-lg border border-gray-700 transform hover:scale-105 transition-all duration-300 hover:border-red-400 hover:shadow-red-400/50">
+                        <h3 class="text-red-300 mb-4 text-3xl font-space-mono">אוטומציה חכמה</h3>
+                        <p class="text-gray-300">אוטומציה של תהליכים - לשחרר את הזמן, למקסם את הפוטנציאל האנושי.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered Section - Interactive Portals -->
+        <section class="relative py-20 px-8 min-h-screen flex items-center fade-in-section" id="services-section">
+            <div class="absolute inset-0 mixed-media-layer bg-blue-500 opacity-5 blur-xl parallax-element" data-speed="0.08"></div>
+            <div class="absolute inset-0 mixed-media-layer bg-fuchsia-500 opacity-5 blur-xl parallax-element" data-speed="-0.12"></div>
+
+            <div class="max-w-6xl mx-auto relative z-20">
+                <h2 class="text-center text-white font-space-mono mb-16 text-4xl md:text-5xl glitch-text">
+                    שערי כניסה לעולם ה-AI
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="service-portal bg-gray-800 bg-opacity-70 backdrop-blur-custom p-8 rounded-2xl shadow-xl border border-gray-700 transform hover:scale-105 transition-all duration-300 hover:shadow-blue-500/50 hover:border-blue-500">
+                        <h3 class="text-blue-300 mb-4 text-3xl font-space-mono">סדנאות קבוצתיות</h3>
+                        <p class="text-gray-300 mb-4">קולקטיב של סקרנות, מסע משותף אל תוך עולם ה-AI. מעשיות, ממוקדות ושוברות מיתוסים.</p>
+                        <button class="mt-4 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-full transition-colors duration-200">לפרטים והרשמה</button>
+                    </div>
+                    <div class="service-portal bg-gray-800 bg-opacity-70 backdrop-blur-custom p-8 rounded-2xl shadow-xl border border-gray-700 transform hover:scale-105 transition-all duration-300 hover:shadow-violet-500/50 hover:border-violet-500">
+                        <h3 class="text-violet-300 mb-4 text-3xl font-space-mono">שיעורים פרטיים</h3>
+                        <p class="text-gray-300 mb-4">פוקוס מוחלט, התאמה אישית לדופק הלמידה והצרכים הייחודיים שלכם.</p>
+                        <button class="mt-4 px-6 py-3 bg-violet-600 hover:bg-violet-700 text-white rounded-full transition-colors duration-200">קבעו פגישה</button>
+                    </div>
+                    <div class="service-portal bg-gray-800 bg-opacity-70 backdrop-blur-custom p-8 rounded-2xl shadow-xl border border-gray-700 transform hover:scale-105 transition-all duration-300 hover:shadow-emerald-500/50 hover:border-emerald-500">
+                        <h3 class="text-emerald-300 mb-4 text-3xl font-space-mono">הרצאות לארגונים</h3>
+                        <p class="text-gray-300 mb-4">ניצוץ ההשראה, מפת דרכים לעתיד העסקי. פתיחת אופקים וכלים לצוותים.</p>
+                        <button class="mt-4 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full transition-colors duration-200">הזמינו הרצאה</button>
+                    </div>
+                    <div class="service-portal bg-gray-800 bg-opacity-70 backdrop-blur-custom p-8 rounded-2xl shadow-xl border border-gray-700 transform hover:scale-105 transition-all duration-300 hover:shadow-rose-500/50 hover:border-rose-500">
+                        <h3 class="text-rose-300 mb-4 text-3xl font-space-mono">ייעוץ ופיתוח</h3>
+                        <p class="text-gray-300 mb-4">ליווי מקצועי, יד ביד, מנקודת הרעיון ועד למימוש פרויקטים מבוססי AI.</p>
+                        <button class="mt-4 px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white rounded-full transition-colors duration-200">צרו קשר לפרויקט</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Call to Action / Contact - Integrated Artistically -->
+        <section class="relative py-20 px-8 flex items-center justify-center min-h-[50vh] fade-in-section" id="contact-section">
+            <div class="mixed-media-layer w-full h-full bg-cyan-600 opacity-5 absolute inset-0 blur-xl animate-pulse-slow parallax-element" data-speed="-0.03"></div>
+            
+            <div class="max-w-2xl text-center relative z-20 bg-gray-900 bg-opacity-70 backdrop-blur-custom p-8 rounded-3xl shadow-2xl border-2 border-dashed border-cyan-500 hover:shadow-purple-500/50 transition-all duration-500">
+                <h2 class="text-white font-space-mono mb-6 text-4xl md:text-5xl glitch-text">
+                    החיבור אל המחר.
+                </h2>
+                <p class="text-gray-300 mb-8 text-xl md:text-2xl leading-relaxed">
+                    הצעד הראשון לשליטה בבינה המלאכותית מתחיל עכשיו. אל תחכו, צרו קשר ישיר עם זאביק אבינר.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-6 mt-8">
+                    <a href="https://wa.me/972546609385" target="_blank" class="px-8 py-4 bg-green-500 text-white font-bold rounded-full text-lg hover:bg-green-600 transition-colors duration-300 flex items-center justify-center space-x-2 space-x-reverse shadow-lg hover:shadow-green-400/50">
+                        <span>שלחו הודעת ווטסאפ</span>
+                        <span class="text-2xl mr-2">💬</span>
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="px-8 py-4 bg-indigo-500 text-white font-bold rounded-full text-lg hover:bg-indigo-600 transition-colors duration-300 flex items-center justify-center space-x-2 space-x-reverse shadow-lg hover:shadow-indigo-400/50">
+                        <span>שלחו אימייל</span>
+                        <span class="text-2xl mr-2">📧</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div> <!-- End of Main Content Wrapper -->
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        });
+
+        document.addEventListener('mousedown', () => {
+            cursor.classList.add('active');
+        });
+
+        document.addEventListener('mouseup', () => {
+            cursor.classList.remove('active');
+        });
+
+        // Parallax Effect Logic
+        const parallaxElements = document.querySelectorAll('.parallax-element');
+        
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            parallaxElements.forEach(el => {
+                const speed = parseFloat(el.getAttribute('data-speed'));
+                el.style.transform = `translateY(${scrollTop * speed}px)`;
+            });
+        });
+
+        // Fade-in on Scroll Logic
+        const fadeInSections = document.querySelectorAll('.fade-in-section');
+
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // 10% of the section must be visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Optional: uncomment below to make it animate only once
+                    // observer.unobserve(entry.target);
+                } else {
+                    // Optional: uncomment below to allow animation to re-trigger on scroll back
+                    // entry.target.classList.remove('is-visible');
+                }
+            });
+        }, observerOptions);
+
+        fadeInSections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Generative Particles Canvas Logic
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const numParticles = 100;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            particles = []; // Re-initialize particles on resize for better distribution
+            initParticles();
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1; // 1 to 3
+                this.speedX = Math.random() * 0.5 - 0.25; // -0.25 to 0.25
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.color = `rgba(100, 200, 255, ${Math.random() * 0.5 + 0.2})`; // Light blue/cyan, semi-transparent
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Simple size reduction over time for a fading effect
+                if (this.size > 0.1) this.size -= 0.01; 
+                if (this.size <= 0.1) { // If particle gets too small, reset it
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 1;
+                    this.speedX = Math.random() * 0.5 - 0.25;
+                    this.speedY = Math.random() * 0.5 - 0.25;
+                }
+
+                // Wrap around canvas edges (optional, resetting is also an option)
+                if (this.x > canvas.width + this.size) this.x = -this.size;
+                if (this.x < -this.size) this.x = canvas.width + this.size;
+                if (this.y > canvas.height + this.size) this.y = -this.size;
+                if (this.y < -this.size) this.y = canvas.height + this.size;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            for (let i = 0; i < numParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear previous frame
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas(); // Initial call to set canvas size and create particles
+        animateParticles(); // Start the animation loop
+
+    </script>
+</body>
+</html>

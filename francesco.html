@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הקלף העתיק של הבינה - העתיד נחרט עכשיו</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Rubik:wght@300..900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --fresco-bg-light: #f7f3ed; /* A warm, off-white for plaster */
+            --fresco-bg-medium: #e0d8cc; /* A slightly darker beige */
+            --fresco-text-dark: #3a2e21; /* Deep brown */
+            --fresco-text-medium: #6f5f4f; /* Muted brown */
+            --fresco-accent-gold: #b89d6e; /* Muted gold, like aged leaf */
+            --fresco-accent-terracotta: #a34a2e; /* Terracotta red, earthy */
+            --fresco-accent-blue: #4f6b8b; /* Muted blue, like lapis lazuli pigment */
+        }
+
+        body {
+            font-family: 'Assistant', sans-serif;
+            color: var(--fresco-text-dark);
+            background-color: var(--fresco-bg-light);
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Rubik', sans-serif;
+            color: var(--fresco-text-dark);
+            line-height: 1.2;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* High contrast on dark */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* High contrast on light */
+            transition: transform 0.1s ease-out, opacity 0.2s ease-out;
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .custom-cursor.active {
+            transform: translate(-50%, -50%) scale(1.5);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .fresco-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            pointer-events: none;
+            opacity: 0.2; /* Subtle layers */
+        }
+        
+        /* Using SVG for noise/texture as background images to mimic plaster */
+        .fresco-layer-1 { 
+            background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noiseFilter)" fill="%23e0d8cc"/></svg>'); 
+            z-index: -3; 
+            opacity: 0.15; 
+            mix-blend-mode: multiply; /* Artistic choice for background layers */
+        }
+        .fresco-layer-2 { 
+            background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noiseFilter)" fill="%23f7f3ed"/></svg>'); 
+            z-index: -2; 
+            opacity: 0.3; 
+            mix-blend-mode: overlay; /* Different blend mode for variation */
+        }
+        .fresco-layer-3 { 
+            background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(%23noiseFilter)" fill="%23e0d8cc"/></svg>'); 
+            z-index: -1; 
+            opacity: 0.08; 
+            transform: scale(1.02); /* Slight scale for parallax effect */
+            mix-blend-mode: lighten;
+        }
+
+        .scroll-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            position: relative;
+            z-index: 10; /* Ensure content is above background layers */
+        }
+        
+        /* Custom scrollbar for aesthetic purposes */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--fresco-bg-medium);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--fresco-accent-gold);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--fresco-accent-terracotta);
+        }
+
+        .ancient-glow {
+            filter: drop-shadow(0 0 8px var(--fresco-accent-gold)) drop-shadow(0 0 4px var(--fresco-accent-terracotta));
+        }
+
+        /* Custom text colors for high contrast and fresco palette */
+        .text-fresco-dark { color: var(--fresco-text-dark); }
+        .text-fresco-medium { color: var(--fresco-text-medium); }
+        .text-fresco-gold { color: var(--fresco-accent-gold); }
+        .text-fresco-terracotta { color: var(--fresco-accent-terracotta); }
+        .bg-fresco-light { background-color: var(--fresco-bg-light); }
+        .bg-fresco-medium { background-color: var(--fresco-bg-medium); }
+        .border-fresco-dark { border-color: var(--fresco-text-dark); }
+        .border-fresco-gold { border-color: var(--fresco-accent-gold); }
+
+        .fresco-frame {
+            border: 4px solid var(--fresco-accent-gold);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2) inset, 0 0 5px rgba(0,0,0,0.1);
+            background-color: rgba(255,255,255,0.85); /* Slightly transparent white to show background */
+            padding: 2.5rem;
+            margin: 2rem auto;
+            max-width: 900px;
+            width: 90%;
+            position: relative;
+        }
+
+        /* Subtle outer glow/feathering for the frame, mimicking aged plaster edges */
+        .fresco-frame::before, .fresco-frame::after {
+            content: '';
+            position: absolute;
+            background-color: var(--fresco-bg-light);
+            opacity: 0.6;
+            filter: blur(10px);
+            z-index: -1;
+        }
+
+        .fresco-frame::before {
+            top: -10px; right: -10px; bottom: -10px; left: -10px;
+        }
+
+        .fresco-frame::after {
+            top: -20px; right: -20px; bottom: -20px; left: -20px;
+            opacity: 0.3;
+            filter: blur(20px);
+        }
+
+        .fresco-line {
+            height: 2px;
+            background-color: var(--fresco-accent-terracotta);
+            margin: 2rem auto;
+            width: 80%;
+            opacity: 0.7;
+        }
+        .fresco-line-gold {
+            height: 2px;
+            background-color: var(--fresco-accent-gold);
+            margin: 2rem auto;
+            width: 60%;
+            opacity: 0.8;
+        }
+
+        .hover-reveal {
+            position: relative;
+            cursor: pointer;
+            display: inline-block;
+            transition: color 0.3s ease-out;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .hover-reveal::before {
+            content: attr(data-original);
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--fresco-accent-gold);
+            color: var(--fresco-bg-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: scale(0.8) translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55); /* Springy effect */
+            pointer-events: none;
+            border-radius: 4px;
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+
+        .hover-reveal:hover::before {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+        .hover-reveal:hover {
+            color: transparent; /* Hide original text on hover */
+        }
+        
+        @keyframes subtle-breathe {
+            0% { transform: scale(1); opacity: 0.98; }
+            50% { transform: scale(1.002); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.98; }
+        }
+
+        .breathe {
+            animation: subtle-breathe 8s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-fresco-light text-fresco-dark antialiased leading-relaxed">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="custom-cursor"></div>
+
+    <!-- Fresco Background Layers for Parallax and Texture -->
+    <div class="fresco-layer fresco-layer-1 parallax-layer" data-speed="0.05"></div>
+    <div class="fresco-layer fresco-layer-2 parallax-layer" data-speed="0.1"></div>
+    <div class="fresco-layer fresco-layer-3 parallax-layer" data-speed="0.15"></div>
+
+    <!-- Main Content Wrapper -->
+    <main class="relative z-10 p-4 sm:p-8">
+
+        <!-- Section 1: Grand Title / Introduction -->
+        <section class="scroll-section text-center max-w-4xl mx-auto min-h-screen flex items-center justify-center">
+            <div class="fresco-frame breathe">
+                <h1 class="text-6xl sm:text-7xl lg:text-8xl font-bold text-fresco-gold mb-8 ancient-glow">
+                    הקלף העתיק של הבינה
+                </h1>
+                <h2 class="text-3xl sm:text-4xl text-fresco-terracotta leading-snug">
+                    העתיד נחרט עכשיו – מאסטר AI
+                </h2>
+                <p class="mt-8 text-xl sm:text-2xl text-fresco-medium max-w-3xl mx-auto">
+                    במקום שבו ניצתת אש הדעת העתיקה, אנו צוללים אל עומקן של מערכות בינה מלאכותית. זהו מסע לגלות את הכוח הטמון בטכנולוגיה, להפוך אותה לכלי אומן בידי כל אדם – 
+                    <span class="text-fresco-dark font-semibold">מהגיצים הראשונים ועד ליצירת המופת הדיגיטלית.</span>
+                </p>
+                <div class="fresco-line-gold"></div>
+                <p class="mt-4 text-lg sm:text-xl text-fresco-dark max-w-2xl mx-auto">
+                    <span class="text-fresco-terracotta font-semibold">זאביק אבינר</span>, אמן הבינה המלאכותית, מזמין אתכם לחרוט את עתידכם.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 2: The Core Message - Accessibility & Application -->
+        <section class="scroll-section text-center max-w-4xl mx-auto">
+            <div class="fresco-frame breathe">
+                <h3 class="text-4xl sm:text-5xl font-bold text-fresco-dark mb-6">
+                    החזון: פענוח צפני המחר
+                </h3>
+                <p class="text-xl sm:text-2xl text-fresco-medium leading-relaxed">
+                    בסדנאות המאסטר, נחשוף את הקוד הסודי, נפצח את רזי האלגוריתם, ונחרוט כלים בני קיימא שיהפכו כל מחשבה למציאות דיגיטלית –
+                    <span class="font-semibold text-fresco-terracotta"> מהלומדים הראשונים ועד לאדריכלי העתיד עצמם. </span>
+                    כלים מעשיים, ישימים מיד – לעבודה, ליצירה, ולחיים המתפתחים.
+                </p>
+                <div class="fresco-line"></div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 text-fresco-dark text-lg sm:text-xl">
+                    <div class="p-6 bg-fresco-light border-2 border-fresco-gold rounded-lg shadow-inner">
+                        <h4 class="text-2xl font-bold mb-4 text-fresco-terracotta">
+                            למחפשי ההתחלה
+                        </h4>
+                        <p>
+                            צעדים ראשונים בעולם ה-AI – ננגיש את המורכב, נחשוף את הפשטות.
+                        </p>
+                    </div>
+                    <div class="p-6 bg-fresco-light border-2 border-fresco-gold rounded-lg shadow-inner">
+                        <h4 class="text-2xl font-bold mb-4 text-fresco-terracotta">
+                            לאומני המלאכה
+                        </h4>
+                        <p>
+                            שילוב AI בעבודה יומיומית – להפוך את הישן לחדש, את המוכר למופלא.
+                        </p>
+                    </div>
+                    <div class="p-6 bg-fresco-light border-2 border-fresco-gold rounded-lg shadow-inner">
+                        <h4 class="text-2xl font-bold mb-4 text-fresco-terracotta">
+                            למנהיגי הדרך
+                        </h4>
+                        <p>
+                            הדרכות ארגוניות וצוותיות – להאיר נתיבים חדשים לחדשנות וצמיחה.
+                        </p>
+                    </div>
+                    <div class="p-6 bg-fresco-light border-2 border-fresco-gold rounded-lg shadow-inner">
+                        <h4 class="text-2xl font-bold mb-4 text-fresco-terracotta">
+                            לאדריכלי הפרויקטים
+                        </h4>
+                        <p>
+                            פיתוח מבוסס AI – מרישום רעיון ועד למימוש מלא, צעד אחר צעד.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Pillars of Wisdom / Expertise Areas -->
+        <section class="scroll-section max-w-5xl mx-auto">
+            <div class="fresco-frame breathe">
+                <h3 class="text-4xl sm:text-5xl font-bold text-fresco-dark text-center mb-10">
+                    עמודי התווך של היצירה הדיגיטלית
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-fresco-dark text-center">
+                    <div class="p-6 bg-fresco-medium bg-opacity-30 border-b-2 border-fresco-terracotta hover:border-fresco-gold transition-colors duration-300 rounded-lg shadow-md">
+                        <h4 class="text-2xl font-bold text-fresco-gold mb-3">אמנות המילים החכמות</h4>
+                        <p class="text-lg">יצירה ופיסול של טקסטים ותוכן בעזרת AI.</p>
+                    </div>
+                    <div class="p-6 bg-fresco-medium bg-opacity-30 border-b-2 border-fresco-terracotta hover:border-fresco-gold transition-colors duration-300 rounded-lg shadow-md">
+                        <h4 class="text-2xl font-bold text-fresco-gold mb-3">פיסול יישומים חכמים</h4>
+                        <p class="text-lg">בניית אפליקציות חכמות המגיבות לעולם.</p>
+                    </div>
+                    <div class="p-6 bg-fresco-medium bg-opacity-30 border-b-2 border-fresco-terracotta hover:border-fresco-gold transition-colors duration-300 rounded-lg shadow-md">
+                        <h4 class="text-2xl font-bold text-fresco-gold mb-3">אריגת מרחבים דיגיטליים</h4>
+                        <p class="text-lg">פיתוח אתרים המשלבים את קסם ה-AI.</p>
+                    </div>
+                    <div class="p-6 bg-fresco-medium bg-opacity-30 border-b-2 border-fresco-terracotta hover:border-fresco-gold transition-colors duration-300 rounded-lg shadow-md">
+                        <h4 class="text-2xl font-bold text-fresco-gold mb-3">פענוח תבניות הנסתר</h4>
+                        <p class="text-lg">ניתוח נתונים עמוק ומחקר מונע בינה.</p>
+                    </div>
+                    <div class="p-6 bg-fresco-medium bg-opacity-30 border-b-2 border-fresco-terracotta hover:border-fresco-gold transition-colors duration-300 rounded-lg shadow-md">
+                        <h4 class="text-2xl font-bold text-fresco-gold mb-3">צבעי המכונה, בד הדמיון</h4>
+                        <p class="text-lg">יצירת תמונות ואמנות חדשנית בעזרת AI.</p>
+                    </div>
+                    <div class="p-6 bg-fresco-medium bg-opacity-30 border-b-2 border-fresco-terracotta hover:border-fresco-gold transition-colors duration-300 rounded-lg shadow-md">
+                        <h4 class="text-2xl font-bold text-fresco-gold mb-3">הזרמת כוח המחשבה</h4>
+                        <p class="text-lg">אוטומציה של תהליכים להגברת היעילות.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Offerings / Services -->
+        <section class="scroll-section max-w-4xl mx-auto">
+            <div class="fresco-frame breathe">
+                <h3 class="text-4xl sm:text-5xl font-bold text-fresco-dark text-center mb-10">
+                    נתיבי ההתגלות
+                </h3>
+                <div class="space-y-8">
+                    <div class="flex flex-col sm:flex-row items-center bg-fresco-bg-medium bg-opacity-40 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border-r-4 border-fresco-terracotta">
+                        <h4 class="text-3xl font-bold text-fresco-gold mb-4 sm:mb-0 sm:mr-6 w-full sm:w-1/3 text-center sm:text-right">מפגשי קבוצת המאסטרים</h4>
+                        <p class="text-xl text-fresco-dark w-full sm:w-2/3 text-center sm:text-right">סדנאות מעשיות וממוקדות, לקבוצות המחפשות ידע עמוק וכלים יישומיים, באווירה של למידה משותפת.</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-center bg-fresco-bg-medium bg-opacity-40 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border-r-4 border-fresco-terracotta">
+                        <h4 class="text-3xl font-bold text-fresco-gold mb-4 sm:mb-0 sm:mr-6 w-full sm:w-1/3 text-center sm:text-right">חניכה אישית</h4>
+                        <p class="text-xl text-fresco-dark w-full sm:w-2/3 text-center sm:text-right">שיעורים פרטיים המותאמים אישית לרמת הידע ולצרכים הספציפיים שלך, במסע למידה פרטי וקפדני.</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-center bg-fresco-bg-medium bg-opacity-40 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border-r-4 border-fresco-terracotta">
+                        <h4 class="text-3xl font-bold text-fresco-gold mb-4 sm:mb-0 sm:mr-6 w-full sm:w-1/3 text-center sm:text-right">הארת דרכים לארגונים</h4>
+                        <p class="text-xl text-fresco-dark w-full sm:w-2/3 text-center sm:text-right">הרצאות והדרכות מותאמות אישית לארגונים, לפתוח אופקים חדשים ולצוותים לרכוש כלים למהפכה הדיגיטלית.</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row items-center bg-fresco-bg-medium bg-opacity-40 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 border-r-4 border-fresco-terracotta">
+                        <h4 class="text-3xl font-bold text-fresco-gold mb-4 sm:mb-0 sm:mr-6 w-full sm:w-1/3 text-center sm:text-right">ליווי היצירה</h4>
+                        <p class="text-xl text-fresco-dark w-full sm:w-2/3 text-center sm:text-right">ייעוץ ופיתוח פרויקטים מבוססי AI, ליווי מקצועי משלב הרעיון ועד למימוש והטמעה מוצלחים.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: The Master / Zevik Aviner -->
+        <section class="scroll-section max-w-4xl mx-auto">
+            <div class="fresco-frame breathe flex flex-col items-center p-8">
+                <h3 class="text-4xl sm:text-5xl font-bold text-fresco-dark text-center mb-10">
+                    המאסטר: זאביק אבינר
+                </h3>
+                <div class="flex flex-col md:flex-row items-center md:items-start text-center md:text-right">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר - מומחה בינה מלאכותית" class="w-48 h-48 rounded-full border-4 border-fresco-gold shadow-lg mb-8 md:mb-0 md:mr-8 flex-shrink-0 ancient-glow">
+                    <div class="flex-grow">
+                        <p class="text-xl sm:text-2xl text-fresco-terracotta mb-4">
+                            זאביק אבינר, <span class="font-semibold text-fresco-dark">אמן הבינה המלאכותית</span> ומוביל דרך בעולם הדיגיטלי, מביא עמו ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות חדשניות מבוססות AI.
+                        </p>
+                        <p class="text-lg sm:text-xl text-fresco-medium">
+                            כהנדסאי, זאביק מתמחה בגישור על הפער בין המורכבות הטכנולוגית לנגישות האנושית, בהפיכת טכנולוגיות עתידניות לכלים יומיומיים וישימים. הוא מאמין כי הידע הוא כוח, ובינה מלאכותית, כאשר היא נלמדת ומופעלת בחכמה, היא מפתח לשינוי ולהתפתחות אישית ומקצועית.
+                        </p>
+                        <div class="fresco-line-gold my-8"></div>
+                        <div class="flex flex-col sm:flex-row justify-center sm:justify-around items-center space-y-4 sm:space-y-0 text-xl font-semibold">
+                            <a href="https://wa.me/972546609385" target="_blank" class="hover-reveal text-fresco-terracotta" data-original="054-6609385">
+                                ווטסאפ
+                            </a>
+                            <a href="mailto:zaviner@gmail.com" class="hover-reveal text-fresco-terracotta" data-original="zaviner@gmail.com">
+                                אימייל
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Message / Call to Action (subtle) -->
+        <section class="scroll-section text-center max-w-3xl mx-auto py-16">
+            <p class="text-2xl sm:text-3xl text-fresco-dark font-semibold leading-loose breathe">
+                הצטרפו למסע אל לב הבינה – לחרוט, ליצור, ולשלוט בעתיד הנפרש לפנינו.
+            </p>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        document.addEventListener('mousedown', () => {
+            cursor.classList.add('active');
+        });
+
+        document.addEventListener('mouseup', () => {
+            cursor.classList.remove('active');
+        });
+
+        // Parallax Effect Logic for background layers
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            parallaxLayers.forEach(layer => {
+                const speed = parseFloat(layer.getAttribute('data-speed'));
+                const yPos = -(scrollY * speed);
+                layer.style.transform = `translateY(${yPos}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

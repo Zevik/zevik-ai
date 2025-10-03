@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>בינה מלאכותית: קתדרלה של קוד</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;700&family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans Hebrew', sans-serif;
+            background-color: #0d0d0d; /* Dark background for contrast */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            cursor: none; /* Hide default cursor */
+        }
+
+        /* Custom Cursor Styling - High Contrast Mandatory */
+        #custom-cursor {
+            pointer-events: none;
+            position: fixed;
+            border-radius: 9999px; /* Tailwind's rounded-full */
+            transition-property: transform;
+            transition-timing-function: ease-out;
+            transition-duration: 100ms;
+            z-index: 9999;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.9); /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.7); /* Dark shadow for contrast on both light/dark */
+        }
+
+        /* Stained Glass Pane Styling */
+        .pane {
+            position: absolute;
+            background-color: rgba(30, 0, 80, 0.2); /* Deep purple, semi-transparent */
+            border: 2px solid rgba(255, 255, 255, 0.1); /* Subtle white outline for "leaded glass" */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px); /* For Safari */
+            padding: 2.5rem; /* ~40px */
+            color: #e0e7ff; /* Light, slightly bluish white text - high contrast */
+            opacity: 0; /* Hidden initially */
+            transition: opacity 1s ease-out, transform 1s ease-out;
+            transform: scale(0.9) translateY(20px); /* Start slightly scaled down and shifted */
+            box-shadow: 0 0 20px rgba(0,0,0,0.3); /* Subtle shadow for depth */
+            direction: rtl; /* Ensure content inside panes is RTL */
+            text-align: right; /* Default text alignment within panes */
+        }
+
+        .pane.active {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+
+        /* Specific pane styles with clip-path and positions */
+        .pane-main-title {
+            top: 10vh;
+            right: 10vw;
+            width: 80vw;
+            max-width: 900px;
+            text-align: center;
+            clip-path: polygon(0% 0%, 100% 0%, 90% 100%, 10% 100%); /* Trapezoid */
+            background-color: rgba(60, 0, 120, 0.3); /* Darker purple */
+            border-color: rgba(255, 255, 255, 0.2);
+            z-index: 20;
+        }
+
+        .pane-message {
+            top: 35vh;
+            right: 15vw;
+            width: 70vw;
+            max-width: 700px;
+            clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%); /* Tilted trapezoid */
+            background-color: rgba(0, 50, 80, 0.25); /* Deep blue */
+            border-color: rgba(255, 255, 255, 0.15);
+            z-index: 18;
+            padding-top: 5rem; /* More padding to account for title pane overlap */
+            padding-bottom: 5rem;
+        }
+
+        .pane-audience-title {
+            top: 70vh;
+            left: 5vw;
+            width: 40vw;
+            max-width: 450px;
+            clip-path: polygon(0% 0%, 80% 0%, 100% 100%, 20% 100%); /* Asymmetric trapezoid */
+            background-color: rgba(80, 20, 0, 0.25); /* Deep red-orange */
+            border-color: rgba(255, 255, 255, 0.15);
+            z-index: 15;
+            text-align: center;
+        }
+
+        .pane-audience-list {
+            top: 85vh;
+            left: 8vw;
+            width: 50vw;
+            max-width: 600px;
+            clip-path: polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%); /* Another trapezoid */
+            background-color: rgba(0, 80, 30, 0.25); /* Emerald green */
+            border-color: rgba(255, 255, 255, 0.15);
+            z-index: 16;
+        }
+        
+        .pane-specialties-title {
+            top: 130vh;
+            right: 10vw;
+            width: 45vw;
+            max-width: 500px;
+            clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+            background-color: rgba(100, 0, 60, 0.25); /* Magenta */
+            border-color: rgba(255, 255, 255, 0.15);
+            z-index: 17;
+            text-align: center;
+        }
+
+        .pane-specialties-list {
+            top: 150vh;
+            right: 5vw;
+            width: 60vw;
+            max-width: 700px;
+            clip-path: polygon(0% 0%, 95% 0%, 100% 100%, 5% 100%);
+            background-color: rgba(0, 60, 100, 0.25); /* Cyan-blue */
+            border-color: rgba(255, 255, 255, 0.15);
+            z-index: 19;
+        }
+
+        .pane-services-title {
+            top: 190vh;
+            left: 10vw;
+            width: 40vw;
+            max-width: 450px;
+            clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 10% 100%);
+            background-color: rgba(80, 40, 0, 0.25); /* Amber */
+            border-color: rgba(255, 255, 255, 0.15);
+            z-index: 15;
+            text-align: center;
+        }
+
+        .pane-services-list {
+            top: 205vh;
+            left: 5vw;
+            width: 55vw;
+            max-width: 650px;
+            clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%);
+            background-color: rgba(30, 80, 0, 0.25); /* Olive green */
+            border-color: rgba(255, 255, 255, 0.15);
+            z-index: 16;
+        }
+
+        .pane-zevik-title {
+            top: 240vh;
+            right: 20vw;
+            width: 40vw;
+            max-width: 450px;
+            clip-path: polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%);
+            background-color: rgba(60, 0, 80, 0.25); /* Purple */
+            border-color: rgba(255, 255, 255, 0.15);
+            z-index: 17;
+            text-align: center;
+        }
+        
+        .pane-zevik-bio {
+            top: 260vh;
+          right: 15vw; /* Adjust from left to right for RTL layout */
+            width: 60vw;
+            max-width: 700px;
+            clip-path: polygon(0% 0%, 90% 0%, 100% 100%, 10% 100%);
+            background-color: rgba(0, 50, 80, 0.3); /* Darker blue */
+            border-color: rgba(255, 255, 255, 0.2);
+            z-index: 18;
+            display: flex; /* For image and text alignment */
+            gap: 2rem;
+            align-items: center;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+        .pane-zevik-bio img {
+            order: 2; /* Put image to the left in RTL flex context */
+        }
+        .pane-zevik-bio p {
+            order: 1; /* Put text to the right in RTL flex context */
+        }
+
+        .pane-contact {
+            top: 300vh;
+            left: 50%;
+            transform: translateX(50%); /* Adjust for RTL centering */
+            width: 50vw;
+            max-width: 600px;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); /* Hexagon */
+            background-color: rgba(80, 0, 0, 0.4); /* Glowing red */
+            border-color: rgba(255, 200, 200, 0.4);
+            text-align: center;
+            z-index: 20;
+            padding: 3rem 2rem;
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .pane {
+                padding: 1.5rem;
+                width: 90vw !important; /* Override specific width for smaller screens */
+                right: 5vw !important;
+                left: 5vw !important;
+                transform: translateX(0) scale(0.9) translateY(20px) !important; /* Reset transform for centering relative to 5vw */
+                clip-path: none !important; /* Simplify shapes on small screens */
+                border-radius: 10px;
+                text-align: center;
+                margin-bottom: 20px; /* Add some vertical spacing */
+            }
+            .pane-main-title { top: 5vh; }
+            .pane-message { top: 20vh; }
+            .pane-audience-title { top: 45vh; }
+            .pane-audience-list { top: 55vh; }
+            .pane-specialties-title { top: 85vh; }
+            .pane-specialties-list { top: 95vh; }
+            .pane-services-title { top: 130vh; }
+            .pane-services-list { top: 140vh; }
+            .pane-zevik-title { top: 175vh; }
+            .pane-zevik-bio { top: 185vh; flex-direction: column; gap: 1rem; padding: 1.5rem; }
+            .pane-zevik-bio img { order: 1; margin-bottom: 1rem; }
+            .pane-zevik-bio p { order: 2; }
+            .pane-contact { top: 220vh; transform: translateX(0) !important; width: 90vw !important; }
+        }
+
+        /* Canvas background styling */
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Ensures canvas is behind all content */
+        }
+    </style>
+</head>
+<body class="overflow-y-scroll">
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Background Canvas for dynamic light effects -->
+    <canvas id="background-canvas"></canvas>
+
+    <!-- Content Panes -->
+    <div id="pane-1" class="pane pane-main-title text-center">
+        <h1 class="font-amatic-sc text-5xl md:text-7xl font-bold mb-4 text-[#FFD700] drop-shadow-lg leading-tight">
+            הבינה המלאכותית: קתדרלה של קוד, אורה עולה מן השברים
+        </h1>
+    </div>
+
+    <div id="pane-2" class="pane pane-message text-center text-lg md:text-xl leading-relaxed">
+        <p class="mb-4">
+            העתיד שוכן עכשיו, אורו בוקע דרך שברי קוד ופוטנציאל אינסופי. אנו מזמינים אתכם לפסוע פנימה, אל תוך ליבת הבינה המלאכותית, ולגלות כיצד לפסל את המחר במו ידיכם.
+        </p>
+        <p class="font-bold text-xl md:text-2xl text-[#87CEEB]">
+            זאביק אבינר יאיר את דרככם במסע אל פסגת היצירה הדיגיטלית.
+        </p>
+    </div>
+
+    <div id="pane-3" class="pane pane-audience-title">
+        <h2 class="font-amatic-sc text-4xl md:text-5xl font-bold mb-4 text-[#FFA07A] drop-shadow-lg">
+            למי הקתדרלה הזו נבנית?
+        </h2>
+    </div>
+
+    <div id="pane-4" class="pane pane-audience-list text-lg md:text-xl">
+        <ul class="list-none space-y-3">
+            <li class="flex items-start gap-2 text-right">
+                <span class="text-2xl text-[#98FB98] mr-2 transform rotate-12">&#9670;</span>
+                לשוחרים הראשונים, המבקשים להביט באור לראשונה- להתחיל את המסע בעולם ה-AI.
+            </li>
+            <li class="flex items-start gap-2 text-right">
+                <span class="text-2xl text-[#ADD8E6] mr-2 transform -rotate-12">&#9670;</span>
+                לאדריכלי ההווה, המבקשים לשלב את קרני הבינה במבניהם הקיימים- אנשי מקצוע המעוניינים להטמיע AI.
+            </li>
+            <li class="flex items-start gap-2 text-right">
+                <span class="text-2xl text-[#FFB6C1] mr-2 transform rotate-6">&#9670;</span>
+                למנהיגי חזון, המבקשים להאיר את נתיב צוותיהם לעבר פסגות חדשות- מנהלים וארגונים.
+            </li>
+            <li class="flex items-start gap-2 text-right">
+                <span class="text-2xl text-[#F0E68C] mr-2 transform -rotate-6">&#9670;</span>
+                לבוני המחר, אלה שרוצים ליצור פרויקטים פורצי דרך מתוך לב הבינה- פיתוח פרויקטים מתקדמים.
+            </li>
+        </ul>
+    </div>
+
+    <div id="pane-5" class="pane pane-specialties-title">
+        <h2 class="font-amatic-sc text-4xl md:text-5xl font-bold mb-4 text-[#DA70D6] drop-shadow-lg">
+            קרני אור-ידע הנשברות דרך הבינה
+        </h2>
+    </div>
+
+    <div id="pane-6" class="pane pane-specialties-list text-lg md:text-xl">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <p><span class="text-3xl text-[#00FFFF] mr-2">&#9670;</span> <strong class="text-[#00FFFF]">פסל טקסטים ותוכן</strong> - ליצור מילים שיש בהן חיים.</p>
+            <p><span class="text-3xl text-[#FF8C00] mr-2">&#9670;</span> <strong class="text-[#FF8C00]">בניית מבנים חכמים</strong> - לאפליקציות שחושבות ופועלות.</p>
+            <p><span class="text-3xl text-[#32CD32] mr-2">&#9670;</span> <strong class="text-[#32CD32]">אריגת רשתות בינה</strong> - פיתוח אתרים המוארים ב-AI.</p>
+            <p><span class="text-3xl text-[#6A5ACD] mr-2">&#9670;</span> <strong class="text-[#6A5ACD]">פענוח דפוסי אור</strong> - ניתוח נתונים ומחקר מעמיק.</p>
+            <p><span class="text-3xl text-[#FF69B4] mr-2">&#9670;</span> <strong class="text-[#FF69B4]">צייר תמונות ונפלאות</strong> - יצירת אמנות ויזואלית בעזרת בינה.</p>
+            <p><span class="text-3xl text-[#FFA500] mr-2">&#9670;</span> <strong class="text-[#FFA500]">סדר את זרימת האור</strong> - אוטומציה של תהליכים משעממים.</p>
+        </div>
+    </div>
+
+    <div id="pane-7" class="pane pane-services-title">
+        <h2 class="font-amatic-sc text-4xl md:text-5xl font-bold mb-4 text-[#FFDAB9] drop-shadow-lg">
+            שערים אל הקתדרלה
+        </h2>
+    </div>
+
+    <div id="pane-8" class="pane pane-services-list text-lg md:text-xl">
+        <ul class="list-none space-y-3">
+            <li class="flex items-start gap-2 text-right">
+                <span class="text-2xl text-[#87CEFA] mr-2 transform rotate-8">&#9670;</span>
+                <strong class="text-[#87CEFA]">סדנאות פסיפס קבוצתיות</strong> - ללמוד יחד, ליצור יחד, מעשיות וממוקדות.
+            </li>
+            <li class="flex items-start gap-2 text-right">
+                <span class="text-2xl text-[#FFD700] mr-2 transform -rotate-8">&#9670;</span>
+                <strong class="text-[#FFD700]">שיעורים אישיים</strong> - מסלול אור פרטי, מותאם לרמה ולצרכים הייחודיים שלך.
+            </li>
+            <li class="flex items-start gap-2 text-right">
+                <span class="text-2xl text-[#ADFF2F] mr-2 transform rotate-4">&#9670;</span>
+                <strong class="text-[#ADFF2F]">הרצאות מוארות לארגונים</strong> - פתיחת אופקים חדשים לצוותים והבאת אור הבינה לכל פינה.
+            </li>
+            <li class="flex items-start gap-2 text-right">
+                <span class="text-2xl text-[#FF6347] mr-2 transform -rotate-4">&#9670;</span>
+                <strong class="text-[#FF6347]">ייעוץ ופיתוח פרויקטים</strong> - ליווי צמוד בבניית המקדש האישי או הארגוני שלך, מפיתוח ועד יישום.
+            </li>
+        </ul>
+    </div>
+
+    <div id="pane-9" class="pane pane-zevik-title">
+        <h2 class="font-amatic-sc text-4xl md:text-5xl font-bold mb-4 text-[#BA55D3] drop-shadow-lg">
+            האמן הפוסע בתוך האור – זאביק אבינר
+        </h2>
+    </div>
+
+    <div id="pane-10" class="pane pane-zevik-bio text-lg md:text-xl">
+        <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר" class="w-32 h-32 rounded-full border-4 border-white object-cover flex-shrink-0" />
+        <p class="flex-grow">
+            אמן הבינה המלאכותית, שנותיו ארוגות בחוטי קוד ויצירה. זאביק הוא המדריך שלכם במסע דרך הקשת הדיגיטלית, מפסל את המורכבות לכדי בהירות ונגישות, הופך כל שבר לכלי עבודה יומיומי. ניסיונו העשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI מבטיח חניכה מעמיקה ופרקטית.
+        </p>
+    </div>
+
+    <div id="pane-11" class="pane pane-contact text-xl md:text-2xl">
+        <h2 class="font-amatic-sc text-5xl md:text-6xl font-bold mb-6 text-[#FF4500] drop-shadow-lg">
+            הישג יד – להצטרף למסע
+        </h2>
+        <p class="mb-4">לכל שאלה, רצון או חלום, דלתות הקתדרלה פתוחות:</p>
+        <p class="font-bold mb-2">
+            <span class="text-[#87CEFA]">&#9993;</span> אימייל: <a href="mailto:zaviner@gmail.com" class="hover:underline text-[#87CEFA]">zaviner@gmail.com</a>
+        </p>
+        <p class="font-bold">
+            <span class="text-[#98FB98]">&#128222;</span> ווטסאפ: <a href="https://wa.me/972546609385" target="_blank" class="hover:underline text-[#98FB98]">054-6609385</a>
+        </p>
+    </div>
+
+
+    <script>
+        // Custom Cursor
+        document.addEventListener('DOMContentLoaded', () => {
+            const cursor = document.getElementById('custom-cursor');
+
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = `${e.clientX - 10}px`; // Adjust for half cursor width
+                cursor.style.top = `${e.clientY - 10}px`;  // Adjust for half cursor height
+            });
+
+            // Pane Intersection Observer for scroll animation
+            const panes = document.querySelectorAll('.pane');
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: '0px',
+                threshold: 0.1 // 10% of the pane must be visible
+            };
+
+            const paneObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+
+            panes.forEach(pane => {
+                paneObserver.observe(pane);
+            });
+
+            // Canvas Background Animation - Fractured Light/Stained Glass Effect
+            const canvas = document.getElementById('background-canvas');
+            const ctx = canvas.getContext('2d');
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            function drawFragment(x, y, size, angle, color, alpha) {
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(angle);
+                ctx.beginPath();
+                ctx.moveTo(0, -size / 2);
+                ctx.lineTo(size / 2, size / 2);
+                ctx.lineTo(-size / 2, size / 2);
+                ctx.closePath();
+                ctx.fillStyle = `rgba(${color}, ${alpha})`;
+                ctx.fill();
+                ctx.restore();
+            }
+
+            let fragments = [];
+            const numFragments = 100;
+            const jewelColors = [
+                '75,0,130',   // Deep Violet
+                '0,0,139',    // Dark Blue
+                '0,100,0',    // Dark Green
+                '139,0,0',    // Dark Red
+                '255,140,0',  // Dark Orange
+                '72,61,139',  // Slate Blue
+                '0,128,128'   // Teal
+            ];
+
+            function initFragments() {
+                fragments = [];
+                for (let i = 0; i < numFragments; i++) {
+                    fragments.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        size: 20 + Math.random() * 80,
+                        angle: Math.random() * Math.PI * 2,
+                        speed: 0.005 + Math.random() * 0.015,
+                        color: jewelColors[Math.floor(Math.random() * jewelColors.length)],
+                        alpha: 0.05 + Math.random() * 0.15,
+                        dx: (Math.random() - 0.5) * 0.5,
+                        dy: (Math.random() - 0.5) * 0.5
+                    });
+                }
+            }
+
+            initFragments();
+
+            function animateBackground() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas each frame
+
+                ctx.fillStyle = 'rgba(13, 13, 13, 0.4)'; // Subtle dark overlay for stained glass feel
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                fragments.forEach(f => {
+                    f.angle += f.speed;
+                    f.x += f.dx;
+                    f.y += f.dy;
+
+                    // Wrap around canvas
+                    if (f.x > canvas.width + f.size) f.x = -f.size;
+                    if (f.x < -f.size) f.x = canvas.width + f.size;
+                    if (f.y > canvas.height + f.size) f.y = -f.size;
+                    if (f.y < -f.size) f.y = canvas.height + f.size;
+
+                    // Slight pull towards mouse position for subtle interactivity
+                    const dxToMouse = (mouseX - f.x) / 10000;
+                    const dyToMouse = (mouseY - f.y) / 10000;
+                    f.x += dxToMouse;
+                    f.y += dyToMouse;
+
+                    drawFragment(f.x, f.y, f.size, f.angle, f.color, f.alpha);
+                });
+
+                requestAnimationFrame(animateBackground);
+            }
+
+            animateBackground();
+        });
+    </script>
+</body>
+</html>

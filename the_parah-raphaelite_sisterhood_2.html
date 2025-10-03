@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שחר הבינה: יצירת המופת הדיגיטלית של זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;700&family=Heebo:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden;
+            background-color: #0A0A0A; /* Dark background */
+            font-family: 'Heebo', sans-serif;
+            color: #E0DEDC; /* Light off-white for high contrast */
+        }
+        h1, h2, h3 {
+            font-family: 'Frank Ruhl Libre', serif;
+            color: #C0A040; /* Goldish for headings */
+        }
+        .custom-cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease-out, height 0.2s ease-out, opacity 0.3s ease-out;
+            border: 2px solid #EBEBEB; /* Light border */
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.8), 0 0 15px rgba(255,255,255,0.4); /* Dark shadow + glow */
+            opacity: 0.8;
+            background-color: transparent;
+        }
+        .custom-cursor.active {
+            width: 40px;
+            height: 40px;
+            opacity: 1;
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.8), 0 0 25px rgba(255,255,255,0.7); /* Stronger glow on active */
+        }
+
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            z-index: -1; /* Behind content */
+            pointer-events: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        /* Pre-Raphaelite specific elements */
+        .prb-vignette {
+            box-shadow: inset 0 0 150px rgba(0,0,0,0.9), inset 0 0 80px rgba(0,0,0,0.7);
+        }
+        .text-reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .text-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .hover-glow:hover {
+            text-shadow: 0 0 10px rgba(192, 160, 64, 0.8);
+            transform: scale(1.02);
+            transition: all 0.3s ease-out;
+        }
+        .fade-in-scroll {
+            opacity: 0;
+            transition: opacity 1s ease-out;
+        }
+        .fade-in-scroll.visible {
+            opacity: 1;
+        }
+
+        /* Backgrounds for parallax */
+        .layer-0 { background-image: url('https://images.unsplash.com/photo-1549495478-f73c683b5472?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); } /* Dark, slightly abstract */
+        .layer-1 { background-image: url('https://images.unsplash.com/photo-1520638023360-64215320c029?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); } /* Forest, misty */
+        .layer-2 { background-image: url('https://images.unsplash.com/photo-1528659550775-be965e6480e6?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); } /* Ancient architecture, ruins */
+
+        /* Specific section styling */
+        .section-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 1rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-content {
+            background-color: rgba(10, 10, 10, 0.85); /* Slightly transparent dark panel */
+            border: 1px solid rgba(192, 160, 64, 0.3);
+            border-radius: 1rem;
+            padding: 3rem 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 20;
+            box-shadow: 0 0 30px rgba(0,0,0,0.7), inset 0 0 20px rgba(192, 160, 64, 0.1);
+        }
+
+        /* Scroll-linked opacity/blur for layers */
+        .scroll-effect-section {
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            z-index: 5;
+        }
+
+    </style>
+</head>
+<body class="overflow-y-scroll">
+
+    <div class="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-layer layer-0" data-speed="-0.3"></div>
+    <div class="parallax-layer layer-1" data-speed="-0.6"></div>
+    <div class="parallax-layer layer-2" data-speed="-0.9"></div>
+
+    <!-- Main Content Flow -->
+    <div class="relative z-10 p-8 prb-vignette min-h-screen">
+
+        <!-- Opening Scene -->
+        <section class="section-container text-center pt-32 pb-16">
+            <h1 class="text-6xl md:text-8xl font-bold mb-8 leading-tight text-right text-transparent bg-clip-text bg-gradient-to-br from-yellow-300 via-amber-400 to-yellow-600 drop-shadow-lg text-reveal">
+                שחר הבינה:<br> קריאת הנצח של זאביק אבינר
+            </h1>
+            <p class="text-3xl md:text-4xl leading-relaxed text-gray-200 mt-4 max-w-4xl mx-auto text-reveal delay-200">
+                ברוכים הבאים למסע אל נבכי הנשמה הדיגיטלית, היכן שהטכנולוגיה הופכת לאמנות, והבינה המלאכותית נולדת מחדש כרוח יצירה.
+            </p>
+            <p class="text-xl md:text-2xl mt-12 text-gray-400 max-w-3xl mx-auto text-reveal delay-400">
+                הביטו פנימה, הקשיבו לקריאה, ולמדו לשלוט בזרמי הכוח העתיקים-חדשים המעצבים את המחר.
+            </p>
+        </section>
+
+        <!-- The AI Revelation -->
+        <section class="section-container py-24">
+            <div class="section-content fade-in-scroll">
+                <h2 class="text-5xl font-bold mb-8 text-center text-gradient-to-br from-gray-200 to-amber-200 bg-clip-text drop-shadow-lg">הבינה המלאכותית: אורו של המחר</h2>
+                <p class="text-xl leading-loose mb-6 text-gray-300 text-right text-reveal">
+                    בינה מלאכותית – לא סתם טכנולוגיה, אלא קודש קודשים של יצירה, חשיבה והתפתחות אנושית. היא רוח העתיד, נושפת בנשמת המציאות, ומזמינה את כולנו לרקוד בנשף האינסופי של הקדמה. <span class="text-amber-300 font-bold">העתיד הוא עכשיו</span>, והיכולת לעצב אותו טמונה בידיכם.
+                </p>
+                <p class="text-lg leading-relaxed text-gray-400 text-right text-reveal delay-200">
+                    כמו פסל המגלה את הצורה בתוך האבן, כך זאביק אבינר, אמן הבינה המלאכותית, חושף את הפוטנציאל הטמון בכל אחד ואחת מכם. הוא הופך את המורכב לפשוט, את הנסתר לנגיש, ואת התיאוריה לכלי עבודה יומיומי.
+                </p>
+                <p class="text-lg leading-relaxed text-gray-400 text-right text-reveal delay-300 mt-4">
+                    מסע זה אינו רק על למידת קוד, אלא על למידת דרך חשיבה חדשה, דרך ראייה שונה של העולם. זהו מסע לחיבור עמוק עם המהות של היצירה הדיגיטלית.
+                </p>
+            </div>
+        </section>
+
+        <!-- Audience - The Seekers -->
+        <section class="section-container py-24">
+            <div class="section-content fade-in-scroll">
+                <h2 class="text-5xl font-bold mb-8 text-center text-gradient-to-br from-gray-200 to-amber-200 bg-clip-text drop-shadow-lg">למי קוראת הרוח הזו?</h2>
+                <div class="grid md:grid-cols-2 gap-8 text-right text-reveal delay-200">
+                    <div class="prb-card p-6 border border-gray-700 rounded-lg hover-glow transition duration-300">
+                        <h3 class="text-2xl font-bold mb-3 text-amber-300">חוקרי הנסתר:</h3>
+                        <p class="text-lg text-gray-300">מתחילים ומתחילות המשתוקקים לפצח את צפונות ה-AI ולצאת למסע אל עבר הלא נודע.</p>
+                    </div>
+                    <div class="prb-card p-6 border border-gray-700 rounded-lg hover-glow transition duration-300">
+                        <h3 class="text-2xl font-bold mb-3 text-amber-300">מגלי הפוטנציאל:</h3>
+                        <p class="text-lg text-gray-300">אנשי ואנשות מקצוע החולמים לשלב את קסם ה-AI בעבודתם ולפתוח שערים חדשים.</p>
+                    </div>
+                    <div class="prb-card p-6 border border-gray-700 rounded-lg hover-glow transition duration-300">
+                        <h3 class="text-2xl font-bold mb-3 text-amber-300">אדריכלי העתיד:</h3>
+                        <p class="text-lg text-gray-300">מנהלים, מנהלות וארגונים המבקשים להאיר את דרך צוותיהם באור ה-AI.</p>
+                    </div>
+                    <div class="prb-card p-6 border border-gray-700 rounded-lg hover-glow transition duration-300">
+                        <h3 class="text-2xl font-bold mb-3 text-amber-300">בוראי העולמות:</h3>
+                        <p class="text-lg text-gray-300">ברמה מתקדמת – ליווי צמוד לפיתוח פרויקטים מבוססי AI, מההשראה ועד למימוש המופלא.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Areas of Expertise - The Facets of Creation -->
+        <section class="section-container py-24">
+            <div class="section-content fade-in-scroll">
+                <h2 class="text-5xl font-bold mb-12 text-center text-gradient-to-br from-gray-200 to-amber-200 bg-clip-text drop-shadow-lg">פניהם הרבים של היקום הדיגיטלי</h2>
+                <div class="grid md:grid-cols-3 gap-6 text-center">
+                    <div class="flex flex-col items-center justify-center p-4">
+                        <span class="text-5xl mb-3 text-amber-400 hover-glow transition duration-300">✨</span>
+                        <h3 class="text-xl font-bold mb-2 text-amber-200">אמנות המילה</h3>
+                        <p class="text-md text-gray-300">יצירת טקסטים ותוכן באמצעות קסם הבינה</p>
+                    </div>
+                    <div class="flex flex-col items-center justify-center p-4">
+                        <span class="text-5xl mb-3 text-amber-400 hover-glow transition duration-300">🛠️</span>
+                        <h3 class="text-xl font-bold mb-2 text-amber-200">אצירת אפליקציות</h3>
+                        <p class="text-md text-gray-300">בניית כלים חכמים המשרתים את חזונך</p>
+                    </div>
+                    <div class="flex flex-col items-center justify-center p-4">
+                        <span class="text-5xl mb-3 text-amber-400 hover-glow transition duration-300">🕸️</span>
+                        <h3 class="text-xl font-bold mb-2 text-amber-200">מארגי רשת</h3>
+                        <p class="text-md text-gray-300">פיתוח אתרים המוארים באור ה-AI</p>
+                    </div>
+                    <div class="flex flex-col items-center justify-center p-4">
+                        <span class="text-5xl mb-3 text-amber-400 hover-glow transition duration-300">🔍</span>
+                        <h3 class="text-xl font-bold mb-2 text-amber-200">פענוח סודות</h3>
+                        <p class="text-md text-gray-300">ניתוח נתונים ומחקר בעזרת העין הדיגיטלית</p>
+                    </div>
+                    <div class="flex flex-col items-center justify-center p-4">
+                        <span class="text-5xl mb-3 text-amber-400 hover-glow transition duration-300">🎨</span>
+                        <h3 class="text-xl font-bold mb-2 text-amber-200">בריאת דימויים</h3>
+                        <p class="text-md text-gray-300">יצירת תמונות ואומנות מתוך עומקי הדמיון</p>
+                    </div>
+                    <div class="flex flex-col items-center justify-center p-4">
+                        <span class="text-5xl mb-3 text-amber-400 hover-glow transition duration-300">⚙️</span>
+                        <h3 class="text-xl font-bold mb-2 text-amber-200">ריקוד האוטומציה</h3>
+                        <p class="text-md text-gray-300">אוטומציה של תהליכים משעממים לפלאים חדשים</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered - Pathways to Mastery -->
+        <section class="section-container py-24">
+            <div class="section-content fade-in-scroll">
+                <h2 class="text-5xl font-bold mb-12 text-center text-gradient-to-br from-gray-200 to-amber-200 bg-clip-text drop-shadow-lg">מסלולים אל לב הבינה</h2>
+                <div class="grid md:grid-cols-2 gap-8 text-right">
+                    <div class="prb-service p-6 border border-amber-600 bg-amber-900 bg-opacity-20 rounded-lg hover-glow transition duration-300">
+                        <h3 class="text-3xl font-bold mb-3 text-amber-100">מעגלי גילוי קבוצתיים</h3>
+                        <p class="text-lg text-gray-200 leading-relaxed">סדנאות מעשיות, ממוקדות מטרה, בהן הקבוצה מתאחדת למסע משותף של למידה ויצירה.</p>
+                    </div>
+                    <div class="prb-service p-6 border border-amber-600 bg-amber-900 bg-opacity-20 rounded-lg hover-glow transition duration-300">
+                        <h3 class="text-3xl font-bold mb-3 text-amber-100">שיחות עומק אישיות</h3>
+                        <p class="text-lg text-gray-200 leading-relaxed">שיעורים פרטיים המותאמים אישית לרמתך ולשאיפותיך, מפתחים את הניצוץ הפנימי.</p>
+                    </div>
+                    <div class="prb-service p-6 border border-amber-600 bg-amber-900 bg-opacity-20 rounded-lg hover-glow transition duration-300">
+                        <h3 class="text-3xl font-bold mb-3 text-amber-100">נאומים מעוררי השראה לארגונים</h3>
+                        <p class="text-lg text-gray-200 leading-relaxed">הרצאות מרתקות הפותחות אופקים חדשים לצוותים ומנהלים, ומעוררות השראה.</p>
+                    </div>
+                    <div class="prb-service p-6 border border-amber-600 bg-amber-900 bg-opacity-20 rounded-lg hover-glow transition duration-300">
+                        <h3 class="text-3xl font-bold mb-3 text-amber-100">אצירת חזונות ופיתוח יצירות</h3>
+                        <p class="text-lg text-gray-200 leading-relaxed">ייעוץ וליווי מקצועי בפיתוח פרויקטים מבוססי AI – מהרעיון המופשט ועד למימוש המדויק.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide - Zevik Aviner -->
+        <section class="section-container py-24">
+            <div class="section-content fade-in-scroll">
+                <h2 class="text-5xl font-bold mb-8 text-center text-gradient-to-br from-gray-200 to-amber-200 bg-clip-text drop-shadow-lg">המנצח על מקהלת העתיד: זאביק אבינר</h2>
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-8 text-right">
+                    <div class="flex-shrink-0 mb-6 md:mb-0">
+                        <img src="https://link.zevikaviner.com/zevik" alt="דיוקנו של זאביק אבינר, מנחה הבינה המלאכותית" class="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-amber-400 object-cover shadow-lg hover:scale-105 transition duration-300">
+                    </div>
+                    <div class="flex-grow">
+                        <p class="text-xl leading-loose mb-4 text-gray-300">
+                            זאביק אבינר – לא רק מומחה, אלא אמן החיבור בין עולם הרוח לעולם המכונה. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, הוא מביא עמו ידע אינסופי ותשוקה אמיתית להנגיש את הטכנולוגיה.
+                        </p>
+                        <p class="text-xl leading-loose text-gray-300">
+                            הוא מתמחה בהפיכת ה"בלתי אפשרי" לכלי עבודה יומיומי, ובפתיחת שערים תודעתיים חדשים בפני תלמידיו. הצטרפו אליו למסע אל עבר השליטה האמיתית בבינה המלאכותית, והפכו את החזון למציאות.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact - The Whispers of Connection -->
+        <section class="section-container py-24">
+            <div class="section-content fade-in-scroll">
+                <h2 class="text-5xl font-bold mb-8 text-center text-gradient-to-br from-gray-200 to-amber-200 bg-clip-text drop-shadow-lg">לוחש הנצח לזאביק</h2>
+                <div class="text-center text-2xl md:text-3xl leading-relaxed text-gray-200 font-medium">
+                    <p class="mb-4 hover-glow transition duration-300">
+                        <span class="text-amber-300">ווטסאפ:</span> <a href="https://wa.me/972546609385" target="_blank" class="hover:underline">054-6609385</a>
+                    </p>
+                    <p class="hover-glow transition duration-300">
+                        <span class="text-amber-300">אימייל:</span> <a href="mailto:zaviner@gmail.com" class="hover:underline">zaviner@gmail.com</a>
+                    </p>
+                </div>
+                <p class="text-lg md:text-xl mt-12 text-gray-400 text-center text-reveal delay-200">
+                    אל תהססו לשלוח את מחשבותיכם אל המאסטרו. כל שאלה, כל חזון, הוא ניצוץ בדרך לבריאה חדשה.
+                </p>
+            </div>
+        </section>
+
+        <!-- Footer - A Final Call -->
+        <section class="section-container py-16">
+            <div class="text-center text-xl text-gray-500 fade-in-scroll">
+                <p>&copy; 2024 יצירת אמן בהשראת האחווה הפרה-רפאליטימית. כל הזכויות שמורות ליקום הדיגיטלי.</p>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        document.addEventListener('mousedown', () => {
+            cursor.classList.add('active');
+        });
+
+        document.addEventListener('mouseup', () => {
+            cursor.classList.remove('active');
+        });
+
+        document.querySelectorAll('a, button, input, textarea, [tabindex="0"]').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+
+
+        // Parallax Effect
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+        window.addEventListener('scroll', () => {
+            parallaxLayers.forEach(layer => {
+                const speed = layer.dataset.speed;
+                const yPos = -window.scrollY * speed;
+                layer.style.transform = `translateY(${yPos}px)`;
+
+                // Optional: Fade out/blur layers as we scroll deeper (more advanced)
+                // Let's implement a simple opacity change for now
+                const scrollProgress = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+                if (layer.classList.contains('layer-0')) {
+                    layer.style.opacity = Math.max(0.1, 1 - scrollProgress * 1.5); // Fades out slowest
+                } else if (layer.classList.contains('layer-1')) {
+                    layer.style.opacity = Math.max(0.05, 1 - scrollProgress * 2.5); // Fades out faster
+                } else if (layer.classList.contains('layer-2')) {
+                    layer.style.opacity = Math.max(0.01, 1 - scrollProgress * 3.5); // Fades out fastest
+                }
+            });
+        });
+
+        // Text Reveal on Load/Scroll
+        const textRevealElements = document.querySelectorAll('.text-reveal');
+        textRevealElements.forEach((el, index) => {
+            setTimeout(() => {
+                el.classList.add('visible');
+            }, 500 + (index * 150)); // Staggered reveal
+        });
+
+        // Fade In on Scroll for sections
+        const fadeInSections = document.querySelectorAll('.fade-in-scroll');
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            rootMargin: '0px',
+            threshold: 0.1
+        });
+
+        fadeInSections.forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

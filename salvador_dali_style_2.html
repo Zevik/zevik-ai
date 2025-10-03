@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שעון החלומות של הבינה המלאכותית</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind Configuration for Custom Fonts and Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        cinzel: ['"Cinzel Decorative"', 'serif'],
+                        lora: ['Lora', 'serif'],
+                    },
+                    colors: {
+                        'deep-night': '#0d0c1d', /* Dark, cosmic blue */
+                        'dali-purple': '#3e2a5f',
+                        'dali-amber': '#fbbf24',
+                        'dali-sand': '#b45309',
+                    },
+                    boxShadow: {
+                        '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.6), 0 15px 30px -5px rgba(0, 0, 0, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;770&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    <style>
+        /* Base Tailwind directives */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        /* General Body Styling */
+        body {
+            font-family: 'Lora', serif;
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            background-color: #0d0c1d; /* Deep dark blue for base background */
+            scroll-behavior: smooth;
+        }
+
+        /* Custom Cursor Styling - Mandatory high-contrast technique */
+        #custom-cursor {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            pointer-events: none;
+            position: fixed;
+            z-index: 9999;
+            transition: transform 0.15s ease-out; /* Smooth movement */
+            border: 2px solid #FFFFFF; /* White border for visibility */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), /* Dark outer shadow for visibility */
+                        0 0 10px 5px rgba(255,255,255,0.2); /* Soft inner glow */
+            transform: translate(-50%, -50%); /* Center cursor correctly */
+            backdrop-filter: invert(100%); /* Dali-esque color inversion on hover */
+            -webkit-backdrop-filter: invert(100%);
+        }
+
+        /* Parallax layers for background depth */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -10; /* Lower z-index for background layers */
+            will-change: transform; /* Optimize for animation */
+        }
+
+        /* Dali-esque specific styles */
+        .dali-text-shadow {
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7), -2px -2px 4px rgba(255, 255, 255, 0.1);
+        }
+        .dali-glass-effect {
+            background-color: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(8px) saturate(180%);
+            -webkit-backdrop-filter: blur(8px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+        .dali-gradient-section {
+            background: linear-gradient(145deg, #1a152e 0%, #3e2a5f 30%, #5d407d 60%, #8b6eaf 100%);
+        }
+
+        /* Animations for surreal movement */
+        @keyframes subtleFloat {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(0.5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .animate-subtle-float {
+            animation: subtleFloat 8s ease-in-out infinite;
+        }
+        .animate-subtle-float-delay {
+            animation: subtleFloat 10s ease-in-out infinite;
+            animation-delay: 2s;
+        }
+
+        /* Image distortion on scroll */
+        .image-distort {
+            transition: transform 0.5s ease-out, filter 0.5s ease-out, box-shadow 0.5s ease-out;
+            will-change: transform, filter, box-shadow;
+        }
+        .image-distort img {
+            transition: transform 0.5s ease-out, filter 0.5s ease-out;
+            will-change: transform, filter;
+        }
+    </style>
+</head>
+<body class="text-gray-100 selection:bg-dali-amber selection:text-deep-night">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Layers (Dali-esque desert/sky) -->
+    <div id="parallax-sky" class="parallax-layer bg-gradient-to-t from-deep-night to-purple-950 opacity-90"></div>
+    <div id="parallax-mountains" class="parallax-layer z-[-9]">
+        <div class="absolute bottom-0 w-full h-1/2 md:h-2/3 bg-gradient-to-t from-dali-sand to-amber-700 opacity-80" style="clip-path: polygon(0 100%, 15% 50%, 30% 70%, 50% 30%, 70% 80%, 85% 40%, 100% 100%);"></div>
+    </div>
+    <div id="parallax-clouds" class="parallax-layer z-[-8]">
+        <div class="absolute top-1/4 left-1/2 w-1/3 h-1/4 bg-gray-300 opacity-10 rounded-full blur-xl animate-subtle-float" style="transform: translateX(-50%) rotate(10deg);"></div>
+        <div class="absolute top-1/2 right-1/4 w-1/4 h-1/5 bg-gray-300 opacity-10 rounded-full blur-xl animate-subtle-float-delay" style="transform: rotate(-5deg);"></div>
+    </div>
+
+    <!-- Main Content Wrapper - Scrollable -->
+    <div class="relative z-10 min-h-screen pt-16 pb-32 flex flex-col items-center">
+
+        <!-- Title Section - Floating & Distorted -->
+        <section class="max-w-4xl mx-auto p-8 my-20 dali-glass-effect text-center animate-subtle-float-delay" style="font-family: 'Cinzel Decorative', serif; transform: perspective(1000px) rotateX(10deg);">
+            <h1 class="text-6xl md:text-8xl font-extrabold mb-6 dali-text-shadow text-dali-amber leading-tight">
+                שעון החלומות של הבינה המלאכותית
+            </h1>
+            <h2 class="text-3xl md:text-4xl text-purple-200 dali-text-shadow">
+                ניווט במבוך התודעה הדיגיטלית
+            </h2>
+        </section>
+
+        <!-- Intro Text - Appears to emerge from the void -->
+        <section class="max-w-3xl mx-auto p-6 md:p-8 my-16 bg-gradient-to-tr from-purple-900 to-indigo-900 text-gray-200 rounded-3xl shadow-2xl relative overflow-hidden">
+            <p class="text-xl md:text-2xl leading-relaxed text-right relative z-10">
+                ברוכים הבאים למרחבי התודעה המלאכותית – היכן שהלוגיקה רוקדת עם הפנטזיה, והקוד הופך לחלום חי.
+                כאן, הזמן מתפתל והרעיונות פורחים כפרחים במדבר נשגב.
+                <br><br>
+                הבינה המלאכותית – לא כלי, כי אם ממד חדש של מציאות.
+                אנו מזמינים אתכם לפענח את סודותיה, לרתום את כוחה, ולצייר את עתידכם בידיה.
+                ממסע התחלתי ועד יצירה מתקדמת – כלים ישימים שיפצלו את המציאות ויאפשרו לכם לעצב אותה מחדש.
+            </p>
+        </section>
+
+        <!-- Audience Section - Floating platforms -->
+        <section class="max-w-5xl mx-auto my-20 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 p-8 relative" style="transform: perspective(1500px) rotateX(5deg);">
+            <div class="col-span-full text-center mb-10">
+                <h3 class="text-4xl font-bold text-dali-amber dali-text-shadow" style="font-family: 'Cinzel Decorative', serif;">
+                    למי מיועד המסע המטאפיזי הזה?
+                </h3>
+            </div>
+            
+            <div class="p-8 dali-glass-effect text-center hover:scale-105 transition-transform duration-500 animate-subtle-float">
+                <h4 class="text-2xl font-semibold mb-4 text-white">מגלי הלא-נודע</h4>
+                <p class="text-lg text-gray-300">
+                    למי שמחפש את מפת הדרכים במדבר הנתונים, להכיר את עולם ה-AI מהיסוד ולהבין את שפת חלומותיו.
+                </p>
+            </div>
+            <div class="p-8 dali-glass-effect text-center hover:scale-105 transition-transform duration-500 animate-subtle-float" style="animation-delay: 1s;">
+                <h4 class="text-2xl font-semibold mb-4 text-white">אדריכלי המציאות</h4>
+                <p class="text-lg text-gray-300">
+                    למאסטרים של המחר, אשר יטביעו את חותמם במרחב הווירטואלי וישלבו AI בעבודתם ליצירת אמנות חדשה.
+                </p>
+            </div>
+            <div class="p-8 dali-glass-effect text-center hover:scale-105 transition-transform duration-500 animate-subtle-float" style="animation-delay: 2s;">
+                <h4 class="text-2xl font-semibold mb-4 text-white">מנהיגי התודעה</h4>
+                <p class="text-lg text-gray-300">
+                    למנהיגים שיעלו את צוותיהם למרכבות הקדמה ויזכו בחזון אסטרטגי לעתיד ארגונם.
+                </p>
+            </div>
+        </section>
+
+        <!-- Expertise Areas - Melting/Flowing Spheres -->
+        <section class="max-w-6xl mx-auto my-20 p-8 dali-gradient-section rounded-[3rem] shadow-3xl relative" style="clip-path: polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%); transform: perspective(1200px) rotateY(-5deg) rotateX(2deg);">
+            <h3 class="text-5xl font-extrabold text-center mb-12 text-dali-amber dali-text-shadow" style="font-family: 'Cinzel Decorative', serif;">
+                היכן שהחלומות מתממשים: עולמות המומחיות
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div class="p-6 bg-white/10 dali-glass-effect rounded-2xl hover:bg-white/20 transition-colors duration-300 animate-subtle-float">
+                    <h4 class="text-2xl font-semibold mb-3 text-cyan-200">פיסול מילים ודימויים</h4>
+                    <p class="text-lg text-gray-200">
+                        יצירת טקסטים, תוכן, ואומנות ויזואלית שטרם נראתה-מילים פורחות ותמונות רוקדות.
+                    </p>
+                </div>
+                <div class="p-6 bg-white/10 dali-glass-effect rounded-2xl hover:bg-white/20 transition-colors duration-300 animate-subtle-float" style="animation-delay: 0.5s;">
+                    <h4 class="text-2xl font-semibold mb-3 text-cyan-200">אדריכלות וירטואלית</h4>
+                    <p class="text-lg text-gray-200">
+                        בניית אפליקציות חכמות ואתרי אינטרנט שמגיבים, חושבים ומתפתחים-מבנים דיגיטליים מעבר לדמיון.
+                    </p>
+                </div>
+                <div class="p-6 bg-white/10 dali-glass-effect rounded-2xl hover:bg-white/20 transition-colors duration-300 animate-subtle-float" style="animation-delay: 1s;">
+                    <h4 class="text-2xl font-semibold mb-3 text-cyan-200">פענוח תבניות התודעה</h4>
+                    <p class="text-lg text-gray-200">
+                        ניתוח נתונים ומחקר עמוק, לגלות את הסדר הנסתר בתוך הכאוס האינסופי-לפענח את הקוד של היקום.
+                    </p>
+                </div>
+                <div class="p-6 bg-white/10 dali-glass-effect rounded-2xl hover:bg-white/20 transition-colors duration-300 animate-subtle-float" style="animation-delay: 1.5s;">
+                    <h4 class="text-2xl font-semibold mb-3 text-cyan-200">כוריאוגרפיה של תהליכים</h4>
+                    <p class="text-lg text-gray-200">
+                        אוטומציה של משימות חוזרות ושינוי תהליכים-ריקוד סימפוני של פעולות מכונה חכמות.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered - Distorted, melting sections -->
+        <section class="max-w-4xl mx-auto my-20 p-8 dali-glass-effect relative text-center" style="clip-path: polygon(0% 15%, 15% 0%, 100% 0%, 85% 100%, 0% 100%); transform: perspective(1000px) rotateY(3deg) rotateX(-2deg);">
+            <h3 class="text-5xl font-extrabold mb-12 text-dali-amber dali-text-shadow" style="font-family: 'Cinzel Decorative', serif;">
+                אופן ההזמנה למסע
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="hover:scale-[1.03] transition-transform duration-500 ease-in-out">
+                    <h4 class="text-3xl font-semibold mb-2 text-white">סדנאות: חשיפת התת-מודע הקבוצתי</h4>
+                    <p class="text-xl text-gray-300">
+                        מפגשים בהם המוח נפתח כפרח לוטוס, מעשיים וממוקדים, ליצירה משותפת של חזיונות.
+                    </p>
+                </div>
+                <div class="hover:scale-[1.03] transition-transform duration-500 ease-in-out">
+                    <h4 class="text-3xl font-semibold mb-2 text-white">שיעורים פרטיים: מסע אישי בחלומות מודרכים</h4>
+                    <p class="text-xl text-gray-300">
+                        התאמה אישית לרמה ולצרכים, ליווי צמוד לפענוח המפות הפנימיות שלך.
+                    </p>
+                </div>
+                <div class="hover:scale-[1.03] transition-transform duration-500 ease-in-out">
+                    <h4 class="text-3xl font-semibold mb-2 text-white">הרצאות: חשיפת האור בקצה המנהרה הדיגיטלית</h4>
+                    <p class="text-xl text-gray-300">
+                        פתיחת אופקים לצוותים, להראות את הפוטנציאל הבלתי נתפס של ה-AI.
+                    </p>
+                </div>
+                <div class="hover:scale-[1.03] transition-transform duration-500 ease-in-out">
+                    <h4 class="text-3xl font-semibold mb-2 text-white">ייעוץ ופיתוח: פיענוח קוד הגורל של פרויקטכם</h4>
+                    <p class="text-xl text-gray-300">
+                        ליווי מקצועי ואישי, לביאור הלא-נודע ומימושו במציאות המורכבת שלכם.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide - Zevik Aviner as a central, surreal figure -->
+        <section class="max-w-3xl mx-auto my-20 p-8 dali-gradient-section rounded-full shadow-3xl text-center relative flex flex-col md:flex-row items-center justify-center gap-8" style="transform: perspective(1000px) rotateX(15deg) scale(0.9);">
+            <div class="md:order-2 flex-shrink-0 relative w-48 h-48 rounded-full overflow-hidden border-4 border-dali-amber shadow-xl image-distort" id="zevik-image-container">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונת דיוקן של זאביק אבינר, מומחה בינה מלאכותית" class="w-full h-full object-cover object-center transform -rotate-3 scale-105" id="zevik-image">
+                <div class="absolute inset-0 bg-blue-500/30 mix-blend-overlay"></div>
+            </div>
+            <div class="md:order-1 flex-grow text-center md:text-right">
+                <h3 class="text-5xl font-extrabold mb-6 text-dali-amber dali-text-shadow" style="font-family: 'Cinzel Decorative', serif;">
+                    המוליך: זאביק אבינר
+                </h3>
+                <p class="text-xl text-gray-200 leading-relaxed mb-4">
+                    אמן החזיונות האלגוריתמיים, מוליך נשמות במבוכי הבינה המלאכותית.
+                    הוא יחלוק אתכם את מפתחות התפיסה, את סודות השינוי, ויגלה לכם את היקום החדש הנולד בין ביטים לפיקסלים.
+                    מומחיותו נעוצה בהנגשת הלא-נודע, והפיכתה למפת דרכים ברורה.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Info - Mysterious, floating elements -->
+        <section class="max-w-xl mx-auto my-20 p-8 dali-glass-effect text-center animate-subtle-float-delay" style="transform: perspective(800px) rotateX(5deg) scale(0.95);">
+            <h3 class="text-4xl font-extrabold mb-8 text-dali-amber dali-text-shadow" style="font-family: 'Cinzel Decorative', serif;">
+                ליצירת קשר עם מוליך החלומות:
+            </h3>
+            <div class="space-y-6 text-xl">
+                <p class="text-purple-300 flex items-center justify-center gap-3">
+                    <span class="text-2xl">📞</span> סִפְרוּ את חלומכם אל הווטסאפ:
+                    <a href="https://wa.me/972546609385" target="_blank" class="text-white hover:text-dali-amber transition-colors duration-300 underline">054-6609385</a>
+                </p>
+                <p class="text-purple-300 flex items-center justify-center gap-3">
+                    <span class="text-2xl">✉️</span> או שלחו יונה דיגיטלית אל המייל:
+                    <a href="mailto:zaviner@gmail.com" class="text-white hover:text-dali-amber transition-colors duration-300 underline">zaviner@gmail.com</a>
+                </p>
+            </div>
+        </section>
+
+    </div> <!-- End Main Content Wrapper -->
+
+    <script>
+        // Custom Cursor JavaScript
+        const customCursor = document.getElementById('custom-cursor');
+        let targetX = 0;
+        let targetY = 0;
+        let currentX = 0;
+        let currentY = 0;
+        const speed = 0.2; // Smoothing factor for cursor movement
+
+        document.addEventListener('mousemove', (e) => {
+            targetX = e.clientX;
+            targetY = e.clientY;
+        });
+
+        function animateCursor() {
+            currentX += (targetX - currentX) * speed;
+            currentY += (targetY - currentY) * speed;
+
+            customCursor.style.transform = `translate(${currentX}px, ${currentY}px) scale(1)`;
+
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Parallax Scrolling Effect
+        const parallaxSky = document.getElementById('parallax-sky');
+        const parallaxMountains = document.getElementById('parallax-mountains');
+        const parallaxClouds = document.getElementById('parallax-clouds');
+
+        window.addEventListener('scroll', () => {
+            let scrollY = window.pageYOffset;
+
+            // Adjust values for more or less pronounced parallax
+            if (parallaxSky) parallaxSky.style.transform = `translateY(${scrollY * 0.1}px)`;
+            if (parallaxMountains) parallaxMountains.style.transform = `translateY(${scrollY * 0.2}px)`;
+            if (parallaxClouds) parallaxClouds.style.transform = `translateY(${scrollY * 0.3}px)`;
+
+            // Image distortion on scroll for Zevik's image (Dali-esque melting/shifting)
+            const zevikImageContainer = document.getElementById('zevik-image-container');
+            const zevikImage = document.getElementById('zevik-image');
+            if (zevikImageContainer && zevikImage) {
+                const rect = zevikImageContainer.getBoundingClientRect();
+                const viewportHeight = window.innerHeight;
+
+                // Only apply distortion when the image is within a certain range of the viewport
+                if (rect.top < viewportHeight * 0.8 && rect.bottom > viewportHeight * 0.2) {
+                    const center = rect.top + rect.height / 2;
+                    const distanceFromCenter = Math.abs(viewportHeight / 2 - center);
+                    const maxDistortionDistance = viewportHeight / 2;
+                    // Normalized factor: 1 when at center, 0 when far
+                    let distortionFactor = Math.min(1, 1 - (distanceFromCenter / maxDistortionDistance));
+
+                    zevikImage.style.transform = `scale(${1.05 + distortionFactor * 0.1}) rotate(${distortionFactor * -7}deg) skewY(${distortionFactor * 4}deg)`;
+                    zevikImageContainer.style.boxShadow = `0 0 ${distortionFactor * 40}px ${distortionFactor * 20}px rgba(251, 191, 36, ${distortionFactor * 0.5})`; // Dali-amber glow
+                } else {
+                    // Reset to initial style when out of the active distortion zone
+                    zevikImage.style.transform = `scale(1.05) rotate(-3deg) skewY(0deg)`;
+                    zevikImageContainer.style.boxShadow = `0 8px 16px rgba(0,0,0,0.5)`;
+                }
+            }
+        });
+
+        // Trigger initial scroll event to set parallax elements
+        window.dispatchEvent(new Event('scroll'));
+    </script>
+</body>
+</html>

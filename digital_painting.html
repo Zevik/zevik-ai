@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הקוד הנפלא: אמנות הבינה המלאכותית בידיים שלך</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Base styles and Google Fonts */
+        body {
+            font-family: 'Assistant', sans-serif;
+            margin: 0;
+            overflow-x: hidden; /* Prevent horizontal scroll from generative background */
+            cursor: none; /* Hide default cursor */
+            background-color: #0d0a1b; /* Dark, deep background */
+            color: #e0e7ff; /* Light, soft text for contrast */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Rubik', sans-serif;
+            color: #d1d5db; /* Slightly different for headings */
+        }
+        /* Custom cursor styling (Required technique) */
+        .custom-cursor {
+            border: 2px solid rgba(255, 255, 255, 0.9); /* White border, high visibility */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.7); /* Dark shadow, ensures visibility on white */
+            backdrop-filter: invert(100%); /* Optional: for a subtle blend effect */
+        }
+        /* Tailwind JIT for arbitrary values */
+        .z-\[-1\] {
+            z-index: -1;
+        }
+        .bg-gradient-digital {
+            background-image: linear-gradient(135deg, #1a152e 0%, #0d0a1b 100%);
+        }
+        /* Specific animations and transitions */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-up.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .glass-effect {
+            backdrop-filter: blur(10px) saturate(180%);
+            -webkit-backdrop-filter: blur(10px) saturate(180%);
+            background-color: rgba(30, 27, 49, 0.6); /* Semi-transparent dark background */
+            border: 1px solid rgba(49, 46, 73, 0.3);
+            border-radius: 12px;
+        }
+        .service-card {
+            background-image: linear-gradient(145deg, rgba(30, 27, 49, 0.7), rgba(15, 12, 28, 0.8));
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(27, 23, 40, 0.6);
+            background-image: linear-gradient(145deg, rgba(45, 40, 65, 0.8), rgba(20, 16, 36, 0.9));
+        }
+    </style>
+</head>
+<body class="relative min-h-screen text-right">
+
+    <!-- Generative Background Canvas -->
+    <canvas id="digitalCanvas" class="fixed top-0 left-0 w-full h-full z-[-1]"></canvas>
+
+    <!-- Custom Cursor -->
+    <div id="customCursor" class="custom-cursor fixed pointer-events-none rounded-full w-6 h-6 opacity-0 transition-opacity duration-200 ease-out z-50 transform -translate-x-1/2 -translate-y-1/2"></div>
+
+    <!-- Main Content Wrapper -->
+    <main class="relative z-10 p-4 md:p-8 lg:p-12 max-w-7xl mx-auto">
+
+        <!-- Header / Hero Section -->
+        <section class="min-h-screen flex items-center justify-center text-center p-6 md:p-12 lg:p-24 bg-gradient-digital rounded-lg shadow-2xl mb-24">
+            <div class="glass-effect p-8 md:p-12 lg:p-16 rounded-xl max-w-4xl fade-in-up">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight text-indigo-300">
+                    הקוד הנפלא: אמנות הבינה המלאכותית בידיים שלך
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl mx-auto">
+                    מסע יצירתי לכיבוש העתיד הדיגיטלי, בו כל קו קוד הופך למשיכת מכחול
+                </p>
+                <a href="#contact" class="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg hover:shadow-xl">
+                    התחילו את המסע
+                </a>
+            </div>
+        </section>
+
+        <!-- Section 1: הקדמה – העתיד מצייר את עצמו -->
+        <section class="my-24 p-8 glass-effect rounded-xl fade-in-up" id="intro">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8 text-indigo-400">הקדמה – העתיד מצייר את עצמו</h2>
+            <p class="text-lg md:text-xl leading-relaxed text-gray-200 mb-6">
+                בעולם שבו קווים של קוד הופכים למשיכות מכחול דיגיטליות, הבינה המלאכותית אינה רק טכנולוגיה – היא שפה חדשה, אמנות חדשה. אנו מזמינים אתכם למסע אל תוך לב היצירה הדיגיטלית, ללמוד לשלוט במכחולים ובצבעים של המחר. זהו המרחב שבו רעיונות הופכים למציאות אלגוריתמית, וכל אחד יכול להפוך לאמן-מתכנת של עידן חדש.
+            </p>
+            <p class="text-lg md:text-xl leading-relaxed text-gray-300">
+                זאביק אבינר, מומחה בינה מלאכותית, מזמין אתכם ללמוד את השפה החדשה הזו, להבין את הניואנסים שלה, ולפסל בעזרתה עתיד חדש – עתיד שיצרתם במו ידיכם.
+            </p>
+        </section>
+
+        <!-- Section 2: הקשת הרחבה – למי מיועד המסע? -->
+        <section class="my-24 p-8 glass-effect rounded-xl fade-in-up" id="audience">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8 text-indigo-400">הקשת הרחבה – למי מיועד המסע?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center text-gray-200">
+                <div class="service-card p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-semibold mb-4 text-purple-300">המתחילים</h3>
+                    <p>סקרנים המבקשים להכיר את עולם ה-AI מאפס, ללא ידע קודם.</p>
+                </div>
+                <div class="service-card p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-semibold mb-4 text-purple-300">אנשי מקצוע</h3>
+                    <p>המבקשים להטמיע AI בעבודה היומיומית ולשדרג תהליכים.</p>
+                </div>
+                <div class="service-card p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-semibold mb-4 text-purple-300">מנהלים וארגונים</h3>
+                    <p>המחפשים הכשרה לצוותים והובלת חדשנות טכנולוגית.</p>
+                </div>
+                <div class="service-card p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-semibold mb-4 text-purple-300">יוצרי פרויקטים</h3>
+                    <p>מפתחים ואמנים המעוניינים לבנות פרויקטים מבוססי AI מורכבים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: קנבס היצירה – תחומי המומחיות שלנו -->
+        <section class="my-24 p-8 glass-effect rounded-xl fade-in-up" id="expertise">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8 text-indigo-400">קנבס היצירה – תחומי המומחיות שלנו</h2>
+            <p class="text-lg md:text-xl leading-relaxed text-gray-200 mb-8">
+                בדומה לצייר המשתמש במגוון רחב של צבעים וטכניקות, אנו מציעים לכם שליטה על קנבס ה-AI דרך תחומי התמחות מגוונים:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="service-card p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-semibold mb-4 text-cyan-300">פיסול מילים</h3>
+                    <p class="text-gray-300">יצירת טקסטים, סיפורים ותוכן שובה לב באמצעות אלגוריתמים.</p>
+                </div>
+                <div class="service-card p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-semibold mb-4 text-cyan-300">אדריכלות חכמה</h3>
+                    <p class="text-gray-300">בניית אפליקציות חכמות המבינות ומגיבות לעולם.</p>
+                </div>
+                <div class="service-card p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-semibold mb-4 text-cyan-300">נופי אינטרנט</h3>
+                    <p class="text-gray-300">פיתוח אתרים דינמיים ואינטואיטיביים המונעים על ידי AI.</p>
+                </div>
+                <div class="service-card p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-semibold mb-4 text-cyan-300">פענוח דפוסים</h3>
+                    <p class="text-gray-300">ניתוח נתונים עמוק ומחקר חכם לחילוץ תובנות.</p>
+                </div>
+                <div class="service-card p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-semibold mb-4 text-cyan-300">גלריית הדימויים</h3>
+                    <p class="text-gray-300">יצירת תמונות, איורים ואומנות דיגיטלית בנגיעה חדשנית.</p>
+                </div>
+                <div class="service-card p-6 rounded-lg shadow-xl">
+                    <h3 class="text-2xl font-semibold mb-4 text-cyan-300">כוריאוגרפיית תהליכים</h3>
+                    <p class="text-gray-300">אוטומציה חכמה של משימות ותהליכים, לשחרור הפוטנציאל האנושי.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: שיעורי אמן – השירותים שאנו מציעים -->
+        <section class="my-24 p-8 glass-effect rounded-xl fade-in-up" id="services">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8 text-indigo-400">שיעורי אמן – השירותים שאנו מציעים</h2>
+            <p class="text-lg md:text-xl leading-relaxed text-gray-200 mb-8">
+                כדי להפוך אתכם לאמני AI, אנו מציעים מגוון דרכים ללמידה והתפתחות:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="service-card p-8 rounded-lg shadow-xl">
+                    <h3 class="text-3xl font-semibold mb-4 text-emerald-300">סדנאות קבוצתיות – הסטודיו המשותף</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        מפגשים מעשיים וממוקדים, בהם תצרו ותלמדו בחברת קהילה תומכת. הזדמנות לחוות, להתנסות ולשתף פעולה עם לומדים נוספים.
+                    </p>
+                </div>
+                <div class="service-card p-8 rounded-lg shadow-xl">
+                    <h3 class="text-3xl font-semibold mb-4 text-emerald-300">שיעורים פרטיים – חונכות אישית</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        מסלול לימוד מותאם אישית, צעד אחר צעד, עד שתשלוט בחומר. התמקדות בצרכים וביעדים הספציפיים שלכם, עם ליווי צמוד.
+                    </p>
+                </div>
+                <div class="service-card p-8 rounded-lg shadow-xl">
+                    <h3 class="text-3xl font-semibold mb-4 text-emerald-300">הרצאות לארגונים – השראה וחדשנות</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        פתיחת אופקים וזרע רעיונות חדשים בקרב צוותים, מעוררי מחשבה ויוזמה. הרצאות מותאמות לצרכי הארגון והעובדים.
+                    </p>
+                </div>
+                <div class="service-card p-8 rounded-lg shadow-xl">
+                    <h3 class="text-3xl font-semibold mb-4 text-emerald-300">ייעוץ ופיתוח פרויקטים – בניית יצירות</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        ליווי מקצועי מפיתוח רעיון ועד השלמה מלאה של פרויקט AI ייחודי. נהפוך את החזון שלכם למציאות טכנולוגית.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: המאסטר – זאביק אבינר -->
+        <section class="my-24 p-8 glass-effect rounded-xl fade-in-up" id="guide">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8 text-indigo-400">המאסטר – זאביק אבינר</h2>
+            <div class="flex flex-col md:flex-row items-center gap-8">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר" class="w-48 h-48 rounded-full border-4 border-indigo-500 shadow-lg object-cover flex-shrink-0">
+                <div class="text-gray-200">
+                    <p class="text-lg md:text-xl leading-relaxed mb-4">
+                        מאחורי כל יצירה גדולה עומד חזון, ומאחורי מסע הלימוד שלנו עומד זאביק אבינר – אמן-מומחה בתחום הבינה המלאכותית. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק הוא המדריך שלכם בעולם המתפתח במהירות.
+                    </p>
+                    <p class="text-lg md:text-xl leading-relaxed">
+                        הוא מתמחה בהנגשת הטכנולוגיה המורכבת, ובזיקוקה לכלי עבודה יומיומיים שכל אחד יכול לאמץ ולשלוט בהם. הצטרפו אליו למסע אל חזית היצירה הדיגיטלית והפכו למובילי העתיד.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: קשר אל המחר – צרו קשר -->
+        <section class="my-24 p-8 glass-effect rounded-xl text-center fade-in-up" id="contact">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8 text-indigo-400">קשר אל המחר – צרו קשר</h2>
+            <p class="text-xl md:text-2xl leading-relaxed text-gray-200 mb-8">
+                העתיד אינו ממתין. צרו קשר היום כדי להתחיל את המסע שלכם לאמנות הבינה המלאכותית.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-8 text-2xl font-bold">
+                <a href="https://wa.me/972546609385" target="_blank" class="flex items-center gap-3 bg-green-600 hover:bg-green-700 text-white py-3 px-6 rounded-full transition-all duration-300 shadow-md hover:shadow-lg">
+                    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.9 4.45-9.9 9.9 0 1.75.52 3.4 1.48 4.85l-1.07 3.93 4.02-1.05c1.4-.85 3-1.3 4.6-1.3 5.46 0 9.9-4.45 9.9-9.9S17.5 2 12.04 2zm3.33 13.93c-.15-.08-.85-.42-.98-.5-.12-.07-.22-.1-.32-.1-.18 0-.46.06-.7 1.05-.24.98-.12 2.05.74 2.18.86.13 2.04-.54 2.55-.96.5-.42.84-.96.98-1.18.14-.22.07-.42-.04-.6-.1-.18-.32-.5-.46-.68-.14-.18-.3-.26-.44-.18zm-2.17-2.3c-.17-.07-.4-.1-.63-.1-.23 0-.32-.08-.46-.17-.14-.08-.34-.1-.53-.08-.2.03-.38.16-.48.27-.1.1-.2.2-.3.34-.1.14-.2.27-.2.43 0 .15.1.3.15.38.05.08.1.1.2.16.1.06.2.1.34.14.14.04.25.04.4.03.15-.02.34-.14.4-.18.06-.03.18-.08.28-.18.1-.1.18-.2.24-.26.06-.06.12-.13.17-.18.06-.06.1-.12.1-.16 0-.05-.02-.1-.03-.12-.02-.03-.03-.04-.06-.06zM8.47 7.76c-.08-.06-.18-.1-.28-.1-.1 0-.2-.02-.27-.02-.07 0-.17.02-.24.03-.07.02-.14.03-.2.07-.06.03-.1.08-.14.13-.04.05-.07.1-.07.16 0 .07.03.14.07.18.04.04.08.06.14.08.06.02.1.02.16.03.06 0 .14.02.2.02.06 0 .12 0 .18-.02.06 0 .1-.02.14-.03.04-.02.07-.03.1-.04.03-.02.06-.04.07-.06z"></path></svg>
+                    <span>ווטסאפ: 054-6609385</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="flex items-center gap-3 bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-full transition-all duration-300 shadow-md hover:shadow-lg">
+                    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"></path></svg>
+                    <span>אימייל: zaviner@gmail.com</span>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor JavaScript
+        document.addEventListener('DOMContentLoaded', () => {
+            const cursor = document.getElementById('customCursor');
+            let mouseX = 0, mouseY = 0;
+            let cursorX = 0, cursorY = 0;
+            let isMouseMoving = false;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                if (!isMouseMoving) {
+                    isMouseMoving = true;
+                    cursor.style.opacity = '1';
+                }
+            });
+
+            function animateCursor() {
+                // Easing effect
+                cursorX += (mouseX - cursorX) * 0.15;
+                cursorY += (mouseY - cursorY) * 0.15;
+                cursor.style.left = `${cursorX}px`;
+                cursor.style.top = `${cursorY}px`;
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor(); // Start the animation loop
+
+            // Generative Background Canvas JavaScript
+            const canvas = document.getElementById('digitalCanvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            const numParticles = 100;
+            const maxDistance = 150; // Max distance for lines between particles
+
+            // Set canvas dimensions
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            // Particle class
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = (Math.random() - 0.5) * 0.8; // Slower movement
+                    this.vy = (Math.random() - 0.5) * 0.8;
+                    this.radius = Math.random() * 2 + 1; // Small particles
+                    this.color = `hsla(${Math.random() * 360}, 70%, 70%, 0.8)`; // HSL for gentle color shifts
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    // Wrap particles around edges
+                    if (this.x < 0 || this.x > canvas.width) this.vx *= -1; // Or reset position: this.x = (this.x < 0) ? canvas.width : 0;
+                    if (this.y < 0 || this.y > canvas.height) this.vy *= -1; // Or reset position: this.y = (this.y < 0) ? canvas.height : 0;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                }
+            }
+
+            // Create particles
+            for (let i = 0; i < numParticles; i++) {
+                particles.push(new Particle());
+            }
+
+            // Animation loop for canvas
+            function animateBackground() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+                ctx.fillStyle = 'rgba(13, 10, 27, 0.05)'; // Subtle fade effect
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                for (let i = 0; i < particles.length; i++) {
+                    const p1 = particles[i];
+                    p1.update();
+                    p1.draw();
+
+                    // Draw lines between close particles
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const p2 = particles[j];
+                        const distance = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+
+                        if (distance < maxDistance) {
+                            ctx.beginPath();
+                            ctx.moveTo(p1.x, p1.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.strokeStyle = `rgba(100, 100, 200, ${1 - (distance / maxDistance)})`; // Fade lines based on distance
+                            ctx.lineWidth = 0.8;
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(animateBackground);
+            }
+            animateBackground(); // Start the background animation
+
+            // Scroll-triggered animations for content sections
+            const faders = document.querySelectorAll('.fade-in-up');
+            const appearOptions = {
+                threshold: 0.3, // When 30% of the element is visible
+                rootMargin: "0px 0px -10% 0px" // Start animating when it's 10% from the bottom of the viewport
+            };
+
+            const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    } else {
+                        entry.target.classList.add('animate');
+                        appearOnScroll.unobserve(entry.target); // Stop observing once animated
+                    }
+                });
+            }, appearOptions);
+
+            faders.forEach(fader => {
+                appearOnScroll.observe(fader);
+            });
+        });
+    </script>
+</body>
+</html>

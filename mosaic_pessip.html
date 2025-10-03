@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - מומחה בינה מלאכותית | פיצוח קוד העתיד</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700&family=Rubik:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #0A1128;
+            --accent-green: #6EE7B7; /* Emerald-300 */
+            --accent-purple: #C084FC; /* Purple-400 */
+            --light-text: #F8FAFC; /* Slate-50 */
+            --dark-text: #1E293B; /* Slate-800 */
+            --panel-bg: rgba(14, 26, 48, 0.9); /* Slightly transparent primary blue */
+            --cursor-border: #FFFFFF;
+            --cursor-shadow: rgba(0,0,0,0.8);
+        }
+
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: var(--primary-blue);
+            color: var(--light-text);
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor */
+        }
+
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Rubik', sans-serif;
+            font-weight: 700;
+        }
+
+        #custom-cursor {
+            position: fixed;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            pointer-events: none;
+            transition: transform 0.1s ease-out, opacity 0.2s ease-out;
+            z-index: 9999;
+            border: 2px solid var(--cursor-border);
+            box-shadow: 0 0 0 2px var(--cursor-shadow);
+            opacity: 0; /* Initially hidden */
+        }
+        #custom-cursor.visible {
+            opacity: 1;
+        }
+
+        /* Mosaic Background Grid - conceptual */
+        .mosaic-background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            grid-template-rows: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 2px;
+            filter: blur(1px) brightness(0.7);
+        }
+        .mosaic-tile {
+            background-color: rgba(var(--primary-blue), 0.1);
+            transition: background-color 0.3s ease-in-out, transform 0.5s ease;
+            opacity: 0.1;
+        }
+        .mosaic-tile:nth-child(even) { background-color: rgba(var(--accent-green), 0.05); }
+        .mosaic-tile:nth-child(3n) { background-color: rgba(var(--accent-purple), 0.05); }
+
+        /* General section styling for artistic fragmentation */
+        .section-panel {
+            background-color: var(--panel-bg);
+            padding: 3rem 2rem;
+            margin-bottom: 4rem;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-radius: 1rem;
+            overflow: hidden;
+            animation: fadeIn 1.5s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .section-panel.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Specific mosaic effects for sections */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #152A4A 100%);
+            overflow: hidden;
+            padding: 4rem 1rem;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%236EE7B7' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+            animation: bg-pan 60s linear infinite;
+        }
+        @keyframes bg-pan {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        .skewed-panel {
+            transform: skewY(-2deg);
+            margin-top: -3rem;
+            margin-bottom: -3rem;
+            padding-top: 6rem;
+            padding-bottom: 6rem;
+            background-color: var(--accent-purple);
+            color: var(--light-text);
+        }
+        .skewed-panel > div {
+            transform: skewY(2deg); /* Counter-skew content */
+        }
+
+        .services-grid > div, .expertise-grid > div {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: rgba(var(--primary-blue), 0.8);
+        }
+        .services-grid > div:hover, .expertise-grid > div:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(var(--accent-green), 0.2);
+        }
+
+        .image-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 0 0 5px var(--accent-green), 0 0 0 8px var(--primary-blue);
+        }
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Parallax effect specific CSS */
+        .parallax-element {
+            will-change: transform;
+            transition: transform 0.1s linear; /* Smooth transition for JS updates */
+        }
+
+        /* Responsive adjustments */
+        @media (min-width: 768px) {
+            .hero-title {
+                font-size: 4rem;
+            }
+        }
+        @media (max-width: 767px) {
+            .section-panel {
+                padding: 2rem 1rem;
+                margin-bottom: 2rem;
+            }
+            .hero-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="custom-cursor"></div>
+
+    <!-- Main content wrapper -->
+    <div class="relative z-10">
+
+        <!-- Hero Section -->
+        <section class="hero-section text-center text-white relative">
+            <div class="relative z-10 max-w-4xl mx-auto px-4">
+                <h1 class="font-heading hero-title text-5xl md:text-7xl font-extrabold mb-6 leading-tight text-transparent bg-clip-text bg-gradient-to-br from-white via-accent-green to-accent-purple parallax-element" data-speed="0.05">
+                    פיצוח קוד העתיד: <br>AI למען כולם
+                </h1>
+                <p class="text-xl md:text-2xl mb-10 text-gray-200 parallax-element" data-speed="0.03">
+                    מסע ויזואלי להבנת ולשליטה בבינה המלאכותית - עם זאביק אבינר.
+                </p>
+                <a href="#contact" class="inline-block bg-accent-green text-primary-blue font-bold py-3 px-8 rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 ease-in-out relative z-20">
+                    התחילו במסע שלכם
+                </a>
+            </div>
+        </section>
+
+        <!-- About Zevik Section -->
+        <section id="about" class="section-panel max-w-6xl mx-auto mt-[-5rem] relative visible">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center text-center md:text-right">
+                <div class="md:col-span-2">
+                    <h2 class="font-heading text-4xl mb-4 text-accent-green">זאביק אבינר: אדריכל הבינה</h2>
+                    <p class="text-lg leading-relaxed text-gray-200">
+                        זאביק אבינר אינו רק מומחה AI, הוא מפרק מורכבויות, בונה גשרים ומעניק לכל אחד את הכלים להפוך את העתיד לנגיש. עם ניסיון עשיר בפיתוח ויישום, זאביק הפך למדריך המוביל בפיצוח סודות ה-AI והפיכתם לכוח מניע בחיי היומיום ובעולם העסקים. אנו מאמינים שהמוזאיקה של הטכנולוגיה חייבת להיות בהירה ומובנת לכל, ולכן זאביק מקדיש את כישוריו להנגשת הידע והכלים המתקדמים ביותר.
+                    </p>
+                </div>
+                <div class="flex justify-center md:justify-end">
+                    <div class="image-container parallax-element" data-speed="0.07">
+                        <img src="https://link.zevikaviner.com/zevik" alt="תמונת זאביק אבינר" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Message Section (Skewed for artistic effect) -->
+        <section class="skewed-panel text-center text-white section-panel visible">
+            <div class="relative z-10 max-w-5xl mx-auto">
+                <h2 class="font-heading text-4xl mb-6 text-primary-blue parallax-element" data-speed="0.04">
+                    המוזאיקה של המחר: AI נגיש, מעשי וישים
+                </h2>
+                <p class="text-xl leading-relaxed text-primary-blue parallax-element" data-speed="0.02">
+                    מפגש ראשוני עם עולם הפלא של הבינה המלאכותית ועד פיתוח פרויקטים חדשניים – אנו פורטים את הקוד המורכב לרכיבים ברורים, ומעניקים לכם מפת דרכים ליישום מיידי. בין אם אתם מתחילים סקרנים או מומחים המבקשים להעמיק, תמצאו אצלנו את האבנים החסרות בפאזל הידע שלכם.
+                </p>
+            </div>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section id="audience" class="section-panel max-w-6xl mx-auto visible">
+            <h2 class="font-heading text-4xl text-center mb-12 text-accent-green">למי מיועד המסע הדיגיטלי?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                <div class="p-6 rounded-lg bg-primary-blue border-r-4 border-accent-purple shadow-xl hover:scale-105 transition-transform duration-300">
+                    <h3 class="font-heading text-2xl mb-3 text-white">לפורצי דרך מתחילים</h3>
+                    <p class="text-gray-300">הצעדים הראשונים בעולם ה-AI המרתק, ללא ידע מוקדם.</p>
+                </div>
+                <div class="p-6 rounded-lg bg-primary-blue border-l-4 border-accent-green shadow-xl hover:scale-105 transition-transform duration-300">
+                    <h3 class="font-heading text-2xl mb-3 text-white">לאנשי מקצוע חולמים</h3>
+                    <p class="text-gray-300">שילוב AI בעבודה היומיומית, לייעול וחדשנות.</p>
+                </div>
+                <div class="p-6 rounded-lg bg-primary-blue border-r-4 border-accent-green shadow-xl hover:scale-105 transition-transform duration-300">
+                    <h3 class="font-heading text-2xl mb-3 text-white">למנהיגי חזון</h3>
+                    <p class="text-gray-300">הדרכות אסטרטגיות לארגונים ולצוותים טכנולוגיים.</p>
+                </div>
+                <div class="p-6 rounded-lg bg-primary-blue border-l-4 border-accent-purple shadow-xl hover:scale-105 transition-transform duration-300">
+                    <h3 class="font-heading text-2xl mb-3 text-white">ליזמי AI מתקדמים</h3>
+                    <p class="text-gray-300">פיתוח פרויקטים מורכבים וליווי אישי ממוקד.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Section -->
+        <section id="expertise" class="section-panel max-w-6xl mx-auto visible">
+            <h2 class="font-heading text-4xl text-center mb-12 text-accent-purple">תחומי התמחות: אריגת המציאות הדיגיטלית</h2>
+            <div class="expertise-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="p-6 bg-gradient-to-br from-primary-blue to-blue-900 rounded-xl shadow-xl border border-accent-green/50">
+                    <h3 class="font-heading text-2xl mb-3 text-accent-green">שפת המכונות: טקסט ותוכן</h3>
+                    <p class="text-gray-300">למדו ליצור תכנים שובי לב, מאמרים, פוסטים וקמפיינים שיווקיים בעזרת AI.</p>
+                </div>
+                <div class="p-6 bg-gradient-to-br from-primary-blue to-blue-900 rounded-xl shadow-xl border border-accent-purple/50">
+                    <h3 class="font-heading text-2xl mb-3 text-accent-purple">מוח דיגיטלי: בניית אפליקציות</h3>
+                    <p class="text-gray-300">כיצד לתכנן ולפתח אפליקציות חכמות המונעות בכוחה של הבינה המלאכותית.</p>
+                </div>
+                <div class="p-6 bg-gradient-to-br from-primary-blue to-blue-900 rounded-xl shadow-xl border border-accent-green/50">
+                    <h3 class="font-heading text-2xl mb-3 text-accent-green">ארכיטקטורה חכמה: אתרים מבוססי AI</h3>
+                    <p class="text-gray-300">הקימו אתרים אינטראקטיביים המשתמשים ב-AI לשיפור חווית המשתמש וביצועים.</p>
+                </div>
+                <div class="p-6 bg-gradient-to-br from-primary-blue to-blue-900 rounded-xl shadow-xl border border-accent-purple/50">
+                    <h3 class="font-heading text-2xl mb-3 text-accent-purple">מצפן הנתונים: ניתוח ומחקר</h3>
+                    <p class="text-gray-300">פענוח נתונים מורכבים, חילוץ תובנות עסקיות והבנת מגמות עתידיות.</p>
+                </div>
+                <div class="p-6 bg-gradient-to-br from-primary-blue to-blue-900 rounded-xl shadow-xl border border-accent-green/50">
+                    <h3 class="font-heading text-2xl mb-3 text-accent-green">קנווס וירטואלי: תמונות ואומנות</h3>
+                    <p class="text-gray-300">שחררו את הדמיון וצרו תמונות, איורים ואומנות דיגיטלית באמצעות כלי AI.</p>
+                </div>
+                <div class="p-6 bg-gradient-to-br from-primary-blue to-blue-900 rounded-xl shadow-xl border border-accent-purple/50">
+                    <h3 class="font-heading text-2xl mb-3 text-accent-purple">ריקוד האוטומציה: ייעול תהליכים</h3>
+                    <p class="text-gray-300">הפוך משימות חוזרות לאוטומטיות, חסכו זמן והתמקדו במה שחשוב באמת.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="section-panel max-w-6xl mx-auto visible">
+            <h2 class="font-heading text-4xl text-center mb-12 text-accent-green">שירותים מוצעים: כלים למוזאיקה שלכם</h2>
+            <div class="services-grid grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="p-8 rounded-2xl bg-gradient-to-bl from-primary-blue to-blue-900 shadow-2xl border-l-8 border-accent-green/70">
+                    <h3 class="font-heading text-3xl mb-4 text-accent-green">סדנאות פסיפס קבוצתיות</h3>
+                    <p class="text-lg text-gray-200">
+                        סדנאות מעשיות וממוקדות, בקבוצות קטנות, המאפשרות ללמוד ולהתנסות בכלי AI מתקדמים בצורה חווייתית ואינטראקטיבית. צרו את האבן הראשונה במוזאיקה הדיגיטלית שלכם.
+                    </p>
+                </div>
+                <div class="p-8 rounded-2xl bg-gradient-to-br from-primary-blue to-blue-900 shadow-2xl border-r-8 border-accent-purple/70">
+                    <h3 class="font-heading text-3xl mb-4 text-accent-purple">שיעורים פרטיים: פרסונליזציה מושלמת</h3>
+                    <p class="text-lg text-gray-200">
+                        ליווי אישי ומעמיק, המותאם לרמה המדויקת ולצרכים הייחודיים שלכם. בין אם אתם מתחילים או מתקדמים, נבנה יחד תוכנית לימודים שתביא אתכם ליעדכם.
+                    </p>
+                </div>
+                <div class="p-8 rounded-2xl bg-gradient-to-tl from-primary-blue to-blue-900 shadow-2xl border-r-8 border-accent-green/70">
+                    <h3 class="font-heading text-3xl mb-4 text-accent-green">הרצאות פותחות אופקים לארגונים</h3>
+                    <p class="text-lg text-gray-200">
+                        הרצאות מרתקות ובהירות המיועדות לצוותים ומנהלים, חושפות את הפוטנציאל העצום של AI וכיצד ניתן ליישמו לקידום הארגון.
+                    </p>
+                </div>
+                <div class="p-8 rounded-2xl bg-gradient-to-tr from-primary-blue to-blue-900 shadow-2xl border-l-8 border-accent-purple/70">
+                    <h3 class="font-heading text-3xl mb-4 text-accent-purple">ייעוץ וליווי פרויקטים: בנייה משותפת</h3>
+                    <p class="text-lg text-gray-200">
+                        ליווי מקצועי וצמוד בפיתוח פרויקטים מבוססי AI, משלב הרעיון ועד ליישום. נהפוך את החזון שלכם למציאות דיגיטלית.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section-panel max-w-5xl mx-auto visible">
+            <h2 class="font-heading text-4xl text-center mb-10 text-accent-purple">התחברו לעתיד: צרו קשר</h2>
+            <p class="text-lg text-center mb-8 text-gray-200">
+                מעוניינים לפצח את קוד הבינה המלאכותית יחד עם זאביק אבינר? אל תהססו לפנות.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-6">
+                <a href="https://wa.me/972546609385" target="_blank" class="flex items-center gap-3 bg-accent-green text-primary-blue font-bold py-3 px-6 rounded-full text-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.233 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.923 3.574 1.442 5.564 1.443 5.232 0 9.48-4.248 9.48-9.485s-4.248-9.48-9.48-9.48c-5.233 0-9.48 4.248-9.48 9.48 0 1.741.521 3.423 1.577 4.877l.58.86-1.934.509 1.634-5.955-.581-.859c-1.056-1.454-1.64-3.118-1.64-4.878 0-5.215 4.205-9.42 9.42-9.42s9.42 4.205 9.42 9.42-4.205 9.42-9.42 9.42h-.002c-1.888 0-3.7-.564-5.294-1.537l-1.106-.749-1.597.42z"/><path d="M12.164 8.653c.113.003.218.006.323.006.505 0 1.05-.164 1.425-.333.684-.308 1.15-.558 1.425-.558.275 0 .55.15.55.625 0 .313-.19.626-.375.813-.2.187-.39.36-.66.625-.45.438-1.08.938-1.53.938-.45 0-1.05-.281-1.39-.718-.34-.438-.56-.994-.75-1.5-.19-.506-.24-.875-.24-1.375 0-.968.75-1.406 1.34-1.406.495 0 .84.188 1.09.438.25.25.405.625.405 1.093 0 .156-.03.313-.06.469-.03.156-.105.328-.15.422-.09.187-.135.3-.27.3s-.255-.078-.345-.14a.89.89 0 01-.195-.14c-.075-.078-.15-.172-.21-.266-.06-.094-.105-.219-.09-.344l.05-.172c.045-.172.09-.375.105-.531.045-.375-.15-.656-.45-.656-.255 0-.465.187-.66.438-.195.25-.345.578-.51.89-.165.313-.285.587-.315.656-.12.313-.09.672.09.968.18.297.48.609.78.844.3.234.66.422 1.005.547.345.125.75.187 1.14.187.525 0 1.035-.187 1.545-.516.51-.328.915-.812 1.245-1.422.33-.609.495-1.328.495-2.078 0-1.78-.975-2.672-2.91-2.672-1.29 0-2.355.609-2.955 1.484-.6.875-.825 1.95-.825 2.531 0 .281.015.562.06.844.045.281.09.562.135.844zm-3.09 3.422l.96 1.766c-.66.218-1.35.343-2.07.343-5.233 0-9.48-4.248-9.48-9.484 0-5.232 4.247-9.48 9.48-9.48 2.085 0 4.095.66 5.73 1.836l1.05.797 1.75-.437-.36 1.385.57-.278.36 1.383.568-.277.36 1.383.57-.277c1.17 1.08 2.055 2.376 2.61 3.82l-.42.219c.12-.234.225-.468.345-.703l.36 1.383.57-.278.36 1.384.57-.278.36 1.383.57-.278-.293 1.125.96.25-.294 1.125.96.25-.294 1.125.96.25-.724 2.784z"/></svg>
+                    <span>ווטסאפ: 054-6609385</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="flex items-center gap-3 bg-accent-purple text-primary-blue font-bold py-3 px-6 rounded-full text-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3v18h24v-18h-24zm6.623 7.929l-6.623 5.619v-13.548l6.623 7.929zm11.754 0l6.623-7.929v13.548l-6.623-5.619zm-11.754-6.929h11.754l-5.877 4.719-5.877-4.719zm11.754 13.071h-11.754l5.209-4.719 5.881 4.719z"/></svg>
+                    <span>אימייל: zaviner@gmail.com</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center py-8 text-gray-400 text-sm">
+            <p>&copy; 2024 זאביק אבינר - כל הזכויות שמורות. נבנה באהבה עם AI.</p>
+        </footer>
+
+    </div>
+
+    <!-- Mosaic background animation layer -->
+    <div class="mosaic-background-grid">
+        <!-- Generate a large number of mosaic tiles for background effect -->
+        <!-- This is illustrative, JS will populate for performance if needed, but for single file, direct HTML is fine if count is reasonable -->
+        <script>
+            // This script generates background tiles dynamically to keep HTML cleaner and allow more tiles.
+            const bgGrid = document.querySelector('.mosaic-background-grid');
+            const numTiles = 200; // Adjust for desired density
+            for (let i = 0; i < numTiles; i++) {
+                const tile = document.createElement('div');
+                tile.className = 'mosaic-tile';
+                // Add some random initial animation/transform
+                tile.style.transform = `rotate(${Math.random() * 360}deg) scale(${0.8 + Math.random() * 0.4})`;
+                tile.style.transitionDelay = `${Math.random() * 2}s`; // Stagger animation start
+                bgGrid.appendChild(tile);
+            }
+        </script>
+    </div>
+
+    <script>
+        // Custom Cursor JavaScript
+        const customCursor = document.getElementById('custom-cursor');
+        let cursorX = 0;
+        let cursorY = 0;
+        let targetX = 0;
+        let targetY = 0;
+        let isVisible = false;
+
+        function updateCursor() {
+            // Smoothly interpolate cursor position
+            cursorX += (targetX - cursorX) * 0.2;
+            cursorY += (targetY - cursorY) * 0.2;
+            customCursor.style.transform = `translate3d(${cursorX - customCursor.offsetWidth / 2}px, ${cursorY - customCursor.offsetHeight / 2}px, 0)`;
+            requestAnimationFrame(updateCursor);
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            targetX = e.clientX;
+            targetY = e.clientY;
+            if (!isVisible) {
+                customCursor.classList.add('visible');
+                isVisible = true;
+                requestAnimationFrame(updateCursor); // Start animation loop
+            }
+        });
+
+        document.addEventListener('mouseleave', () => {
+            customCursor.classList.remove('visible');
+            isVisible = false;
+        });
+
+        // Parallax Scrolling Effect
+        const parallaxElements = document.querySelectorAll('.parallax-element');
+
+        function applyParallax() {
+            parallaxElements.forEach(el => {
+                const speed = parseFloat(el.dataset.speed);
+                const rect = el.getBoundingClientRect();
+                const offset = window.pageYOffset;
+                const top = rect.top + offset;
+                const translateY = (window.pageYOffset - top) * speed;
+
+                el.style.transform = `translateY(${translateY}px)`;
+            });
+        }
+
+        // Section visibility and fade-in animation
+        const sections = document.querySelectorAll('.section-panel');
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // 10% of the section must be visible
+        };
+
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // observer.unobserve(entry.target); // Optional: Stop observing once visible
+                } else {
+                    entry.target.classList.remove('visible'); // For re-animating on scroll back up
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+
+        // Initial calls and event listeners
+        window.addEventListener('scroll', () => {
+            applyParallax();
+        });
+        window.addEventListener('resize', () => {
+            applyParallax(); // Recalculate parallax on resize
+        });
+        applyParallax(); // Initial call
+        
+        // Dynamic mosaic tile animation on scroll/hover
+        const mosaicTiles = document.querySelectorAll('.mosaic-tile');
+        mosaicTiles.forEach(tile => {
+            // Randomize background colors further on initial load
+            const colors = ['#0A1128', '#6EE7B7', '#C084FC', '#38BDF8', '#FDE047']; // primary, green, purple, sky, yellow
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            tile.style.backgroundColor = `${randomColor}1A`; // Add 1A for 10% opacity
+
+            // Interactive effect on hover for subtle feedback
+            tile.addEventListener('mouseenter', () => {
+                tile.style.transform = `scale(1.1) rotate(${Math.random() * 5 - 2.5}deg)`;
+                tile.style.backgroundColor = `${randomColor}40`; // 25% opacity
+            });
+            tile.addEventListener('mouseleave', () => {
+                tile.style.transform = `scale(1) rotate(${Math.random() * 360}deg)`; // Reset or new random rotation
+                tile.style.backgroundColor = `${randomColor}1A`; // Back to 10% opacity
+            });
+        });
+
+    </script>
+</body>
+</html>

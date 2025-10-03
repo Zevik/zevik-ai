@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הבינה המלאכותית: קנווס חדש, צבעים ללא גבולות</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&family=Noto+Serif+Hebrew:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles for the Van Gogh impasto effect */
+        :root {
+            --van-gogh-blue: #0A1128; /* Deep Night Blue */
+            --van-gogh-yellow: #FFC300; /* Starry Yellow */
+            --van-gogh-green: #3A4F32; /* Olive Green */
+            --van-gogh-orange: #D44D00; /* Fiery Orange */
+            --van-gogh-light-blue: #86BBD8; /* Sky Blue */
+            --van-gogh-white: #E9E9E9; /* Canvas White */
+            --van-gogh-dark: #1F2232; /* Deep Canvas Base */
+            --van-gogh-dark-rgb: 31, 34, 50;
+            --van-gogh-yellow-rgb: 255, 195, 0;
+            --van-gogh-orange-rgb: 212, 77, 0;
+            --van-gogh-blue-rgb: 10, 17, 40;
+        }
+
+        body {
+            font-family: 'Noto Serif Hebrew', serif;
+            background-color: var(--van-gogh-dark);
+            color: var(--van-gogh-white);
+            overflow-x: hidden; /* Prevent horizontal scroll for parallax */
+            cursor: none; /* Hide default cursor to use custom one */
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Frank Ruhl Libre', serif;
+            color: var(--van-gogh-yellow);
+        }
+
+        /* Custom cursor styles */
+        #custom-cursor {
+            position: fixed;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: width 0.1s ease, height 0.1s ease, background-color 0.1s ease, border-color 0.1s ease, box-shadow 0.1s ease;
+            /* Required technique for visibility on any background */
+            border: 2px solid var(--van-gogh-white); /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow */
+            background-color: rgba(255, 255, 255, 0.1); /* Subtle inner fill */
+        }
+        #custom-cursor.active {
+            width: 36px;
+            height: 36px;
+            background-color: var(--van-gogh-orange);
+            border-color: var(--van-gogh-yellow);
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.9);
+        }
+
+        /* Van Gogh background elements: Swirling, layered, blurred gradients for impasto effect */
+        .van-gogh-bg-layer {
+            position: fixed;
+            width: 150vw; /* Larger than viewport to allow movement */
+            height: 150vh;
+            top: -25vh; /* Offset to center the larger element */
+            left: -25vw;
+            background-repeat: no-repeat;
+            background-size: cover;
+            opacity: 0.1;
+            transform: rotateZ(var(--rotation, 0deg)) scale(var(--scale, 1));
+            animation: bg-swirl var(--duration, 30s) infinite alternate ease-in-out;
+            z-index: -10;
+        }
+
+        /* Specific layer adjustments with different colors, rotations, scales, durations, and blur */
+        .van-gogh-layer-1 {
+            background-image: radial-gradient(circle at 60% 30%, var(--van-gogh-blue) 0%, transparent 70%);
+            --rotation: 10deg;
+            --scale: 1.1;
+            --duration: 40s;
+            opacity: 0.15;
+            filter: blur(50px);
+        }
+        .van-gogh-layer-2 {
+            background-image: radial-gradient(circle at 20% 80%, var(--van-gogh-yellow) 0%, transparent 60%);
+            --rotation: -15deg;
+            --scale: 1.05;
+            --duration: 35s;
+            opacity: 0.1;
+            filter: blur(40px);
+        }
+        .van-gogh-layer-3 {
+            background-image: radial-gradient(circle at 90% 50%, var(--van-gogh-orange) 0%, transparent 65%);
+            --rotation: 5deg;
+            --scale: 1.2;
+            --duration: 45s;
+            opacity: 0.08;
+            filter: blur(60px);
+        }
+        .van-gogh-layer-4 { /* A darker, deeper blue swirl, less transparent */
+            background-image: radial-gradient(circle at 40% 70%, var(--van-gogh-dark) 0%, transparent 50%);
+            --rotation: 20deg;
+            --scale: 1.15;
+            --duration: 50s;
+            opacity: 0.2;
+            filter: blur(70px);
+            z-index: -11; /* Deeper layer */
+        }
+        .van-gogh-layer-5 { /* A more defined, brighter swirl */
+            background-image: radial-gradient(circle at 75% 25%, var(--van-gogh-light-blue) 0%, transparent 60%);
+            --rotation: -8deg;
+            --scale: 1.08;
+            --duration: 38s;
+            opacity: 0.12;
+            filter: blur(30px);
+            z-index: -9; /* Slightly above deepest, below others */
+        }
+
+        @keyframes bg-swirl {
+            0% { transform: rotateZ(var(--rotation, 0deg)) scale(var(--scale, 1)); }
+            50% { transform: rotateZ(calc(var(--rotation, 0deg) * -1)) scale(calc(var(--scale, 1) * 1.03)); }
+            100% { transform: rotateZ(var(--rotation, 0deg)) scale(var(--scale, 1)); }
+        }
+
+        /* Content element styling to give an 'impasto' feel with depth and blur */
+        .impasto-element {
+            background-color: rgba(var(--van-gogh-dark-rgb), 0.7); /* Semi-transparent dark background */
+            border: 1px solid rgba(var(--van-gogh-yellow-rgb), 0.3); /* Subtle yellow border */
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4), 0px 0px 0px 4px rgba(var(--van-gogh-blue-rgb), 0.5); /* Layered shadow for depth */
+            backdrop-filter: blur(8px); /* Frosted glass effect */
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem auto;
+            position: relative;
+            transform: perspective(1000px) rotateX(var(--rotateX, 0deg)) rotateY(var(--rotateY, 0deg)) translateZ(var(--translateZ, 0px)) translateY(var(--initial-y, 0px)) scale(var(--initial-scale, 0.9));
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.8s ease-out; /* Custom easing for smoother animation */
+            opacity: 0; /* Hidden by default, revealed by JS */
+            will-change: transform, opacity; /* Optimize for animation */
+        }
+
+        .impasto-element.is-visible {
+            opacity: 1;
+            transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px) translateY(0px) scale(1);
+        }
+
+        /* Text styling to mimic painted strokes */
+        .title-stroke {
+            text-shadow: 2px 2px 0px var(--van-gogh-blue), 4px 4px 0px var(--van-gogh-orange);
+            letter-spacing: 0.05em;
+            line-height: 1.2;
+        }
+
+        .text-impasto {
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.5);
+            line-height: 1.8;
+            font-size: 1.15rem;
+            color: var(--van-gogh-white);
+        }
+
+        /* General content wrapper, above background layers */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* Zevik's image styling: Artistic portrait effect */
+        .zevik-portrait {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 2rem auto;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0px 0px 0px 8px var(--van-gogh-orange), 0px 0px 0px 12px var(--van-gogh-blue);
+            filter: grayscale(70%) contrast(120%) brightness(110%);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .zevik-portrait:hover {
+            filter: grayscale(0%) contrast(100%) brightness(100%);
+            transform: scale(1.05);
+            box-shadow: 0px 0px 0px 8px var(--van-gogh-yellow), 0px 0px 0px 12px var(--van-gogh-light-blue);
+        }
+
+        .zevik-portrait img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block; /* Remove extra space below image */
+        }
+
+        /* Contact links styling: Bold and interactive */
+        .contact-link {
+            display: inline-flex; /* Use flex for icon and text alignment */
+            align-items: center;
+            background-color: rgba(var(--van-gogh-yellow-rgb), 0.8);
+            color: var(--van-gogh-dark);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+        }
+
+        .contact-link:hover {
+            background-color: var(--van-gogh-orange);
+            color: var(--van-gogh-white);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 4px 4px 10px rgba(0,0,0,0.6);
+        }
+        .contact-link svg { /* Adjust SVG icon size and margin */
+            width: 1.25em; /* Match font size */
+            height: 1.25em;
+            margin-right: 0.5rem; /* Space between icon and text in RTL */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .impasto-element {
+                padding: 1rem;
+                margin: 1.5rem auto;
+                width: 95%; /* Adjust width for smaller screens */
+            }
+            .title-stroke {
+                font-size: 2.5rem;
+            }
+            .text-impasto {
+                font-size: 1rem;
+            }
+            #custom-cursor {
+                width: 18px;
+                height: 18px;
+            }
+            #custom-cursor.active {
+                width: 28px;
+                height: 28px;
+            }
+            .text-5xl { font-size: 3rem; }
+            .text-4xl { font-size: 2.25rem; }
+            .text-3xl { font-size: 1.875rem; }
+            .text-2xl { font-size: 1.5rem; }
+            .text-xl { font-size: 1.25rem; }
+        }
+    </style>
+</head>
+<body class="bg-van-gogh-dark text-van-gogh-white selection:bg-van-gogh-yellow selection:text-van-gogh-dark">
+
+    <!-- Van Gogh Impasto Background Layers -->
+    <div class="van-gogh-bg-layer van-gogh-layer-4"></div>
+    <div class="van-gogh-bg-layer van-gogh-layer-1"></div>
+    <div class="van-gogh-bg-layer van-gogh-layer-2"></div>
+    <div class="van-gogh-bg-layer van-gogh-layer-3"></div>
+    <div class="van-gogh-bg-layer van-gogh-layer-5"></div>
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <main class="content-wrapper">
+        <!-- Main Title & Intro: Like a bold opening stroke on the canvas -->
+        <section class="impasto-element text-center max-w-4xl mx-auto" data-initial-y="100" data-delay="0">
+            <h1 class="text-5xl md:text-6xl font-extrabold mb-4 title-stroke text-van-gogh-yellow">
+                הבינה המלאכותית: קנווס חדש, צבעים ללא גבולות.
+            </h1>
+            <p class="text-2xl md:text-3xl font-light mb-8 text-van-gogh-light-blue leading-relaxed text-impasto">
+                בואו נצייר את העתיד – <span class="text-van-gogh-orange font-bold">עכשיו</span>.
+            </p>
+            <p class="text-xl md:text-2xl font-light text-impasto max-w-3xl mx-auto leading-loose">
+                בואו נצלול אל תוך עולם שבו המכחול הדיגיטלי יוצר מציאויות חדשות. זאביק אבינר מזמין אתכם למסע אל לב ה-AI, להפוך את הפוטנציאל העצום לכלי אמנות בידיכם.
+                <br>
+                החזון שלנו הוא לפרוש את מניפת הצבעים של ה-AI בפני כל אחד ואחת, להפוך את המורכב לפשוט, את הרחוק לנגיש.
+            </p>
+        </section>
+
+        <!-- Core Message Section: A central, vibrant splash of meaning -->
+        <section class="impasto-element text-center max-w-3xl mx-auto" data-initial-y="120" data-delay="200">
+            <h2 class="text-4xl font-bold mb-6 text-van-gogh-orange title-stroke">
+                מפסעות ראשונות ועד יצירות מופת
+            </h2>
+            <p class="text-lg md:text-xl text-impasto leading-loose">
+                כלים שיהפכו לחלק בלתי נפרד מנוף חייכם ועבודתכם, כאן ועכשיו.
+                <br>
+                אנו מאמינים כי שליטה ב-AI היא לא רק טכנולוגיה, אלא שפה חדשה, דרך יצירה חופשית, שתשחרר אתכם ליצור, לחדש ולהצטיין בכל תחום.
+            </p>
+        </section>
+
+        <!-- Target Audience Section: Different figures emerging from the landscape -->
+        <section class="impasto-element grid md:grid-cols-2 gap-8 text-impasto max-w-4xl mx-auto" data-initial-y="140" data-delay="400">
+            <div class="p-6">
+                <h3 class="text-3xl font-bold mb-4 text-van-gogh-yellow title-stroke">
+                    למי המסע הזה נועד?
+                </h3>
+                <ul class="list-none space-y-4">
+                    <li class="relative pr-6">
+                        <span class="absolute right-0 top-0 text-van-gogh-orange text-2xl">•</span>
+                        המשוטטים הראשונים בשדה הדיגיטלי: אלו המעוניינים להכיר את עולם ה-AI, ללמוד את יסודותיו ולגלות את קסמיו.
+                    </li>
+                    <li class="relative pr-6">
+                        <span class="absolute right-0 top-0 text-van-gogh-orange text-2xl">•</span>
+                        האמנים המקצועיים: אנשי מקצוע המבקשים לשלב את ה-AI בכלים היומיומיים שלהם, להפוך את עבודתם ליעילה ופורצת דרך.
+                    </li>
+                </ul>
+            </div>
+            <div class="p-6">
+                 <ul class="list-none space-y-4 pt-10 md:pt-0">
+                    <li class="relative pr-6">
+                        <span class="absolute right-0 top-0 text-van-gogh-orange text-2xl">•</span>
+                        מנהיגי הגלריות: מנהלים וארגונים המחפשים להאיר את צוותיהם בידע ה-AI, להוביל לחדשנות ארגונית.
+                    </li>
+                    <li class="relative pr-6">
+                        <span class="absolute right-0 top-0 text-van-gogh-orange text-2xl">•</span>
+                        הציירים המתקדמים: יחידים וצוותים המעוניינים לפתח פרויקטים מבוססי AI משלהם, ליצור את המחר.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Expertise Areas Section: A palette of skills and possibilities -->
+        <section class="impasto-element max-w-4xl mx-auto" data-initial-y="160" data-delay="600">
+            <h2 class="text-4xl font-bold text-center mb-8 text-van-gogh-blue title-stroke">
+                צבעי הקשת של ה-AI: תחומי התמחות
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 text-impasto">
+                <div class="p-4 bg-transparent border-b-2 border-van-gogh-orange">
+                    <h4 class="text-2xl font-bold mb-2 text-van-gogh-yellow">יצירת טקסטים ותוכן</h4>
+                    <p>לרקוח סיפורים, מאמרים ומסרים עוצמתיים בלחיצת מכחול דיגיטלי.</p>
+                </div>
+                <div class="p-4 bg-transparent border-b-2 border-van-gogh-orange">
+                    <h4 class="text-2xl font-bold mb-2 text-van-gogh-yellow">בניית אפליקציות חכמות</h4>
+                    <p>להפיח חיים ברעיונות באמצעות יישומים אינטליגנטיים ויצירתיים.</p>
+                </div>
+                <div class="p-4 bg-transparent border-b-2 border-van-gogh-orange">
+                    <h4 class="text-2xl font-bold mb-2 text-van-gogh-yellow">פיתוח אתרים מבוססי AI</h4>
+                    <p>ליצור גלריות דיגיטליות הנושמות ומגיבות, עם קסם הבינה המלאכותית.</p>
+                </div>
+                <div class="p-4 bg-transparent border-b-2 border-van-gogh-orange">
+                    <h4 class="text-2xl font-bold mb-2 text-van-gogh-yellow">ניתוח נתונים ומחקר</h4>
+                    <p>לחשוף את הנסתר בים הנתונים, להאיר תובנות חדשות ככוכבים זוהרים.</p>
+                </div>
+                <div class="p-4 bg-transparent border-b-2 border-van-gogh-orange">
+                    <h4 class="text-2xl font-bold mb-2 text-van-gogh-yellow">יצירת תמונות ואומנות</h4>
+                    <p>להפוך מילים ויזואליות ליצירות אמנות מרהיבות, ללא גבולות לדמיון.</p>
+                </div>
+                <div class="p-4 bg-transparent border-b-2 border-van-gogh-orange">
+                    <h4 class="text-2xl font-bold mb-2 text-van-gogh-yellow">אוטומציה של תהליכים</h4>
+                    <p>לפשט את המורכב, לשחרר זמן ואנרגיה ליצירה האמיתית.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section: The tools of the trade, presented as distinct painted areas -->
+        <section class="impasto-element max-w-4xl mx-auto" data-initial-y="180" data-delay="800">
+            <h2 class="text-4xl font-bold text-center mb-8 text-van-gogh-orange title-stroke">
+                השירותים שלנו: המכחולים העומדים לרשותכם
+            </h2>
+            <div class="grid md:grid-cols-2 gap-8 text-impasto">
+                <div class="bg-[rgba(var(--van-gogh-dark-rgb),0.7)] p-6 rounded-lg shadow-xl border border-[rgba(var(--van-gogh-yellow-rgb),0.3)] backdrop-blur-md">
+                    <h3 class="text-3xl font-bold mb-3 text-van-gogh-yellow">סדנאות קבוצתיות</h3>
+                    <p>כתמי צבע עזים בקהילה – מפגשים מעשיים וממוקדים, ליצירה משותפת והתנסות חווייתית. ללמוד יחד, לגלות יחד.</p>
+                </div>
+                <div class="bg-[rgba(var(--van-gogh-dark-rgb),0.7)] p-6 rounded-lg shadow-xl border border-[rgba(var(--van-gogh-yellow-rgb),0.3)] backdrop-blur-md">
+                    <h3 class="text-3xl font-bold mb-3 text-van-gogh-yellow">שיעורים פרטיים</h3>
+                    <p>מכחול אישי לכל תלמיד – התאמה מושלמת לקצב, לרמה ולצרכים הייחודיים שלכם. מסע עמוק אל עולם ה-AI.</p>
+                </div>
+                <div class="bg-[rgba(var(--van-gogh-dark-rgb),0.7)] p-6 rounded-lg shadow-xl border border-[rgba(var(--van-gogh-yellow-rgb),0.3)] backdrop-blur-md">
+                    <h3 class="text-3xl font-bold mb-3 text-van-gogh-yellow">הרצאות לארגונים</h3>
+                    <p>פתיחת גלריות חדשות לתודעה – הרצאות מרתקות המעניקות השראה וידע לצוותים, מפתחות אופקים חדשים ומעודדות חדשנות.</p>
+                </div>
+                <div class="bg-[rgba(var(--van-gogh-dark-rgb),0.7)] p-6 rounded-lg shadow-xl border border-[rgba(var(--van-gogh-yellow-rgb),0.3)] backdrop-blur-md">
+                    <h3 class="text-3xl font-bold mb-3 text-van-gogh-yellow">ייעוץ ופיתוח פרויקטים</h3>
+                    <p>ליווי מקצועי ואישי – משלב הרעיון ועד למימוש הפרויקט. נהפוך את החזון שלכם למציאות דיגיטלית מתקדמת.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide Section: The master painter, a vivid portrait and contact info -->
+        <section class="impasto-element text-center max-w-3xl mx-auto" data-initial-y="200" data-delay="1000">
+            <h2 class="text-4xl font-bold mb-6 text-van-gogh-blue title-stroke">
+                המאסטר והמנטור: זאביק אבינר
+            </h2>
+            <div class="zevik-portrait">
+                <img src="https://link.zevikaviner.com/zevik" alt="דיוקן של זאביק אבינר - מומחה בינה מלאכותית.">
+            </div>
+            <p class="text-xl md:text-2xl font-light text-impasto leading-loose mb-6">
+                זאביק אבינר – המאסטר, הצייר הראשי במלאכת ה-AI. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות בינה מלאכותית.
+                <br>
+                הוא מנגיש את הקסם, הופך את הטכנולוגיה למסע יצירה אישי ומוכשר, ומוביל אתכם בבטחה אל עבר השליטה המלאה בכלים העוצמתיים של העתיד.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4 mt-8">
+                <a href="https://wa.me/972546609385" target="_blank" class="contact-link" aria-label="שלח הודעת ווטסאפ לזאביק">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.52 3.4 1.48 4.88l-1.04 3.79 3.86-1.01c1.42.92 3.06 1.45 4.9 1.45 5.46 0 9.91-4.45 9.91-9.91s-4.45-9.91-9.91-9.91zm0 18.04c-1.6 0-3.11-.47-4.42-1.3l-.31-.18-3.26.85.87-3.18-.2-.33c-.87-1.46-1.37-3.13-1.37-4.88 0-4.47 3.63-8.1 8.1-8.1s8.1 3.63 8.1 8.1-3.63 8.1-8.1 8.1zm4.51-6.19c-.25-.13-.78-.39-.9-.44-.12-.05-.2-.07-.28.07-.07.12-.29.36-.36.44-.07.07-.15.08-.28.03-.12-.05-.51-.19-.97-.6-.35-.35-.59-.62-.66-.75-.07-.12 0-.17.05-.25.04-.07.09-.12.13-.19.04-.06.02-.12 0-.18-.02-.07-.25-.6-.34-.81-.08-.2-.16-.17-.22-.17-.07 0-.15-.02-.2-.02-.07 0-.19.03-.29.15-.09.12-.34.33-.39.4-.06.07-.09.15-.09.25-.01.08.01.24.18.39.16.15.41.35.45.39.04.04.07.1.07.25s-.08.25-.15.35c-.07.1-.15.15-.22.22-.07.07-.15.15-.22.2-.07.06-.15.1-.07.25.07.12.51 1.05 1.23 1.34.72.29 1.15.42 1.3.47.14.05.25.04.34.02.09-.02.25-.1.35-.2c.1-.12.18-.2.25-.3.07-.08.13-.15.18-.22.04-.07.08-.13.13-.2.07-.1.14-.14.22-.14 0-.01.07.02.2.14.12.12.78.7 1.22.6.45-.1.72-.89.72-.99 0-.09-.04-.15-.09-.2zm-4.51-.85l-.01.01-.01.01.01.01z"/></svg>
+                    <span>ווטסאפ: 054-6609385</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="contact-link" aria-label="שלח אימייל לזאביק">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12.713l-11.75 6.287h23.5l-11.75-6.287zm0-2.226l-12 6.4v-12.8l12-6.4 12 6.4v12.8l-12-6.4z"/></svg>
+                    <span>אימייל: zaviner@gmail.com</span>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        const speed = 0.2; // Adjust for smoother or snappier movement
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * speed;
+            cursorY += (mouseY - cursorY) * speed;
+            cursor.style.left = `${cursorX}px`;
+            cursor.style.top = `${cursorY}px`;
+            requestAnimationFrame(animateCursor);
+        }
+
+        document.addEventListener('mousemove', e => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        document.addEventListener('mousedown', () => cursor.classList.add('active'));
+        document.addEventListener('mouseup', () => cursor.classList.remove('active'));
+
+        animateCursor(); // Start the animation loop
+
+        // Intersection Observer for impasto-element reveal
+        const impastoElements = document.querySelectorAll('.impasto-element');
+
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // 10% of the element visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = parseInt(entry.target.dataset.delay || '0', 10);
+                    // No need to set transform again here, it's already defined in CSS and `is-visible` overrides it
+                    setTimeout(() => {
+                        entry.target.classList.add('is-visible');
+                    }, delay);
+                    observer.unobserve(entry.target); // Stop observing once visible
+                }
+            });
+        }, observerOptions);
+
+        impastoElements.forEach(element => {
+            // Apply initial transform based on data attributes (CSS variables could also be used here)
+            const initialY = parseInt(element.dataset.initialY || '0', 10);
+            element.style.setProperty('--initial-y', `${initialY}px`);
+            element.style.setProperty('--initial-scale', '0.9'); // Slightly smaller
+            element.style.setProperty('--rotateX', '5deg'); // Subtle rotation for depth
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>קוד העתיד: שליטה בבינה המלאכותית</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Custom Tailwind Configuration for 80s Anime / Cyberpunk Aesthetic
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-purple': '#BF00FF', // Bright purple
+                        'neon-blue': '#00FFFF',   // Cyan
+                        'neon-pink': '#FF007F',   // Hot pink
+                        'cyber-gray-light': '#8A8A8A', // Lighter gray for details
+                        'cyber-gray': '#3A3A3A',  // Darker grey for accents
+                        'cyber-black': '#1A1A1A', // Deeper black
+                    },
+                    boxShadow: {
+                        'glow-purple': '0 0 10px #BF00FF, 0 0 20px #BF00FF',
+                        'glow-blue': '0 0 10px #00FFFF, 0 0 20px #00FFFF',
+                        'glow-pink': '0 0 10px #FF007F, 0 0 20px #FF007F',
+                    },
+                    fontFamily: {
+                        'orbitron': ['Orbitron', 'sans-serif'],
+                        'heebo': ['Heebo', 'sans-serif'],
+                    },
+                    keyframes: {
+                        'scanline-pulse': {
+                            '0%, 100%': { opacity: '0.08' },
+                            '50%': { opacity: '0.04' },
+                        },
+                        'neon-flicker': {
+                            '0%, 18%, 22%, 25%, 53%, 57%, 100%': {
+                                textShadow: '0 0 4px #fff, 0 0 11px #fff, 0 0 19px #fff, 0 0 20px var(--neon-flicker-color), 0 0 30px var(--neon-flicker-color), 0 0 40px var(--neon-flicker-color), 0 0 55px var(--neon-flicker-color), 0 0 75px var(--neon-flicker-color)'
+                            },
+                            '20%, 24%, 55%': {
+                                textShadow: 'none'
+                            }
+                        },
+                        'text-reveal': {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        'glitch-effect': {
+                            '0%': { transform: 'translate(0)' },
+                            '20%': { transform: 'translate(-2px, 2px)' },
+                            '40%': { transform: 'translate(-2px, -2px)' },
+                            '60%': { transform: 'translate(2px, 2px)' },
+                            '80%': { transform: 'translate(2px, -2px)' },
+                            '100%': { transform: 'translate(0)' }
+                        },
+                        'fade-in-up': {
+                            '0%': { opacity: '0', transform: 'translateY(50px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        'pulse-glow': {
+                            '0%, 100%': { boxShadow: '0 0 8px currentColor' },
+                            '50%': { boxShadow: '0 0 20px currentColor, 0 0 30px currentColor' },
+                        }
+                    },
+                    animation: {
+                        'scanline-pulse': 'scanline-pulse 4s infinite alternate',
+                        'neon-flicker-purple': 'neon-flicker 1.5s infinite alternate',
+                        'neon-flicker-blue': 'neon-flicker 1.5s infinite alternate',
+                        'neon-flicker-pink': 'neon-flicker 1.5s infinite alternate',
+                        'text-reveal-slow': 'text-reveal 1s ease-out forwards',
+                        'glitch-subtle': 'glitch-effect 0.7s infinite alternate-reverse',
+                        'fade-in-up': 'fade-in-up 1s ease-out forwards',
+                        'pulse-glow-purple': 'pulse-glow 2s infinite ease-in-out',
+                        'pulse-glow-blue': 'pulse-glow 2.2s infinite ease-in-out',
+                        'pulse-glow-pink': 'pulse-glow 2.4s infinite ease-in-out',
+                    }
+                }
+            },
+            plugins: [],
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer base {
+            html {
+                font-family: 'Heebo', sans-serif;
+                background-color: #0d0d0d; /* Very dark background */
+                color: #e0e0e0; /* Light text for contrast */
+                cursor: none; /* Hide default cursor */
+            }
+            h1, h2, h3, h4 {
+                font-family: 'Orbitron', sans-serif;
+                color: #e0e0e0;
+            }
+            /* Setting custom CSS variables for neon flicker animations */
+            .text-neon-purple { --neon-flicker-color: #BF00FF; }
+            .text-neon-blue { --neon-flicker-color: #00FFFF; }
+            .text-neon-pink { --neon-flicker-color: #FF007F; }
+
+            .scanlines::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: repeating-linear-gradient(
+                    to bottom,
+                    transparent 0px,
+                    transparent 1px,
+                    rgba(0, 0, 0, 0.2) 2px,
+                    rgba(0, 0, 0, 0.2) 3px
+                );
+                pointer-events: none;
+                z-index: 100; /* Above most content but below cursor */
+                animation: scanline-pulse 4s infinite alternate;
+            }
+            .glitch-text {
+                position: relative;
+                display: inline-block;
+                color: #fff;
+            }
+            .glitch-text::before,
+            .glitch-text::after {
+                content: attr(data-text);
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #0d0d0d;
+                overflow: hidden; /* Important for clip-path */
+            }
+            .glitch-text::before {
+                left: -2px;
+                text-shadow: 1px 0 #FF007F; /* Pink shadow */
+                animation: glitch-effect 0.7s infinite alternate-reverse;
+                clip-path: inset(50% 0 30% 0); /* Subtle top glitch */
+            }
+            .glitch-text::after {
+                left: 2px;
+                text-shadow: -1px 0 #00FFFF; /* Blue shadow */
+                animation: glitch-effect 0.9s infinite alternate;
+                clip-path: inset(10% 0 60% 0); /* Subtle bottom glitch */
+            }
+
+            /* Custom `animation-delay` classes for JS to apply */
+            .animate-delay-0 { animation-delay: 0s !important; }
+            .animate-delay-100 { animation-delay: 0.1s !important; }
+            .animate-delay-200 { animation-delay: 0.2s !important; }
+            .animate-delay-300 { animation-delay: 0.3s !important; }
+            .animate-delay-400 { animation-delay: 0.4s !important; }
+            .animate-delay-500 { animation-delay: 0.5s !important; }
+            .animate-delay-600 { animation-delay: 0.6s !important; }
+            .animate-delay-700 { animation-delay: 0.7s !important; }
+            .animate-delay-800 { animation-delay: 0.8s !important; }
+            .animate-delay-1500 { animation-delay: 1.5s !important; }
+
+            /* Ensure elements to be animated start invisible */
+            [data-scroll-in], .animate-fade-in-up, .animate-text-reveal-slow {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden min-h-screen relative text-gray-200 bg-cyber-black">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="fixed w-6 h-6 rounded-full pointer-events-none z-[9999] transition-transform duration-100 ease-out" style="border: 2px solid #FFFFFF; box-shadow: 0 0 0 2px rgba(0,0,0,0.8);"></div>
+
+    <!-- Background Elements (fixed position, negative z-index) -->
+    <div class="fixed inset-0 bg-gradient-to-br from-cyber-black to-cyber-gray-light/10 z-[-1] opacity-90"></div>
+    <div class="fixed inset-0 z-[-2] background-grid"></div>
+    <div class="fixed inset-0 z-10 scanlines"></div> <!-- Scanlines are above most content -->
+
+    <!-- Main Content Area - no conventional structure -->
+    <div class="relative min-h-screen pt-16 pb-32 px-4 sm:px-8 lg:px-16 flex flex-col items-center justify-center space-y-24">
+
+        <!-- Title Sequence - Centralized and Dramatic -->
+        <div class="relative text-center max-w-4xl mx-auto py-20 px-8 bg-gradient-to-br from-cyber-gray/20 to-cyber-black/20 backdrop-blur-sm rounded-lg border-2 border-neon-purple/50 shadow-glow-purple" data-scroll-in data-delay="0s">
+            <h1 class="text-5xl sm:text-7xl lg:text-8xl font-orbitron font-bold leading-tight text-neon-purple animate-neon-flicker-purple" data-delay="0s">
+                <span class="glitch-text" data-text="קוד העתיד:">קוד העתיד:</span>
+            </h1>
+            <h2 class="text-3xl sm:text-5xl lg:text-6xl font-orbitron font-bold leading-relaxed text-neon-blue mt-4 animate-neon-flicker-blue" data-delay="0.5s">
+                <span class="glitch-text" data-text="שליטה בבינה המלאכותית">שליטה בבינה המלאכותית</span>
+            </h2>
+            <p class="mt-8 text-xl sm:text-2xl text-gray-300 animate-fade-in-up" data-delay="1.5s" dir="rtl">
+                בעידן שבו הקווים בין מציאות לקוד מיטשטשים, הבינה המלאכותית היא לא רק כלי - היא שפה.
+                שפה שמי שישלוט בה, יפסל את המחר. הצטרף למסע אל לב המטריצה הדיגיטלית.
+            </p>
+        </div>
+
+        <!-- Zevik Aviner - The Digital Architect Module -->
+        <div class="relative w-full max-w-5xl mx-auto flex flex-col lg:flex-row items-center justify-center p-8 bg-gradient-to-tl from-cyber-gray/30 to-cyber-black/30 backdrop-blur-sm rounded-xl border-2 border-neon-blue/50 shadow-glow-blue" data-scroll-in data-delay="0s">
+            <div class="lg:w-1/3 flex justify-center lg:justify-start mb-8 lg:mb-0 lg:ml-8">
+                <div class="relative w-48 h-48 sm:w-64 sm:h-64 rounded-full overflow-hidden border-4 border-neon-pink/70 shadow-glow-pink animate-pulse-glow-pink" data-delay="0.2s">
+                    <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מנטור AI" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-neon-pink/20 opacity-30"></div>
+                </div>
+            </div>
+            <div class="lg:w-2/3 text-center lg:text-right" dir="rtl">
+                <h3 class="text-3xl sm:text-4xl font-orbitron font-bold text-neon-pink animate-neon-flicker-pink" data-delay="0.3s">
+                    זאביק אבינר - הארכיטקט הדיגיטלי
+                </h3>
+                <p class="text-lg sm:text-xl leading-relaxed text-gray-300 animate-fade-in-up" data-delay="0.5s">
+                    מן המעמקים הדיגיטליים, מגיע זאביק אבינר - מנטור ומומחה, הארכיטקט שמאחורי קודים פורצי דרך.
+                    עם ניסיון עשיר בפיתוח פרויקטים ומערכות AI, זאביק מתמחה בהנגשת הטכנולוגיה, והפיכתה לכלי עבודה יומיומי לכל אחד.
+                    הוא יחשוף בפניך את הסודות, צעד אחר צעד, בדרך לשליטה מוחלטת בעולם הבינה המלאכותית.
+                </p>
+            </div>
+        </div>
+
+        <!-- Pathways to Mastery - Layered information modules -->
+        <div class="relative w-full max-w-6xl mx-auto mt-24">
+            <h3 class="text-4xl font-orbitron font-bold text-center text-neon-purple mb-12 animate-neon-flicker-purple" data-scroll-in data-delay="0s">
+                נתיבי ההדרכה: מסע אל הידע
+            </h3>
+
+            <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="relative p-6 bg-gradient-to-br from-neon-blue/20 to-cyber-black/30 rounded-lg border border-neon-blue shadow-glow-blue text-center flex flex-col items-center justify-center h-full animate-fade-in-up" data-scroll-in data-delay="0.2s" dir="rtl">
+                    <div class="text-5xl text-neon-blue mb-4 leading-none select-none">✦</div>
+                    <h4 class="text-2xl font-orbitron font-bold text-neon-blue mb-2">סדנאות קוד אינטנסיביות</h4>
+                    <p class="text-gray-300">אימונים קבוצתיים מעשיים וממוקדים, לצלול לעומק עולם ה-AI עם ליווי מקצועי.</p>
+                </div>
+                <div class="relative p-6 bg-gradient-to-tl from-neon-pink/20 to-cyber-black/30 rounded-lg border border-neon-pink shadow-glow-pink text-center flex flex-col items-center justify-center h-full animate-fade-in-up" data-scroll-in data-delay="0.4s" dir="rtl">
+                    <div class="text-5xl text-neon-pink mb-4 leading-none select-none">⚙</div>
+                    <h4 class="text-2xl font-orbitron font-bold text-neon-pink mb-2">מפגשים פרטיים מותאמים</h4>
+                    <p class="text-gray-300">ניווט אישי המותאם לרמה ולצרכים שלך, צעד אחר צעד, בקצב שלך.</p>
+                </div>
+                <div class="relative p-6 bg-gradient-to-br from-neon-purple/20 to-cyber-black/30 rounded-lg border border-neon-purple shadow-glow-purple text-center flex flex-col items-center justify-center h-full animate-fade-in-up" data-scroll-in data-delay="0.6s" dir="rtl">
+                    <div class="text-5xl text-neon-purple mb-4 leading-none select-none">⌘</div>
+                    <h4 class="text-2xl font-orbitron font-bold text-neon-purple mb-2">הרצאות לחללי עבודה</h4>
+                    <p class="text-gray-300">הארה ופתיחת אופקים דיגיטליים לצוותים ולארגונים המובילים את העתיד.</p>
+                </div>
+                <div class="relative p-6 bg-gradient-to-tl from-neon-blue/20 to-cyber-black/30 rounded-lg border border-neon-blue shadow-glow-blue text-center flex flex-col items-center justify-center h-full animate-fade-in-up" data-scroll-in data-delay="0.8s" dir="rtl">
+                    <div class="text-5xl text-neon-blue mb-4 leading-none select-none">❖</div>
+                    <h4 class="text-2xl font-orbitron font-bold text-neon-blue mb-2">פיתוח פרויקטים אסטרטגיים</h4>
+                    <p class="text-gray-300">ליווי מקצועי ופיתוח פתרונות AI מותאמים אישית למיזמים שלך.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Digital Battlegrounds - Expertise Modules -->
+        <div class="relative w-full max-w-6xl mx-auto mt-24">
+            <h3 class="text-4xl font-orbitron font-bold text-center text-neon-blue mb-12 animate-neon-flicker-blue" data-scroll-in data-delay="0s">
+                שדות הקרב הדיגיטליים שלנו
+            </h3>
+
+            <div class="flex flex-wrap justify-center gap-6">
+                <div class="data-module bg-cyber-gray/40 border-l-4 border-neon-purple p-4 text-center rounded-md shadow-lg transition-transform hover:scale-105 duration-300 hover:shadow-glow-purple animate-fade-in-up" data-scroll-in data-delay="0s" dir="rtl">
+                    <span class="text-neon-purple text-3xl mb-2 block">✍</span>
+                    <p class="text-lg font-orbitron text-gray-200">יצירת נרטיבים קיברנטיים</p>
+                </div>
+                <div class="data-module bg-cyber-gray/40 border-l-4 border-neon-blue p-4 text-center rounded-md shadow-lg transition-transform hover:scale-105 duration-300 hover:shadow-glow-blue animate-fade-in-up" data-scroll-in data-delay="0.1s" dir="rtl">
+                    <span class="text-neon-blue text-3xl mb-2 block">⛭</span>
+                    <p class="text-lg font-orbitron text-gray-200">אדריכלות אפליקציות חכמות</p>
+                </div>
+                <div class="data-module bg-cyber-gray/40 border-l-4 border-neon-pink p-4 text-center rounded-md shadow-lg transition-transform hover:scale-105 duration-300 hover:shadow-glow-pink animate-fade-in-up" data-scroll-in data-delay="0.2s" dir="rtl">
+                    <span class="text-neon-pink text-3xl mb-2 block">🌐</span>
+                    <p class="text-lg font-orbitron text-gray-200">פיתוח ממשקים ממוקדי AI</p>
+                </div>
+                <div class="data-module bg-cyber-gray/40 border-l-4 border-neon-purple p-4 text-center rounded-md shadow-lg transition-transform hover:scale-105 duration-300 hover:shadow-glow-purple animate-fade-in-up" data-scroll-in data-delay="0.3s" dir="rtl">
+                    <span class="text-neon-purple text-3xl mb-2 block">📊</span>
+                    <p class="text-lg font-orbitron text-gray-200">פענוח דאטה ותובנות עתידניות</p>
+                </div>
+                <div class="data-module bg-cyber-gray/40 border-l-4 border-neon-blue p-4 text-center rounded-md shadow-lg transition-transform hover:scale-105 duration-300 hover:shadow-glow-blue animate-fade-in-up" data-scroll-in data-delay="0.4s" dir="rtl">
+                    <span class="text-neon-blue text-3xl mb-2 block">🖼</span>
+                    <p class="text-lg font-orbitron text-gray-200">פיסול אמנות אלגוריתמית</p>
+                </div>
+                <div class="data-module bg-cyber-gray/40 border-l-4 border-neon-pink p-4 text-center rounded-md shadow-lg transition-transform hover:scale-105 duration-300 hover:shadow-glow-pink animate-fade-in-up" data-scroll-in data-delay="0.5s" dir="rtl">
+                    <span class="text-neon-pink text-3xl mb-2 block">🤖</span>
+                    <p class="text-lg font-orbitron text-gray-200">אוטומציה טרנספורמטיבית</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Target Audience - Initiates Module -->
+        <div class="relative w-full max-w-5xl mx-auto p-8 mt-24 bg-gradient-to-tr from-cyber-gray/30 to-cyber-black/30 backdrop-blur-sm rounded-xl border-2 border-neon-pink/50 shadow-glow-pink" data-scroll-in data-delay="0s">
+            <h3 class="text-4xl font-orbitron font-bold text-center text-neon-pink mb-8 animate-neon-flicker-pink" data-delay="0s">
+                מי יצטרף למסע?
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
+                <div class="initiate-module relative p-6 bg-cyber-black/60 rounded-lg border border-neon-purple/70 animate-fade-in-up" data-scroll-in data-delay="0s" dir="rtl">
+                    <h4 class="text-2xl font-orbitron text-neon-purple mb-2">המתחילים: צעד ראשון למטריצה</h4>
+                    <p class="text-gray-300">למי שרוצה להכיר את עולם ה-AI ולעשות את צעדיו הראשונים בעולם הדיגיטלי החדש.</p>
+                </div>
+                <div class="initiate-module relative p-6 bg-cyber-black/60 rounded-lg border border-neon-blue/70 animate-fade-in-up" data-scroll-in data-delay="0.2s" dir="rtl">
+                    <h4 class="text-2xl font-orbitron text-neon-blue mb-2">המקצוענים: שדרוג המציאות</h4>
+                    <p class="text-gray-300">אנשי מקצוע המעוניינים להטמיע AI בעבודתם ולשפר תהליכים.</p>
+                </div>
+                <div class="initiate-module relative p-6 bg-cyber-black/60 rounded-lg border border-neon-pink/70 animate-fade-in-up" data-scroll-in data-delay="0.4s" dir="rtl">
+                    <h4 class="text-2xl font-orbitron text-neon-pink mb-2">המנהלים: פיקוד על העידון החדש</h4>
+                    <p class="text-gray-300">מנהלים וארגונים המחפשים הדרכות לצוותים ופתיחת אופקים חדשים.</p>
+                </div>
+                <div class="initiate-module relative p-6 bg-cyber-black/60 rounded-lg border border-neon-purple/70 animate-fade-in-up" data-scroll-in data-delay="0.6s" dir="rtl">
+                    <h4 class="text-2xl font-orbitron text-neon-purple mb-2">החזון: בניית עולמות ממוחשבים</h4>
+                    <p class="text-gray-300">ברמה מתקדמת - פיתוח פרויקטים מבוססי AI ועיצוב העתיד הטכנולוגי.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Stream Access - Contact Info -->
+        <div class="relative w-full max-w-3xl mx-auto p-8 mt-24 bg-gradient-to-br from-cyber-gray/40 to-cyber-black/40 backdrop-blur-sm rounded-xl border-2 border-neon-blue/50 shadow-glow-blue text-center" data-scroll-in data-delay="0s">
+            <h3 class="text-4xl font-orbitron font-bold text-neon-blue mb-8 animate-neon-flicker-blue" data-delay="0s">
+                גישה למנטור: קבלת נתיב תקשורת
+            </h3>
+            <div class="space-y-6">
+                <p class="text-xl sm:text-2xl font-orbitron text-gray-100 animate-fade-in-up" data-delay="0s" dir="rtl">
+                    <span class="text-neon-pink">ווטסאפ:</span> <a href="https://wa.me/972546609385" class="text-neon-purple hover:underline hover:text-neon-blue transition-colors duration-300">054-6609385</a>
+                </p>
+                <p class="text-xl sm:text-2xl font-orbitron text-gray-100 animate-fade-in-up" data-delay="0.2s" dir="rtl">
+                    <span class="text-neon-pink">אימייל:</span> <a href="mailto:zaviner@gmail.com" class="text-neon-purple hover:underline hover:text-neon-blue transition-colors duration-300">zaviner@gmail.com</a>
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cursor = document.getElementById('custom-cursor');
+
+            // Custom Cursor Logic
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.transform = `translate(${e.clientX - cursor.offsetWidth / 2}px, ${e.clientY - cursor.offsetHeight / 2}px)`;
+            });
+
+            // Intersection Observer for scroll-in animations
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1 // Trigger when 10% of the element is visible
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = entry.target;
+                        const delay = target.dataset.delay || '0s'; // Get delay from data-delay attribute
+                        
+                        // Apply animation classes and delay
+                        if (target.tagName === 'H1' || target.tagName === 'H2' || target.tagName === 'H3') {
+                            if (target.classList.contains('text-neon-purple')) target.classList.add('animate-neon-flicker-purple');
+                            else if (target.classList.contains('text-neon-blue')) target.classList.add('animate-neon-flicker-blue');
+                            else if (target.classList.contains('text-neon-pink')) target.classList.add('animate-neon-flicker-pink');
+                            target.style.animationDelay = delay;
+                        } else if (target.tagName === 'P' || target.classList.contains('data-module') || target.classList.contains('initiate-module') || target.tagName === 'DIV' && target.classList.contains('shadow-glow-purple') || target.classList.contains('shadow-glow-blue') || target.classList.contains('shadow-glow-pink')) {
+                             target.classList.add('animate-fade-in-up');
+                             target.style.animationDelay = delay;
+                        }
+                        
+                        target.classList.remove('opacity-0'); // Ensure it becomes visible
+                        observer.unobserve(target); // Stop observing once animated
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all elements with data-scroll-in
+            document.querySelectorAll('[data-scroll-in]').forEach(element => {
+                element.classList.add('opacity-0'); // Ensure initial hidden state
+                observer.observe(element);
+            });
+
+            // Specific handling for elements that might be nested and need their own delay
+            document.querySelectorAll('[data-scroll-in] .animate-fade-in-up').forEach(el => {
+                el.classList.add('opacity-0'); // Ensure nested animated elements are hidden initially
+                observer.observe(el);
+            });
+            document.querySelectorAll('[data-scroll-in] [data-delay]').forEach(el => {
+                el.classList.add('opacity-0'); // Ensure nested animated elements are hidden initially
+                observer.observe(el);
+            });
+        });
+    </script>
+    <style>
+        /* CSS for the background grid */
+        .background-grid {
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+    </style>
+</body>
+</html>

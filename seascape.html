@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הכל על חתולים בציור ימי</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;700&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Cursor */
+        #custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out; /* Smooth follow, not instant jump */
+            border: 2px solid #FFFFFF; /* White border for high contrast */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for high contrast */
+        }
+        body {
+            cursor: none; /* Hide default cursor */
+            font-family: 'Rubik', sans-serif;
+            background-color: #030712; /* Dark background */
+            overflow-x: hidden;
+        }
+        h1, h2, h3 {
+            font-family: 'Heebo', sans-serif;
+            font-weight: 700;
+        }
+        /* Custom scroll indicator - optional, but artistic */
+        .scroll-indicator {
+            position: fixed;
+            right: 20px; /* Position on the right for RTL */
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            background-color: rgba(255, 255, 255, 0.2);
+            z-index: 50;
+        }
+        .scroll-indicator-bar {
+            width: 100%;
+            background-color: #38bdf8; /* Sky blue */
+            transition: height 0.1s linear;
+        }
+        /* Parallax background effects */
+        .parallax-bg {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            transform: translateY(0);
+            transition: opacity 0.5s ease-in-out;
+        }
+        /* Gradient overlay for depth */
+        .depth-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+            z-index: 0; /* Slightly above fixed backgrounds, below content */
+            pointer-events: none;
+        }
+        /* Specific section styling for radical artistry */
+        .art-section {
+            min-height: 120vh; /* Make sections longer than viewport for scroll effects */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 8rem 2rem;
+            position: relative;
+            z-index: 10;
+        }
+        .art-section:nth-child(even) {
+            background-color: rgba(0, 0, 0, 0.1); /* Subtle dark overlay for even sections */
+        }
+        .art-section-content {
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 3rem;
+            border-radius: 1rem;
+            max-width: 900px;
+            text-align: right; /* RTL alignment */
+            margin: 0 auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        .art-section-image-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            opacity: 0.3;
+            filter: grayscale(100%) brightness(50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        .art-section-image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 1rem;
+        }
+
+        /* Responsive typography adjustments */
+        @media (max-width: 768px) {
+            .art-section-content {
+                padding: 1.5rem;
+                max-width: 95%;
+            }
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            p { font-size: 1rem; }
+            #custom-cursor {
+                width: 16px;
+                height: 16px;
+                border: 1px solid #FFFFFF;
+                box-shadow: 0 0 0 1px rgba(0,0,0,0.8);
+            }
+        }
+    </style>
+</head>
+<body class="text-gray-200 antialiased overflow-y-scroll" style="background-color: #000a12;">
+
+    <!-- Custom High-Contrast Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-bg" id="bg-layer-1" data-parallax-speed="0.1" style="background-image: url('https://source.unsplash.com/random/1920x1080/?deep,ocean,abyss,mysterious'); opacity: 0.7;"></div>
+    <div class="parallax-bg" id="bg-layer-2" data-parallax-speed="0.2" style="background-image: url('https://source.unsplash.com/random/1920x1080/?sea,waves,horizon,misty'); opacity: 0.5;"></div>
+    <div class="parallax-bg" id="bg-layer-3" data-parallax-speed="0.3" style="background-image: url('https://source.unsplash.com/random/1920x1080/?sea,foam,water,movement'); opacity: 0.3;"></div>
+
+    <!-- Depth Gradient Overlay -->
+    <div class="depth-gradient"></div>
+
+    <main class="relative z-10">
+
+        <!-- Section 1: Introduction - The Call of the Deep -->
+        <section class="art-section text-center min-h-screen relative overflow-hidden" id="intro">
+            <div class="art-section-content max-w-4xl mx-auto py-16 px-8 bg-gradient-to-t from-blue-950 to-transparent bg-opacity-70 text-white shadow-2xl rounded-3xl border border-blue-700/50">
+                <h1 class="text-6xl md:text-8xl mb-8 leading-tight text-blue-300 drop-shadow-lg" style="text-shadow: 0 0 20px rgba(56,189,248,0.7);">
+                    הכל על חתולים בציור ימי
+                </h1>
+                <p class="text-xl md:text-2xl leading-relaxed mt-4 text-blue-100">
+                    בממלכת הגלים המתנפצים, היכן שהאופק מתמזג עם התהום, שם שוכנים סודותיהם העתיקים של הים והחתולים. מסע אל נבכי הנפש, העוקב אחר יצורים מסתוריים המנווטים בין מים עמוקים לרוחות חופשיות.
+                </p>
+                <div class="mt-12 text-center">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg" onclick="document.getElementById('section-1').scrollIntoView({ behavior: 'smooth' });">
+                        התחל את המסע הימי
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Whispers of the Tide - The Gazing Feline -->
+        <section class="art-section relative" id="section-1">
+            <div class="art-section-image-wrapper">
+                <img src="https://source.unsplash.com/random/1200x800/?cat,ocean,gazing,mysterious,feline" alt="חתול שחור מביט אל האוקיינוס הסוער, עיניו מבריקות בחושך." class="object-cover w-full h-full rounded-xl opacity-20 filter grayscale hue-rotate-180 brightness-75">
+            </div>
+            <div class="art-section-content text-right relative z-20">
+                <h2 class="text-4xl md:text-5xl mb-6 text-sky-400">
+                    הקריאה ממעמקים: חתול הים
+                </h2>
+                <p class="text-lg md:text-xl leading-loose mb-4 text-gray-200">
+                    הוא יושב על הסלע הרטוב, זנבו מתפתל בקצב הגלים. פרוותו שחורה כליל, סופגת את צללי הלילה ואת עומק הים. עיניו, ירוקות כאזמרגד, משקפות את זוהר הירח ואת סודות המים המלוחים. אין הוא דייג רגיל- הוא צופה, מאזין ללחש הזרמים, קורא את סיפורי הספינות הטרופות והיצורים האגדיים השוכנים מטה. נשמתו כרוכה בזו של האוקיינוס, חופשית, פראית, ולעולם לא מאולפת.
+                </p>
+                <p class="text-md md:text-lg leading-relaxed text-gray-300 mt-6">
+                    הרוח לוחשת את שמו בכיסי הסלע, והוא מגיב רק בנצנוץ קל בעיניו. איש אינו יודע את מקורו, או לאן הוא הולך כשהשחר עולה. הוא רק מופיע- יצור של גלים ושל שקט, נוכחות נצחית בנוף המשתנה של הים.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 3: Feline Mariners - Stories of the Waves -->
+        <section class="art-section relative" id="section-2">
+            <div class="art-section-image-wrapper">
+                <img src="https://source.unsplash.com/random/1200x800/?cat,sailboat,adventure,sea,journey" alt="חתול על סיפון ספינת מפרש עתיקה, מביט אל האופק המכוסה ערפל." class="object-cover w-full h-full rounded-xl opacity-20 filter sepia brightness-75 contrast-125">
+            </div>
+            <div class="art-section-content text-right relative z-20">
+                <h2 class="text-4xl md:text-5xl mb-6 text-emerald-400">
+                    יורדי ים חתוליים: מסעות נשכחים
+                </h2>
+                <p class="text-lg md:text-xl leading-loose mb-4 text-gray-200">
+                    מספרים על חתולים עתיקים, זני ים נשכחים, שסייעו למלחים לנווט בנתיבים מסוכנים. לא באמצעות כוכבים או מצפן, אלא באמצעות אינטואיציה ימית עמוקה, שהרגישה את שינויי הזרם ואת בואן של סערות. זנבותיהם שימשו כמנהרות רוח, אוזניהם קלטו את שירת הסירנות, ופרוותם החזיקה את מפת האוקיינוסים בתוכה, מפות שקופות לעין אדם.
+                </p>
+                <p class="text-md md:text-lg leading-relaxed text-gray-300 mt-6">
+                    הם היו אלו שסיפרו סיפורים בשקט הלילה, בעוד הספינה חורקת וטובלת בין גלים. סיפורים על איים נעלמים, על אוצרות קבורים ועל דרקוני ים שישנים בעומק. המלחים, בבדידותם, היו סומכים על החתולים יותר מאשר על כל לוויה אנושי. בבוא היום, כאשר המכונות החליפו את הלב, החתולים נעלמו חזרה אל המסתורין של המים, ממתינים לשובם של יורדי הים שזוכרים את השקט שבעומק.
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 4: The Horizon's Secret - Reflection -->
+        <section class="art-section relative" id="section-3">
+            <div class="art-section-image-wrapper">
+                <img src="https://source.unsplash.com/random/1200x800/?cat,reflection,sea,sunset,meditation" alt="חתול ג'ינג'י יושב על חוף ים בשקיעה, השתקפותו נמתחת על המים." class="object-cover w-full h-full rounded-xl opacity-20 filter invert hue-rotate-200 brightness-75">
+            </div>
+            <div class="art-section-content text-right relative z-20">
+                <h2 class="text-4xl md:text-5xl mb-6 text-purple-400">
+                    סוד האופק: נצח בטיפה
+                </h2>
+                <p class="text-lg md:text-xl leading-loose mb-4 text-gray-200">
+                    בכל טיפת מים, בכל גל מתנפץ, יש רמז לאין-סוף. בחתול, בכל תנועה חרישית, בכל מבט שקט, יש השתקפות של אותה תעלומה. החתול והים- שני קצוות של אותו חוט בלתי נראה, קשורים בקשר של חירות ושל עצמאות. שניהם אינם ניתנים לשליטה, שניהם נצחיים בשינויים התמידיים שלהם.
+                </p>
+                <p class="text-md md:text-lg leading-relaxed text-gray-300 mt-6">
+                    האופק אינו קו סיום, אלא הזמנה. הזמנה לחתול לנדוד, לים לשאת סודות, ולנו- להתבונן. להבין שפני השטח הם רק רמז לעומק, ושמאחורי כל מבט ניבט עולם שלם, בלתי נתפס לעין, אך מורגש בנשמה.
+                </p>
+                <div class="mt-12 text-center">
+                    <p class="text-lg text-blue-200">
+                        ציור ימי של חתולים- יצירת אמנות דיגיטלית.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor JavaScript
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // Parallax Scrolling JavaScript
+        const parallaxElements = document.querySelectorAll('.parallax-bg');
+        window.addEventListener('scroll', () => {
+            let scrollY = window.pageYOffset;
+            parallaxElements.forEach(el => {
+                const speed = parseFloat(el.dataset.parallaxSpeed) || 0.5;
+                el.style.transform = `translateY(${scrollY * speed * -1}px)`; // Multiply by -1 to move in opposite direction of scroll
+            });
+
+            // Adjust opacity of background layers based on scroll for depth effect
+            const scrollProgress = scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+            document.getElementById('bg-layer-1').style.opacity = Math.max(0.3, 0.7 - scrollProgress * 0.4);
+            document.getElementById('bg-layer-2').style.opacity = Math.max(0.2, 0.5 - scrollProgress * 0.3);
+            document.getElementById('bg-layer-3').style.opacity = Math.max(0.1, 0.3 - scrollProgress * 0.2);
+        });
+
+        // Optional: Implement a subtle scroll indicator
+        const scrollIndicator = document.createElement('div');
+        scrollIndicator.className = 'scroll-indicator h-3/4 flex flex-col justify-center';
+        scrollIndicator.innerHTML = '<div class="scroll-indicator-bar" style="height: 0;"></div>';
+        document.body.appendChild(scrollIndicator);
+
+        const scrollIndicatorBar = scrollIndicator.querySelector('.scroll-indicator-bar');
+        window.addEventListener('scroll', () => {
+            const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPosition = window.pageYOffset;
+            const progress = (scrollPosition / totalHeight) * 100;
+            scrollIndicatorBar.style.height = `${progress}%`;
+        });
+
+        // Optional: Fade in content sections as they come into view (simple example)
+        const contentSections = document.querySelectorAll('.art-section-content');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.3 // Trigger when 30% of the item is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fadeInUp'); // Tailwind animation class
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, observerOptions);
+
+        contentSections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(50px)';
+            section.style.transition = 'opacity 1s ease-out, transform 1s ease-out';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

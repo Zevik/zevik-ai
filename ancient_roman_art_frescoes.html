@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - בינה מלאכותית: אמנות השליטה בעתיד</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700&family=Frank+Ruhl+Libre:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for Roman Fresco feel and cursor */
+        html, body {
+            cursor: none; /* Hide default cursor */
+            font-family: 'Assistant', sans-serif; /* Default body font */
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Frank Ruhl Libre', serif; /* Headings font */
+        }
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            transition: transform 0.1s ease-out; /* Smooth movement */
+            /* High-contrast cursor: white border + dark shadow */
+            border: 2px solid #FFFFFF; /* White border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), /* Dark outer shadow */
+                        0 0 10px rgba(255,255,255,0.4); /* Inner glow for better visibility */
+        }
+        /* Further customize Tailwind for fresco-like colors */
+        .fresco-red-dark { background-color: #6a040f; } /* Darker brick red */
+        .fresco-red-light { background-color: #9d0208; } /* Lighter brick red */
+        .fresco-gold { color: #d4af37; } /* Gold accent */
+        .fresco-stone { color: #c4c4c4; } /* Stone grey text */
+        .fresco-bg-stone { background-color: #2b2d42; } /* Dark, deep stone */
+        .fresco-border-gold { border-color: #d4af37; }
+
+        /* General section styling */
+        .section-wrapper {
+            @apply relative z-20 mx-auto max-w-7xl px-4 py-16 md:py-24 lg:py-32;
+        }
+
+        /* Hero section specific */
+        .hero-section {
+            @apply min-h-screen flex items-center justify-center text-center p-4;
+            background-image: linear-gradient(145deg, #1a0404 0%, #301111 50%, #1a0404 100%);
+        }
+
+        /* Fresco texture background element (CSS-only pattern) */
+        .fresco-texture {
+            background-image: radial-gradient(#4d1a1a 1px, transparent 1px),
+                              radial-gradient(#4d1a1a 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            opacity: 0.05;
+        }
+
+        /* Hover effect for service cards */
+        .service-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Subtle text shadow for headings to enhance depth */
+        .heading-shadow {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body class="fresco-bg-stone text-fresco-stone antialiased">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="custom-cursor"></div>
+
+    <!-- Background Layers for Parallax (behind main content) -->
+    <div class="fixed inset-0 fresco-texture z-0 opacity-10" id="bg-layer-1"></div>
+    <div class="fixed inset-0 bg-gradient-to-br from-stone-900 to-red-950 z-[-2] opacity-70" id="bg-layer-2"></div>
+    <div class="fixed inset-0 bg-gradient-to-tr from-blue-950 to-gray-950 z-[-3] opacity-60" id="bg-layer-3"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 min-h-screen">
+
+        <!-- Hero Section - The Grand Unveiling -->
+        <section class="hero-section text-white relative overflow-hidden">
+            <!-- Decorative element, like a cracked pillar or arch -->
+            <div class="absolute inset-0 z-10 opacity-5 pointer-events-none">
+                <svg viewBox="0 0 100 100" class="w-full h-full">
+                    <path d="M 10 0 C 30 20, 70 20, 90 0 L 100 0 L 100 100 L 0 100 L 0 0 Z" fill="#6a040f" opacity="0.1"></path>
+                    <path d="M 5 0 C 25 25, 75 25, 95 0 L 100 0 L 100 100 L 0 100 L 0 0 Z" fill="#d4af37" opacity="0.05"></path>
+                </svg>
+            </div>
+            <div class="section-wrapper z-20 text-center">
+                <h1 class="text-6xl md:text-8xl font-bold fresco-gold mb-6 leading-tight heading-shadow">
+                    בינה מלאכותית:<br> אמנות השליטה בגורל האנושי
+                </h1>
+                <p class="text-3xl md:text-4xl text-fresco-stone mb-10 leading-relaxed heading-shadow">
+                    המדריך לעידן החדש: זאביק אבינר - נביא הידע המודרני
+                </p>
+                <a href="#about" class="inline-block py-4 px-10 text-xl md:text-2xl fresco-gold border-2 fresco-border-gold rounded-full hover:bg-fresco-gold hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl">
+                    התחל את המסע
+                </a>
+            </div>
+        </section>
+
+        <!-- About AI - The Ancient Wisdom Revealed -->
+        <section id="about" class="section-wrapper text-fresco-stone bg-fresco-bg-stone">
+            <h2 class="text-5xl md:text-6xl font-bold fresco-gold mb-12 text-center heading-shadow">
+                הפרסקאות הדיגיטליות: ידע נשגב לכל בן אנוש
+            </h2>
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div class="space-y-8 text-xl leading-relaxed">
+                    <p>
+                        בעתות קדומים, אומנים גילפו באבן ולחשו סודות לקירות המקדשים. היום, אנו מפסלים את הבינה עצמה, לוחשים פקודות למכונות שיעצבו את מחר. הבינה המלאכותית אינה מיתוס הנגיש למעטים, אלא אמנות עתיקה-חדשה, המצפה שתיחשף על ידי כל מי שחפץ להטביע את חותמו בעידן המתפתח.
+                    </p>
+                    <p>
+                        זאביק אבינר, כארכיטקט של התבונה המלאכותית, פורש בפניך את מפת הדרכים לשליטה בעוצמה הזו. מהתחלה צנועה ועד לשיאים נשגבים של יצירה וחדשנות, כל כלי וכל ידע מוגשים בבהירות ובמעשיות, מוכנים ליישום מיידי בחייך ובעבודתך.
+                    </p>
+                    <p>
+                        העתיד אינו ממתין. העתיד נוצר כעת, ברגע זה. הצטרף אלינו כדי ללמוד כיצד להפוך את הבינה המלאכותית למשרת נאמן ולאמן יוצר בידיך.
+                    </p>
+                </div>
+                <div class="relative flex justify-center items-center">
+                    <div class="absolute inset-0 bg-fresco-red-dark opacity-10 rounded-full blur-3xl"></div>
+                    <div class="relative w-full h-80 md:h-96 bg-gradient-to-br from-fresco-red-dark to-fresco-gold rounded-lg shadow-2xl flex items-center justify-center p-8 border-4 fresco-border-gold">
+                        <p class="text-2xl md:text-3xl font-bold text-white text-center leading-tight">
+                            "הבינה המלאכותית - המפתח לחדרי הנסתר של העתיד"
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Audience - Who Will Walk the Paths of the Future -->
+        <section id="audience" class="section-wrapper text-fresco-stone bg-fresco-bg-stone/90 py-24">
+            <h2 class="text-5xl md:text-6xl font-bold fresco-gold mb-12 text-center heading-shadow">
+                קהל המאמינים: מי יצעד בשבילי העתיד?
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 text-center">
+                <div class="border-2 fresco-border-gold p-8 rounded-lg bg-fresco-red-dark bg-opacity-30 shadow-xl transition-all duration-300 hover:scale-105 hover:bg-opacity-50">
+                    <h3 class="text-3xl font-bold fresco-gold mb-4">המתחילים</h3>
+                    <p class="text-xl text-white/90">
+                        אלו המעוניינים לפתוח שער לעולם המופלא של ה-AI, ללא ידע מוקדם.
+                    </p>
+                </div>
+                <div class="border-2 fresco-border-gold p-8 rounded-lg bg-fresco-red-dark bg-opacity-30 shadow-xl transition-all duration-300 hover:scale-105 hover:bg-opacity-50">
+                    <h3 class="text-3xl font-bold fresco-gold mb-4">אנשי המקצוע</h3>
+                    <p class="text-xl text-white/90">
+                        השואפים לשלב כלי AI בעבודתם, לייעל תהליכים ולחדש.
+                    </p>
+                </div>
+                <div class="border-2 fresco-border-gold p-8 rounded-lg bg-fresco-red-dark bg-opacity-30 shadow-xl transition-all duration-300 hover:scale-105 hover:bg-opacity-50">
+                    <h3 class="text-3xl font-bold fresco-gold mb-4">מנהלים וארגונים</h3>
+                    <p class="text-xl text-white/90">
+                        המבקשים להעצים את צוותיהם ולהטמיע חדשנות טכנולוגית.
+                    </p>
+                </div>
+                <div class="border-2 fresco-border-gold p-8 rounded-lg bg-fresco-red-dark bg-opacity-30 shadow-xl transition-all duration-300 hover:scale-105 hover:bg-opacity-50">
+                    <h3 class="text-3xl font-bold fresco-gold mb-4">המפתחים</h3>
+                    <p class="text-xl text-white/90">
+                        ברמה מתקדמת, לפיתוח פרויקטים מבוססי AI ומערכות חכמות.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise - Pillars of Knowledge -->
+        <section id="expertise" class="section-wrapper text-fresco-stone py-24">
+            <h2 class="text-5xl md:text-6xl font-bold fresco-gold mb-12 text-center heading-shadow">
+                המקדש הפנימי: סודות האומנות הנשגבת
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <!-- Each expertise item as a "fresco panel" -->
+                <div class="relative bg-fresco-red-light bg-opacity-40 p-8 rounded-xl border-t-4 border-l-4 fresco-border-gold shadow-xl overflow-hidden transition-all duration-300 hover:scale-105 service-card">
+                    <div class="absolute inset-0 bg-fresco-red-dark opacity-5 -skew-y-3 z-0"></div>
+                    <h3 class="text-3xl font-bold fresco-gold mb-4 relative z-10">יצירת טקסטים ותוכן</h3>
+                    <p class="text-white/90 relative z-10 text-lg">
+                        לפסל מילים מן האוויר - אמנות הניסוח האוטומטי, שיווקי ויצירתי.
+                    </p>
+                </div>
+                <div class="relative bg-fresco-red-light bg-opacity-40 p-8 rounded-xl border-t-4 border-l-4 fresco-border-gold shadow-xl overflow-hidden transition-all duration-300 hover:scale-105 service-card">
+                    <div class="absolute inset-0 bg-fresco-red-dark opacity-5 skew-y-3 z-0"></div>
+                    <h3 class="text-3xl font-bold fresco-gold mb-4 relative z-10">בניית אפליקציות חכמות</h3>
+                    <p class="text-white/90 relative z-10 text-lg">
+                        להפיח רוח חיים בקוד - יצירת כלים המבינים ופועלים באופן עצמאי.
+                    </p>
+                </div>
+                <div class="relative bg-fresco-red-light bg-opacity-40 p-8 rounded-xl border-t-4 border-l-4 fresco-border-gold shadow-xl overflow-hidden transition-all duration-300 hover:scale-105 service-card">
+                    <div class="absolute inset-0 bg-fresco-red-dark opacity-5 -skew-y-6 z-0"></div>
+                    <h3 class="text-3xl font-bold fresco-gold mb-4 relative z-10">פיתוח אתרים מבוססי AI</h3>
+                    <p class="text-white/90 relative z-10 text-lg">
+                        המקדש הדיגיטלי - בניית אתרים החושבים, לומדים ומגיבים.
+                    </p>
+                </div>
+                <div class="relative bg-fresco-red-light bg-opacity-40 p-8 rounded-xl border-t-4 border-l-4 fresco-border-gold shadow-xl overflow-hidden transition-all duration-300 hover:scale-105 service-card">
+                    <div class="absolute inset-0 bg-fresco-red-dark opacity-5 skew-y-6 z-0"></div>
+                    <h3 class="text-3xl font-bold fresco-gold mb-4 relative z-10">ניתוח נתונים ומחקר</h3>
+                    <p class="text-white/90 relative z-10 text-lg">
+                        פענוח כתבי חידה - גילוי דפוסים ומשמעויות נסתרות בים הנתונים.
+                    </p>
+                </div>
+                <div class="relative bg-fresco-red-light bg-opacity-40 p-8 rounded-xl border-t-4 border-l-4 fresco-border-gold shadow-xl overflow-hidden transition-all duration-300 hover:scale-105 service-card">
+                    <div class="absolute inset-0 bg-fresco-red-dark opacity-5 -skew-y-3 z-0"></div>
+                    <h3 class="text-3xl font-bold fresco-gold mb-4 relative z-10">יצירת תמונות ואומנות</h3>
+                    <p class="text-white/90 relative z-10 text-lg">
+                        הפיכת חזיונות למציאות - ציור ופיסול בעזרת מכונה.
+                    </p>
+                </div>
+                <div class="relative bg-fresco-red-light bg-opacity-40 p-8 rounded-xl border-t-4 border-l-4 fresco-border-gold shadow-xl overflow-hidden transition-all duration-300 hover:scale-105 service-card">
+                    <div class="absolute inset-0 bg-fresco-red-dark opacity-5 skew-y-3 z-0"></div>
+                    <h3 class="text-3xl font-bold fresco-gold mb-4 relative z-10">אוטומציה של תהליכים</h3>
+                    <p class="text-white/90 relative z-10 text-lg">
+                        שחרור מכבלי השגרה - להניח למכונה לעשות את הנדרש ביעילות.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services - Initiation Rites and Paths to Transcendence -->
+        <section id="services" class="section-wrapper text-fresco-stone bg-fresco-bg-stone/90 py-24">
+            <h2 class="text-5xl md:text-6xl font-bold fresco-gold mb-12 text-center heading-shadow">
+                טקסי חניכה ודרכים להתעלות
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 text-center">
+                <div class="border-2 fresco-border-gold p-8 rounded-lg bg-fresco-red-light bg-opacity-30 shadow-xl transition-all duration-300 hover:scale-105 hover:bg-opacity-50 service-card">
+                    <h3 class="text-3xl font-bold fresco-gold mb-4">סדנאות קבוצתיות</h3>
+                    <p class="text-xl text-white/90">
+                        מסעות משותפים אל עומק הידע, עם דגש על התנסות מעשית.
+                    </p>
+                </div>
+                <div class="border-2 fresco-border-gold p-8 rounded-lg bg-fresco-red-light bg-opacity-30 shadow-xl transition-all duration-300 hover:scale-105 hover:bg-opacity-50 service-card">
+                    <h3 class="text-3xl font-bold fresco-gold mb-4">שיעורים פרטיים</h3>
+                    <p class="text-xl text-white/90">
+                        ליווי אישי בחדר הסודות, מותאם לקצב ולצרכים הייחודיים שלך.
+                    </p>
+                </div>
+                <div class="border-2 fresco-border-gold p-8 rounded-lg bg-fresco-red-light bg-opacity-30 shadow-xl transition-all duration-300 hover:scale-105 hover:bg-opacity-50 service-card">
+                    <h3 class="text-3xl font-bold fresco-gold mb-4">הרצאות לארגונים</h3>
+                    <p class="text-xl text-white/90">
+                        פתיחת אופקים חדשים לצוותים, וזרעי השראה לחדשנות.
+                    </p>
+                </div>
+                <div class="border-2 fresco-border-gold p-8 rounded-lg bg-fresco-red-light bg-opacity-30 shadow-xl transition-all duration-300 hover:scale-105 hover:bg-opacity-50 service-card">
+                    <h3 class="text-3xl font-bold fresco-gold mb-4">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-xl text-white/90">
+                        ליווי מקצועי להגשמת חזיונותיך המבוססים על AI.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide - Zevik Aviner, The Human Compass -->
+        <section id="guide" class="section-wrapper text-fresco-stone py-24">
+            <h2 class="text-5xl md:text-6xl font-bold fresco-gold mb-12 text-center heading-shadow">
+                זאביק אבינר: המנהיג והמקודש
+            </h2>
+            <div class="flex flex-col lg:flex-row items-center justify-center gap-16 bg-fresco-red-dark bg-opacity-30 p-10 md:p-16 rounded-3xl border-4 fresco-border-gold shadow-2xl">
+                <div class="flex-shrink-0">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונת זאביק אבינר - מומחה בינה מלאכותית" class="w-64 h-64 md:w-80 md:h-80 rounded-full object-cover border-4 fresco-border-gold shadow-lg transform hover:scale-105 transition-transform duration-300">
+                </div>
+                <div class="text-center lg:text-right space-y-6 text-xl leading-relaxed">
+                    <p class="text-white/90">
+                        זאביק אבינר אינו רק מומחה בינה מלאכותית, הוא מגדלור של ידע בעידן של שינוי. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק הפך את משימתו להנגיש את הטכנולוגיה המורכבת הזו לכולם.
+                    </p>
+                    <p class="text-white/90">
+                        הוא המצפן האנושי שינחה אותך דרך נבכי הבינה המלאכותית, יהפוך אותה מכלי מסתורי לכלי עבודה יומיומי ועוצמתי בידיך. מסורתו העתיקה של הידע, מועברת ברוח חדשנית ופרקטית.
+                    </p>
+                    <div class="mt-8 text-2xl font-bold fresco-gold">
+                        <p class="mb-2">ווטסאפ: <a href="https://wa.me/972546609385" class="hover:text-white transition-colors">054-6609385</a></p>
+                        <p>אימייל: <a href="mailto:zaviner@gmail.com" class="hover:text-white transition-colors">zaviner@gmail.com</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer - A Whisper from the Past, a Promise for the Future -->
+        <footer class="section-wrapper text-fresco-stone py-16 text-center text-lg border-t-2 border-fresco-red-dark">
+            <p class="mb-4">
+                &copy; <span id="current-year"></span> כל הזכויות שמורות לזאביק אבינר - מורה הדרך של העתיד.
+            </p>
+            <p>
+                "העתיד אינו משהו שנכנסים אליו. העתיד הוא משהו שיוצרים." - חזון נצחי.
+            </p>
+        </footer>
+
+    </div>
+
+    <script>
+        // Set current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        // Parallax Scrolling Logic for background layers
+        const bgLayer1 = document.getElementById('bg-layer-1');
+        const bgLayer2 = document.getElementById('bg-layer-2');
+        const bgLayer3 = document.getElementById('bg-layer-3');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+
+            // Adjust speeds for different layers to create depth
+            bgLayer1.style.transform = `translateY(${scrollY * 0.15}px)`;
+            bgLayer2.style.transform = `translateY(${scrollY * 0.08}px)`;
+            bgLayer3.style.transform = `translateY(${scrollY * 0.02}px)`;
+        });
+
+        // Add a subtle hover effect to service cards that slightly "lifts" them
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-10px) scale(1.02)';
+                card.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.4)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+                card.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.2)'; /* Reset to a base shadow */
+            });
+        });
+    </script>
+</body>
+</html>

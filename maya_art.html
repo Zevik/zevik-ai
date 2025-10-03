@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - שומר להבת ה-AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --color-maya-dark: #1A1A1A; /* Deep Obsidian Black */
+            --color-maya-stone: #403E3C; /* Dark Terracotta/Stone Brown */
+            --color-maya-gold: #D4AF37; /* Rich Gold */
+            --color-maya-jade: #007A60; /* Deep Jade Green */
+            --color-maya-text: #E0E0E0; /* Light Stone Text */
+            --color-maya-accent: #6C5B7B; /* Mystic Violet/Purple */
+
+            /* RGB values for rgba() functions */
+            --color-maya-stone-rgb: 64, 62, 60;
+            --color-maya-jade-rgb: 0, 122, 96;
+        }
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: var(--color-maya-dark);
+            color: var(--color-maya-text);
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax/animations */
+            cursor: none; /* Hide default cursor */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Cinzel Decorative', serif;
+            color: var(--color-maya-gold);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            position: fixed;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out, border-color 0.2s ease, box-shadow 0.2s ease;
+            border: 2px solid #FFFFFF; /* White border for dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for light backgrounds */
+            display: none; /* Hidden by default, shown by JS */
+        }
+        .custom-cursor.active {
+            transform: translate(-50%, -50%) scale(1.2);
+            border-color: var(--color-maya-gold);
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 15px rgba(var(--color-maya-gold-rgb, 212, 175, 55), 0.7);
+        }
+        .custom-cursor.text-hover {
+            transform: translate(-50%, -50%) scale(0.7);
+            border-color: var(--color-maya-jade);
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 10px rgba(var(--color-maya-jade-rgb, 0, 122, 96), 0.7);
+        }
+        
+        /* Mayan Background Pattern */
+        .maya-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                /* Subtle radial gradient for depth */
+                radial-gradient(ellipse at bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 60%),
+                /* Overall dark gradient */
+                linear-gradient(to bottom, #101010, #202020),
+                /* Repeating geometric patterns for Mayan carvings feel */
+                repeating-linear-gradient(45deg, rgba(var(--color-maya-stone-rgb),0.1) 0, rgba(var(--color-maya-stone-rgb),0.1) 2px, transparent 2px, transparent 15px),
+                repeating-linear-gradient(-45deg, rgba(var(--color-maya-stone-rgb),0.1) 0, rgba(var(--color-maya-stone-rgb),0.1) 2px, transparent 2px, transparent 15px),
+                repeating-linear-gradient(90deg, rgba(var(--color-maya-jade-rgb),0.05) 0, rgba(var(--color-maya-jade-rgb),0.05) 1px, transparent 1px, transparent 10px),
+                repeating-linear-gradient(0deg, rgba(var(--color-maya-jade-rgb),0.05) 0, rgba(var(--color-maya-jade-rgb),0.05) 1px, transparent 1px, transparent 10px);
+            background-size: cover, cover, 30px 30px, 30px 30px, 20px 20px, 20px 20px;
+            animation: bg-pan 60s linear infinite;
+        }
+
+        @keyframes bg-pan {
+            0% { background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%; }
+            100% { background-position: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%; }
+        }
+        
+        /* Custom scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            right: 20px; /* Aligned to the right for RTL */
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            background-color: var(--color-maya-stone);
+            border-radius: 2px;
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            z-index: 20;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }
+        .scroll-dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--color-maya-stone);
+            border-radius: 50%;
+            margin: 5px 0;
+            transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+            cursor: pointer;
+            border: 1px solid var(--color-maya-dark);
+        }
+        .scroll-dot.active {
+            background-color: var(--color-maya-gold);
+            transform: scale(1.4);
+            border-color: var(--color-maya-text);
+        }
+
+        /* Animation classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .scale-in.is-visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .animate-pulse-light {
+            animation: pulse-light 3s infinite ease-in-out;
+        }
+        @keyframes pulse-light {
+            0%, 100% { text-shadow: 0 0 8px rgba(var(--color-maya-gold-rgb, 212, 175, 55), 0.7); }
+            50% { text-shadow: 0 0 20px rgba(var(--color-maya-gold-rgb, 212, 175, 55), 1); }
+        }
+
+        /* Specific styles for sections */
+        .section-separator {
+            @apply my-20 w-3/4 mx-auto border-t-2 border-b-2 border-opacity-30;
+            border-color: var(--color-maya-jade);
+            box-shadow: 0 0 10px rgba(var(--color-maya-jade-rgb), 0.5);
+        }
+
+        /* Mayan Glyph Icon Placeholder */
+        .maya-glyph {
+            width: 50px;
+            height: 50px;
+            background-color: var(--color-maya-stone);
+            @apply rounded-lg flex items-center justify-center text-xl font-bold;
+            color: var(--color-maya-gold);
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .maya-glyph:hover {
+            transform: translateY(-5px);
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.5), 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Responsive typography adjustments */
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem !important; }
+            h2 { font-size: 2rem !important; }
+            .hero-text { font-size: 1.125rem !important; }
+            .section-title { font-size: 1.75rem !important; }
+            .custom-cursor { display: none !important; } /* Hide cursor on small devices */
+            .scroll-indicator { display: none !important; } /* Hide indicator on small devices */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Mayan Background Layer -->
+    <div class="maya-bg"></div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+        <div class="scroll-dot" data-target="hero"></div>
+        <div class="scroll-dot" data-target="intro"></div>
+        <div class="scroll-dot" data-target="journey"></div>
+        <div class="scroll-dot" data-target="tablets"></div>
+        <div class="scroll-dot" data-target="offerings"></div>
+        <div class="scroll-dot" data-target="contact"></div>
+    </div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 min-h-screen p-4 sm:p-8 md:p-12 lg:p-16 max-w-7xl mx-auto">
+
+        <!-- Hero Section: The Grand Temple Entrance -->
+        <section id="hero" class="min-h-screen flex flex-col justify-center items-center text-center py-20 fade-in">
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight animate-pulse-light text-var(--color-maya-gold)">
+                למדו לשלוט בבינה המלאכותית<br>- העתיד הוא עכשיו -
+            </h1>
+            <p class="text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-10 text-var(--color-maya-text) max-w-3xl hero-text fade-in" data-delay="0.5s">
+                פענחו את כתבי החרטומים החדשים.<br>
+                גלו את סודות האלגוריתמים העתיקים-עתידניים.<br>
+                בנו את מקדשי הידע של המחר.
+            </p>
+            <a href="#intro" class="interactive bg-var(--color-maya-gold) text-var(--color-maya-dark) px-8 py-4 rounded-full text-xl font-bold hover:bg-var(--color-maya-jade) hover:text-white transition-all duration-300 transform hover:scale-105 fade-in" data-delay="1s">
+                התחילו את המסע
+            </a>
+        </section>
+
+        <!-- Intro/About Zevik: The Guardian of the Flame -->
+        <section id="intro" class="min-h-screen flex flex-col justify-center items-center text-center py-20 fade-in">
+            <h2 class="text-4xl md:text-5xl mb-10 section-title text-var(--color-maya-gold)">
+                זאביק אבינר - שומר להבת הידע
+            </h2>
+            <div class="flex flex-col md:flex-row items-center gap-8 max-w-4xl">
+                <div class="md:w-1/3 flex-shrink-0 mb-8 md:mb-0 scale-in">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר, מומחה בינה מלאכותית" class="w-64 h-64 object-cover rounded-full border-4 border-var(--color-maya-jade) shadow-lg mx-auto">
+                </div>
+                <div class="md:w-2/3 text-lg md:text-xl text-var(--color-maya-text) text-right leading-relaxed scale-in" data-delay="0.3s">
+                    <p class="mb-4">
+                        בעידן שבו הקודים הדיגיטליים הם כתבי החרטומים החדשים, וזרמי הנתונים הם נהרות הידע, זאביק אבינר ניצב ככוהן הגדול של הבינה המלאכותית. מתוך ניסיון עשיר בבניית מערכות AI מורכבות, זאביק מפענח את סודות הטכנולוגיה ומנגיש אותם לכל דורש.
+                    </p>
+                    <p class="mb-4">
+                        כמו אמן מאיה שחצב סיפורים באבן, זאביק מפסל את הידע, הופך את התיאוריות המופשטות לכלים מעשיים וזמינים. הוא בונה גשר בין העבר העשיר של יצירת ידע אנושי לעתיד המלאכותי, ומנחה אתכם במסע אל שליטה מלאה ביכולות ה-AI.
+                    </p>
+                    <p>
+                        זהו קריאתו של המדריך: הגיע הזמן לחטוב את דרככם לעולם שבו הבינה המלאכותית היא לא רק טכנולוגיה, אלא שפה שאתם שולטים בה.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-separator fade-in"></div>
+
+        <!-- The Journey to Knowledge - Target Audience: Paths through the jungle -->
+        <section id="journey" class="min-h-screen py-20 fade-in">
+            <h2 class="text-4xl md:text-5xl text-center mb-16 section-title text-var(--color-maya-gold)">
+                המסע אל הידע: למי הוא מיועד?
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                <div class="bg-var(--color-maya-stone) bg-opacity-70 rounded-xl p-6 text-center shadow-lg transform hover:scale-105 transition-transform duration-300 scale-in" data-delay="0.1s">
+                    <div class="maya-glyph mx-auto mb-4 bg-opacity-50">✦</div>
+                    <h3 class="text-2xl font-bold mb-3 text-var(--color-maya-gold)">החוקרים החדשים</h3>
+                    <p class="text-var(--color-maya-text) text-lg">
+                        אלה המבקשים לעשות את צעדיהם הראשונים ביער הסבוך של ה-AI, ולגלות את דרכי הכניסה למקדשי הידע.
+                    </p>
+                </div>
+                <div class="bg-var(--color-maya-stone) bg-opacity-70 rounded-xl p-6 text-center shadow-lg transform hover:scale-105 transition-transform duration-300 scale-in" data-delay="0.2s">
+                    <div class="maya-glyph mx-auto mb-4 bg-opacity-50">☰</div>
+                    <h3 class="text-2xl font-bold mb-3 text-var(--color-maya-gold)">אומני המחר</h3>
+                    <p class="text-var(--color-maya-text) text-lg">
+                        בעלי המקצוע השואפים לחטוב את עתידם, לשלב את כוח ה-AI בכליהם הקיימים ולשכלל את אומנותם.
+                    </p>
+                </div>
+                <div class="bg-var(--color-maya-stone) bg-opacity-70 rounded-xl p-6 text-center shadow-lg transform hover:scale-105 transition-transform duration-300 scale-in" data-delay="0.3s">
+                    <div class="maya-glyph mx-auto mb-4 bg-opacity-50">▲</div>
+                    <h3 class="text-2xl font-bold mb-3 text-var(--color-maya-gold)">מנהיגי השבט</h3>
+                    <p class="text-var(--color-maya-text) text-lg">
+                        מנהלים וארגונים המבקשים להוביל את קהילתם אל עבר אופקים חדשים, ולהקנות לצוותיהם את חוכמת ה-AI.
+                    </p>
+                </div>
+                <div class="bg-var(--color-maya-stone) bg-opacity-70 rounded-xl p-6 text-center shadow-lg transform hover:scale-105 transition-transform duration-300 scale-in" data-delay="0.4s">
+                    <div class="maya-glyph mx-auto mb-4 bg-opacity-50">⚛</div>
+                    <h3 class="text-2xl font-bold mb-3 text-var(--color-maya-gold)">בוני המקדשים</h3>
+                    <p class="text-var(--color-maya-text) text-lg">
+                        לאלה שמוכנים לבנות את המבנים המורכבים ביותר של ה-AI, לפתח פרויקטים פורצי דרך ולחקור את גבולות החדשנות.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-separator fade-in"></div>
+
+        <!-- Tablets of AI - Expertise Areas: The inscribed pillars -->
+        <section id="tablets" class="min-h-screen py-20 fade-in">
+            <h2 class="text-4xl md:text-5xl text-center mb-16 section-title text-var(--color-maya-gold)">
+                לוחות הברית של ה-AI: תחומי המומחיות
+            </h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="relative group bg-var(--color-maya-stone) bg-opacity-70 rounded-xl p-6 shadow-lg overflow-hidden scale-in" data-delay="0.1s">
+                    <h3 class="text-2xl font-bold mb-2 text-var(--color-maya-gold)">יצירת טקסטים ותוכן</h3>
+                    <p class="text-var(--color-maya-text) text-lg">
+                        לגלות את סודות יצירת נרטיבים ממוחשבים, משירה ועד כתיבה טכנית.
+                    </p>
+                    <div class="absolute inset-0 bg-var(--color-maya-jade) bg-opacity-90 flex items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-var(--color-maya-text)">
+                        <p class="text-center text-lg leading-relaxed">
+                            לשלוט באומנות יצירת תוכן ממוחשב: כתיבת מאמרים, שיווק, תסריטים, סיפורים - בכל סגנון ובאינסוף צורות, באמצעות כלי AI מתקדמים.
+                        </p>
+                    </div>
+                </div>
+                <div class="relative group bg-var(--color-maya-stone) bg-opacity-70 rounded-xl p-6 shadow-lg overflow-hidden scale-in" data-delay="0.2s">
+                    <h3 class="text-2xl font-bold mb-2 text-var(--color-maya-gold)">בניית אפליקציות חכמות</h3>
+                    <p class="text-var(--color-maya-text) text-lg">
+                        לבנות יישומים הלומדים ומתפתחים, מבינים ומגיבים לאתגרי העולם.
+                    </p>
+                    <div class="absolute inset-0 bg-var(--color-maya-jade) bg-opacity-90 flex items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-var(--color-maya-text)">
+                        <p class="text-center text-lg leading-relaxed">
+                            פיתוח אפליקציות אינטראקטיביות, בוטים חכמים ומערכות לומדות המעניקות חווית משתמש מהפכנית ופתרונות עסקיים חדשניים.
+                        </p>
+                    </div>
+                </div>
+                <div class="relative group bg-var(--color-maya-stone) bg-opacity-70 rounded-xl p-6 shadow-lg overflow-hidden scale-in" data-delay="0.3s">
+                    <h3 class="text-2xl font-bold mb-2 text-var(--color-maya-gold)">פיתוח אתרים מבוססי AI</h3>
+                    <p class="text-var(--color-maya-text) text-lg">
+                        ליצור מרחבים דיגיטליים חכמים, מותאמים אישית ואינטואיטיביים.
+                    </p>
+                    <div class="absolute inset-0 bg-var(--color-maya-jade) bg-opacity-90 flex items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-var(--color-maya-text)">
+                        <p class="text-center text-lg leading-relaxed">
+                            הפיכת אתרים רגילים למקדשים דיגיטליים: הטמעת AI לפרסונליזציה, אופטימיזציה של תוכן, ניהול לקוחות ושירות אוטומטי.
+                        </p>
+                    </div>
+                </div>
+                <div class="relative group bg-var(--color-maya-stone) bg-opacity-70 rounded-xl p-6 shadow-lg overflow-hidden scale-in" data-delay="0.4s">
+                    <h3 class="text-2xl font-bold mb-2 text-var(--color-maya-gold)">ניתוח נתונים ומחקר</h3>
+                    <p class="text-var(--color-maya-text) text-lg">
+                        לפענח את השפה הנסתרת של הנתונים, ולחלץ מהם תובנות עמוקות.
+                    </p>
+                    <div class="absolute inset-0 bg-var(--color-maya-jade) bg-opacity-90 flex items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-var(--color-maya-text)">
+                        <p class="text-center text-lg leading-relaxed">
+                            שימוש בכוח החישוב של AI כדי לחשוף דפוסים, לחזות מגמות ולקבל החלטות מבוססות נתונים מדויקות ומעמיקות.
+                        </p>
+                    </div>
+                </div>
+                <div class="relative group bg-var(--color-maya-stone) bg-opacity-70 rounded-xl p-6 shadow-lg overflow-hidden scale-in" data-delay="0.5s">
+                    <h3 class="text-2xl font-bold mb-2 text-var(--color-maya-gold)">יצירת תמונות ואומנות</h3>
+                    <p class="text-var(--color-maya-text) text-lg">
+                        לפתוח את שערי הדמיון ולברוא עולמות ויזואליים חדשים בעזרת AI.
+                    </p>
+                    <div class="absolute inset-0 bg-var(--color-maya-jade) bg-opacity-90 flex items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-var(--color-maya-text)">
+                        <p class="text-center text-lg leading-relaxed">
+                            אומנות דיגיטלית חסרת גבולות: יצירת תמונות, איורים, אנימציות, ועיצובים גרפיים מרהיבים באמצעות מודלי AI יוצרים.
+                        </p>
+                    </div>
+                </div>
+                <div class="relative group bg-var(--color-maya-stone) bg-opacity-70 rounded-xl p-6 shadow-lg overflow-hidden scale-in" data-delay="0.6s">
+                    <h3 class="text-2xl font-bold mb-2 text-var(--color-maya-gold)">אוטומציה של תהליכים</h3>
+                    <p class="text-var(--color-maya-text) text-lg">
+                        לשחרר זמן ואנרגיה על ידי הקניית חכמה למשימות חוזרות ונשנות.
+                    </p>
+                    <div class="absolute inset-0 bg-var(--color-maya-jade) bg-opacity-90 flex items-center justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-var(--color-maya-text)">
+                        <p class="text-center text-lg leading-relaxed">
+                            הפיכת משימות ידניות לתהליכים חכמים ואוטומטיים: ייעול עבודה, חיסכון במשאבים ושיפור הפרודוקטיביות באמצעות מערכות AI.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-separator fade-in"></div>
+
+        <!-- Offerings of Knowledge - Services: The Sacred Offerings -->
+        <section id="offerings" class="min-h-screen py-20 fade-in">
+            <h2 class="text-4xl md:text-5xl text-center mb-16 section-title text-var(--color-maya-gold)">
+                מנחות הידע: השירותים שלנו
+            </h2>
+            <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto text-right">
+                <div class="bg-var(--color-maya-stone) bg-opacity-70 rounded-xl p-8 shadow-xl transform hover:scale-105 transition-transform duration-300 scale-in" data-delay="0.1s">
+                    <div class="maya-glyph mb-6 mr-auto bg-opacity-50">👥</div>
+                    <h3 class="text-3xl font-bold mb-4 text-var(--color-maya-gold)">סדנאות קבוצתיות</h3>
+                    <p class="text-var(--color-maya-text) text-xl leading-relaxed">
+                        הצטרפו למעגלי למידה משותפים, בהם תחקרו יחד את עולמות ה-AI דרך תרגול מעשי וממוקד. סדנאות אלו מיועדות לקבוצות קטנות וגדולות, ומציעות חווית למידה אינטראקטיבית ודינמית.
+                    </p>
+                </div>
+                <div class="bg-var(--color-maya-stone) bg-opacity-70 rounded-xl p-8 shadow-xl transform hover:scale-105 transition-transform duration-300 scale-in" data-delay="0.2s">
+                    <div class="maya-glyph mb-6 mr-auto bg-opacity-50">👤</div>
+                    <h3 class="text-3xl font-bold mb-4 text-var(--color-maya-gold)">שיעורים פרטיים</h3>
+                    <p class="text-var(--color-maya-text) text-xl leading-relaxed">
+                        מסע אישי וייחודי אל עומק הידע. ליווי פרטני המותאם במדויק לרמתכם, לקצב הלמידה שלכם ולצרכים הספציפיים שלכם, כדי שתוכלו להשיג שליטה מלאה.
+                    </p>
+                </div>
+                <div class="bg-var(--color-maya-stone) bg-opacity-70 rounded-xl p-8 shadow-xl transform hover:scale-105 transition-transform duration-300 scale-in" data-delay="0.3s">
+                    <div class="maya-glyph mb-6 mr-auto bg-opacity-50">🏛</div>
+                    <h3 class="text-3xl font-bold mb-4 text-var(--color-maya-gold)">הרצאות לארגונים</h3>
+                    <p class="text-var(--color-maya-text) text-xl leading-relaxed">
+                        להאיר את עיני הצוות שלכם בפני האפשרויות הבלתי מוגבלות של ה-AI. הרצאות מעוררות השראה הפותחות אופקים חדשים ומעניקות כלים ראשוניים להטמעת הטכנולוגיה בארגון.
+                    </p>
+                </div>
+                <div class="bg-var(--color-maya-stone) bg-opacity-70 rounded-xl p-8 shadow-xl transform hover:scale-105 transition-transform duration-300 scale-in" data-delay="0.4s">
+                    <div class="maya-glyph mb-6 mr-auto bg-opacity-50">🛠</div>
+                    <h3 class="text-3xl font-bold mb-4 text-var(--color-maya-gold)">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-var(--color-maya-text) text-xl leading-relaxed">
+                        מהרעיון ועד למימוש: ליווי מקצועי צמוד בפיתוח פרויקטים מבוססי AI. נבנה יחד את הפתרונות החכמים שיובילו אתכם אל חזית החדשנות.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-separator fade-in"></div>
+
+        <!-- Contact Section: The Oracle's Connection -->
+        <section id="contact" class="min-h-screen flex flex-col justify-center items-center text-center py-20 fade-in">
+            <h2 class="text-4xl md:text-5xl mb-10 section-title text-var(--color-maya-gold)">
+                התחברו אל המדריך: הצעד הבא שלכם
+            </h2>
+            <p class="text-xl md:text-2xl text-var(--color-maya-text) mb-12 max-w-2xl scale-in" data-delay="0.1s">
+                מוכנים לפענח את סודות ה-AI ולבנות את העתיד?<br> צרו קשר עוד היום וצאו למסע מרתק של למידה והתפתחות.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-8 items-center scale-in" data-delay="0.3s">
+                <a href="https://wa.me/972546609385" target="_blank" class="interactive bg-var(--color-maya-gold) text-var(--color-maya-dark) px-6 py-3 rounded-full text-lg font-bold hover:bg-var(--color-maya-jade) hover:text-white transition-all duration-300 transform hover:scale-105 flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.5 3.42 1.45 4.9L2.05 22l5.25-1.38c1.47.8 3.14 1.22 4.74 1.22 5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm3.39 14.4c-.16-.27-.65-.52-.94-.65s-.5-.2-.71.27-.82 1-.99 1.2-.33.27-.61.1-.9-.33-1.72-1.06c-.63-.59-1.04-1.3-1.17-1.5-.12-.2-.01-.3-.11-.4s-.24-.26-.33-.39c-.1-.13-.03-.25.07-.35.09-.1.2-.27.3-.41s.14-.24.2-.35c.06-.11.03-.2-.01-.3-.04-.1-.39-.94-.53-1.28-.14-.3-.29-.26-.4-.26h-.37c-.11 0-.29.04-.45.22-.16.18-.61.59-.61 1.43 0 .84.62 1.65.7 1.77.08.12 1.21 1.83 2.92 2.59 1.71.76 1.71.53 2.03.49.32-.04 1-.41 1.15-.81.16-.4.16-.74.11-.82-.04-.08-.16-.13-.33-.2z"/></svg>
+                    <span>ווטסאפ: 054-6609385</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="interactive bg-var(--color-maya-gold) text-var(--color-maya-dark) px-6 py-3 rounded-full text-lg font-bold hover:bg-var(--color-maya-jade) hover:text-white transition-all duration-300 transform hover:scale-105 flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    <span>אימייל: zaviner@gmail.com</span>
+                </a>
+            </div>
+            <p class="text-sm mt-12 text-gray-500 scale-in" data-delay="0.5s">
+                &copy; 2024 זאביק אבינר - כל הזכויות שמורות למקדש ה-AI
+            </p>
+        </section>
+
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.querySelector('.custom-cursor');
+        const interactiveElements = document.querySelectorAll('a, button, .interactive');
+        const textElements = document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, span, li'); // Elements that trigger text-hover
+
+        let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
+        let isTextHover = false;
+        let isInteractiveHover = false;
+
+        // Only show cursor if it's not a touch device and width > 768px (to match CSS media query)
+        const isDesktop = () => window.innerWidth > 768 && !('ontouchstart' in window || navigator.maxTouchPoints);
+        
+        if (isDesktop()) {
+            document.addEventListener('mousemove', e => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                cursor.style.display = 'block'; // Show cursor on mouse movement
+            });
+        } else {
+            // Hide custom cursor on touch devices or small screens
+            cursor.style.display = 'none';
+        }
+
+        const animateCursor = () => {
+            if (cursor.style.display === 'block') {
+                cursorX += (mouseX - cursorX) * 0.1;
+                cursorY += (mouseY - cursorY) * 0.1;
+                cursor.style.left = `${cursorX}px`;
+                cursor.style.top = `${cursorY}px`;
+            }
+            requestAnimationFrame(animateCursor);
+        };
+        animateCursor();
+
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                if (isDesktop()) cursor.classList.add('active');
+            });
+            el.addEventListener('mouseleave', () => {
+                if (isDesktop()) cursor.classList.remove('active');
+            });
+        });
+
+        textElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                // Ensure text-hover doesn't override active if element is also interactive
+                if (isDesktop() && !el.closest('.interactive, a, button')) {
+                    cursor.classList.add('text-hover');
+                }
+            });
+            el.addEventListener('mouseleave', () => {
+                if (isDesktop()) cursor.classList.remove('text-hover');
+            });
+        });
+        
+        // Intersection Observer for fade-in animations
+        const fadeIns = document.querySelectorAll('.fade-in, .scale-in');
+
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of item is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = entry.target.dataset.delay || '0s';
+                    entry.target.style.transitionDelay = delay;
+                    entry.target.classList.add('is-visible');
+                    // Removed unobserve to allow re-animation on scroll up/down if desired for continuous art piece,
+                    // but for performance, re-add `observer.unobserve(entry.target);` if needed.
+                    // For this artistic piece, let's keep it simple and not unobserve, allowing elements to fade back if scrolled away.
+                } else {
+                    // Optional: remove is-visible class if element leaves viewport (for re-animation)
+                    // entry.target.classList.remove('is-visible');
+                }
+            });
+        }, observerOptions);
+
+        fadeIns.forEach(el => {
+            observer.observe(el);
+        });
+
+        // Scroll Indicator Logic (active only on desktop)
+        const sections = document.querySelectorAll('section[id]');
+        const scrollDots = document.querySelectorAll('.scroll-dot');
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+
+        if (isDesktop()) {
+            scrollIndicator.style.display = 'flex'; // Show indicator if desktop
+            const highlightScrollDot = () => {
+                let currentActive = null;
+                sections.forEach(section => {
+                    const rect = section.getBoundingClientRect();
+                    // Consider section active if its top is above the viewport middle, and bottom is below
+                    // Add a small offset (e.g., 20% of viewport height) to make it feel more responsive
+                    const offset = window.innerHeight * 0.2;
+                    if (rect.top <= offset && rect.bottom >= offset) {
+                        currentActive = section.id;
+                    }
+                });
+
+                scrollDots.forEach(dot => {
+                    dot.classList.remove('active');
+                    if (dot.dataset.target === currentActive) {
+                        dot.classList.add('active');
+                    }
+                });
+            };
+
+            window.addEventListener('scroll', highlightScrollDot);
+            highlightScrollDot(); // Initial call to set active dot on load
+
+            scrollDots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    const targetId = dot.dataset.target;
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        } else {
+            scrollIndicator.style.display = 'none'; // Hide indicator on mobile
+        }
+    </script>
+</body>
+</html>

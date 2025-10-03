@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>לשלוט בבינה המלאכותית: העתיד הוא עכשיו</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Oswald:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles for Social Realism - Stark, purposeful, human-centric */
+        :root {
+            --color-deep-steel: #263E4A; /* A deep, industrial blue/gray */
+            --color-dark-coal: #1A1A1A; /* Near black for strong contrast */
+            --color-concrete-gray: #B0B0B0; /* Muted gray for body text */
+            --color-vibrant-gold: #FFD700; /* A bold accent for empowerment and knowledge */
+            --color-light-glow: #F0F0F0; /* Off-white for highlights */
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: var(--color-deep-steel);
+            color: var(--color-concrete-gray);
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax */
+            cursor: none; /* Hide default cursor */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Oswald', sans-serif;
+            color: var(--color-vibrant-gold);
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.6); /* Adds depth and impact */
+            direction: rtl; /* Ensure RTL for headings explicitly */
+        }
+
+        /* High-Contrast Custom Cursor */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none; /* Allows clicks on elements beneath */
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease, height 0.2s ease; /* Smooth size change */
+            z-index: 9999;
+            border: 2px solid var(--color-light-glow); /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark, high-opacity shadow */
+        }
+        .custom-cursor.active {
+            width: 35px; /* Larger on hover */
+            height: 35px;
+        }
+
+        /* Parallax Background Layers - Visualizing the complex layers of AI */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center center;
+            z-index: -10; /* Ensures backgrounds are behind all content */
+            pointer-events: none;
+            will-change: transform; /* Optimize for smooth animation */
+        }
+
+        /* Specific background images - industrial, data-driven, yet foundational */
+        #bg-layer-1 {
+            background-image: linear-gradient(to bottom, rgba(38, 62, 74, 0.9) 0%, rgba(38, 62, 74, 0.7) 100%), url('https://images.unsplash.com/photo-1518770660439-4636190af170?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); /* Circuit board/industrial foundation */
+            background-blend-mode: multiply;
+        }
+        #bg-layer-2 {
+            background-image: linear-gradient(to bottom, rgba(38, 62, 74, 0.8) 0%, rgba(38, 62, 74, 0.6) 100%), url('https://images.unsplash.com/photo-1510511459019-5efa6449e1fd?auto=format&fit=crop&q=80&w=2070&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); /* Abstract data streams/human-machine interface */
+            background-blend-mode: screen;
+            opacity: 0.35;
+        }
+        
+        /* General content wrapper for distinct 'art panels' */
+        .content-section {
+            position: relative;
+            padding: 6rem 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1; /* Ensures content is always visible above backgrounds */
+        }
+
+        .text-block {
+            max-width: 800px;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent dark overlay for text readability */
+            padding: 2.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7); /* Stronger shadow for depth */
+            margin-bottom: 4rem;
+            border: 1px solid rgba(255, 215, 0, 0.2); /* Subtle gold border */
+        }
+        
+        .section-title {
+            margin-bottom: 2.5rem;
+            line-height: 1.2;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            margin-top: 2.5rem;
+            background-color: var(--color-vibrant-gold);
+            color: var(--color-dark-coal); /* Black text on gold for impact */
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 18px rgba(255,215,0,0.5); /* Glowing shadow */
+            text-decoration: none;
+            border: none;
+            cursor: none; /* Controlled by custom cursor */
+        }
+        .cta-button:hover {
+            background-color: #e6c200;
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(255,215,0,0.8);
+        }
+
+        /* Specific styles for Zevik's image - the human element at the core */
+        #zevik-image-container {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 6px solid var(--color-vibrant-gold);
+            box-shadow: 0 0 25px rgba(255,215,0,0.8);
+            filter: grayscale(85%) contrast(130%); /* Social Realism: raw, stark, almost archival feel */
+            transition: filter 0.6s ease-in-out, transform 0.3s ease;
+            margin-bottom: 2.5rem;
+            cursor: none; /* Controlled by custom cursor */
+        }
+        #zevik-image-container:hover {
+            filter: grayscale(0%) contrast(100%); /* Reveals full color - "illuminating knowledge" */
+            transform: scale(1.05);
+        }
+        #zevik-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .content-section {
+                padding: 4rem 1rem;
+            }
+            .text-block {
+                padding: 1.5rem;
+                margin-bottom: 3rem;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            h2 {
+                font-size: 2rem;
+            }
+            p {
+                font-size: 1rem;
+            }
+            .cta-button {
+                font-size: 1rem;
+                padding: 0.8rem 2rem;
+                margin-top: 2rem;
+            }
+            #zevik-image-container {
+                width: 180px;
+                height: 180px;
+            }
+            .grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div id="bg-layer-1" class="parallax-bg" data-speed="0.1"></div>
+    <div id="bg-layer-2" class="parallax-bg" data-speed="0.2"></div>
+
+    <!-- Main Content Wrapper - Relative positioning and z-index to stack content above backgrounds -->
+    <div class="relative z-10">
+
+        <!-- Intro Section - The Call to Mastery -->
+        <section class="content-section h-screen bg-transparent">
+            <div class="text-block px-8 py-10 md:px-12 md:py-16">
+                <h1 class="text-4xl md:text-6xl font-extrabold mb-6 leading-tight text-light-glow">לשלוט בבינה המלאכותית: <br> העתיד כבר כאן, בידיים שלך.</h1>
+                <p class="text-lg md:text-xl leading-relaxed text-concrete-gray">העידן הדיגיטלי משתנה לנגד עינינו. בינה מלאכותית אינה מדע בדיוני- היא כוח עבודה, כלי יצירה, ומפתח לצמיחה אישית ומקצועית. אנו כאן כדי להנגיש לך את הכוח הזה, להפוך אותך לאדון הטכנולוגיה, לא למשרתה.</p>
+                <a href="#message" class="cta-button">גלה את הפוטנציאל</a>
+            </div>
+        </section>
+
+        <!-- Core Message Section - Demystifying the Machine -->
+        <section id="message" class="content-section bg-transparent pt-0">
+            <div class="text-block max-w-2xl px-8 py-10 md:px-12 md:py-16">
+                <h2 class="section-title text-3xl md:text-5xl font-bold text-vibrant-gold">הכוח שייך לכולם.</h2>
+                <p class="text-lg md:text-xl leading-relaxed text-concrete-gray mb-6">זוהי אינה טכנולוגיה רחוקה ששמורה ליחידי סגולה. זהו כלי עבודה יומיומי, כוח חדש שניתן לרתום לכל תחום בחיים ובעבודה. מהמתחילים המבקשים להכיר את העולם החדש, ועד למומחים המעוניינים לפתח פרויקטים פורצי דרך – אנו מפרקים את המורכבות ומעניקים לך את המפתח לפוטנציאל הבלתי מוגבל של AI. אנו מאמינים בפרקטיקה, בתוצאות מיידיות, ובכלים שניתן ליישם מיד.</p>
+                <a href="#audience" class="cta-button">מי יכול להצטרף?</a>
+            </div>
+        </section>
+
+        <!-- Target Audience Section - The Collective of Learners -->
+        <section id="audience" class="content-section bg-transparent pt-0">
+            <div class="text-block max-w-2xl px-8 py-10 md:px-12 md:py-16">
+                <h2 class="section-title text-3xl md:text-5xl font-bold text-vibrant-gold">למי נועדה ההדרכה?</h2>
+                <div class="text-lg md:text-xl leading-relaxed text-concrete-gray space-y-4">
+                    <p><b>לסקרנים, למחפשים, למובילים.</b> למי שמרגיש את השינוי באוויר ומחפש להבין את השפה החדשה של המחר. למי שרוצה לשלב חדשנות בעבודתו ולהפוך ליעיל יותר. למנהלים המבינים שהעתיד הוא כבר כאן וצוותיהם זקוקים לכלים מתקדמים.</p>
+                    <p>למתחילים שמביטים אל עולם ה-AI בפליאה, לאנשי מקצוע השואפים להטמיע יכולות מתקדמות בתחומם, ולארגונים המחפשים להוביל את המהפכה הטכנולוגית – זוהי הקריאה לפעולה. זוהי קריאה לאקשן, לשינוי, להצטרפות לחוד החנית.</p>
+                </div>
+                <a href="#expertise" class="cta-button">תחומי ההתמחות שלנו</a>
+            </div>
+        </section>
+
+        <!-- Expertise Section - The Tools of Tomorrow, Today -->
+        <section id="expertise" class="content-section bg-transparent pt-0">
+            <div class="text-block max-w-3xl px-8 py-10 md:px-12 md:py-16">
+                <h2 class="section-title text-3xl md:text-5xl font-bold text-vibrant-gold">בונים את העתיד: תחומי התמחות.</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-lg text-concrete-gray mt-8">
+                    <div class="flex flex-col items-center p-5 bg-dark-coal bg-opacity-70 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 border-b-2 border-vibrant-gold hover:scale-105">
+                        <span class="text-5xl mb-3 text-vibrant-gold">✍️</span>
+                        <p class="font-bold text-light-glow">יצירת טקסטים ותוכן</p>
+                        <p class="text-sm text-concrete-gray mt-1">מהגיית רעיונות ועד ניסוח מושלם.</p>
+                    </div>
+                    <div class="flex flex-col items-center p-5 bg-dark-coal bg-opacity-70 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 border-b-2 border-vibrant-gold hover:scale-105">
+                        <span class="text-5xl mb-3 text-vibrant-gold">📱</span>
+                        <p class="font-bold text-light-glow">בניית אפליקציות חכמות</p>
+                        <p class="text-sm text-concrete-gray mt-1">לפתור בעיות עם אינטליגנציה חדשנית.</p>
+                    </div>
+                    <div class="flex flex-col items-center p-5 bg-dark-coal bg-opacity-70 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 border-b-2 border-vibrant-gold hover:scale-105">
+                        <span class="text-5xl mb-3 text-vibrant-gold">🌐</span>
+                        <p class="font-bold text-light-glow">פיתוח אתרים מבוססי AI</p>
+                        <p class="text-sm text-concrete-gray mt-1">חוויה מותאמת אישית לכל משתמש.</p>
+                    </div>
+                    <div class="flex flex-col items-center p-5 bg-dark-coal bg-opacity-70 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 border-b-2 border-vibrant-gold hover:scale-105">
+                        <span class="text-5xl mb-3 text-vibrant-gold">📊</span>
+                        <p class="font-bold text-light-glow">ניתוח נתונים ומחקר</p>
+                        <p class="text-sm text-concrete-gray mt-1">לחשוף תובנות חבויות ובעלות ערך.</p>
+                    </div>
+                    <div class="flex flex-col items-center p-5 bg-dark-coal bg-opacity-70 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 border-b-2 border-vibrant-gold hover:scale-105">
+                        <span class="text-5xl mb-3 text-vibrant-gold">🎨</span>
+                        <p class="font-bold text-light-glow">יצירת תמונות ואומנות</p>
+                        <p class="text-sm text-concrete-gray mt-1">להפוך חזון למציאות ויזואלית מרהיבה.</p>
+                    </div>
+                    <div class="flex flex-col items-center p-5 bg-dark-coal bg-opacity-70 rounded-lg shadow-xl hover:shadow-2xl transition-all duration-300 border-b-2 border-vibrant-gold hover:scale-105">
+                        <span class="text-5xl mb-3 text-vibrant-gold">⚙️</span>
+                        <p class="font-bold text-light-glow">אוטומציה של תהליכים</p>
+                        <p class="text-sm text-concrete-gray mt-1">לשחרר זמן למשימות חשובות באמת.</p>
+                    </div>
+                </div>
+                <a href="#services" class="cta-button">איך נלמד?</a>
+            </div>
+        </section>
+
+        <!-- Services Section - Pathways to Knowledge -->
+        <section id="services" class="content-section bg-transparent pt-0">
+            <div class="text-block max-w-2xl px-8 py-10 md:px-12 md:py-16">
+                <h2 class="section-title text-3xl md:text-5xl font-bold text-vibrant-gold">הדרך שלך לשליטה.</h2>
+                <div class="text-lg md:text-xl leading-relaxed text-concrete-gray space-y-6">
+                    <p><b>סדנאות קבוצתיות:</b> מסע למידה משותף, מעשי וממוקד. נצלול יחד לעולם ה-AI, נתנסה בכלים וניצור פתרונות אמיתיים שמועילים לכולם.</p>
+                    <p><b>שיעורים פרטיים:</b> הדרכה אישית ממוקדת שתפורה בדיוק לך. בקצב שלך, לפי הצרכים והמטרות הספציפיות שלך, נבנה ידע וכישורים מעשיים.</p>
+                    <p><b>הרצאות לארגונים:</b> פתיחת אופקים והשראה לצוותים שלמים. הצגת הפוטנציאל העצום של AI וכיצד הוא יכול לחולל מהפכה בארגון שלכם, מהעובד ועד המנהל.</p>
+                    <p><b>ייעוץ ופיתוח פרויקטים:</b> ליווי מקצועי צמוד מרעיון ועד יישום. נבנה יחד פרויקטים מבוססי AI שישנו את פני העסק שלך ויעצימו את הפעילות.</p>
+                </div>
+                <a href="#guide" class="cta-button">פגוש את המדריך</a>
+            </div>
+        </section>
+
+        <!-- Guide (Zevik) Section - The Human Guide Through the Digital Frontier -->
+        <section id="guide" class="content-section bg-transparent pt-0">
+            <div class="text-block max-w-2xl px-8 py-10 md:px-12 md:py-16">
+                <h2 class="section-title text-3xl md:text-5xl font-bold text-vibrant-gold">האדם שמאחורי הידע.</h2>
+                <div id="zevik-image-container" role="img" aria-label="תמונה של זאביק אבינר, מומחה לבינה מלאכותית">
+                    <img id="zevik-image" src="https://link.zevikaviner.com/zevik" alt="תמונה קטנה של זאביק אבינר, מומחה בינה מלאכותית" loading="lazy">
+                </div>
+                <h3 class="text-2xl md:text-3xl font-bold mb-4 text-light-glow">זאביק אבינר - מומחה בינה מלאכותית</h3>
+                <p class="text-lg md:text-xl leading-relaxed text-concrete-gray mb-6">מאחורי כלים אלה עומד זאביק אבינר – לא רק מומחה, אלא מורה דרך. אדם שחי ונושם בינה מלאכותית, עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI. מחויב להנגיש את הטכנולוגיה ולהפוך אותה לכלי עבודה יומיומי – בת ברית נאמנה שלך, לא משנה מהי נקודת הפתיחה שלך. הוא מאמין בכוחו של האדם לשלוט במכונה.</p>
+                <a href="#contact" class="cta-button">צור קשר</a>
+            </div>
+        </section>
+
+        <!-- Contact Section - The Next Step Towards Mastery -->
+        <section id="contact" class="content-section bg-transparent pt-0 pb-16">
+            <div class="text-block max-w-xl px-8 py-10 md:px-12 md:py-16">
+                <h2 class="section-title text-3xl md:text-5xl font-bold text-vibrant-gold">מוכן לקפוץ למים?</h2>
+                <p class="text-lg md:text-xl leading-relaxed text-concrete-gray mb-8">העתיד הוא עכשיו, והוא ממתין לך. אל תהסס – צור קשר עוד היום ונתחיל לבנות את הדרך שלך לשליטה בבינה המלאכותית. המפתח נמצא אצלך, בוא ניצור יחד את השינוי.</p>
+                <div class="flex flex-col space-y-5 md:space-y-0 md:flex-row md:space-x-reverse md:space-x-6 justify-center items-center">
+                    <a href="https://wa.me/972546609385" target="_blank" class="cta-button text-black bg-light-glow hover:bg-gray-200 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center min-w-[250px]">
+                        <span class="ml-2 font-bold text-xl">ווטסאפ: 054-6609385</span> <span class="text-2xl mr-2">💬</span>
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="cta-button text-black bg-light-glow hover:bg-gray-200 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center min-w-[250px]">
+                        <span class="ml-2 font-bold text-xl">אימייל: zaviner@gmail.com</span> <span class="text-2xl mr-2">✉️</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div> <!-- End of Main Content Wrapper -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cursor = document.querySelector('.custom-cursor');
+            const parallaxBgs = document.querySelectorAll('.parallax-bg');
+
+            // Custom Cursor Movement
+            document.addEventListener('mousemove', e => {
+                cursor.style.left = `${e.clientX}px`;
+                cursor.style.top = `${e.clientY}px`;
+            });
+
+            // Cursor Hover Effect for interactive elements
+            const interactives = document.querySelectorAll('a, button, .cta-button, #zevik-image-container');
+            interactives.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+            });
+
+            // Parallax Scrolling Effect
+            function updateParallax() {
+                const scrollPos = window.scrollY;
+                parallaxBgs.forEach(bg => {
+                    const speed = parseFloat(bg.dataset.speed);
+                    bg.style.transform = `translateY(${scrollPos * speed}px)`;
+                });
+                // Using requestAnimationFrame for smoother animations
+                requestAnimationFrame(updateParallax);
+            }
+            updateParallax(); // Initial call to start the parallax
+        });
+    </script>
+</body>
+</html>

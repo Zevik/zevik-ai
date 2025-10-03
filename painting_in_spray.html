@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>קירות חכמים: לרסס את העתיד</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll from effects */
+            cursor: none; /* Hide default cursor */
+            background-color: #0d0d0d; /* Deep dark background */
+        }
+        h1, h2, h3 {
+            font-family: 'Bebas Neue', sans-serif;
+        }
+
+        /* Custom Cursor Styling */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* White border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s, transform 0.1s ease-out;
+            z-index: 9999;
+            background-color: rgba(255,255,255,0.1); /* Subtle inner fill */
+        }
+        .custom-cursor.active {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(6, 182, 212, 0.4); /* Cyan/teal accent */
+            border-color: #06B6D4;
+        }
+
+        /* Spray Paint Effect Styles */
+        .spray-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.6;
+            z-index: -1;
+        }
+        .spray-layer-1 {
+            background: radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.2) 0%, transparent 70%),
+                        radial-gradient(circle at 80% 90%, rgba(232, 121, 249, 0.2) 0%, transparent 60%);
+            transform: scale(1.1);
+        }
+        .spray-layer-2 {
+            background: radial-gradient(circle at 30% 70%, rgba(16, 185, 129, 0.2) 0%, transparent 60%),
+                        radial-gradient(circle at 60% 10%, rgba(6, 182, 212, 0.2) 0%, transparent 70%);
+            transform: scale(1.05);
+        }
+        .spray-layer-3 {
+            background: radial-gradient(circle at 90% 30%, rgba(251, 191, 36, 0.15) 0%, transparent 60%),
+                        radial-gradient(circle at 20% 50%, rgba(244, 63, 94, 0.15) 0%, transparent 70%);
+            transform: scale(1.02);
+        }
+
+        /* Scroll-based animation for spray layers */
+        @keyframes parallaxScroll {
+            to { transform: translateY(-50px); }
+        }
+        .parallax-bg {
+            animation: parallaxScroll 30s linear infinite alternate;
+        }
+
+        /* Custom text effects */
+        .text-spray-outline {
+            text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+                         2px 2px 0 rgba(16, 185, 129, 0.5), -2px -2px 0 rgba(16, 185, 129, 0.5);
+        }
+        .text-neon-glow {
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #06B6D4, 0 0 20px #06B6D4, 0 0 25px #06B6D4, 0 0 30px #06B6D4, 0 0 35px #06B6D4;
+        }
+        .spray-border {
+            border-image-slice: 1;
+            border-image-source: linear-gradient(to bottom right, #8b5cf6, #ec4899);
+        }
+
+        /* Element spray-in animation */
+        .reveal-spray {
+            opacity: 0;
+            transform: scale(0.8) translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal-spray.visible {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+        }
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+        .delay-400 { transition-delay: 0.4s; }
+        .delay-500 { transition-delay: 0.5s; }
+        .delay-600 { transition-delay: 0.6s; }
+        .delay-700 { transition-delay: 0.7s; }
+        .delay-800 { transition-delay: 0.8s; }
+        .delay-900 { transition-delay: 0.9s; }
+
+        /* Keyframe for particle animation */
+        @keyframes splatter {
+            0% { opacity: 0; transform: translate(0, 0) scale(0.2); }
+            50% { opacity: 1; transform: translate(var(--x), var(--y)) scale(1); }
+            100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(1.5); }
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-gray-100 min-h-screen">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Spray Paint Background Layers (Parallax effect) -->
+    <div class="spray-layer spray-layer-1 parallax-bg"></div>
+    <div class="spray-layer spray-layer-2 parallax-bg" style="animation-delay: -15s;"></div>
+    <div class="spray-layer spray-layer-3 parallax-bg" style="animation-delay: -5s;"></div>
+
+    <!-- Main Content Canvas -->
+    <div class="relative z-10 p-4 sm:p-8 md:p-12 lg:p-16 min-h-screen flex flex-col items-center justify-center">
+
+        <!-- Title Section - Center Stage -->
+        <section class="max-w-4xl mx-auto my-16 text-center reveal-spray">
+            <h1 class="text-7xl sm:text-8xl md:text-9xl font-extrabold leading-none mb-4 text-emerald-400 text-neon-glow">
+                קירות חכמים:
+            </h1>
+            <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight text-fuchsia-500 text-spray-outline">
+                לרסס את העתיד, לשלוט בבינה המלאכותית
+            </h2>
+            <p class="mt-8 text-xl sm:text-2xl text-gray-200 leading-relaxed max-w-2xl mx-auto">
+                בינה מלאכותית - לא סוד של קודדים, אלא צבע חופשי על קנבס הדיגיטל.
+                ננגיש את הכלי, נשחרר את הפוטנציאל, נהפוך כל רעיון לגרפיטי של חדשנות.
+            </p>
+        </section>
+
+        <!-- Dynamic Content Elements -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-6xl mx-auto my-24">
+
+            <!-- Audience Callout -->
+            <div class="col-span-1 md:col-span-2 reveal-spray delay-200 bg-zinc-800/60 p-8 rounded-xl backdrop-blur-md border border-cyan-400/30 shadow-lg relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-tr from-cyan-400/20 to-transparent opacity-10 blur-xl"></div>
+                <h3 class="text-3xl font-bold mb-4 text-cyan-400 text-spray-outline">קול קורא לאמני המחר</h3>
+                <p class="text-lg text-gray-200">
+                    הקנבס הדיגיטלי ממתין לכם:
+                </p>
+                <ul class="list-none space-y-3 mt-4 text-gray-300 text-right pr-4">
+                    <li class="relative before:content-[''] before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:w-2 before:h-2 before:rounded-full before:bg-violet-400">
+                        <span class="mr-4">מתחילים ומתחילות שרוצים לרסס את צעדיהם הראשונים בעולם ה-AI.</span>
+                    </li>
+                    <li class="relative before:content-[''] before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:w-2 before:h-2 before:rounded-full before:bg-emerald-400">
+                        <span class="mr-4">אנשי ואנשות מקצוע שמוכנים לצייר מחדש את גבולות עבודתם.</span>
+                    </li>
+                    <li class="relative before:content-[''] before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:w-2 before:h-2 before:rounded-full before:bg-fuchsia-400">
+                        <span class="mr-4">מנהלים וארגונים שמחפשים פחית צבע לצוותים שלהם.</span>
+                    </li>
+                    <li class="relative before:content-[''] before:absolute before:right-0 before:top-1/2 before:-translate-y-1/2 before:w-2 before:h-2 before:rounded-full before:bg-yellow-400">
+                        <span class="mr-4">מרססים מתקדמים - לפיתוח פרויקטים וירטואוזיים.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Specializations Grid -->
+            <div class="col-span-1 lg:col-span-1 reveal-spray delay-400 bg-zinc-800/60 p-8 rounded-xl backdrop-blur-md border border-fuchsia-400/30 shadow-lg relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-tl from-fuchsia-400/20 to-transparent opacity-10 blur-xl"></div>
+                <h3 class="text-3xl font-bold mb-4 text-fuchsia-400 text-spray-outline">תחומי התפרצות צבע</h3>
+                <div class="grid grid-cols-2 gap-4 text-gray-200">
+                    <span class="flex items-center gap-2 text-md text-emerald-300"><span class="text-xl">🎨</span> יצירת טקסטים ותוכן</span>
+                    <span class="flex items-center gap-2 text-md text-cyan-300"><span class="text-xl">⚙️</span> בניית אפליקציות חכמות</span>
+                    <span class="flex items-center gap-2 text-md text-violet-300"><span class="text-xl">🌐</span> פיתוח אתרים מבוססי AI</span>
+                    <span class="flex items-center gap-2 text-md text-yellow-300"><span class="text-xl">📊</span> ניתוח נתונים ומחקר</span>
+                    <span class="flex items-center gap-2 text-md text-pink-300"><span class="text-xl">🖼️</span> יצירת תמונות ואומנות</span>
+                    <span class="flex items-center gap-2 text-md text-orange-300"><span class="text-xl">🤖</span> אוטומציה של תהליכים</span>
+                </div>
+            </div>
+
+            <!-- Services Section -->
+            <div class="col-span-1 md:col-span-1 reveal-spray delay-600 bg-zinc-800/60 p-8 rounded-xl backdrop-blur-md border border-violet-400/30 shadow-lg relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-br from-violet-400/20 to-transparent opacity-10 blur-xl"></div>
+                <h3 class="text-3xl font-bold mb-4 text-violet-400 text-spray-outline">שירותי ריסוס יצירתיים</h3>
+                <ul class="list-none space-y-4 text-gray-200">
+                    <li class="text-xl font-bold text-emerald-300 flex items-center gap-2"><span class="text-2xl">⚡</span> סדנאות קבוצתיות <span class="text-gray-400 text-base font-normal">- התפרצות צבע מעשית.</span></li>
+                    <li class="text-xl font-bold text-cyan-300 flex items-center gap-2"><span class="text-2xl">✨</span> שיעורים פרטיים <span class="text-gray-400 text-base font-normal">- ציור בהזמנה אישית.</span></li>
+                    <li class="text-xl font-bold text-fuchsia-300 flex items-center gap-2"><span class="text-2xl">📢</span> הרצאות לארגונים <span class="text-gray-400 text-base font-normal">- גרפיטי שישנה את האופק.</span></li>
+                    <li class="text-xl font-bold text-yellow-300 flex items-center gap-2"><span class="text-2xl">💡</span> ייעוץ ופיתוח פרויקטים <span class="text-gray-400 text-base font-normal">- ליווי ליצירת מופת דיגיטלית.</span></li>
+                </ul>
+            </div>
+
+            <!-- The Guide - Zevik Aviner -->
+            <div class="col-span-1 md:col-span-2 reveal-spray delay-800 bg-zinc-800/60 p-8 rounded-xl backdrop-blur-md border border-emerald-400/30 shadow-lg relative overflow-hidden flex flex-col sm:flex-row items-center justify-center gap-6">
+                <div class="absolute inset-0 bg-gradient-to-bl from-emerald-400/20 to-transparent opacity-10 blur-xl"></div>
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה קטנה של זאביק אבינר" class="w-32 h-32 rounded-full border-4 border-emerald-400 object-cover shadow-xl">
+                <div class="text-center sm:text-right">
+                    <h3 class="text-4xl font-bold mb-2 text-emerald-400 text-neon-glow">זאביק אבינר - המאסטרו של הרחוב הדיגיטלי</h3>
+                    <p class="text-lg text-gray-200 max-w-xl sm:max-w-none">
+                        המרסס הראשי. זאביק אבינר - מומחה שמפצח את קוד ה-AI והופך אותו לריסוס חי ונושם.
+                        הוא ייתן לכם את הפחית, אתם תציירו את המחר.
+                    </p>
+                    <div class="mt-6 flex flex-col sm:flex-row gap-4 justify-center sm:justify-end items-center">
+                        <a href="https://wa.me/972546609385" target="_blank" class="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-bold py-3 px-6 rounded-full shadow-lg transition transform hover:scale-105 active:scale-95 text-xl">
+                            <span class="text-2xl">📞</span> ווטסאפ
+                        </a>
+                        <a href="mailto:zaviner@gmail.com" class="flex items-center gap-2 bg-gradient-to-r from-fuchsia-500 to-pink-500 hover:from-fuchsia-400 hover:to-pink-400 text-white font-bold py-3 px-6 rounded-full shadow-lg transition transform hover:scale-105 active:scale-95 text-xl">
+                            <span class="text-2xl">📧</span> אימייל
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Particle container for interactive spray effects -->
+        <div id="particle-container" class="fixed inset-0 pointer-events-none z-[9998]"></div>
+
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        document.addEventListener('mousedown', () => {
+            cursor.classList.add('active');
+        });
+        document.addEventListener('mouseup', () => {
+            cursor.classList.remove('active');
+        });
+
+        // Intersection Observer for reveal-spray animation
+        const revealElements = document.querySelectorAll('.reveal-spray');
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Stop observing once visible
+                }
+            });
+        }, {
+            threshold: 0.2 // Trigger when 20% of the element is visible
+        });
+
+        revealElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // Generative Spray Particles on Click
+        const particleContainer = document.getElementById('particle-container');
+        document.addEventListener('click', e => {
+            const numParticles = Math.floor(Math.random() * 5) + 3; // 3-7 particles
+            const colors = ['#06B6D4', '#8B5CF6', '#EC4899', '#10B981', '#FBBF24']; // Tailwind colors: cyan, violet, fuchsia, emerald, yellow
+
+            for (let i = 0; i < numParticles; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle', 'absolute', 'rounded-full');
+                
+                const size = Math.floor(Math.random() * 8) + 4; // 4-12px
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                // Random position around click point, slightly offset
+                const xOffset = (Math.random() - 0.5) * 100; // -50 to 50px
+                const yOffset = (Math.random() - 0.5) * 100; // -50 to 50px
+                
+                particle.style.left = `${e.clientX}px`;
+                particle.style.top = `${e.clientY}px`;
+                particle.style.setProperty('--x', `${xOffset}px`);
+                particle.style.setProperty('--y', `${yOffset}px`);
+                particle.style.animation = `splatter 0.8s ease-out forwards ${Math.random() * 0.2}s`; // Random delay
+
+                particleContainer.appendChild(particle);
+
+                // Remove particle after animation
+                particle.addEventListener('animationend', () => {
+                    particle.remove();
+                });
+            }
+        });
+
+        // Basic parallax for background layers based on scroll
+        document.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            document.querySelector('.spray-layer-1').style.transform = `scale(1.1) translateY(${-scrollY * 0.1}px)`;
+            document.querySelector('.spray-layer-2').style.transform = `scale(1.05) translateY(${-scrollY * 0.05}px)`;
+            // Layer 3 is less affected by scroll, or just uses its own animation.
+        });
+
+    </script>
+</body>
+</html>

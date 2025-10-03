@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>האומנות הנסתרת של הבינה המלאכותית - זאביק אבינר</title>
+    <!-- Google Fonts for Hebrew - Frank Ruhl Libre (serif, classic) and Heebo (sans-serif, modern) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS to blend tempera artistry with modern web */
+        :root {
+            --color-primary: #1A2E05; /* Deep Forest Green */
+            --color-secondary: #5D5C61; /* Muted Grey */
+            --color-accent: #E0B062; /* Ochre/Gold */
+            --color-text-light: #F0EAD6; /* Off-white Parchment */
+            --color-text-dark: #2E2E2E; /* Dark Grey */
+            --font-display: 'Frank Ruhl Libre', serif;
+            --font-body: 'Heebo', sans-serif;
+            --cursor-border: #FFFFFF;
+            --cursor-shadow: rgba(0,0,0,0.8);
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll for parallax */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-display);
+            color: var(--color-accent);
+        }
+
+        /* Custom cursor styling */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--cursor-border);
+            box-shadow: 0 0 0 2px var(--cursor-shadow); /* High contrast shadow */
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 1; /* Ensure visibility */
+            transition: transform 0.1s ease-out, opacity 0.2s ease-out;
+            transform: translate(-50%, -50%); /* Center the cursor on mouse position */
+        }
+
+        .custom-cursor.hidden {
+            opacity: 0;
+        }
+
+        /* Parallax layers */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1; /* Place behind content */
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Layer specific styles for tempera effect */
+        .layer-1 {
+            background-color: #0A1400; /* Deepest dark */
+            background-image: radial-gradient(circle at 50% 50%, rgba(20, 30, 0, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+            filter: blur(2px);
+        }
+        .layer-2 {
+            background-color: #283810; /* Darker green */
+            opacity: 0.7;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%236B5E46' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M0 60L12 48 0 36 0 0 60 60zM60 0L48 12 60 24 60 60z'/%3E%3C/g%3E%3C/svg%3E"); /* Subtle diagonal lines for texture */
+            filter: brightness(0.8) contrast(1.2);
+        }
+        .layer-3 {
+            background-color: #4C5C38; /* Muted green */
+            opacity: 0.4;
+            background-image: radial-gradient(circle at 100% 0%, rgba(100, 110, 80, 0.1) 0%, rgba(0, 0, 0, 0) 50%);
+            filter: saturate(0.8);
+        }
+
+        /* Content containers */
+        .content-section {
+            background-color: rgba(10, 20, 0, 0.7); /* Slightly transparent dark green for depth */
+            border: 1px solid var(--color-accent);
+            padding: 2rem;
+            margin: 4rem auto;
+            max-width: 900px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5), inset 0 0 10px rgba(224, 176, 98, 0.2);
+            position: relative;
+            z-index: 10;
+            border-radius: 8px;
+            backdrop-filter: blur(3px); /* Subtle blur behind content */
+        }
+
+        .cta-button {
+            background-color: var(--color-accent);
+            color: var(--color-primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px; /* Pill shape */
+            font-family: var(--font-display);
+            font-weight: bold;
+            text-decoration: none;
+            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            background-color: #F0C476; /* Lighter ochre on hover */
+        }
+
+        /* Specific section styles */
+        #intro .text-4xl { font-size: 2.5rem; }
+        #intro .text-6xl { font-size: 4rem; line-height: 1.1; }
+
+        @media (min-width: 768px) {
+            #intro .text-4xl { font-size: 3.5rem; }
+            #intro .text-6xl { font-size: 5.5rem; }
+        }
+
+        .expertise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .expertise-item {
+            border: 1px solid rgba(224, 176, 98, 0.4);
+            background-color: rgba(10, 20, 0, 0.5);
+            padding: 1rem;
+            border-radius: 6px;
+            text-align: center;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .expertise-item:hover {
+            background-color: rgba(224, 176, 98, 0.1);
+            transform: translateY(-5px);
+        }
+
+        /* Zevik's image styling */
+        .zevik-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--color-accent);
+            box-shadow: 0 0 15px rgba(224, 176, 98, 0.5);
+        }
+
+    </style>
+</head>
+<body class="bg-primary text-text-light min-h-screen">
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-layer layer-1" data-speed="-0.05"></div>
+    <div class="parallax-layer layer-2" data-speed="-0.1"></div>
+    <div class="parallax-layer layer-3" data-speed="-0.2"></div>
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <header id="intro" class="relative z-20 min-h-screen flex items-center justify-center text-center p-4">
+        <div class="content-section max-w-4xl mx-auto py-16 px-8 bg-gradient-to-br from-emerald-950 to-emerald-800 border-amber-600 border-2">
+            <h1 class="text-4xl md:text-6xl font-display leading-tight text-amber-300 drop-shadow-lg mb-6">
+                אדוני הפיקסל והאלגוריתם: <br> מסע אל לב הבינה המלאכותית
+            </h1>
+            <p class="text-lg md:text-xl font-body text-stone-200 leading-relaxed max-w-2xl mx-auto mb-10">
+                כמו אמני הטמפרה שחשפו עולמות מפיגמנטים טהורים, אנו מגלים היום את האפשרויות הבלתי נדלות של הבינה המלאכותית. הצטרפו לזאביק אבינר, מדריך וחזאי של העתיד הדיגיטלי, כדי לפצח את סודות ה-AI ולהפוך את הטכנולוגיה המהפכנית הזו למכחול בידיים שלכם.
+            </p>
+            <a href="#services" class="cta-button text-xl">
+                התחילו את מסע היצירה שלכם
+            </a>
+        </div>
+    </header>
+
+    <main class="relative z-20">
+        <section id="mission" class="content-section text-center">
+            <h2 class="text-5xl font-display text-amber-400 mb-8">המסר החבוי: AI נגיש לכל אומן</h2>
+            <p class="text-lg font-body leading-loose text-stone-200 mb-8">
+                אנו מאמינים כי עוצמתה של הבינה המלאכותית לא צריכה להישאר נחלתם של מעטים. המשימה שלנו היא להפוך את ה-AI לברור, למעשי ולישים עבור כל אחד ואחת - מהמכחול הראשון ועד הדיוק המורכב של יצירת מופת דיגיטלית. עם זאביק אבינר, תרכשו כלים עוצמתיים שתוכלו ליישם מיד בעבודתכם, בחייכם ובפרויקטים השאפתניים ביותר. זהו פתח לעידן חדש של יצירה והגשמה.
+            </p>
+        </section>
+
+        <section id="audience" class="content-section text-center">
+            <h2 class="text-5xl font-display text-amber-400 mb-8">למי מיועד המסע האמנותי?</h2>
+            <div class="grid md:grid-cols-2 gap-8 text-lg font-body text-stone-200 leading-relaxed">
+                <div class="p-6 bg-emerald-800 rounded-lg shadow-xl border border-amber-500/50">
+                    <h3 class="text-3xl font-display text-amber-300 mb-4">חניכים מתחילים</h3>
+                    <p>למי שחולם לגעת בפיגמנטים של הבינה המלאכותית בפעם הראשונה, ללא ידע מוקדם. ננווט אתכם בזהירות אל היסודות.</p>
+                </div>
+                <div class="p-6 bg-emerald-800 rounded-lg shadow-xl border border-amber-500/50">
+                    <h3 class="text-3xl font-display text-amber-300 mb-4">אמנים מקצועיים</h3>
+                    <p>לאנשי מקצוע המבקשים לשלב את כלי ה-AI בסטודיו שלהם, לשדרג תהליכי עבודה קיימים ולפתוח אפיקי יצירה חדשים.</p>
+                </div>
+                <div class="p-6 bg-emerald-800 rounded-lg shadow-xl border border-amber-500/50">
+                    <h3 class="text-3xl font-display text-amber-300 mb-4">מנהלים וארגונים</h3>
+                    <p>למנהיגים ואומנים עסקיים המבקשים להכניס את קסם ה-AI לצוותים שלהם, להעלות פרודוקטיביות וחדשנות.</p>
+                </div>
+                <div class="p-6 bg-emerald-800 rounded-lg shadow-xl border border-amber-500/50">
+                    <h3 class="text-3xl font-display text-amber-300 mb-4">יוצרים מתקדמים</h3>
+                    <p>לשואפים לבנות יצירות AI משלהם, לפתח פרויקטים מורכבים ולעמוד בחזית החדשנות הדיגיטלית.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="expertise" class="content-section">
+            <h2 class="text-5xl font-display text-amber-400 text-center mb-10">גווני הבינה המלאכותית: מכחולי היצירה הדיגיטלית</h2>
+            <div class="expertise-grid">
+                <div class="expertise-item">
+                    <h3 class="text-2xl font-display text-amber-300 mb-2">אריגת טקסטים ותוכן</h3>
+                    <p class="text-md text-stone-300">יצירת סיפורים, מאמרים וקופירייטינג בעזרת מודלים מתקדמים.</p>
+                </div>
+                <div class="expertise-item">
+                    <h3 class="text-2xl font-display text-amber-300 mb-2">בניית אפליקציות חכמות</h3>
+                    <p class="text-md text-stone-300">הפיכת רעיונות לאפליקציות מבוססות AI המשנות מציאות.</p>
+                </div>
+                <div class="expertise-item">
+                    <h3 class="text-2xl font-display text-amber-300 mb-2">אדריכלות אתרים AI</h3>
+                    <p class="text-md text-stone-300">עיצוב ופיתוח אתרים שחושבים, לומדים ומתפתחים.</p>
+                </div>
+                <div class="expertise-item">
+                    <h3 class="text-2xl font-display text-amber-300 mb-2">פענוח נתונים ומחקר</h3>
+                    <p class="text-md text-stone-300">הבנה עמוקה של דאטה דרך עדשת הבינה המלאכותית.</p>
+                </div>
+                <div class="expertise-item">
+                    <h3 class="text-2xl font-display text-amber-300 mb-2">ציור ופיסול דיגיטלי</h3>
+                    <p class="text-md text-stone-300">יצירת תמונות, איורים ואומנות ויזואלית שטרם נראתה.</p>
+                </div>
+                <div class="expertise-item">
+                    <h3 class="text-2xl font-display text-amber-300 mb-2">אוטומציה כמעשה קסם</h3>
+                    <p class="text-md text-stone-300">ייעול תהליכים משעממים והפיכתם ליעילים ומהירים.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="content-section text-center">
+            <h2 class="text-5xl font-display text-amber-400 mb-10">שירותי הסטודיו: נתיבי הלמידה</h2>
+            <div class="grid md:grid-cols-2 gap-8 text-lg font-body text-stone-200 leading-relaxed">
+                <div class="p-6 bg-emerald-800 rounded-lg shadow-xl border border-amber-500/50">
+                    <h3 class="text-3xl font-display text-amber-300 mb-4">סדנאות יצירה קבוצתיות</h3>
+                    <p>מרחב משותף לגילוי, למידה והתנסות מעשית, תוך התמקדות בטכניקות AI ספציפיות.</p>
+                </div>
+                <div class="p-6 bg-emerald-800 rounded-lg shadow-xl border border-amber-500/50">
+                    <h3 class="text-3xl font-display text-amber-300 mb-4">שיעורים חונכים אישיים</h3>
+                    <p>מסלול מותאם אישית, צעד אחר צעד, העונה בדיוק לצרכים ולקצב שלכם, מהיסוד ועד לשליטה.</p>
+                </div>
+                <div class="p-6 bg-emerald-800 rounded-lg shadow-xl border border-amber-500/50">
+                    <h3 class="text-3xl font-display text-amber-300 mb-4">הרצאות השראה לארגונים</h3>
+                    <p>פתיחת אופקים והטמעת חשיבה חדשנית בקרב צוותים, עם דגש על פוטנציאל ה-AI.</p>
+                </div>
+                <div class="p-6 bg-emerald-800 rounded-lg shadow-xl border border-amber-500/50">
+                    <h3 class="text-3xl font-display text-amber-300 mb-4">ייעוץ וליווי פרויקטים</h3>
+                    <p>הכוונה מקצועית וליווי צמוד בפיתוח והטמעת פרויקטים מבוססי AI, מהרעיון ועד הביצוע.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="guide" class="content-section text-center flex flex-col md:flex-row items-center justify-center gap-8">
+            <div class="flex-shrink-0">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר, מומחה בינה מלאכותית" class="zevik-image">
+            </div>
+            <div class="md:text-right text-stone-200">
+                <h2 class="text-5xl font-display text-amber-400 mb-4">זאביק אבינר: החומש הדיגיטלי</h2>
+                <p class="text-xl font-body leading-relaxed mb-4">
+                    זאביק אבינר הוא אמן הבינה המלאכותית - מומחה עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI. הוא מונע מתשוקה להנגיש את הטכנולוגיה, להסיר את הלוט מעל מורכבותה, ולהפוך אותה לכלי עבודה יומיומי ונגיש לכל מי שחפץ ליצור בעזרתה. מסעו הוא מסע של גילוי, והוא מזמין אתכם להצטרף.
+                </p>
+                <div class="flex flex-col md:flex-row justify-center md:justify-end gap-4 text-lg mt-6">
+                    <a href="https://wa.me/972546609385" target="_blank" class="flex items-center gap-2 text-amber-200 hover:text-amber-500 transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.52 3.39 1.45 4.83l-1.52 5.57 5.75-1.51c1.37.79 2.92 1.23 4.23 1.23 5.46 0 9.91-4.45 9.91-9.91s-4.45-9.91-9.91-9.91zm.04 18.06c-1.2 0-2.34-.33-3.34-.91l-.24-.14-2.51.66.67-2.45-.16-.25c-.6-.92-.95-2-.95-3.15 0-4.32 3.51-7.82 7.82-7.82 2.1 0 4.04.82 5.51 2.29 1.46 1.46 2.29 3.4 2.29 5.51 0 4.31-3.51 7.82-7.82 7.82zm3.32-5.34l-.15-.07c-.4-.19-.24-.31-.56-.47-.25-.12-.6-.2-.85-.12-.2.07-.46.19-.68.4-.22.2-.44.22-.8.09-.31-.11-1.3-.48-2.47-1.52-.91-.79-1.52-1.78-1.7-2.09-.18-.3-.02-.46.12-.6h.28c.13 0 .27-.04.42-.18.15-.14.2-.33.3-.47.1-.15.04-.27-.02-.38-.05-.12-.4-.95-.55-1.3-.15-.36-.3-.31-.4-.31h-.34c-.1-.01-.27-.02-.42.06-.15.08-.57.29-.86.58-.29.29-.62.66-.75 1.2-.13.54.12 1.04.28 1.25.16.21.99 1.54 2.4 2.18 1.41.64 2.62.88 2.97.97.35.09.56.07.77-.09.22-.16.65-.67.83-1.02.19-.34.12-.25.08-.47z"/></svg>
+                        ווטסאפ: 054-6609385
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="flex items-center gap-2 text-amber-200 hover:text-amber-500 transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 12.713l-11.75 6.787h23.5l-11.75-6.787zm0-2.713l11.75-6.787h-23.5l11.75 6.787zm-12 1.287v10.713h24v-10.713l-12 6.787zm22-10.287l-10-5.787-10 5.787h20z"/></svg>
+                        אימייל: zaviner@gmail.com
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="relative z-20 text-center py-12 px-4 bg-emerald-950 text-stone-400 text-sm border-t border-amber-600/50">
+        <p class="mb-2">© 2024 זאביק אבינר. כל הזכויות שמורות. יצירת אומנות דיגיטלית של AI.</p>
+        <p>האתר עוצב בהשראת ציור טמפרה ומופעל בכוחה של הבינה המלאכותית.</p>
+    </footer>
+
+    <script>
+        // Custom Cursor JavaScript
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.transform = `translate(${e.clientX - (cursor.offsetWidth / 2)}px, ${e.clientY - (cursor.offsetHeight / 2)}px)`;
+        });
+
+        document.addEventListener('mouseenter', () => cursor.classList.remove('hidden'));
+        document.addEventListener('mouseleave', () => cursor.classList.add('hidden'));
+
+        // Parallax Scrolling JavaScript
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            parallaxLayers.forEach(layer => {
+                const speed = parseFloat(layer.dataset.speed);
+                layer.style.transform = `translateY(${scrollY * speed}px)`;
+            });
+        });
+        // Initial parallax position on load
+        window.dispatchEvent(new Event('scroll'));
+    </script>
+</body>
+</html>

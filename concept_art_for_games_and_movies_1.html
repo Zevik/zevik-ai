@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מנזר החתול: אודיסיאה לרוח החתולית</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Oswald:wght@300;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Base styles and custom variables */
+        :root {
+            --primary-bg: #0a0a0a; /* Deep charcoal */
+            --text-light: #e0e0e0;
+            --text-accent: #f0c38e; /* Warm gold/amber */
+            --highlight-glow: #f0c38e; /* Same as accent for glow */
+            --cursor-border-light: rgba(255, 255, 255, 0.9);
+            --cursor-shadow-dark: rgba(0, 0, 0, 0.8);
+            --cursor-size: 16px;
+            --cursor-halo-size: 32px;
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-light);
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax/animations */
+        }
+
+        h1, h2, h3 {
+            font-family: 'Oswald', sans-serif;
+            color: var(--text-accent);
+            letter-spacing: 0.05em;
+        }
+
+        /* Custom cursor styling */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            border-radius: 50%;
+            transform: translate(-50%, -50%); /* Center cursor div on mouse position */
+            z-index: 9999; /* Always on top */
+            transition: width 0.1s ease, height 0.1s ease; /* Smooth size change */
+        }
+
+        .cursor-dot {
+            width: var(--cursor-size);
+            height: var(--cursor-size);
+            border: 2px solid var(--cursor-border-light);
+            box-shadow: 0 0 0 2px var(--cursor-shadow-dark);
+        }
+
+        .cursor-halo {
+            width: var(--cursor-halo-size);
+            height: var(--cursor-halo-size);
+            background-color: transparent;
+            border: 1px solid var(--text-accent); /* Accent color border for halo */
+            box-shadow: 0 0 15px 5px var(--highlight-glow); /* Subtle glow */
+            opacity: 0.6;
+            transition: opacity 0.3s ease, transform 0.2s ease; /* Smooth transition for halo */
+        }
+        
+        /* State for interactive elements */
+        .interactive-text:hover {
+            color: var(--text-accent);
+            text-shadow: 0 0 8px var(--highlight-glow);
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        /* Background image styling for parallax */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-attachment: scroll; /* Changed to scroll for JS parallax */
+            z-index: -1;
+            filter: brightness(0.7) grayscale(0.2); /* Concept art mood */
+            transition: transform 0.1s ease-out; /* Smooth parallax movement */
+        }
+
+        .parallax-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, var(--primary-bg) 0%, transparent 50%, var(--primary-bg) 100%);
+            opacity: 0.6;
+        }
+
+        /* Responsive typography for a more artistic feel */
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            h2 { font-size: 2rem; }
+            .text-3xl { font-size: 1.8rem; }
+            .text-xl { font-size: 1.2rem; }
+            .text-lg { font-size: 1.1rem; }
+        }
+
+        /* Tailwind overrides/additions */
+        .container-art {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .section-art {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 10;
+        }
+        .section-content {
+            background-color: rgba(10, 10, 10, 0.7); /* Slightly transparent background for readability */
+            backdrop-filter: blur(8px);
+            padding: 4rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 800px;
+            margin: 2rem;
+            text-align: center;
+            border: 1px solid rgba(240, 195, 142, 0.2);
+        }
+        .text-glow {
+            text-shadow: 0 0 5px var(--highlight-glow), 0 0 10px var(--highlight-glow);
+        }
+
+        /* Specific styles for artistic sections */
+        .section-full-bleed {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative; /* Needed for absolute children */
+        }
+
+        .full-bleed-image-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .full-bleed-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.6) grayscale(0.1);
+            transform: scale(1.05); /* Slight zoom for parallax feel */
+        }
+
+        .image-overlay-text {
+            position: relative;
+            z-index: 20;
+            color: var(--text-light);
+            text-align: center;
+            padding: 2rem;
+            background-color: rgba(10, 10, 10, 0.6);
+            backdrop-filter: blur(5px);
+            border-radius: 8px;
+            max-width: 90%;
+            border: 1px solid rgba(240, 195, 142, 0.15);
+        }
+
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-200 antialiased leading-relaxed">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor cursor-dot"></div>
+    <div class="custom-cursor cursor-halo"></div>
+
+    <!-- Parallax Background Image -->
+    <div class="parallax-bg" style="background-image: url('https://source.unsplash.com/random/1920x1080/?cat,mysterious,concept-art,shadows,ancient,forest')"></div>
+
+    <main class="relative z-10">
+
+        <!-- Header - Intro Section -->
+        <section class="section-full-bleed flex-col justify-center items-center p-4 min-h-screen">
+            <h1 class="text-6xl md:text-8xl font-bold text-accent mb-6 text-glow interactive-text">מנזר החתול</h1>
+            <h2 class="text-3xl md:text-5xl font-light text-zinc-300 text-glow text-center max-w-4xl leading-tight interactive-text">אודיסיאה לרוח החתולית - מדריך למסתורין שבפרווה</h2>
+            <p class="text-xl md:text-2xl mt-8 max-w-3xl text-center leading-relaxed opacity-90">
+                מעבר למבט התמים, מעבר לפרווה הרכה-מסתתר עולם שלם. עולם עתיק, חבוי, קסום. הצטרפו אלינו למסע אל נבכי הנפש החתולית, אל המקום שבו הזמן עומד מלכת והחושים מתחדדים.
+            </p>
+        </section>
+
+        <!-- Section 1: החתול הנצחי -->
+        <section class="section-art p-4 min-h-screen">
+            <div class="section-content text-right">
+                <h2 class="text-5xl font-bold text-accent mb-8 interactive-text">החתול הנצחי - שומר הסף</h2>
+                <p class="text-xl leading-relaxed mb-6 interactive-text">
+                    החתול, יצור של אלף פנים ושמות, צועד על פני האדמה מאז שחר הימים. הוא לא רק חיית מחמד-הוא פילוסוף שקט, צייד מלכותי, ושומר סף לעולמות נשכחים. במבטו העמוק טמונה תמצית הקיום: עבר, הווה ועתיד מתמזגים לכדי נקודה אחת של חוכמה עתיקה.
+                </p>
+                <p class="text-lg leading-relaxed mb-6 opacity-90">
+                    תנועותיו הן שיר מלודיה לזרימה הטבעית של החיים, והשקט שהוא נושא עימו הוא מנזר, מקום מקלט לנפש הסוערת. הוא מזכיר לנו שגם בתוך הכאוס המודרני, עדיין קיימת הרמוניה, קצב איטי ועמוק שמחבר אותנו למהותנו הפראית.
+                </p>
+                <div class="mt-8 text-center interactive-text">
+                    <img src="https://source.unsplash.com/random/800x600/?cat,ancient,spirit,concept-art,mythical,wisdom,eyes,glow" 
+                         alt="חתול במבט עמוק ומהורהר, עיניו זוהרות בעדינות על רקע טקסטורות עתיקות, בסגנון אמנות קונספט. המראה משדר חוכמה קדמונית." 
+                         class="rounded-lg shadow-xl inline-block max-w-full h-auto mx-auto border border-accent-light opacity-90 hover:opacity-100 transition-opacity duration-300" 
+                         style="max-height: 500px; object-fit: cover;">
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: הקודש שבשקט -->
+        <section class="section-art p-4 min-h-screen">
+            <div class="section-content text-right">
+                <h2 class="text-5xl font-bold text-accent mb-8 interactive-text">הקודש שבשקט - תקשורת מעבר למילים</h2>
+                <p class="text-xl leading-relaxed mb-6 interactive-text">
+                    חתולים אינם מדברים, אך הם מתקשרים. כל זנב מתנופף, כל רטט בחרטום, כל מיקום של האוזניים-הוא שפה. שפה של רגשות, של כוונות, של קשר עמוק שמעבר למילים. הם מורים לנו על חשיבות ההקשבה השקטה, על היכולת להבין מבלי לדרוש הסבר.
+                </p>
+                <p class="text-lg leading-relaxed mb-6 opacity-90">
+                    השקט שלהם אינו ריק-הוא מלא. מלא בהבנה, באמפתיה, ובנוכחות. הם פוסעים בין צלילי חיינו, לוכדים את התנודות הקטנות, את האנרגיות הנסתרות, ומהדהדים אותן בחזרה אלינו בדרכם הייחודית. כה מעט חיצוני, כה עמוק פנימי.
+                </p>
+                <div class="mt-8 text-center interactive-text">
+                    <img src="https://source.unsplash.com/random/800x600/?cat,meditation,peace,calm,concept-art,serenity,warm-light" 
+                         alt="חתול ישן בשלווה עמוקה, מואר בקרן אור חמימה, משדר שלווה רוחנית וקודש בסגנון אמנותי עמוק. הפרטים מדגישים את שלווה הפנימית." 
+                         class="rounded-lg shadow-xl inline-block max-w-full h-auto mx-auto border border-accent-light opacity-90 hover:opacity-100 transition-opacity duration-300" 
+                         style="max-height: 500px; object-fit: cover;">
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: ריקוד הצללים והאור -->
+        <section class="section-art p-4 min-h-screen">
+            <div class="section-content text-right">
+                <h2 class="text-5xl font-bold text-accent mb-8 interactive-text">ריקוד הצללים והאור - החופש הנצחי</h2>
+                <p class="text-xl leading-relaxed mb-6 interactive-text">
+                    ריקוד החתול הוא ריקוד של חופש. הוא מטפס לפסגות הגבוהות ביותר, מתגנב בצללים העמוקים ביותר, ומוצא את דרכו גם במבוכים הסבוכים ביותר. הוא מלמד אותנו גמישות, הסתגלות, ואת החשיבות של להישאר נאמנים לעצמנו, גם כשהעולם סביבנו משתנה.
+                </p>
+                <p class="text-lg leading-relaxed mb-6 opacity-90">
+                    בכל קפיצה, בכל התמתחות, בכל חלום-יש תזכורת לכוח החיים הפנימי, ליכולת להתחדש, לשחק, ולחקור. הם סמלים חזקים לעצמאות נשמתית, ולשחרור מכבלי הקונבנציות. הם מזמינים אותנו לחיות בתשוקה, בתנועה ובקלילות.
+                </p>
+                <div class="mt-8 text-center interactive-text">
+                    <img src="https://source.unsplash.com/random/800x600/?cat,playful,agile,motion,concept-art,dynamic,hunter" 
+                         alt="חתול במשחק דינמי, קופץ או מתגנב, עם אפקט טשטוש תנועה עדין, על רקע כהה בסגנון אמנות קונספט. האנרגיה והתנועה מודגשות." 
+                         class="rounded-lg shadow-xl inline-block max-w-full h-auto mx-auto border border-accent-light opacity-90 hover:opacity-100 transition-opacity duration-300" 
+                         style="max-height: 500px; object-fit: cover;">
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer / Conclusion Section -->
+        <section class="section-full-bleed flex-col justify-center items-center p-4 min-h-screen">
+            <div class="image-overlay-text w-full max-w-4xl">
+                <h2 class="text-5xl md:text-6xl font-bold text-accent mb-6 text-glow interactive-text">סוד החתול - המראה לנשמה</h2>
+                <p class="text-xl md:text-2xl leading-relaxed mb-8">
+                    בסופו של יום, החתול הוא מראה. הוא משקף אלינו את מה שאנחנו צריכים לראות, את מה שאנחנו צריכים ללמוד על שקט, חופש, אהבה ללא תנאי, וקבלת העצמי.
+                </p>
+                <p class="text-lg md:text-xl leading-relaxed opacity-90">
+                    תנו לו ללמד אתכם. פשוט התבוננו, הקשיבו, הרגישו. וכך, מנזר החתול יחשוף בפניכם את סודותיו העתיקים, ויעניק לכם שלווה שתשנה את עולמכם.
+                </p>
+                <p class="text-md mt-10 text-zinc-400">
+                    &copy; 2023 מנזר החתול. כל הזכויות שמורות ליצירה הקסומה.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor JavaScript
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorHalo = document.querySelector('.cursor-halo');
+
+        document.addEventListener('mousemove', e => {
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+
+            // Halo trails slightly behind
+            cursorHalo.style.left = e.clientX + 'px';
+            cursorHalo.style.top = e.clientY + 'px';
+        });
+
+        // Add hover effect to interactive elements
+        const interactiveElements = document.querySelectorAll('.interactive-text');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorDot.style.width = 'var(--cursor-halo-size)';
+                cursorDot.style.height = 'var(--cursor-halo-size)';
+                cursorDot.style.borderColor = 'var(--highlight-glow)';
+                cursorDot.style.boxShadow = `0 0 10px 3px var(--highlight-glow), 0 0 0 2px var(--cursor-shadow-dark)`;
+                cursorDot.style.opacity = '0.9';
+
+                cursorHalo.style.opacity = '0'; // Hide halo when dot expands
+                cursorHalo.style.transform = 'translate(-50%, -50%) scale(0.5)'; // Shrink halo
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorDot.style.width = 'var(--cursor-size)';
+                cursorDot.style.height = 'var(--cursor-size)';
+                cursorDot.style.borderColor = 'var(--cursor-border-light)';
+                cursorDot.style.boxShadow = `0 0 0 2px var(--cursor-shadow-dark)`;
+                cursorDot.style.opacity = '1';
+
+                cursorHalo.style.opacity = '0.6'; // Restore halo
+                cursorHalo.style.transform = 'translate(-50%, -50%) scale(1)'; // Restore halo size
+            });
+        });
+
+        // Parallax Scrolling JavaScript
+        const parallaxBg = document.querySelector('.parallax-bg');
+        let currentScroll = 0;
+        let targetScroll = 0;
+        const easeFactor = 0.1; // Determines how smooth the scroll is
+
+        function animateParallax() {
+            targetScroll = window.scrollY;
+            currentScroll += (targetScroll - currentScroll) * easeFactor;
+
+            // Adjust the translateY value to control parallax strength
+            // Moving background slightly slower than foreground content gives the effect
+            parallaxBg.style.transform = `translateY(${currentScroll * 0.3}px)`; // 0.3 is the parallax strength
+
+            requestAnimationFrame(animateParallax);
+        }
+
+        animateParallax(); // Start the parallax animation loop
+
+    </script>
+</body>
+</html>

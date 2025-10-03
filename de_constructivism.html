@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - מפרקים את ה-AI, בונים את העתיד</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&family=Noto+Sans+Hebrew:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles and Google Fonts integration */
+        body {
+            font-family: 'Noto Sans Hebrew', sans-serif;
+            background-color: #0d0d0d; /* Deep charcoal */
+            color: #e0e0e0; /* Off-white */
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            color: #f0f0f0;
+        }
+
+        /* Custom Deconstructivist Cursor */
+        #custom-cursor {
+            position: fixed;
+            width: 24px;
+            height: 24px;
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        body:hover #custom-cursor {
+             opacity: 1;
+        }
+        body:not(:hover) #custom-cursor {
+            opacity: 0;
+        }
+        a:hover + #custom-cursor, button:hover + #custom-cursor {
+            width: 32px;
+            height: 32px;
+            border-color: #60a5fa; /* Blue accent */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 15px rgba(96, 165, 250, 0.7); /* Glow effect */
+        }
+
+        /* Deconstructivist background layers */
+        .deconstruct-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -10;
+        }
+        .bg-layer-1 {
+            background: repeating-linear-gradient(45deg, rgba(30, 30, 30, 0.05), rgba(30, 30, 30, 0.05) 10px, transparent 10px, transparent 20px),
+                        repeating-linear-gradient(-45deg, rgba(30, 30, 30, 0.05), rgba(30, 30, 30, 0.05) 10px, transparent 10px, transparent 20px);
+            background-size: 80px 80px;
+            opacity: 0.8;
+        }
+        .bg-layer-2 {
+            background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M 0 10 L 100 0 L 100 90 L 0 100 Z" fill="rgba(30, 30, 30, 0.08)"/></svg>');
+            background-size: cover;
+            transform: scale(1.05) rotate(2deg);
+            opacity: 0.6;
+        }
+        .bg-layer-3 {
+            background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M 0 0 L 100 20 L 80 100 L 20 80 Z" fill="rgba(30, 30, 30, 0.1)"/></svg>');
+            background-size: cover;
+            transform: scale(1.08) rotate(-3deg);
+            opacity: 0.4;
+        }
+        
+        /* Deconstructivist Section Styling */
+        .deconstruct-section {
+            position: relative;
+            padding: 4rem 0;
+            margin-bottom: 8rem; /* Space between abstractly shaped sections */
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            background: linear-gradient(135deg, rgba(15,15,15,0.8) 0%, rgba(25,25,25,0.9) 100%);
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        /* Hero specific styling */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 0;
+            box-shadow: none;
+        }
+        .hero-title-container {
+            position: relative;
+            z-index: 20;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .hero-title {
+            font-size: clamp(3rem, 10vw, 8rem);
+            line-height: 1.1;
+            text-shadow: 4px 4px #000, 8px 8px #60a5fa, 12px 12px #ef4444;
+            color: #f0f0f0;
+            letter-spacing: -0.05em;
+        }
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 2.5rem);
+            color: #a0a0a0;
+            margin-top: 1rem;
+            max-width: 800px;
+            text-align: center;
+        }
+        
+        /* Fragmented text effect */
+        .fragmented-text span {
+            display: inline-block;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        .fragmented-text:hover span {
+            transform: translateY(calc(var(--i) * 0.5px - 5px)) rotateZ(calc(var(--i) * 0.5deg - 5deg));
+            color: #60a5fa;
+        }
+
+        /* Skewed elements */
+        .skew-element-left {
+            transform: skewY(-5deg);
+            margin-left: -5vw;
+            margin-right: -5vw;
+        }
+        .skew-element-right {
+            transform: skewY(5deg);
+            margin-left: -5vw;
+            margin-right: -5vw;
+        }
+
+        /* Unique section shapes */
+        .section-shape-1 {
+            clip-path: polygon(0 5%, 100% 0, 100% 95%, 0% 100%);
+        }
+        .section-shape-2 {
+            clip-path: polygon(0 0, 100% 10%, 100% 100%, 0% 90%);
+        }
+        .section-shape-3 {
+            clip-path: polygon(5% 0, 100% 0, 95% 100%, 0 100%);
+        }
+        .section-shape-4 {
+            clip-path: polygon(0 10%, 100% 0, 100% 90%, 0 100%);
+        }
+        .section-shape-5 {
+            clip-path: polygon(0 0, 90% 0, 100% 100%, 10% 100%);
+        }
+
+        /* Overlapping elements */
+        .overlapping-card {
+            position: relative;
+            margin-bottom: -4rem; /* Makes them overlap with next elements */
+            background-color: rgba(25,25,25,0.9);
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+        }
+        .overlapping-card:nth-child(even) {
+            transform: translateX(10%); /* Shift even cards */
+        }
+        .overlapping-card:nth-child(odd) {
+            transform: translateX(-10%); /* Shift odd cards */
+        }
+        @media (min-width: 768px) {
+            .overlapping-card:nth-child(even) {
+                transform: translateX(20%);
+            }
+            .overlapping-card:nth-child(odd) {
+                transform: translateX(-20%);
+            }
+        }
+        
+        /* Custom scrollbar for aesthetic */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #60a5fa;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-100 min-h-screen">
+    <div id="custom-cursor"></div>
+
+    <!-- Deconstructivist Background Layers -->
+    <div class="deconstruct-bg bg-layer-1" data-parallax-speed="0.05"></div>
+    <div class="deconstruct-bg bg-layer-2" data-parallax-speed="0.1"></div>
+    <div class="deconstruct-bg bg-layer-3" data-parallax-speed="0.15"></div>
+
+    <main class="relative z-10 overflow-hidden">
+        <!-- Hero Section -->
+        <section id="hero" class="hero-section flex flex-col justify-center items-center text-center p-8 relative z-20">
+            <div class="hero-title-container">
+                <h1 class="hero-title font-bold mb-4">
+                    <span class="block">לפרק את המורכבות.</span>
+                    <span class="block text-sky-400">לבנות את העתיד.</span>
+                </h1>
+                <p class="hero-subtitle text-gray-400 max-w-3xl mx-auto fragmented-text" data-text="בינה מלאכותית - האדריכלות החדשה של המחר.">
+                    <span style="--i:1;">ב</span><span style="--i:2;">י</span><span style="--i:3;">נ</span><span style="--i:4;">ה</span>
+                    <span style="--i:5;"> </span>
+                    <span style="--i:6;">מ</span><span style="--i:7;">ל</span><span style="--i:8;">א</span><span style="--i:9;">כ</span><span style="--i:10;">ו</span><span style="--i:11;">ת</span><span style="--i:12;">י</span><span style="--i:13;">ת</span>
+                    <span style="--i:14;"> </span>
+                    <span style="--i:15;">-</span>
+                    <span style="--i:16;"> </span>
+                    <span style="--i:17;">ה</span><span style="--i:18;">א</span><span style="--i:19;">ד</span><span style="--i:20;">ר</span><span style="--i:21;">י</span><span style="--i:22;">כ</span><span style="--i:23;">ל</span><span style="--i:24;">ו</span><span style="--i:25;">ת</span>
+                    <span style="--i:26;"> </span>
+                    <span style="--i:27;">ה</span><span style="--i:28;">ח</span><span style="--i:29;">ד</span><span style="--i:30;">ש</span><span style="--i:31;">ה</span>
+                    <span style="--i:32;"> </span>
+                    <span style="--i:33;">ש</span><span style="--i:34;">ל</span>
+                    <span style="--i:35;"> </span>
+                    <span style="--i:36;">ה</span><span style="--i:37;">מ</span><span style="--i:38;">ח</span><span style="--i:39;">ר</span><span style="--i:40;">.</span>
+                </p>
+            </div>
+            <div class="mt-8 flex flex-col sm:flex-row gap-4 z-20">
+                <a href="#contact" class="px-8 py-3 bg-sky-600 text-white font-bold rounded-lg shadow-lg hover:bg-sky-700 transition-all duration-300 text-lg relative overflow-hidden group">
+                    <span class="relative z-10">בנה את הגשר שלך</span>
+                    <span class="absolute inset-0 bg-sky-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-x-0 group-hover:scale-x-100 origin-left"></span>
+                </a>
+                <a href="#services" class="px-8 py-3 border-2 border-gray-600 text-gray-200 font-bold rounded-lg shadow-lg hover:border-sky-500 hover:text-sky-400 transition-all duration-300 text-lg relative overflow-hidden group">
+                    <span class="relative z-10">גלה את הכלים</span>
+                    <span class="absolute inset-0 bg-gray-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform scale-x-0 group-hover:scale-x-100 origin-right"></span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Message Section -->
+        <section id="message" class="deconstruct-section section-shape-1 py-16 px-8 lg:px-16 transform -skew-y-2 relative mt-[-8rem] mb-20 z-10">
+            <div class="max-w-6xl mx-auto transform skew-y-2">
+                <h2 class="text-4xl lg:text-5xl font-bold text-sky-400 mb-8 text-center fragmented-text" data-text="הפיכת ה-AI לנגיש. לכולם.">
+                    <span style="--i:1;">ה</span><span style="--i:2;">פ</span><span style="--i:3;">י</span><span style="--i:4;">כ</span><span style="--i:5;">ת</span>
+                    <span style="--i:6;"> </span>
+                    <span style="--i:7;">ה</span><span style="--i:8;">-</span><span style="--i:9;">AI</span>
+                    <span style="--i:10;"> </span>
+                    <span style="--i:11;">ל</span><span style="--i:12;">נ</span><span style="--i:13;">ג</span><span style="--i:14;">י</span><span style="--i:15;">ש</span><span style="--i:16;">.</span>
+                    <span style="--i:17;"> </span>
+                    <span style="--i:18;">ל</span><span style="--i:19;">כ</span><span style="--i:20;">ו</span><span style="--i:21;">ל</span><span style="--i:22;">ם</span><span style="--i:23;">.</span>
+                </h2>
+                <p class="text-xl lg:text-2xl text-gray-300 leading-relaxed max-w-4xl mx-auto text-center">
+                    בעולם שמתעצב מחדש, היכולת לפענח, להבין וליישם AI אינה עוד מותרות - היא המפתח שלך. אנו הופכים את הבינה המלאכותית לנגישה, מפורקת לחלקים הניתנים להבנה וליישום מיידי. מהצעד הראשון ועד לשיאים של חדשנות. AI – לא תאוריה, אלא כוח מניע בידיים שלך.
+                </p>
+                <div class="mt-12 flex justify-center space-x-4">
+                    <div class="w-24 h-24 bg-sky-500 flex items-center justify-center text-3xl font-bold text-white shadow-xl rotate-6 hover:rotate-12 transition-transform duration-300">AI</div>
+                    <div class="w-24 h-24 bg-gray-800 flex items-center justify-center text-3xl font-bold text-gray-200 shadow-xl -rotate-6 hover:-rotate-12 transition-transform duration-300">NOW</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Audience Section -->
+        <section id="audience" class="deconstruct-section section-shape-2 py-16 px-8 lg:px-16 relative mt-[-8rem] mb-20 z-10">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-4xl lg:text-5xl font-bold mb-12 text-center text-emerald-400">למי זה נועד?</h2>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="p-8 bg-gray-800 rounded-lg shadow-lg relative overflow-hidden transform hover:scale-105 transition-transform duration-300 group">
+                        <div class="absolute inset-0 bg-sky-600 opacity-10 group-hover:opacity-20 transition-opacity duration-300 transform -skew-y-6"></div>
+                        <h3 class="text-3xl font-bold mb-4 text-sky-400 relative z-10">המחפשים את נקודת הכניסה.</h3>
+                        <p class="text-gray-300 text-lg relative z-10">הפרומים את הקשירה הראשונית. מתחילים ומתחילות המעוניינים להכיר את עולם ה-AI, ללא ידע מוקדם.</p>
+                    </div>
+                    <div class="p-8 bg-gray-800 rounded-lg shadow-lg relative overflow-hidden transform hover:scale-105 transition-transform duration-300 group">
+                        <div class="absolute inset-0 bg-emerald-600 opacity-10 group-hover:opacity-20 transition-opacity duration-300 transform skew-y-6"></div>
+                        <h3 class="text-3xl font-bold mb-4 text-emerald-400 relative z-10">המובילים שינוי.</h3>
+                        <p class="text-gray-300 text-lg relative z-10">המשבצים AI בתוך הקיים. אנשי ואנשות מקצוע המעוניינים להטמיע כלים חכמים בעבודתם היומיומית.</p>
+                    </div>
+                    <div class="p-8 bg-gray-800 rounded-lg shadow-lg relative overflow-hidden transform hover:scale-105 transition-transform duration-300 group">
+                        <div class="absolute inset-0 bg-red-600 opacity-10 group-hover:opacity-20 transition-opacity duration-300 transform -skew-y-3"></div>
+                        <h3 class="text-3xl font-bold mb-4 text-red-400 relative z-10">המנהלים את המחר.</h3>
+                        <p class="text-gray-300 text-lg relative z-10">המציידים צוותים בכלים חדשים. מנהלים, מנהלות וארגונים המחפשים הדרכות ממוקדות לצוותים שלהם.</p>
+                    </div>
+                    <div class="p-8 bg-gray-800 rounded-lg shadow-lg relative overflow-hidden transform hover:scale-105 transition-transform duration-300 group">
+                        <div class="absolute inset-0 bg-purple-600 opacity-10 group-hover:opacity-20 transition-opacity duration-300 transform skew-y-3"></div>
+                        <h3 class="text-3xl font-bold mb-4 text-purple-400 relative z-10">החותרים לפריצת דרך.</h3>
+                        <p class="text-gray-300 text-lg relative z-10">הבונים את הדבר הגדול הבא. ברמה מתקדמת – פיתוח פרויקטים מבוססי AI ופתרונות חדשניים.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Section -->
+        <section id="expertise" class="deconstruct-section section-shape-3 py-16 px-8 lg:px-16 relative mt-[-8rem] mb-20 z-10">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-4xl lg:text-5xl font-bold mb-12 text-center text-sky-400 fragmented-text" data-text="מרכיבי הפירוק וההרכבה">
+                    <span style="--i:1;">מ</span><span style="--i:2;">ר</span><span style="--i:3;">כ</span><span style="--i:4;">י</span><span style="--i:5;">ב</span><span style="--i:6;">י</span>
+                    <span style="--i:7;"> </span>
+                    <span style="--i:8;">ה</span><span style="--i:9;">פ</span><span style="--i:10;">י</span><span style="--i:11;">ר</span><span style="--i:12;">ו</span><span style="--i:13;">ק</span>
+                    <span style="--i:14;"> </span>
+                    <span style="--i:15;">ו</span><span style="--i:16;">ה</span><span style="--i:17;">ה</span><span style="--i:18;">ר</span><span style="--i:19;">כ</span><span style="--i:20;">ב</span><span style="--i:21;">ה</span>
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="overlapping-card p-6 rounded-lg text-center hover:bg-sky-900/50 transition-colors duration-300 group">
+                        <h3 class="text-2xl font-bold text-sky-400 mb-2">שפה חדשה</h3>
+                        <p class="text-gray-300">יצירת טקסטים ותוכן באמצעות AI - משחררים את הכתיבה.</p>
+                    </div>
+                    <div class="overlapping-card p-6 rounded-lg text-center hover:bg-emerald-900/50 transition-colors duration-300 group">
+                        <h3 class="text-2xl font-bold text-emerald-400 mb-2">מבנים חכמים</h3>
+                        <p class="text-gray-300">בניית אפליקציות חכמות המונעות על ידי בינה מלאכותית.</p>
+                    </div>
+                    <div class="overlapping-card p-6 rounded-lg text-center hover:bg-red-900/50 transition-colors duration-300 group">
+                        <h3 class="text-2xl font-bold text-red-400 mb-2">מרחבים דיגיטליים</h3>
+                        <p class="text-gray-300">פיתוח אתרים מבוססי AI - עתיד האינטרנט מתחיל כאן.</p>
+                    </div>
+                    <div class="overlapping-card p-6 rounded-lg text-center hover:bg-purple-900/50 transition-colors duration-300 group">
+                        <h3 class="text-2xl font-bold text-purple-400 mb-2">פענוח נתונים</h3>
+                        <p class="text-gray-300">ניתוח נתונים ומחקר באמצעות AI - מפיקים תובנות חדשות.</p>
+                    </div>
+                    <div class="overlapping-card p-6 rounded-lg text-center hover:bg-yellow-900/50 transition-colors duration-300 group">
+                        <h3 class="text-2xl font-bold text-yellow-400 mb-2">אומנות דיגיטלית</h3>
+                        <p class="text-gray-300">יצירת תמונות ואומנות מבוססת AI - פורצים גבולות יצירה.</p>
+                    </div>
+                    <div class="overlapping-card p-6 rounded-lg text-center hover:bg-pink-900/50 transition-colors duration-300 group">
+                        <h3 class="text-2xl font-bold text-pink-400 mb-2">זרימה רציפה</h3>
+                        <p class="text-gray-300">אוטומציה של תהליכים - מייעלים את העבודה והחיים.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="deconstruct-section section-shape-4 py-16 px-8 lg:px-16 relative mt-[-8rem] mb-20 z-10">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-4xl lg:text-5xl font-bold mb-12 text-center text-emerald-400">הכלים שבארגז</h2>
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="bg-gray-800 p-8 rounded-lg shadow-xl relative overflow-hidden group hover:scale-105 transition-transform duration-300">
+                        <div class="absolute inset-0 bg-emerald-700 opacity-10 transform -rotate-12 group-hover:rotate-0 transition-all duration-500"></div>
+                        <h3 class="text-3xl font-bold text-emerald-400 mb-4 relative z-10">סדנאות - פירוק והרכבה קבוצתית</h3>
+                        <p class="text-gray-300 text-lg relative z-10">סדנאות אינטנסיביות, מעשיות, המפרקות את המורכבות ומאפשרות הרכבה מחודשת של ידע וכלים מעשיים לצוותים ולאנשים פרטיים.</p>
+                    </div>
+                    <div class="bg-gray-800 p-8 rounded-lg shadow-xl relative overflow-hidden group hover:scale-105 transition-transform duration-300">
+                        <div class="absolute inset-0 bg-sky-700 opacity-10 transform rotate-12 group-hover:rotate-0 transition-all duration-500"></div>
+                        <h3 class="text-3xl font-bold text-sky-400 mb-4 relative z-10">שיעורים פרטיים - נתיב אישי</h3>
+                        <p class="text-gray-300 text-lg relative z-10">מסלול מותאם, צעד אחר צעד, ממוקד לצרכים ולשאיפות האישיות שלך. ליווי מקצועי המביא אותך לשליטה מלאה.</p>
+                    </div>
+                    <div class="bg-gray-800 p-8 rounded-lg shadow-xl relative overflow-hidden group hover:scale-105 transition-transform duration-300">
+                        <div class="absolute inset-0 bg-red-700 opacity-10 transform -rotate-6 group-hover:rotate-0 transition-all duration-500"></div>
+                        <h3 class="text-3xl font-bold text-red-400 mb-4 relative z-10">הרצאות - פתיחת אופקים לארגונים</h3>
+                        <p class="text-gray-300 text-lg relative z-10">זריקת השראה והבנת עומק לצוותים, פירוק תפיסות קיימות ובניית חזון משותף לעתיד מבוסס AI.</p>
+                    </div>
+                    <div class="bg-gray-800 p-8 rounded-lg shadow-xl relative overflow-hidden group hover:scale-105 transition-transform duration-300">
+                        <div class="absolute inset-0 bg-purple-700 opacity-10 transform rotate-6 group-hover:rotate-0 transition-all duration-500"></div>
+                        <h3 class="text-3xl font-bold text-purple-400 mb-4 relative z-10">ייעוץ ופיתוח פרויקטים - ליווי יצירה</h3>
+                        <p class="text-gray-300 text-lg relative z-10">מבניית הקונספט ועד ליישום. אנו מלווים אותך ביצירת פרויקטי ה-AI פורצי הדרך שלך, צעד אחר צעד.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instructor & Contact Section -->
+        <section id="contact" class="deconstruct-section section-shape-5 py-16 px-8 lg:px-16 relative mt-[-8rem] mb-20 z-10">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-4xl lg:text-5xl font-bold mb-12 text-center text-sky-400">האדריכל - זאביק אבינר</h2>
+                <div class="flex flex-col md:flex-row items-center md:items-start gap-12">
+                    <div class="relative w-48 h-48 sm:w-64 sm:h-64 flex-shrink-0 mx-auto md:mx-0 shadow-2xl">
+                        <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר" class="w-full h-full object-cover transform rotate-3 hover:rotate-0 transition-transform duration-500" style="clip-path: polygon(0 15%, 100% 0, 85% 100%, 0 85%);">
+                        <div class="absolute inset-0 border-4 border-sky-400 opacity-50 transform -rotate-3 hover:-rotate-6 transition-transform duration-500" style="clip-path: polygon(0 15%, 100% 0, 85% 100%, 0 85%);"></div>
+                    </div>
+                    <div class="flex-grow text-center md:text-right">
+                        <p class="text-xl lg:text-2xl text-gray-300 leading-relaxed mb-6">
+                            זאביק אבינר הוא מומחה בינה מלאכותית בעל ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI. הוא מתמחה בפירוק טכנולוגיות מורכבות ובהפיכתן לכלי עבודה יומיומיים. לא רק מלמד, אלא בונה גשרים אל העתיד.
+                        </p>
+                        <h3 class="text-3xl font-bold text-emerald-400 mb-4 fragmented-text" data-text="ליצירת קשר - בנה את הגשר שלך">
+                            <span style="--i:1;">ל</span><span style="--i:2;">י</span><span style="--i:3;">צ</span><span style="--i:4;">י</span><span style="--i:5;">ר</span><span style="--i:6;">ת</span>
+                            <span style="--i:7;"> </span>
+                            <span style="--i:8;">ק</span><span style="--i:9;">ש</span><span style="--i:10;">ר</span>
+                            <span style="--i:11;"> </span>
+                            <span style="--i:12;">-</span>
+                            <span style="--i:13;"> </span>
+                            <span style="--i:14;">ב</span><span style="--i:15;">נ</span><span style="--i:16;">ה</span>
+                            <span style="--i:17;"> </span>
+                            <span style="--i:18;">א</span><span style="--i:19;">ת</span>
+                            <span style="--i:20;"> </span>
+                            <span style="--i:21;">ה</span><span style="--i:22;">ג</span><span style="--i:23;">ש</span><span style="--i:24;">ר</span>
+                            <span style="--i:25;"> </span>
+                            <span style="--i:26;">ש</span><span style="--i:27;">ל</span><span style="--i:28;">ך</span><span style="--i:29;">!</span>
+                        </h3>
+                        <div class="flex flex-col sm:flex-row justify-center md:justify-end gap-4 text-xl">
+                            <a href="https://wa.me/972546609385" target="_blank" class="flex items-center gap-2 text-gray-200 hover:text-green-400 transition-colors duration-300">
+                                <span class="text-2xl">📞</span> 054-6609385
+                            </a>
+                            <a href="mailto:zaviner@gmail.com" class="flex items-center gap-2 text-gray-200 hover:text-red-400 transition-colors duration-300">
+                                <span class="text-2xl">✉️</span> zaviner@gmail.com
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center py-12 bg-gray-900 text-gray-500 text-sm border-t border-gray-800">
+            <p>&copy; 2024 זאביק אבינר - כל הזכויות שמורות. נבנה באהבה על בסיס עקרונות דה-קונסטרוקטיביסטיים.</p>
+        </footer>
+    </main>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = e.clientX + 'px';
+            customCursor.style.top = e.clientY + 'px';
+        });
+
+        // Parallax Effect for Background Layers
+        const parallaxLayers = document.querySelectorAll('.deconstruct-bg');
+        window.addEventListener('scroll', () => {
+            let scrollPosition = window.pageYOffset;
+            parallaxLayers.forEach(layer => {
+                const speed = parseFloat(layer.getAttribute('data-parallax-speed'));
+                layer.style.transform = `translateY(${scrollPosition * speed}px)`;
+            });
+        });
+
+        // Fragmented Text Hover Effect
+        document.querySelectorAll('.fragmented-text').forEach(element => {
+            const originalText = element.getAttribute('data-text') || element.innerText;
+            element.innerHTML = ''; // Clear original text
+            originalText.split('').forEach((char, index) => {
+                const span = document.createElement('span');
+                span.textContent = char;
+                span.style.setProperty('--i', index); // Custom property for unique transformation
+                element.appendChild(span);
+            });
+        });
+
+        // Optional: Reveal sections on scroll for a dynamic feel
+        const deconstructSections = document.querySelectorAll('.deconstruct-section');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = entry.target.style.transform.replace(/translateY\(\w+\)/, 'translateY(0)');
+                    entry.target.style.filter = 'blur(0)';
+                    entry.target.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out, filter 0.8s ease-out';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        deconstructSections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.filter = 'blur(5px)';
+            section.style.transform = 'translateY(50px)';
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

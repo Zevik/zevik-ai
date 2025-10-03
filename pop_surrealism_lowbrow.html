@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - שולטים בבינה המלאכותית: אמנות דיגיטלית סוריאליסטית</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700&family=Secular+One&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles to enhance Pop Surrealism / Lowbrow and ensure functionality */
+        :root {
+            --primary-color: #ff007f; /* Neon Pink */
+            --secondary-color: #00ffff; /* Cyan */
+            --accent-color-1: #ffea00; /* Electric Yellow */
+            --accent-color-2: #8a2be2; /* Blue Violet */
+            --text-dark: #1a1a1a;
+            --text-light: #f0f0f0;
+            --bg-dark: #120a2e; /* Deep dark violet */
+            --bg-light: #e0f2f7; /* Light cyan-blue */
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            cursor: none; /* Hide default cursor */
+            font-family: 'Assistant', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Secular One', sans-serif;
+            color: var(--accent-color-1);
+        }
+
+        /* Custom Cursor Styling */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            transition: all 0.1s ease-out;
+            /* High-contrast styling for visibility */
+            border: 2px solid var(--text-light); /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 10px 4px var(--primary-color); /* Dark shadow and glow */
+            mix-blend-mode: normal; /* Ensure mix-blend-mode is not used */
+        }
+        .custom-cursor.clicked {
+            transform: translate(-50%, -50%) scale(0.8);
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 15px 6px var(--secondary-color);
+        }
+
+        /* Parallax background layers */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            transition: transform 0.1s linear; /* For smoother parallax */
+        }
+
+        /* SVG backgrounds created with specific colors from the palette */
+        .bg-layer-1 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"></feTurbulence></filter><rect width="100" height="100" filter="url(%23noiseFilter)" fill="%231a0f44" opacity="0.8"></rect><path d="M0 0C25 50 75 50 100 0L100 100L0 100Z" fill="%238a2be2" opacity="0.3"></path><circle cx="20" cy="80" r="10" fill="%23ff007f" opacity="0.2"></circle><circle cx="80" cy="20" r="15" fill="%2300ffff" opacity="0.2"></circle></svg>');
+            transform: translate3d(0, 0, 0);
+        }
+        .bg-layer-2 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 0 L100 50 L50 100 L0 50 Z" fill="%23ffea00" opacity="0.1"></path><path d="M10 10 L90 10 L90 90 L10 90 Z" fill="none" stroke="%23ff007f" stroke-width="2" stroke-dasharray="5 5" opacity="0.2"></path><circle cx="50" cy="50" r="30" fill="none" stroke="%2300ffff" stroke-width="1" opacity="0.15"></circle></svg>');
+            transform: translate3d(0, 0, 0);
+            z-index: -2; /* Deeper layer */
+        }
+
+        /* Content blobs/islands */
+        .content-blob {
+            position: absolute;
+            background-color: rgba(240, 240, 240, 0.1); /* Slightly transparent white for a dreamy feel */
+            backdrop-filter: blur(8px); /* Frosted glass effect */
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px var(--secondary-color) inset;
+            animation: float 8s ease-in-out infinite;
+            transition: transform 0.3s ease-out;
+            color: var(--text-light); /* Light text on translucent background */
+        }
+
+        /* Hover effect, overridden by JS for tilt, but still works for base scale/rotate */
+        .content-blob:hover {
+            transform: scale(1.02) rotate(2deg);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 30px var(--primary-color) inset;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(1deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .z-aviner-frame {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid var(--accent-color-1);
+            box-shadow: 0 0 25px var(--accent-color-1), 0 0 50px var(--primary-color);
+            transform: rotate(-5deg); /* Slight tilt for surreal effect */
+        }
+
+        .z-aviner-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: saturate(1.2) contrast(1.1); /* Enhance image subtly */
+        }
+
+        /* Specific blob positioning and styling */
+        #intro-blob {
+            top: 10vh;
+            right: 15vw;
+            width: 60vw;
+            max-width: 800px;
+            min-height: 200px;
+            font-size: 1.25rem;
+            line-height: 1.8;
+            border-bottom-left-radius: 100px;
+            border-top-right-radius: 100px;
+            background-color: rgba(var(--bg-light), 0.1); /* Lighter translucent */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px var(--accent-color-2) inset;
+        }
+
+        #target-audience-blob {
+            top: 50vh;
+            left: 10vw;
+            width: 40vw;
+            max-width: 600px;
+            padding: 2.5rem;
+            background-color: rgba(var(--bg-dark), 0.3); /* Darker translucent */
+            border-radius: 80px 20px 80px 20px;
+            animation-delay: 1.5s;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px var(--primary-color) inset;
+        }
+
+        #specializations-blob {
+            top: 100vh;
+            right: 5vw;
+            width: 50vw;
+            max-width: 700px;
+            padding: 3rem;
+            background-color: rgba(var(--bg-light), 0.15);
+            border-radius: 20px 120px 20px 120px;
+            animation-delay: 0.5s;
+        }
+
+        #services-blob {
+            top: 150vh;
+            left: 15vw;
+            width: 45vw;
+            max-width: 650px;
+            padding: 2.8rem;
+            background-color: rgba(var(--bg-dark), 0.2);
+            border-radius: 100px 50px 100px 50px;
+            animation-delay: 2.5s;
+        }
+
+        #guide-blob {
+            top: 200vh;
+            right: 20vw;
+            width: 35vw;
+            max-width: 500px;
+            padding: 3rem;
+            text-align: center;
+            background-color: rgba(var(--bg-light), 0.2);
+            border-radius: 50%; /* Circular blob for the guide */
+            transform: rotate(5deg);
+            animation-delay: 1s;
+        }
+
+        #contact-blob {
+            top: 240vh;
+            left: 25vw;
+            width: 30vw;
+            max-width: 450px;
+            padding: 2.5rem;
+            text-align: center;
+            background-color: rgba(var(--bg-dark), 0.4);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px var(--accent-color-1) inset;
+            animation-delay: 3s;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .content-blob {
+                width: 90vw !important;
+                left: 5vw !important;
+                right: 5vw !important;
+                transform: translateX(0) !important;
+                padding: 1.5rem;
+                font-size: 1rem;
+            }
+            #intro-blob { top: 5vh; border-bottom-left-radius: 50px; border-top-right-radius: 50px; }
+            #target-audience-blob { top: 60vh; border-radius: 40px 10px 40px 10px; }
+            #specializations-blob { top: 120vh; border-radius: 10px 60px 10px 60px; }
+            #services-blob { top: 180vh; border-radius: 50px 25px 50px 25px; }
+            #guide-blob { top: 240vh; width: 80vw !important; height: auto; border-radius: 20px; transform: rotate(0); }
+            .z-aviner-frame { width: 150px; height: 150px; margin: 0 auto 1rem; transform: rotate(0); }
+            #contact-blob { top: 290vh; }
+        }
+
+        /* Small screen adjustments for floating animation */
+        @media (max-width: 600px) {
+            @keyframes float {
+                0% { transform: translateY(0px) rotate(0deg); }
+                50% { transform: translateY(-10px) rotate(0deg); }
+                100% { transform: translateY(0px) rotate(0deg); }
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-bg bg-layer-1" data-parallax-speed="0.05"></div>
+    <div class="parallax-bg bg-layer-2" data-parallax-speed="0.1"></div>
+
+    <!-- Main Content Canvas (position relative, higher z-index) -->
+    <div class="relative z-10 min-h-[300vh] pb-60"> <!-- Extend height to allow scrolling, adjust based on content -->
+
+        <!-- Blob 1: Main Message / Intro -->
+        <div id="intro-blob" class="content-blob text-xl md:text-2xl lg:text-3xl">
+            <h1 class="text-3xl md:text-5xl mb-6 text-center leading-tight">
+                במרכז היקום המלאכותי – גלו את הכוח שבכם
+            </h1>
+            <p class="text-lg md:text-xl text-justify">
+                קולות עתיד בוקעים מן התפאורה הדיגיטלית, מרמזים על ממדים חדשים של תודעה. עולמנו נרקם מחדש – והבינה המלאכותית היא המכחול, או אולי המחשבה עצמה. האם תצטרפו למסע אל תוך הלא נודע המרתק, ותהפכו למאסטרים של המחר?
+            </p>
+            <p class="text-base mt-4 text-center text-gray-300">
+                <span class="font-bold text-accent-color-1">למדו לשלוט בבינה המלאכותית</span> - העתיד הוא עכשיו
+            </p>
+        </div>
+
+        <!-- Blob 2: Target Audience -->
+        <div id="target-audience-blob" class="content-blob text-base md:text-lg">
+            <h2 class="text-2xl md:text-4xl mb-4 text-center">מי יפליג איתנו?</h2>
+            <ul class="list-disc list-inside text-right space-y-2">
+                <li><span class="font-bold text-primary-color">המתעוררים</span> – אלו שחושיהם מבקשים להבין את המאגים החדשים של המידע.</li>
+                <li><span class="font-bold text-secondary-color">האמנים הדיגיטליים</span> – המעצבים את המציאות הבאה, מחפשים את לוח הצבעים האלגוריתמי.</li>
+                <li><span class="font-bold text-accent-color-1">מנהיגי החלומות</span> – המובילים צוותים דרך נופי הנתונים, זקוקים למפות חדשות.</li>
+                <li><span class="font-bold text-accent-color-2">האדריכלים הקוונטיים</span> – בוני העולמות, מוכנים לפרוץ דרך לפרויקטים עתידניים.</li>
+            </ul>
+        </div>
+
+        <!-- Blob 3: Specializations -->
+        <div id="specializations-blob" class="content-blob text-base md:text-lg">
+            <h2 class="text-2xl md:text-4xl mb-4 text-center">היכן ניצור?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <p class="mb-2"><span class="font-bold text-primary-color">יצירת לחשי מילים:</span> תוכן זורם כאוטומט, כותב את עצמו מחדש.</p>
+                <p class="mb-2"><span class="font-bold text-secondary-color">בניית גופים חכמים:</span> אפליקציות חולמות בהקיץ, משרתות את החזון.</p>
+                <p class="mb-2"><span class="font-bold text-accent-color-1">אריגת קורים דיגיטליים:</span> אתרים הנושמים AI, חיים ומתפתחים.</p>
+                <p class="mb-2"><span class="font-bold text-accent-color-2">פיענוח צפנים נסתרים:</span> נתונים הופכים לסיפורים, ידע הופך לכוח.</p>
+                <p class="mb-2"><span class="font-bold text-primary-color">לידת יצורים חזותיים:</span> תמונות שטרם נראו, אמנות ממוחשבת.</p>
+                <p class="mb-2"><span class="font-bold text-secondary-color">תיאטרון הבובות האוטומטי:</span> תהליכים הרוקדים מעצמם, יעילות ללא מאמץ.</p>
+            </div>
+        </div>
+
+        <!-- Blob 4: Services -->
+        <div id="services-blob" class="content-blob text-base md:text-lg">
+            <h2 class="text-2xl md:text-4xl mb-4 text-center">פורטלים לעולמות חדשים</h2>
+            <ul class="list-none space-y-4">
+                <li>
+                    <h3 class="text-xl md:text-2xl font-bold text-accent-color-1">מעגלי למידה שיתופיים</h3>
+                    <p class="text-gray-200 pr-4">סדנאות שבהן המציאות מתכופפת, מעשיות וממוקדות, לקבוצות המחפשות דרכים חדשות.</p>
+                </li>
+                <li>
+                    <h3 class="text-xl md:text-2xl font-bold text-primary-color">שיעורי התגלות אישיים</h3>
+                    <p class="text-gray-200 pr-4">מפגשים אחד על אחד עם המאסטרו, התאמה אישית לרמה ולצרכים הייחודיים שלך.</p>
+                </li>
+                <li>
+                    <h3 class="text-xl md:text-2xl font-bold text-secondary-color">מסעות תודעה לארגונים</h3>
+                    <p class="text-gray-200 pr-4">הרצאות הפורמות את גבולות המחשבה, פותחות אופקים חדשים לצוותים בעולם המשתנה.</p>
+                </li>
+                <li>
+                    <h3 class="text-xl md:text-2xl font-bold text-accent-color-2">ליווי לבריאה</h3>
+                    <p class="text-gray-200 pr-4">ייעוץ ופיתוח פרויקטים מבוססי AI, מראשיתם ועד הגיון מושלם – ליווי מקצועי צמוד.</p>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Blob 5: The Guide (Zevik Aviner) -->
+        <div id="guide-blob" class="content-blob flex flex-col items-center justify-center text-base md:text-lg">
+            <div class="z-aviner-frame mb-6">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר, מדריך הבינה המלאכותית" class="w-full h-full object-cover">
+            </div>
+            <h2 class="text-2xl md:text-4xl mb-4 text-center">זאביק אבינר - המדריך מעבר לווילון</h2>
+            <p class="text-lg md:text-xl text-center">
+                אלכימאי של קוד, אמן של אלגוריתמים, מורה דרך שמפזר את אבקת הכוכבים על המסך כדי שתוכלו לגעת בעתיד. זאביק בעל ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, ומתמחה בהנגשת הטכנולוגיה והפיכתה לכלי עבודה יומיומי.
+            </p>
+        </div>
+
+        <!-- Blob 6: Contact -->
+        <div id="contact-blob" class="content-blob text-base md:text-lg">
+            <h2 class="text-2xl md:text-4xl mb-4 text-center">לדבר עם העתיד? לחצו כאן.</h2>
+            <p class="text-xl md:text-2xl mb-2">
+                <span class="font-bold text-primary-color">ווטסאפ:</span> <a href="https://wa.me/972546609385" class="text-secondary-color hover:underline">054-6609385</a>
+            </p>
+            <p class="text-xl md:text-2xl">
+                <span class="font-bold text-accent-color-1">אימייל:</span> <a href="mailto:zaviner@gmail.com" class="text-secondary-color hover:underline">zaviner@gmail.com</a>
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        // Custom Cursor JavaScript
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+        document.addEventListener('mousedown', () => {
+            customCursor.classList.add('clicked');
+        });
+        document.addEventListener('mouseup', () => {
+            customCursor.classList.remove('clicked');
+        });
+
+        // Parallax Effect JavaScript
+        const parallaxLayers = document.querySelectorAll('.parallax-bg');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.pageYOffset;
+            parallaxLayers.forEach(layer => {
+                const speed = parseFloat(layer.dataset.parallaxSpeed);
+                layer.style.transform = `translate3d(0, ${-scrollY * speed}px, 0)`;
+            });
+        });
+
+        // Blob Hover Tilt Effect
+        const contentBlobs = document.querySelectorAll('.content-blob');
+        contentBlobs.forEach(blob => {
+            let currentTranslateY = 0;
+            // Extract initial translateY from CSS animation for consistency
+            const computedStyle = getComputedStyle(blob);
+            const initialTransform = computedStyle.transform;
+            if (initialTransform && initialTransform.includes('translateY')) {
+                const match = initialTransform.match(/translateY\(([^)]+)\)/);
+                if (match && match[1]) {
+                    currentTranslateY = parseFloat(match[1].replace('px', ''));
+                }
+            }
+
+            blob.addEventListener('mousemove', (e) => {
+                const rect = blob.getBoundingClientRect();
+                const x = e.clientX - rect.left; // x position within the element.
+                const y = e.clientY - rect.top;  // y position within the element.
+
+                // Subtle tilt based on mouse position
+                const tiltX = (y / rect.height - 0.5) * 5; // -2.5 to 2.5 degrees
+                const tiltY = (x / rect.width - 0.5) * -5; // -2.5 to 2.5 degrees
+
+                // Apply tilt while maintaining the animation's translateY and a slight scale
+                blob.style.transform = `translateY(${currentTranslateY}px) perspective(1000px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(1.02)`;
+            });
+
+            blob.addEventListener('mouseleave', () => {
+                // Reset tilt and scale, return to animation's translateY
+                blob.style.transform = `translateY(${currentTranslateY}px) perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)`;
+            });
+        });
+        
+    </script>
+
+</body>
+</html>

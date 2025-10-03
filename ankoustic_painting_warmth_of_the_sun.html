@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שעווה חמה, בינה חדה: גלו את מלאכת ה-AI - זאביק אבינר</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for Hebrew support and artistic flair -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Bellefair&display=swap" rel="stylesheet">
+    <style>
+        /* Define custom CSS variables for our color palette and fonts */
+        :root {
+            --color-primary-dark: #3A0C43; /* Deep Aubergine / Dark Purple */
+            --color-accent-magenta: #9A2B5F; /* Rich Magenta */
+            --color-accent-coral: #DB5461; /* Warm Coral / Red */
+            --color-light-wax: #F9F5E3; /* Creamy Wax / Light Parchment */
+            --color-text-dark: #2A0930; /* Very Dark Purple for text on light backgrounds */
+            --color-text-light: #F0EAD6; /* Light text for dark backgrounds */
+        }
+
+        /* Base styles */
+        body {
+            font-family: 'Assistant', sans-serif; /* Readable body font for Hebrew */
+            color: var(--color-text-light);
+            background-color: var(--color-primary-dark);
+            overflow-x: hidden; /* Prevent horizontal scroll due to effects */
+            cursor: none; /* Hide default cursor to use custom one */
+        }
+
+        /* Heading fonts for an artistic touch, 'Bellefair' has an almost carved feel */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Bellefair', serif;
+            letter-spacing: 0.05em; /* Slight letter spacing for headings */
+        }
+
+        /* Encaustic Background Layers - fixed position, behind content */
+        .encaustic-layer {
+            position: fixed;
+            inset: 0; /* Cover the entire viewport */
+            z-index: -1; /* Place behind all content */
+            pointer-events: none; /* Do not block mouse events on content */
+            opacity: 0.7; /* Base opacity for layering effect */
+            transition: transform 0.2s ease-out; /* Smooth transition for mouse parallax */
+        }
+
+        /* Layer 1: Deepest, most diffuse background */
+        .encaustic-layer-1 {
+            background: radial-gradient(circle at 10% 20%, var(--color-accent-magenta) 0%, transparent 70%),
+                        linear-gradient(135deg, var(--color-primary-dark) 0%, #1A0620 100%);
+            filter: blur(12px) opacity(0.8); /* Strong blur for depth */
+            transform: scale(1.1); /* Slightly zoomed in */
+        }
+
+        /* Layer 2: Intermediate, subtle glow/texture */
+        .encaustic-layer-2 {
+            background: conic-gradient(from 180deg at 50% 50%, #5B0F6B 0deg, #2D0835 180deg, #5B0F6B 360deg);
+            filter: blur(6px) opacity(0.6); /* Moderate blur */
+            transform: scale(1.05) rotate(5deg); /* Slight rotation and zoom */
+        }
+
+        /* Layer 3: Noise texture for a grainy, wax-like surface */
+        .encaustic-layer-3 {
+            /* SVG filter for fractal noise, integrated as a background image */
+            background: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)" fill="%23DB5461" opacity="0.15"/></svg>');
+            background-size: 100% 100%; /* Ensure SVG covers */
+            opacity: 0.25; /* Subtle texture overlay */
+            filter: blur(0.5px); /* Very slight blur to soften noise */
+        }
+
+        /* Custom Cursor Styling - IMPORTANT: HIGH VISIBILITY */
+        .custom-cursor {
+            position: fixed;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%; /* Circular cursor */
+            pointer-events: none; /* Ensures cursor doesn't interfere with clicks */
+            transition: transform 0.1s ease-out; /* Smooth movement when mouse moves */
+            z-index: 9999; /* Always on top of all elements */
+            border: 2px solid #FFFFFF; /* White border for visibility on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for visibility on light backgrounds */
+            transform: translate(-50%, -50%); /* Centers the cursor on the mouse position */
+            background-color: var(--color-accent-coral); /* Fill color for the cursor */
+            opacity: 0.8; /* Slight translucency */
+        }
+
+        /* Encaustic Card Styles - for content sections */
+        .encaustic-card {
+            background: linear-gradient(145deg, var(--color-light-wax) 0%, #E7DED2 100%); /* Light, waxy gradient */
+            border-radius: 16px; /* Rounded corners */
+            /* Multi-layered shadow for depth and glow, mimicking layered wax */
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45), /* Strong outer shadow */
+                        inset 0 0 20px rgba(255, 255, 255, 0.7); /* Inner glow for wax translucence */
+            backdrop-filter: blur(6px); /* Blurs content behind the card (if any) */
+            border: 1px solid rgba(255, 255, 255, 0.4); /* Subtle light border */
+            position: relative;
+            overflow: hidden; /* Contains inner elements within rounded corners */
+            color: var(--color-text-dark); /* Dark text on light card for high contrast */
+        }
+        /* Pseudo-element for additional wax texture on cards */
+        .encaustic-card::before {
+            content: '';
+            position: absolute;
+            inset: -5px; /* Slightly larger than the card */
+            background: radial-gradient(circle at 10% 90%, rgba(255, 255, 255, 0.15) 0%, transparent 70%); /* Subtle highlight */
+            pointer-events: none; /* Do not block interaction */
+            filter: blur(2px);
+        }
+
+        /* Section Dividers - like melted wax lines */
+        .encaustic-divider {
+            height: 4px;
+            background: linear-gradient(to right, var(--color-accent-coral), var(--color-accent-magenta));
+            border-radius: 50%; /* Rounded ends */
+            margin: 6rem auto; /* Vertical spacing and centering */
+            width: 60%; /* Width relative to parent */
+            filter: blur(2px); /* Soft, glowing blur */
+            opacity: 0.7;
+        }
+
+        /* Generative Wax Particle Styles */
+        .wax-particle {
+            position: fixed;
+            background-color: var(--color-light-wax);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0; /* Starts invisible */
+            animation: fadeOutAndFloat 8s ease-out forwards; /* Animation for fading and moving */
+            filter: blur(2px); /* Soft blur */
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.4); /* Subtle glow */
+            z-index: -2; /* Below content, above some background layers */
+        }
+        /* Keyframe animation for wax particles */
+        @keyframes fadeOutAndFloat {
+            0% { transform: scale(0.5); opacity: 0.7; }
+            100% { transform: translateY(-300px) scale(1.5); opacity: 0; } /* Floats up and expands */
+        }
+
+        /* Scroll Reveal Effect - for elements appearing on scroll */
+        .scroll-reveal {
+            opacity: 0; /* Starts invisible */
+            transform: translateY(70px); /* Starts slightly below its final position */
+            transition: opacity 1.5s ease-out, transform 1.5s ease-out; /* Smooth transition */
+        }
+        .scroll-reveal.visible {
+            opacity: 1; /* Becomes fully visible */
+            transform: translateY(0); /* Moves to its final position */
+        }
+
+        /* Specific styles for Zevik's image */
+        .zevik-image {
+            /* Multi-ring border effect, like concentric wax rings */
+            box-shadow: 0 0 0 5px var(--color-accent-coral),
+                        0 0 0 10px var(--color-accent-magenta),
+                        0 0 0 15px var(--color-primary-dark);
+            filter: grayscale(20%) brightness(1.1); /* Subtle artistic filter */
+        }
+
+        /* Ensure high contrast for text shadows on headings */
+        h1 { text-shadow: 0 0 10px rgba(154, 43, 95, 0.8), 0 0 20px rgba(154, 43, 95, 0.5); }
+        h2.text-purple-900 { text-shadow: 0 0 6px rgba(58, 12, 67, 0.6); }
+        h2.text-white { text-shadow: 0 0 10px rgba(219, 84, 97, 0.8), 0 0 20px rgba(219, 84, 97, 0.5); }
+    </style>
+</head>
+<body class="min-h-screen text-lg">
+    <!-- Encaustic Background Layers -->
+    <div class="encaustic-layer encaustic-layer-1" data-depth="5"></div>
+    <div class="encaustic-layer encaustic-layer-2" data-depth="10"></div>
+    <div class="encaustic-layer encaustic-layer-3" data-depth="15"></div>
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="custom-cursor"></div>
+
+    <!-- Main Content Wrapper -->
+    <main class="relative z-10 p-4 md:p-8 lg:p-12 max-w-7xl mx-auto">
+
+        <!-- Header - Thematic Introduction -->
+        <header class="text-center my-16 md:my-24 scroll-reveal">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 leading-tight text-white">
+                שעווה חמה, בינה חדה: <br> גלו את מלאכת ה-AI
+            </h1>
+            <p class="text-2xl md:text-3xl max-w-3xl mx-auto text-gray-200 leading-relaxed opacity-90">
+                בעולם שמשתנה בקצב מסחרר, הבינה המלאכותית היא לא רק כלי - היא שפה חדשה, אמנות חדשה.
+                אנו מזמינים אתכם למסע יצירתי, מהמגע הראשון ועד השליטה במרקם המורכב שלה, בדומה לאומן המפסל בשעווה חמה.
+            </p>
+            <div class="encaustic-divider"></div>
+        </header>
+
+        <!-- Section: The Guide (Zevik Aviner) -->
+        <section class="my-16 md:my-24 encaustic-card p-8 md:p-12 lg:p-16 text-center shadow-xl scroll-reveal">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8 text-purple-900">המורה, האמן, המדריך: זאביק אבינר</h2>
+            <div class="flex flex-col md:flex-row items-center md:space-x-reverse md:space-x-8 lg:space-x-reverse lg:space-x-12 justify-center">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר, מומחה בינה מלאכותית" class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover mb-8 md:mb-0 zevik-image shadow-lg">
+                <p class="text-xl md:text-2xl max-w-2xl text-gray-800 leading-loose">
+                    זאביק אבינר הוא לא רק מומחה בינה מלאכותית; הוא אומן שמגלה את נבכי הטכנולוגיה ומנגיש אותה לכל.
+                    עם ניסיון עשיר בפיתוח פרויקטים חדשניים, אפליקציות חכמות ומערכות מבוססות AI,
+                    זאביק פורט את התיאוריה המורכבת לכלים מעשיים שניתן ליישם בחיי היומיום ובעבודה.
+                    הוא המדריך שלכם במלאכה זו - להפוך את ה-AI לכלי יצירה, פיתוח וצמיחה אישית ומקצועית.
+                </p>
+            </div>
+            <div class="mt-10 text-xl md:text-2xl text-gray-700 font-semibold leading-relaxed">
+                <p>לפני שתפסלו את עתידכם, צרו קשר ישיר:</p>
+                <p class="mt-4">
+                    <a href="https://wa.me/972546609385" class="text-indigo-700 hover:text-indigo-900 transition-colors duration-300 whitespace-nowrap" target="_blank">
+                        <span class="inline-block align-middle ml-2">📞</span> ווטסאפ: 054-6609385
+                    </a>
+                </p>
+                <p>
+                    <a href="mailto:zaviner@gmail.com" class="text-indigo-700 hover:text-indigo-900 transition-colors duration-300 whitespace-nowrap">
+                        <span class="inline-block align-middle ml-2">✉️</span> אימייל: zaviner@gmail.com
+                    </a>
+                </p>
+            </div>
+            <div class="encaustic-divider"></div>
+        </section>
+
+        <!-- Section: The AI Canvas - What You Will Master -->
+        <section class="my-16 md:my-24 text-center scroll-reveal">
+            <h2 class="text-4xl md:text-5xl font-bold mb-12 text-white">
+                הקנבס של ה-AI: <br> מה תלמדו ליצור ולשלוט
+            </h2>
+            <p class="text-xl md:text-2xl max-w-3xl mx-auto mb-10 text-gray-200 opacity-90">
+                כמו פיגמנטים עשירים בשעווה, הבינה המלאכותית מציעה מגוון אינסופי של אפשרויות ביטוי.
+                הנה רק כמה מהתחומים בהם תרכשו שליטה ותגלו עולם של חדשנות.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 text-gray-800 max-w-6xl mx-auto">
+                <div class="encaustic-card p-6 md:p-8 flex flex-col items-center justify-center text-center">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-purple-900">יצירת טקסט ותוכן</h3>
+                    <p class="text-lg md:text-xl leading-relaxed">פיתוח קול ייחודי לבינה, כתיבה אוטומטית ועריכה חכמה - כלים לסיפורים, שיווק ועוד.</p>
+                </div>
+                <div class="encaustic-card p-6 md:p-8 flex flex-col items-center justify-center text-center">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-purple-900">בניית אפליקציות חכמות</h3>
+                    <p class="text-lg md:text-xl leading-relaxed">מהרעיון ליישום - פיתוח אפליקציות שמבינות, לומדות ופועלות באופן עצמאי.</p>
+                </div>
+                <div class="encaustic-card p-6 md:p-8 flex flex-col items-center justify-center text-center">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-purple-900">פיתוח אתרים מבוססי AI</h3>
+                    <p class="text-lg md:text-xl leading-relaxed">אתרים שחושבים, מתאימים עצמם ויוצרים חווית משתמש מהפכנית.</p>
+                </div>
+                <div class="encaustic-card p-6 md:p-8 flex flex-col items-center justify-center text-center">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-purple-900">ניתוח נתונים ומחקר</h3>
+                    <p class="text-lg md:text-xl leading-relaxed">גלו תובנות נסתרות, פענחו דפוסים וקבלו החלטות מבוססות ידע.</p>
+                </div>
+                <div class="encaustic-card p-6 md:p-8 flex flex-col items-center justify-center text-center">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-purple-900">יצירת תמונות ואמנות</h3>
+                    <p class="text-lg md:text-xl leading-relaxed">הפכו רעיונות ויזואליים למציאות באמצעות כוחה של הבינה המלאכותית.</p>
+                </div>
+                <div class="encaustic-card p-6 md:p-8 flex flex-col items-center justify-center text-center">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-purple-900">אוטומציה של תהליכים</h3>
+                    <p class="text-lg md:text-xl leading-relaxed">שחררו זמן ומשאבים על ידי אוטומציה חכמה של משימות חוזרות.</p>
+                </div>
+            </div>
+            <div class="encaustic-divider"></div>
+        </section>
+
+        <!-- Section: Your Journey with AI - Target Audience & Levels -->
+        <section class="my-16 md:my-24 encaustic-card p-8 md:p-12 lg:p-16 text-center shadow-xl scroll-reveal">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8 text-purple-900">המסע שלכם עם AI: מהטיפה הראשונה ועד לנהר שוצף</h2>
+            <p class="text-xl md:text-2xl max-w-3xl mx-auto mb-10 text-gray-800 leading-loose">
+                בין אם אתם עומדים לראשונה מול הקנבס ורוצים להטביע את חותמכם, או כבר מחזיקים במכחול ומוכנים לפסל פרויקטים מורכבים -
+                המסע שלכם ב-AI מתחיל כאן. ההדרכות מותאמות בדיוק לרמה ולשאיפות שלכם.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-800 max-w-4xl mx-auto">
+                <div class="bg-gray-100 p-6 rounded-lg shadow-inner border border-gray-300">
+                    <h3 class="text-2xl font-bold mb-4 text-purple-800">מתחילים: צעדים ראשונים בעולם ה-AI</h3>
+                    <p class="text-lg leading-relaxed">היכרות עם היסודות, הבנת המושגים המרכזיים ויצירת הניצוצות הראשונים שלכם עם בינה מלאכותית.</p>
+                </div>
+                <div class="bg-gray-100 p-6 rounded-lg shadow-inner border border-gray-300">
+                    <h3 class="text-2xl font-bold mb-4 text-purple-800">אנשי מקצוע: הטמעת AI בעבודה</h3>
+                    <p class="text-lg leading-relaxed">כלים וטכניקות מעשיות לשילוב AI בתהליכי העבודה הקיימים, לשיפור יעילות וחדשנות.</p>
+                </div>
+                <div class="bg-gray-100 p-6 rounded-lg shadow-inner border border-gray-300">
+                    <h3 class="text-2xl font-bold mb-4 text-purple-800">מנהלים וארגונים: הדרכות צוותים</h3>
+                    <p class="text-lg leading-relaxed">פתיחת אופקים חדשים לצוותים שלמים, הטמעת חשיבה מבוססת AI וחיזוק יכולות ארגוניות.</p>
+                </div>
+                <div class="bg-gray-100 p-6 rounded-lg shadow-inner border border-gray-300">
+                    <h3 class="text-2xl font-bold mb-4 text-purple-800">מתקדמים: פיתוח פרויקטים ב-AI</h3>
+                    <p class="text-lg leading-relaxed">ליווי צמוד בפיתוח פרויקטים מורכבים, בניית מודלים ומימוש חזון טכנולוגי.</p>
+                </div>
+            </div>
+            <div class="encaustic-divider"></div>
+        </section>
+
+        <!-- Section: Crafting Your AI Future - Services -->
+        <section class="my-16 md:my-24 text-center scroll-reveal">
+            <h2 class="text-4xl md:text-5xl font-bold mb-12 text-white">
+                פיסול העתיד: <br> השירותים שלנו
+            </h2>
+            <p class="text-xl md:text-2xl max-w-3xl mx-auto mb-10 text-gray-200 opacity-90">
+                אנו מציעים מגוון רחב של מסגרות לימוד וליווי, שנועדו להבטיח שכל אחד ואחת יוכלו ללמוד לשלוט באמנות ה-AI,
+                בדרך המתאימה ביותר עבורם.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 text-gray-800 max-w-6xl mx-auto">
+                <div class="encaustic-card p-6 md:p-8 flex flex-col items-center justify-center text-center">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-purple-900">סדנאות קבוצתיות</h3>
+                    <p class="text-lg md:text-xl leading-relaxed">חוויה מעשית ממוקדת, ללמוד, ליצור ולהתנסות יחד עם קבוצה.</p>
+                </div>
+                <div class="encaustic-card p-6 md:p-8 flex flex-col items-center justify-center text-center">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-purple-900">שיעורים פרטיים</h3>
+                    <p class="text-lg md:text-xl leading-relaxed">ליווי אישי אחד על אחד, המותאם לרמה, לקצב ולצרכים הייחודיים שלכם.</p>
+                </div>
+                <div class="encaustic-card p-6 md:p-8 flex flex-col items-center justify-center text-center">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-purple-900">הרצאות לארגונים</h3>
+                    <p class="text-lg md:text-xl leading-relaxed">השראה וידע לצוותים, לפתיחת אופקים חדשים ולגיבוש אסטרטגיה טכנולוגית.</p>
+                </div>
+                <div class="encaustic-card p-6 md:p-8 flex flex-col items-center justify-center text-center">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4 text-purple-900">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-lg md:text-xl leading-relaxed">ליווי מקצועי מרעיון לביצוע, לבניית פרויקטים פורצי דרך מבוססי AI.</p>
+                </div>
+            </div>
+            <div class="encaustic-divider"></div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center my-16 md:my-24 text-gray-400 text-lg scroll-reveal">
+            <p>&copy; 2024 זאביק אבינר - מומחה בינה מלאכותית. כל הזכויות שמורות.</p>
+            <p class="mt-2 text-gray-500 text-sm">יצירה דיגיטלית בהשראת אמנות השעווה החמה.</p>
+        </footer>
+
+    </main>
+
+    <!-- JavaScript for immersive interactivity -->
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+        // Show custom cursor when mouse enters the body, hide if leaves
+        document.body.addEventListener('mouseenter', () => customCursor.style.display = 'block');
+        document.body.addEventListener('mouseleave', () => customCursor.style.display = 'none');
+
+
+        // Parallax Effect for Background Layers (simulated by cursor interaction)
+        // This creates a subtle depth and movement, as if looking through layers of wax.
+        const encausticLayers = document.querySelectorAll('.encaustic-layer');
+        document.addEventListener('mousemove', e => {
+            // Normalize mouse coordinates to a -1 to 1 range relative to viewport center
+            const x = (e.clientX / window.innerWidth - 0.5) * 2;
+            const y = (e.clientY / window.innerHeight - 0.5) * 2;
+
+            encausticLayers.forEach(layer => {
+                const depth = parseFloat(layer.getAttribute('data-depth')) || 0; // Get depth from data-attribute
+                const translateX = -x * depth * 0.5; // Multiplied by 0.5 to reduce intensity
+                const translateY = -y * depth * 0.5;
+                layer.style.transform = `translate3d(${translateX}px, ${translateY}px, 0) scale(${1 + depth * 0.002})`; // Add a slight scale effect
+            });
+        });
+
+        // Generative Wax Particles - adds a dynamic, flowing "hot wax" element
+        const body = document.body;
+        let particleCount = 0;
+        const maxParticles = 60; // Limit the number of particles for performance
+
+        // Function to create and manage individual wax particles
+        function createWaxParticle(e) {
+            if (particleCount >= maxParticles) return; // Prevent too many particles
+
+            const particle = document.createElement('div');
+            particle.classList.add('wax-particle');
+            const size = Math.random() * 12 + 6; // Random size between 6px and 18px
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            // Position near cursor with a slight random offset
+            particle.style.left = `${e.clientX + Math.random() * 20 - 10}px`;
+            particle.style.top = `${e.clientY + Math.random() * 20 - 10}px`;
+            // Randomize animation duration for a less uniform look
+            particle.style.animationDuration = `${Math.random() * 6 + 5}s`;
+            // Randomize initial opacity slightly
+            particle.style.opacity = `${Math.random() * 0.4 + 0.3}`;
+
+            body.appendChild(particle);
+            particleCount++;
+
+            // Remove particle after its animation completes to manage DOM size
+            particle.addEventListener('animationend', () => {
+                particle.remove();
+                particleCount--;
+            });
+        }
+        document.addEventListener('mousemove', createWaxParticle); // Trigger particle creation on mouse move
+
+        // Scroll Reveal Effect - makes sections appear smoothly as they enter the viewport
+        const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
+
+        const observerOptions = {
+            root: null, // Use the viewport as the root
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible'); // Add 'visible' class to trigger CSS transition
+                    observer.unobserve(entry.target); // Stop observing once visible
+                }
+            });
+        }, observerOptions);
+
+        // Attach the observer to all elements with the 'scroll-reveal' class
+        scrollRevealElements.forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

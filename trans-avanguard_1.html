@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>טרנס-אוונגרד של AI: מסע אל העתיד</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50%25' y='50%25' font-size='80' text-anchor='middle' dominant-baseline='central'%3E%F0%9F%A7%A0%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;700&family=Rubik:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #0A0A0E; /* Deep almost black */
+            --secondary-bg: #1A1A22; /* Slightly lighter dark */
+            --accent-blue: #00FFFF; /* Electric Cyan */
+            --accent-purple: #9333EA; /* Deep Purple */
+            --text-light: #E0E0E0;
+            --text-dark: #333333;
+            --gradient-start: rgba(147, 51, 234, 0.4); /* Purple */
+            --gradient-end: rgba(0, 255, 255, 0.4); /* Cyan */
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-light);
+            overflow-x: hidden; /* Prevent horizontal scroll from effects */
+            cursor: none; /* Hide default cursor */
+            perspective: 1000px; /* For 3D effects */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'IBM Plex Mono', monospace;
+            color: var(--accent-blue);
+        }
+
+        /* Custom Cursor Styling */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid white; /* Visible on dark */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8), 0 0 15px var(--accent-blue), 0 0 5px var(--accent-purple) inset; /* Visible on light + glow */
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: width 0.2s ease, height 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            opacity: 0.9;
+        }
+
+        #custom-cursor.hovered {
+            width: 40px;
+            height: 40px;
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8), 0 0 25px var(--accent-blue), 0 0 10px var(--accent-purple) inset;
+        }
+        
+        /* Particle Background */
+        .particle {
+            position: fixed;
+            background-color: var(--accent-blue);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: floatAndFade 15s infinite ease-in-out;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        @keyframes floatAndFade {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.5; }
+            50% { transform: translateY(-200px) rotate(180deg); opacity: 0.8; }
+            100% { transform: translateY(0) rotate(360deg); opacity: 0.5; }
+        }
+
+        .particle:nth-child(2n) { background-color: var(--accent-purple); animation-delay: -7.5s; }
+        .particle:nth-child(3n) { animation-delay: -10s; }
+        .particle:nth-child(4n) { animation-delay: -5s; }
+
+        /* Main Content Scroll Effects */
+        .section-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 4rem 1rem; /* Added horizontal padding for smaller screens */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+        }
+
+        .floating-text {
+            position: relative; /* Changed from absolute to relative to keep in flow, then use transforms */
+            opacity: 0;
+            transform: translateY(50px) scale(0.9) rotate(0deg); /* Initial hidden state */
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            pointer-events: auto; /* Allow interaction */
+        }
+
+        .scroll-reveal.active .floating-text {
+            opacity: 1;
+            transform: translateY(0) scale(1) rotate(0deg); /* Final active state */
+        }
+
+        .gradient-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top left, var(--gradient-start) 0%, transparent 50%),
+                        radial-gradient(circle at bottom right, var(--gradient-end) 0%, transparent 50%);
+            opacity: 0.2;
+            z-index: -1;
+            pointer-events: none;
+            animation: subtleGradientShift 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes subtleGradientShift {
+            0% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.05); opacity: 0.25; }
+            100% { transform: scale(1); opacity: 0.2; }
+        }
+
+        /* Specific section styling */
+        .section-intro, .section-guide, .section-contact {
+            text-shadow: 0 0 5px rgba(0,255,255,0.7), 0 0 10px rgba(147,51,234,0.7);
+        }
+
+        .text-neon-cyan {
+            color: var(--accent-blue);
+            text-shadow: 0 0 8px var(--accent-blue), 0 0 15px var(--accent-blue);
+        }
+
+        .text-neon-purple {
+            color: var(--accent-purple);
+            text-shadow: 0 0 8px var(--accent-purple), 0 0 15px var(--accent-purple);
+        }
+
+        /* For the Zevik image */
+        .zevik-image-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 0 20px var(--accent-blue), 0 0 10px var(--accent-purple) inset;
+            transform: rotateY(20deg) rotateX(10deg);
+            transition: transform 0.5s ease-out;
+        }
+        .zevik-image-container:hover {
+            transform: rotateY(0deg) rotateX(0deg) scale(1.05);
+        }
+        .zevik-image-container img {
+            filter: grayscale(80%) brightness(120%) contrast(110%);
+            transition: filter 0.5s ease-out;
+        }
+        .zevik-image-container:hover img {
+            filter: grayscale(0%) brightness(100%) contrast(100%);
+        }
+
+        /* Glitch effect for hoverable elements (e.g., contact info) */
+        .glitch-text {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            color: var(--accent-blue);
+            transition: color 0.3s ease;
+        }
+
+        .glitch-text:hover {
+            color: var(--accent-purple);
+        }
+
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            color: var(--accent-blue);
+            background: var(--primary-bg);
+            transition: transform 0.1s ease-in-out;
+        }
+
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -2px 0 var(--accent-purple);
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
+        }
+
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -2px 0 var(--accent-blue);
+            animation: glitch-anim-2 2s infinite linear alternate-reverse;
+        }
+
+        .glitch-text:hover::before {
+            animation: glitch-anim-1-hover 0.3s infinite linear alternate;
+        }
+        .glitch-text:hover::after {
+            animation: glitch-anim-2-hover 0.3s infinite linear alternate;
+        }
+
+        @keyframes glitch-anim-1 {
+            0% { clip: rect(42px, 9999px, 44px, 0); transform: skew(0.5deg); }
+            5% { clip: rect(65px, 9999px, 20px, 0); transform: skew(-0.5deg); }
+            10% { clip: rect(78px, 9999px, 80px, 0); transform: skew(1.5deg); }
+            15% { clip: rect(100px, 9999px, 20px, 0); transform: skew(-1.5deg); }
+            20% { clip: rect(40px, 9999px, 60px, 0); transform: skew(2.5deg); }
+            25% { clip: rect(10px, 9999px, 25px, 0); transform: skew(-2.5deg); }
+            30% { clip: rect(70px, 9999px, 90px, 0); transform: skew(0.5deg); }
+            35% { clip: rect(15px, 9999px, 30px, 0); transform: skew(-0.5deg); }
+            40% { clip: rect(55px, 9999px, 75px, 0); transform: skew(1.5deg); }
+            45% { clip: rect(85px, 9999px, 5px, 0); transform: skew(-1.5deg); }
+            50% { clip: rect(25px, 9999px, 45px, 0); transform: skew(2.5deg); }
+            55% { clip: rect(95px, 9999px, 10px, 0); transform: skew(-2.5deg); }
+            60% { clip: rect(30px, 9999px, 50px, 0); transform: skew(0.5deg); }
+            65% { clip: rect(80px, 9999px, 20px, 0); transform: skew(-0.5deg); }
+            70% { clip: rect(50px, 9999px, 70px, 0); transform: skew(1.5deg); }
+            75% { clip: rect(10px, 9999px, 90px, 0); transform: skew(-1.5deg); }
+            80% { clip: rect(60px, 9999px, 80px, 0); transform: skew(2.5deg); }
+            85% { clip: rect(5px, 9999px, 20px, 0); transform: skew(-2.5deg); }
+            90% { clip: rect(35px, 9999px, 55px, 0); transform: skew(0.5deg); }
+            95% { clip: rect(75px, 9999px, 15px, 0); transform: skew(-0.5deg); }
+            100% { clip: rect(45px, 9999px, 65px, 0); transform: skew(1.5deg); }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% { clip: rect(25px, 9999px, 27px, 0); transform: skew(-0.5deg); }
+            5% { clip: rect(80px, 9999px, 30px, 0); transform: skew(0.5deg); }
+            10% { clip: rect(15px, 9999px, 17px, 0); transform: skew(-1.5deg); }
+            15% { clip: rect(50px, 9999px, 70px, 0); transform: skew(1.5deg); }
+            20% { clip: rect(90px, 9999px, 10px, 0); transform: skew(-2.5deg); }
+            25% { clip: rect(35px, 9999px, 55px, 0); transform: skew(2.5deg); }
+            30% { clip: rect(70px, 9999px, 90px, 0); transform: skew(-0.5deg); }
+            35% { clip: rect(20px, 9999px, 40px, 0); transform: skew(0.5deg); }
+            40% { clip: rect(85px, 9999px, 5px, 0); transform: skew(-1.5deg); }
+            45% { clip: rect(45px, 9999px, 65px, 0); transform: skew(1.5deg); }
+            50% { clip: rect(10px, 9999px, 30px, 0); transform: skew(-2.5deg); }
+            55% { clip: rect(60px, 9999px, 80px, 0); transform: skew(2.5deg); }
+            60% { clip: rect(5px, 9999px, 25px, 0); transform: skew(-0.5deg); }
+            65% { clip: rect(75px, 9999px, 15px, 0); transform: skew(0.5deg); }
+            70% { clip: rect(30px, 9999px, 50px, 0); transform: skew(-1.5deg); }
+            75% { clip: rect(95px, 9999px, 10px, 0); transform: skew(1.5deg); }
+            80% { clip: rect(40px, 9999px, 60px, 0); transform: skew(-2.5deg); }
+            85% { clip: rect(15px, 9999px, 35px, 0); transform: skew(2.5deg); }
+            90% { clip: rect(80px, 9999px, 20px, 0); transform: skew(-0.5deg); }
+            95% { clip: rect(25px, 9999px, 45px, 0); transform: skew(0.5deg); }
+            100% { clip: rect(65px, 9999px, 85px, 0); transform: skew(-1.5deg); }
+        }
+
+        @keyframes glitch-anim-1-hover {
+            0% { clip: rect(50px, 9999px, 52px, 0); transform: skew(0.5deg); }
+            10% { clip: rect(80px, 9999px, 20px, 0); transform: skew(-0.5deg); }
+            20% { clip: rect(30px, 9999px, 40px, 0); transform: skew(1.5deg); }
+            30% { clip: rect(90px, 9999px, 10px, 0); transform: skew(-1.5deg); }
+            40% { clip: rect(10px, 9999px, 70px, 0); transform: skew(2.5deg); }
+            50% { clip: rect(60px, 9999px, 20px, 0); transform: skew(-2.5deg); }
+            60% { clip: rect(25px, 9999px, 55px, 0); transform: skew(0.5deg); }
+            70% { clip: rect(70px, 9999px, 30px, 0); transform: skew(-0.5deg); }
+            80% { clip: rect(40px, 9999px, 60px, 0); transform: skew(1.5deg); }
+            90% { clip: rect(5px, 9999px, 95px, 0); transform: skew(-1.5deg); }
+            100% { clip: rect(85px, 9999px, 15px, 0); transform: skew(2.5deg); }
+        }
+
+        @keyframes glitch-anim-2-hover {
+            0% { clip: rect(70px, 9999px, 72px, 0); transform: skew(-0.5deg); }
+            10% { clip: rect(20px, 9999px, 80px, 0); transform: skew(0.5deg); }
+            20% { clip: rect(90px, 9999px, 30px, 0); transform: skew(-1.5deg); }
+            30% { clip: rect(40px, 9999px, 60px, 0); transform: skew(1.5deg); }
+            40% { clip: rect(80px, 9999px, 10px, 0); transform: skew(-2.5deg); }
+            50% { clip: rect(30px, 9999px, 70px, 0); transform: skew(2.5deg); }
+            60% { clip: rect(55px, 9999px, 25px, 0); transform: skew(-0.5deg); }
+            70% { clip: rect(10px, 9999px, 90px, 0); transform: skew(0.5deg); }
+            80% { clip: rect(60px, 9999px, 40px, 0); transform: skew(-1.5deg); }
+            90% { clip: rect(95px, 9999px, 5px, 0); transform: skew(1.5deg); }
+            100% { clip: rect(15px, 9999px, 85px, 0); transform: skew(-2.5deg); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .text-5xl { font-size: 3rem; }
+            .text-3xl { font-size: 2rem; }
+            .text-xl { font-size: 1.25rem; }
+            .section-container { padding: 2rem 1rem; } /* More balanced padding */
+            .zevik-image-container { margin-bottom: 2rem; } /* Space out image and text on small screens */
+            .flex-col-reverse-md { flex-direction: column-reverse; } /* Optional, if content order needs change */
+        }
+    </style>
+</head>
+<body>
+    <div id="custom-cursor"></div>
+    <div class="gradient-overlay"></div>
+    <div id="particle-container" class="fixed inset-0 overflow-hidden z-[-2]"></div>
+
+    <main class="relative z-10 p-4 md:p-8">
+        <!-- Section 1: Introduction - The Portal -->
+        <section id="intro" class="section-container section-intro flex flex-col justify-center items-center text-center scroll-reveal">
+            <h1 class="text-5xl md:text-7xl font-bold text-neon-cyan leading-tight mb-8 drop-shadow-lg floating-text">שליטה בבינה המלאכותית: <br><span class="text-neon-purple">המסע אל הטרנס-עתיד</span></h1>
+            <p class="text-xl md:text-3xl max-w-4xl mx-auto mb-16 text-right leading-relaxed floating-text text-light">
+                העתיד אינו ממתין. הוא כאן, טמון בממלכות הדיגיטליות, קורא לכם לפענח את סודותיו.
+                <br>בינה מלאכותית – לא רק כלי, אלא שפה חדשה, ממד שניתן ללמוד ולשלוט בו.
+                <br>הצטרפו אלינו למסע טרנס-אוונגרד, להפוך את הבלתי-נגיש לנגיש, את המורכב למעשי.
+            </p>
+        </section>
+
+        <!-- Section 2: The Call - Who Are We Speaking To? -->
+        <section id="audience" class="section-container text-center section-audience flex flex-col justify-center items-center scroll-reveal">
+            <h2 class="text-3xl md:text-5xl font-bold text-neon-purple mb-10 drop-shadow-lg floating-text text-light">
+                קריאת ההתעוררות: למי מיועד המסע?
+            </h2>
+            <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 floating-text text-light">
+                <div class="p-6 border border-accent-blue rounded-xl bg-secondary-bg hover:bg-accent-purple/20 transition-all duration-300 transform hover:-translate-y-2 relative overflow-hidden">
+                    <h3 class="text-xl font-bold text-neon-cyan mb-4">חלוצי הסף</h3>
+                    <p class="text-sm">לאלו המוטטים את חומות הבורות, פותחים שערים לעולם ה-AI בפעם הראשונה – צעד אחר צעד, ממבוכה להבנה.</p>
+                </div>
+                <div class="p-6 border border-accent-purple rounded-xl bg-secondary-bg hover:bg-accent-blue/20 transition-all duration-300 transform hover:-translate-y-2 relative overflow-hidden">
+                    <h3 class="text-xl font-bold text-neon-purple mb-4">אדריכלי החדשנות</h3>
+                    <p class="text-sm">אנשי מקצוע הרוצים לארוג את חוטיי ה-AI במארג עבודתם, ליצור פתרונות פורצי דרך ולעלות לרמת ביצועים חדשה.</p>
+                </div>
+                <div class="p-6 border border-accent-blue rounded-xl bg-secondary-bg hover:bg-accent-purple/20 transition-all duration-300 transform hover:-translate-y-2 relative overflow-hidden">
+                    <h3 class="text-xl font-bold text-neon-cyan mb-4">מנהיגי המחר</h3>
+                    <p class="text-sm">מנהלים וארגונים השואפים להוביל את צוותיהם לעידן ה-AI, לצייד אותם בידע ובכלים הדרושים לניווט במציאות המשתנה.</p>
+                </div>
+                <div class="p-6 border border-accent-purple rounded-xl bg-secondary-bg hover:bg-accent-blue/20 transition-all duration-300 transform hover:-translate-y-2 relative overflow-hidden">
+                    <h3 class="text-xl font-bold text-neon-purple mb-4">בוראי המציאות</h3>
+                    <p class="text-sm">למתקדמים, אלו החולמים בפרויקטים מבוססי AI, וזקוקים לליווי וייעוץ להגשמת חזונם.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Domains of Creation - Expertise -->
+        <section id="expertise" class="section-container text-center section-expertise flex flex-col justify-center items-center scroll-reveal">
+            <h2 class="text-3xl md:text-5xl font-bold text-neon-cyan mb-10 drop-shadow-lg floating-text text-light">
+                תחומי התמחות: מפתחות היצירה בממלכת ה-AI
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto floating-text text-light">
+                <div class="p-6 bg-secondary-bg border border-accent-blue/50 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <h3 class="text-xl font-bold text-neon-cyan mb-3">אוטומציית המחשבה</h3>
+                    <p class="text-sm">יצירת טקסטים, תכנים, סיפורים – ה-AI כשותף יצירתי בלתי נדלה.</p>
+                </div>
+                <div class="p-6 bg-secondary-bg border border-accent-purple/50 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <h3 class="text-xl font-bold text-neon-purple mb-3">אדריכלות חכמה</h3>
+                    <p class="text-sm">בניית אפליקציות חכמות, מערכות לומדות – הפיכת רעיונות למציאות דיגיטלית.</p>
+                </div>
+                <div class="p-6 bg-secondary-bg border border-accent-blue/50 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <h3 class="text-xl font-bold text-neon-cyan mb-3">פורטלים טרנספורמטיביים</h3>
+                    <p class="text-sm">פיתוח אתרים שאינם רק מציגים מידע, אלא חושבים, לומדים ומגיבים באמצעות AI.</p>
+                </div>
+                <div class="p-6 bg-secondary-bg border border-accent-purple/50 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <h3 class="text-xl font-bold text-neon-purple mb-3">פיענוח נתונים</h3>
+                    <p class="text-sm">ניתוח נתונים וביצוע מחקרים מורכבים – ה-AI כעין רואה ומוח מבין.</p>
+                </div>
+                <div class="p-6 bg-secondary-bg border border-accent-blue/50 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <h3 class="text-xl font-bold text-neon-cyan mb-3">אמנות אלגוריתמית</h3>
+                    <p class="text-sm">יצירת תמונות, קונספטים ואמנות ויזואלית באמצעות בינה מלאכותית – הגבול היחיד הוא הדמיון.</p>
+                </div>
+                <div class="p-6 bg-secondary-bg border border-accent-purple/50 rounded-lg shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <h3 class="text-xl font-bold text-neon-purple mb-3">מכונות ההגשמה</h3>
+                    <p class="text-sm">אוטומציה של תהליכים משעממים וחוזרניים, לשחרר אתכם להתמקד ביצירה וחדשנות.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Pathways to Mastery - Services -->
+        <section id="services" class="section-container text-center section-services flex flex-col justify-center items-center scroll-reveal">
+            <h2 class="text-3xl md:text-5xl font-bold text-neon-purple mb-10 drop-shadow-lg floating-text text-light">
+                נתיבי ההתגלות: השירותים שלנו
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto floating-text text-light">
+                <div class="p-8 bg-secondary-bg border border-accent-blue rounded-3xl relative overflow-hidden transform hover:rotate-1 transition-all duration-500 shadow-xl">
+                    <h3 class="text-2xl font-bold text-neon-cyan mb-4">סדנאות טרנספורמטיביות</h3>
+                    <p class="text-md">חוויות לימוד קבוצתיות מעשיות, ממוקדות מטרה, שבהן אתם לא רק לומדים – אתם יוצרים, מתנסים ומטמיעים את ה-AI בכישוריכם. מסע משותף אל החדשנות.</p>
+                </div>
+                <div class="p-8 bg-secondary-bg border border-accent-purple rounded-3xl relative overflow-hidden transform hover:-rotate-1 transition-all duration-500 shadow-xl">
+                    <h3 class="text-2xl font-bold text-neon-purple mb-4">שיעורים פרטיים: התגלות אישית</h3>
+                    <p class="text-md">מסלול למידה המותאם באופן מלא אליכם – לרמה, לקצב ולצרכים הייחודיים שלכם. חניכה אישית עם זאביק, להגשמת הפוטנציאל המלא שלכם בעולם ה-AI.</p>
+                </div>
+                <div class="p-8 bg-secondary-bg border border-accent-blue rounded-3xl relative overflow-hidden transform hover:rotate-1 transition-all duration-500 shadow-xl">
+                    <h3 class="text-2xl font-bold text-neon-cyan mb-4">הרצאות מעוררות השראה לארגונים</h3>
+                    <p class="text-md">פתחו אופקים חדשים לצוותים שלכם. הרצאות דינמיות שחושפות את העוצמה והאפשרויות הבלתי מוגבלות של ה-AI, ומעוררות השראה לפעולה ולחדשנות.</p>
+                </div>
+                <div class="p-8 bg-secondary-bg border border-accent-purple rounded-3xl relative overflow-hidden transform hover:-rotate-1 transition-all duration-500 shadow-xl">
+                    <h3 class="text-2xl font-bold text-neon-purple mb-4">ייעוץ ופיתוח פרויקטים: ליווי מודרך</h3>
+                    <p class="text-md">מליווי רעיוני ועד יישום מלא – זאביק והצוות ילוו אתכם בפיתוח פרויקטים מבוססי AI, יסייעו במימוש חזונכם ויבטיחו הצלחה טכנולוגית ועסקית.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: The Architect - Zevik Aviner -->
+        <section id="guide" class="section-container text-center section-guide flex flex-col justify-center items-center scroll-reveal">
+            <h2 class="text-3xl md:text-5xl font-bold text-neon-cyan mb-12 drop-shadow-lg floating-text text-light">
+                האדריכל של ההבנה: זאביק אבינר
+            </h2>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8 max-w-4xl mx-auto floating-text text-light">
+                <div class="zevik-image-container flex-shrink-0">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונת זאביק אבינר - מומחה בינה מלאכותית" class="w-full h-full object-cover">
+                </div>
+                <div class="text-right flex-grow">
+                    <p class="text-xl leading-relaxed mb-4">
+                        זאביק אבינר אינו רק מומחה בינה מלאכותית – הוא החזון המוגשם. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק הוא הגשר שלכם אל הטכנולוגיה המשתנה. הוא רואה ב-AI לא רק קוד, אלא כלי שביכולתו לשנות חיים ועסקים.
+                    </p>
+                    <p class="text-xl leading-relaxed">
+                        היכולת הייחודית שלו להנגיש את המורכב, להפוך את התיאוריה ליישום יומיומי, הופכת אותו למדריך האידיאלי במסע זה אל עתיד שאתם יכולים ליצור ולעצב.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: Connect - Nodes of Connection -->
+        <section id="contact" class="section-container text-center section-contact flex flex-col justify-center items-center scroll-reveal">
+            <h2 class="text-3xl md:text-5xl font-bold text-neon-purple mb-10 drop-shadow-lg floating-text text-light">
+                צרו קשר: פתחו ערוץ ישיר אל העתיד
+            </h2>
+            <div class="text-2xl md:text-4xl font-bold floating-text text-light">
+                <p class="mb-6">
+                    <a href="https://wa.me/972546609385" target="_blank" class="glitch-text text-neon-cyan" data-text="וואטסאפ: 054-6609385">וואטסאפ: 054-6609385</a>
+                </p>
+                <p>
+                    <a href="mailto:zaviner@gmail.com" class="glitch-text text-neon-purple" data-text="אימייל: zaviner@gmail.com">אימייל: zaviner@gmail.com</a>
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        document.querySelectorAll('a, button, input[type="submit"], .glitch-text, .zevik-image-container, [role="button"], .p-6').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
+        });
+
+        // Particle Background Generation
+        const particleContainer = document.getElementById('particle-container');
+        const numParticles = 30; // Number of particles
+
+        for (let i = 0; i < numParticles; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const size = Math.random() * 8 + 2; // Size between 2px and 10px
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${Math.random() * 100}vw`;
+            particle.style.top = `${Math.random() * 100}vh`;
+            particle.style.animationDuration = `${Math.random() * 10 + 10}s`; // 10-20s
+            particle.style.animationDelay = `-${Math.random() * 10}s`; // Offset start times
+            particleContainer.appendChild(particle);
+        }
+
+        // Scroll Reveal Animation (Trans-Avant-garde style)
+        const sections = document.querySelectorAll('.section-container');
+
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.3 // Trigger when 30% of the section is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active'); // General active class for section
+                    entry.target.querySelectorAll('.floating-text').forEach((text, index) => {
+                        // Stagger the animation of floating-text elements
+                        setTimeout(() => {
+                            text.classList.add('active');
+                        }, index * 200); // Stagger by 200ms
+                    });
+                } else {
+                    entry.target.classList.remove('active');
+                    entry.target.querySelectorAll('.floating-text').forEach(text => {
+                        text.classList.remove('active');
+                    });
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+            // Initialize floating-text elements to their hidden state by default CSS
+            // The JavaScript only adds/removes the 'active' class
+        });
+
+        // Parallax-like effect for the background gradient overlay
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 2; // -1 to 1
+            const y = (e.clientY / window.innerHeight - 0.5) * 2; // -1 to 1
+
+            const overlay = document.querySelector('.gradient-overlay');
+            if (overlay) {
+                // Apply a slight transform for parallax effect
+                overlay.style.transform = `translate(${x * 20}px, ${y * 20}px) scale(1.05)`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שליטה בבינה המלאכותית: המסע אל עולם הקסם הדיגיטלי</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Frank+Ruhl+Libre:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles */
+        html {
+            scroll-behavior: smooth;
+            /* Disable text selection to enhance "art" feel, but keep accessible via keyboard */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        body {
+            /* Fantasy background - deep space, mystical nebula */
+            background: radial-gradient(circle at top left, #0D061F 0%, #1A0D3B 30%, #0D061F 70%, #060312 100%);
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden;
+            font-family: 'Frank Ruhl Libre', serif; /* Default readable font */
+            color: #E0E7FF; /* Light blue-purple for general text */
+        }
+        
+        /* Typography for Fantasy Art */
+        .fantasy-title {
+            font-family: 'Amatic SC', cursive; /* More stylistic, hand-drawn font for titles */
+        }
+
+        /* Custom Cursor Styling - High Contrast Mandatory */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #a3e635; /* Bright neon green border for visibility */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), /* Dark outline for high contrast on light backgrounds */
+                        0 0 15px #a3e635, /* Inner neon glow */
+                        0 0 30px #d9f99d; /* Wider, softer glow */
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+            z-index: 9999;
+            opacity: 1;
+        }
+        #custom-cursor.active {
+            width: 30px;
+            height: 30px;
+            opacity: 0.8;
+            transform: translate(-50%, -50%) scale(1.2); /* Slight scale on click */
+        }
+
+        /* Glowing Text Effect */
+        .glow-text {
+            text-shadow: 0 0 8px rgba(163,230,53,0.7), 0 0 15px rgba(163,230,53,0.5), 0 0 25px rgba(163,230,53,0.3); /* Multi-layer neon green glow */
+        }
+
+        /* Scroll Reveal Animation */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+            will-change: opacity, transform; /* Optimize for animation */
+        }
+        .scroll-reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Call to Action Button Styling */
+        .cta-button {
+            background: linear-gradient(90deg, #a3e635, #d9f99d); /* Neon gradient */
+            color: #0D061F; /* Dark text on light background for contrast */
+            padding: 1rem 2.5rem;
+            border-radius: 9999px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 0 15px rgba(163,230,53,0.6);
+            cursor: none; /* Custom cursor takes over */
+            position: relative; /* For custom cursor interaction */
+        }
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 25px rgba(163,230,53,0.8), 0 0 40px rgba(217,249,157,0.5);
+        }
+
+        /* Custom scrollbar for better aesthetics */
+        body::-webkit-scrollbar {
+            width: 8px;
+        }
+        body::-webkit-scrollbar-track {
+            background: #0d061f;
+        }
+        body::-webkit-scrollbar-thumb {
+            background-color: #a3e635;
+            border-radius: 20px;
+            border: 2px solid #0d061f;
+        }
+
+        /* Ensure images are selectable/draggable if needed, but not essential for art piece */
+        img {
+            -webkit-user-select: auto;
+            -moz-user-select: auto;
+            -ms-user-select: auto;
+            user-select: auto;
+        }
+    </style>
+</head>
+<body class="text-white">
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Main Content Area - This is the "Canvas" -->
+    <main class="relative z-10 min-h-screen p-8 lg:p-16 flex flex-col items-center justify-center">
+
+        <!-- Grand Opening - Hero Section: The Call to the Unknown -->
+        <section class="min-h-screen flex flex-col justify-center items-center text-center max-w-4xl mx-auto py-20 scroll-reveal">
+            <h1 class="fantasy-title text-6xl md:text-8xl font-bold mb-6 glow-text leading-tight" style="color:#d9f99d;">
+                הקריאה אל הנעלם:<br>
+                <span class="text-5xl md:text-7xl">שליטה באמנות ה-AI</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl leading-relaxed">
+                בעידן שבו הקסם הדיגיטלי משנה את העולם, <br>
+                האם תהיו אדונים לגורלכם או תלמידים נצחיים? <br>
+                הצטרפו למסע אל נבכי הבינה המלאכותית – <br>
+                העתיד אינו עוד הבטחה, הוא המפתח שבידיכם.
+            </p>
+            <div class="space-y-4 md:space-y-0 md:space-x-4 flex flex-col md:flex-row items-center">
+                <a href="#the_vision" class="cta-button">התחילו את המסע</a>
+            </div>
+        </section>
+
+        <!-- Section 1: The Vision / Core Message - Deciphering the Magic -->
+        <section id="the_vision" class="min-h-screen flex flex-col justify-center items-center text-center max-w-5xl mx-auto py-20 scroll-reveal">
+            <h2 class="fantasy-title text-5xl md:text-7xl font-bold mb-8 glow-text" style="color:#d9f99d;">
+                המסר המרכזי: פענוח הקסם
+            </h2>
+            <p class="text-lg md:text-xl text-gray-200 mb-12 max-w-3xl leading-relaxed">
+                אנו מאמינים כי כוחה של הבינה המלאכותית אינו שמור רק למעטים. <br>
+                הייעוד שלנו הוא להפוך את האמנות העתיקה הזו לנגישה, מובנת ושימושית לכל אחד ואחת. <br>
+                מהצעדים הראשונים ועד לפסגות היצירה המתקדמות ביותר, <br>
+                נעניק לכם את הכלים המעשיים ליישום מיידי – <br>
+                בעבודה, בעסק ובשדות החיים. <br>
+                זוהי קריאה להתעלות, לא רק ללמוד, אלא לשלוט.
+            </p>
+            <!-- A fantasy-themed image to enhance the artistic style -->
+            <img src="https://images.unsplash.com/photo-1516131206120-c8f498179294?q=80&w=1920&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="ערפל קסום ופורטלים דיגיטליים המייצגים את המעבר מידע טכנולוגי לכוח יצירתי" class="w-full md:w-3/4 lg:w-2/3 h-auto rounded-xl shadow-2xl transition-transform duration-500 hover:scale-105 mb-8" style="box-shadow: 0 0 30px rgba(163,230,53,0.4);">
+            <p class="text-sm text-gray-400 mt-4">
+                (דימוי: שער בין ממדים, המייצג את המעבר מידע טכנולוגי לכוח יצירתי)
+            </p>
+        </section>
+
+        <!-- Section 2: The Initiates / Target Audience - The Prophecy's Chosen -->
+        <section class="min-h-screen flex flex-col justify-center items-center text-center max-w-5xl mx-auto py-20 scroll-reveal">
+            <h2 class="fantasy-title text-5xl md:text-7xl font-bold mb-8 glow-text" style="color:#d9f99d;">
+                הקבועים בנבואה: למי המסע מיועד?
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                <div class="bg-gradient-to-br from-indigo-900 to-purple-900 p-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105" style="box-shadow: 0 0 20px rgba(163,230,53,0.3);">
+                    <h3 class="fantasy-title text-3xl font-bold mb-4" style="color:#d9f99d;">המתלמדים</h3>
+                    <p class="text-gray-200">למי שזה עתה גילה את ניצוץ הקסם ורוצה להבין את יסודותיו.</p>
+                </div>
+                <div class="bg-gradient-to-br from-purple-900 to-fuchsia-900 p-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105" style="box-shadow: 0 0 20px rgba(163,230,53,0.3);">
+                    <h3 class="fantasy-title text-3xl font-bold mb-4" style="color:#d9f99d;">האמנים</h3>
+                    <p class="text-gray-200">לאנשי מקצוע המבקשים לשזור AI באמנותם ובעבודתם היומיומית.</p>
+                </div>
+                <div class="bg-gradient-to-br from-fuchsia-900 to-rose-900 p-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105" style="box-shadow: 0 0 20px rgba(163,230,53,0.3);">
+                    <h3 class="fantasy-title text-3xl font-bold mb-4" style="color:#d9f99d;">המנהיגים</h3>
+                    <p class="text-gray-200">למנהלים וארגונים השואפים להוביל את צוותיהם לעידן חדש של פריון.</p>
+                </div>
+                <div class="bg-gradient-to-br from-rose-900 to-red-900 p-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105" style="box-shadow: 0 0 20px rgba(163,230,53,0.3);">
+                    <h3 class="fantasy-title text-3xl font-bold mb-4" style="color:#d9f99d;">האדריכלים</h3>
+                    <p class="text-gray-200">למפתחי פרויקטים מתקדמים החוצים את גבולות הידוע.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The Arcane Arts / Specialties - Realms of Mastery -->
+        <section class="min-h-screen flex flex-col justify-center items-center text-center max-w-5xl mx-auto py-20 scroll-reveal">
+            <h2 class="fantasy-title text-5xl md:text-7xl font-bold mb-8 glow-text" style="color:#d9f99d;">
+                האמנויות הנסתרות: תחומי השליטה
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                <div class="flex items-center space-x-4 space-x-reverse bg-purple-900 bg-opacity-30 p-6 rounded-lg shadow-md hover:scale-105 transition-transform duration-300" style="box-shadow: 0 0 15px rgba(163,230,53,0.2);">
+                    <span class="text-4xl text-yellow-300 flex-shrink-0">✨</span>
+                    <p class="text-lg text-gray-100 text-right">יצירת מגילות טקסט ותוכן קסום</p>
+                </div>
+                <div class="flex items-center space-x-4 space-x-reverse bg-indigo-900 bg-opacity-30 p-6 rounded-lg shadow-md hover:scale-105 transition-transform duration-300" style="box-shadow: 0 0 15px rgba(163,230,53,0.2);">
+                    <span class="text-4xl text-blue-300 flex-shrink-0">🔮</span>
+                    <p class="text-lg text-gray-100 text-right">בניית קמעות אפליקציה חכמות</p>
+                </div>
+                <div class="flex items-center space-x-4 space-x-reverse bg-fuchsia-900 bg-opacity-30 p-6 rounded-lg shadow-md hover:scale-105 transition-transform duration-300" style="box-shadow: 0 0 15px rgba(163,230,53,0.2);">
+                    <span class="text-4xl text-pink-300 flex-shrink-0">🌐</span>
+                    <p class="text-lg text-gray-100 text-right">פיתוח פורטלים דיגיטליים (אתרים) מבוססי AI</p>
+                </div>
+                <div class="flex items-center space-x-4 space-x-reverse bg-rose-900 bg-opacity-30 p-6 rounded-lg shadow-md hover:scale-105 transition-transform duration-300" style="box-shadow: 0 0 15px rgba(163,230,53,0.2);">
+                    <span class="text-4xl text-orange-300 flex-shrink-0">📊</span>
+                    <p class="text-lg text-gray-100 text-right">פענוח חזיונות (ניתוח נתונים ומחקר)</p>
+                </div>
+                <div class="flex items-center space-x-4 space-x-reverse bg-red-900 bg-opacity-30 p-6 rounded-lg shadow-md hover:scale-105 transition-transform duration-300" style="box-shadow: 0 0 15px rgba(163,230,53,0.2);">
+                    <span class="text-4xl text-red-300 flex-shrink-0">🎨</span>
+                    <p class="text-lg text-gray-100 text-right">יצירת אימאג'ים ואומנות דיגיטלית קסומה</p>
+                </div>
+                <div class="flex items-center space-x-4 space-x-reverse bg-green-900 bg-opacity-30 p-6 rounded-lg shadow-md hover:scale-105 transition-transform duration-300" style="box-shadow: 0 0 15px rgba(163,230,53,0.2);">
+                    <span class="text-4xl text-green-300 flex-shrink-0">⚙️</span>
+                    <p class="text-lg text-gray-100 text-right">אוטומציה של לחשים ותהליכים</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: The Pathways / Services - Trails to Power -->
+        <section class="min-h-screen flex flex-col justify-center items-center text-center max-w-5xl mx-auto py-20 scroll-reveal">
+            <h2 class="fantasy-title text-5xl md:text-7xl font-bold mb-8 glow-text" style="color:#d9f99d;">
+                השבילים אל העוצמה: שירותי ההדרכה
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-gradient-to-br from-cyan-900 to-emerald-900 p-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105" style="box-shadow: 0 0 20px rgba(163,230,53,0.3);">
+                    <h3 class="fantasy-title text-3xl font-bold mb-4" style="color:#d9f99d;">טקסי קבוצה</h3>
+                    <p class="text-gray-200">סדנאות מעשיות, ממוקדות ואינטנסיביות, לפענוח קסמי ה-AI יחד עם קבוצת לומדים.</p>
+                </div>
+                <div class="bg-gradient-to-br from-teal-900 to-lime-900 p-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105" style="box-shadow: 0 0 20px rgba(163,230,53,0.3);">
+                    <h3 class="fantasy-title text-3xl font-bold mb-4" style="color:#d9f99d;">חניכה אישית</h3>
+                    <p class="text-gray-200">שיעורים פרטיים המותאמים אישית לרמתכם, לקצב שלכם ולשאיפותיכם הקסומות.</p>
+                </div>
+                <div class="bg-gradient-to-br from-green-900 to-yellow-900 p-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105" style="box-shadow: 0 0 20px rgba(163,230,53,0.3);">
+                    <h3 class="fantasy-title text-3xl font-bold mb-4" style="color:#d9f99d;">הטפה לארגונים</h3>
+                    <p class="text-gray-200">הרצאות מעוררות השראה לארגונים וצוותים, לפתוח אופקים ולחשוף את פוטנציאל ה-AI.</p>
+                </div>
+                <div class="bg-gradient-to-br from-yellow-900 to-orange-900 p-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105" style="box-shadow: 0 0 20px rgba(163,230,53,0.3);">
+                    <h3 class="fantasy-title text-3xl font-bold mb-4" style="color:#d9f99d;">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-gray-200">ליווי מקצועי ואישי בפיתוח פרויקטים מבוססי AI, מהרעיון ועד למימוש הקסם.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: The Grandmaster / Instructor - Zevik Aviner, Master of the Digital Blade -->
+        <section class="min-h-screen flex flex-col justify-center items-center text-center max-w-4xl mx-auto py-20 scroll-reveal">
+            <h2 class="fantasy-title text-5xl md:text-7xl font-bold mb-8 glow-text" style="color:#d9f99d;">
+                הגורו: זאביק אבינר - האדון של הלהב הדיגיטלי
+            </h2>
+            <div class="bg-purple-950 p-10 rounded-3xl shadow-2xl flex flex-col md:flex-row items-center md:space-x-reverse md:space-x-8 lg:space-x-12 mb-12" style="box-shadow: 0 0 40px rgba(163,230,53,0.5);">
+                <div class="mb-8 md:mb-0 flex-shrink-0">
+                    <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית, פנים חכמות המביטות אל העתיד" class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover border-4 border-yellow-300 shadow-lg transition-transform duration-500 hover:scale-105" style="box-shadow: 0 0 20px rgba(252,211,77,0.7);">
+                </div>
+                <div class="text-right">
+                    <p class="text-xl md:text-2xl text-gray-200 mb-6 leading-relaxed">
+                        זאביק אבינר אינו רק מומחה לבינה מלאכותית; הוא האדון, המורה, המגשר בין העולמות. <br>
+                        עם ניסיון עשיר באצירת פרויקטים, אפליקציות ומערכות מבוססות AI, <br>
+                        הוא הפך את המסתורין הטכנולוגי לכלי עבודה יומיומי, נגיש ורב עוצמה. <br>
+                        כשעתיד הדיגיטל נשען על קצה להב, זאביק הוא המנחה הבטוח אל השליטה.
+                    </p>
+                </div>
+            </div>
+            <p class="text-xl md:text-2xl text-gray-300 mb-8" style="color:#d9f99d;">
+                רוצים לפענח את הקודים הנסתרים? <br>
+                ליצור מציאות חדשה באמצעות AI? <br>
+                המסע מתחיל כאן.
+            </p>
+        </section>
+
+        <!-- Section 6: The Nexus / Contact - Join the Alliance -->
+        <section class="min-h-screen flex flex-col justify-center items-center text-center max-w-3xl mx-auto py-20 scroll-reveal">
+            <h2 class="fantasy-title text-5xl md:text-7xl font-bold mb-8 glow-text" style="color:#d9f99d;">
+                הצטרפו אל הברית: צרו קשר
+            </h2>
+            <p class="text-lg md:text-xl text-gray-200 mb-10 max-w-prose leading-relaxed">
+                העידן החדש קורא לכם. אל תחכו שהקסם יתרחש; <br>
+                בואו ללמוד איך אתם יכולים ליצור אותו. <br>
+                צרו קשר עוד היום וקבעו את צעדיכם הראשונים במסע אל שליטה בבינה המלאכותית.
+            </p>
+            <div class="flex flex-col space-y-6 md:space-y-0 md:flex-row md:space-x-reverse md:space-x-8 items-center">
+                <a href="https://wa.me/972546609385" target="_blank" rel="noopener noreferrer" class="cta-button flex items-center justify-center space-x-2 space-x-reverse" style="color:#0D061F;">
+                    <span class="text-2xl">💬</span>
+                    <span>וואטסאפ: 054-6609385</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="cta-button flex items-center justify-center space-x-2 space-x-reverse" style="color:#0D061F;">
+                    <span class="text-2xl">✉️</span>
+                    <span>אימייל: zaviner@gmail.com</span>
+                </a>
+            </div>
+            <p class="text-sm text-gray-500 mt-12">
+                © כל הזכויות שמורות לזאביק אבינר. שער הידע פתוח בפניכם.
+            </p>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor JS
+        const customCursor = document.getElementById('custom-cursor');
+        
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+        
+        document.addEventListener('mousedown', () => {
+            customCursor.classList.add('active');
+        });
+        
+        document.addEventListener('mouseup', () => {
+            customCursor.classList.remove('active');
+        });
+
+        // Add hover effect for interactable elements (e.g., buttons, links)
+        document.querySelectorAll('a, button, .cta-button').forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('active'));
+        });
+
+        // Scroll Reveal Animation JS
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Optional: observer.unobserve(entry.target); // Uncomment if you only want to animate once
+                } else {
+                    // Optional: entry.target.classList.remove('is-visible'); // Uncomment to re-animate on scroll back
+                }
+            });
+        }, {
+            threshold: 0.1 // Trigger when 10% of the item is visible
+        });
+
+        document.querySelectorAll('.scroll-reveal').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Prevent default drag for images to maintain artistic control, allows text selection
+        document.querySelectorAll('img').forEach(img => {
+            img.ondragstart = () => false;
+        });
+    </script>
+</body>
+</html>

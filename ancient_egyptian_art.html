@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - הכהן הגדול של ה-AI: שליטה בסודות העתיד</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;700&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Tailwind Configuration & Variables */
+        :root {
+            --color-primary-blue: #0F2C59; /* Deep Lapis Lazuli Blue - A symbol of divinity and the heavens */
+            --color-secondary-gold: #FFD700; /* Rich Gold - Representing the sun, gods, and eternal life */
+            --color-accent-sand: #C4A484; /* Desert Sand/Ochre - Earthly tones, papyrus */
+            --color-background-cream: #F0EAD6; /* Papyrus Cream - Base for content, light and readable */
+            --color-text-dark: #333333; /* Dark earthy text - High contrast on light backgrounds */
+            --color-text-light: #F0EAD6; /* Papyrus cream text - High contrast on dark backgrounds */
+        }
+
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        html {
+            scroll-behavior: smooth;
+            /* Hide default scrollbar to use custom one if desired, or let system handle */
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
+
+        html::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: var(--color-background-cream); /* Default background */
+            cursor: none; /* Hide default cursor to use custom one */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            color: var(--color-text-dark); /* Default text color, overridden where needed */
+            line-height: 1.8; /* Enhanced readability */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Frank Ruhl Libre', serif; /* Stately, ancient feel for headings */
+            color: var(--color-secondary-gold); /* Gold headings */
+        }
+
+        /* Custom Cursor Styling - High Contrast Mandatory */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            pointer-events: none; /* Allows clicks on elements beneath */
+            z-index: 9999; /* Always on top */
+            transform: translate(-50%, -50%); /* Center cursor on mouse pointer */
+            transition: width 0.2s ease-out, height 0.2s ease-out, opacity 0.2s ease-out, border-color 0.2s ease-out, box-shadow 0.2s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* REQUIRED TECHNIQUE: High-contrast border and shadow */
+            border: 2px solid var(--color-secondary-gold); /* Gold border visible on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8), /* Dark shadow visible on light backgrounds */
+                        0 0 0 4px var(--color-primary-blue); /* Blue shadow for depth and contrast on white/yellow */
+            opacity: 0.9;
+            will-change: transform; /* Optimize animation performance */
+        }
+        .custom-cursor::before {
+            content: '';
+            position: absolute;
+            width: 0.5rem;
+            height: 0.5rem;
+            background-color: var(--color-secondary-gold); /* Inner dot */
+            border-radius: 50%;
+            opacity: 0.8;
+        }
+        /* Cursor state on hover/click */
+        .custom-cursor.active {
+            width: 3rem;
+            height: 3rem;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.1); /* Slightly enlarge on click */
+        }
+        .custom-cursor.text-hover {
+            border-color: var(--color-primary-blue); /* Swap colors on text hover */
+            box-shadow: 0 0 0 2px var(--color-secondary-gold),
+                        0 0 0 4px rgba(0, 0, 0, 0.8);
+            transform: translate(-50%, -50%) scale(0.8); /* Shrink on text hover */
+        }
+
+        /* Parallax Background Layers */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -10; /* Deeper layers further back */
+            will-change: transform; /* Optimize for transform animations */
+        }
+
+        /* Specific background layers with placeholder images */
+        #bg-layer-deep {
+            background-image: url('https://picsum.photos/seed/egypt-deep-sky/1920/1080?blur=2'); /* Distant sky/desert haze */
+            filter: brightness(0.6) grayscale(0.2);
+            z-index: -12; /* Farthest back */
+        }
+        #bg-layer-mid {
+            background-image: url('https://picsum.photos/seed/egypt-mid-pyramids/1920/1080?grayscale&blur=1'); /* Stylized distant pyramids/structures */
+            background-position: bottom center;
+            background-size: 120%; /* Slightly larger to allow horizontal/vertical movement */
+            z-index: -11; /* Middle layer */
+            opacity: 0.7;
+        }
+        #bg-layer-front {
+            background-image: url('https://picsum.photos/seed/egypt-front-hieroglyph/1920/1080'); /* Subtle hieroglyphic patterns / sand dunes */
+            background-size: 100%;
+            opacity: 0.2; /* Very subtle */
+            z-index: -10; /* Closest background layer */
+        }
+
+        /* Scroll Reveal Animation */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .scroll-reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .scroll-reveal-left {
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .scroll-reveal-left.is-visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .scroll-reveal-right {
+            opacity: 0;
+            transform: translateX(100px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .scroll-reveal-right.is-visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Gradient overlay for background to soften parallax and provide atmospheric depth */
+        .gradient-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top, rgba(240,234,214,0.1) 0%, rgba(15,44,89,0.3) 100%);
+            z-index: -9;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="text-lg leading-relaxed bg-gradient-to-br from-[var(--color-background-cream)] to-[var(--color-accent-sand)] min-h-screen">
+
+    <!-- Parallax Background Layers -->
+    <div id="bg-layer-deep" class="parallax-layer"></div>
+    <div id="bg-layer-mid" class="parallax-layer"></div>
+    <div id="bg-layer-front" class="parallax-layer"></div>
+    <div class="gradient-overlay"></div> <!-- Atmospheric overlay -->
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="custom-cursor"></div>
+
+    <!-- Main Content Container - Positioned above parallax layers -->
+    <div class="relative z-10 p-4 md:p-8 lg:p-12 max-w-7xl mx-auto backdrop-blur-sm bg-gradient-to-b from-[rgba(240,234,214,0.85)] to-[rgba(196,164,132,0.7)] shadow-2xl rounded-lg border-2 border-[var(--color-secondary-gold)] mt-8 mb-8">
+
+        <!-- Header - Stylized Title -->
+        <header class="text-center mb-16 pt-8 pb-4 border-b-2 border-dashed border-[var(--color-primary-blue)] scroll-reveal">
+            <h1 class="text-5xl md:text-7xl font-bold mb-4 text-[var(--color-primary-blue)] tracking-wide">
+                שערי ידע עתיקים נפתחים
+            </h1>
+            <h2 class="text-3xl md:text-5xl text-[var(--color-secondary-gold)] font-light mt-2 tracking-wide">
+                זאביק אבינר - מפענח סודות הבינה המלאכותית
+            </h2>
+            <p class="mt-8 text-xl md:text-2xl text-[var(--color-text-dark)] border-t-2 border-dotted border-[var(--color-accent-sand)] pt-4 max-w-4xl mx-auto">
+                <span class="text-2xl text-[var(--color-primary-blue)]">"</span> במדבר הדיגיטלי האינסופי, בו הנתונים זורמים כנהר קדמון, קם צורך חדש - להבין את לחשי הקוד, לפענח את שפת המכונה. הבינה המלאכותית, ככוח אדיר שטרם נשלט, ממתינה למדריכיה. זאביק אבינר, סופר חכמת הדור החדש, מזמין אתכם למסע אל לב הפירמידה הדיגיטלית, שם תרכשו את הכלים לשלוט בעתיד. <span class="text-2xl text-[var(--color-primary-blue)]">"</span>
+            </p>
+        </header>
+
+        <!-- Main Message Section -->
+        <section class="my-16 bg-[var(--color-primary-blue)] text-[var(--color-text-light)] p-8 md:p-12 rounded-xl shadow-inner border border-[var(--color-secondary-gold)] scroll-reveal-left">
+            <h3 class="text-4xl md:text-5xl text-[var(--color-secondary-gold)] mb-6 text-center font-bold">המסר החרוט באבן</h3>
+            <p class="text-xl md:text-2xl text-center max-w-3xl mx-auto leading-loose">
+                מטרתנו היא להפוך את הבינה המלאכותית לנגישה וישימה לכולם - מהחניך המתחיל ועד לאדריכל העילית. אנו מספקים לכם את הקמעות והכלים המעשיים שתוכלו ליישם מיד בעבודתכם ובחייכם, כדי לגלות את כוח היצירה שבכם.
+            </p>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section class="my-16 scroll-reveal-right">
+            <h3 class="text-4xl md:text-5xl text-[var(--color-primary-blue)] mb-10 text-center font-bold relative pb-4">
+                <span class="z-10 relative">מי יצעד בשבילים הקדושים הללו?</span>
+                <span class="absolute bottom-0 right-1/2 translate-x-1/2 w-24 h-1 bg-[var(--color-secondary-gold)] rounded-full"></span>
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="p-6 bg-[var(--color-background-cream)] border-2 border-[var(--color-primary-blue)] rounded-lg shadow-md text-center group hover:bg-[var(--color-primary-blue)] transition-all duration-300">
+                    <div class="text-5xl text-[var(--color-secondary-gold)] mb-4 group-hover:text-[var(--color-background-cream)]">💡</div>
+                    <h4 class="text-2xl font-semibold mb-2 text-[var(--color-primary-blue)] group-hover:text-[var(--color-secondary-gold)]">החניכים הצעירים</h4>
+                    <p class="text-[var(--color-text-dark)] group-hover:text-[var(--color-text-light)]">אלו המבקשים לראות את אור השחר של ה-AI ולהכיר את עולמותיה המופלאים.</p>
+                </div>
+                <div class="p-6 bg-[var(--color-background-cream)] border-2 border-[var(--color-primary-blue)] rounded-lg shadow-md text-center group hover:bg-[var(--color-primary-blue)] transition-all duration-300">
+                    <div class="text-5xl text-[var(--color-secondary-gold)] mb-4 group-hover:text-[var(--color-background-cream)]">👷‍♀️</div>
+                    <h4 class="text-2xl font-semibold mb-2 text-[var(--color-primary-blue)] group-hover:text-[var(--color-secondary-gold)]">אמני המקצוע</h4>
+                    <p class="text-[var(--color-text-dark)] group-hover:text-[var(--color-text-light)]">המעוניינים לגלף את ה-AI בלב עבודתם ולהטמיע אותה בכלים היומיומיים.</p>
+                </div>
+                <div class="p-6 bg-[var(--color-background-cream)] border-2 border-[var(--color-primary-blue)] rounded-lg shadow-md text-center group hover:bg-[var(--color-primary-blue)] transition-all duration-300">
+                    <div class="text-5xl text-[var(--color-secondary-gold)] mb-4 group-hover:text-[var(--color-background-cream)]">👑</div>
+                    <h4 class="text-2xl font-semibold mb-2 text-[var(--color-primary-blue)] group-hover:text-[var(--color-secondary-gold)]">בנאי הממלכה</h4>
+                    <p class="text-[var(--color-text-dark)] group-hover:text-[var(--color-text-light)]">מנהלים וארגונים השואפים להקים מבני AI מתקדמים לצוותיהם.</p>
+                </div>
+                <div class="p-6 bg-[var(--color-background-cream)] border-2 border-[var(--color-primary-blue)] rounded-lg shadow-md text-center group hover:bg-[var(--color-primary-blue)] transition-all duration-300">
+                    <div class="text-5xl text-[var(--color-secondary-gold)] mb-4 group-hover:text-[var(--color-background-cream)]">✨</div>
+                    <h4 class="text-2xl font-semibold mb-2 text-[var(--color-primary-blue)] group-hover:text-[var(--color-secondary-gold)]">אדריכלי העילית</h4>
+                    <p class="text-[var(--color-text-dark)] group-hover:text-[var(--color-text-light)]">הפועלים לבנות פרויקטים מבוססי AI, לגעת בכוכבים ולפתח פתרונות חדשניים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Section -->
+        <section class="my-16 bg-[var(--color-primary-blue)] text-[var(--color-text-light)] p-8 md:p-12 rounded-xl shadow-inner border border-[var(--color-secondary-gold)] scroll-reveal">
+            <h3 class="text-4xl md:text-5xl text-[var(--color-secondary-gold)] mb-10 text-center font-bold">מקדשי ידע: תחומי ההתמחות</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="flex items-start gap-4 p-4 border border-[var(--color-accent-sand)] rounded-lg bg-[rgba(0,0,0,0.2)]">
+                    <div class="text-4xl text-[var(--color-secondary-gold)] mt-1">📝</div>
+                    <div>
+                        <h4 class="text-2xl font-semibold text-[var(--color-secondary-gold)]">הירוגליפים דיגיטליים</h4>
+                        <p class="text-lg text-[var(--color-text-light)]">יצירת טקסטים ותוכן באמצעות קסם האלגוריתמים.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 border border-[var(--color-accent-sand)] rounded-lg bg-[rgba(0,0,0,0.2)]">
+                    <div class="text-4xl text-[var(--color-secondary-gold)] mt-1">📱</div>
+                    <div>
+                        <h4 class="text-2xl font-semibold text-[var(--color-secondary-gold)]">קמעות חכמים</h4>
+                        <p class="text-lg text-[var(--color-text-light)]">בניית אפליקציות חכמות המבינות את הצרכים.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 border border-[var(--color-accent-sand)] rounded-lg bg-[rgba(0,0,0,0.2)]">
+                    <div class="text-4xl text-[var(--color-secondary-gold)] mt-1">🌐</div>
+                    <div>
+                        <h4 class="text-2xl font-semibold text-[var(--color-secondary-gold)]">מקדשי רשת</h4>
+                        <p class="text-lg text-[var(--color-text-light)]">פיתוח אתרים מבוססי AI, שערים לעולמות חדשים.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 border border-[var(--color-accent-sand)] rounded-lg bg-[rgba(0,0,0,0.2)]">
+                    <div class="text-4xl text-[var(--color-secondary-gold)] mt-1">📊</div>
+                    <div>
+                        <h4 class="text-2xl font-semibold text-[var(--color-secondary-gold)]">פענוח מגילות סודיות</h4>
+                        <p class="text-lg text-[var(--color-text-light)]">ניתוח נתונים ומחקר, לחשוף את האמת הנסתרת.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 border border-[var(--color-accent-sand)] rounded-lg bg-[rgba(0,0,0,0.2)]">
+                    <div class="text-4xl text-[var(--color-secondary-gold)] mt-1">🎨</div>
+                    <div>
+                        <h4 class="text-2xl font-semibold text-[var(--color-secondary-gold)]">ציורי נשמה דיגיטליים</h4>
+                        <p class="text-lg text-[var(--color-text-light)]">יצירת תמונות ואומנות, להפיח חיים בפיקסלים.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-4 border border-[var(--color-accent-sand)] rounded-lg bg-[rgba(0,0,0,0.2)]">
+                    <div class="text-4xl text-[var(--color-secondary-gold)] mt-1">⚙️</div>
+                    <div>
+                        <h4 class="text-2xl font-semibold text-[var(--color-secondary-gold)]">פסלי תנועה</h4>
+                        <p class="text-lg text-[var(--color-text-light)]">אוטומציה של תהליכים, לשחרר את הידיים מעבודת הפרך.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="my-16 scroll-reveal-left">
+            <h3 class="text-4xl md:text-5xl text-[var(--color-primary-blue)] mb-10 text-center font-bold relative pb-4">
+                <span class="z-10 relative">שירותי המקדש המוצעים</span>
+                <span class="absolute bottom-0 right-1/2 translate-x-1/2 w-24 h-1 bg-[var(--color-secondary-gold)] rounded-full"></span>
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-[var(--color-accent-sand)] text-[var(--color-text-dark)] p-8 rounded-lg shadow-md border-2 border-[var(--color-primary-blue)] group hover:bg-[var(--color-primary-blue)] hover:text-[var(--color-text-light)] transition-colors duration-300">
+                    <h4 class="text-3xl font-semibold mb-4 text-[var(--color-primary-blue)] group-hover:text-[var(--color-secondary-gold)]">סדנאות המקדש הקבוצתיות</h4>
+                    <p class="text-xl">מסעות ידע מעשיים בצוותא, ממוקדים ומרתקים, לחוויית למידה משותפת ומעשירה.</p>
+                </div>
+                <div class="bg-[var(--color-accent-sand)] text-[var(--color-text-dark)] p-8 rounded-lg shadow-md border-2 border-[var(--color-primary-blue)] group hover:bg-[var(--color-primary-blue)] hover:text-[var(--color-text-light)] transition-colors duration-300">
+                    <h4 class="text-3xl font-semibold mb-4 text-[var(--color-primary-blue)] group-hover:text-[var(--color-secondary-gold)]">שיעורים פרטיים של המדריך</h4>
+                    <p class="text-xl">הכוונת כוכבים אישית, התאמה מושלמת לרמתכם ולצרכים הייחודיים שלכם.</p>
+                </div>
+                <div class="bg-[var(--color-accent-sand)] text-[var(--color-text-dark)] p-8 rounded-lg shadow-md border-2 border-[var(--color-primary-blue)] group hover:bg-[var(--color-primary-blue)] hover:text-[var(--color-text-light)] transition-colors duration-300">
+                    <h4 class="text-3xl font-semibold mb-4 text-[var(--color-primary-blue)] group-hover:text-[var(--color-secondary-gold)]">הרצאות לחצרות המלך</h4>
+                    <p class="text-xl">פתיחת אופקים לארגונים, לחשוף את פוטנציאל ה-AI בפני צוותים שלמים.</p>
+                </div>
+                <div class="bg-[var(--color-accent-sand)] text-[var(--color-text-dark)] p-8 rounded-lg shadow-md border-2 border-[var(--color-primary-blue)] group hover:bg-[var(--color-primary-blue)] hover:text-[var(--color-text-light)] transition-colors duration-300">
+                    <h4 class="text-3xl font-semibold mb-4 text-[var(--color-primary-blue)] group-hover:text-[var(--color-secondary-gold)]">ליווי בניית פירמידות</h4>
+                    <p class="text-xl">ייעוץ ופיתוח פרויקטים מבוססי AI, ליווי מקצועי צעד אחר צעד אל המטרה.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide Section (Zevik Aviner) -->
+        <section class="my-16 bg-[var(--color-primary-blue)] text-[var(--color-text-light)] p-8 md:p-12 rounded-xl shadow-inner border border-[var(--color-secondary-gold)] flex flex-col lg:flex-row items-center gap-8 scroll-reveal-right">
+            <div class="w-full lg:w-1/3 flex justify-center lg:justify-end">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר, הכהן הגדול של ה-AI" class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover border-4 border-[var(--color-secondary-gold)] shadow-lg transform hover:scale-105 transition-transform duration-300">
+            </div>
+            <div class="w-full lg:w-2/3 text-center lg:text-right">
+                <h3 class="text-4xl md:text-5xl text-[var(--color-secondary-gold)] mb-6 font-bold">זאביק אבינר - הכהן הגדול של ה-AI</h3>
+                <p class="text-xl md:text-2xl leading-loose max-w-2xl mx-auto lg:mx-0">
+                    הוא ספג את חכמת הקודים עוד בצעירותו, ופענח אלפי מגילות דיגיטליות. זאביק אינו רק מומחה, הוא גשר בין העולמות - בין עתיקות המידע לחדשנות המחשבה. בידיו הכוח להפוך את המורכב לפשוט, את הבלתי מושג לישים. הוא המורה, המדריך והמלווה שלכם במסע אל שליטה בבינה המלאכותית.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="my-16 text-center scroll-reveal-left">
+            <h3 class="text-4xl md:text-5xl text-[var(--color-primary-blue)] mb-10 font-bold relative pb-4">
+                <span class="z-10 relative">כתבו על מגילות המגע: הדרך אלינו</span>
+                <span class="absolute bottom-0 right-1/2 translate-x-1/2 w-24 h-1 bg-[var(--color-secondary-gold)] rounded-full"></span>
+            </h3>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-8 text-2xl md:text-3xl font-medium">
+                <a href="https://wa.me/972546609385" target="_blank" class="flex items-center gap-4 bg-[var(--color-secondary-gold)] text-[var(--color-primary-blue)] py-4 px-8 rounded-full shadow-lg hover:bg-[var(--color-primary-blue)] hover:text-[var(--color-secondary-gold)] transition-colors duration-300 group">
+                    <span class="text-4xl">📞</span>
+                    <span>לחשו בקול: 054-6609385</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="flex items-center gap-4 bg-[var(--color-secondary-gold)] text-[var(--color-primary-blue)] py-4 px-8 rounded-full shadow-lg hover:bg-[var(--color-primary-blue)] hover:text-[var(--color-secondary-gold)] transition-colors duration-300 group">
+                    <span class="text-4xl">✉️</span>
+                    <span>שלחו יונת דואר דיגיטלית: zaviner@gmail.com</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer - A simple artistic touch -->
+        <footer class="text-center mt-16 pt-8 border-t-2 border-dotted border-[var(--color-primary-blue)] text-[var(--color-text-dark)] text-sm opacity-70 scroll-reveal">
+            <p>&copy; 2023 זאביק אבינר - כל הזכויות שמורות לחכמת הדורות החדשה.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        
+        // Update cursor position on mouse movement
+        document.addEventListener('mousemove', e => {
+            cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        });
+
+        // Add 'active' class on mouse down, remove on mouse up for visual feedback
+        document.addEventListener('mousedown', () => cursor.classList.add('active'));
+        document.addEventListener('mouseup', () => cursor.classList.remove('active'));
+
+        // Text hover effect for cursor
+        // Selects interactive elements for cursor transformation
+        const interactiveElements = document.querySelectorAll('a, button, input[type="submit"], .group, img');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('text-hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('text-hover'));
+        });
+
+
+        // Parallax Scrolling Logic
+        const deepLayer = document.getElementById('bg-layer-deep');
+        const midLayer = document.getElementById('bg-layer-mid');
+        const frontLayer = document.getElementById('bg-layer-front');
+        
+        // Listen to scroll event to apply parallax effect
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+
+            // Adjust these multipliers for different parallax speeds.
+            // Smaller multiplier for deeper layers, larger for closer ones.
+            deepLayer.style.transform = `translateY(${scrollY * 0.04}px)`;
+            midLayer.style.transform = `translateY(${scrollY * 0.08}px)`;
+            frontLayer.style.transform = `translateY(${scrollY * 0.15}px)`;
+        });
+
+        // Scroll Reveal Animation Logic using Intersection Observer
+        const scrollRevealElements = document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right');
+
+        const observerOptions = {
+            root: null, // viewport is the root
+            rootMargin: '0px', // No margin
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Stop observing once visible to prevent re-triggering
+                }
+            });
+        }, observerOptions);
+
+        // Observe each scroll-reveal element
+        scrollRevealElements.forEach(el => {
+            observer.observe(el);
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אמנות מושגית: שליטה בבינה המלאכותית</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Rubik:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Heebo', sans-serif; /* Primary content font */
+            background-color: #0d012e; /* Deep dark background */
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            color: #e0e0e0; /* Default text color for body */
+        }
+
+        /* Custom Cursor Styling */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease-out; /* Smooth movement */
+            border: 2px solid #FFFFFF; /* White border for visibility on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 15px rgba(138, 43, 226, 0.7); /* Dark shadow for visibility on light backgrounds + glow */
+        }
+        .custom-cursor-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background-color: #8A2BE2; /* Violet accent */
+            border-radius: 50%;
+        }
+
+        /* Conceptual Reveal Effect */
+        .concept-element {
+            filter: blur(8px); /* Starts blurred */
+            opacity: 0.2; /* Starts dim */
+            transform: scale(0.98);
+            transition: filter 0.8s ease-out, opacity 0.8s ease-out, transform 0.8s ease-out;
+            pointer-events: none; /* No interaction until revealed */
+        }
+        .concept-element.revealed {
+            filter: blur(0px);
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto; /* Make links clickable when revealed */
+        }
+
+        /* Animated Background Gradient */
+        .animated-bg {
+            background: linear-gradient(-45deg, #0d012e, #2e004a, #001a4d, #0d012e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Entry Animation for text/blocks */
+        @keyframes fadeInScale {
+            from { opacity: 0; transform: scale(0.8) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animated-entry {
+            animation: fadeInScale 1s ease-out forwards;
+            opacity: 0; /* Ensure elements start invisible before animation */
+        }
+
+        /* Digital Grid Overlay */
+        .conceptual-grid {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            opacity: 0.08; /* Subtle grid */
+            background-image: linear-gradient(to right, #ffffff0d 1px, transparent 1px),
+                              linear-gradient(to bottom, #ffffff0d 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 0; /* Behind content */
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden relative">
+
+    <div class="conceptual-grid"></div>
+
+    <div id="custom-cursor" class="custom-cursor">
+        <div class="custom-cursor-inner"></div>
+    </div>
+
+    <div class="min-h-screen flex flex-col items-center justify-center p-4 relative z-10 animated-bg">
+        <div class="max-w-4xl text-center space-y-12 md:space-y-16 lg:space-y-20 p-4 sm:p-8">
+
+            <!-- Core Concept Statement -->
+            <h1 class="text-6xl md:text-8xl font-extrabold leading-tight tracking-wider text-[#9333ea] font-['Rubik'] drop-shadow-lg animated-entry" style="animation-delay: 0.2s;">
+                הבינה המלאכותית:<br> קריאה לעתיד, כאן ועכשיו.
+            </h1>
+
+            <div class="space-y-8 mt-16 text-lg md:text-xl font-light text-gray-200">
+                <!-- Section 1: Introduction / Thesis -->
+                <p class="concept-element animated-entry" style="animation-delay: 0.8s;">
+                    בעידן שבו הקוד מתמזג עם הדמיון, והלוגיקה פוגשת את האינטואיציה, הבינה המלאכותית אינה עוד מדע בדיוני- היא שפה חדשה. שפה המגדירה מחדש את גבולות היצירה, היעילות וההבנה. האמנות אינה רק במה שהעין רואה, אלא בקונספט הנרקם מאחורי הקלעים.
+                </p>
+                <p class="concept-element animated-entry" style="animation-delay: 1.2s;">
+                    אנו חיים בפתחו של טרנספורמציה דיגיטלית חסרת תקדים. למד לשלוט בכלי הבריאה הזה, והפוך ממסתכל למעצב. כי העתיד אינו ממתין- הוא כבר כאן, בידיים שלך.
+                </p>
+
+                <!-- Section 2: Audience / Vision -->
+                <div class="flex flex-wrap justify-center gap-8 mt-16 md:mt-24">
+                    <div class="p-6 bg-white bg-opacity-5 backdrop-filter backdrop-blur-sm rounded-lg shadow-xl concept-element w-full sm:w-80 animated-entry" style="animation-delay: 1.6s;">
+                        <h3 class="text-2xl font-bold text-[#fbcfe8] mb-4">למי נועד המסע?</h3>
+                        <ul class="list-none space-y-2 text-right">
+                            <li><span class="text-[#8A2BE2] text-xl ml-2">◀</span> חוקרי סף - מתחילים בנתיב הדיגיטלי.</li>
+                            <li><span class="text-[#8A2BE2] text-xl ml-2">◀</span> מחדשי מקצוע - משלבים AI בשגרת עבודתם.</li>
+                            <li><span class="text-[#8A2BE2] text-xl ml-2">◀</span> מנהיגי חזון - מובילים צוותים לעתיד.</li>
+                            <li><span class="text-[#8A2BE2] text-xl ml-2">◀</span> אדריכלי פרויקטים - בוני המחר.</li>
+                        </ul>
+                    </div>
+                    <div class="p-6 bg-white bg-opacity-5 backdrop-filter backdrop-blur-sm rounded-lg shadow-xl concept-element w-full sm:w-80 animated-entry" style="animation-delay: 2.0s;">
+                        <h3 class="text-2xl font-bold text-[#fbcfe8] mb-4">תחומי ההתמרה</h3>
+                        <ul class="list-none space-y-2 text-right">
+                            <li><span class="text-[#8A2BE2] text-xl ml-2">◀</span> יצירת טקסטים - שירה של מכונות.</li>
+                            <li><span class="text-[#8A2BE2] text-xl ml-2">◀</span> אפליקציות חכמות - תבונה בכף היד.</li>
+                            <li><span class="text-[#8A2BE2] text-xl ml-2">◀</span> אתרי AI - מרחבים דיגיטליים חושבים.</li>
+                            <li><span class="text-[#8A2BE2] text-xl ml-2">◀</span> ניתוח נתונים - גילוי דפוסים נסתרים.</li>
+                            <li><span class="text-[#8A2BE2] text-xl ml-2">◀</span> אמנות ודימויים - דמיון מתוכנת.</li>
+                            <li><span class="text-[#8A2BE2] text-xl ml-2">◀</span> אוטומציה - ריקוד התהליכים.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Section 3: Services as "Pathways" -->
+                <div class="mt-16 md:mt-24 text-right space-y-6">
+                    <h2 class="text-4xl md:text-5xl font-bold text-[#fbcfe8] mb-6 concept-element animated-entry" style="animation-delay: 2.4s;">
+                        נתיבי ההארה
+                    </h2>
+                    <p class="text-lg md:text-xl concept-element animated-entry" style="animation-delay: 2.8s;">
+                        המסע אל לב הבינה המלאכותית מתחיל בבחירה. כל נתיב הוא שער לעולם של ידע ויישום:
+                    </p>
+                    <ul class="list-none space-y-4 text-right pr-4">
+                        <li class="p-4 bg-white bg-opacity-5 backdrop-filter backdrop-blur-sm rounded-lg concept-element animated-entry" style="animation-delay: 3.2s;">
+                            <h4 class="text-2xl font-bold text-[#8A2BE2] mb-2">סדנאות קבוצתיות: קהילות תובנה</h4>
+                            <p>מפגשים דינמיים ומונחי מטרה, לחשיפת כוחה המעשי של הבינה המלאכותית ביחד. חשיבה משותפת, יצירה משותפת.</p>
+                        </li>
+                        <li class="p-4 bg-white bg-opacity-5 backdrop-filter backdrop-blur-sm rounded-lg concept-element animated-entry" style="animation-delay: 3.6s;">
+                            <h4 class="text-2xl font-bold text-[#8A2BE2] mb-2">שיעורים פרטיים: התאמה אישית של ידע</h4>
+                            <p>ליווי צמוד וממוקד, המותאם לקצב, לרמה ולשאיפות האישיות שלך. פתרון חידות AI בהנחיה ישירה.</p>
+                        </li>
+                        <li class="p-4 bg-white bg-opacity-5 backdrop-filter backdrop-blur-sm rounded-lg concept-element animated-entry" style="animation-delay: 4.0s;">
+                            <h4 class="text-2xl font-bold text-[#8A2BE2] mb-2">הרצאות לארגונים: פריצת גבולות חשיבה</h4>
+                            <p>העצמת צוותים בחזית החדשנות, פתיחת אופקים אסטרטגיים ועידוד תרבות של יצירתיות מבוססת AI.</p>
+                        </li>
+                        <li class="p-4 bg-white bg-opacity-5 backdrop-filter backdrop-blur-sm rounded-lg concept-element animated-entry" style="animation-delay: 4.4s;">
+                            <h4 class="text-2xl font-bold text-[#8A2BE2] mb-2">ייעוץ ופיתוח פרויקטים: בניית העתיד הלכה למעשה</h4>
+                            <p>מליווי רעיוני ועד יישום טכנולוגי - להפוך חזון למציאות באמצעות פרויקטים מבוססי בינה מלאכותית.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Section 4: The Guide -->
+                <div class="mt-20 md:mt-32 flex flex-col md:flex-row items-center justify-center gap-8 bg-white bg-opacity-5 backdrop-filter backdrop-blur-sm rounded-lg p-8 concept-element animated-entry" style="animation-delay: 4.8s;">
+                    <div class="flex-shrink-0 mb-6 md:mb-0 md:ml-8">
+                        <img src="https://link.zevikaviner.com/zevik" alt="תמונה קטנה של זאביק אבינר" class="w-32 h-32 rounded-full border-4 border-[#8A2BE2] shadow-lg">
+                    </div>
+                    <div class="text-right flex-grow">
+                        <h2 class="text-4xl md:text-5xl font-bold text-[#fbcfe8] mb-4">זאביק אבינר: אדריכל התובנה</h2>
+                        <p class="text-lg md:text-xl leading-relaxed">
+                            מורה דרך ומנטור, זאביק אבינר מביא איתו ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI. הוא מומחה בהנגשת הטכנולוגיה המורכבת והפיכתה לכלי יומיומי עוצמתי, זמין לכל יד ולכל רעיון.
+                        </p>
+                        <div class="mt-6 text-xl space-y-2">
+                            <p><strong><span class="text-[#8A2BE2]">✉️</span> אימייל:</strong> <a href="mailto:zaviner@gmail.com" class="text-blue-300 hover:underline">zaviner@gmail.com</a></p>
+                            <p><strong><span class="text-[#8A2BE2]">📱</span> ווטסאפ:</strong> <a href="https://wa.me/972546609385" class="text-blue-300 hover:underline">054-6609385</a></p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const customCursor = document.getElementById('custom-cursor');
+        const conceptElements = document.querySelectorAll('.concept-element');
+        const contentContainer = document.querySelector('.animated-bg'); // The main scrollable container
+
+        // Custom Cursor Movement
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // Intersection Observer for initial animated entry
+        const entryObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100'); // Triggers 'animated-entry' fade-in
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 }); // Trigger when 10% of element is visible
+
+        document.querySelectorAll('.animated-entry').forEach(el => {
+            entryObserver.observe(el);
+        });
+
+        // Reveal effect based on cursor proximity
+        let isThrottled = false;
+        const throttleDelay = 50; // milliseconds
+
+        contentContainer.addEventListener('mousemove', (e) => {
+            if (isThrottled) return;
+
+            isThrottled = true;
+            requestAnimationFrame(() => {
+                conceptElements.forEach(el => {
+                    // Only process elements that are already visible (finished their initial animation)
+                    if (el.classList.contains('opacity-100') || !el.classList.contains('animated-entry')) {
+                        const rect = el.getBoundingClientRect();
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+
+                        const distance = Math.sqrt(
+                            Math.pow(e.clientX - centerX, 2) +
+                            Math.pow(e.clientY - centerY, 2)
+                        );
+
+                        const revealRadius = Math.min(window.innerWidth / 3, 400); // Dynamic reveal radius
+                        if (distance < revealRadius) {
+                            el.classList.add('revealed');
+                        } else {
+                            el.classList.remove('revealed');
+                        }
+                    }
+                });
+                isThrottled = false;
+            });
+        });
+
+        // For elements that are initially in the viewport and don't have animated-entry, ensure they get the conceptual blur state
+        window.addEventListener('load', () => {
+            conceptElements.forEach(el => {
+                // This targets elements that are conceptual but perhaps not animated on entry
+                // or after the animation has completed and left them at full opacity
+                if (!el.classList.contains('animated-entry')) { // If it's not waiting for an entry animation
+                    el.classList.add('concept-element'); // Ensure it has the base conceptual style
+                }
+                // If it *does* have animated-entry, the animation brings it to opacity:1,
+                // and then the .concept-element styles (blur/dim) apply, unless 'revealed'
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שליטה בבינה המלאכותית – העתיד הוא עכשיו | זאביק אבינר</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for Matte Painting aesthetic and RTL */
+        body {
+            font-family: 'Heebo', sans-serif;
+            cursor: none; /* Hide default cursor to use custom one */
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax */
+            background-color: #0d0d1a; /* Very dark blue-purple base */
+        }
+        h1, h2, h3 {
+            font-family: 'Rubik', sans-serif;
+        }
+
+        /* Custom Cursor Styling - High Contrast Mandatory */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none; /* Allows interaction with elements beneath */
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* Light border for visibility on dark */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), /* Dark shadow for visibility on light */
+                        0 0 15px rgba(100,255,255,0.7); /* Ethereal glow for artistic effect */
+            transform: translate(-50%, -50%); /* Center cursor accurately */
+            transition: transform 0.1s ease-out, width 0.2s ease-out, height 0.2s ease-out, box-shadow 0.2s ease-out;
+            z-index: 9999; /* Ensure it's always on top */
+        }
+        .link-hover #custom-cursor {
+            width: 30px;
+            height: 30px;
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8),
+                        0 0 25px rgba(100,255,255,0.9); /* More pronounced glow on hover */
+        }
+
+        /* Matte Painting Background Layers for Parallax */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -10; /* Place behind all content */
+            pointer-events: none; /* Do not interfere with mouse events */
+            will-change: transform; /* Optimize for animation */
+        }
+
+        /* Layer 1: Deepest, slowest - Atmospheric gradient */
+        #layer-1 {
+            background: radial-gradient(circle at 80% 20%, rgba(10, 10, 30, 0.5) 0%, rgba(13, 13, 26, 0.9) 70%, #080810 100%),
+                        linear-gradient(135deg, rgba(20, 20, 60, 0.2) 0%, rgba(5, 5, 15, 0.5) 100%);
+        }
+        /* Layer 2: Middle ground, faster - Subtle procedural texture (SVG) */
+        #layer-2 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><defs><filter id="f1"><feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="3" result="noise" /><feColorMatrix in="noise" type="matrix" values="0 0 0 0 0, 0 0 0 0 0, 0 0 0 0 0, 0 0 0 0.2 0" /></filter></defs><rect width="100%" height="100%" fill="none" filter="url(%23f1)" /></svg>');
+            opacity: 0.15;
+            transform: scale(1.05); /* Slightly larger for parallax effect */
+            filter: blur(1px); /* Soften the texture */
+        }
+        /* Layer 3: Foreground, fastest - Ethereal light sources */
+        #layer-3 {
+            background-image: radial-gradient(circle at 15% 85%, rgba(100,255,255,0.08) 0%, transparent 40%),
+                              radial-gradient(circle at 90% 10%, rgba(200,100,255,0.08) 0%, transparent 35%);
+            opacity: 0.2;
+            transform: scale(1.1);
+            filter: blur(0.5px);
+        }
+
+        /* Main content wrapper - ensure it sits above parallax layers */
+        .content-wrapper {
+            position: relative;
+            z-index: 1; /* Always on top of background layers */
+            background-color: rgba(0,0,0,0.2); /* Subtle overlay for text readability */
+            min-height: 100vh; /* Ensure it covers full height */
+            padding-bottom: 8rem; /* Space for footer/contact */
+        }
+
+        /* Smooth scrolling for navigation */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Subtle glow animation for hero title */
+        @keyframes pulse-light {
+            0%, 100% {
+                text-shadow: 0 0 8px rgba(100,255,255,0.6), 0 0 16px rgba(100,255,255,0.3);
+            }
+            50% {
+                text-shadow: 0 0 12px rgba(100,255,255,0.8), 0 0 24px rgba(100,255,255,0.5);
+            }
+        }
+        .animate-pulse-light {
+            animation: pulse-light 4s infinite ease-in-out;
+        }
+    </style>
+    <script>
+        // Tailwind CSS Configuration
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ai-primary': '#64FFFF', /* Electric cyan for primary accents */
+                        'ai-secondary': '#C864FF', /* Deep magenta for secondary accents */
+                        'ai-dark': '#0d0d1a', /* Very dark blue-purple for base and deep shadows */
+                        'ai-light-gray': '#e0e0e0', /* Light gray for main text - high contrast */
+                    },
+                    fontFamily: {
+                        heebo: ['Heebo', 'sans-serif'],
+                        rubik: ['Rubik', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-ai-light-gray antialiased">
+    <!-- Custom Cursor Element -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div id="layer-1" class="parallax-layer"></div>
+    <div id="layer-2" class="parallax-layer"></div>
+    <div id="layer-3" class="parallax-layer"></div>
+
+    <main class="content-wrapper">
+        <!-- Hero Section - The Grand Overture -->
+        <section class="min-h-screen flex items-center justify-center relative px-4 md:px-8 text-center" style="background: radial-gradient(circle at 50% 10%, rgba(100,255,255,0.08) 0%, transparent 30%);">
+            <div class="max-w-4xl mx-auto py-24 md:py-32">
+                <h1 class="text-5xl md:text-7xl font-rubik font-bold text-ai-primary leading-tight mb-6 animate-pulse-light">
+                    <span class="block">למד לשלוט בבינה המלאכותית</span>
+                    <span class="block text-3xl md:text-5xl text-ai-light-gray mt-4">העתיד הוא עכשיו - והוא בידיים שלך</span>
+                </h1>
+                <p class="text-lg md:text-xl text-ai-light-gray opacity-80 mb-10 max-w-2xl mx-auto font-heebo">
+                    בעולם המשתנה במהירות הבזק, AI הוא כבר לא מדע בדיוני, אלא הזרז האולטימטיבי לחדשנות
+                    ולהגשמת חזונות. הצטרף למסע שיהפוך אותך ממסתכל - לארכיטקט דיגיטלי, ממעצב - למגשים.
+                </p>
+                <a href="#services" class="inline-block bg-ai-secondary text-white font-rubik text-xl py-4 px-10 rounded-full hover:bg-opacity-90 transition duration-300 transform hover:scale-105 shadow-lg relative overflow-hidden group">
+                    <span class="absolute inset-0 bg-gradient-to-r from-ai-primary to-ai-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-500"></span>
+                    <span class="relative z-10">התחל את המסע שלך ב-AI</span>
+                </a>
+            </div>
+            <div class="absolute bottom-10 right-10 text-ai-light-gray text-opacity-60 text-sm md:text-base">
+                <p>בהנחיית זאביק אבינר - מומחה בינה מלאכותית</p>
+            </div>
+        </section>
+
+        <!-- Vision / Core Message Section - Unveiling the AI Canvas -->
+        <section class="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-t from-ai-dark to-transparent relative overflow-hidden">
+            <div class="max-w-5xl mx-auto text-center relative z-10">
+                <h2 class="text-4xl md:text-5xl font-rubik font-bold text-ai-secondary mb-8 leading-snug">
+                    לפרוץ את גבולות היכולת - AI ככלי יצירה וצמיחה אינסופית
+                </h2>
+                <p class="text-lg md:text-xl text-ai-light-gray max-w-3xl mx-auto mb-6 opacity-90 font-heebo leading-relaxed">
+                    הבינה המלאכותית אינה רק טכנולוגיה, היא שפה חדשה של יצירה, כלי אמנותי רב עוצמה,
+                    וזרז לחדשנות בלתי פוסקת. אנו מנגישים את הכוח הטרנספורמטיבי הזה לכולם –
+                    מהצעד הראשון ועד פיתוח פרויקטים מורכבים המשנים מציאות.
+                    הצטרפו אלינו ללמוד כיצד ליישם AI באופן מיידי וחכם בחייכם ובעבודתכם.
+                </p>
+                <div class="grid md:grid-cols-2 gap-10 mt-16 text-right">
+                    <div class="p-8 bg-black bg-opacity-30 rounded-lg shadow-xl border border-ai-primary border-opacity-20 transform hover:scale-105 transition duration-300">
+                        <h3 class="text-3xl font-rubik font-semibold text-ai-primary mb-4 flex items-center justify-end">
+                            נגישות בלתי מתפשרת
+                            <svg class="w-8 h-8 ml-3 text-ai-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.275a1.125 1.125 0 011.233 1.579L20.8 17.15A4.5 4.5 0 0116.15 21l-4.238-1.782a1.125 1.125 0 01-1.233-1.579l1.5-3.003a1.125 1.125 0 011.579-1.233l3.003 1.5c.66.33 1.408.093 1.738-.567zM16.002 8.783L14.246 6.52a.75.75 0 00-1.214.153L10.323 11.25H9.25a.75.75 0 00-.75.75v1.75a.75.75 0 00.75.75h1.5l-3.353 5.37a.75.75 0 001.214.152l1.756-2.263a.75.75 0 00.182-.871l-1.458-2.917a.75.75 0 00-.735-.458H8.5V11h-.75V8.5h.75V11H14.18l-1.39-2.222a.75.75 0 00-.154-1.214l-2.262-1.757a.75.75 0 00-.87.182l-2.917 1.458a.75.75 0 00-.458.735v1.5a.75.75 0 00.75.75h1.75l5.37-3.353a.75.75 0 00.152-1.214zM12 11.25V13.5M17.25 10.5V12"></path></svg>
+                        </h3>
+                        <p class="text-md text-ai-light-gray font-heebo">
+                            הדרכות אינטואיטיביות, מותאמות אישית, שמפרקות את המורכבות המדומה של AI
+                            לשלבים קלים להבנה וליישום פרקטי, לכל רמה של ידע וניסיון מוקדם.
+                        </p>
+                    </div>
+                    <div class="p-8 bg-black bg-opacity-30 rounded-lg shadow-xl border border-ai-secondary border-opacity-20 transform hover:scale-105 transition duration-300">
+                        <h3 class="text-3xl font-rubik font-semibold text-ai-secondary mb-4 flex items-center justify-end">
+                            כלים ליישום מיידי ומוחשי
+                            <svg class="w-8 h-8 ml-3 text-ai-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </h3>
+                        <p class="text-md text-ai-light-gray font-heebo">
+                            מעבר לתיאוריה - אנחנו מתמקדים בכלים, שיטות עבודה וטקטיקות עכשוויות
+                            שניתן לשלב באופן מיידי בעבודה, בקריירה ובפרויקטים האישיים שלך, כבר מחר בבוקר.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-r from-ai-primary to-ai-secondary opacity-5 blur-3xl z-0"></div>
+        </section>
+
+        <!-- Target Audience Section - Who Will Command the Future? -->
+        <section class="py-20 md:py-32 px-4 md:px-8 bg-black bg-opacity-40">
+            <div class="max-w-5xl mx-auto text-center relative z-10">
+                <h2 class="text-4xl md:text-5xl font-rubik font-bold text-ai-primary mb-12">
+                    למי המסע הדיגיטלי המהפכני הזה נועד?
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 text-right">
+                    <div class="p-6 bg-ai-dark bg-opacity-70 rounded-lg shadow-lg border border-gray-700 hover:border-ai-primary transition duration-300 transform hover:translate-y-[-5px]">
+                        <h3 class="text-2xl font-rubik font-semibold text-ai-light-gray mb-3 flex items-center justify-end">
+                            <span class="ml-3 text-ai-primary">●</span>מתחילים סקרנים
+                        </h3>
+                        <p class="text-md text-gray-300 font-heebo">
+                            מבוא מרתק לעולם ה-AI, בניית הבנה יסודית ללא צורך בידע מוקדם. צעדיך הראשונים בעולם הדיגיטלי החדש.
+                        </p>
+                    </div>
+                    <div class="p-6 bg-ai-dark bg-opacity-70 rounded-lg shadow-lg border border-gray-700 hover:border-ai-secondary transition duration-300 transform hover:translate-y-[-5px]">
+                        <h3 class="text-2xl font-rubik font-semibold text-ai-light-gray mb-3 flex items-center justify-end">
+                            <span class="ml-3 text-ai-secondary">●</span>אנשי מקצוע מתפתחים
+                        </h3>
+                        <p class="text-md text-gray-300 font-heebo">
+                            לשדרג את היכולות המקצועיות ולהטמיע כלים חכמים בשגרת העבודה היומיומית, להוביל בתחומך.
+                        </p>
+                    </div>
+                    <div class="p-6 bg-ai-dark bg-opacity-70 rounded-lg shadow-lg border border-gray-700 hover:border-ai-primary transition duration-300 transform hover:translate-y-[-5px]">
+                        <h3 class="text-2xl font-rubik font-semibold text-ai-light-gray mb-3 flex items-center justify-end">
+                            <span class="ml-3 text-ai-primary">●</span>מנהלים וארגונים אסטרטגיים
+                        </h3>
+                        <p class="text-md text-gray-300 font-heebo">
+                            להוביל חדשנות, לייעל תהליכים ולחשוף את צוותי העבודה לפוטנציאל העצום של ה-AI.
+                        </p>
+                    </div>
+                    <div class="p-6 bg-ai-dark bg-opacity-70 rounded-lg shadow-lg border border-gray-700 hover:border-ai-secondary transition duration-300 transform hover:translate-y-[-5px]">
+                        <h3 class="text-2xl font-rubik font-semibold text-ai-light-gray mb-3 flex items-center justify-end">
+                            <span class="ml-3 text-ai-secondary">●</span>מפתחי פרויקטים מתקדמים
+                        </h3>
+                        <p class="text-md text-gray-300 font-heebo">
+                            לצלול לעומק הפיתוח, ליצור פרויקטים מבוססי AI מורכבים ולממש רעיונות פורצי דרך.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Specializations Section - The Spectrum of AI Manifestations -->
+        <section class="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-b from-ai-dark to-transparent relative overflow-hidden">
+            <div class="max-w-5xl mx-auto text-center relative z-10">
+                <h2 class="text-4xl md:text-5xl font-rubik font-bold text-ai-secondary mb-12">
+                    היכן ה-AI פורש כנפיים ויוצר? תחומי התמחות מרכזיים
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 text-right">
+                    <div class="group p-6 bg-black bg-opacity-30 rounded-xl shadow-lg border border-ai-primary border-opacity-10 hover:border-opacity-40 transition duration-300">
+                        <h3 class="text-2xl font-rubik font-semibold text-ai-primary mb-3 flex items-center justify-end">
+                            <svg class="w-7 h-7 ml-3 group-hover:text-white transition duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                            יצירת טקסטים ותוכן פורץ דרך
+                        </h3>
+                        <p class="text-md text-gray-300 font-heebo">
+                            ממאמרים שובי לב ועד קמפיינים שיווקיים וקריאייטיב - לימדו להפיק תוכן איכותי בזמני שיא ובאינסוף שפות.
+                        </p>
+                    </div>
+                    <div class="group p-6 bg-black bg-opacity-30 rounded-xl shadow-lg border border-ai-secondary border-opacity-10 hover:border-opacity-40 transition duration-300">
+                        <h3 class="text-2xl font-rubik font-semibold text-ai-secondary mb-3 flex items-center justify-end">
+                            <svg class="w-7 h-7 ml-3 group-hover:text-white transition duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                            בניית אפליקציות חכמות ואינטואיטיביות
+                        </h3>
+                        <p class="text-md text-gray-300 font-heebo">
+                            הכירו את הכלים והמתודולוגיות לבניית יישומים המשלבים יכולות AI מתקדמות וחווית משתמש עילאית.
+                        </p>
+                    </div>
+                    <div class="group p-6 bg-black bg-opacity-30 rounded-xl shadow-lg border border-ai-primary border-opacity-10 hover:border-opacity-40 transition duration-300">
+                        <h3 class="text-2xl font-rubik font-semibold text-ai-primary mb-3 flex items-center justify-end">
+                            <svg class="w-7 h-7 ml-3 group-hover:text-white transition duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                            פיתוח אתרים מבוססי AI ומסחר אלקטרוני
+                        </h3>
+                        <p class="text-md text-gray-300 font-heebo">
+                            מהפכה בעולם ה-Web – אתרים חכמים המגיבים למשתמשים, מתפתחים עם הנתונים ומספקים חוויה אישית.
+                        </p>
+                    </div>
+                    <div class="group p-6 bg-black bg-opacity-30 rounded-xl shadow-lg border border-ai-secondary border-opacity-10 hover:border-opacity-40 transition duration-300">
+                        <h3 class="text-2xl font-rubik font-semibold text-ai-secondary mb-3 flex items-center justify-end">
+                            <svg class="w-7 h-7 ml-3 group-hover:text-white transition duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                            ניתוח נתונים ומחקר אסטרטגי
+                        </h3>
+                        <p class="text-md text-gray-300 font-heebo">
+                            פענוח תובנות מורכבות, זיהוי מגמות חבויות וקבלת החלטות מבוססות נתונים מדויקות בעזרת AI.
+                        </p>
+                    </div>
+                    <div class="group p-6 bg-black bg-opacity-30 rounded-xl shadow-lg border border-ai-primary border-opacity-10 hover:border-opacity-40 transition duration-300">
+                        <h3 class="text-2xl font-rubik font-semibold text-ai-primary mb-3 flex items-center justify-end">
+                            <svg class="w-7 h-7 ml-3 group-hover:text-white transition duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m-4 8h4m10-4h4m-4 8h4M3 12h18"></path></svg>
+                            יצירת תמונות, וידאו ואומנות דיגיטלית
+                        </h3>
+                        <p class="text-md text-gray-300 font-heebo">
+                            הבינה המלאכותית ככלי חסר תקדים להפקת ויזואליזציות מרהיבות, אומנות דיגיטלית ועיצוב.
+                        </p>
+                    </div>
+                    <div class="group p-6 bg-black bg-opacity-30 rounded-xl shadow-lg border border-ai-secondary border-opacity-10 hover:border-opacity-40 transition duration-300">
+                        <h3 class="text-2xl font-rubik font-semibold text-ai-secondary mb-3 flex items-center justify-end">
+                            <svg class="w-7 h-7 ml-3 group-hover:text-white transition duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                            אוטומציה של תהליכים עסקיים
+                        </h3>
+                        <p class="text-md text-gray-300 font-heebo">
+                            ייעול ודיגיטציה של משימות חוזרות ונשנות, פינוי זמן יקר ליצירה, חדשנות וקבלת החלטות אנושית.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section - Your Pathways to Mastery -->
+        <section id="services" class="py-20 md:py-32 px-4 md:px-8 bg-black bg-opacity-50 relative overflow-hidden">
+            <div class="max-w-5xl mx-auto text-center relative z-10">
+                <h2 class="text-4xl md:text-5xl font-rubik font-bold text-ai-primary mb-12">
+                    הנתיבים שלך לשליטה מלאה בבינה המלאכותית
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 text-right">
+                    <div class="group p-8 bg-ai-dark bg-opacity-80 rounded-xl shadow-2xl border border-ai-primary border-opacity-20 transform hover:scale-105 transition duration-300 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-ai-primary to-transparent opacity-10 group-hover:opacity-20 transition-opacity duration-500"></div>
+                        <h3 class="text-3xl font-rubik font-bold text-ai-light-gray mb-4 flex items-center justify-end">
+                            סדנאות קבוצתיות מעשיות
+                            <svg class="w-9 h-9 ml-3 text-ai-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h2a2 2 0 002-2V4a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2h2m3-10h4m-4 0v4m-4-7h10a2 2 0 012 2v7a2 2 0 01-2 2H7a2 2 0 01-2-2V7a2 2 0 012-2z"></path></svg>
+                        </h3>
+                        <p class="text-lg text-gray-300 font-heebo mb-6">
+                            הצטרפו לקבוצות למידה דינמיות ואינטראקטיביות, בהן נצלול יחד לעולם ה-AI עם תרגילים מעשיים,
+                            דוגמאות מהשטח ודיונים פתוחים. חווית למידה משותפת, מעשירה ומרתקת.
+                        </p>
+                        <ul class="list-disc pr-6 text-md text-gray-400 font-heebo">
+                            <li>מבוא מקיף לכלים מובילים</li>
+                            <li>פיתוח פרויקטים קטנים בזמן אמת</li>
+                            <li>שאלות ותשובות מקיפות וליווי קבוצתי</li>
+                        </ul>
+                    </div>
+                    <div class="group p-8 bg-ai-dark bg-opacity-80 rounded-xl shadow-2xl border border-ai-secondary border-opacity-20 transform hover:scale-105 transition duration-300 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-ai-secondary to-transparent opacity-10 group-hover:opacity-20 transition-opacity duration-500"></div>
+                        <h3 class="text-3xl font-rubik font-bold text-ai-light-gray mb-4 flex items-center justify-end">
+                            שיעורים פרטיים - מסלול מותאם אישית
+                            <svg class="w-9 h-9 ml-3 text-ai-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </h3>
+                        <p class="text-lg text-gray-300 font-heebo mb-6">
+                            למידה אחד על אחד המותאמת בדיוק לרמת הידע, קצב ההתקדמות והיעדים האישיים שלך.
+                            התמקדות מעמיקה בנושאים שמעניינים אותך באמת, עם ליווי צמוד ופרקטיקה מתמדת.
+                        </p>
+                        <ul class="list-disc pr-6 text-md text-gray-400 font-heebo">
+                            <li>תוכנית לימודים אישית וממוקדת</li>
+                            <li>פתרון בעיות ואתגרים ספציפיים</li>
+                            <li>הכוונה מקצועית לפרויקטים אישיים</li>
+                        </ul>
+                    </div>
+                    <div class="group p-8 bg-ai-dark bg-opacity-80 rounded-xl shadow-2xl border border-ai-primary border-opacity-20 transform hover:scale-105 transition duration-300 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-ai-primary to-transparent opacity-10 group-hover:opacity-20 transition-opacity duration-500"></div>
+                        <h3 class="text-3xl font-rubik font-bold text-ai-light-gray mb-4 flex items-center justify-end">
+                            הרצאות וסדנאות לארגונים
+                            <svg class="w-9 h-9 ml-3 text-ai-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                        </h3>
+                        <p class="text-lg text-gray-300 font-heebo mb-6">
+                            הכניסו את ארגונכם לעידן ה-AI עם הרצאות וסדנאות מותאמות אישית לצוותים,
+                            מנהלים ועובדים. נחשוף את הפוטנציאל הטכנולוגי והעסקי הטמון בבינה המלאכותית לארגון שלכם.
+                        </p>
+                        <ul class="list-disc pr-6 text-md text-gray-400 font-heebo">
+                            <li>סקירה מעמיקה והשראה לחדשנות</li>
+                            <li>הטמעה אסטרטגית של AI בתהליכים קיימים</li>
+                            <li>פתרונות AI מותאמים לצוותים ספציפיים</li>
+                        </ul>
+                    </div>
+                    <div class="group p-8 bg-ai-dark bg-opacity-80 rounded-xl shadow-2xl border border-ai-secondary border-opacity-20 transform hover:scale-105 transition duration-300 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-ai-secondary to-transparent opacity-10 group-hover:opacity-20 transition-opacity duration-500"></div>
+                        <h3 class="text-3xl font-rubik font-bold text-ai-light-gray mb-4 flex items-center justify-end">
+                            ייעוץ ופיתוח פרויקטים מותאמים
+                            <svg class="w-9 h-9 ml-3 text-ai-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-2 1m0 0l-1 2.5M4.332 12.805A4.538 4.538 0 017 10.5h1.5a4.538 4.538 0 012.668 2.305m0 0L12 14.5m-3 0V11a3 3 0 013-3V7a3 3 0 013-3h1.5M16 17.5l-1 2.5m-1 0l-2 1m-1 2.5L9.75 17"></path></svg>
+                        </h3>
+                        <p class="text-lg text-gray-300 font-heebo mb-6">
+                            הגשימו את חזונכם עם ליווי מקצועי צמוד מפיתוח רעיון, דרך תכנון ארכיטקטורה,
+                            וביצוע בפועל של פרויקטים מבוססי AI מותאמים – מהיסוד ועד ההשקה המוצלחת.
+                        </p>
+                        <ul class="list-disc pr-6 text-md text-gray-400 font-heebo">
+                            <li>אפיון אסטרטגי והכוונה טכנולוגית</li>
+                            <li>פיתוח טכני מלא ואינטגרציה חלקה</li>
+                            <li>אופטימיזציה, הטמעה ותמיכה מתמשכת</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instructor Section (Zevik Aviner) - The Visionary Guide -->
+        <section class="py-20 md:py-32 px-4 md:px-8 bg-gradient-to-b from-ai-dark to-transparent relative overflow-hidden">
+            <div class="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-center gap-12 text-right relative z-10">
+                <div class="md:w-1/3 flex justify-center md:justify-end">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר, מומחה בינה מלאכותית" class="w-64 h-64 md:w-80 md:h-80 object-cover rounded-full shadow-2xl border-4 border-ai-primary transform transition duration-500 hover:scale-105 hover:shadow-ai-primary/50">
+                </div>
+                <div class="md:w-2/3">
+                    <h2 class="text-4xl md:text-5xl font-rubik font-bold text-ai-secondary mb-6 leading-snug">
+                        זאביק אבינר - הארכיטקט והמדריך שלך לעתיד ה-AI
+                    </h2>
+                    <p class="text-lg md:text-xl text-ai-light-gray mb-6 opacity-90 font-heebo leading-relaxed">
+                        זאביק אבינר אינו רק מומחה בינה מלאכותית, הוא אמן ההנגשה, המפיח חיים בעולם המורכב של ה-AI.
+                        עם ניסיון עשיר בפיתוח פרויקטים פורצי דרך, אפליקציות ומערכות מבוססות AI במגוון תעשיות,
+                        זאביק הפך את התיאוריה המורכבת לכלים מעשיים שכל אחד ואחת יכולים לאמץ וליישם.
+                        הוא המדריך שלך במסע ללימוד, הבנה ויישום הכוח העצום של הבינה המלאכותית בחיי היומיום ובעולם העבודה.
+                    </p>
+                    <p class="text-lg md:text-xl text-ai-light-gray font-bold mb-4 flex items-center justify-end">
+                        <svg class="w-7 h-7 ml-3 text-ai-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                        ווטסאפ: <a href="https://wa.me/972546609385" class="text-ai-primary hover:underline mr-2" target="_blank" aria-label="שלח הודעה לזאביק אבינר בוואטסאפ">054-6609385</a>
+                    </p>
+                    <p class="text-lg md:text-xl text-ai-light-gray font-bold flex items-center justify-end">
+                        <svg class="w-7 h-7 ml-3 text-ai-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-10 4.22V21a2 2 0 002 2h4a2 2 0 002-2v-8.78m-14 0V21a2 2 0 002 2h4a2 2 0 002-2v-8.78"></path></svg>
+                        אימייל: <a href="mailto:zaviner@gmail.com" class="text-ai-secondary hover:underline mr-2" aria-label="שלח אימייל לזאביק אבינר">zaviner@gmail.com</a>
+                    </p>
+                </div>
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-r from-ai-secondary to-transparent opacity-5 blur-3xl z-0"></div>
+        </section>
+
+    </main>
+
+    <!-- Footer - The Foundation of Tomorrow -->
+    <footer class="bg-ai-dark py-10 px-4 md:px-8 text-center text-ai-light-gray text-opacity-70 text-sm md:text-base font-heebo">
+        <p>
+            &copy; 2024 זאביק אבינר - כל הזכויות שמורות. עיצוב ופיתוח בהשראת עולם הבינה המלאכותית המתפתח תמיד.
+        </p>
+    </footer>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Smoothly animate the cursor position
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.1;
+            cursorY += (mouseY - cursorY) * 0.1;
+
+            cursor.style.left = `${cursorX}px`;
+            cursor.style.top = `${cursorY}px`;
+
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor(); // Start the animation loop
+
+        // Add 'link-hover' class to cursor when hovering over interactive elements
+        document.querySelectorAll('a, button, .group').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.classList.add('link-hover');
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.classList.remove('link-hover');
+            });
+        });
+
+
+        // Parallax Scrolling Logic for background layers
+        const layer1 = document.getElementById('layer-1');
+        const layer2 = document.getElementById('layer-2');
+        const layer3 = document.getElementById('layer-3');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+
+            // Apply different scroll speeds to create depth
+            layer1.style.transform = `translateY(${scrollY * 0.1}px)`;
+            layer2.style.transform = `translateY(${scrollY * 0.25}px) scale(1.05)`; /* Faster and slightly scaled */
+            layer3.style.transform = `translateY(${scrollY * 0.4}px) scale(1.1)`;  /* Fastest and more scaled */
+        });
+    </script>
+</body>
+</html>

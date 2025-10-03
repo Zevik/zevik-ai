@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אדריכלות הבינה המלאכותית: זאביק אבינר</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=IBM+Plex+Sans+Hebrew:wght@400;700&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom Tailwind Configuration - Defining variables for consistent theme */
+        :root {
+            --color-primary-dark: #0C162C; /* Deep Blue/Indigo */
+            --color-secondary-dark: #1A2F4A; /* Slightly lighter blue */
+            --color-accent-cyan: #00FFFF; /* Electric Cyan */
+            --color-accent-lime: #39FF14; /* Neon Lime Green */
+            --color-text-light: #E0E7FF; /* Light off-white */
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: var(--color-primary-dark);
+            color: var(--color-text-light);
+            overflow-x: hidden; /* Prevent horizontal scroll for parallax elements */
+            cursor: none; /* Hide default cursor to use custom one */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'IBM Plex Sans Hebrew', sans-serif;
+            font-weight: 700;
+        }
+
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Custom scrollbar for artistic touch */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--color-secondary-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-accent-cyan);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-accent-lime);
+        }
+
+        /* Artistic styling for text and buttons */
+        .glowing-text {
+            text-shadow: 0 0 8px var(--color-accent-cyan), 0 0 16px var(--color-accent-cyan);
+        }
+        .glowing-border {
+            border: 1px solid var(--color-accent-cyan);
+            box-shadow: 0 0 10px var(--color-accent-cyan);
+        }
+        .glowing-button {
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5); /* Initial cyan glow */
+        }
+        .glowing-button:hover {
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.8), 0 0 40px rgba(57, 255, 20, 0.6); /* Stronger mixed glow on hover */
+            transform: scale(1.05);
+        }
+
+        /* Parallax/Animated Background elements */
+        .bg-grid-lines {
+            background-image: linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .animated-line-glow {
+            animation: lineGlow 4s infinite alternate ease-in-out;
+        }
+        @keyframes lineGlow {
+            0% { opacity: 0.3; transform: scaleX(0.5); }
+            50% { opacity: 0.8; transform: scaleX(1); }
+            100% { opacity: 0.3; transform: scaleX(0.5); }
+        }
+        .animate-spin-slow {
+            animation: spinSlow 30s linear infinite;
+        }
+        .animate-spin-slow-reverse {
+            animation: spinSlowReverse 40s linear infinite;
+        }
+        .animate-pulse-slow {
+            animation: pulseSlow 5s infinite ease-in-out;
+        }
+        .animate-pulse-fast {
+            animation: pulseFast 2s infinite ease-in-out;
+        }
+        @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes spinSlowReverse {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+        }
+        @keyframes pulseSlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
+        }
+        @keyframes pulseFast {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+
+
+        /* Custom Cursor styling (High-Contrast requirement) */
+        .custom-cursor {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: transparent;
+            border: 2px solid #FFFFFF; /* White border for visibility on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for visibility on light backgrounds */
+            position: fixed;
+            pointer-events: none; /* Allows clicks to pass through */
+            transform: translate(-50%, -50%); /* Centers the cursor on the mouse point */
+            z-index: 9999; /* Ensures it's always on top */
+            transition: width 0.1s ease-out, height 0.1s ease-out, border-color 0.1s ease-out, box-shadow 0.1s ease-out;
+            opacity: 0; /* Hidden by default, shown by JS */
+        }
+        .custom-cursor.hover-effect {
+            width: 36px;
+            height: 36px;
+            border-color: var(--color-accent-cyan);
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 10px var(--color-accent-cyan); /* Adds glow on hover */
+        }
+
+        /* General element animation for sections (reveal on scroll) */
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal-element.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Card styles for services/expertise - Technical illustration aesthetic */
+        .tech-card {
+            background: linear-gradient(135deg, rgba(26, 47, 74, 0.7) 0%, rgba(12, 22, 44, 0.7) 100%);
+            border: 1px solid rgba(0, 255, 255, 0.2); /* Subtle cyan border */
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.15); /* Subtle cyan shadow */
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px); /* Frosted glass effect */
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        .tech-card:hover {
+            border-color: var(--color-accent-cyan);
+            box-shadow: 0 0 25px rgba(0, 255, 255, 0.4); /* Stronger glow on hover */
+            transform: translateY(-8px) scale(1.02);
+        }
+
+        /* Gradient for body background */
+        .bg-gradient-tech {
+            background: linear-gradient(180deg, var(--color-primary-dark) 0%, var(--color-secondary-dark) 100%);
+        }
+
+        /* Contact button specific glow for lime accent */
+        .contact-btn-glow {
+            box-shadow: 0 0 10px var(--color-accent-lime);
+        }
+        .contact-btn-glow:hover {
+            box-shadow: 0 0 20px var(--color-accent-lime), 0 0 30px rgba(57, 255, 20, 0.7);
+        }
+
+    </style>
+</head>
+<body class="bg-gradient-tech min-h-screen">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="custom-cursor"></div>
+
+    <!-- Background Art (Parallax inspired) -->
+    <div class="fixed inset-0 overflow-hidden z-[-1]">
+        <!-- Main grid lines -->
+        <div class="absolute inset-0 bg-grid-lines opacity-10"></div>
+        <!-- Larger glowing circles/nodes -->
+        <div id="parallax-circle-1" class="absolute w-64 h-64 rounded-full bg-cyan-400 opacity-5 blur-3xl animate-pulse top-1/4 right-1/4"></div>
+        <div id="parallax-circle-2" class="absolute w-80 h-80 rounded-full bg-lime-400 opacity-5 blur-3xl animate-pulse delay-700 bottom-1/3 left-1/3"></div>
+        <!-- Abstract data streams/lines -->
+        <div id="parallax-line-1" class="absolute h-2 w-1/3 bg-cyan-400 opacity-10 blur-sm top-[10%] left-0 animated-line-glow"></div>
+        <div id="parallax-line-2" class="absolute h-2 w-1/4 bg-lime-400 opacity-10 blur-sm bottom-[15%] right-0 animated-line-glow delay-1000"></div>
+    </div>
+
+
+    <div class="relative z-10 p-4 md:p-8 max-w-7xl mx-auto">
+
+        <!-- Header - Navigation -->
+        <header class="flex flex-col md:flex-row justify-between items-center py-6 border-b border-cyan-700 border-opacity-30 mb-12">
+            <a href="#hero" class="text-3xl md:text-4xl font-orbitron glowing-text text-white mb-4 md:mb-0">
+                <span class="text-cyan-400">AI</span>-אדריכל
+            </a>
+            <nav>
+                <ul class="flex flex-wrap justify-center gap-4 text-lg md:text-xl font-ibm-plex-sans-hebrew">
+                    <li><a href="#about" class="hover:text-cyan-400 transition-colors">הליבה הדיגיטלית</a></li>
+                    <li><a href="#audience" class="hover:text-cyan-400 transition-colors">מעגל ההשפעה</a></li>
+                    <li><a href="#expertise" class="hover:text-cyan-400 transition-colors">מרכיבי המערכת</a></li>
+                    <li><a href="#services" class="hover:text-cyan-400 transition-colors">מנועי ההפעלה</a></li>
+                    <li><a href="#zevik" class="hover:text-cyan-400 transition-colors">המוח מאחורי המערכת</a></li>
+                    <li><a href="#contact" class="hover:text-cyan-400 transition-colors">צומת ההתחברות</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <section id="hero" class="relative min-h-screen flex flex-col justify-center items-center text-center pb-20 reveal-element">
+            <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 z-[-1]">
+                <!-- Abstract AI core visual - Animated, nested circles -->
+                <div class="relative w-96 h-96 rounded-full border border-cyan-500 animate-spin-slow">
+                    <div class="absolute inset-0 rounded-full border border-lime-500 animate-spin-slow-reverse"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-24 h-24 bg-cyan-400 rounded-full blur-2xl opacity-60 animate-pulse"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-orbitron glowing-text text-white drop-shadow-lg mb-6 leading-tight">
+                אדריכלות הבינה המלאכותית
+            </h1>
+            <p class="text-xl md:text-3xl font-ibm-plex-sans-hebrew text-gray-200 mb-8 max-w-3xl">
+                מפת הדרכים שלך לשליטה בעולם החדש
+            </p>
+            <p class="text-lg md:text-xl font-heebo text-gray-400 mb-10 max-w-2xl">
+                זאביק אבינר - מומחה בינה מלאכותית מנגיש את העתיד, צעד אחר צעד.
+            </p>
+            <a href="#contact" class="glowing-button bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-4 px-10 rounded-full text-xl md:text-2xl transition-all duration-300">
+                התחל את המסע שלך עכשיו
+            </a>
+        </section>
+
+        <!-- Introduction Section: "הליבה הדיגיטלית" -->
+        <section id="about" class="py-20 md:py-32 reveal-element">
+            <h2 class="text-4xl md:text-5xl text-center mb-12 text-cyan-400 glowing-text">
+                הליבה הדיגיטלית: פענוח העתיד
+            </h2>
+            <div class="relative flex flex-col md:flex-row items-center gap-12 max-w-5xl mx-auto p-6 md:p-10 tech-card">
+                <div class="md:w-1/2 text-lg leading-relaxed text-gray-200">
+                    <p class="mb-6">
+                        בינה מלאכותית (AI) אינה עוד מדע בדיוני; היא הזרם החשמלי המפעיל את העולם, האדריכל הבלתי נראה שמעצב את המחר. בכל מקום, ממעמקי הנתונים ועד קצה החוויה האנושית, AI משנה את חוקי המשחק.
+                    </p>
+                    <p>
+                        אצל זאביק אבינר, אנו הופכים את הליבה המורכבת הזו לכלי עבודה עוצמתי ונגיש בידיים שלך. אנו מפענחים את עקרונותיה, ממפים את יכולותיה, ומציידים אותך בידע ובכלים לשלוט בה - לא רק להשתמש בה, אלא להוביל איתה.
+                    </p>
+                </div>
+                <div class="md:w-1/2 relative h-64 md:h-80 w-full flex items-center justify-center">
+                    <!-- Stylized circuit board element - abstract, glowing lines -->
+                    <div class="absolute w-full h-full border border-lime-400 border-opacity-30 rounded-lg animate-pulse-slow"></div>
+                    <div class="absolute w-2/3 h-2/3 border-2 border-cyan-400 border-opacity-50 rounded-lg animate-pulse-slow-reverse"></div>
+                    <div class="absolute w-1/3 h-1/3 bg-lime-400 rounded-full blur-xl opacity-30 animate-pulse-fast"></div>
+                    <div class="absolute w-2 h-1/2 bg-cyan-400 opacity-60 left-1/4 top-1/4 rotate-45"></div>
+                    <div class="absolute w-2 h-1/2 bg-cyan-400 opacity-60 right-1/4 top-1/4 -rotate-45"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Journey/Target Audience Section: "מעגל ההשפעה" -->
+        <section id="audience" class="py-20 md:py-32 reveal-element">
+            <h2 class="text-4xl md:text-5xl text-center mb-12 text-lime-400 glowing-text">
+                מעגל ההשפעה: מי יבנה את העתיד?
+            </h2>
+            <p class="text-center text-xl text-gray-300 mb-16 max-w-3xl mx-auto">
+                הדרך לשליטה ב-AI נפרשת בפניך, ללא קשר לרמת הידע הנוכחית שלך. אנו משרטטים את הנתיב המושלם עבורך.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                <!-- Audience Card 1: מתחילים -->
+                <div class="tech-card flex flex-col items-center text-center p-6">
+                    <div class="w-24 h-24 bg-cyan-700 bg-opacity-30 rounded-full flex items-center justify-center mb-4 border border-cyan-400 glowing-border">
+                        <span class="text-5xl text-cyan-400">💡</span>
+                    </div>
+                    <h3 class="text-2xl font-ibm-plex-sans-hebrew mb-3 text-white">מתחילים וסקרנים</h3>
+                    <p class="text-gray-300 text-lg">
+                        הכרות ראשונית עם עולם ה-AI המרתק - מושגים, יישומים ואיך זה משפיע על חיינו.
+                    </p>
+                </div>
+
+                <!-- Audience Card 2: אנשי מקצוע -->
+                <div class="tech-card flex flex-col items-center text-center p-6">
+                    <div class="w-24 h-24 bg-lime-700 bg-opacity-30 rounded-full flex items-center justify-center mb-4 border border-lime-400 glowing-border">
+                        <span class="text-5xl text-lime-400">🛠️</span>
+                    </div>
+                    <h3 class="text-2xl font-ibm-plex-sans-hebrew mb-3 text-white">אנשי מקצוע</h3>
+                    <p class="text-gray-300 text-lg">
+                        הטמעת כלי AI מתקדמים בעבודה השוטפת, לשיפור תפוקה ופיתוח חדשנות בתחומך.
+                    </p>
+                </div>
+
+                <!-- Audience Card 3: מנהלים וארגונים -->
+                <div class="tech-card flex flex-col items-center text-center p-6">
+                    <div class="w-24 h-24 bg-cyan-700 bg-opacity-30 rounded-full flex items-center justify-center mb-4 border border-cyan-400 glowing-border">
+                        <span class="text-5xl text-cyan-400">📊</span>
+                    </div>
+                    <h3 class="text-2xl font-ibm-plex-sans-hebrew mb-3 text-white">מנהלים וארגונים</h3>
+                    <p class="text-gray-300 text-lg">
+                        הובלת מהפכת ה-AI בארגון, פיתוח אסטרטגיה והדרכת צוותים לחשיבה עתידנית.
+                    </p>
+                </div>
+
+                <!-- Audience Card 4: פיתוח פרויקטים מתקדמים -->
+                <div class="tech-card flex flex-col items-center text-center p-6">
+                    <div class="w-24 h-24 bg-lime-700 bg-opacity-30 rounded-full flex items-center justify-center mb-4 border border-lime-400 glowing-border">
+                        <span class="text-5xl text-lime-400">🚀</span>
+                    </div>
+                    <h3 class="text-2xl font-ibm-plex-sans-hebrew mb-3 text-white">פיתוח מתקדם</h3>
+                    <p class="text-gray-300 text-lg">
+                        תכנון, בנייה ויישום של פרויקטים מבוססי AI מורכבים ופורצי דרך.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Section: "מרכיבי המערכת" -->
+        <section id="expertise" class="py-20 md:py-32 reveal-element">
+            <h2 class="text-4xl md:text-5xl text-center mb-12 text-cyan-400 glowing-text">
+                מרכיבי המערכת: תחומי מומחיות
+            </h2>
+            <p class="text-center text-xl text-gray-300 mb-16 max-w-3xl mx-auto">
+                בניית רשתות סמנטיות, אריגת אלגוריתמים, יציקת קוד - אלו אבני היסוד של הטרנספורמציה הדיגיטלית.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <!-- Expertise Card 1: יצירת טקסטים ותוכן -->
+                <div class="tech-card p-6">
+                    <h3 class="text-2xl font-ibm-plex-sans-hebrew text-white mb-3 flex items-center">
+                        <span class="text-lime-400 text-3xl ml-3">✍️</span> יצירת טקסטים ותוכן
+                    </h3>
+                    <p class="text-gray-300 text-lg">
+                        הפקת תוכן שיווקי, מאמרים, קופירייטינג וכתיבה יצירתית באמצעות כלי AI מתקדמים.
+                    </p>
+                </div>
+                <!-- Expertise Card 2: בניית אפליקציות חכמות -->
+                <div class="tech-card p-6">
+                    <h3 class="text-2xl font-ibm-plex-sans-hebrew text-white mb-3 flex items-center">
+                        <span class="text-cyan-400 text-3xl ml-3">📱</span> בניית אפליקציות חכמות
+                    </h3>
+                    <p class="text-gray-300 text-lg">
+                        פיתוח אפליקציות המשלבות AI לחווית משתמש משופרת ופונקציונליות חדשנית.
+                    </p>
+                </div>
+                <!-- Expertise Card 3: פיתוח אתרים מבוססי AI -->
+                <div class="tech-card p-6">
+                    <h3 class="text-2xl font-ibm-plex-sans-hebrew text-white mb-3 flex items-center">
+                        <span class="text-lime-400 text-3xl ml-3">🌐</span> פיתוח אתרים מבוססי AI
+                    </h3>
+                    <p class="text-gray-300 text-lg">
+                        הפיכת אתרים לאינטליגנטיים יותר בעזרת התאמה אישית, צ'אטבוטים וניתוח התנהגות גולשים.
+                    </p>
+                </div>
+                <!-- Expertise Card 4: ניתוח נתונים ומחקר -->
+                <div class="tech-card p-6">
+                    <h3 class="text-2xl font-ibm-plex-sans-hebrew text-white mb-3 flex items-center">
+                        <span class="text-cyan-400 text-3xl ml-3">🔬</span> ניתוח נתונים ומחקר
+                    </h3>
+                    <p class="text-gray-300 text-lg">
+                        חילוץ תובנות משמעותיות ממאגרי נתונים עצומים וביצוע מחקרים מבוססי AI.
+                    </p>
+                </div>
+                <!-- Expertise Card 5: יצירת תמונות ואומנות -->
+                <div class="tech-card p-6">
+                    <h3 class="text-2xl font-ibm-plex-sans-hebrew text-white mb-3 flex items-center">
+                        <span class="text-lime-400 text-3xl ml-3">🎨</span> יצירת תמונות ואומנות
+                    </h3>
+                    <p class="text-gray-300 text-lg">
+                        פיתוח חזון ויזואלי והפקת גרפיקה, תמונות ואומנות דיגיטלית בעזרת AI.
+                    </p>
+                </div>
+                <!-- Expertise Card 6: אוטומציה של תהליכים -->
+                <div class="tech-card p-6">
+                    <h3 class="text-2xl font-ibm-plex-sans-hebrew text-white mb-3 flex items-center">
+                        <span class="text-cyan-400 text-3xl ml-3">⚙️</span> אוטומציה של תהליכים
+                    </h3>
+                    <p class="text-gray-300 text-lg">
+                        ייעול תהליכים עסקיים ואישיים, חיסכון בזמן ומשאבים באמצעות פתרונות אוטומציה חכמים.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section: "מנועי ההפעלה" -->
+        <section id="services" class="py-20 md:py-32 reveal-element">
+            <h2 class="text-4xl md:text-5xl text-center mb-12 text-lime-400 glowing-text">
+                מנועי ההפעלה: שירותים מותאמים אישית
+            </h2>
+            <p class="text-center text-xl text-gray-300 mb-16 max-w-3xl mx-auto">
+                בואו נניע את השינוי! אנו נספק לך את הדלק והמפות כדי לשלוט בכוחה של הבינה המלאכותית.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+                <div class="tech-card p-8 flex flex-col items-center text-center">
+                    <div class="text-6xl mb-4 text-cyan-400">👨‍🏫</div>
+                    <h3 class="text-3xl font-ibm-plex-sans-hebrew text-white mb-4">סדנאות קבוצתיות מעשיות</h3>
+                    <p class="text-gray-300 text-lg">
+                        חוויה לימודית אינטנסיבית המשלבת תיאוריה, הדגמות ותרגול מעשי, בקבוצות קטנות ואינטימיות. פתרונות פרקטיים ליישום מיידי.
+                    </p>
+                </div>
+                <div class="tech-card p-8 flex flex-col items-center text-center">
+                    <div class="text-6xl mb-4 text-lime-400">👤</div>
+                    <h3 class="text-3xl font-ibm-plex-sans-hebrew text-white mb-4">שיעורים פרטיים אישיים</h3>
+                    <p class="text-gray-300 text-lg">
+                        הדרכה אחד על אחד, מותאמת באופן מלא לרמת הידע, לצרכים ולמטרות הספציפיות שלך. למידה בקצב שלך.
+                    </p>
+                </div>
+                <div class="tech-card p-8 flex flex-col items-center text-center">
+                    <div class="text-6xl mb-4 text-cyan-400">🎤</div>
+                    <h3 class="text-3xl font-ibm-plex-sans-hebrew text-white mb-4">הרצאות וסדנאות לארגונים</h3>
+                    <p class="text-gray-300 text-lg">
+                        פתיחת אופקים והטמעת תרבות AI בארגונים, הרצאות מרתקות וסדנאות מותאמות לצוותים שונים.
+                    </p>
+                </div>
+                <div class="tech-card p-8 flex flex-col items-center text-center">
+                    <div class="text-6xl mb-4 text-lime-400">💡</div>
+                    <h3 class="text-3xl font-ibm-plex-sans-hebrew text-white mb-4">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-gray-300 text-lg">
+                        ליווי מקצועי ואישי מתחילתו ועד סופו של פרויקט AI, החל משלב הרעיון ועד ליישום מלא.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Zevik Section: "המוח מאחורי המערכת" -->
+        <section id="zevik" class="py-20 md:py-32 reveal-element">
+            <h2 class="text-4xl md:text-5xl text-center mb-12 text-cyan-400 glowing-text">
+                המוח מאחורי המערכת: זאביק אבינר
+            </h2>
+            <div class="flex flex-col lg:flex-row items-center justify-center gap-12 max-w-5xl mx-auto p-6 md:p-10 tech-card">
+                <div class="relative w-48 h-48 rounded-full overflow-hidden border-4 border-cyan-500 shadow-lg shadow-cyan-500/50">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר - מומחה בינה מלאכותית" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500 ease-in-out">
+                    <div class="absolute inset-0 rounded-full border-2 border-lime-400 opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
+                </div>
+                <div class="text-center lg:text-right lg:w-2/3">
+                    <h3 class="text-3xl md:text-4xl font-ibm-plex-sans-hebrew text-white mb-4">
+                        זאביק אבינר - האדריכל שלך לעולם ה-AI
+                    </h3>
+                    <p class="text-gray-300 text-xl leading-relaxed">
+                        זאביק אבינר אינו רק מומחה לבינה מלאכותית; הוא האדריכל שמפענח את סודותיה והופך אותם לפתרונות מעשיים. עם ניסיון עשיר בפיתוח ויישום פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק מביא עמו יכולת נדירה להנגיש את המורכב, להלהיב את הספקן ולצייד אותך בכלים שיעניקו לך יתרון מובהק בעולם החדש. הוא מאמין שהעתיד הוא עכשיו, וכי בידיים הנכונות, AI הוא לא רק כלי - אלא כוח משנה עולם.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section: "צומת ההתחברות" -->
+        <section id="contact" class="py-20 md:py-32 reveal-element text-center">
+            <h2 class="text-4xl md:text-5xl text-center mb-12 text-lime-400 glowing-text">
+                צומת ההתחברות: בואו נתחיל
+            </h2>
+            <p class="text-center text-xl text-gray-300 mb-16 max-w-3xl mx-auto">
+                בין אם לשאלה קצרה, ייעוץ מעמיק, או תחילתו של פרויקט פורץ דרך - זאביק אבינר כאן עבורך.
+            </p>
+
+            <div class="flex flex-col md:flex-row justify-center items-center gap-8 max-w-2xl mx-auto">
+                <a href="https://wa.me/972546609385" target="_blank" rel="noopener noreferrer"
+                   class="glowing-button contact-btn-glow bg-gradient-to-br from-lime-600 to-lime-700 hover:from-lime-700 hover:to-lime-800 text-white font-bold py-4 px-8 rounded-full text-2xl flex items-center transition-all duration-300">
+                    <span class="ml-3 text-4xl">📞</span> ווטסאפ
+                </a>
+                <a href="mailto:zaviner@gmail.com"
+                   class="glowing-button contact-btn-glow bg-gradient-to-br from-cyan-600 to-cyan-700 hover:from-cyan-700 hover:to-cyan-800 text-white font-bold py-4 px-8 rounded-full text-2xl flex items-center transition-all duration-300">
+                    <span class="ml-3 text-4xl">📧</span> אימייל
+                </a>
+            </div>
+            <p class="text-gray-500 text-lg mt-8">
+                ניתן גם לחייג: 054-6609385
+            </p>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center py-10 border-t border-cyan-700 border-opacity-30 mt-20 text-gray-500 text-sm">
+            &copy; 2023 AI-אדריכל. כל הזכויות שמורות לזאביק אבינר.
+        </footer>
+
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // Elements that trigger the cursor hover effect
+        const interactiveElements = 'a, button, .glowing-button, .tech-card';
+        document.querySelectorAll(interactiveElements).forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('hover-effect'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('hover-effect'));
+        });
+
+        // Intersection Observer for reveal animations on scroll
+        const revealElements = document.querySelectorAll('.reveal-element');
+        const observerOptions = {
+            root: null, // Use the viewport as the root
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Option: Unobserve the element after it's visible to animate only once
+                    // observer.unobserve(entry.target);
+                } else {
+                    // Option: Remove 'is-visible' to re-trigger animation when scrolling back up
+                    // entry.target.classList.remove('is-visible');
+                }
+            });
+        }, observerOptions);
+
+        revealElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // Simple Parallax Effect for background elements
+        const parallaxCircle1 = document.getElementById('parallax-circle-1');
+        const parallaxCircle2 = document.getElementById('parallax-circle-2');
+        const parallaxLine1 = document.getElementById('parallax-line-1');
+        const parallaxLine2 = document.getElementById('parallax-line-2');
+
+        document.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+
+            // Adjust values for desired speed and direction
+            if (parallaxCircle1) parallaxCircle1.style.transform = `translateY(${scrollY * 0.05}px) translateX(${scrollY * 0.02}px)`;
+            if (parallaxCircle2) parallaxCircle2.style.transform = `translateY(${scrollY * -0.07}px) translateX(${scrollY * -0.03}px)`;
+            if (parallaxLine1) parallaxLine1.style.transform = `translateY(${scrollY * 0.03}px) translateX(${scrollY * 0.01}px)`;
+            if (parallaxLine2) parallaxLine2.style.transform = `translateY(${scrollY * -0.04}px) translateX(${scrollY * -0.02}px)`;
+        });
+
+        // Ensure the custom cursor is visible once the page is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            customCursor.style.opacity = '1';
+        });
+
+    </script>
+</body>
+</html>

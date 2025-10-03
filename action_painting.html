@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - AI//פעולה</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS */
+        body {
+            font-family: 'Heebo', sans-serif; /* Primary font */
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll from elements moving */
+        }
+        .mono-font {
+            font-family: 'Rubik Mono One', monospace; /* Accent font for titles/keywords */
+        }
+
+        /* High-Contrast Custom Cursor */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+            z-index: 9999;
+            transition: transform 0.1s ease-out, width 0.1s ease-out, height 0.1s ease-out;
+            transform-origin: center center;
+        }
+
+        /* Action Painting inspired background effects - using CSS variables for dynamic movement */
+        .action-bg-splash {
+            position: fixed;
+            width: 150vmax; /* Large enough to cover screen */
+            height: 150vmax;
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), var(--color-center, #8B5CF6) 0%, transparent 70%);
+            opacity: var(--opacity, 0.05);
+            /* Using calc() to combine initial positioning with JS-driven offsets */
+            transform: translate(calc(var(--init-translate-x, -50%) + var(--offset-x, 0px)), calc(var(--init-translate-y, -50%) + var(--offset-y, 0px))) rotate(var(--rotate, 0deg)) scale(var(--scale, 1));
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -2; /* Below main content, above fixed base background */
+            transition: transform 0.1s ease-out; /* Smooth transition for movement */
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8B5CF6; /* Purple */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #7C3AED;
+        }
+
+        /* Animation for header text */
+        @keyframes popInChar {
+            0% {
+                transform: translateY(20px) scale(0.8);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+        .animate-pop-in-char {
+            animation: popInChar 0.6s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-black text-gray-100 overflow-x-hidden">
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Base Background Layer - fixed, low z-index -->
+    <div class="fixed inset-0 bg-gradient-to-br from-black via-gray-950 to-purple-950 z-[-3]"></div>
+
+    <!-- Multiple "paint splatters" for action painting effect - fixed, lower z-index, interactive via JS -->
+    <div class="action-bg-splash" style="--x: 10%; --y: 20%; --color-center: #6D28D9; --opacity: 0.07; --rotate: 15deg; --scale: 0.8; --init-translate-x: -30%; --init-translate-y: -10%;"></div>
+    <div class="action-bg-splash" style="--x: 90%; --y: 80%; --color-center: #DB2777; --opacity: 0.09; --rotate: -25deg; --scale: 1.2; --init-translate-x: -70%; --init-translate-y: -90%;"></div>
+    <div class="action-bg-splash" style="--x: 50%; --y: 50%; --color-center: #06B6D4; --opacity: 0.06; --rotate: 40deg; --scale: 0.9; --init-translate-x: -20%; --init-translate-y: -60%;"></div>
+    <div class="action-bg-splash" style="--x: 30%; --y: 70%; --color-center: #FACC15; --opacity: 0.08; --rotate: -10deg; --scale: 1.1; --init-translate-x: -10%; --init-translate-y: -40%;"></div>
+    <div class="action-bg-splash" style="--x: 70%; --y: 10%; --color-center: #8B5CF6; --opacity: 0.05; --rotate: 60deg; --scale: 0.7; --init-translate-x: -80%; --init-translate-y: -5%;"></div>
+
+    <!-- Main Content Wrapper - ensures positive z-index to be on top -->
+    <div class="relative z-10 min-h-screen p-4 sm:p-8 md:p-16 flex flex-col justify-center items-center">
+        <!-- Header/Hero Section -->
+        <header class="text-center mb-16 max-w-4xl">
+            <h1 class="text-6xl sm:text-7xl md:text-8xl font-black mono-font text-purple-400 leading-tight mb-6 animate-char-pop" style="text-shadow: 0 0 10px #A78BFA, 0 0 20px #8B5CF6;">
+                AI<span class="text-white">//</span>פעולה
+            </h1>
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-50 leading-relaxed mb-8">
+                <span class="text-indigo-400">לשלוט בבינה המלאכותית:</span> <br> העתיד הוא עכשיו. הצטרפו למהפכה.
+            </h2>
+            <p class="text-xl sm:text-2xl text-gray-300 max-w-2xl mx-auto leading-loose">
+                זאביק אבינר מזמין אתכם למסע אל תוך הלב הפועם של הבינה המלאכותית. לא עוד מילים גבוהות - אלא כלים מעשיים, ידע שניתן ליישם מיד, וטרנספורמציה דיגיטלית שתעצים אתכם. בואו לצייר את העתיד שלכם עם AI.
+            </p>
+        </header>
+
+        <!-- Section: למי מיועדת האמנות? (Who is the art for?) -->
+        <section id="who-is-it-for" class="mb-24 relative p-8 bg-gray-900 bg-opacity-70 rounded-2xl shadow-xl border border-purple-800 backdrop-blur-sm max-w-5xl w-full">
+            <h3 class="text-4xl font-bold mono-font text-purple-300 mb-8 text-center">
+                למי מיועדת האמנות?
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-xl text-gray-200">
+                <div class="p-6 bg-gray-800 bg-opacity-60 rounded-xl border border-gray-700 hover:border-purple-600 transition duration-300">
+                    <p class="font-semibold text-2xl text-indigo-300 mb-2">המתחילים והמתחילות</p>
+                    <p>אלו שרוצים לפתוח את הדלת לעולם ה-AI המרתק, ללא ידע מוקדם. נתחיל מהיסודות, נבנה ביטחון, ונצייר יחד את הצעדים הראשונים שלכם במרחב הדיגיטלי החדש.</p>
+                </div>
+                <div class="p-6 bg-gray-800 bg-opacity-60 rounded-xl border border-gray-700 hover:border-purple-600 transition duration-300">
+                    <p class="font-semibold text-2xl text-indigo-300 mb-2">אנשי ונשות מקצוע</p>
+                    <p>מי ששואפים להזריק חדשנות לעבודתם, להפוך תהליכים לאוטומטיים, ולקבל יתרון תחרותי בעזרת AI. נלמד איך AI הוא לא רק כלי, אלא שותף אסטרטגי.</p>
+                </div>
+                <div class="p-6 bg-gray-800 bg-opacity-60 rounded-xl border border-gray-700 hover:border-purple-600 transition duration-300">
+                    <p class="font-semibold text-2xl text-indigo-300 mb-2">מנהלים, מנהלות וארגונים</p>
+                    <p>המחפשים להטמיע תרבות AI בארגון, להכשיר צוותים ולהוביל חדשנות. נבנה מסלולי למידה מותאמים שיניעו קדימה את כל הארגון.</p>
+                </div>
+                <div class="p-6 bg-gray-800 bg-opacity-60 rounded-xl border border-gray-700 hover:border-purple-600 transition duration-300">
+                    <p class="font-semibold text-2xl text-indigo-300 mb-2">המובילים קדימה (מתקדמים)</p>
+                    <p>למתקדמים שרוצים לצלול עמוק, לפתח פרויקטים מורכבים ולפרוץ גבולות עם AI. כאן נהפוך חלומות למציאות קודמת, נפסל פיקסלים של חדשנות.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: הצבעים על קנבס ה-AI (The Colors on the AI Canvas) -->
+        <section id="expertise-canvas" class="mb-24 relative p-8 bg-gray-900 bg-opacity-70 rounded-2xl shadow-xl border border-indigo-800 backdrop-blur-sm max-w-5xl w-full">
+            <h3 class="text-4xl font-bold mono-font text-indigo-300 mb-8 text-center">
+                הצבעים על קנבס ה-AI
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-xl text-gray-200">
+                <div class="flex items-start p-4 bg-gray-800 bg-opacity-60 rounded-lg hover:bg-gray-700 transition duration-300">
+                    <span class="text-yellow-400 text-3xl ml-3">✍️</span>
+                    <div>
+                        <p class="font-semibold text-xl text-yellow-300 mb-1">מילים רוקדות</p>
+                        <p class="text-sm text-gray-300">יצירת טקסטים, תסריטים, קמפיינים ותוכן שובה לב באמצעות AI.</p>
+                    </div>
+                </div>
+                <div class="flex items-start p-4 bg-gray-800 bg-opacity-60 rounded-lg hover:bg-gray-700 transition duration-300">
+                    <span class="text-green-400 text-3xl ml-3">💡</span>
+                    <div>
+                        <p class="font-semibold text-xl text-green-300 mb-1">אפליקציות חכמות</p>
+                        <p class="text-sm text-gray-300">הפיכת רעיונות לאפליקציות AI שימושיות וחדשניות, בקלות וביעילות.</p>
+                    </div>
+                </div>
+                <div class="flex items-start p-4 bg-gray-800 bg-opacity-60 rounded-lg hover:bg-gray-700 transition duration-300">
+                    <span class="text-blue-400 text-3xl ml-3">🌐</span>
+                    <div>
+                        <p class="font-semibold text-xl text-blue-300 mb-1">אתרים מהעתיד</p>
+                        <p class="text-sm text-gray-300">פיתוח אתרי אינטרנט אינטראקטיביים המונעים על ידי בינה מלאכותית.</p>
+                    </div>
+                </div>
+                <div class="flex items-start p-4 bg-gray-800 bg-opacity-60 rounded-lg hover:bg-gray-700 transition duration-300">
+                    <span class="text-red-400 text-3xl ml-3">📊</span>
+                    <div>
+                        <p class="font-semibold text-xl text-red-300 mb-1">לנתח את הנשמה</p>
+                        <p class="text-sm text-gray-300">ניתוח נתונים מתקדם ומחקר מעמיק, חילוץ תובנות עסקיות מורכבות.</p>
+                    </div>
+                </div>
+                <div class="flex items-start p-4 bg-gray-800 bg-opacity-60 rounded-lg hover:bg-gray-700 transition duration-300">
+                    <span class="text-pink-400 text-3xl ml-3">🎨</span>
+                    <div>
+                        <p class="font-semibold text-xl text-pink-300 mb-1">אמנות דיגיטלית</p>
+                        <p class="text-sm text-gray-300">יצירת תמונות, קונספטים ואמנות ויזואלית פורצת גבולות עם AI.</p>
+                    </div>
+                </div>
+                <div class="flex items-start p-4 bg-gray-800 bg-opacity-60 rounded-lg hover:bg-gray-700 transition duration-300">
+                    <span class="text-teal-400 text-3xl ml-3">⚙️</span>
+                    <div>
+                        <p class="font-semibold text-xl text-teal-300 mb-1">אוטומציה בתנועה</p>
+                        <p class="text-sm text-gray-300">ייעול תהליכים, חיסכון בזמן ושיפור יעילות עם אוטומציית AI חכמה.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: זרם השירותים (Flow of Services) -->
+        <section id="services-flow" class="mb-24 relative p-8 bg-gray-900 bg-opacity-70 rounded-2xl shadow-xl border border-purple-800 backdrop-blur-sm max-w-5xl w-full">
+            <h3 class="text-4xl font-bold mono-font text-purple-300 mb-8 text-center">
+                זרם השירותים
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-xl text-gray-200">
+                <div class="group relative p-8 bg-gray-800 bg-opacity-60 rounded-xl border border-gray-700 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-purple-900 to-indigo-900 opacity-0 group-hover:opacity-30 transition-opacity duration-500 z-0"></div>
+                    <div class="relative z-10">
+                        <p class="font-semibold text-3xl text-purple-300 mb-3">סדנאות קבוצתיות</p>
+                        <p class="text-lg text-gray-300">מסגרות דינמיות ומעשיות, בהן נצלול יחד לעולם ה-AI. קבוצות קטנות, למידה חווייתית ויישומית, שתשאיר אתכם עם כלים מיידיים.</p>
+                    </div>
+                </div>
+                <div class="group relative p-8 bg-gray-800 bg-opacity-60 rounded-xl border border-gray-700 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-900 to-blue-900 opacity-0 group-hover:opacity-30 transition-opacity duration-500 z-0"></div>
+                    <div class="relative z-10">
+                        <p class="font-semibold text-3xl text-indigo-300 mb-3">שיעורים פרטיים</p>
+                        <p class="text-lg text-gray-300">מסע אישי, מותאם לרמה ולצרכים הייחודיים שלכם. למידה אחד על אחד עם זאביק, שתבנה את הידע והמיומנויות שלכם בקצב שלכם.</p>
+                    </div>
+                </div>
+                <div class="group relative p-8 bg-gray-800 bg-opacity-60 rounded-xl border border-gray-700 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-900 to-cyan-900 opacity-0 group-hover:opacity-30 transition-opacity duration-500 z-0"></div>
+                    <div class="relative z-10">
+                        <p class="font-semibold text-3xl text-blue-300 mb-3">הרצאות לארגונים</p>
+                        <p class="text-lg text-gray-300">השראה ופתיחת אופקים לצוותים ומנהלים. הרצאות מרתקות שמפרקות את מיתוסי ה-AI ומציגות את הפוטנציאל העצום שלו לעולם העסקי.</p>
+                    </div>
+                </div>
+                <div class="group relative p-8 bg-gray-800 bg-opacity-60 rounded-xl border border-gray-700 overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-cyan-900 to-teal-900 opacity-0 group-hover:opacity-30 transition-opacity duration-500 z-0"></div>
+                    <div class="relative z-10">
+                        <p class="font-semibold text-3xl text-cyan-300 mb-3">ייעוץ ופיתוח</p>
+                        <p class="text-lg text-gray-300">ליווי צמוד בפיתוח פרויקטים מבוססי AI, מתוך ניסיון עשיר וידע מעמיק. נהפוך את הרעיון שלכם למציאות דיגיטלית פורצת דרך.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: האמן שמאחורי הקנבס (The Artist Behind the Canvas) -->
+        <section id="the-master-painter" class="mb-24 relative p-8 bg-gray-900 bg-opacity-70 rounded-2xl shadow-xl border border-yellow-800 backdrop-blur-sm max-w-5xl w-full">
+            <h3 class="text-4xl font-bold mono-font text-yellow-300 mb-8 text-center">
+                האמן שמאחורי הקנבס
+            </h3>
+            <div class="flex flex-col md:flex-row items-center md:items-start text-xl text-gray-200">
+                <div class="mb-8 md:mb-0 md:ml-8 flex-shrink-0">
+                    <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="w-48 h-48 rounded-full object-cover border-4 border-yellow-500 shadow-lg"/>
+                </div>
+                <div class="text-center md:text-right">
+                    <p class="text-3xl font-bold text-white mb-4">זאביק אבינר</p>
+                    <p class="text-lg text-gray-300 leading-relaxed mb-6">
+                        זאביק אבינר הוא לא רק מומחה בינה מלאכותית, הוא אמן. אמן שיודע לתרגם את המורכבות של AI לשפה ברורה, לכלים שימושיים ולחזון מעורר השראה. עם ניסיון עשיר בפיתוח פרויקטים פורצי דרך, אפליקציות חכמות ומערכות מבוססות AI, זאביק מביא עמו ידע פרקטי וגישה פדגוגית שמנגישה את העתיד לכולם. הוא מאמין שה-AI הוא כלי עבודה יומיומי, ושהיכולת לשלוט בו היא המפתח לצמיחה אישית ומקצועית. הצטרפו לזאביק, והפכו את המורכב לפשוט, את העתיד להווה.
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center md:justify-end gap-4 mt-6">
+                        <a href="https://wa.me/972546609385" target="_blank" class="flex items-center justify-center sm:justify-end text-lg text-purple-200 hover:text-purple-400 transition duration-300">
+                            <span class="ml-2">054-6609385</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="text-green-500"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.911C.15 5.183 5.092.021 12.002.021s11.851 5.162 11.851 11.851-4.941 11.83-11.851 11.83c-1.996 0-3.974-.501-5.683-1.446L.057 24zm6.597-3.807c1.405.732 3.097 1.118 4.839 1.118 6.571 0 10.606-4.436 10.606-10.605 0-6.151-4.035-10.586-10.606-10.586-6.551 0-10.586 4.416-10.586 10.586 0 1.987.529 3.905 1.464 5.604l-.946 3.447 3.542-.976zm-2.618-2.907c-.477-.232-1.168-.583-1.206-.697-.038-.114.27-.456.409-.595.14-.14.3-.293.456-.456.156-.164.204-.293.342-.456.14-.164.28-.125.46-.057.18.067.437.197.64.381.203.185.343.393.46.532.116.14.223.212.43.293.207.082.529.212.761.306.232.094.409.156.559.133.15-.023.409-.173.492-.323.082-.15.057-.28-.016-.393-.073-.114-.18-.293-.254-.443-.072-.15-.057-.125-.031-.239.026-.114.173-.293.254-.443.082-.15.156-.239.232-.393.073-.153.116-.28.173-.393.057-.114.026-.212-.016-.293-.042-.082-.4-.954-.549-1.302-.14-.336-.28-.28-.393-.28-.114 0-.24.016-.366.016-.125 0-.323.042-.492.204-.17.163-.65.654-.65 1.597 0 .942.675 1.858.773 1.987.098.129 1.394 2.158 3.383 2.956.883.358 1.592.569 2.133.722.54.152.868.125 1.144.072.276-.053.899-.364 1.037-.704.14-.34.14-.633.099-.705-.043-.072-.15-.114-.31-.197zm-1.102 6.953h-.001z"/></svg>
+                        </a>
+                        <a href="mailto:zaviner@gmail.com" class="flex items-center justify-center sm:justify-end text-lg text-purple-200 hover:text-purple-400 transition duration-300">
+                            <span class="ml-2">zaviner@gmail.com</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="text-red-500"><path d="M12 12.713l-11.751-8.739h23.502l-11.751 8.739zm0 2.574l-12-8.924v12.637h24v-12.637l-12 8.924z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center mt-16 text-gray-400 text-sm">
+            <p>
+                <span class="mono-font text-purple-500 text-lg">AI//פעולה</span> - כל הזכויות שמורות לזאביק אבינר © <span id="current-year"></span>
+            </p>
+            <p class="mt-2 text-xs">
+                נוצר באהבה עם קוד וצבע
+            </p>
+        </footer>
+
+    </div>
+
+    <script>
+        // Custom Cursor JavaScript
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+        document.addEventListener('mousedown', () => {
+            customCursor.style.transform = 'scale(0.8)';
+        });
+        document.addEventListener('mouseup', () => {
+            customCursor.style.transform = 'scale(1)';
+        });
+
+        // Action Painting Parallax for background splatters
+        const splatters = document.querySelectorAll('.action-bg-splash');
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = (e.clientX / window.innerWidth - 0.5) * 2; // Normalize to -1 to 1
+            const mouseY = (e.clientY / window.innerHeight - 0.5) * 2; // Normalize to -1 to 1
+
+            splatters.forEach((splash, index) => {
+                // Vary the movement intensity for each splash
+                const movementIntensityX = (index % 3 + 1) * 15; // e.g., 15px, 30px, 45px
+                const movementIntensityY = ((index + 1) % 4 + 1) * 10; // e.g., 10px, 20px, 30px, 40px
+
+                const offsetX = mouseX * movementIntensityX;
+                const offsetY = mouseY * movementIntensityY;
+
+                splash.style.setProperty('--offset-x', `${offsetX}px`);
+                splash.style.setProperty('--offset-y', `${offsetY}px`);
+            });
+        });
+
+        // Text animation on load (header)
+        const headerText = document.querySelector('.animate-char-pop');
+        // Split text into characters, wrap each in a span, and apply animation
+        headerText.innerHTML = headerText.textContent.split('').map((char, i) =>
+            `<span style="animation-delay: ${i * 50}ms;" class="inline-block animate-pop-in-char">${char}</span>`
+        ).join('');
+
+        // Footer Year
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

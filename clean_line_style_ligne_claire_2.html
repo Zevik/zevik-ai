@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מפת דרכים לבינה מלאכותית - זאביק אבינר</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Assistant for Hebrew -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles */
+        body {
+            font-family: 'Assistant', sans-serif;
+            margin: 0;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            cursor: none; /* Hide default cursor */
+            background-color: #f0f0f0; /* Light base for a clean start */
+            line-height: 1.6;
+        }
+
+        /* Custom cursor styles */
+        #custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.2s ease-out, background-color 0.2s ease-out;
+            transform: translate(-50%, -50%); /* Center cursor */
+
+            /* High contrast requirement: border + box-shadow */
+            border: 2px solid #FFFFFF; /* White border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+        }
+
+        #custom-cursor.interactive {
+            transform: translate(-50%, -50%) scale(1.5);
+            background-color: rgba(255, 255, 0, 0.3); /* Soft yellow glow on interactive elements */
+        }
+
+        /* Ligne Claire specific styles */
+        .ligne-claire-panel {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 4rem 2rem;
+            position: relative;
+            box-sizing: border-box;
+            border-bottom: 4px solid black; /* Strong separator lines between panels */
+        }
+        .ligne-claire-panel:last-child {
+            border-bottom: none; /* No border for the last panel */
+        }
+
+        .ligne-claire-element {
+            border: 4px solid black; /* Clear, strong lines */
+            padding: 1.5rem;
+            background-color: white; /* Flat, clear background for content */
+            box-shadow: 8px 8px 0px 0px black; /* Subtle, sharp shadow for depth, Ligne claire style */
+            transition: all 0.3s ease-out;
+            position: relative;
+        }
+
+        .ligne-claire-element:hover {
+            transform: translate(-4px, -4px); /* Lift effect */
+            box-shadow: 12px 12px 0px 0px black;
+        }
+
+        .ligne-claire-icon {
+            border: 3px solid black;
+            border-radius: 50%; /* For circular icons */
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fce47c; /* Soft yellow accent for icons */
+            color: black;
+            font-size: 2rem;
+            line-height: 1;
+            transition: all 0.2s ease-in-out;
+            cursor: none; /* Handled by custom cursor */
+        }
+
+        .ligne-claire-icon:hover {
+            transform: scale(1.1) rotate(5deg);
+            background-color: #ffc107; /* Slightly darker yellow */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .ligne-claire-panel {
+                padding: 2rem 1rem;
+            }
+            .ligne-claire-element {
+                padding: 1rem;
+                box-shadow: 4px 4px 0px 0px black; /* Smaller shadow on mobile */
+            }
+            .ligne-claire-element:hover {
+                 transform: translate(-2px, -2px);
+                 box-shadow: 6px 6px 0px 0px black;
+            }
+            .ligne-claire-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            .ligne-claire-element h1 { font-size: 3rem; }
+            .ligne-claire-element p { font-size: 1.125rem; }
+        }
+
+        /* Parallax effect for panels with distinct gradient backgrounds */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            transition: background-image 0.5s ease-in-out, background-position 0.1s ease-out; /* Smooth transitions */
+        }
+        /* Define gradients for each panel */
+        .parallax-1 { background-image: linear-gradient(to top right, #c1f0fb, #90e0ef); } /* Soft Cyan */
+        .parallax-2 { background-image: linear-gradient(to top right, #ffe6b8, #ffd787); } /* Soft Peach */
+        .parallax-3 { background-image: linear-gradient(to top right, #c5fcd9, #99fdaa); } /* Soft Mint */
+        .parallax-4 { background-image: linear-gradient(to top right, #ffc7d6, #ffa2bf); } /* Soft Rose */
+        .parallax-5 { background-image: linear-gradient(to top right, #d4befd, #b99bfd); } /* Soft Lavender */
+        .parallax-6 { background-image: linear-gradient(to top right, #fbf7c1, #f8ef90); } /* Soft Yellow */
+
+
+        /* Tooltip for icon descriptions */
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+            cursor: none; /* Handled by custom cursor */
+        }
+        .tooltip-text {
+            visibility: hidden;
+            opacity: 0;
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 6px;
+            position: absolute;
+            z-index: 10; /* Ensure tooltip is above other elements */
+            bottom: 125%; /* Position above the icon */
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            transition: opacity 0.3s;
+            border: 2px solid white; /* Ligne claire outline for tooltip */
+        }
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Custom scroll indicator animation */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-bounce-custom {
+            animation: bounce 1.5s infinite;
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Container -->
+    <div id="parallax-container" class="fixed inset-0 overflow-hidden -z-10">
+        <div id="parallax-bg-layer" class="parallax-bg"></div>
+    </div>
+
+    <!-- The Art Piece / Digital Experience -->
+    <main class="relative z-10">
+
+        <!-- Panel 1: The Awakening -->
+        <section id="panel-1" class="ligne-claire-panel text-center">
+            <div class="ligne-claire-element max-w-3xl bg-white text-black p-8 md:p-12 text-center">
+                <h1 class="text-5xl md:text-6xl font-extrabold mb-4 leading-tight">למדו לשלוט בבינה המלאכותית</h1>
+                <p class="text-3xl md:text-4xl font-light mb-8 text-cyan-700">העתיד הוא עכשיו</p>
+                <p class="text-xl md:text-2xl mt-8 leading-relaxed">
+                    צעד אל עולם שקוף ומופלא, עולם שבו המחר נולד היום. הקווים הבהירים של הבינה המלאכותית מחכים שתשרטט אותם.
+                    <br>דף זה הוא מפה - קווים מנחים למסע המרתק שלך.
+                </p>
+            </div>
+            <div class="absolute bottom-12 text-black text-lg">
+                <span class="animate-bounce-custom">גלו עוד ↓</span>
+            </div>
+        </section>
+
+        <!-- Panel 2: The Guide Appears (Zevik) -->
+        <section id="panel-2" class="ligne-claire-panel text-center">
+            <div class="ligne-claire-element max-w-4xl bg-white text-black p-8 md:p-12 flex flex-col md:flex-row items-center justify-center gap-8">
+                <div class="md:w-1/2">
+                    <p class="text-xl md:text-2xl leading-relaxed mb-6">
+                        בנתיב זה, לא תצעד לבד. זאביק אבינר - שרטט המפות, אמן הקווים הבהירים של ה-AI - יהיה המדריך שלך.
+                        מומחה בינה מלאכותית עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI. הוא מתמחה בהנגשת הטכנולוגיה והפיכתה לכלי עבודה יומיומי.
+                    </p>
+                    <div class="flex flex-col gap-4 text-lg mt-6">
+                        <a href="https://wa.me/972546609385" target="_blank" class="text-blue-600 hover:underline hover:text-blue-800 flex items-center justify-center gap-2" style="cursor: none;">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.55 2 2.04 6.5 2.04 12c0 1.77.47 3.45 1.3 4.9L2.01 22l5.25-1.38c1.4.77 2.97 1.18 4.78 1.18C17.53 21.8 22.04 17.3 22.04 12S17.53 2 12.04 2zm0 19c-1.5 0-2.9-.4-4.13-1.12l-.3-.17-3.1 0 .65-3.04-.2-.33c-.76-1.29-1.16-2.78-1.16-4.34 0-4.42 3.6-8 8.04-8s8.04 3.58 8.04 8-3.6 8-8.04 8zm4.35-6.57c-.24-.12-.86-.43-.99-.48-.12-.05-.22-.07-.32.07-.1.14-.38.48-.46.58-.08.1-.16.12-.3.04-.14-.08-.6-.22-1.14-.7-.42-.39-.71-.65-.8-1.07-.08-.4-.01-.38.06-.5-.06-.12-.32-.29-.45-.43-.12-.13-.26-.11-.36-.11-.1 0-.21-.01-.3-.01.1-.03-.38-.13-.53-.19-.14-.06-.4-.2-.6-.2-.2-.01-.43-.01-.66-.01-.47.11-1.3.46-1.3 1.25s1.3 1.45 1.5 1.57c.2.12 2.56 3.9 4.16 4.67.97.47 1.63.74 2.19.95.77.29 1.05.25 1.44.22.42-.03 1.3-.53 1.48-1.04.18-.5.18-.9.12-1.04-.05-.14-.17-.22-.36-.31z"/></svg>
+                            <span>וואטסאפ: 054-6609385</span>
+                        </a>
+                        <a href="mailto:zaviner@gmail.com" class="text-blue-600 hover:underline hover:text-blue-800 flex items-center justify-center gap-2" style="cursor: none;">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 19c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14zm18-12.29V5c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1v1.71l8 5.66 8-5.68zM4 8.52v10.48c0 .55.45 1 1 1h14c.55 0 1-.45 1-1V8.53l-8 5.67-8-5.68z"/></svg>
+                            <span>אימייל: zaviner@gmail.com</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center relative group">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר, מומחה בינה מלאכותית" class="ligne-claire-element w-48 h-48 md:w-64 md:h-64 object-cover rounded-full p-0 border-4 border-black group-hover:scale-105 transition-transform duration-300" style="box-shadow: 8px 8px 0px 0px black; cursor: none;">
+                    <div class="absolute -bottom-8 md:-bottom-10 left-1/2 -translate-x-1/2 bg-yellow-200 border-4 border-black text-black text-lg p-2 px-4 rounded-full whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300" style="box-shadow: 4px 4px 0px 0px black;">
+                        המדריך שלך
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Panel 3: The Blueprint (Core Message & Audience) -->
+        <section id="panel-3" class="ligne-claire-panel text-center">
+            <div class="ligne-claire-element max-w-5xl bg-white text-black p-8 md:p-12">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-green-700">מפת דרכים - למי מיועד המסע?</h2>
+                <p class="text-xl md:text-2xl leading-relaxed mb-10">
+                    המסר ברור: AI לכל אחד. מכלי עבודה יומיומיים ועד יצירה חדשנית. אנו משרטטים את הנתיב, מהקו הראשון ועד ליצירה המורכבת ביותר.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Audience 1 -->
+                    <div class="ligne-claire-element flex flex-col items-center p-6 bg-blue-50 hover:bg-blue-100" style="cursor: none;">
+                        <div class="ligne-claire-icon bg-blue-300">💡</div>
+                        <h3 class="text-2xl font-semibold mt-4 mb-2">ראשית הדרך</h3>
+                        <p class="text-lg">למתחילים המעוניינים להכיר את עולם ה-AI מאפס.</p>
+                    </div>
+                    <!-- Audience 2 -->
+                    <div class="ligne-claire-element flex flex-col items-center p-6 bg-yellow-50 hover:bg-yellow-100" style="cursor: none;">
+                        <div class="ligne-claire-icon bg-yellow-300">💼</div>
+                        <h3 class="text-2xl font-semibold mt-4 mb-2">לבעלי מקצוע</h3>
+                        <p class="text-lg">להטמעת AI בעבודה וייעול תהליכים.</p>
+                    </div>
+                    <!-- Audience 3 -->
+                    <div class="ligne-claire-element flex flex-col items-center p-6 bg-red-50 hover:bg-red-100" style="cursor: none;">
+                        <div class="ligne-claire-icon bg-red-300">🏢</div>
+                        <h3 class="text-2xl font-semibold mt-4 mb-2">ארגונים ומנהלים</h3>
+                        <p class="text-lg">הדרכות צוותיות ופתיחת אופקים חדשים.</p>
+                    </div>
+                    <!-- Audience 4 -->
+                    <div class="ligne-claire-element flex flex-col items-center p-6 bg-purple-50 hover:bg-purple-100" style="cursor: none;">
+                        <div class="ligne-claire-icon bg-purple-300">⚙️</div>
+                        <h3 class="text-2xl font-semibold mt-4 mb-2">פרויקטים מתקדמים</h3>
+                        <p class="text-lg">לפיתוח פתרונות מבוססי AI מורכבים.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Panel 4: Tools of the Artisan (Expertise) -->
+        <section id="panel-4" class="ligne-claire-panel text-center">
+            <div class="ligne-claire-element max-w-5xl bg-white text-black p-8 md:p-12">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-red-700">הכלים שתרכשו - מברשת בידך</h2>
+                <p class="text-xl md:text-2xl leading-relaxed mb-10">
+                    זוהי הסדנה שלנו: כלים חדים, קווים מדויקים. צור, בנה, נתח, אוטמט. הבינה המלאכותית - מברשת בידך.
+                </p>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 justify-items-center">
+                    <div class="tooltip-container">
+                        <div class="ligne-claire-icon bg-blue-300">✍️</div>
+                        <span class="tooltip-text">יצירת טקסטים ותוכן</span>
+                    </div>
+                    <div class="tooltip-container">
+                        <div class="ligne-claire-icon bg-yellow-300">📱</div>
+                        <span class="tooltip-text">בניית אפליקציות חכמות</span>
+                    </div>
+                    <div class="tooltip-container">
+                        <div class="ligne-claire-icon bg-green-300">🌐</div>
+                        <span class="tooltip-text">פיתוח אתרים מבוססי AI</span>
+                    </div>
+                    <div class="tooltip-container">
+                        <div class="ligne-claire-icon bg-purple-300">📊</div>
+                        <span class="tooltip-text">ניתוח נתונים ומחקר</span>
+                    </div>
+                    <div class="tooltip-container">
+                        <div class="ligne-claire-icon bg-pink-300">🎨</div>
+                        <span class="tooltip-text">יצירת תמונות ואומנות</span>
+                    </div>
+                    <div class="tooltip-container">
+                        <div class="ligne-claire-icon bg-indigo-300">🤖</div>
+                        <span class="tooltip-text">אוטומציה של תהליכים</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Panel 5: The Journeys (Services) -->
+        <section id="panel-5" class="ligne-claire-panel text-center">
+            <div class="ligne-claire-element max-w-5xl bg-white text-black p-8 md:p-12">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-purple-700">בחר את נתיב המסע שלך</h2>
+                <p class="text-xl md:text-2xl leading-relaxed mb-10">
+                    כל מסלול הוא קו ברור במפה, המוביל אותך לשליטה וחדשנות.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Service 1 -->
+                    <div class="ligne-claire-element flex flex-col items-center p-6 bg-blue-50 hover:bg-blue-100" style="cursor: none;">
+                        <div class="ligne-claire-icon bg-blue-300">👥</div>
+                        <h3 class="text-2xl font-semibold mt-4 mb-2">סדנאות קבוצתיות</h3>
+                        <p class="text-lg">מעשיות וממוקדות. למידה בקבוצה דינמית עם דגש על יישום מיידי.</p>
+                    </div>
+                    <!-- Service 2 -->
+                    <div class="ligne-claire-element flex flex-col items-center p-6 bg-yellow-50 hover:bg-yellow-100" style="cursor: none;">
+                        <div class="ligne-claire-icon bg-yellow-300">👤</div>
+                        <h3 class="text-2xl font-semibold mt-4 mb-2">שיעורים פרטיים</h3>
+                        <p class="text-lg">התאמה אישית מלאה לרמה, לקצב ולצרכים הייחודיים שלך.</p>
+                    </div>
+                    <!-- Service 3 -->
+                    <div class="ligne-claire-element flex flex-col items-center p-6 bg-green-50 hover:bg-green-100" style="cursor: none;">
+                        <div class="ligne-claire-icon bg-green-300">🎤</div>
+                        <h3 class="text-2xl font-semibold mt-4 mb-2">הרצאות לארגונים</h3>
+                        <p class="text-lg">פתיחת אופקים לצוותים, יצירת השראה וחיבור לעולם ה-AI.</p>
+                    </div>
+                    <!-- Service 4 -->
+                    <div class="ligne-claire-element flex flex-col items-center p-6 bg-purple-50 hover:bg-purple-100" style="cursor: none;">
+                        <div class="ligne-claire-icon bg-purple-300">🛠️</div>
+                        <h3 class="text-2xl font-semibold mt-4 mb-2">ייעוץ ופיתוח פרויקטים</h3>
+                        <p class="text-lg">ליווי מקצועי ואישי, משלב הרעיון ועד למימוש פרויקטים מבוססי AI.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Panel 6: The Nexus (Contact) -->
+        <section id="panel-6" class="ligne-claire-panel text-center pb-20"> <!-- Added pb-20 to ensure content isn't cut off by cursor at bottom -->
+            <div class="ligne-claire-element max-w-3xl bg-white text-black p-8 md:p-12">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 text-yellow-700">הקו המחבר - צור קשר</h2>
+                <p class="text-xl md:text-2xl leading-relaxed mb-8">
+                    זהו הרגע לשרטט את הקו הראשון במסע שלך. נשמח לעמוד לרשותך.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-6">
+                    <a href="https://wa.me/972546609385" target="_blank" class="ligne-claire-element flex items-center justify-center gap-3 px-6 py-3 bg-green-400 text-black text-2xl font-bold hover:bg-green-500" style="cursor: none;">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.55 2 2.04 6.5 2.04 12c0 1.77.47 3.45 1.3 4.9L2.01 22l5.25-1.38c1.4.77 2.97 1.18 4.78 1.18C17.53 21.8 22.04 17.3 22.04 12S17.53 2 12.04 2zm0 19c-1.5 0-2.9-.4-4.13-1.12l-.3-.17-3.1 0 .65-3.04-.2-.33c-.76-1.29-1.16-2.78-1.16-4.34 0-4.42 3.6-8 8.04-8s8.04 3.58 8.04 8-3.6 8-8.04 8zm4.35-6.57c-.24-.12-.86-.43-.99-.48-.12-.05-.22-.07-.32.07-.1.14-.38.48-.46.58-.08.1-.16.12-.3.04-.14-.08-.6-.22-1.14-.7-.42-.39-.71-.65-.8-1.07-.08-.4-.01-.38.06-.5-.06-.12-.32-.29-.45-.43-.12-.13-.26-.11-.36-.11-.1 0-.21-.01-.3-.01.1-.03-.38-.13-.53-.19-.14-.06-.4-.2-.6-.2-.2-.01-.43-.01-.66-.01-.47.11-1.3.46-1.3 1.25s1.3 1.45 1.5 1.57c.2.12 2.56 3.9 4.16 4.67.97.47 1.63.74 2.19.95.77.29 1.05.25 1.44.22.42-.03 1.3-.53 1.48-1.04.18-.5.18-.9.12-1.04-.05-.14-.17-.22-.36-.31z"/></svg>
+                        <span>וואטסאפ</span>
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="ligne-claire-element flex items-center justify-center gap-3 px-6 py-3 bg-blue-400 text-black text-2xl font-bold hover:bg-blue-500" style="cursor: none;">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M2.01 19c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v14zm18-12.29V5c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1v1.71l8 5.66 8-5.68zM4 8.52v10.48c0 .55.45 1 1 1h14c.55 0 1-.45 1-1V8.53l-8 5.67-8-5.68z"/></svg>
+                        <span>אימייל</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        const customCursor = document.getElementById('custom-cursor');
+        // Ensure all interactive elements have 'cursor: none;' in CSS to delegate to custom cursor.
+        // Selecting elements that typically have pointer feedback.
+        const interactiveElements = document.querySelectorAll('a, button, .ligne-claire-element, .ligne-claire-icon, .tooltip-container');
+        const parallaxBg = document.getElementById('parallax-bg-layer');
+        const panels = document.querySelectorAll('.ligne-claire-panel');
+
+        // 1. Custom Cursor Functionality
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('interactive'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('interactive'));
+        });
+
+        // 2. Parallax Effect for Background Panels
+        const updateParallax = () => {
+            let scrollY = window.scrollY;
+            let currentPanelIndex = 0;
+            // Determine which panel is currently most in view
+            for (let i = 0; i < panels.length; i++) {
+                const rect = panels[i].getBoundingClientRect();
+                // Consider a panel "active" if its top is above or at the viewport's center,
+                // and its bottom is below or at the viewport's center.
+                // This gives a smoother transition point.
+                if (rect.top <= window.innerHeight * 0.5 && rect.bottom >= window.innerHeight * 0.5) {
+                    currentPanelIndex = i;
+                    break;
+                }
+            }
+
+            // Update background class based on current panel
+            // Use currentPanelIndex + 1 because CSS classes are 1-indexed (parallax-1, parallax-2, etc.)
+            parallaxBg.className = `parallax-bg parallax-${currentPanelIndex + 1}`;
+
+            // Adjust background position based on scroll within the *active* panel
+            // This creates a subtle parallax movement that's relative to each panel's scroll
+            const panel = panels[currentPanelIndex];
+            const panelRect = panel.getBoundingClientRect();
+            const panelHeight = panel.offsetHeight;
+
+            // Calculate how far we are scrolled into the current panel (0 to 1)
+            // (Viewport Top - Panel Top) / Panel Height
+            const scrollProgress = Math.max(0, Math.min(1, (-panelRect.top + window.innerHeight * 0.2) / (panelHeight * 0.8)));
+
+            // Subtle vertical parallax movement. Max 50px movement.
+            // Move background slower than foreground.
+            const backgroundYOffset = -scrollProgress * 50;
+            parallaxBg.style.backgroundPosition = `center ${backgroundYOffset}px`;
+        };
+
+        window.addEventListener('scroll', updateParallax);
+        window.addEventListener('resize', updateParallax);
+        updateParallax(); // Initial call to set background based on initial scroll position
+    </script>
+</body>
+</html>

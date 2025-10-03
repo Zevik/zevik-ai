@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - אמנות ה-AI הביזנטית: שליטה בבינה המלאכותית</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        byz_gold: '#DAA520', // Goldenrod
+                        byz_deep_gold: '#B8860B', // Dark Goldenrod
+                        byz_red: '#8B0000', // Dark Red
+                        byz_deep_blue: '#000080', // Navy
+                        byz_emerald: '#228B22', // Forest Green
+                        byz_purple: '#4B0082', // Indigo
+                        byz_cream: '#F5F5DC', // Beige for text background
+                        byz_dark_bg: '#1A1A1A', // Very dark gray for overall background
+                        byz_dark_bg_lighter: '#2A2A2A', // Slightly lighter for contrast
+                    },
+                    fontFamily: {
+                        frank: ['"Frank Ruhl Libre"', 'serif'],
+                        rubik: ['"Rubik"', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glow-gold': '0 0 15px 5px rgba(218, 165, 32, 0.7), 0 0 30px 10px rgba(218, 165, 32, 0.4)',
+                        'glow-blue': '0 0 15px 5px rgba(0, 0, 128, 0.7), 0 0 30px 10px rgba(0, 0, 128, 0.4)',
+                        'glow-emerald': '0 0 15px 5px rgba(34, 139, 34, 0.7), 0 0 30px 10px rgba(34, 139, 34, 0.4)',
+                        'glow-purple': '0 0 15px 5px rgba(75, 0, 130, 0.7), 0 0 30px 10px rgba(75, 0, 130, 0.4)',
+                        'glow-red': '0 0 15px 5px rgba(139, 0, 0, 0.7), 0 0 30px 10px rgba(139, 0, 0, 0.4)',
+                        'glow-white': '0 0 10px 3px rgba(255, 255, 255, 0.5), 0 0 20px 6px rgba(255, 255, 255, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: var(--byz-dark-bg);
+            font-family: 'Rubik', sans-serif; /* Default for non-specific text */
+            color: #F5F5DC; /* byz_cream */
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax */
+            cursor: none; /* Hide default cursor */
+        }
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%); /* Center cursor */
+            transition: width 0.2s ease, height 0.2s ease, border-radius 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+            border: 2px solid #FFFFFF; /* White border for contrast */
+            background-color: transparent;
+        }
+        .custom-cursor.active {
+            width: 30px;
+            height: 30px;
+            background-color: rgba(255, 255, 255, 0.2); /* Subtle fill on hover */
+            border: 3px solid var(--byz-gold); /* Gold highlight on hover */
+        }
+        /* General styling for Byzantine feel */
+        .byzantine-frame {
+            border: 4px solid var(--byz-gold);
+            padding: 1rem;
+            box-shadow: 0 0 10px rgba(218, 165, 32, 0.5); /* Subtle glow */
+        }
+        .byzantine-text-bg {
+            background-color: rgba(42, 42, 42, 0.85); /* byz_dark_bg_lighter with transparency */
+            border: 1px solid rgba(218, 165, 32, 0.5);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        .byzantine-gradient-gold {
+            background: linear-gradient(135deg, var(--byz-deep-gold) 0%, var(--byz-gold) 100%);
+        }
+        .text-glow {
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.5), 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+        .icon-hover-effect {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .icon-hover-effect:hover {
+            transform: scale(1.05);
+            box-shadow: var(--tw-shadow-glow-gold); /* Default gold glow on hover for most icons */
+        }
+        /* Parallax background layers */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            transform: translate3d(0, 0, 0); /* Force hardware acceleration */
+        }
+        /* Layer 1: Subtle geometric pattern, very dark */
+        .layer-1 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" fill="%231A1A1A"/><g opacity="0.15"><path d="M0 0 L100 0 L100 100 L0 100 Z" fill="%23DAA520"/><path d="M10 10 L90 10 L90 90 L10 90 Z" fill="%23000080"/><path d="M20 20 L80 20 L80 80 L20 80 Z" fill="%238B0000"/></g></svg>');
+            opacity: 0.15;
+            filter: blur(2px);
+        }
+        /* Layer 2: More intricate pattern, slightly brighter */
+        .layer-2 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" fill="none"><rect width="100" height="100" fill="%231A1A1A"/><g opacity="0.2"><circle cx="50" cy="50" r="40" stroke="%23B8860B" stroke-width="2" fill="none"/><rect x="30" y="30" width="40" height="40" stroke="%23228B22" stroke-width="2" fill="none"/><line x1="20" y1="50" x2="80" y2="50" stroke="%234B0082" stroke-width="1"/><line x1="50" y1="20" x2="50" y2="80" stroke="%234B0082" stroke-width="1"/></g></svg>');
+            opacity: 0.1;
+            filter: blur(1px);
+        }
+    </style>
+</head>
+<body class="bg-byz-dark-bg text-byz-cream font-rubik leading-relaxed">
+
+    <div class="custom-cursor" id="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-layer layer-1" style="transform: translate3d(0, 0px, 0);"></div>
+    <div class="parallax-layer layer-2" style="transform: translate3d(0, 0px, 0);"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 min-h-screen flex flex-col items-center p-4 sm:p-8">
+
+        <!-- Hero Section -->
+        <header class="w-full max-w-5xl my-16 text-center byzantine-text-bg p-8 rounded-xl shadow-2xl byzantine-frame border-byz-deep-gold">
+            <h1 class="font-frank text-5xl sm:text-7xl font-bold text-byz-gold leading-tight mb-4 text-glow">
+                אור חדש בעידן הדיגיטלי:
+                <br><span class="text-byz-cream text-4xl sm:text-6xl block mt-2 text-glow">שליטה באמנות הבינה המלאכותית</span>
+            </h1>
+            <p class="font-frank text-xl sm:text-2xl text-byz-cream max-w-3xl mx-auto mb-6">
+                כמו אומן ביזנטי המפענח סודות עתיקים, אנו מזמינים אתכם למסע אל נבכי ה-AI- כוח יצירתי ואינסופי המגדיר מחדש את העתיד.
+            </p>
+            <a href="#contact" class="inline-block byzantine-gradient-gold text-byz-dark-bg font-rubik font-bold text-xl sm:text-2xl py-4 px-8 rounded-full shadow-lg hover:shadow-glow-gold transition-all duration-300 transform hover:scale-105">
+                הצטרפו למסע ההארה
+            </a>
+        </header>
+
+        <!-- Introduction Section -->
+        <section class="w-full max-w-4xl my-12 p-8 byzantine-text-bg rounded-xl shadow-xl byzantine-frame">
+            <h2 class="font-frank text-4xl font-bold text-byz-emerald mb-6 text-center text-glow">
+                הבינה המלאכותית - קודש הקודשים של המאה ה-21
+            </h2>
+            <p class="font-frank text-lg text-byz-cream mb-4">
+                בעידן שבו הקידמה דוהרת, ה-AI ניצבת כמעיין ידע בלתי נדלה, מעצבת כל היבט בחיינו - החל מהרעיונות הגדולים ביותר ועד לפעולות היומיומיות הקטנות. עבור רבים, היא עדיין נראית כמסתורין בלתי חדיר, שפה שלא נלמדה. אנו כאן כדי לשנות זאת.
+            </p>
+            <p class="font-frank text-lg text-byz-cream mb-4">
+                בהנחיית זאביק אבינר, אנו הופכים את ה-AI לנגיש, מובן ובר-יישום. מפשטים את המורכבות, חושפים את הפוטנציאל ומעניקים לכם את הכלים להפוך מאנשי מקצוע למובילי דרך בנוף הדיגיטלי המתפתח.
+            </p>
+            <div class="text-center mt-8">
+                <a href="#services" class="text-byz-gold font-rubik text-xl hover:underline hover:text-byz-deep-gold transition-colors duration-200">
+                    גלו את הדרך שלכם <span class="pr-2">&#8592;</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section class="w-full max-w-4xl my-12 p-8 byzantine-text-bg rounded-xl shadow-xl byzantine-frame">
+            <h2 class="font-frank text-4xl font-bold text-byz-purple mb-6 text-center text-glow">
+                למי מיועדת הדרך הרוחנית-טכנולוגית הזו?
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-byz-cream font-frank text-lg">
+                <div class="byzantine-frame p-6 bg-byz-dark-bg_lighter rounded-lg shadow-md hover:shadow-glow-purple icon-hover-effect">
+                    <h3 class="font-rubik text-2xl font-semibold text-byz-gold mb-3">מגלי עולם מתחילים</h3>
+                    <p>אלו השואפים להבין את יסודות ה-AI ולעשות את צעדיהם הראשונים אל עולם חדש ומרגש.</p>
+                </div>
+                <div class="byzantine-frame p-6 bg-byz-dark-bg_lighter rounded-lg shadow-md hover:shadow-glow-emerald icon-hover-effect">
+                    <h3 class="font-rubik text-2xl font-semibold text-byz-emerald mb-3">אדריכלי מקצועות העתיד</h3>
+                    <p>אנשי מקצוע המעוניינים לשלב AI בעבודתם, לייעל תהליכים ולפתוח אופקים חדשים לקריירה.</p>
+                </div>
+                <div class="byzantine-frame p-6 bg-byz-dark-bg_lighter rounded-lg shadow-md hover:shadow-glow-blue icon-hover-effect">
+                    <h3 class="font-rubik text-2xl font-semibold text-byz-deep-blue mb-3">מנהיגי חזון וארגונים</h3>
+                    <p>מנהלים וארגונים המבקשים להטמיע את כוחה של ה-AI בצוותיהם, להגביר חדשנות ויתרון תחרותי.</p>
+                </div>
+                <div class="byzantine-frame p-6 bg-byz-dark-bg_lighter rounded-lg shadow-md hover:shadow-glow-red icon-hover-effect">
+                    <h3 class="font-rubik text-2xl font-semibold text-byz-red mb-3">בוני פרויקטים מתקדמים</h3>
+                    <p>למתקדמים - ליווי ופיתוח פרויקטים מבוססי AI, מהרעיון ועד למימוש מלא.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Specializations Section -->
+        <section class="w-full max-w-5xl my-12 p-8 byzantine-text-bg rounded-xl shadow-xl byzantine-frame">
+            <h2 class="font-frank text-4xl font-bold text-byz-gold mb-8 text-center text-glow">
+                תחומי הארה - היבטיה השונים של הבינה המלאכותית
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 text-center">
+                <div class="byzantine-frame p-6 bg-byz-dark-bg_lighter rounded-lg shadow-md hover:shadow-glow-gold icon-hover-effect flex flex-col items-center">
+                    <div class="text-6xl text-byz-red mb-4">📝</div>
+                    <h3 class="font-rubik text-2xl font-semibold text-byz-gold mb-2">יצירת כתבי קודש דיגיטליים</h3>
+                    <p class="font-frank text-lg text-byz-cream">איך ה-AI יוצרת טקסטים, מאמרים ותוכן שובה לב.</p>
+                </div>
+                <div class="byzantine-frame p-6 bg-byz-dark-bg_lighter rounded-lg shadow-md hover:shadow-glow-blue icon-hover-effect flex flex-col items-center">
+                    <div class="text-6xl text-byz-gold mb-4">💡</div>
+                    <h3 class="font-rubik text-2xl font-semibold text-byz-deep-blue mb-2">ארכיטקטורה של מחשבה</h3>
+                    <p class="font-frank text-lg text-byz-cream">פיתוח אפליקציות חכמות המגיבות ומבינות.</p>
+                </div>
+                <div class="byzantine-frame p-6 bg-byz-dark-bg_lighter rounded-lg shadow-md hover:shadow-glow-emerald icon-hover-effect flex flex-col items-center">
+                    <div class="text-6xl text-byz-red mb-4">🌐</div>
+                    <h3 class="font-rubik text-2xl font-semibold text-byz-emerald mb-2">הקמת מקדשים וירטואליים</h3>
+                    <p class="font-frank text-lg text-byz-cream">בניית אתרים אינטראקטיביים עם יכולות AI.</p>
+                </div>
+                <div class="byzantine-frame p-6 bg-byz-dark-bg_lighter rounded-lg shadow-md hover:shadow-glow-purple icon-hover-effect flex flex-col items-center">
+                    <div class="text-6xl text-byz-gold mb-4">📊</div>
+                    <h3 class="font-rubik text-2xl font-semibold text-byz-purple mb-2">פיענוח נבואות הנתונים</h3>
+                    <p class="font-frank text-lg text-byz-cream">כלי AI לניתוח נתונים וגילוי תובנות עמוקות.</p>
+                </div>
+                <div class="byzantine-frame p-6 bg-byz-dark-bg_lighter rounded-lg shadow-md hover:shadow-glow-gold icon-hover-effect flex flex-col items-center">
+                    <div class="text-6xl text-byz-red mb-4">🖼️</div>
+                    <h3 class="font-rubik text-2xl font-semibold text-byz-gold mb-2">בורא יקומים חזותיים</h3>
+                    <p class="font-frank text-lg text-byz-cream">יצירת תמונות, אומנות ועיצוב באמצעות AI.</p>
+                </div>
+                <div class="byzantine-frame p-6 bg-byz-dark-bg_lighter rounded-lg shadow-md hover:shadow-glow-blue icon-hover-effect flex flex-col items-center">
+                    <div class="text-6xl text-byz-gold mb-4">⚙️</div>
+                    <h3 class="font-rubik text-2xl font-semibold text-byz-deep-blue mb-2">מכניקת הפלא</h3>
+                    <p class="font-frank text-lg text-byz-cream">אוטומציה חכמה המייעלת תהליכים ומשימות.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="w-full max-w-4xl my-12 p-8 byzantine-text-bg rounded-xl shadow-xl byzantine-frame">
+            <h2 class="font-frank text-4xl font-bold text-byz-red mb-6 text-center text-glow">
+                השבילים אל ההתמרה: שירותי ההדרכה שלנו
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-byz-cream font-frank text-lg">
+                <div class="byzantine-frame p-6 bg-byz-dark-bg_lighter rounded-lg shadow-md hover:shadow-glow-red icon-hover-effect">
+                    <h3 class="font-rubik text-2xl font-semibold text-byz-gold mb-3">סדנאות קבוצתיות מעשיות</h3>
+                    <p>מסעות משותפים אל ה-AI, תוך דגש על יישום פרקטי וכלים מעשיים לשליטה מיידית.</p>
+                </div>
+                <div class="byzantine-frame p-6 bg-byz-dark-bg_lighter rounded-lg shadow-md hover:shadow-glow-emerald icon-hover-effect">
+                    <h3 class="font-rubik text-2xl font-semibold text-byz-emerald mb-3">שיעורים פרטיים - הארה אישית</h3>
+                    <p>למידה מותאמת אישית, בקצב שלכם ובהתאם לצרכים הספציפיים שלכם, ממתחילים ועד מתקדמים.</p>
+                </div>
+                <div class="byzantine-frame p-6 bg-byz-dark-bg_lighter rounded-lg shadow-md hover:shadow-glow-blue icon-hover-effect">
+                    <h3 class="font-rubik text-2xl font-semibold text-byz-deep-blue mb-3">הרצאות וסדנאות לארגונים</h3>
+                    <p>פתיחת אופקים חדשים לצוותים ומנהלים, חשיפה לכוחה של ה-AI בשינוי ארגוני וחדשנות.</p>
+                </div>
+                <div class="byzantine-frame p-6 bg-byz-dark-bg_lighter rounded-lg shadow-md hover:shadow-glow-purple icon-hover-effect">
+                    <h3 class="font-rubik text-2xl font-semibold text-byz-purple mb-3">ייעוץ ופיתוח פרויקטים</h3>
+                    <p>ליווי מקצועי ואישי, מהרעיון הראשוני ועד למימוש מלא של פרויקטים מורכבים מבוססי AI.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Zaviner Section -->
+        <section class="w-full max-w-4xl my-12 p-8 byzantine-text-bg rounded-xl shadow-xl byzantine-frame flex flex-col md:flex-row items-center gap-8">
+            <div class="w-full md:w-1/3 flex justify-center">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר, מומחה בינה מלאכותית" class="w-48 h-48 rounded-full object-cover byzantine-frame border-byz-gold shadow-glow-gold">
+            </div>
+            <div class="w-full md:w-2/3 text-byz-cream">
+                <h2 class="font-frank text-4xl font-bold text-byz-emerald mb-4 text-glow">
+                    זאביק אבינר: מורה דרך, אדריכל חזונות AI
+                </h2>
+                <p class="font-frank text-lg mb-4">
+                    זאביק אבינר הוא לא רק מומחה בינה מלאכותית- הוא שומר הסף והמגלה של פוטנציאל ה-AI עבורכם. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק הפך את מומחיותו לשליחות: להנגיש את הטכנולוגיה המהפכנית הזו לכל דורש.
+                </p>
+                <p class="font-frank text-lg mb-4">
+                    יכולתו המיוחדת טמונה בפישוט המורכב, בהפיכת הרעיונות המופשטים לכלים ישימים שניתן ליישם מיד בעבודה ובחיים. הוא רואה ב-AI לא רק טכנולוגיה, אלא שפה חדשה, ואותה הוא מלמד באהבה, בסבלנות ובמקצועיות ללא פשרות.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="w-full max-w-4xl my-12 p-8 byzantine-text-bg rounded-xl shadow-xl byzantine-frame text-center">
+            <h2 class="font-frank text-4xl font-bold text-byz-deep-blue mb-6 text-glow">
+                האירו את דרככם: צרו קשר עם זאביק
+            </h2>
+            <p class="font-frank text-xl text-byz-cream mb-8">
+                הזדמנות להפוך את המסתורין של ה-AI לכוח מניע בחייכם ובקריירה שלכם. אל תחכו שהעתיד יבוא אליכם - צרו אותו יחד איתנו.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
+                <a href="https://wa.me/972546609385" target="_blank" class="byzantine-gradient-gold text-byz-dark-bg font-rubik font-bold text-xl py-3 px-6 rounded-full shadow-lg hover:shadow-glow-gold transition-all duration-300 transform hover:scale-105 flex items-center">
+                    <span class="ml-2">וואטסאפ: 054-6609385</span> 💬
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="byzantine-gradient-gold text-byz-dark-bg font-rubik font-bold text-xl py-3 px-6 rounded-full shadow-lg hover:shadow-glow-gold transition-all duration-300 transform hover:scale-105 flex items-center">
+                    <span class="ml-2">אימייל: zaviner@gmail.com</span> 📧
+                </a>
+            </div>
+        </section>
+
+        <footer class="mt-16 text-center text-byz-cream text-sm opacity-70">
+            <p>&copy; 2023 זאביק אבינר - כל הזכויות שמורות למאסטרו ה-AI.</p>
+            <p>אמנות דיגיטלית בהשראת מסורות עתיקות וטכנולוגיות העתיד.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        document.querySelectorAll('a, button, .icon-hover-effect').forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('active'));
+        });
+
+        // Parallax Scrolling Logic
+        const layer1 = document.querySelector('.layer-1');
+        const layer2 = document.querySelector('.layer-2');
+
+        window.addEventListener('scroll', () => {
+            const scrollPos = window.pageYOffset;
+
+            // Adjust these factors for desired parallax speed
+            // Layer 1 moves slowest, Layer 2 slightly faster
+            layer1.style.transform = `translate3d(0, ${scrollPos * 0.1}px, 0)`;
+            layer2.style.transform = `translate3d(0, ${scrollPos * 0.05}px, 0)`; // Slower than layer1, creating depth
+        });
+    </script>
+</body>
+</html>

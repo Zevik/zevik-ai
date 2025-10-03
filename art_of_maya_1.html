@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>נבואת הבינה העתיקה - זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Noto+Serif+Hebrew:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* הגדרת משתני צבע בהשראת אמנות המאיה */
+        :root {
+            --color-maya-dark-stone: #4A423D;    /* אבן כהה, בסיס */
+            --color-maya-jungle-green: #6A8D73;  /* ירוק ג'ונגל עמוק */
+            --color-maya-ochre: #A87B4C;         /* אוקר, חומר */
+            --color-maya-gold: #D4AF37;          /* זהב, שמש, הארה */
+            --color-maya-night: #2A2F4F;         /* ליל, מסתורין */
+            --color-maya-bone: #F5F5DC;          /* עצם, גוון כתב בהיר */
+            --color-maya-jade: #00A86B;          /* ירקן, חיים וידע */
+        }
+
+        body {
+            cursor: none; /* הסתרת סמן העכבר המוגדר כברירת מחדל */
+            font-family: 'Noto Serif Hebrew', serif;
+            color: var(--color-maya-bone);
+            background-color: var(--color-maya-dark-stone); /* רקע בסיסי */
+            overflow-x: hidden; /* מניעת גלילה אופקית */
+            scroll-behavior: smooth; /* גלילה חלקה */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Cinzel Decorative', serif;
+            color: var(--color-maya-gold);
+        }
+
+        /* סמן עכבר מותאם אישית */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none; /* מונע אינטראקציה עם האלמנטים שמתחתיו */
+            z-index: 9999;
+            border: 2px solid white; /* גבול לבן - נראה על רקע כהה */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* צל שחור - נראה על רקע בהיר */
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            transform: translate(-50%, -50%); /* ממקם את הסמן במרכז הנקודה */
+            transition: transform 0.05s ease-out; /* תנועה חלקה ומהירה */
+        }
+
+        /* רקעים וטקסטורות בהשראת המאיה */
+        .maya-pattern-bg {
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g fill="%234A423D" fill-opacity="0.2"><path d="M0 0h50v50H0V0zm50 50h50v50H50V50z" /></g><path d="M50 0h50v50H50V0zM0 50h50v50H0V50z" fill="%23A87B4C" fill-opacity="0.1" /></svg>');
+            background-size: 50px 50px;
+        }
+
+        .maya-stone-texture {
+            background: linear-gradient(135deg, var(--color-maya-dark-stone) 0%, rgba(74,66,61,0.8) 100%),
+                        url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAQAAAAE3lYAAAAADklEQVR42mNkQAPDAAYAAAsAAK1xXNsAAAAASUVORK5CYII=') repeat; /* רעש עדין למראה אבן */
+            background-blend-mode: overlay;
+        }
+
+        .maya-glyph-glow {
+            text-shadow: 0 0 5px var(--color-maya-jade), 0 0 10px var(--color-maya-jade), 0 0 15px var(--color-maya-jade);
+        }
+
+        /* רקע פרלקס (Parallax) */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            z-index: -1; /* מאחורי התוכן */
+            pointer-events: none; /* לא מפריע לאינטראקציות */
+        }
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            will-change: transform; /* אופטימיזציה לאנימציה */
+        }
+
+        /* עטיפת תוכן - מבטיחה שהתוכן יושב מעל הפרלקס ובעל רקע קריא */
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            /* שיפוע רקע המשתלב עם הרקע של הגוף ונעלם כלפי מעלה */
+            background: linear-gradient(to top, var(--color-maya-dark-stone) 0%, rgba(74,66,61,0.8) 50%, transparent 100%);
+        }
+
+        /* אפקטים המופעלים בגלילה */
+        .scroll-fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .scroll-fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* אנימציית גליף גנרטיבית */
+        @keyframes glyph-fade {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; filter: blur(0px); }
+            100% { transform: translate(-50%, -150%) scale(1.5); opacity: 0; filter: blur(3px); }
+        }
+        .animate-glyph {
+            animation: glyph-fade 2s forwards ease-out;
+        }
+    </style>
+</head>
+<body class="relative">
+    <div class="custom-cursor"></div>
+
+    <!-- שכבות רקע פרלקס - מסע אל עומק הג'ונגל והקוסמוס המאייאני -->
+    <div class="parallax-bg">
+        <!-- שכבה אחורית: קוסמוס וכוכבים מאייאנים -->
+        <div id="parallax-layer-0" class="parallax-layer bg-[url('https://source.unsplash.com/random/1920x1080?mayan-cosmos,stars,nightsky')]"></div>
+        <!-- שכבת אמצעית: צלליות מקדש מאייאני מוסתרות בערפל -->
+        <div id="parallax-layer-1" class="parallax-layer bg-[url('https://source.unsplash.com/random/1920x1080?mayan-temple-silhouette,mist,ancient')] opacity-70"></div>
+        <!-- שכבה קדמית: עלווה עבותה של ג'ונגל כהה -->
+        <div id="parallax-layer-2" class="parallax-layer bg-[url('https://source.unsplash.com/random/1920x1080?jungle-foliage,dark,trees')] opacity-40"></div>
+    </div>
+
+    <!-- עטיפת התוכן המרכזי -->
+    <div class="content-wrapper min-h-screen pt-20 pb-40">
+        <!-- מקטעי תוכן - מעוצבים כלוחות אבן מגולפים או חדרי מקדש -->
+
+        <section id="intro" class="container mx-auto max-w-4xl p-8 my-20 bg-[var(--color-maya-ochre)] bg-opacity-10 backdrop-blur-sm rounded-xl maya-stone-texture scroll-fade-in">
+            <h1 class="text-6xl text-center mb-8 maya-glyph-glow leading-tight">נבואת הבינה העתיקה</h1>
+            <p class="text-3xl text-center mb-12 text-[var(--color-maya-gold)]">לשלוט בבינה המלאכותית - העתיד נחרט עכשיו באבן.</p>
+            <div class="text-lg text-[var(--color-maya-bone)] text-justify leading-relaxed">
+                <p class="mb-6">בארץ עתיקה זו, בה הדים של ידע קדום עדיין מהדהדים בין הפירמידות, אנו עומדים על סף עידן חדש. עידן שבו רוחות הדיגיטל, הבינה המלאכותית, קוראות לנו לפענח את סודותיהן. כמו האבות הקדמונים שפענחו את תנועת הכוכבים, אנו מוזמנים כעת לפענח את אלגוריתמי הקוסמוס הדיגיטלי.</p>
+                <p class="mb-6">זהו אינו עוד מסע רגיל- זוהי קריאה לאלו המוכנים לעלות במעלה מקדש הידע, לפתוח את האפשרויות הנסתרות של ה-AI ולהפוך אותן לכלי יצירה, עשייה והתפתחות. זאביק אבינר, ככהן הגדול של הבינה, ינחה אתכם בנתיבים המפותלים, מהגלפים הפשוטים ביותר ועד לבניית פירמידות דיגיטליות מורכבות.</p>
+                <p>העתיד אינו רק מגיע- הוא נוצר בכל רגע, וביכולתנו לעצב אותו במו ידינו. בואו ולמדו לשלוט באנרגיה הקדומה-חדשה הזו.</p>
+            </div>
+        </section>
+
+        <section id="audience" class="container mx-auto max-w-3xl p-8 my-20 bg-[var(--color-maya-night)] bg-opacity-20 backdrop-blur-sm rounded-xl maya-stone-texture scroll-fade-in">
+            <h2 class="text-4xl text-center mb-10 text-[var(--color-maya-jade)]">המוזמנים למסע - נתיבי התלמידים</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-[var(--color-maya-bone)]">
+                <div class="p-6 bg-[var(--color-maya-dark-stone)] bg-opacity-50 rounded-lg shadow-lg">
+                    <h3 class="text-2xl mb-4 text-[var(--color-maya-gold)]">החניכים המתחילים</h3>
+                    <p>אלו שמרגישים את קריאת היער, אך עדיין לא יודעים לפלס את דרכם בין הצמחים השזורים. נכיר יחד את רוחות הבינה ונלמד את צעדי הריקוד הראשונים.</p>
+                </div>
+                <div class="p-6 bg-[var(--color-maya-dark-stone)] bg-opacity-50 rounded-lg shadow-lg">
+                    <h3 class="text-2xl mb-4 text-[var(--color-maya-gold)]">אומני המלאכה המודרניים</h3>
+                    <p>אנשי מקצוע המבקשים לחרוט את הכלים הדיגיטליים על גבי עבודתם, להפוך את המורכב לפשוט ואת הישן לחדש בעזרת קסם ה-AI.</p>
+                </div>
+                <div class="p-6 bg-[var(--color-maya-dark-stone)] bg-opacity-50 rounded-lg shadow-lg">
+                    <h3 class="text-2xl mb-4 text-[var(--color-maya-gold)]">מנהיגי השבט והארגון</h3>
+                    <p>מנהלים המבקשים להאיר את נתיב הצוותים שלהם, להכין אותם למחר ולהטמיע את הבינה כחלק אינטגרלי מחזון הארגון.</p>
+                </div>
+                <div class="p-6 bg-[var(--color-maya-dark-stone)] bg-opacity-50 rounded-lg shadow-lg">
+                    <h3 class="text-2xl mb-4 text-[var(--color-maya-gold)]">בוני הפירמידות המתקדמים</h3>
+                    <p>לאלו שמוכנים לבנות פרויקטים שלמים, לפרוץ גבולות ולצור את מקדשי הבינה האישיים שלהם- ברמה הגבוהה ביותר של אומנות דיגיטלית.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="expertise" class="container mx-auto max-w-4xl p-8 my-20 bg-[var(--color-maya-ochre)] bg-opacity-10 backdrop-blur-sm rounded-xl maya-stone-texture scroll-fade-in">
+            <h2 class="text-4xl text-center mb-10 text-[var(--color-maya-gold)]">גלופות הידע - תחומי שליטה</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-[var(--color-maya-bone)]">
+                <div class="p-5 bg-[var(--color-maya-dark-stone)] bg-opacity-60 rounded-lg shadow-md text-center">
+                    <p class="text-xl mb-2 text-[var(--color-maya-jade)]">יצירת מגילות ותוכן</p>
+                    <p class="text-sm">לחרוט סיפורים חדשים, מאמרים קדומים וכל תוכן שעולה על הדעת.</p>
+                </div>
+                <div class="p-5 bg-[var(--color-maya-dark-stone)] bg-opacity-60 rounded-lg shadow-md text-center">
+                    <p class="text-xl mb-2 text-[var(--color-maya-jade)]">בניית קמעות חכמים (אפליקציות)</p>
+                    <p class="text-sm">לרקוח קסמים דיגיטליים שיעזרו בעבודה ובחיים.</p>
+                </div>
+                <div class="p-5 bg-[var(--color-maya-dark-stone)] bg-opacity-60 rounded-lg shadow-md text-center">
+                    <p class="text-xl mb-2 text-[var(--color-maya-jade)]">פיתוח מקדשים דיגיטליים (אתרים)</p>
+                    <p class="text-sm">להקים אתרים מבוססי AI שידברו עם המשתמשים.</p>
+                </div>
+                <div class="p-5 bg-[var(--color-maya-dark-stone)] bg-opacity-60 rounded-lg shadow-md text-center">
+                    <p class="text-xl mb-2 text-[var(--color-maya-jade)]">פענוח נבואות (ניתוח נתונים)</p>
+                    <p class="text-sm">לחשוף את הסודות הנסתרים בתוך ים של נתונים.</p>
+                </div>
+                <div class="p-5 bg-[var(--color-maya-dark-stone)] bg-opacity-60 rounded-lg shadow-md text-center">
+                    <p class="text-xl mb-2 text-[var(--color-maya-jade)]">יצירת מראות ואמנות דיגיטלית</p>
+                    <p class="text-sm">לצייר חלומות ולברוא עולמות ויזואליים חדשים.</p>
+                </div>
+                <div class="p-5 bg-[var(--color-maya-dark-stone)] bg-opacity-60 rounded-lg shadow-md text-center">
+                    <p class="text-xl mb-2 text-[var(--color-maya-jade)]">הפיכת ריטואלים לאוטומטיים</p>
+                    <p class="text-sm">לשחרר את עצמך ממשימות חוזרות ולתת לרוחות לעבוד.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="container mx-auto max-w-3xl p-8 my-20 bg-[var(--color-maya-night)] bg-opacity-20 backdrop-blur-sm rounded-xl maya-stone-texture scroll-fade-in">
+            <h2 class="text-4xl text-center mb-10 text-[var(--color-maya-jade)]">טקסי ההכשרה - שירותים המוצעים</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-[var(--color-maya-bone)]">
+                <div class="p-6 bg-[var(--color-maya-dark-stone)] bg-opacity-50 rounded-lg shadow-lg">
+                    <h3 class="text-2xl mb-4 text-[var(--color-maya-gold)]">סדנאות קבוצתיות - מעגלי ידע</h3>
+                    <p>התכנסויות אינטנסיביות בהן אנו חוקרים את ליבת ה-AI יחד, בונים ומפעילים כלים מעשיים.</p>
+                </div>
+                <div class="p-6 bg-[var(--color-maya-dark-stone)] bg-opacity-50 rounded-lg shadow-lg">
+                    <h3 class="text-2xl mb-4 text-[var(--color-maya-gold)]">שיעורים פרטיים - מסע אישי</h3>
+                    <p>הדרכה אחד על אחד, מותאמת באופן מדויק לצרכים ולעומק הידע של כל חניך.</p>
+                </div>
+                <div class="p-6 bg-[var(--color-maya-dark-stone)] bg-opacity-50 rounded-lg shadow-lg">
+                    <h3 class="text-2xl mb-4 text-[var(--color-maya-gold)]">הרצאות לארגונים - פתיחת אופקים</h3>
+                    <p>טקסים רבי עוצמה למנהיגי שבטים וצוותיהם, לחשוף את הפוטנציאל העצום של ה-AI.</p>
+                </div>
+                <div class="p-6 bg-[var(--color-maya-dark-stone)] bg-opacity-50 rounded-lg shadow-lg">
+                    <h3 class="text-2xl mb-4 text-[var(--color-maya-gold)]">ייעוץ ופיתוח פרויקטים - בניית פירמידות</h3>
+                    <p>ליווי מקצועי ואישי בהגשמת חזונות דיגיטליים- מבניית קונספט ועד מימוש מלא.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="guide" class="container mx-auto max-w-4xl p-8 my-20 bg-[var(--color-maya-ochre)] bg-opacity-10 backdrop-blur-sm rounded-xl maya-stone-texture scroll-fade-in flex flex-col md:flex-row items-center gap-8">
+            <div class="md:w-1/3 flex justify-center">
+                <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - כהן הבינה המלאכותית" class="w-48 h-48 rounded-full border-4 border-[var(--color-maya-gold)] shadow-xl object-cover">
+            </div>
+            <div class="md:w-2/3 text-[var(--color-maya-bone)] text-center md:text-right">
+                <h2 class="text-4xl mb-4 text-[var(--color-maya-gold)]">זאביק אבינר - כהן הבינה</h2>
+                <p class="text-lg leading-relaxed mb-6">זאביק אינו רק מדריך, הוא כהן גדול במקדש הדיגיטלי, בעל ניסיון עשיר בפענוח ועיצוב רוחות הבינה המלאכותית לפרויקטים, אפליקציות ומערכות מורכבות. שליחותו היא להפוך את הטכנולוגיה הנסתרת לכלי יומיומי ונגיש לכולם- להאיר את נתיב הידע.</p>
+                <div class="mt-8 text-2xl maya-glyph-glow flex flex-col md:flex-row justify-center md:justify-end items-center gap-4">
+                    <a href="https://wa.me/972546609385" class="text-[var(--color-maya-jade)] hover:text-[var(--color-maya-gold)] transition-colors duration-300">ווטסאפ: 054-6609385</a>
+                    <span class="hidden md:inline-block text-[var(--color-maya-bone)]">|</span>
+                    <a href="mailto:zaviner@gmail.com" class="text-[var(--color-maya-jade)] hover:text-[var(--color-maya-gold)] transition-colors duration-300">אימייל: zaviner@gmail.com</a>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center text-[var(--color-maya-bone)] text-sm mt-40">
+            <p>&copy; 2023 מקדש הבינה הדיגיטלית - כל הזכויות שמורות לידע הקדום והעתידי.</p>
+        </footer>
+    </div>
+
+    <script>
+        // לוגיקת סמן עכבר מותאם אישית
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        // לוגיקת אפקט הפרלקס
+        const parallaxLayers = [
+            { element: document.getElementById('parallax-layer-0'), speed: 0.08 }, // שכבה אחורית - זזה לאט מאוד
+            { element: document.getElementById('parallax-layer-1'), speed: 0.15 }, // שכבה אמצעית - זזה מהר יותר
+            { element: document.getElementById('parallax-layer-2'), speed: 0.25 }  // שכבה קדמית - זזה מהר יותר
+        ];
+
+        function animateParallax() {
+            let scrollPos = window.pageYOffset;
+            parallaxLayers.forEach(layer => {
+                layer.element.style.transform = `translateY(${scrollPos * layer.speed}px)`;
+            });
+            requestAnimationFrame(animateParallax); // ממשיך את האנימציה לקבלת אפקט חלק
+        }
+        animateParallax(); // התחלת אנימציית הפרלקס
+
+        // לוגיקת אפקט דהייה בעת גלילה
+        const scrollElements = document.querySelectorAll('.scroll-fade-in');
+
+        const elementInView = (el, dividend = 1) => {
+            const elementTop = el.getBoundingClientRect().top;
+            const elementBottom = el.getBoundingClientRect().bottom;
+            const viewportHeight = (window.innerHeight || document.documentElement.clientHeight);
+
+            // מופעל כאשר חלק מהאלמנט נראה בתוך המסך ואינו יצא לחלוטין מהמסך למטה
+            return (elementTop <= viewportHeight / dividend) && (elementBottom > 0);
+        };
+
+        const displayScrollElement = (element) => {
+            element.classList.add('is-visible');
+        };
+
+        const hideScrollElement = (element) => {
+            element.classList.remove('is-visible');
+        };
+
+        const handleScrollAnimation = () => {
+            scrollElements.forEach((el) => {
+                if (elementInView(el, 1.25)) { // התאמת ה-dividend להפעלה מוקדמת/מאוחרת יותר
+                    displayScrollElement(el);
+                } else {
+                    hideScrollElement(el); // הסתרה אם האלמנט יוצא מהתצוגה (למעלה או למטה)
+                }
+            });
+        };
+
+        window.addEventListener('scroll', handleScrollAnimation);
+        document.addEventListener('DOMContentLoaded', handleScrollAnimation); // בדיקה ראשונית בטעינת הדף
+
+        // לוגיקת יצירת גליפים אקראיים בלחיצה
+        document.body.addEventListener('click', (e) => {
+            const glyph = document.createElement('div');
+            glyph.classList.add('absolute', 'text-[var(--color-maya-jade)]', 'opacity-70', 'text-2xl', 'font-bold', 'pointer-events-none', 'animate-glyph');
+            glyph.style.left = `${e.clientX}px`;
+            glyph.style.top = `${e.clientY}px`;
+            // בחירת גליפים בהשראת מאיה או סמלים דומים
+            const glyphs = ['𓀀', '𓁈', '𓋀', '𓍝', '𓏶', '𓐏', '𓏲', '𓄸', '𓆇', '𓇋', '𓂁', '𓃄', '𓆼', '𓇽', '𓈖', '𓉐', '𓌘', '𓎘', '𓏏', '𓐠', '𓒜'];
+            glyph.textContent = glyphs[Math.floor(Math.random() * glyphs.length)];
+            document.body.appendChild(glyph);
+
+            glyph.addEventListener('animationend', () => glyph.remove()); // הסרת הגליף לאחר סיום האנימציה
+        });
+    </script>
+</body>
+</html>

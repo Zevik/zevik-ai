@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אדריכלי העתיד: שליטה בבינה המלאכותית עם זאביק אבינר</title>
+    <meta name="description" content="מסע אמנותי אל עולם הבינה המלאכותית בהנחיית זאביק אבינר. למדו לבנות, ליצור ולשלוט בכלים של העתיד, בהשראת אמנות רומנסקית.">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts - Frank Ruhl Libre (Headings), Rubik (Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;700&family=Rubik:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom CSS Variables & Tailwind Configuration Overrides */
+        :root {
+            --color-primary-dark: #2c2c2c; /* Deep stone grey */
+            --color-primary-light: #f5f5dc; /* Parchment/bone white */
+            --color-accent-gold: #b8860b; /* Muted gold */
+            --color-accent-blue: #1a237e; /* Deep blue */
+            --color-text-dark: #1f2937; /* Dark gray */
+            --color-text-light: #e0e0e0; /* Light gray */
+        }
+
+        /* Basic Styles & Font Definitions */
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: var(--color-primary-dark);
+            color: var(--color-text-light);
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            scroll-behavior: smooth; /* Smooth scrolling */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Frank Ruhl Libre', serif;
+            color: var(--color-accent-gold); /* Headings in gold */
+        }
+
+        /* Text Shadow for Headings (Romanesque Carved look) */
+        .text-shadow-lg {
+            text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Custom Scrollbar for Webkit browsers */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--color-primary-dark);
+            border-left: 1px solid var(--color-accent-gold);
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--color-accent-gold);
+            border-radius: 6px;
+            border: 3px solid var(--color-primary-dark);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #d4af37; /* Lighter gold on hover */
+        }
+
+        /* Custom Cursor Styles (REQUIRED: light border + dark high-opacity shadow) */
+        #custom-cursor {
+            position: fixed;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease-out, background-color 0.2s ease-out, border-color 0.2s ease-out;
+            will-change: transform; /* Optimize for animation */
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark, high-opacity shadow */
+        }
+        #custom-cursor.grow {
+            transform: scale(1.8);
+            background-color: var(--color-accent-gold); /* Fill on hover */
+            border-color: var(--color-primary-dark); /* Adjust border on hover */
+        }
+
+        /* Parallax Background */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -2; /* Behind the main content, but in front of body background */
+            will-change: transform; /* Optimize for animation */
+        }
+
+        /* Specific Romanesque-inspired shapes/elements */
+        .ro_arch {
+            border-radius: 50% 50% 0 0; /* Rounded top, flat bottom */
+        }
+
+        .ro_column {
+            width: 8px; /* Thin column */
+            background-color: var(--color-accent-gold);
+            opacity: 0.3;
+            animation: pulse-column 5s infinite ease-in-out;
+        }
+
+        /* Column Pulse Animation */
+        @keyframes pulse-column {
+            0%, 100% { opacity: 0.3; transform: scaleY(1); }
+            50% { opacity: 0.6; transform: scaleY(1.05); }
+        }
+
+        /* Animation for section entry */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Delay utility classes for staggered animations */
+        .animate-on-scroll.delay-100 { transition-delay: 0.1s; }
+        .animate-on-scroll.delay-200 { transition-delay: 0.2s; }
+        .animate-on-scroll.delay-300 { transition-delay: 0.3s; }
+        .animate-on-scroll.delay-400 { transition-delay: 0.4s; }
+        .animate-on-scroll.delay-500 { transition-delay: 0.5s; }
+        .animate-on-scroll.delay-600 { transition-delay: 0.6s; }
+        .animate-on-scroll.delay-700 { transition-delay: 0.7s; }
+        .animate-on-scroll.delay-800 { transition-delay: 0.8s; }
+        .animate-on-scroll.delay-900 { transition-delay: 0.9s; }
+        .animate-on-scroll.delay-1000 { transition-delay: 1s; }
+
+        /* Custom slow spin for the AI medallion */
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin-slow 60s linear infinite;
+        }
+
+    </style>
+</head>
+<body class="relative text-lg leading-relaxed antialiased">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Layer 1: Subtle Texture -->
+    <div class="parallax-bg" data-speed="0.1" style="background-image: url('https://source.unsplash.com/random/1920x1080/?ancient-stone-texture,parchment'); opacity: 0.1;"></div>
+    <!-- Parallax Background Layer 2: Abstract Romanesque Pattern -->
+    <div class="parallax-bg" data-speed="0.05" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://source.unsplash.com/random/1920x1080/?geometric-pattern,arabic-tile'); opacity: 0.2;"></div>
+
+    <!-- Main Content Wrapper -->
+    <main class="relative z-10 min-h-screen pt-16 pb-16">
+        
+        <!-- Hero Section -->
+        <section id="hero" class="relative min-h-screen flex items-center justify-center p-8 bg-gradient-to-t from-transparent via-black/30 to-black/50">
+            <div class="container mx-auto text-center relative z-20">
+                <h1 class="text-6xl md:text-8xl font-bold mb-4 animate-on-scroll delay-100 text-shadow-lg" style="text-shadow: 4px 4px var(--color-primary-dark);">אדריכלי העתיד:</h1>
+                <h2 class="text-4xl md:text-6xl font-light mb-8 animate-on-scroll delay-300 text-shadow-lg" style="text-shadow: 3px 3px var(--color-primary-dark);">שליטה בבינה המלאכותית</h2>
+                <p class="text-2xl md:text-3xl max-w-4xl mx-auto mb-10 animate-on-scroll delay-500 text-stone-200">
+                    בפתחו של עידן חדש, שבו המחשבה הופכת למעשה והחזון למציאות. הבינה המלאכותית אינה עוד חידה אפלה, כי אם אומנות עתיקה-חדשה, הממתינה להתגלות. הדרך לשליטה בה - פתוחה בפניך.
+                </p>
+                <a href="#about" class="inline-block px-10 py-4 text-2xl font-bold bg-amber-700 text-white rounded-full hover:bg-amber-800 transition-colors duration-300 animate-on-scroll delay-700 shadow-xl border-2 border-amber-900 cursor-pointer">
+                    גלה את הדרך
+                </a>
+            </div>
+
+            <!-- Romanesque Arch / Frame effect -->
+            <div class="absolute inset-0 flex justify-center items-center pointer-events-none z-10">
+                <div class="absolute w-[80%] h-[80%] border-4 border-amber-700 ro_arch border-b-0 opacity-20 animate-on-scroll delay-900" style="transform: scaleY(1.2);"></div>
+                <div class="absolute w-[70%] h-[70%] border-4 border-amber-700 ro_arch border-b-0 opacity-10 animate-on-scroll delay-1000" style="transform: scaleY(1.3);"></div>
+            </div>
+        </section>
+
+        <!-- About Zevik Section -->
+        <section id="about" class="relative py-24 md:py-32 px-8 bg-gradient-to-t from-primary-dark to-black/20 text-center">
+            <div class="container mx-auto max-w-5xl">
+                <h3 class="text-5xl font-bold mb-12 animate-on-scroll delay-100 text-amber-500">זאביק אבינר - המאסטר, המורה, המפתח</h3>
+                
+                <div class="flex flex-col md:flex-row items-center md:items-start md:space-x-reverse md:space-x-12 mb-12">
+                    <div class="w-48 h-48 md:w-64 md:h-64 flex-shrink-0 mb-8 md:mb-0 relative rounded-full overflow-hidden border-4 border-amber-700 shadow-2xl animate-on-scroll delay-300 transform hover:scale-105 transition-transform duration-500 group">
+                        <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר, מומחה בינה מלאכותית" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                        <div class="absolute inset-0 bg-blue-900/30 group-hover:bg-transparent transition-colors duration-500"></div>
+                        <div class="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-primary-dark to-transparent"></div>
+                    </div>
+                    <div class="text-xl md:text-2xl text-stone-200 text-justify animate-on-scroll delay-500">
+                        <p class="mb-6">
+                            זאביק אבינר – המורה, האמן, המפתח. עם ידע עמוק וניסיון עשיר באלגוריתמים ובארכיטקטורות AI, זאביק מזמין אותך לפענח את סודות המכונה. הוא מגשר בין הידע המורכב לבין היישום הפרקטי, והופך את התיאוריה לכלים שימושיים.
+                        </p>
+                        <p class="mb-6">
+                            חזונו מניע אותנו: לאפשר לכל אחד ואחת, ללא קשר לרקע, להטמיע את כוחה של ה-AI בחיי היומיום ובעולם העבודה. כלים מעשיים, הבנה עמוקה, והשראה ליצור עתיד חדש – מהבסיס ועד פסגות היצירה.
+                        </p>
+                    </div>
+                </div>
+                <a href="#contact" class="inline-block px-8 py-3 text-xl font-bold bg-blue-900 text-white rounded-full hover:bg-blue-800 transition-colors duration-300 animate-on-scroll delay-700 shadow-xl border-2 border-blue-700 cursor-pointer">
+                    צור קשר עם המאסטר
+                </a>
+            </div>
+            <!-- Decorative arch/column elements -->
+            <div class="absolute bottom-0 right-0 w-1/3 h-1/3 border-4 border-blue-900 ro_arch border-b-0 opacity-10"></div>
+            <div class="absolute top-1/4 left-0 w-1/4 h-1/4 border-4 border-amber-700 ro_arch border-b-0 opacity-05" style="transform: rotate(180deg);"></div>
+        </section>
+
+        <!-- Pillars of Knowledge (Expertise) Section -->
+        <section id="expertise" class="relative py-24 md:py-32 px-8 bg-stone-900 text-center">
+            <div class="container mx-auto">
+                <h3 class="text-5xl font-bold mb-16 animate-on-scroll delay-100 text-amber-500">עמודי הידע: תחומי האומנות הדיגיטלית</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 text-center">
+                    <!-- Pillar 1 -->
+                    <div class="animate-on-scroll delay-200 group relative p-8 bg-gray-800 rounded-lg shadow-xl border-2 border-amber-700 hover:border-amber-500 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105">
+                        <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-16 h-16 bg-amber-700 rounded-full flex items-center justify-center text-3xl font-bold text-white shadow-lg border-2 border-amber-900 group-hover:bg-amber-500 transition-colors duration-300">
+                            ✍️
+                        </div>
+                        <h4 class="text-3xl font-bold mt-8 mb-4 text-amber-300 group-hover:text-white transition-colors duration-300">ליצור בטקסט</h4>
+                        <p class="text-lg text-stone-300">אומנות המילה והתוכן האינסופי: בניית סיפורים, מאמרים וכתיבה יצירתית בעזרת בינה מלאכותית.</p>
+                    </div>
+                    <!-- Pillar 2 -->
+                    <div class="animate-on-scroll delay-300 group relative p-8 bg-gray-800 rounded-lg shadow-xl border-2 border-blue-700 hover:border-blue-500 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105">
+                        <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-16 h-16 bg-blue-700 rounded-full flex items-center justify-center text-3xl font-bold text-white shadow-lg border-2 border-blue-900 group-hover:bg-blue-500 transition-colors duration-300">
+                            📱
+                        </div>
+                        <h4 class="text-3xl font-bold mt-8 mb-4 text-blue-300 group-hover:text-white transition-colors duration-300">לבנות אפליקציות חכמות</h4>
+                        <p class="text-lg text-stone-300">לחיות במרחב הדיגיטלי: פיתוח יישומים חדשניים המשלבים יכולות AI מתקדמות.</p>
+                    </div>
+                    <!-- Pillar 3 -->
+                    <div class="animate-on-scroll delay-400 group relative p-8 bg-gray-800 rounded-lg shadow-xl border-2 border-amber-700 hover:border-amber-500 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105">
+                        <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-16 h-16 bg-amber-700 rounded-full flex items-center justify-center text-3xl font-bold text-white shadow-lg border-2 border-amber-900 group-hover:bg-amber-500 transition-colors duration-300">
+                            🌐
+                        </div>
+                        <h4 class="text-3xl font-bold mt-8 mb-4 text-amber-300 group-hover:text-white transition-colors duration-300">לפסל אתרים חכמים</h4>
+                        <p class="text-lg text-stone-300">ממשקים מתעוררים לחיים: בניית אתרי אינטרנט אינטראקטיביים המשלבים AI לחוויית משתמש עשירה.</p>
+                    </div>
+                    <!-- Pillar 4 -->
+                    <div class="animate-on-scroll delay-500 group relative p-8 bg-gray-800 rounded-lg shadow-xl border-2 border-blue-700 hover:border-blue-500 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105">
+                        <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-16 h-16 bg-blue-700 rounded-full flex items-center justify-center text-3xl font-bold text-white shadow-lg border-2 border-blue-900 group-hover:bg-blue-500 transition-colors duration-300">
+                            📊
+                        </div>
+                        <h4 class="text-3xl font-bold mt-8 mb-4 text-blue-300 group-hover:text-white transition-colors duration-300">לפענח נתונים</h4>
+                        <p class="text-lg text-stone-300">להבין את שפת העולם: ניתוח עמוק של מידע בעזרת AI לצורך מחקר והסקת מסקנות.</p>
+                    </div>
+                    <!-- Pillar 5 -->
+                    <div class="animate-on-scroll delay-600 group relative p-8 bg-gray-800 rounded-lg shadow-xl border-2 border-amber-700 hover:border-amber-500 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105">
+                        <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-16 h-16 bg-amber-700 rounded-full flex items-center justify-center text-3xl font-bold text-white shadow-lg border-2 border-amber-900 group-hover:bg-amber-500 transition-colors duration-300">
+                            🎨
+                        </div>
+                        <h4 class="text-3xl font-bold mt-8 mb-4 text-amber-300 group-hover:text-white transition-colors duration-300">לצייר בתמונה ואמנות</h4>
+                        <p class="text-lg text-stone-300">להפיח חיים בצורות: יצירת דימויים ויזואליים, גרפיקה ואמנות דיגיטלית בעזרת AI.</p>
+                    </div>
+                    <!-- Pillar 6 -->
+                    <div class="animate-on-scroll delay-700 group relative p-8 bg-gray-800 rounded-lg shadow-xl border-2 border-blue-700 hover:border-blue-500 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105">
+                        <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-16 h-16 bg-blue-700 rounded-full flex items-center justify-center text-3xl font-bold text-white shadow-lg border-2 border-blue-900 group-hover:bg-blue-500 transition-colors duration-300">
+                            ⚙️
+                        </div>
+                        <h4 class="text-3xl font-bold mt-8 mb-4 text-blue-300 group-hover:text-white transition-colors duration-300">לארגן ולמכן</h4>
+                        <p class="text-lg text-stone-300">תהליכים נגישים ויעילים: אוטומציה חכמה של משימות וזרימות עבודה עסקיות.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Vertical decorative columns -->
+            <div class="absolute top-0 bottom-0 right-0 w-8 flex flex-col justify-around">
+                <div class="ro_column h-1/4"></div>
+                <div class="ro_column h-1/3 delay-500"></div>
+                <div class="ro_column h-1/5 delay-1000"></div>
+            </div>
+            <div class="absolute top-0 bottom-0 left-0 w-8 flex flex-col justify-around">
+                <div class="ro_column h-1/5 delay-700"></div>
+                <div class="ro_column h-1/4 delay-200"></div>
+                <div class="ro_column h-1/3 delay-1200"></div>
+            </div>
+        </section>
+
+        <!-- Paths to Mastery (Services) Section -->
+        <section id="services" class="relative py-24 md:py-32 px-8 bg-gradient-to-b from-stone-900 to-primary-dark text-center">
+            <div class="container mx-auto max-w-6xl">
+                <h3 class="text-5xl font-bold mb-16 animate-on-scroll delay-100 text-amber-500">הדרכים למאסטריה: שירותים וליווי</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <!-- Service 1 -->
+                    <div class="animate-on-scroll delay-200 group p-10 bg-gray-800 rounded-xl shadow-2xl border-4 border-amber-700 hover:border-amber-500 transition-all duration-300 transform hover:rotate-1 hover:scale-105">
+                        <h4 class="text-4xl font-bold mb-4 text-amber-300 group-hover:text-white transition-colors duration-300">סדנאות קבוצתיות</h4>
+                        <p class="text-xl text-stone-300 mb-6">מפגשי חניכה מעשיים, קבוצתיים, בהם תלמדו כלים יישומיים ותתחילו ליצור מיד.</p>
+                        <ul class="list-disc list-inside text-right text-lg text-stone-400">
+                            <li>למידה חווייתית ואינטראקטיבית</li>
+                            <li>פרויקטים מעשיים</li>
+                            <li>התנסות עם הכלים העדכניים ביותר</li>
+                        </ul>
+                    </div>
+                    <!-- Service 2 -->
+                    <div class="animate-on-scroll delay-400 group p-10 bg-gray-800 rounded-xl shadow-2xl border-4 border-blue-700 hover:border-blue-500 transition-all duration-300 transform hover:-rotate-1 hover:scale-105">
+                        <h4 class="text-4xl font-bold mb-4 text-blue-300 group-hover:text-white transition-colors duration-300">שיעורים פרטיים</h4>
+                        <p class="text-xl text-stone-300 mb-6">מסע אישי, צעד אחר צעד, מותאם לרמתך, קצב הלמידה וצרכיך הייחודיים.</p>
+                        <ul class="list-disc list-inside text-right text-lg text-stone-400">
+                            <li>תוכנית לימודים אישית</li>
+                            <li>קצב התקדמות מותאם</li>
+                            <li>מענה ממוקד לשאלות ספציפיות</li>
+                        </ul>
+                    </div>
+                    <!-- Service 3 -->
+                    <div class="animate-on-scroll delay-600 group p-10 bg-gray-800 rounded-xl shadow-2xl border-4 border-amber-700 hover:border-amber-500 transition-all duration-300 transform hover:rotate-1 hover:scale-105">
+                        <h4 class="text-4xl font-bold mb-4 text-amber-300 group-hover:text-white transition-colors duration-300">הרצאות לארגונים</h4>
+                        <p class="text-xl text-stone-300 mb-6">מפתחות שערים לתבונה ארגונית: חשיפה רחבה לצוותים והנהלות לעולם ה-AI.</p>
+                        <ul class="list-disc list-inside text-right text-lg text-stone-400">
+                            <li>הרצאות השראה והיכרות</li>
+                            <li>בניית מודעות ומוכנות ל-AI</li>
+                            <li>התאמה לצרכים וליעדים ארגוניים</li>
+                        </ul>
+                    </div>
+                    <!-- Service 4 -->
+                    <div class="animate-on-scroll delay-800 group p-10 bg-gray-800 rounded-xl shadow-2xl border-4 border-blue-700 hover:border-blue-500 transition-all duration-300 transform hover:-rotate-1 hover:scale-105">
+                        <h4 class="text-4xl font-bold mb-4 text-blue-300 group-hover:text-white transition-colors duration-300">ייעוץ ופיתוח פרויקטים</h4>
+                        <p class="text-xl text-stone-300 mb-6">ליווי ותמיכה ביצירה: מליווי קונספטואלי ועד פיתוח פרויקטים מבוססי AI בפועל.</p>
+                        <ul class="list-disc list-inside text-right text-lg text-stone-400">
+                            <li>אפיון וגיבוש פרויקטים</li>
+                            <li>פיתוח פתרונות AI מותאמים</li>
+                            <li>תמיכה טכנית וייעוץ שוטף</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action / Contact Section -->
+        <section id="contact" class="relative py-24 md:py-32 px-8 bg-blue-900 text-center">
+            <div class="container mx-auto max-w-4xl">
+                <h3 class="text-5xl font-bold mb-12 animate-on-scroll delay-100 text-amber-300">צור קשר עם המאסטר</h3>
+                <p class="text-2xl text-stone-200 mb-10 animate-on-scroll delay-300">
+                    הדרך לשליטה בבינה המלאכותית מתחילה כאן. אל תהסס - בנה את עתידך עוד היום.
+                </p>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-8 mb-12">
+                    <a href="https://wa.me/972546609385" target="_blank" class="flex items-center space-x-reverse space-x-4 px-8 py-4 bg-green-600 text-white text-2xl font-bold rounded-full shadow-lg hover:bg-green-700 transition-colors duration-300 animate-on-scroll delay-500 border-2 border-green-800 cursor-pointer">
+                        <span class="ml-2">ווטסאפ: 054-6609385</span>
+                        <span>📱</span>
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="flex items-center space-x-reverse space-x-4 px-8 py-4 bg-red-600 text-white text-2xl font-bold rounded-full shadow-lg hover:bg-red-700 transition-colors duration-300 animate-on-scroll delay-700 border-2 border-red-800 cursor-pointer">
+                        <span class="ml-2">אימייל: zaviner@gmail.com</span>
+                        <span>✉️</span>
+                    </a>
+                </div>
+                <p class="text-xl text-stone-400 animate-on-scroll delay-900">
+                    זאביק אבינר - מומחה בינה מלאכותית.
+                </p>
+            </div>
+            <!-- Decorative "seal" or medallion -->
+            <div class="absolute bottom-8 left-8 w-24 h-24 bg-amber-700 rounded-full flex items-center justify-center text-5xl text-blue-900 font-bold opacity-30 animate-spin-slow">
+                AI
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
+        let speed = 0.2; // Adjust for smoother or snappier movement
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * speed;
+            cursorY += (mouseY - cursorY) * speed;
+
+            customCursor.style.transform = `translate3d(${cursorX - customCursor.offsetWidth / 2}px, ${cursorY - customCursor.offsetHeight / 2}px, 0)`;
+
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Cursor grow on hover for interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, [role="button"]'); // Added [role="button"] for flexibility
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('grow'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('grow'));
+        });
+
+        // Parallax Effect Logic
+        const parallaxBgs = document.querySelectorAll('.parallax-bg');
+
+        function updateParallax() {
+            const scrollY = window.scrollY;
+            parallaxBgs.forEach(bg => {
+                const speed = parseFloat(bg.dataset.speed);
+                bg.style.transform = `translateY(${scrollY * speed}px)`;
+            });
+            // Using requestAnimationFrame for smooth parallax updates
+            requestAnimationFrame(updateParallax); 
+        }
+        updateParallax(); // Initial call to set position
+
+        // Scroll-triggered Animations using IntersectionObserver
+        const animateOnScrollElements = document.querySelectorAll('.animate-on-scroll');
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Optional: Stop observing once element is visible
+                    // observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        });
+
+        animateOnScrollElements.forEach(el => observer.observe(el));
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+    </script>
+</body>
+</html>

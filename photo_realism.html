@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מסע אל לב הבינה המלאכותית - זאביק אבינר</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=IBM+Plex+Sans+Hebrew:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Define color variables for easy theming and photo-realistic feel */
+        :root {
+            --primary-light: #B4D4FF; /* A soft, techy blue */
+            --primary-dark: #0A0A0F;  /* Deep, almost black, for background depth */
+            --accent-glow: #00FFC2;   /* A vibrant, futuristic green for emphasis */
+            --secondary-text: #A0A0B0; /* Muted gray for secondary information */
+        }
+
+        /* Base styles for the immersive experience */
+        body {
+            font-family: 'Heebo', 'IBM Plex Sans Hebrew', sans-serif;
+            cursor: none; /* Hide default cursor for custom one */
+            overflow-x: hidden; /* Prevent horizontal scrolling artifacts */
+            background-color: var(--primary-dark);
+            color: var(--primary-light);
+            line-height: 1.7;
+            text-rendering: optimizeLegibility; /* Enhance text clarity */
+        }
+
+        /* MANDATORY Custom cursor styling: multi-layered for high contrast */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none; /* Allows clicks on elements beneath */
+            transition: transform 0.1s ease-out, opacity 0.2s ease-in-out; /* Smooth movement and fade */
+            z-index: 9999; /* Ensures cursor is always on top */
+            border: 2px solid var(--primary-light); /* Light border visible on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), /* Dark shadow visible on light backgrounds */
+                        0 0 15px var(--accent-glow); /* Artistic glow for photo-realistic effect */
+        }
+
+        /* Dynamic, photo-realistic background effect */
+        .background-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Placed behind all content */
+            overflow: hidden;
+            background: radial-gradient(circle at 70% 30%, rgba(0, 255, 194, 0.1) 0%, rgba(10, 10, 15, 0) 60%), /* Subtle green light source */
+                        radial-gradient(circle at 30% 80%, rgba(180, 212, 255, 0.1) 0%, rgba(10, 10, 15, 0) 60%), /* Subtle blue light source */
+                        linear-gradient(to bottom right, #050508, #1A1A22); /* Deep dark base gradient */
+            animation: backgroundShift 20s infinite alternate ease-in-out; /* Slow, breathing background animation */
+            transform-style: preserve-3d; /* Enable 3D transformations for child elements */
+            perspective: 1000px; /* Perspective for depth effect */
+        }
+
+        /* Abstract, floating background elements for depth and photo-realism */
+        .background-element {
+            position: absolute;
+            background-color: rgba(180, 212, 255, 0.05); /* Faint blue blob */
+            border-radius: 50%;
+            filter: blur(50px); /* Deep blur to simulate atmospheric haze/data fields */
+            animation: floatAndPulse 15s infinite alternate ease-in-out; /* Movement and size changes */
+            opacity: 0.7; /* Semi-transparent */
+        }
+        /* Variations for different background elements */
+        .background-element:nth-child(2) {
+            background-color: rgba(0, 255, 194, 0.05); /* Faint green blob */
+            animation-delay: 3s; /* Staggered animation */
+            animation-duration: 18s;
+        }
+        .background-element:nth-child(3) {
+            background-color: rgba(255, 180, 212, 0.05); /* Faint pink blob */
+            animation-delay: 6s;
+            animation-duration: 20s;
+        }
+
+        /* Keyframe animations */
+        @keyframes backgroundShift {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+
+        @keyframes floatAndPulse {
+            0% { transform: translate(-50%, -50%) scale(1) rotate(0deg) translateZ(0); opacity: 0.7; }
+            50% { transform: translate(-50%, -50%) scale(1.2) rotate(10deg) translateZ(50px); opacity: 1; } /* Moves closer and becomes clearer */
+            100% { transform: translate(-50%, -50%) scale(1) rotate(0deg) translateZ(0); opacity: 0.7; }
+        }
+
+        /* Main content container styling */
+        .content-section {
+            position: relative;
+            z-index: 10; /* Ensures content is always on top of background */
+            padding: 4rem 2rem;
+            max-width: 900px;
+            margin: 0 auto; /* Center content */
+            text-shadow: 0 0 10px rgba(0, 255, 194, 0.2); /* Subtle glow for text readability and artistic touch */
+        }
+
+        /* Text reveal animation for immersive discovery */
+        .text-reveal {
+            opacity: 0;
+            transform: translateY(20px); /* Starts slightly below its final position */
+            transition: opacity 1s ease-out, transform 1s ease-out; /* Smooth transition */
+        }
+        .text-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Interactive link styling (no default underline, artistic hover) */
+        .interactive-link {
+            transition: color 0.3s ease, text-shadow 0.3s ease, transform 0.3s ease;
+            display: inline-block; /* Required for transform on inline elements */
+            text-decoration: none;
+        }
+        .interactive-link:hover {
+            color: var(--accent-glow); /* Glows green on hover */
+            text-shadow: 0 0 15px var(--accent-glow);
+            transform: scale(1.05); /* Slight zoom on hover */
+        }
+        
+        /* Section separators for artistic flow */
+        .section-glow {
+            position: relative;
+            padding: 2rem 0;
+        }
+        .section-glow::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, rgba(0, 255, 194, 0.3), transparent); /* Fading line */
+            opacity: 0.5;
+        }
+        .section-glow:last-of-type::before {
+            display: none; /* No separator after the last content section */
+        }
+        
+        /* Zevik's image styling - treated as a holographic projection */
+        .zevik-image-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 2rem auto 1rem;
+            box-shadow: 0 0 20px rgba(0, 255, 194, 0.5), inset 0 0 10px rgba(180, 212, 255, 0.3); /* Outer and inner glow */
+            filter: grayscale(20%) brightness(1.2); /* Subtle photo-realistic enhancement */
+            transition: transform 0.5s ease-in-out;
+        }
+        .zevik-image-container:hover {
+            transform: scale(1.08) rotateY(10deg); /* Subtle 3D rotation on hover */
+        }
+        .zevik-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensures image fills container without distortion */
+            object-position: center;
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .content-section {
+                padding: 3rem 1rem;
+            }
+            h1 {
+                font-size: 2.5rem;
+            }
+            h2 {
+                font-size: 1.8rem;
+            }
+            .custom-cursor {
+                width: 15px;
+                height: 15px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-primary-dark text-primary-light font-heebo">
+
+    <!-- Custom Cursor Element -->
+    <div class="custom-cursor"></div>
+
+    <!-- Photo-realistic background system -->
+    <div class="background-effect">
+        <div class="background-element absolute top-[10%] right-[20%] w-[300px] h-[300px]"></div>
+        <div class="background-element absolute top-[70%] left-[10%] w-[400px] h-[400px]"></div>
+        <div class="background-element absolute top-[40%] right-[60%] w-[250px] h-[250px]"></div>
+    </div>
+
+    <!-- Main artistic content container, acting as the narrative canvas -->
+    <main class="content-section">
+
+        <!-- Opening Statement / Title: A portal to the AI realm -->
+        <section class="section-glow mb-20 text-reveal">
+            <h1 class="text-5xl md:text-6xl font-extrabold text-center mb-6 leading-tight text-white font-ibm-plex-sans-hebrew"
+                style="text-shadow: 0 0 25px var(--accent-glow);">
+                לפענח את הקוד של המחר: מסע אל לב הבינה המלאכותית
+            </h1>
+            <p class="text-xl md:text-2xl text-center text-secondary-text max-w-3xl mx-auto italic">
+                העתיד אינו רק מגיע - הוא נוצר. למדו לשלוט במטריצה הדיגיטלית עם זאביק אבינר.
+            </p>
+        </section>
+
+        <!-- Core Message Section: The essence of AI accessibility -->
+        <section class="section-glow mb-20 text-reveal">
+            <h2 class="text-4xl font-bold mb-8 text-center text-accent-glow">מהות הפענוח</h2>
+            <p class="text-lg text-secondary-text text-center leading-relaxed max-w-2xl mx-auto">
+                בתוך אריג הנתונים המורכב, אנו חושפים את פשטות הכוח.
+                <span class="text-white font-bold">AI</span>, ממושג ועד מציאות יומיומית, נגיש לכל יד.
+                הפכו כלים מתקדמים לחלק אינטגרלי ממהותכם המקצועית והאישית - <br>
+                <span class="text-accent-glow font-bold">יישום מיידי, שינוי עמוק.</span>
+            </p>
+        </section>
+
+        <!-- Target Audience Section: The diverse explorers of AI -->
+        <section class="section-glow mb-20 text-reveal">
+            <h2 class="text-4xl font-bold mb-8 text-center text-accent-glow">הדהוד הקריאה: למי מיועד המסע?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-center max-w-5xl mx-auto">
+                <div class="p-6 bg-primary-dark/50 rounded-lg shadow-xl border border-primary-light/10 hover:border-accent-glow/30 transition duration-300 transform hover:scale-105">
+                    <h3 class="text-2xl font-semibold mb-3 text-white">הסקרנים הראשונים</h3>
+                    <p class="text-secondary-text">אלה המבקשים להכיר את עולם ה-AI מרגע היוולדו, ללא ידע מוקדם.</p>
+                </div>
+                <div class="p-6 bg-primary-dark/50 rounded-lg shadow-xl border border-primary-light/10 hover:border-accent-glow/30 transition duration-300 transform hover:scale-105">
+                    <h3 class="text-2xl font-semibold mb-3 text-white">אורגי המקצוע</h3>
+                    <p class="text-secondary-text">אנשי ונשות מקצוע המעוניינים לשלב AI כחוט בודד בבד עבודתם.</p>
+                </div>
+                <div class="p-6 bg-primary-dark/50 rounded-lg shadow-xl border border-primary-light/10 hover:border-accent-glow/30 transition duration-300 transform hover:scale-105">
+                    <h3 class="text-2xl font-semibold mb-3 text-white">אדריכלי הצוות</h3>
+                    <p class="text-secondary-text">מנהלים וארגונים השואפים להאיר את דרך צוותיהם בידע AI חדשני.</p>
+                </div>
+                <div class="p-6 bg-primary-dark/50 rounded-lg shadow-xl border border-primary-light/10 hover:border-accent-glow/30 transition duration-300 transform hover:scale-105">
+                    <h3 class="text-2xl font-semibold mb-3 text-white">פורצי הגבולות</h3>
+                    <p class="text-secondary-text">למפתחים ומובילים המכוונים לפיתוח פרויקטים מבוססי AI מורכבים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Areas Section: The luminous domains of AI creation -->
+        <section class="section-glow mb-20 text-reveal">
+            <h2 class="text-4xl font-bold mb-8 text-center text-accent-glow">האופקים הנגלים: תחומי התמחות</h2>
+            <div class="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto">
+                <span class="px-5 py-2 rounded-full bg-primary-light/10 border border-primary-light/20 text-primary-light text-lg interactive-link hover:bg-accent-glow/20 hover:text-white">מילים נולדות מחדש</span>
+                <span class="px-5 py-2 rounded-full bg-primary-light/10 border border-primary-light/20 text-primary-light text-lg interactive-link hover:bg-accent-glow/20 hover:text-white">אפליקציות נושמות אינטליגנציה</span>
+                <span class="px-5 py-2 rounded-full bg-primary-light/10 border border-primary-light/20 text-primary-light text-lg interactive-link hover:bg-accent-glow/20 hover:text-white">מרחבים דיגיטליים מתפתחים</span>
+                <span class="px-5 py-2 rounded-full bg-primary-light/10 border border-primary-light/20 text-primary-light text-lg interactive-link hover:bg-accent-glow/20 hover:text-white">פענוח תהומות הנתונים</span>
+                <span class="px-5 py-2 rounded-full bg-primary-light/10 border border-primary-light/20 text-primary-light text-lg interactive-link hover:bg-accent-glow/20 hover:text-white">ציור במכחול של קוד</span>
+                <span class="px-5 py-2 rounded-full bg-primary-light/10 border border-primary-light/20 text-primary-light text-lg interactive-link hover:bg-accent-glow/20 hover:text-white">ריקוד האוטומציה</span>
+            </div>
+        </section>
+
+        <!-- Services Offered Section: The gateways to the future of learning -->
+        <section class="section-glow mb-20 text-reveal">
+            <h2 class="text-4xl font-bold mb-8 text-center text-accent-glow">השערים אל העתיד: נתיבי הלמידה</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+                <div class="p-8 bg-primary-dark/60 rounded-xl shadow-2xl border border-accent-glow/20 relative group overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-accent-glow/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <h3 class="text-3xl font-semibold mb-4 text-white relative z-10">סדנאות התגלות קבוצתיות</h3>
+                    <p class="text-lg text-secondary-text relative z-10">
+                        מסעות מעשיים ממוקדים, חושפים כלים וטכניקות AI מתקדמים שניתן ליישם באופן מיידי.
+                        הכוח של ידע משותף בחדר וירטואלי או פיזי.
+                    </p>
+                </div>
+                <div class="p-8 bg-primary-dark/60 rounded-xl shadow-2xl border border-accent-glow/20 relative group overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary-light/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <h3 class="text-3xl font-semibold mb-4 text-white relative z-10">ליווי אישי - חייטות ידע</h3>
+                    <p class="text-lg text-secondary-text relative z-10">
+                        התאמה אישית של מסלול הלמידה לרמתך, שאיפותיך וצרכיך הייחודיים.
+                        יד מכוונת בנתיב המותאם לך באופן מדויק.
+                    </p>
+                </div>
+                <div class="p-8 bg-primary-dark/60 rounded-xl shadow-2xl border border-accent-glow/20 relative group overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary-light/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <h3 class="text-3xl font-semibold mb-4 text-white relative z-10">הרצאות חוצות אופקים לארגונים</h3>
+                    <p class="text-lg text-secondary-text relative z-10">
+                        הרחבת אופקים לצוותים שלמים, חשיפה לעולם ה-AI וכיצד הוא יכול לשנות את פני העבודה והחדשנות בארגון.
+                    </p>
+                </div>
+                <div class="p-8 bg-primary-dark/60 rounded-xl shadow-2xl border border-accent-glow/20 relative group overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-accent-glow/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <h3 class="text-3xl font-semibold mb-4 text-white relative z-10">אדריכלות פרויקטים - יד ביד עם החדשנות</h3>
+                    <p class="text-lg text-secondary-text relative z-10">
+                        ליווי מקצועי ופיתוח פרויקטים מבוססי AI, מהרעיון ועד המימוש.
+                        בניית המחר יחד איתך.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide / Zevik Aviner Section: The conductor of the AI orchestra -->
+        <section class="section-glow mb-20 text-reveal">
+            <h2 class="text-4xl font-bold mb-8 text-center text-accent-glow">המנצח על התזמורת: זאביק אבינר</h2>
+            <div class="flex flex-col md:flex-row items-center md:items-start max-w-3xl mx-auto gap-8">
+                <div class="zevik-image-container flex-shrink-0">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר, מומחה בינה מלאכותית" class="zevik-image">
+                </div>
+                <div class="text-center md:text-right flex-grow">
+                    <p class="text-xl font-semibold mb-4 text-white">
+                        <span class="text-accent-glow">זאביק אבינר</span> - אמן החיבור בין אדם למכונה.
+                    </p>
+                    <p class="text-lg text-secondary-text leading-relaxed">
+                        מומחה בינה מלאכותית בעל ניסיון עשיר באדריכלות ופיתוח פרויקטים מורכבים, אפליקציות ומערכות אינטליגנטיות.
+                        משימתו היא להפוך את הטכנולוגיה החזקה ביותר של זמננו לכלי זמין ויומיומי בידי כל אחד ואחת,
+                        לפשט את המורכבות ולהעצים את היצירה האנושית.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Information: Creating a connection to the future -->
+        <section class="section-glow text-reveal text-center pb-10">
+            <h2 class="text-4xl font-bold mb-8 text-accent-glow">ליצור מגע עם העתיד</h2>
+            <p class="text-2xl mb-4 text-white">
+                <a href="https://wa.me/972546609385" target="_blank" class="interactive-link">
+                    <span class="text-accent-glow">ווטסאפ:</span> 054-6609385
+                </a>
+            </p>
+            <p class="text-2xl text-white">
+                <a href="mailto:zaviner@gmail.com" class="interactive-link">
+                    <span class="text-accent-glow">אימייל:</span> zaviner@gmail.com
+                </a>
+            </p>
+            <p class="text-lg mt-8 text-secondary-text">
+                המסע אל השליטה בבינה המלאכותית מתחיל בשיחה.
+            </p>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom cursor JavaScript for smooth, responsive movement
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Intersection Observer for text reveal animation (simulating content coming into focus)
+        const textRevealElements = document.querySelectorAll('.text-reveal');
+        const observerOptions = {
+            root: null, // Observe based on the viewport
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Stop observing once animated to prevent re-triggering
+                }
+            });
+        }, observerOptions);
+
+        textRevealElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // Tailwind CSS configuration for custom colors and fonts (ensures JIT works with variables)
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-light': 'var(--primary-light)',
+                        'primary-dark': 'var(--primary-dark)',
+                        'accent-glow': 'var(--accent-glow)',
+                        'secondary-text': 'var(--secondary-text)',
+                    },
+                    fontFamily: {
+                        heebo: ['Heebo', 'sans-serif'],
+                        'ibm-plex-sans-hebrew': ['IBM Plex Sans Hebrew', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

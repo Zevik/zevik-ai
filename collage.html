@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מפתחות למחר: מסע ה-AI של זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;700&family=Miriam+Libre:wght@400;700&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles and custom fonts */
+        body {
+            font-family: 'Noto Sans Hebrew', sans-serif;
+            background-color: #0d0d1a; /* Deep dark blue-purple */
+            color: #e0e0f0;
+            overflow-x: hidden; /* Prevent horizontal scroll from rotated elements */
+        }
+        .font-noto { font-family: 'Noto Sans Hebrew', sans-serif; }
+        .font-miriam { font-family: 'Miriam Libre', sans-serif; }
+        .font-rubik { font-family: 'Rubik Mono One', monospace; }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            width: 28px;
+            height: 28px;
+            border: 2px solid #FFFFFF;
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8);
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out, background-color 0.1s ease-out;
+            pointer-events: none;
+            z-index: 9999;
+        }
+        .custom-cursor.interactive {
+            transform: translate(-50%, -50%) scale(1.5);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Scroll Animation (Collage effect) */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(40px) scale(0.95) rotate(0deg);
+            transition: opacity 1s ease-out, transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .animate-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1) rotate(0deg);
+        }
+        .animate-on-scroll.rotate-right.is-visible {
+            transform: translateY(0) scale(1) rotate(5deg);
+        }
+        .animate-on-scroll.rotate-left.is-visible {
+            transform: translateY(0) scale(1) rotate(-5deg);
+        }
+        .animate-on-scroll.scale-up.is-visible {
+            transform: translateY(0) scale(1.05);
+        }
+
+        /* Specific collage element styles */
+        .collage-element {
+            position: absolute;
+            background-color: rgba(30, 0, 80, 0.4); /* Semi-transparent purple */
+            border: 1px solid rgba(120, 0, 255, 0.3);
+            backdrop-filter: blur(5px);
+            border-radius: 10px;
+            padding: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 10; /* Default z-index for content */
+        }
+        .collage-element-background {
+            position: fixed;
+            background-color: rgba(30, 0, 80, 0.2);
+            border: 1px solid rgba(120, 0, 255, 0.1);
+            backdrop-filter: blur(3px);
+            z-index: -1;
+        }
+
+        /* Custom colors for Tailwind via config */
+        /* To override or extend Tailwind's default colors, you can use the `tailwind.config` object. */
+        /* This is included for demonstration; if this was a separate file, it would be in tailwind.config.js */
+        /* For a single file, we can define these directly using arbitrary values or just map to existing Tailwind colors */
+        /* For this task, I'll rely on existing Tailwind color names for simplicity, or use direct hex values for specific needs */
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor fixed rounded-full z-[9999]"></div>
+
+    <!-- Background Collage Elements (fixed for parallax-like feel) -->
+    <div class="collage-element-background top-20 right-1/4 w-80 h-80 rounded-full transform rotate-12 opacity-30 blur-sm" style="background-color: rgba(50, 0, 100, 0.15);"></div>
+    <div class="collage-element-background bottom-40 left-1/3 w-64 h-64 rounded-xl transform -rotate-24 opacity-20 blur-sm" style="background-color: rgba(0, 80, 80, 0.1);"></div>
+    <div class="collage-element-background top-1/3 left-1/4 w-96 h-48 rounded-md transform rotate-6 opacity-25 blur-sm" style="background-color: rgba(100, 50, 0, 0.1);"></div>
+    <div class="collage-element-background bottom-10 right-1/4 w-72 h-72 rounded-full transform -rotate-180 opacity-15 blur-sm" style="background-color: rgba(80, 0, 50, 0.15);"></div>
+
+    <!-- Main Content Canvas -->
+    <div class="relative min-h-screen pt-16 pb-32 px-4 md:px-8 lg:px-16 z-20">
+
+        <!-- Main Title - Fragmented -->
+        <div class="relative h-[300px] md:h-[400px] mb-20 animate-on-scroll">
+            <h1 class="absolute top-1/4 right-0 md:right-1/4 text-6xl md:text-8xl font-rubik text-blue-300 leading-none transform -rotate-6">
+                לשלוט בבינה
+            </h1>
+            <h1 class="absolute top-1/2 left-0 md:left-1/4 text-5xl md:text-7xl font-miriam text-yellow-300 leading-none transform rotate-3 -translate-y-4 md:translate-x-12">
+                המלאכותית
+            </h1>
+            <p class="absolute bottom-0 right-1/2 md:right-1/3 text-4xl md:text-6xl font-noto text-gray-100 transform rotate-12 -translate-x-8">
+                העתיד? <span class="text-green-300 font-rubik">הוא כבר כאן.</span>
+            </p>
+        </div>
+
+        <!-- Core Message - Layered fragments -->
+        <div class="relative collage-element p-6 md:p-8 max-w-lg mx-auto md:mx-0 right-0 md:right-1/4 lg:right-[15%] mt-20 animate-on-scroll rotate-right">
+            <p class="font-miriam text-xl md:text-2xl text-gray-200 leading-relaxed text-right">
+                <span class="block text-yellow-200 text-3xl font-bold mb-2">לפרוץ את חומות הקוד.</span>
+                <span class="block mt-2">להפוך את הנסתר לגלוי, את המורכב לפשוט.</span>
+                <span class="block mt-2 text-blue-300">AI - לא רק מילה, אלא כלי יומיומי, מעשי, <span class="font-bold">בידיים שלך.</span></span>
+            </p>
+        </div>
+
+        <!-- Zevik's image and intro - prominent -->
+        <div class="relative mt-40 mb-32 collage-element bg-gradient-to-br from-blue-900/60 to-purple-900/60 p-8 rounded-2xl max-w-md mx-auto md:mx-0 left-0 md:left-1/4 lg:left-[10%] z-30 animate-on-scroll scale-up">
+            <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-blue-400 shadow-xl mx-auto mb-6 transform -rotate-3">
+            <p class="text-center text-4xl font-rubik text-yellow-300 mt-4 mb-2">זאביק אבינר</p>
+            <p class="text-center text-xl text-gray-200 font-noto leading-relaxed">האדריכל של ההבנה. מומחה AI עם ניסיון עשיר, מתמחה בהנגשת הטכנולוגיה ובהפיכתה לכלי עבודה יומיומי.</p>
+            <p class="text-center text-lg text-blue-300 font-miriam mt-4 transform rotate-2">מפתח, מיישם, ובעיקר - מעורר השראה.</p>
+        </div>
+
+        <!-- Target Audience - Scattered tags -->
+        <div class="relative mt-20 collage-element bg-gray-800/40 p-5 rounded-lg max-w-xl mx-auto md:mx-0 right-0 md:right-1/4 lg:right-[20%] z-20 animate-on-scroll rotate-left">
+            <h2 class="text-yellow-300 text-3xl font-miriam mb-6">למי זה מיועד?</h2>
+            <div class="flex flex-wrap justify-end gap-4 text-center">
+                <span class="bg-blue-800/70 text-blue-200 p-3 rounded-md shadow-lg transform rotate-2 text-lg font-noto">למתחילים סקרנים</span>
+                <span class="bg-purple-800/70 text-purple-200 p-3 rounded-md shadow-lg transform -rotate-4 translate-x-4 text-lg font-noto">לאנשי מקצוע פורצי דרך</span>
+                <span class="bg-green-800/70 text-green-200 p-3 rounded-md shadow-lg transform rotate-3 translate-y-2 text-lg font-noto">למנהלים ואסטרטגים</span>
+                <span class="bg-red-800/70 text-red-200 p-3 rounded-md shadow-lg transform -rotate-2 translate-x-8 text-lg font-noto">למפתחי פרויקטים מתקדמים</span>
+            </div>
+        </div>
+
+        <!-- Expertise Areas - Dynamic Word Cloud/Fragments -->
+        <div class="relative mt-32 collage-element bg-cyan-900/40 p-8 rounded-xl max-w-3xl mx-auto z-20 animate-on-scroll scale-up">
+            <h2 class="text-orange-300 text-4xl font-miriam text-center mb-8">אופקים חדשים עם AI:</h2>
+            <div class="flex flex-wrap justify-center gap-6">
+                <span class="skill-chip text-white bg-blue-700/80 p-3 rounded-full shadow-lg transform rotate-2 text-lg md:text-xl font-noto transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:bg-blue-500">יצירת טקסטים ותוכן</span>
+                <span class="skill-chip text-white bg-purple-700/80 p-3 rounded-full shadow-lg transform -rotate-3 translate-x-4 text-lg md:text-xl font-noto transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:bg-purple-500">בניית אפליקציות חכמות</span>
+                <span class="skill-chip text-white bg-green-700/80 p-3 rounded-full shadow-lg transform rotate-4 text-lg md:text-xl font-noto transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:bg-green-500">פיתוח אתרים מבוססי AI</span>
+                <span class="skill-chip text-white bg-yellow-700/80 p-3 rounded-full shadow-lg transform -rotate-2 translate-y-2 text-lg md:text-xl font-noto transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:bg-yellow-500">ניתוח נתונים ומחקר</span>
+                <span class="skill-chip text-white bg-red-700/80 p-3 rounded-full shadow-lg transform rotate-1 text-lg md:text-xl font-noto transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:bg-red-500">יצירת תמונות ואומנות</span>
+                <span class="skill-chip text-white bg-teal-700/80 p-3 rounded-full shadow-lg transform -rotate-5 translate-x-6 text-lg md:text-xl font-noto transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:bg-teal-500">אוטומציה של תהליכים</span>
+            </div>
+        </div>
+
+        <!-- Services Offered - Interactive Blocks -->
+        <div class="relative mt-32 collage-element bg-amber-900/40 p-8 rounded-xl max-w-2xl mx-auto md:mx-0 right-0 md:right-[25%] lg:right-[30%] z-20 animate-on-scroll rotate-right">
+            <h2 class="text-blue-200 text-4xl font-miriam mb-8">המסלול שלך אל המחר:</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="service-card bg-gray-900/70 p-6 rounded-lg shadow-xl border border-blue-700/50 transform rotate-2 hover:rotate-0 hover:scale-105 transition-all duration-300 cursor-pointer">
+                    <h3 class="text-3xl text-yellow-300 font-miriam mb-3">סדנאות קבוצתיות</h3>
+                    <p class="text-gray-300 font-noto">ידע משותף מתפרץ, דיון פורה, כלים מעשיים כאן ועכשיו.</p>
+                </div>
+                <div class="service-card bg-gray-900/70 p-6 rounded-lg shadow-xl border border-purple-700/50 transform -rotate-3 translate-y-4 hover:rotate-0 hover:scale-105 transition-all duration-300 cursor-pointer">
+                    <h3 class="text-3xl text-green-300 font-miriam mb-3">שיעורים פרטיים</h3>
+                    <p class="text-gray-300 font-noto">המסלול האישי שלך, מותאם לרמה ולצרכים. הקוד שלך, ההדרכה שלי.</p>
+                </div>
+                <div class="service-card bg-gray-900/70 p-6 rounded-lg shadow-xl border border-green-700/50 transform rotate-1 hover:rotate-0 hover:scale-105 transition-all duration-300 cursor-pointer">
+                    <h3 class="text-3xl text-orange-300 font-miriam mb-3">הרצאות לארגונים</h3>
+                    <p class="text-gray-300 font-noto">לפתוח אופקים לצוות, להצית את הדמיון, להטמיע AI באסטרטגיה העסקית.</p>
+                </div>
+                <div class="service-card bg-gray-900/70 p-6 rounded-lg shadow-xl border border-yellow-700/50 transform -rotate-4 translate-y-2 hover:rotate-0 hover:scale-105 transition-all duration-300 cursor-pointer">
+                    <h3 class="text-3xl text-blue-300 font-miriam mb-3">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-gray-300 font-noto">ליווי מקצועי, משלב הרעיון עד הביצוע. הפיכת חזון למציאות.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information - torn paper feel -->
+        <div class="relative mt-40 collage-element bg-pink-900/40 p-6 rounded-br-2xl rounded-tl-2xl max-w-sm mx-auto md:mx-0 left-0 md:left-1/4 lg:left-[10%] z-30 animate-on-scroll scale-up">
+            <h2 class="text-green-300 text-3xl font-miriam mb-6">מפתחות ליצירת קשר:</h2>
+            <div class="flex flex-col gap-4 text-right">
+                <a href="https://wa.me/972546609385" class="contact-link bg-green-700/80 text-white font-rubik text-2xl p-4 rounded-md shadow-lg transform rotate-2 hover:rotate-0 hover:scale-105 transition-all duration-300">
+                    ווטסאפ: 054-6609385
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="contact-link bg-blue-700/80 text-white font-miriam text-xl p-4 rounded-md shadow-lg transform -rotate-3 translate-y-2 hover:rotate-0 hover:scale-105 transition-all duration-300">
+                    אימייל: zaviner@gmail.com
+                </a>
+            </div>
+        </div>
+
+        <!-- Filler space to allow scrolling -->
+        <div class="h-64"></div>
+
+    </div>
+
+    <script>
+        // Custom Cursor
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        const interactiveElements = document.querySelectorAll('a, button, .service-card, .skill-chip');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('interactive'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('interactive'));
+        });
+
+        // Intersection Observer for Scroll Animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Simple Parallax Effect for some background elements
+        document.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            document.querySelectorAll('.collage-element-background').forEach(el => {
+                const speed = parseFloat(el.getAttribute('data-parallax-speed') || 0.05); // Default speed
+                el.style.transform = `translateY(${scrolled * speed}px) ${el.style.transform.replace(/translateY\([^)]+\)/g, '')}`;
+            });
+        });
+        // Set initial parallax speeds for background elements
+        document.querySelector('.collage-element-background:nth-child(1)').setAttribute('data-parallax-speed', '0.03');
+        document.querySelector('.collage-element-background:nth-child(2)').setAttribute('data-parallax-speed', '0.06');
+        document.querySelector('.collage-element-background:nth-child(3)').setAttribute('data-parallax-speed', '0.04');
+        document.querySelector('.collage-element-background:nth-child(4)').setAttribute('data-parallax-speed', '0.07');
+    </script>
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>קריאת הקירות: אמנות הבינה המלאכותית</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;700&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS Configuration -->
+    <script type="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans Hebrew"', 'sans-serif'],
+                        mono: ['"Rubik Mono One"', 'monospace'],
+                    },
+                    colors: {
+                        'cave-dark': '#2C251F', // Near black
+                        'cave-deep': '#4A3C2F',  // Deep brown
+                        'cave-mid': '#6B5E51',   // Medium brown/taupe
+                        'cave-light': '#8C7D6B', // Lighter brown
+                        'ochre-light': '#A69C8E', // Ochre/sand
+                        'bone-white': '#D4CCC3', // Off-white/bone
+                        'red-ochre': '#B44C3F',  // Red ochre
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* General body styling */
+        body {
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            cursor: none; /* Hide default cursor */
+            background-color: #2C251F; /* Default background if JS fails */
+            font-family: 'Noto Sans Hebrew', sans-serif;
+            color: #D4CCC3; /* Default text color */
+        }
+
+        /* Custom cursor styling */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #D4CCC3; /* Light border for visibility */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8), 0 0 15px rgba(212, 204, 195, 0.5); /* Dark shadow for contrast + glow */
+            z-index: 9999;
+            transition: transform 0.1s ease-out;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Cave background base layer with noise texture */
+        .cave-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#noiseFilter)" fill="%232C251F" opacity="1"/></svg>');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.95;
+            z-index: -3; /* Lowest layer */
+        }
+
+        /* Parallax layers for faint, ancient-looking glyphs/shapes */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-size: cover;
+            opacity: 0.04; /* Very faint, almost subliminal */
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* SVG data URLs for simple, abstract shapes */
+        .layer-1 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%234A3C2F" d="M30 10 Q10 50 30 90 L70 90 Q90 50 70 10 Z" opacity="0.8"/><path fill="%236B5E51" d="M25 15 Q15 50 25 85 L75 85 Q85 50 75 15 Z" opacity="0.8"/></svg>');
+            background-position: 10% 20%;
+        }
+        .layer-2 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="70" cy="30" r="20" fill="%234A3C2F" opacity="0.6"/><path fill="%238C7D6B" d="M10 70 Q30 50 50 70 L50 90 Q30 100 10 90 Z" opacity="0.6"/></svg>');
+            background-position: 80% 70%;
+        }
+        .layer-3 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%236B5E51" d="M20 20 L80 40 L60 80 L40 60 Z" opacity="0.7"/><circle cx="50" cy="50" r="15" fill="%238C7D6B" opacity="0.5"/></svg>');
+            background-position: 30% 60%;
+        }
+
+        /* "Drawing in" effect for content blocks */
+        .draw-in {
+            opacity: 0;
+            animation: drawInEffect 1.5s forwards;
+            animation-timing-function: ease-out;
+        }
+
+        @keyframes drawInEffect {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Underline effect for interactive text */
+        .text-drawn {
+            position: relative;
+            display: inline-block;
+            line-height: 1.2;
+        }
+        .text-drawn::after {
+            content: '';
+            position: absolute;
+            right: 0; /* RTL support for underline animation */
+            bottom: -5px;
+            width: 0%;
+            height: 2px;
+            background: #B44C3F; /* Red ochre underline */
+            transition: width 0.3s ease-out;
+        }
+        .text-drawn:hover::after {
+            width: 100%;
+        }
+
+        /* Styling for 'cave-glyph' content blocks */
+        .cave-glyph {
+            background-color: rgba(74, 60, 47, 0.4); /* Semi-transparent brown */
+            border: 1px solid rgba(212, 204, 195, 0.15); /* Faint bone-white border */
+            border-radius: 8px; /* Slightly softened corners */
+            padding: 1.5rem;
+            margin: 2rem;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.6); /* Deeper shadow for depth */
+            position: relative;
+        }
+        
+        /* Custom scrollbar styling to fit theme */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #4A3C2F; /* Deep brown */
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: #8C7D6B; /* Lighter brown */
+            border-radius: 6px;
+            border: 3px solid #4A3C2F;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #A69C8E; /* Ochre on hover */
+        }
+    </style>
+</head>
+<body class="bg-cave-dark text-bone-white font-sans overflow-y-auto">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Cave Background Base Layer -->
+    <div class="cave-background"></div>
+
+    <!-- Parallax Layers (Faint, abstract Cave Drawings/Glyphs) -->
+    <div class="parallax-layer layer-1" data-parallax-speed="0.03"></div>
+    <div class="parallax-layer layer-2" data-parallax-speed="0.06"></div>
+    <div class="parallax-layer layer-3" data-parallax-speed="0.09"></div>
+
+    <!-- Main Content Area - A flexible canvas for art -->
+    <div class="relative min-h-screen p-8 md:p-16 lg:p-24 z-10 flex flex-col items-center justify-center">
+
+        <!-- Title - The Grand Prophecy -->
+        <h1 class="font-mono text-5xl md:text-7xl lg:text-8xl text-red-ochre tracking-wider leading-tight text-center mb-16 mt-8 draw-in" style="animation-delay: 0.5s;">
+            קריאת הקירות
+            <br>
+            <span class="text-bone-white text-3xl md:text-5xl lg:text-6xl block mt-4 font-sans font-light">אמנות הבינה המלאכותית</span>
+        </h1>
+
+        <!-- The Shaman's Introduction (Zevik Aviner) -->
+        <div class="relative w-full max-w-4xl mx-auto my-16 text-center draw-in" style="animation-delay: 1s;">
+            <p class="text-cave-light text-xl md:text-2xl leading-relaxed italic mb-8">
+                "בזמן שהעולם הישן רועד תחת רגלנו, אנו מוצאים אש חדשה. אש הבינה המלאכותית.
+                כמו אבותינו שציירו את חיות הבר על סלעי המערה, אנו מציירים את עתידנו עם הכלים החדשים.
+                הצטרפו אליי, זאביק אבינר, אל המסע ללמוד, להבין ולשלוט ברוחות הנתונים."
+            </p>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-6 mt-8">
+                <img src="https://link.zevikaviner.com/zevik" alt="דיוקן השאמאן זאביק אבינר" class="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-red-ochre shadow-lg object-cover draw-in" style="animation-delay: 1.5s;">
+                <p class="font-mono text-2xl md:text-3xl text-red-ochre draw-in" style="animation-delay: 1.7s;">
+                    השאמאן זאביק אבינר
+                </p>
+            </div>
+        </div>
+
+        <!-- Section: Core Message -->
+        <div class="cave-glyph w-full max-w-3xl my-16 draw-in" style="animation-delay: 2s; transform: rotate(-2deg);">
+            <h2 class="font-mono text-3xl md:text-4xl text-red-ochre mb-6 text-drawn text-right">הלהבה החדשה: סוד הנגישות</h2>
+            <p class="text-bone-white text-lg md:text-xl leading-relaxed">
+                כמו שהאדם הקדמון למד להדליק אש, אנו מנגישים את עוצמת ה-AI לכל יד.
+                מגרדומים ראשונים על הקיר ועד לציורים המורכבים ביותר-
+                כאן תלמדו כלים מעשיים, שיטות עתיקות וחדשות, שניתן ליישם מיד
+                בעבודתכם ובחייכם. אין סודות בלתי נגישים, רק ידע שמחכה להתגלות.
+            </p>
+        </div>
+
+        <!-- Section: Target Audience -->
+        <div class="cave-glyph w-full max-w-3xl my-16 draw-in" style="animation-delay: 2.5s; transform: rotate(3deg) translateX(-20px);">
+            <h2 class="font-mono text-3xl md:text-4xl text-red-ochre mb-6 text-drawn text-right">למי יתגלה הסוד?</h2>
+            <ul class="list-none space-y-4 text-lg md:text-xl">
+                <li class="flex items-center gap-4 text-right">
+                    <span class="text-red-ochre text-2xl">⚡</span>
+                    <span><strong class="text-ochre-light">למתיירים הראשונים:</strong> אלו המבקשים לראות את אור היום הראשון של ה-AI.</span>
+                </li>
+                <li class="flex items-center gap-4 text-right">
+                    <span class="text-red-ochre text-2xl">🪓</span>
+                    <span><strong class="text-ochre-light">לציידי הידע:</strong> אנשי מקצוע המבקשים להשחיז את כליהם עם AI.</span>
+                </li>
+                <li class="flex items-center gap-4 text-right">
+                    <span class="text-red-ochre text-2xl">👑</span>
+                    <span><strong class="text-ochre-light">לראשי השבט:</strong> מנהלים וארגונים המבקשים להאיר את דרך צוותיהם.</span>
+                </li>
+                <li class="flex items-center gap-4 text-right">
+                    <span class="text-red-ochre text-2xl">🔭</span>
+                    <span><strong class="text-ochre-light">למגלי העולמות:</strong> מפתחי פרויקטים מתקדמים ב-AI.</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Section: Specialties -->
+        <div class="cave-glyph w-full max-w-3xl my-16 draw-in" style="animation-delay: 3s; transform: rotate(-4deg) translateX(30px);">
+            <h2 class="font-mono text-3xl md:text-4xl text-red-ochre mb-6 text-drawn text-right">עקבות הדרך: מה נגלה?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg md:text-xl">
+                <div class="flex items-center gap-4">
+                    <span class="text-red-ochre text-2xl">✍️</span>
+                    <span>ציור סיפורים ותוכן חדש.</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="text-red-ochre text-2xl">🛠️</span>
+                    <span>יצירת כלים ואפליקציות חכמות.</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="text-red-ochre text-2xl">🕸️</span>
+                    <span>בניית מחילות דיגיטליות (אתרים מבוססי AI).</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="text-red-ochre text-2xl">🔍</span>
+                    <span>פענוח סלעים מדברים (ניתוח נתונים).</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="text-red-ochre text-2xl">🎨</span>
+                    <span>פיסול צללים ויצירת אמנות.</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="text-red-ochre text-2xl">⚙️</span>
+                    <span>ריקוד התהליכים (אוטומציה).</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Services Offered -->
+        <div class="cave-glyph w-full max-w-3xl my-16 draw-in" style="animation-delay: 3.5s; transform: rotate(1deg) translateX(-10px);">
+            <h2 class="font-mono text-3xl md:text-4xl text-red-ochre mb-6 text-drawn text-right">מסע הלמידה: דרכים לגילוי</h2>
+            <ul class="list-none space-y-4 text-lg md:text-xl">
+                <li class="flex items-center gap-4 text-right">
+                    <span class="text-red-ochre text-2xl">🔥</span>
+                    <span><strong class="text-ochre-light">חוגי מדורה קבוצתיים:</strong> מעשיים וממוקדים, סביב האש המשותפת.</span>
+                </li>
+                <li class="flex items-center gap-4 text-right">
+                    <span class="text-red-ochre text-2xl">🗣️</span>
+                    <span><strong class="text-ochre-light">שיחות עם השאמאן:</strong> שיעורים פרטיים, התאמה אישית לרמה ולצרכים.</span>
+                </li>
+                <li class="flex items-center gap-4 text-right">
+                    <span class="text-red-ochre text-2xl">📢</span>
+                    <span><strong class="text-ochre-light">מסרים לשבטים:</strong> הרצאות והדרכות לארגונים, פתיחת אופקים.</span>
+                </li>
+                <li class="flex items-center gap-4 text-right">
+                    <span class="text-red-ochre text-2xl">🔮</span>
+                    <span><strong class="text-ochre-light">פיענוח נבואות:</strong> ייעוץ ופיתוח פרויקטים, ליווי מקצועי.</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Contact Information - Call to the Tribe -->
+        <div class="cave-glyph w-full max-w-2xl my-16 text-center draw-in" style="animation-delay: 4s; transform: rotate(-2deg);">
+            <h2 class="font-mono text-4xl text-red-ochre mb-8 text-drawn">קריאה אל השבט</h2>
+            <div class="text-xl md:text-2xl space-y-4">
+                <p>
+                    <a href="https://wa.me/972546609385" target="_blank" class="text-ochre-light hover:text-red-ochre transition-colors text-drawn">
+                        <span class="inline-block align-middle ml-2">📞</span>
+                        וואטסאפ: 054-6609385
+                    </a>
+                </p>
+                <p>
+                    <a href="mailto:zaviner@gmail.com" class="text-ochre-light hover:text-red-ochre transition-colors text-drawn">
+                        <span class="inline-block align-middle ml-2">✉️</span>
+                        אימייל: zaviner@gmail.com
+                    </a>
+                </p>
+            </div>
+            <p class="mt-8 text-lg text-cave-light">
+                העתיד נכתב, ובידכם הוא להחזיק את המקל.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- JavaScript for custom cursor and parallax -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cursor = document.querySelector('.custom-cursor');
+            const parallaxLayers = document.querySelectorAll('.parallax-layer');
+
+            // Custom Cursor Logic
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = `${e.clientX}px`;
+                cursor.style.top = `${e.clientY}px`;
+            });
+
+            // Parallax Scrolling Logic
+            function updateParallax() {
+                const scrollY = window.pageYOffset;
+                parallaxLayers.forEach(layer => {
+                    const speed = parseFloat(layer.getAttribute('data-parallax-speed'));
+                    const yPos = -scrollY * speed;
+                    layer.style.transform = `translateY(${yPos}px)`;
+                });
+            }
+
+            window.addEventListener('scroll', updateParallax);
+            // Initial call to set correct parallax position on load
+            updateParallax();
+        });
+    </script>
+</body>
+</html>

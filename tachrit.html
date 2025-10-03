@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הכתובת נחרטה: לשלוט בבינה המלאכותית</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Define custom CSS variables for color palette */
+        :root {
+            --color-dark-bg: #1A1A1A; /* Very dark almost black */
+            --color-light-text: #E0E0E0; /* Off-white for contrast */
+            --color-accent-gold: #B8860B; /* Muted gold/bronze */
+            --color-parchment: #F8F0E3; /* Light, slightly aged paper color */
+        }
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: var(--color-dark-bg);
+            color: var(--color-light-text);
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll for parallax */
+            position: relative; /* For noise overlay */
+        }
+        /* Apply Frank Ruhl Libre to headings and accent gold color */
+        h1, h2, h3 {
+            font-family: 'Frank Ruhl Libre', serif;
+            color: var(--color-accent-gold);
+        }
+
+        /* Custom Cursor Styling */
+        #custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.1s, height 0.1s, border-color 0.1s, box-shadow 0.1s;
+            border: 2px solid var(--color-light-text); /* Light border for visibility */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for visibility */
+        }
+
+        /* Etching background texture */
+        .etching-bg {
+            background-color: var(--color-dark-bg);
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 2px 2px;
+            filter: grayscale(0.5) contrast(1.1);
+        }
+
+        /* Subtle Noise Effect on the entire body for paper/metal texture */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 999; /* Above parallax, below cursor */
+            /* Using inline SVG for noise pattern to avoid external resources */
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            background-size: cover;
+            opacity: 0.05; /* Very subtle opacity */
+        }
+
+        /* Scroll reveal animation base state */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        /* Scroll reveal animation visible state */
+        .scroll-reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Text styling to mimic an etched or carved effect */
+        .text-etched {
+            text-shadow:
+                -1px -1px 0 rgba(0,0,0,0.6), /* Dark shadow for depth */
+                1px 1px 0 rgba(255,255,255,0.05); /* Light highlight for carved edge */
+            letter-spacing: 0.05em; /* Slightly more spaced out letters */
+        }
+
+        /* Border styling to mimic hand-etched borders with subtle layering */
+        .etched-border {
+            border: 1px solid var(--color-accent-gold);
+            box-shadow: 0 0 0 1px var(--color-dark-bg), inset 0 0 0 1px var(--color-dark-bg); /* Inner and outer dark "line" */
+            padding: 1rem;
+            position: relative;
+            background-clip: padding-box; /* Ensures background doesn't extend beyond padding */
+        }
+        /* Pseudo-elements for layered dashed lines around etched borders */
+        .etched-border::before, .etched-border::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 1px dashed var(--color-accent-gold);
+            opacity: 0.3; /* Subtle transparency */
+            pointer-events: none; /* Allows interaction with content underneath */
+        }
+        .etched-border::before {
+            transform: scale(1.02); /* Slightly larger than the main border */
+        }
+        .etched-border::after {
+            transform: scale(1.04); /* Even larger */
+        }
+
+        /* Responsive adjustments for font size and padding */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            h3 { font-size: 1.5rem; }
+            .text-etched { letter-spacing: 0.02em; }
+            .container-px { padding-left: 1rem; padding-right: 1rem; }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden min-h-screen text-lg">
+
+    <!-- Custom Cursor Element -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <!-- Layer 1: Base etching texture, moves slowest -->
+    <div id="parallax-layer-1" class="fixed inset-0 w-full h-full etching-bg z-[-1]" style="transform: translateZ(0);"></div>
+    <!-- Layer 2: Subtle radial gradient vignette, moves faster -->
+    <div id="parallax-layer-2" class="fixed inset-0 w-full h-full z-[-2]" style="background-image: radial-gradient(circle at 50% 50%, rgba(0,0,0,0.1) 0%, transparent 70%); transform: translateZ(0);"></div>
+    <!-- Layer 3: Faint diagonal line pattern, moves fastest -->
+    <div id="parallax-layer-3" class="fixed inset-0 w-full h-full z-[-3]" style="background-image: linear-gradient(135deg, rgba(var(--color-accent-gold-rgb), 0.05) 25%, transparent 25%), linear-gradient(225deg, rgba(var(--color-accent-gold-rgb), 0.05) 25%, transparent 25%), linear-gradient(45deg, rgba(var(--color-accent-gold-rgb), 0.05) 25%, transparent 25%), linear-gradient(315deg, rgba(var(--color-accent-gold-rgb), 0.05) 25%, var(--color-dark-bg) 25%); background-size: 20px 20px; transform: translateZ(0);"></div>
+
+    <!-- Main Content Wrapper - positioned above background layers -->
+    <div class="relative z-10 p-4 md:p-8 lg:p-12 min-h-screen flex flex-col items-center justify-center container-px max-w-4xl mx-auto">
+
+        <!-- Introduction Section -->
+        <section class="mb-24 text-center scroll-reveal">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 text-etched">הכתובת נחרטה: לשלוט בבינה המלאכותית</h1>
+            <p class="text-xl md:text-2xl leading-relaxed max-w-3xl mx-auto text-etched">
+                בממלכת הקוד והאלגוריתם, נחרט עידן חדש. עתיד של יצירה, הבנה ושליטה, שמחכה להתגלות למי שיבחר לאחוז במפתח.
+                הבינה המלאכותית אינה כוח זר, אלא שפה עתיקה הממתינה לפרשניה, כלי עצום שרק מחכה ליד האמן שתעצב אותו.
+                העתיד אינו רק מגיע, הוא נחרט לנגד עינינו – <span class="text-accent-gold font-bold">הצטרפו לחריטה.</span>
+            </p>
+        </section>
+
+        <!-- Call to Action / Core Message Section -->
+        <section class="mb-24 text-center scroll-reveal etched-border p-6 rounded-lg shadow-xl" style="background-color: var(--color-parchment); color: var(--color-dark-bg);">
+            <h2 class="text-3xl md:text-4xl font-semibold mb-6 text-etched" style="color: var(--color-accent-gold);">הנגשה מעשית: הבינה המלאכותית בידיים שלך - מהיסוד ועד השליטה</h2>
+            <p class="text-xl leading-relaxed text-etched">
+                אנו מפרקים את המורכבות, חושפים את העקרונות, ומעניקים כלים מעשיים ומידיים.
+                התמסרו למסע שבו הבינה המלאכותית הופכת משמועה – לכוח יצירה יומיומי בעבודה ובחיים.
+                <span class="block mt-4 font-medium" style="color: var(--color-dark-bg);">העתיד אינו מיתוס – הוא מיומנות נרכשת.</span>
+            </p>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section class="mb-24 w-full scroll-reveal">
+            <h2 class="text-3xl md:text-4xl text-center font-bold mb-12 text-etched">למי נכתבה התגלית? חוצבי דרך לעולם חדש</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+                <div class="p-6 etched-border" style="background-color: var(--color-dark-bg);">
+                    <h3 class="text-2xl font-bold mb-4 text-etched">המתחילים – חוצבי דרך ראשונים</h3>
+                    <p class="text-lg leading-relaxed text-etched">
+                        אלו המביטים אל אופק הבינה המלאכותית בסקרנות, אך חסרי מצפן. נחרוט יחד את הצעדים הראשונים, נחשוף את היסודות ונעניק לכם את הביטחון לצאת למסע.
+                    </p>
+                </div>
+                <div class="p-6 etched-border" style="background-color: var(--color-dark-bg);">
+                    <h3 class="text-2xl font-bold mb-4 text-etched">המקצוענים – מפסלי המחר</h3>
+                    <p class="text-lg leading-relaxed text-etched">
+                        אנשי ונשות מקצוע המבקשים לשלב את כוח ה-AI בעבודתם, לחדד תהליכים ולפסל יתרון תחרותי. נלמד איך להטמיע את הבינה המלאכותית ככלי יומיומי.
+                    </p>
+                </div>
+                <div class="p-6 etched-border" style="background-color: var(--color-dark-bg);">
+                    <h3 class="text-2xl font-bold mb-4 text-etched">המנהיגים – רושמי החזון</h3>
+                    <p class="text-lg leading-relaxed text-etched">
+                        מנהלים, מנהלות וארגונים המבינים שהעתיד הוא עכשיו. נבנה יחד אסטרטגיות, נכשיר צוותים ונפתח אופקים של חדשנות ארגונית באמצעות AI.
+                    </p>
+                </div>
+                <div class="p-6 etched-border" style="background-color: var(--color-dark-bg);">
+                    <h3 class="text-2xl font-bold mb-4 text-etched">המתקדמים – אדריכלי פרויקטים</h3>
+                    <p class="text-lg leading-relaxed text-etched">
+                        ליחידים וצוותים המעוניינים לצלול לעומק, לפתח פרויקטים מורכבים ולבנות מערכות AI בהתאמה אישית. כאן נחרטת החדשנות האמיתית.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Section -->
+        <section class="mb-24 w-full scroll-reveal">
+            <h2 class="text-3xl md:text-4xl text-center font-bold mb-12 text-etched">מכחול השליטה – תחומי ההתמחות הנחרטים</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="p-6 etched-border flex flex-col items-center justify-center h-40" style="background-color: var(--color-dark-bg);">
+                    <h3 class="text-xl font-semibold text-etched">העלאת תוכן – מילים רוקדות</h3>
+                </div>
+                <div class="p-6 etched-border flex flex-col items-center justify-center h-40" style="background-color: var(--color-dark-bg);">
+                    <h3 class="text-xl font-semibold text-etched">אפליקציות חכמות – כלי מחשבה</h3>
+                </div>
+                <div class="p-6 etched-border flex flex-col items-center justify-center h-40" style="background-color: var(--color-dark-bg);">
+                    <h3 class="text-xl font-semibold text-etched">אתרים חכמים – פורטלים לעתיד</h3>
+                </div>
+                <div class="p-6 etched-border flex flex-col items-center justify-center h-40" style="background-color: var(--color-dark-bg);">
+                    <h3 class="text-xl font-semibold text-etched">ניתוח נתונים – פענוח נסתר</h3>
+                </div>
+                <div class="p-6 etched-border flex flex-col items-center justify-center h-40" style="background-color: var(--color-dark-bg);">
+                    <h3 class="text-xl font-semibold text-etched">אמנות דיגיטלית – חזיונות נולדים</h3>
+                </div>
+                <div class="p-6 etched-border flex flex-col items-center justify-center h-40" style="background-color: var(--color-dark-bg);">
+                    <h3 class="text-xl font-semibold text-etched">אוטומציה – זרימת הבריאה</h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="mb-24 w-full scroll-reveal">
+            <h2 class="text-3xl md:text-4xl text-center font-bold mb-12 text-etched">מסעות ההשראה – דרכי הלמידה</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="p-6 etched-border" style="background-color: var(--color-parchment); color: var(--color-dark-bg);">
+                    <h3 class="text-2xl font-bold mb-4" style="color: var(--color-accent-gold);">סדנאות קבוצתיות – ליטוש בצוותא</h3>
+                    <p class="text-lg leading-relaxed">
+                        מעשיות, ממוקדות ואינטראקטיביות, חורטות ידע עמוק במבנה קבוצתי תומך. יחד נגלה את כוחה של הבינה המלאכותית ביישומיים פרקטיים.
+                    </p>
+                </div>
+                <div class="p-6 etched-border" style="background-color: var(--color-parchment); color: var(--color-dark-bg);">
+                    <h3 class="text-2xl font-bold mb-4" style="color: var(--color-accent-gold);">שיעורים פרטיים – חקיקה אישית</h3>
+                    <p class="text-lg leading-relaxed">
+                        מסלול לימוד מותאם אישית, צעד אחר צעד, לרמה ולצרכים הייחודיים שלך. חריטה מדויקת של ידע ומיומנויות להצלחה אישית.
+                    </p>
+                </div>
+                <div class="p-6 etched-border" style="background-color: var(--color-parchment); color: var(--color-dark-bg);">
+                    <h3 class="text-2xl font-bold mb-4" style="color: var(--color-accent-gold);">הרצאות לארגונים – פריצת אופקים</h3>
+                    <p class="text-lg leading-relaxed">
+                        פתיחת צוהר לעולם ה-AI עבור צוותים ומנהלים, חשיפת הפוטנציאל העצום ודרכי ההטמעה. השראה שתניע חדשנות.
+                    </p>
+                </div>
+                <div class="p-6 etched-border" style="background-color: var(--color-parchment); color: var(--color-dark-bg);">
+                    <h3 class="text-2xl font-bold mb-4" style="color: var(--color-accent-gold);">ייעוץ ופיתוח פרויקטים – ליווי היצירה</h3>
+                    <p class="text-lg leading-relaxed">
+                        ליווי מקצועי ואישי מתחילת הרעיון ועד למימוש פרויקטים מבוססי AI. נהפוך את חזונכם למציאות חרוטה.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide Section -->
+        <section class="mb-24 w-full text-center scroll-reveal">
+            <h2 class="text-3xl md:text-4xl font-bold mb-12 text-etched">האמן – זאביק אבינר, חרט העתיד</h2>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8">
+                <div class="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-2 border-accent-gold shadow-lg flex-shrink-0">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר" class="w-full h-full object-cover filter grayscale sepia-[0.5] contrast-[1.2]">
+                </div>
+                <div class="md:text-right md:pr-8 max-w-xl">
+                    <p class="text-xl leading-relaxed mb-4 text-etched">
+                        זאביק אבינר – המפסל הדיגיטלי, חרט העתיד.
+                        מומחה בעל ניסיון עשיר בפענוח והנגשת סודות הבינה המלאכותית, הפיכתה לשפה מובנת וכלי עוצמתי בידי כל אדם.
+                        ידו המיומנת תוביל אתכם במסע אל מעמקי הקוד, עד שתחרטו את חזונכם שלכם.
+                    </p>
+                    <p class="text-xl leading-relaxed text-accent-gold font-bold text-etched">מומחיותו – להפוך את המורכב לנגיש, את העתיד למעשי.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="w-full text-center scroll-reveal mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8 text-etched">ליצירת קשר – חרטו דרך משלכם</h2>
+            <div class="text-2xl md:text-3xl font-bold text-accent-gold text-etched mb-4">
+                <a href="https://wa.me/972546609385" target="_blank" class="hover:underline">ווטסאפ: 054-6609385</a>
+            </div>
+            <div class="text-2xl md:text-3xl font-bold text-accent-gold text-etched">
+                <a href="mailto:zaviner@gmail.com" class="hover:underline">אימייל: zaviner@gmail.com</a>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Set CSS variables for RGB values, necessary for rgba in linear-gradient for parallax layer 3
+        document.documentElement.style.setProperty('--color-accent-gold-rgb', '184, 134, 11'); /* RGB for #B8860B */
+
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+        document.addEventListener('mousedown', () => {
+            customCursor.style.width = '16px'; // Shrink on click
+            customCursor.style.height = '16px';
+            customCursor.style.borderColor = 'rgba(255,255,255,0.7)';
+            customCursor.style.boxShadow = '0 0 0 2px rgba(0,0,0,0.9)';
+        });
+        document.addEventListener('mouseup', () => {
+            customCursor.style.width = '20px'; // Restore on release
+            customCursor.style.height = '20px';
+            customCursor.style.borderColor = 'var(--color-light-text)';
+            customCursor.style.boxShadow = '0 0 0 2px rgba(0,0,0,0.8)';
+        });
+
+        // Parallax Scrolling Logic for background layers
+        const parallaxLayer1 = document.getElementById('parallax-layer-1');
+        const parallaxLayer2 = document.getElementById('parallax-layer-2');
+        const parallaxLayer3 = document.getElementById('parallax-layer-3');
+        const layers = [
+            { element: parallaxLayer1, speed: 0.05 }, /* Slower movement for base layer */
+            { element: parallaxLayer2, speed: 0.1 },  /* Medium movement for vignette */
+            { element: parallaxLayer3, speed: 0.15 } /* Faster movement for pattern */
+        ];
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            layers.forEach(layer => {
+                // Use translate3d for GPU acceleration, improving performance
+                layer.element.style.transform = `translate3d(0, ${scrollY * layer.speed}px, 0)`;
+            });
+        });
+
+        // Scroll Reveal Animation Logic using Intersection Observer
+        const observerOptions = {
+            root: null, // Observe changes in the viewport
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        const scrollRevealCallback = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Stop observing once the element is visible
+                }
+            });
+        };
+
+        const scrollRevealObserver = new IntersectionObserver(scrollRevealCallback, observerOptions);
+
+        // Apply observer to all elements with 'scroll-reveal' class
+        document.querySelectorAll('.scroll-reveal').forEach(element => {
+            scrollRevealObserver.observe(element);
+        });
+    </script>
+</body>
+</html>

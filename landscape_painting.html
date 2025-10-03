@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אופק הבינה המלאכותית: מסע אל העתיד עם זאביק אבינר</title>
+    <meta name="description" content="הדרכות AI מתקדמות מפי זאביק אבינר. סדנאות, שיעורים פרטיים וייעוץ - הופכים את הבינה המלאכותית לנגישה וישימה לכולם.">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50%25' y='50%25' font-size='90' text-anchor='middle' dominant-baseline='central'%3E%F0%9F%A7%A0%3C/text%3E%3C/svg%3E">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Heebo:wght@100..900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --color-deep-blue: #0A192F; /* Dark background, deep night sky */
+            --color-sky-gray: #6B7A8F; /* Distant misty mountains */
+            --color-plain-green: #D0D6B5; /* Soft, illuminated digital plains */
+            --color-digital-horizon: #E3E8FF; /* Bright, ethereal horizon or cloud */
+            --color-ai-spark: #FFD700; /* Vibrant gold for AI energy/highlights */
+            --color-mid-blue: #1B2E49; /* Slightly lighter deep blue, for atmospheric depth */
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif; /* Primary body font for readability */
+            background-color: var(--color-deep-blue);
+            cursor: none; /* Hide default cursor to use custom one */
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax layers */
+            color: var(--color-digital-horizon); /* Default text color for contrast */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Assistant', sans-serif; /* Headings for a modern, bold look */
+        }
+
+        /* Custom Cursor Styling */
+        #custom-cursor {
+            pointer-events: none; /* Ensures cursor doesn't interfere with clicks */
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            z-index: 9999; /* Always on top */
+            transition: transform 0.1s ease-out; /* Smooth movement tracking mouse */
+        }
+
+        .cursor-outer {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid white; /* Essential for visibility on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8); /* Essential for visibility on light backgrounds */
+            transition: width 0.2s ease-in-out, height 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .cursor-inner {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--color-ai-spark); /* A central 'spark' */
+            opacity: 0.8;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease-in-out, height 0.2s ease-in-out, background-color 0.2s ease-in-out;
+        }
+
+        /* Cursor hover effects for interactive elements */
+        a:hover ~ #custom-cursor .cursor-outer,
+        button:hover ~ #custom-cursor .cursor-outer,
+        .interactive-element:hover ~ #custom-cursor .cursor-outer {
+            width: 48px;
+            height: 48px;
+            border-color: var(--color-ai-spark);
+            box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.9);
+        }
+
+        a:hover ~ #custom-cursor .cursor-inner,
+        button:hover ~ #custom-cursor .cursor-inner,
+        .interactive-element:hover ~ #custom-cursor .cursor-inner {
+            width: 16px;
+            height: 16px;
+            background-color: white; /* Inner spark becomes white on hover */
+        }
+        
+        /* Parallax layers - fixed position to create depth */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            pointer-events: none; /* Allow interaction with content below */
+            will-change: transform; /* Optimize for smooth animation */
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Specific layer backgrounds, simulating a layered landscape */
+        .layer-1 {
+            background: linear-gradient(to top, var(--color-deep-blue) 0%, var(--color-mid-blue) 50%, transparent 100%);
+            z-index: -5; /* Farthest back */
+        }
+        .layer-2 {
+            background: linear-gradient(to top, transparent 0%, rgba(107, 122, 143, 0.1) 20%, rgba(107, 122, 143, 0.3) 50%, rgba(107, 122, 143, 0.5) 80%, transparent 100%); /* Misty mountains */
+            z-index: -4;
+        }
+        .layer-3 {
+            background: radial-gradient(circle at 70% 30%, rgba(255, 215, 0, 0.05) 0%, transparent 40%),
+                        radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.03) 0%, transparent 30%); /* Subtle light sources/stars */
+            z-index: -3; /* Closer to content */
+        }
+
+        /* Smooth scroll for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom utility for text alignment (RTL specific) */
+        .text-balance-rtl {
+            text-align: justify; /* For balanced block text */
+            text-align-last: right; /* To keep last line right-aligned in RTL */
+        }
+        
+        /* RTL specific adjustments for images/text blocks in flex */
+        .flex-row-reverse-rtl {
+            flex-direction: row-reverse;
+        }
+        @media (max-width: 768px) {
+            .sm\\:flex-col-reverse-rtl { /* Apply column-reverse on small screens */
+                flex-direction: column-reverse;
+            }
+        }
+
+        /* Animations for elements */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 1s ease-out forwards;
+            opacity: 0; /* Hidden by default until animation starts */
+        }
+        /* Custom delay utilities for specific elements */
+        .animate-delay-1000 { animation-delay: 1s; }
+        .animate-delay-\\[1\\.5s\\] { animation-delay: 1.5s; }
+        .animate-delay-\\[2s\\] { animation-delay: 2s; }
+
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1); opacity: 0.1; }
+            50% { transform: scale(1.1); opacity: 0.2; }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 6s infinite ease-in-out;
+        }
+
+        @keyframes pulse-fast {
+            0%, 100% { transform: scale(1); opacity: 0.15; }
+            50% { transform: scale(1.2); opacity: 0.25; }
+        }
+        .animate-pulse-fast {
+            animation: pulse-fast 4s infinite ease-in-out;
+        }
+
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-bounce-slow {
+            animation: bounce-slow 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen text-digital-horizon leading-relaxed">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor">
+        <div class="cursor-outer"></div>
+        <div class="cursor-inner"></div>
+    </div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-layer layer-1" data-parallax-speed="0.05"></div>
+    <div class="parallax-layer layer-2" data-parallax-speed="0.1"></div>
+    <div class="parallax-layer layer-3" data-parallax-speed="0.15"></div>
+
+    <!-- Main Content Wrapper (positioned above parallax layers) -->
+    <main class="relative z-10 w-full max-w-6xl mx-auto px-6 lg:px-8 py-16">
+
+        <!-- Hero Section - The Grand Vista -->
+        <section id="hero" class="min-h-screen flex flex-col justify-center items-center text-center pb-24 relative overflow-hidden">
+            <h1 class="text-6xl md:text-8xl font-bold text-ai-spark drop-shadow-lg leading-tight mb-6 animate-fade-in animate-delay-1000">
+                אופק הבינה המלאכותית
+            </h1>
+            <p class="text-xl md:text-3xl max-w-4xl mb-12 text-digital-horizon animate-fade-in animate-delay-[1.5s]">
+                העתיד אינו מגיע - אנו בונים אותו. בואו לחקור את נופי הבינה המלאכותית איתנו, מהמדרונות המוריקים ועד לפסגות המוארות.
+            </p>
+            <a href="#mission" class="bg-ai-spark text-deep-blue px-8 py-4 rounded-full text-lg font-bold hover:bg-white hover:shadow-xl transition-all duration-300 glow-on-hover interactive-element animate-fade-in animate-delay-[2s]">
+                צאו למסע
+            </a>
+            <!-- Subtle generative elements as visual texture on top of parallax -->
+            <div class="absolute inset-0 pointer-events-none opacity-20">
+                <div class="absolute top-1/4 right-1/4 w-32 h-32 bg-digital-horizon rounded-full mix-blend-overlay blur-3xl animate-pulse-slow"></div>
+                <div class="absolute bottom-1/3 left-1/3 w-40 h-40 bg-ai-spark rounded-full mix-blend-overlay blur-3xl animate-pulse-fast"></div>
+            </div>
+        </section>
+
+        <!-- Mission Statement - The Core Philosophy -->
+        <section id="mission" class="my-24 md:my-32 p-8 bg-mid-blue/30 backdrop-blur-sm rounded-lg shadow-xl border border-sky-gray/20 animate-fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold text-ai-spark mb-8 text-right">
+                הפיכת נוף הבינה המלאכותית לנגיש
+            </h2>
+            <p class="text-lg md:text-xl max-w-5xl text-right leading-relaxed text-balance-rtl">
+                בעולם שבו טכנולוגיה מתפתחת בקצב מסחרר, הבינה המלאכותית (AI) היא כבר לא מדע בדיוני, אלא כלי עוצמתי המעצב את חיינו ועבודתנו. אנו מאמינים שהיכולת לשלוט בכלי הזה צריכה להיות נגישה לכולם. המשימה שלנו היא לפרוץ את חומות המורכבות, להפוך את ה-AI לשפה שכל אחד יכול לדבר, ולצייד אתכם בכלים המעשיים שיאפשרו לכם ליישם אותה מיד- - בעבודה, בעסקים ובחיים האישיים.
+            </p>
+        </section>
+
+        <!-- Audience Section - Fellow Travelers -->
+        <section id="audience" class="my-24 md:my-32 animate-fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold text-ai-spark mb-12 text-center">
+                מי יחקור איתנו את הפסגות?
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="p-6 bg-mid-blue/30 backdrop-blur-sm rounded-lg shadow-lg border border-sky-gray/20 text-center hover:scale-105 transition-transform duration-300 interactive-element">
+                    <h3 class="text-2xl font-bold text-digital-horizon mb-4">מטיילים ראשונים</h3>
+                    <p class="text-base text-right text-balance-rtl">למתחילים המעוניינים להכיר את עולם ה-AI, להבין את המושגים הבסיסיים ולפתוח צוהר לעתיד הדיגיטלי.</p>
+                </div>
+                <div class="p-6 bg-mid-blue/30 backdrop-blur-sm rounded-lg shadow-lg border border-sky-gray/20 text-center hover:scale-105 transition-transform duration-300 interactive-element">
+                    <h3 class="text-2xl font-bold text-digital-horizon mb-4">מגלי דרכים חדשות</h3>
+                    <p class="text-base text-right text-balance-rtl">לאנשי מקצוע המעוניינים להטמיע AI בעבודה היומיומית, לייעל תהליכים ולפתוח אפיקי חדשנות.</p>
+                </div>
+                <div class="p-6 bg-mid-blue/30 backdrop-blur-sm rounded-lg shadow-lg border border-sky-gray/20 text-center hover:scale-105 transition-transform duration-300 interactive-element">
+                    <h3 class="text-2xl font-bold text-digital-horizon mb-4">פורצי דרך לארגונים</h3>
+                    <p class="text-base text-right text-balance-rtl">למנהלים וארגונים המחפשים להכשיר צוותים, לזהות הזדמנויות עסקיות חדשות ולבסס אסטרטגיית AI.</p>
+                </div>
+                <div class="p-6 bg-mid-blue/30 backdrop-blur-sm rounded-lg shadow-lg border border-sky-gray/20 text-center hover:scale-105 transition-transform duration-300 interactive-element">
+                    <h3 class="text-2xl font-bold text-digital-horizon mb-4">בונים עולמות AI חדשים</h3>
+                    <p class="text-base text-right text-balance-rtl">למתקדמים המעוניינים לפתח פרויקטים מבוססי AI, לבנות יישומים מורכבים ולצלוח את האתגרים הטכניים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Areas - Digital Treasure Maps -->
+        <section id="expertise" class="my-24 md:my-32 animate-fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold text-ai-spark mb-12 text-right">
+                מפות האוצר הדיגיטליות: תחומי התמחות
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="p-6 bg-mid-blue/30 backdrop-blur-sm rounded-lg shadow-lg border border-sky-gray/20 flex flex-row-reverse-rtl items-center hover:bg-mid-blue/50 transition-colors duration-300 interactive-element">
+                    <span class="text-4xl text-ai-spark ml-4">✍️</span>
+                    <div>
+                        <h3 class="text-2xl font-bold text-digital-horizon mb-2">פיסול מילים חכמות</h3>
+                        <p class="text-base text-right text-balance-rtl">יצירת טקסטים, מאמרים ותוכן שיווקי באמצעות מודלי שפה מתקדמים.</p>
+                    </div>
+                </div>
+                <div class="p-6 bg-mid-blue/30 backdrop-blur-sm rounded-lg shadow-lg border border-sky-gray/20 flex flex-row-reverse-rtl items-center hover:bg-mid-blue/50 transition-colors duration-300 interactive-element">
+                    <span class="text-4xl text-ai-spark ml-4">📱</span>
+                    <div>
+                        <h3 class="text-2xl font-bold text-digital-horizon mb-2">אדריכלות יישומים</h3>
+                        <p class="text-base text-right text-balance-rtl">בנייה ותכנון של אפליקציות חכמות מבוססות AI לצרכים מגוונים.</p>
+                    </div>
+                </div>
+                <div class="p-6 bg-mid-blue/30 backdrop-blur-sm rounded-lg shadow-lg border border-sky-gray/20 flex flex-row-reverse-rtl items-center hover:bg-mid-blue/50 transition-colors duration-300 interactive-element">
+                    <span class="text-4xl text-ai-spark ml-4">🌐</span>
+                    <div>
+                        <h3 class="text-2xl font-bold text-digital-horizon mb-2">נופי רשת אינטליגנטיים</h3>
+                        <p class="text-base text-right text-balance-rtl">פיתוח אתרים המשלבים יכולות AI לשיפור חווית המשתמש ופונקציונליות.</p>
+                    </div>
+                </div>
+                <div class="p-6 bg-mid-blue/30 backdrop-blur-sm rounded-lg shadow-lg border border-sky-gray/20 flex flex-row-reverse-rtl items-center hover:bg-mid-blue/50 transition-colors duration-300 interactive-element">
+                    <span class="text-4xl text-ai-spark ml-4">📊</span>
+                    <div>
+                        <h3 class="text-2xl font-bold text-digital-horizon mb-2">פענוח סודות הנתונים</h3>
+                        <p class="text-base text-right text-balance-rtl">ניתוח נתונים מתקדם ומחקר מבוסס AI לחשיפת תובנות עסקיות.</p>
+                    </div>
+                </div>
+                <div class="p-6 bg-mid-blue/30 backdrop-blur-sm rounded-lg shadow-lg border border-sky-gray/20 flex flex-row-reverse-rtl items-center hover:bg-mid-blue/50 transition-colors duration-300 interactive-element">
+                    <span class="text-4xl text-ai-spark ml-4">🎨</span>
+                    <div>
+                        <h3 class="text-2xl font-bold text-digital-horizon mb-2">אומנות דיגיטלית</h3>
+                        <p class="text-base text-right text-balance-rtl">יצירת תמונות, גרפיקה ואמנות ויזואלית באמצעות מודלי יצירה של AI.</p>
+                    </div>
+                </div>
+                <div class="p-6 bg-mid-blue/30 backdrop-blur-sm rounded-lg shadow-lg border border-sky-gray/20 flex flex-row-reverse-rtl items-center hover:bg-mid-blue/50 transition-colors duration-300 interactive-element">
+                    <span class="text-4xl text-ai-spark ml-4">⚙️</span>
+                    <div>
+                        <h3 class="text-2xl font-bold text-digital-horizon mb-2">זרמים חכמים בתהליכים</h3>
+                        <p class="text-base text-right text-balance-rtl">אוטומציה של תהליכים עסקיים ותפעוליים בעזרת בינה מלאכותית.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered - Guided Trails to the Peak -->
+        <section id="services" class="my-24 md:my-32 animate-fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold text-ai-spark mb-12 text-center">
+                שבילים מודרכים אל הפסגה
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="p-6 bg-sky-gray/20 backdrop-blur-sm rounded-lg shadow-lg border border-digital-horizon/20 text-center hover:bg-sky-gray/40 transition-colors duration-300 interactive-element">
+                    <h3 class="text-2xl font-bold text-digital-horizon mb-4">מסעות קבוצתיים מעמיקים</h3>
+                    <p class="text-base text-right text-balance-rtl">סדנאות מעשיות וממוקדות, ללמידה משותפת וחיבור לקהילת ה-AI.</p>
+                </div>
+                <div class="p-6 bg-sky-gray/20 backdrop-blur-sm rounded-lg shadow-lg border border-digital-horizon/20 text-center hover:bg-sky-gray/40 transition-colors duration-300 interactive-element">
+                    <h3 class="text-2xl font-bold text-digital-horizon mb-4">ליווי אישי בשביל הייחודי שלך</h3>
+                    <p class="text-base text-right text-balance-rtl">שיעורים פרטיים המותאמים אישית לרמת הידע ולצרכים הספציפיים שלכם.</p>
+                </div>
+                <div class="p-6 bg-sky-gray/20 backdrop-blur-sm rounded-lg shadow-lg border border-digital-horizon/20 text-center hover:bg-sky-gray/40 transition-colors duration-300 interactive-element">
+                    <h3 class="text-2xl font-bold text-digital-horizon mb-4">השראה לפריצת דרך בארגון</h3>
+                    <p class="text-base text-right text-balance-rtl">הרצאות מרתקות לארגונים, לפתיחת אופקים חדשים ולהצגת הפוטנציאל העצום של AI לצוותים.</p>
+                </div>
+                <div class="p-6 bg-sky-gray/20 backdrop-blur-sm rounded-lg shadow-lg border border-digital-horizon/20 text-center hover:bg-sky-gray/40 transition-colors duration-300 interactive-element">
+                    <h3 class="text-2xl font-bold text-digital-horizon mb-4">תכנון ופיתוח המסלול שלך</h3>
+                    <p class="text-base text-right text-balance-rtl">ייעוץ וליווי מקצועי בפיתוח פרויקטים מבוססי AI, מהרעיון ועד ליישום.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide - Meet Your Navigator -->
+        <section id="guide" class="my-24 md:my-32 p-8 bg-mid-blue/30 backdrop-blur-sm rounded-lg shadow-xl border border-sky-gray/20 animate-fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold text-ai-spark mb-8 text-center">
+                המנווט הראשי: זאביק אבינר
+            </h2>
+            <div class="flex flex-col sm:flex-row-reverse-rtl items-center sm:items-start gap-8">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר - מומחה בינה מלאכותית" class="w-48 h-48 rounded-full object-cover border-4 border-ai-spark shadow-lg flex-shrink-0 mb-6 sm:mb-0">
+                <div class="text-right flex-grow">
+                    <p class="text-lg md:text-xl leading-relaxed mb-6 text-balance-rtl">
+                        זאביק אבינר הוא לא רק מומחה בינה מלאכותית, אלא מנווט ופורץ דרך אמיתי בנוף הדיגיטלי המשתנה ללא הרף. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק הפך למורה דרך המוביל אנשים וארגונים אל עבר השליטה בטכנולוגיות המתקדמות ביותר. הוא מתמחה בהנגשת הידע המורכב, ובצמצום הפער בין התיאוריה ליישום המעשי, הפיכת ה-AI לכלי עבודה יומיומי ונגיש לכולם.
+                    </p>
+                    <div class="flex flex-col sm:flex-row-reverse-rtl justify-center sm:justify-start gap-4 text-lg font-semibold">
+                        <a href="https://wa.me/972546609385" target="_blank" class="flex items-center justify-center sm:justify-end text-digital-horizon hover:text-ai-spark transition-colors duration-200 interactive-element">
+                            <span class="ml-2">054-6609385</span> 📞
+                        </a>
+                        <a href="mailto:zaviner@gmail.com" class="flex items-center justify-center sm:justify-end text-digital-horizon hover:text-ai-spark transition-colors duration-200 interactive-element">
+                            <span class="ml-2">zaviner@gmail.com</span> 📧
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action / Footer - Chart Your Course -->
+        <section id="contact" class="my-24 md:my-32 text-center animate-fade-in">
+            <h2 class="text-4xl md:text-5xl font-bold text-ai-spark mb-8 drop-shadow-lg">
+                המסע שלך מתחיל עכשיו
+            </h2>
+            <p class="text-xl md:text-2xl mb-12 max-w-4xl mx-auto text-digital-horizon text-balance-rtl">
+                אל תחכו לעתיד שיגיע- - צרו אותו במו ידיכם. צרו קשר עוד היום ונתאים עבורכם את המסלול המושלם לכיבוש פסגות הבינה המלאכותית.
+            </p>
+            <a href="https://wa.me/972546609385" target="_blank" class="bg-ai-spark text-deep-blue px-10 py-5 rounded-full text-xl font-bold hover:bg-white hover:shadow-2xl transition-all duration-300 glow-on-hover interactive-element animate-bounce-slow">
+                דברו איתנו בוואטסאפ
+            </a>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor JavaScript: Tracks mouse movement and updates cursor position
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        });
+
+        // Parallax Effect JavaScript: Moves background layers at different speeds on scroll
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            parallaxLayers.forEach(layer => {
+                const speed = parseFloat(layer.getAttribute('data-parallax-speed'));
+                layer.style.transform = `translateY(${scrollY * speed}px)`;
+            });
+        });
+
+        // Intersection Observer for fade-in animations as elements enter viewport
+        const faders = document.querySelectorAll('.animate-fade-in');
+        const appearOptions = {
+            threshold: 0.1, // Element is considered 'intersecting' when 10% visible
+            rootMargin: "0px 0px -100px 0px" // Starts fade-in when 100px from bottom of viewport
+        };
+        const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return; // Not in viewport yet, or scrolled out
+                } else {
+                    entry.target.style.opacity = '1'; // Make it visible
+                    // No need to remove 'opacity-0' class, direct style property is fine
+                    appearOnScroll.unobserve(entry.target); // Stop observing after animation
+                }
+            });
+        }, appearOptions);
+
+        // Initially hide elements and apply observer
+        faders.forEach(fader => {
+            fader.style.opacity = '0'; // Ensure it's hidden before observer kicks in
+            fader.style.transition = 'opacity 1s ease-out, transform 1s ease-out'; // Apply transition
+            // Apply initial transform for the fade-in animation
+            fader.style.transform = 'translateY(20px)'; 
+            appearOnScroll.observe(fader);
+        });
+
+        // Manually apply initial animation for hero section elements on page load
+        // This ensures they animate even if they are in view immediately
+        document.querySelector('.animate-fade-in.animate-delay-1000').style.animationPlayState = 'running';
+        document.querySelector('.animate-fade-in.animate-delay-\\[1\\.5s\\]').style.animationPlayState = 'running';
+        document.querySelector('.animate-fade-in.animate-delay-\\[2s\\]').style.animationPlayState = 'running';
+
+        // Set initial animation state for hero elements that are immediately visible
+        // This makes sure the animation plays on load, not just on scroll.
+        const heroElements = document.querySelectorAll('#hero .animate-fade-in');
+        heroElements.forEach(el => {
+            el.style.animationPlayState = 'running';
+            // Set styles for animation "from" state if they aren't already
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            // Then let the CSS animation override with 'forwards' to its 'to' state
+        });
+    </script>
+</body>
+</html>

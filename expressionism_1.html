@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>התפרצות הבינה - זאביק אבינר</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: #0A0A0A; /* Deep dark background */
+            color: #F0F0F0; /* Stark white for contrast */
+            overflow-x: hidden; /* Prevent horizontal scroll from absolute positioning */
+            cursor: none; /* Hide default cursor */
+            perspective: 1000px; /* For subtle 3D effects */
+        }
+
+        .rubik-mono-one {
+            font-family: 'Rubik Mono One', monospace;
+        }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease, height 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+        }
+        #custom-cursor.active {
+            width: 30px;
+            height: 30px;
+            transform: translate(-50%, -50%) scale(1.2);
+            background-color: rgba(138, 43, 226, 0.3); /* Electric purple hint */
+        }
+        #custom-cursor::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background-color: #39FF14; /* Neon green core */
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.8;
+            transition: background-color 0.2s ease, opacity 0.2s ease;
+        }
+        #custom-cursor.active::before {
+            background-color: #D2042D; /* Distressed red on active */
+            opacity: 1;
+        }
+
+        /* Expressionist styling classes */
+        .expressionist-text {
+            line-height: 1.3;
+            letter-spacing: 0.05em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .expressionist-block {
+            background-color: rgba(32, 43, 54, 0.7); /* Muted blue-gray with transparency */
+            border: 1px solid rgba(138, 43, 226, 0.5); /* Electric purple border */
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            position: relative; /* For inner skewed background */
+        }
+        .expressionist-block > .inner-skew-bg {
+            position: absolute;
+            inset: 0;
+            background-color: inherit; /* Inherit from parent for consistent color */
+            opacity: 0.8;
+            border-radius: inherit; /* Inherit border-radius */
+            z-index: -1;
+        }
+        .expressionist-line {
+            height: 2px;
+            background: linear-gradient(to right, #8A2BE2, #39FF14, #D2042D);
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen">
+
+    <!-- Tailwind CDN (placed here for better scope, though generally in head) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'dark-void': '#0A0A0A',
+                        'muted-blue-gray': '#202B36',
+                        'electric-purple': '#8A2BE2',
+                        'neon-green': '#39FF14',
+                        'distressed-red': '#D2042D',
+                        'stark-white': '#F0F0F0',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Generative Background Canvas (Expressionist abstract forms) -->
+    <canvas id="backgroundCanvas" class="fixed inset-0 w-full h-full z-[-1] opacity-70"></canvas>
+
+    <!-- Main Content Wrapper - Relative to body -->
+    <main class="relative z-10 p-4 md:p-8 lg:p-12 overflow-hidden min-h-screen flex flex-col justify-center items-center">
+
+        <!-- Opening Statement / Title - Fragmented and Impactful -->
+        <section class="mb-20 text-center relative w-full max-w-4xl px-4 mt-16 md:mt-24">
+            <h1 class="rubik-mono-one text-5xl md:text-7xl lg:text-8xl text-stark-white mb-4 expressionist-text leading-tight" style="transform: rotateZ(-3deg) translateX(-10px);">
+                <span class="inline-block text-distressed-red">התפרצות</span> <span class="inline-block text-electric-purple">הבינה</span>
+            </h1>
+            <h2 class="text-3xl md:text-5xl lg:text-6xl text-neon-green mb-8 font-bold expressionist-text leading-snug" style="transform: rotateZ(2deg) translateX(10px);">
+                <span class="inline-block">לשלוט בלא נודע.</span> <span class="inline-block">העתיד הוא עכשיו.</span>
+            </h2>
+            <p class="text-lg md:text-xl text-stark-white max-w-2xl mx-auto expressionist-text mt-8" style="transform: rotateZ(-1deg);">
+                בנקודת ההתנגשות שבין חומר ורוח דיגיטלית, אנו ניצבים בפני כוח חדש. זו לא טכנולוגיה, זו מהפכה תודעתית.
+            </p>
+            <div class="absolute w-2/3 h-1 expressionist-line left-1/2 -translate-x-1/2 mt-12 transform rotate-1 skew-y-2"></div>
+        </section>
+
+        <!-- Zevik Aviner - The Guide -->
+        <section class="my-20 relative w-full max-w-4xl px-4 md:flex items-center gap-8 expressionist-block py-10 rounded-lg" style="transform: rotateZ(4deg) translateX(-30px); margin-left: auto; margin-right: 0;">
+            <div class="inner-skew-bg" style="transform: skewY(2deg);"></div>
+            <div class="md:w-1/3 flex justify-center mb-8 md:mb-0 transform rotateZ(-5deg)">
+                <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="w-40 h-40 md:w-56 md:h-56 rounded-full object-cover border-4 border-neon-green shadow-lg transition-transform hover:scale-105 duration-300">
+            </div>
+            <div class="md:w-2/3 text-center md:text-right">
+                <h3 class="rubik-mono-one text-4xl text-electric-purple mb-4 expressionist-text">זאביק אבינר - האדריכל</h3>
+                <p class="text-lg md:text-xl text-stark-white mb-4 expressionist-text leading-relaxed">
+                    כאדריכל בממלכת הבינה המלאכותית, זאביק אבינר פורט את המורכבות לכלי יצירה. הוא לא רק מלמד, הוא מנווט במסע אל ליבת העתיד, חושף את הקודים הנסתרים של התפתחות תודעתית חדשה.
+                </p>
+                <p class="text-md text-gray-300 expressionist-text">
+                    ניסיון רב בפיתוח פרויקטים מערכות ואפליקציות מבוססות AI. המומחיות: להפוך את הלא-נודע לכוח מניע בידיים שלך.
+                </p>
+            </div>
+        </section>
+
+        <!-- Core Message - A fragmented truth -->
+        <section class="my-20 relative w-full max-w-3xl px-4 text-center expressionist-block py-8 rounded-lg" style="transform: rotateZ(-2deg) translateX(20px); margin-left: 0; margin-right: auto;">
+            <div class="inner-skew-bg" style="transform: skewY(-3deg);"></div>
+            <h3 class="rubik-mono-one text-3xl text-distressed-red mb-4 expressionist-text">המסר המתפרץ:</h3>
+            <p class="text-xl md:text-2xl text-stark-white expressionist-text leading-loose">
+                AI אינו רק למעטים. הוא <span class="text-neon-green font-bold">הזרז לשינוי</span>, הכוח שישחרר את הפוטנציאל שלך.
+                <br>
+                מ"אין לי מושג" ועד "אני בורא". כלים <span class="text-electric-purple font-bold">מעשיים, נגישים, משנים חיים</span>.
+            </p>
+            <div class="absolute w-1/2 h-1 expressionist-line left-1/2 -translate-x-1/2 mt-8 transform rotate-3 skew-y-1"></div>
+        </section>
+
+        <!-- Target Audience - Echoes and Reflections -->
+        <section class="my-20 relative w-full max-w-5xl px-4 expressionist-block py-10 rounded-lg text-center" style="transform: rotateZ(1deg) translateY(15px);">
+            <div class="inner-skew-bg" style="transform: skewX(1deg);"></div>
+            <h3 class="rubik-mono-one text-3xl text-neon-green mb-8 expressionist-text">מי יראה את האור?</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="relative p-6 border-b-2 border-electric-purple hover:border-neon-green transition-colors duration-300 transform hover:scale-105 hover:rotate-1">
+                    <p class="text-xl font-bold text-stark-white mb-2">המגששים בערפל:</p>
+                    <p class="text-md text-gray-300">מתחילים, סקרנים, מחפשי דרך ראשונה בעולם ה-AI המתגלה.</p>
+                </div>
+                <div class="relative p-6 border-b-2 border-electric-purple hover:border-neon-green transition-colors duration-300 transform hover:scale-105 hover:-rotate-1">
+                    <p class="text-xl font-bold text-stark-white mb-2">היוצרים והעושים:</p>
+                    <p class="text-md text-gray-300">אנשי מקצוע המבקשים להטמיע AI כמכחול חדש בעבודתם.</p>
+                </div>
+                <div class="relative p-6 border-b-2 border-electric-purple hover:border-neon-green transition-colors duration-300 transform hover:scale-105 hover:rotate-2">
+                    <p class="text-xl font-bold text-stark-white mb-2">המובילים והמארגנים:</p>
+                    <p class="text-md text-gray-300">מנהלים וארגונים השואפים להאיר את הדרך לצוותים שלהם.</p>
+                </div>
+                <div class="relative p-6 border-b-2 border-electric-purple hover:border-neon-green transition-colors duration-300 transform hover:scale-105 hover:-rotate-2">
+                    <p class="text-xl font-bold text-stark-white mb-2">הפורצים קדימה:</p>
+                    <p class="text-md text-gray-300">ברמה מתקדמת- אלו הבונים את המחר בפרויקטים פורצי דרך.</p>
+                </div>
+            </div>
+            <div class="absolute w-3/4 h-1 expressionist-line left-1/2 -translate-x-1/2 mt-12 transform rotate-2 skew-y-3"></div>
+        </section>
+
+        <!-- Specializations - The Tools of Creation -->
+        <section class="my-20 relative w-full max-w-4xl px-4 expressionist-block py-10 rounded-lg" style="transform: rotateZ(-3deg) translateY(20px); margin-left: auto; margin-right: 0;">
+            <div class="inner-skew-bg" style="transform: skewY(1deg);"></div>
+            <h3 class="rubik-mono-one text-4xl text-distressed-red mb-8 text-center expressionist-text">הכלים להתמרה:</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-4 text-center">
+                <div class="p-4 transform hover:scale-105 transition-transform duration-300">
+                    <p class="text-2xl font-bold text-neon-green mb-2">יצירת תודעה טקסטואלית</p>
+                    <p class="text-md text-gray-300">טקסט, סיפור, תוכן - מהברק ועד העומק.</p>
+                </div>
+                <div class="p-4 transform hover:scale-105 transition-transform duration-300">
+                    <p class="text-2xl font-bold text-neon-green mb-2">פיסול יישומים חכמים</p>
+                    <p class="text-md text-gray-300">אפליקציות נושמות, חושבות, מגיבות.</p>
+                </div>
+                <div class="p-4 transform hover:scale-105 transition-transform duration-300">
+                    <p class="text-2xl font-bold text-neon-green mb-2">אריגת מציאות דיגיטלית</p>
+                    <p class="text-md text-gray-300">אתרים מבוססי AI, חיים ומתפתחים.</p>
+                </div>
+                <div class="p-4 transform hover:scale-105 transition-transform duration-300">
+                    <p class="text-2xl font-bold text-neon-green mb-2">פענוח צפני היקום</p>
+                    <p class="text-md text-gray-300">ניתוח נתונים ומחקר, חשיפת דפוסים נסתרים.</p>
+                </div>
+                <div class="p-4 transform hover:scale-105 transition-transform duration-300">
+                    <p class="text-2xl font-bold text-neon-green mb-2">בריאת דימויים ואומנות</p>
+                    <p class="text-md text-gray-300">AI כמכחול ביד האמן - מראות חדשים.</p>
+                </div>
+                <div class="p-4 transform hover:scale-105 transition-transform duration-300">
+                    <p class="text-2xl font-bold text-neon-green mb-2">אוטומציה של הנשמה</p>
+                    <p class="text-md text-gray-300">תהליכים שהופכים ליצירה אוטונומית.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered - Paths to Power -->
+        <section class="my-20 relative w-full max-w-3xl px-4 expressionist-block py-10 rounded-lg text-center" style="transform: rotateZ(2deg) translateY(-10px); margin-left: 0; margin-right: auto;">
+            <div class="inner-skew-bg" style="transform: skewY(-2deg);"></div>
+            <h3 class="rubik-mono-one text-3xl text-electric-purple mb-8 expressionist-text">נתיבי הכוח:</h3>
+            <div class="space-y-6">
+                <div class="p-4 border-b border-distressed-red hover:border-neon-green transition-colors duration-300 transform hover:scale-105 hover:skew-x-1">
+                    <p class="text-xl font-bold text-stark-white mb-1">סדנאות התגלות קבוצתיות</p>
+                    <p class="text-md text-gray-300">מעשיות, ממוקדות - הצתה קולקטיבית של ידע.</p>
+                </div>
+                <div class="p-4 border-b border-distressed-red hover:border-neon-green transition-colors duration-300 transform hover:scale-105 hover:skew-x-2">
+                    <p class="text-xl font-bold text-stark-white mb-1">שיעורים פרטיים אישיים</p>
+                    <p class="text-md text-gray-300">מסע מותאם אישית אל עומק הבינה המלאכותית.</p>
+                </div>
+                <div class="p-4 border-b border-distressed-red hover:border-neon-green transition-colors duration-300 transform hover:scale-105 hover:skew-x-1">
+                    <p class="text-xl font-bold text-stark-white mb-1">הרצאות תהודה לארגונים</p>
+                    <p class="text-md text-gray-300">פתיחת אופקים, השראה לצוותים - הזרעים לשינוי.</p>
+                </div>
+                <div class="p-4 border-b border-distressed-red hover:border-neon-green transition-colors duration-300 transform hover:scale-105 hover:skew-x-2">
+                    <p class="text-xl font-bold text-stark-white mb-1">ייעוץ ופיתוח פרויקטים</p>
+                    <p class="text-md text-gray-300">ליווי מקצועי, בנייה משותפת של העתיד.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact - The Portal to Connection -->
+        <section class="my-20 relative w-full max-w-2xl px-4 text-center expressionist-block py-10 rounded-lg" style="transform: rotateZ(-1deg) translateY(10px);">
+            <div class="inner-skew-bg" style="transform: skewX(-2deg);"></div>
+            <h3 class="rubik-mono-one text-4xl text-stark-white mb-8 expressionist-text">צרו קשר - חצו את הסף</h3>
+            <div class="space-y-4">
+                <p class="text-xl md:text-2xl text-neon-green expressionist-text transform hover:scale-105 transition-transform duration-300">
+                    <a href="https://wa.me/972546609385" target="_blank" class="hover:underline">ווטסאפ: 054-6609385</a>
+                </p>
+                <p class="text-xl md:text-2xl text-electric-purple expressionist-text transform hover:scale-105 transition-transform duration-300">
+                    <a href="mailto:zaviner@gmail.com" class="hover:underline">אימייל: zaviner@gmail.com</a>
+                </p>
+            </div>
+            <div class="absolute w-1/3 h-1 expressionist-line left-1/2 -translate-x-1/2 mt-12 transform rotate-4 skew-y-2"></div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+        document.addEventListener('mousedown', () => {
+            customCursor.classList.add('active');
+        });
+        document.addEventListener('mouseup', () => {
+            customCursor.classList.remove('active');
+        });
+
+        // Background Canvas - Generative Expressionist Art
+        const canvas = document.getElementById('backgroundCanvas');
+        const ctx = canvas.getContext('2d');
+        let animationFrameId;
+        let particles = [];
+        const maxParticles = 50;
+        let mouse = { x: canvas.width / 2, y: canvas.height / 2 }; // Initial mouse position
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            ctx.fillStyle = '#0A0A0A';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            particles = []; // Clear particles on resize
+            initParticles(); // Re-initialize for new canvas dimensions
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas(); // Initial call
+
+        canvas.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 5 + 2; // Random size
+                this.speedX = Math.random() * 2 - 1; // -1 to 1
+                this.speedY = Math.random() * 2 - 1; // -1 to 1
+                this.color = `hsla(${Math.random() * 360}, 70%, 50%, 0.6)`; // Vibrant random colors
+                this.life = 100; // Lifespan
+                this.maxLife = 100;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.life--;
+
+                if (this.life <= 0) {
+                    this.reset();
+                }
+
+                // Add a subtle pull towards the mouse, stronger when active
+                const dx = mouse.x - this.x;
+                const dy = mouse.y - this.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const pullStrength = customCursor.classList.contains('active') ? 0.02 : 0.01;
+                if (distance < 250) { // Only pull if close enough
+                    this.x += dx * pullStrength;
+                    this.y += dy * pullStrength;
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size * (this.life / this.maxLife), 0, Math.PI * 2); // Shrink as it dies
+                ctx.fill();
+            }
+
+            reset() {
+                this.x = mouse.x + (Math.random() - 0.5) * 50; // Reappear near mouse with some offset
+                this.y = mouse.y + (Math.random() - 0.5) * 50;
+                this.size = Math.random() * 5 + 2;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 2 - 1;
+                this.color = `hsla(${Math.random() * 360}, 70%, 50%, 0.6)`;
+                this.life = this.maxLife;
+            }
+        }
+
+        function initParticles() {
+            for (let i = 0; i < maxParticles; i++) {
+                particles.push(new Particle(Math.random() * canvas.width, Math.random() * canvas.height));
+            }
+        }
+
+        function animateParticles() {
+            ctx.globalAlpha = 0.05; // Trail effect
+            ctx.fillStyle = '#0A0A0A'; // Slightly erase previous frame with dark color
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.globalAlpha = 1;
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+
+            animationFrameId = requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+    </script>
+
+</body>
+</html>

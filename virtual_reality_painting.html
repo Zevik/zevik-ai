@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הטאו של הבינה המלאכותית: קפסולה וירטואלית</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@200;400;700&family=Michroma&display=swap" rel="stylesheet">
+    <style>
+        /* Custom VR Painting Styles */
+        body {
+            font-family: 'Heebo', sans-serif;
+            background: linear-gradient(135deg, #0A0A1F 0%, #200A38 50%, #0A0A1F 100%);
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor */
+            color: #E0E0FF; /* Light, slightly purplish text */
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Michroma', sans-serif;
+            color: #8B5CF6; /* Vibrant purple for headings */
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.7), 0 0 20px rgba(139, 92, 246, 0.5);
+        }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            z-index: 9999;
+            transition: transform 0.1s ease-out, opacity 0.3s ease-out;
+            transform: translate(-50%, -50%) scale(1);
+            /* REQUIRED high-contrast visibility */
+            border: 2px solid rgba(255, 255, 255, 0.9); /* Light border */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.7), 0 0 8px rgba(139, 92, 246, 0.8); /* Dark shadow + glow */
+            opacity: 1;
+            animation: pulse-cursor 2s infinite alternate;
+        }
+
+        #custom-cursor::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #A78BFA; /* Inner glow */
+            opacity: 0.7;
+            transition: transform 0.1s ease-out;
+        }
+
+        @keyframes pulse-cursor {
+            from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            to { transform: translate(-50%, -50%) scale(1.1); opacity: 0.9; }
+        }
+
+        /* Parallax Background Elements */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -20;
+            opacity: 0.5;
+        }
+        .layer-1 { background: radial-gradient(circle at 80% 20%, rgba(50, 0, 100, 0.3) 0%, transparent 50%); transform: translateZ(-50px); }
+        .layer-2 { background: radial-gradient(circle at 20% 70%, rgba(0, 50, 100, 0.2) 0%, transparent 40%); transform: translateZ(-100px); }
+        .layer-3 { background: radial-gradient(circle at 50% 50%, rgba(100, 0, 100, 0.1) 0%, transparent 30%); transform: translateZ(-150px); }
+
+
+        /* VR-like floating card style */
+        .vr-card {
+            background: rgba(30, 0, 60, 0.6);
+            border-image: linear-gradient(to top right, #6A1B9A, #A78BFA, #6A1B9A) 1;
+            border-width: 2px;
+            border-style: solid;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4), inset 0 0 10px rgba(139, 92, 246, 0.2);
+            transition: all 0.3s ease-in-out;
+            animation: float-element 4s infinite alternate ease-in-out;
+        }
+        .vr-card:hover {
+            transform: scale(1.03) translateZ(10px);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.7), inset 0 0 15px rgba(139, 92, 246, 0.4);
+            border-image: linear-gradient(to top right, #9C27B0, #D1C4E9, #9C27B0) 1;
+        }
+        @keyframes float-element {
+            0% { transform: translateY(0px) rotateX(0deg); }
+            100% { transform: translateY(-10px) rotateX(2deg); }
+        }
+        .vr-card.delay-1 { animation-delay: 0.5s; }
+        .vr-card.delay-2 { animation-delay: 1s; }
+        .vr-card.delay-3 { animation-delay: 1.5s; }
+
+        /* Glowing text effect for contacts */
+        .glow-text {
+            color: #E0E0FF;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.6), 0 0 15px rgba(167, 139, 250, 0.8);
+            transition: text-shadow 0.3s ease-in-out;
+        }
+        .glow-text:hover {
+            text-shadow: 0 0 12px rgba(255, 255, 255, 0.8), 0 0 20px rgba(191, 149, 255, 1);
+        }
+
+        /* Generic container for central content, to enable relative positioning */
+        .content-container {
+            position: relative;
+            perspective: 1000px; /* For 3D effects */
+            z-index: 10;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            .vr-card { margin-right: 1rem; margin-left: 1rem; }
+            .vr-card, .text-section { animation: none; transform: none !important; } /* Disable some animations for mobile to optimize performance */
+            .parallax-layer { display: none; } /* Hide parallax layers on smaller screens */
+        }
+
+    </style>
+</head>
+<body class="antialiased leading-relaxed text-right min-h-screen flex flex-col justify-center items-center p-4 md:p-8">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-layer layer-1" data-parallax-speed="0.05"></div>
+    <div class="parallax-layer layer-2" data-parallax-speed="0.1"></div>
+    <div class="parallax-layer layer-3" data-parallax-speed="0.15"></div>
+
+    <div class="content-container w-full max-w-5xl space-y-24 mt-12 mb-24 md:mt-24 md:mb-32">
+
+        <!-- Title Section - VR Canvas Intro -->
+        <section class="relative text-center pb-8 z-20" style="transform: translateZ(20px);">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">אפופאת הבינה המלאכותית: <br class="hidden md:block">קפסולה וירטואלית אל העתיד</h1>
+            <p class="text-xl md:text-2xl text-purple-200 mt-6 mx-auto max-w-3xl">
+                צעד אל תוך המטריצה – שם מחשבות מתגשמות ונתונים רוקדים. בעולם שבו המציאות מתמזגת עם הקוד, בינה מלאכותית היא לא רק טכנולוגיה, אלא שפת יצירה חדשה. כאן, בקפסולה הדיגיטלית הזו, נחשפים הסודות להפעלת כוחותיה.
+            </p>
+        </section>
+
+        <!-- Instructor Section - Zevik Aviner as the Guide -->
+        <section class="relative flex flex-col md:flex-row items-center justify-center p-8 bg-gradient-to-l from-purple-900/40 to-transparent rounded-3xl vr-card delay-1 z-20" style="transform: translateZ(30px);">
+            <div class="md:w-1/3 flex justify-center mb-6 md:mb-0">
+                <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="w-48 h-48 md:w-64 md:h-64 rounded-full border-4 border-purple-500 shadow-lg object-cover transform hover:scale-105 transition-transform duration-300">
+            </div>
+            <div class="md:w-2/3 text-center md:text-right md:pr-8">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">המורה הדיגיטלי: זאביק אבינר</h2>
+                <p class="text-lg md:text-xl text-purple-100">
+                    בניצוחו של זאביק אבינר – אדריכל חלומות דיגיטליים, אמן למידת מכונה, ומורה דרך אל עבר אופקים בלתי נודעים.
+                    מומחה בינה מלאכותית עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI.
+                    הוא מזמין אותך למסע בו הקוד הופך לקסם והבינה – לכוח מניע אישי, תוך התמחות בהנגשת הטכנולוגיה והפיכתה לכלי עבודה יומיומי.
+                </p>
+            </div>
+        </section>
+
+        <!-- Core Message - Floating Shard -->
+        <section class="relative flex justify-center z-20" style="transform: translateZ(10px);">
+            <div class="vr-card p-8 text-center max-w-3xl delay-2">
+                <h3 class="text-3xl font-bold mb-4 text-purple-300">המסר הקוואנטי: הנגשת AI לכולם</h3>
+                <p class="text-xl text-purple-100">
+                    הפיכת AI לנגיש, מוחשי וישים לכל אחד – מהצעד הראשון ועד לרמת פיתוח מתקדמת.
+                    אנו נספק לך כלים מעשיים, שיטות עבודה, ותובנות עמוקות שתוכל ליישם באופן מידי בחייך המקצועיים והאישיים.
+                    העתיד אינו מחכה – הוא כאן, והוא בידיים שלך.
+                </p>
+            </div>
+        </section>
+
+        <!-- Target Audience - Echoing Voices -->
+        <section class="relative text-center pb-8 z-20" style="transform: translateZ(25px);">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8">קריאה לחלוצים הדיגיטליים:</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-center max-w-6xl mx-auto">
+                <div class="vr-card p-6 delay-1">
+                    <h4 class="text-2xl font-semibold mb-3 text-purple-400">מתחילים וסקרנים</h4>
+                    <p class="text-lg text-purple-100">לצאת למסע אל עולם ה-AI המרתק.</p>
+                </div>
+                <div class="vr-card p-6 delay-2">
+                    <h4 class="text-2xl font-semibold mb-3 text-purple-400">אנשי ונשות מקצוע</h4>
+                    <p class="text-lg text-purple-100">להטמיע AI ולייעל תהליכי עבודה.</p>
+                </div>
+                <div class="vr-card p-6 delay-3">
+                    <h4 class="text-2xl font-semibold mb-3 text-purple-400">מנהלים וארגונים</h4>
+                    <p class="text-lg text-purple-100">לפתוח אופקים חדשים לצוותים.</p>
+                </div>
+                <div class="vr-card p-6">
+                    <h4 class="text-2xl font-semibold mb-3 text-purple-400">מפתחים ויוזמים</h4>
+                    <p class="text-lg text-purple-100">לפתח פרויקטים מבוססי AI מורכבים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Areas - The Pillars of AI -->
+        <section class="relative pb-8 z-20" style="transform: translateZ(35px);">
+            <h2 class="text-3xl md:text-4xl text-center font-bold mb-12">תחומי ההתמחות בראי וירטואלי:</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-6xl mx-auto">
+                <div class="vr-card p-8 flex flex-col items-center text-center delay-1">
+                    <div class="text-5xl mb-4 text-yellow-300 transform -rotate-6">✨</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-purple-300">יצירת טקסטים ותוכן</h3>
+                    <p class="text-lg text-purple-100">אלגוריתמים ההופכים רעיונות למילים – שירה, פרוזה, ואסטרטגיה דיגיטלית.</p>
+                </div>
+                <div class="vr-card p-8 flex flex-col items-center text-center delay-2">
+                    <div class="text-5xl mb-4 text-green-300 transform rotate-6">🧠</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-purple-300">בניית אפליקציות חכמות</h3>
+                    <p class="text-lg text-purple-100">אדריכלות תוכנה בה בינה מלאכותית מפיחה חיים בפונקציונליות.</p>
+                </div>
+                <div class="vr-card p-8 flex flex-col items-center text-center delay-3">
+                    <div class="text-5xl mb-4 text-red-300 transform -rotate-3">🌐</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-purple-300">פיתוח אתרים מבוססי AI</h3>
+                    <p class="text-lg text-purple-100">פורטלים אינטליגנטיים שמזהים, מגיבים ולומדים מכל אינטראקציה.</p>
+                </div>
+                <div class="vr-card p-8 flex flex-col items-center text-center delay-2">
+                    <div class="text-5xl mb-4 text-blue-300 transform rotate-9">📊</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-purple-300">ניתוח נתונים ומחקר</h3>
+                    <p class="text-lg text-purple-100">פענוח תבניות חבויות, גילוי תובנות עמוקות והנעת החלטות מושכלות.</p>
+                </div>
+                <div class="vr-card p-8 flex flex-col items-center text-center delay-1">
+                    <div class="text-5xl mb-4 text-pink-300 transform -rotate-5">🎨</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-purple-300">יצירת תמונות ואומנות</h3>
+                    <p class="text-lg text-purple-100">הפיכת טקסט לדימויים ויזואליים עוצמתיים ופורצי דרך.</p>
+                </div>
+                <div class="vr-card p-8 flex flex-col items-center text-center delay-3">
+                    <div class="text-5xl mb-4 text-cyan-300 transform rotate-4">⚙️</div>
+                    <h3 class="text-2xl font-semibold mb-3 text-purple-300">אוטומציה של תהליכים</h3>
+                    <p class="text-lg text-purple-100">שחרור מפוטנציאל אנושי ממשימות חוזרות – עתיד של יעילות חכמה.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered - The Learning Pathways -->
+        <section class="relative pb-8 z-20" style="transform: translateZ(40px);">
+            <h2 class="text-3xl md:text-4xl text-center font-bold mb-12">מסלולי הלמידה הדיגיטליים:</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+                <div class="vr-card p-8 text-center delay-1">
+                    <h3 class="text-2xl font-semibold mb-3 text-purple-300">סדנאות קבוצתיות וירטואליות</h3>
+                    <p class="text-lg text-purple-100">חוויות למידה מעשיות, ממוקדות ואינטראקטיביות, המוקלטות לתמיד במרחב הווירטואלי.</p>
+                </div>
+                <div class="vr-card p-8 text-center delay-2">
+                    <h3 class="text-2xl font-semibold mb-3 text-purple-300">שיעורים פרטיים אישיים</h3>
+                    <p class="text-lg text-purple-100">מסלול למידה מותאם לרמתך האישית ולצרכים הספציפיים שלך במטריקס.</p>
+                </div>
+                <div class="vr-card p-8 text-center delay-3">
+                    <h3 class="text-2xl font-semibold mb-3 text-purple-300">הרצאות מעוררות השראה לארגונים</h3>
+                    <p class="text-lg text-purple-100">פתיחת אופקים חדשים והצגה מרתקת של עולם ה-AI לצוותים וחברות.</p>
+                </div>
+                <div class="vr-card p-8 text-center delay-1">
+                    <h3 class="text-2xl font-semibold mb-3 text-purple-300">ייעוץ ופיתוח פרויקטים מתקדמים</h3>
+                    <p class="text-lg text-purple-100">ליווי מקצועי וחדשני במימוש חזונך, מהרעיון ועד הקוד הפועל.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section - Nexus Point -->
+        <section class="relative text-center pb-8 z-20" style="transform: translateZ(50px);">
+            <h2 class="text-3xl md:text-4xl font-bold mb-8">הישאר מחובר למטריקס:</h2>
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 md:space-x-reverse">
+                <a href="https://wa.me/972546609385" class="glow-text text-xl md:text-2xl font-bold hover:scale-110 transition-transform duration-300">
+                    <span class="ml-2">054-6609385</span><span class="text-purple-400">ווטסאפ:</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="glow-text text-xl md:text-2xl font-bold hover:scale-110 transition-transform duration-300">
+                    <span class="ml-2">zaviner@gmail.com</span><span class="text-purple-400">אימייל:</span>
+                </a>
+            </div>
+            <p class="text-lg mt-8 text-purple-200">
+                צרו קשר עכשיו כדי להתחיל את המסע שלכם אל עתיד הבינה המלאכותית!
+            </p>
+        </section>
+
+    </div> <!-- End content-container -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cursor = document.getElementById('custom-cursor');
+            const body = document.body;
+
+            // Cursor movement
+            document.addEventListener('mousemove', e => {
+                cursor.style.left = `${e.clientX}px`;
+                cursor.style.top = `${e.clientY}px`;
+            });
+
+            // Parallax effect
+            const parallaxElements = document.querySelectorAll('.parallax-layer');
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                parallaxElements.forEach(el => {
+                    const speed = parseFloat(el.dataset.parallaxSpeed || 0.05); // Default speed
+                    const transformValue = `translate3d(0, ${scrollY * speed * -1}px, 0)`;
+                    el.style.transform = transformValue;
+                });
+            });
+
+            // Optional: Mouse over interactive elements to change cursor appearance
+            document.querySelectorAll('.vr-card, a').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                    cursor.style.boxShadow = '0 0 0 2px rgba(0, 0, 0, 0.7), 0 0 15px rgba(255, 255, 255, 0.9)';
+                    cursor.style.border = '2px solid rgba(191, 149, 255, 0.9)';
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                    cursor.style.boxShadow = '0 0 0 2px rgba(0, 0, 0, 0.7), 0 0 8px rgba(139, 92, 246, 0.8)';
+                    cursor.style.border = '2px solid rgba(255, 255, 255, 0.9)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

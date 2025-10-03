@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הקו המנחה: זאביק אבינר - שליטה ב-AI</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Rubik:wght@300..900&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Base styles for Ligne Claire */
+        body {
+            font-family: 'Assistant', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #f8fafc; /* lc-light */
+            color: #1a202c; /* lc-dark */
+            cursor: none; /* Hide default cursor */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Rubik', sans-serif;
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            position: fixed;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* White border for visibility on dark */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for visibility on light */
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: width 0.15s ease-out, height 0.15s ease-out, border-width 0.15s ease-out, box-shadow 0.15s ease-out;
+            will-change: transform, width, height, border-width;
+        }
+
+        .custom-cursor.active {
+            width: 30px;
+            height: 30px;
+            border-width: 3px;
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.8); /* Slightly thicker shadow on active */
+        }
+
+        /* Ligne Claire specific styling */
+        .ligne-claire-border {
+            border: 2px solid #1a202c; /* Strong dark border */
+        }
+
+        /* Tailwind custom config & animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInLeft {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes textReveal {
+            from { clip-path: inset(0 100% 0 0); }
+            to { clip-path: inset(0 0 0 0); }
+        }
+        @keyframes buttonPop {
+            0% { transform: scale(0.9); opacity: 0; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); }
+        }
+        @keyframes drawRect {
+            from { stroke-dashoffset: 800; }
+            to { stroke-dashoffset: 0; }
+        }
+        @keyframes drawLine {
+            from { stroke-dashoffset: 300; }
+            to { stroke-dashoffset: 0; }
+        }
+        @keyframes drawCircle {
+            from { stroke-dashoffset: 188; }
+            to { stroke-dashoffset: 0; }
+        }
+        @keyframes lineDrawBackground {
+            0% { transform: translateY(100%) rotate(0deg) scaleY(0); }
+            100% { transform: translateY(0) rotate(0deg) scaleY(1.5); }
+        }
+        @keyframes lineDrawBackgroundRotate1 {
+            0% { transform: translateY(100vh) rotate(-12deg) scaleY(0); }
+            100% { transform: translateY(0) rotate(-12deg) scaleY(1.5); }
+        }
+        @keyframes lineDrawBackgroundRotate2 {
+            0% { transform: translateY(100vh) rotate(6deg) scaleY(0); }
+            100% { transform: translateY(0) rotate(6deg) scaleY(1.25); }
+        }
+        @keyframes lineDrawBackgroundRotate3 {
+            0% { transform: translateY(100vh) rotate(-18deg) scaleY(0); }
+            100% { transform: translateY(0) rotate(-18deg) scaleY(1.75); }
+        }
+
+        .animate-fade-in-up { animation: fadeInUp 1s ease-out forwards; opacity: 0; }
+        .animate-fade-in-down { animation: fadeInDown 1s ease-out forwards; opacity: 0; }
+        .animate-fade-in-left { animation: fadeInLeft 1s ease-out forwards; opacity: 0; }
+        .animate-fade-in-right { animation: fadeInRight 1s ease-out forwards; opacity: 0; }
+        .animate-text-reveal { animation: textReveal 1.5s ease-out forwards; clip-path: inset(0 100% 0 0); }
+        .animate-button-pop { animation: buttonPop 0.8s ease-out forwards; opacity: 0; }
+
+        .animate-line-draw-1 { animation: lineDrawBackgroundRotate1 3s ease-out forwards; }
+        .animate-line-draw-2 { animation: lineDrawBackgroundRotate2 3s ease-out forwards; }
+        .animate-line-draw-3 { animation: lineDrawBackgroundRotate3 3s ease-out forwards; }
+
+        .svg-draw-animation {
+            opacity: 0; /* Hidden initially */
+            animation-fill-mode: forwards;
+        }
+        .svg-draw-animation.visible {
+            opacity: 1; /* Show when visible */
+        }
+        .svg-draw-animation .draw-rect {
+            stroke-dasharray: 1000; /* Perimeter of 300x200 rect is 2*(300+200) = 1000 */
+            stroke-dashoffset: 1000;
+            animation: drawRect 2s ease-out forwards;
+        }
+        .svg-draw-animation .draw-line {
+            stroke-dasharray: 300; /* Length of the line (350-50) */
+            stroke-dashoffset: 300;
+            animation: drawLine 1.5s ease-out forwards;
+        }
+        .svg-draw-animation .draw-circle {
+            stroke-dasharray: 188; /* Circumference of circle with r=30 is 2*pi*30 approx 188.5 */
+            stroke-dashoffset: 188;
+            animation: drawCircle 1.5s ease-out forwards;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'lc-dark': '#1a202c', /* Ligne Claire Dark */
+                        'lc-light': '#f8fafc', /* Ligne Claire Light */
+                        'lc-blue': '#2563eb', /* Ligne Claire Accent Blue */
+                        'lc-green': '#10b981', /* Ligne Claire Accent Green */
+                    },
+                    fontFamily: {
+                        assistant: ['Assistant', 'sans-serif'],
+                        rubik: ['Rubik', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 1s ease-out forwards',
+                        'fade-in-down': 'fadeInDown 1s ease-out forwards',
+                        'fade-in-left': 'fadeInLeft 1s ease-out forwards',
+                        'fade-in-right': 'fadeInRight 1s ease-out forwards',
+                        'text-reveal': 'textReveal 1.5s ease-out forwards',
+                        'button-pop': 'buttonPop 0.8s ease-out forwards',
+                        'line-draw-1': 'lineDrawBackgroundRotate1 3s ease-out forwards',
+                        'line-draw-2': 'lineDrawBackgroundRotate2 3s ease-out forwards',
+                        'line-draw-3': 'lineDrawBackgroundRotate3 3s ease-out forwards',
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-lc-light text-lc-dark relative overflow-x-hidden">
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Main content wrapper -->
+    <div id="content-wrapper" class="relative z-10">
+
+        <!-- Header - A clear "panel" -->
+        <header class="container mx-auto p-8 border-b-2 border-lc-dark bg-white shadow-md">
+            <h1 class="text-5xl font-rubik text-center leading-tight">
+                <span class="block animate-fade-in-up opacity-0">הקו המנחה:</span>
+                <span class="block text-lc-blue mt-2 animate-fade-in-up opacity-0 delay-100">עתיד הבינה המלאכותית</span>
+            </h1>
+        </header>
+
+        <!-- Hero Section - A large, clean frame -->
+        <section class="min-h-screen flex items-center justify-center p-8 bg-lc-light relative overflow-hidden">
+            <!-- Background Lines (Subtle, fixed, negative z-index) -->
+            <div class="fixed inset-0 z-[-1] flex justify-around opacity-20">
+                <div class="w-px bg-lc-dark h-full transform -rotate-12 scale-y-0 origin-top animate-line-draw-1"></div>
+                <div class="w-px bg-lc-dark h-full transform rotate-6 scale-y-0 origin-top animate-line-draw-2 delay-200"></div>
+                <div class="w-px bg-lc-dark h-full transform -rotate-18 scale-y-0 origin-top animate-line-draw-3 delay-400"></div>
+            </div>
+
+            <div class="text-center max-w-4xl ligne-claire-border p-12 bg-white shadow-lg relative z-10">
+                <h2 class="text-6xl font-rubik leading-snug animate-text-reveal opacity-0">
+                    למדו לשלוט בבינה המלאכותית - העתיד הוא עכשיו.
+                </h2>
+                <p class="mt-8 text-2xl font-assistant animate-text-reveal opacity-0 delay-300">
+                    שרטטו את מסלולכם בעידן החדש של יצירה, חדשנות ואפשרויות בלתי מוגבלות.
+                </p>
+                <a href="#contact" class="inline-block mt-12 px-10 py-4 text-2xl font-rubik bg-lc-blue text-white rounded-full hover:bg-lc-dark transition-colors duration-300 transform hover:scale-105 active:scale-95 shadow-lg animate-button-pop opacity-0 delay-600">
+                    הצטרפו למסע
+                </a>
+            </div>
+        </section>
+
+        <!-- Core Message Section -->
+        <section class="py-24 px-8 bg-white border-t-2 border-b-2 border-lc-dark shadow-inner relative overflow-hidden">
+            <div class="container mx-auto grid md:grid-cols-2 gap-16 items-center">
+                <div class="md:border-l-2 md:border-lc-dark md:pl-8">
+                    <h3 class="text-5xl font-rubik text-lc-blue mb-6 animate-fade-in-left opacity-0">משרטטים את העתיד: AI נגיש לכולם</h3>
+                    <p class="text-xl font-assistant leading-relaxed animate-fade-in-left opacity-0 delay-100">
+                        בכל קו, בכל צבע, בכל צורה - הבינה המלאכותית משנה את המציאות.
+                        אנו מנגישים את הכוח הזה לכולם. ממבואות היסוד ועד לקצה החדשנות,
+                        נסייע לך לרכוש כלים מעשיים, מדויקים ומוכנים ליישום.
+                    </p>
+                    <p class="mt-4 text-xl font-assistant leading-relaxed animate-fade-in-left opacity-0 delay-200">
+                        לא רק להבין, אלא ליצור. לא רק לצפות, אלא להוביל.
+                        הצטרפו אלינו ללמוד את השפה החדשה של המחר.
+                    </p>
+                </div>
+                <div class="relative h-64 md:h-96 flex items-center justify-center svg-draw-animation">
+                    <!-- Abstract Ligne Claire graphic -->
+                    <svg class="w-full h-full absolute" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="300" height="200" class="stroke-lc-dark stroke-[3px] fill-none draw-rect" />
+                        <line x1="50" y1="150" x2="350" y2="150" class="stroke-lc-blue stroke-[3px] draw-line delay-200" />
+                        <circle cx="200" cy="150" r="30" class="stroke-lc-green stroke-[3px] fill-none draw-circle delay-400" />
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- Target Audience Section - "Panels" for each group -->
+        <section class="py-24 px-8 bg-lc-light relative">
+            <h3 class="text-5xl font-rubik text-center text-lc-dark mb-16 animate-fade-in-down opacity-0">למי הקו נמתח?</h3>
+            <div class="container mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="ligne-claire-border p-8 bg-white shadow-lg text-center animate-fade-in-up opacity-0 delay-100 group">
+                    <div class="text-6xl text-lc-blue mb-4 transition-transform group-hover:scale-110 duration-300">✦</div>
+                    <h4 class="text-3xl font-rubik mb-2">המתחילים</h4>
+                    <p class="text-lg font-assistant text-gray-700">צעד ראשון אל עולם של אפשרויות, עם ליווי צמוד ונגיש.</p>
+                </div>
+                <div class="ligne-claire-border p-8 bg-white shadow-lg text-center animate-fade-in-up opacity-0 delay-200 group">
+                    <div class="text-6xl text-lc-green mb-4 transition-transform group-hover:scale-110 duration-300">⚡</div>
+                    <h4 class="text-3xl font-rubik mb-2">אנשי מקצוע</h4>
+                    <p class="text-lg font-assistant text-gray-700">הטמעת AI כיתרון תחרותי, לייעול תהליכים וחדשנות.</p>
+                </div>
+                <div class="ligne-claire-border p-8 bg-white shadow-lg text-center animate-fade-in-up opacity-0 delay-300 group">
+                    <div class="text-6xl text-lc-blue mb-4 transition-transform group-hover:scale-110 duration-300">⌘</div>
+                    <h4 class="text-3xl font-rubik mb-2">מנהלים וארגונים</h4>
+                    <p class="text-lg font-assistant text-gray-700">אסטרטגיה וחדשנות צוותית, הדרכות מותאמות אישית.</p>
+                </div>
+                <div class="ligne-claire-border p-8 bg-white shadow-lg text-center animate-fade-in-up opacity-0 delay-400 group">
+                    <div class="text-6xl text-lc-green mb-4 transition-transform group-hover:scale-110 duration-300">▞</div>
+                    <h4 class="text-3xl font-rubik mb-2">המובילים</h4>
+                    <p class="text-lg font-assistant text-gray-700">פיתוח פרויקטים פורצי דרך, ליווי מקצועי מהרעיון לביצוע.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Areas Section - Grid of icons and text -->
+        <section class="py-24 px-8 bg-white border-t-2 border-b-2 border-lc-dark relative">
+            <h3 class="text-5xl font-rubik text-center text-lc-dark mb-16 animate-fade-in-down opacity-0">קווים לדמותה של הבינה: תחומי יצירה</h3>
+            <div class="container mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-12">
+                <!-- Each item is a "panel" -->
+                <div class="flex items-center ligne-claire-border p-6 bg-lc-light shadow-md hover:shadow-lg transition-all duration-300 animate-fade-in-right opacity-0 delay-100">
+                    <div class="text-5xl text-lc-blue ml-4 flex-shrink-0">✍</div>
+                    <div>
+                        <h4 class="text-2xl font-rubik">לשון ה-AI</h4>
+                        <p class="text-lg font-assistant text-gray-700">יצירת טקסטים ותוכן חכם, סקריפטים וסיפורים.</p>
+                    </div>
+                </div>
+                <div class="flex items-center ligne-claire-border p-6 bg-lc-light shadow-md hover:shadow-lg transition-all duration-300 animate-fade-in-right opacity-0 delay-200">
+                    <div class="text-5xl text-lc-green ml-4 flex-shrink-0">⚙</div>
+                    <div>
+                        <h4 class="text-2xl font-rubik">אדריכלות דיגיטלית</h4>
+                        <p class="text-lg font-assistant text-gray-700">בניית אפליקציות חכמות, פתרונות יצירתיים לכל צורך.</p>
+                    </div>
+                </div>
+                <div class="flex items-center ligne-claire-border p-6 bg-lc-light shadow-md hover:shadow-lg transition-all duration-300 animate-fade-in-right opacity-0 delay-300">
+                    <div class="text-5xl text-lc-blue ml-4 flex-shrink-0">🌐</div>
+                    <div>
+                        <h4 class="text-2xl font-rubik">נופי אינטרנט</h4>
+                        <p class="text-lg font-assistant text-gray-700">פיתוח אתרים מבוססי AI, חוויה אינטראקטיבית ומתקדמת.</p>
+                    </div>
+                </div>
+                <div class="flex items-center ligne-claire-border p-6 bg-lc-light shadow-md hover:shadow-lg transition-all duration-300 animate-fade-in-right opacity-0 delay-400">
+                    <div class="text-5xl text-lc-green ml-4 flex-shrink-0">📊</div>
+                    <div>
+                        <h4 class="text-2xl font-rubik">מצפן הנתונים</h4>
+                        <p class="text-lg font-assistant text-gray-700">ניתוח מידע ומחקר, הסקת מסקנות וחיזויים מדויקים.</p>
+                    </div>
+                </div>
+                <div class="flex items-center ligne-claire-border p-6 bg-lc-light shadow-md hover:shadow-lg transition-all duration-300 animate-fade-in-right opacity-0 delay-500">
+                    <div class="text-5xl text-lc-blue ml-4 flex-shrink-0">🎨</div>
+                    <div>
+                        <h4 class="text-2xl font-rubik">גלריית הפיקסלים</h4>
+                        <p class="text-lg font-assistant text-gray-700">יצירת תמונות ואומנות, עיצוב גרפי בעזרת בינה מלאכותית.</p>
+                    </div>
+                </div>
+                <div class="flex items-center ligne-claire-border p-6 bg-lc-light shadow-md hover:shadow-lg transition-all duration-300 animate-fade-in-right opacity-0 delay-600">
+                    <div class="text-5xl text-lc-green ml-4 flex-shrink-0">⏳</div>
+                    <div>
+                        <h4 class="text-2xl font-rubik">ריקוד התהליכים</h4>
+                        <p class="text-lg font-assistant text-gray-700">אוטומציה חכמה של משימות, חיסכון בזמן ומשאבים.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="py-24 px-8 bg-lc-light relative">
+            <h3 class="text-5xl font-rubik text-center text-lc-dark mb-16 animate-fade-in-down opacity-0">אופני הציור: שירותי הדרכה</h3>
+            <div class="container mx-auto grid md:grid-cols-2 gap-12">
+                <div class="ligne-claire-border p-10 bg-white shadow-lg group hover:bg-lc-blue hover:text-white transition-all duration-300 animate-fade-in-left opacity-0 delay-100">
+                    <h4 class="text-4xl font-rubik mb-4 group-hover:text-white text-lc-blue transition-colors duration-300">סדנאות קבוצתיות</h4>
+                    <p class="text-xl font-assistant leading-relaxed group-hover:text-white text-gray-800 transition-colors duration-300">
+                        מעשיות וממוקדות, למידה חווייתית בקבוצות קטנות, עם דגש על יישום מיידי.
+                    </p>
+                    <span class="block mt-6 text-6xl group-hover:text-white text-lc-green transition-colors duration-300">👥</span>
+                </div>
+                <div class="ligne-claire-border p-10 bg-white shadow-lg group hover:bg-lc-green hover:text-white transition-all duration-300 animate-fade-in-right opacity-0 delay-200">
+                    <h4 class="text-4xl font-rubik mb-4 group-hover:text-white text-lc-green transition-colors duration-300">שיעורים פרטיים</h4>
+                    <p class="text-xl font-assistant leading-relaxed group-hover:text-white text-gray-800 transition-colors duration-300">
+                        התאמה אישית מלאה לרמה ולצרכים שלך, בניית מסלול לימוד מותאם באופן פרטני.
+                    </p>
+                    <span class="block mt-6 text-6xl group-hover:text-white text-lc-blue transition-colors duration-300">👤</span>
+                </div>
+                <div class="ligne-claire-border p-10 bg-white shadow-lg group hover:bg-lc-blue hover:text-white transition-all duration-300 animate-fade-in-left opacity-0 delay-300">
+                    <h4 class="text-4xl font-rubik mb-4 group-hover:text-white text-lc-blue transition-colors duration-300">הרצאות לארגונים</h4>
+                    <p class="text-xl font-assistant leading-relaxed group-hover:text-white text-gray-800 transition-colors duration-300">
+                        פתיחת אופקים, הצגת חזון והכנה לעתיד הטכנולוגי לצוותים ומנהלים.
+                    </p>
+                    <span class="block mt-6 text-6xl group-hover:text-white text-lc-green transition-colors duration-300">🏢</span>
+                </div>
+                <div class="ligne-claire-border p-10 bg-white shadow-lg group hover:bg-lc-green hover:text-white transition-all duration-300 animate-fade-in-right opacity-0 delay-400">
+                    <h4 class="text-4xl font-rubik mb-4 group-hover:text-white text-lc-green transition-colors duration-300">ייעוץ ופיתוח פרויקטים</h4>
+                    <p class="text-xl font-assistant leading-relaxed group-hover:text-white text-gray-800 transition-colors duration-300">
+                        ליווי מקצועי מהרעיון ועד למימוש, בניית פתרונות AI מותאמים אישית.
+                    </p>
+                    <span class="block mt-6 text-6xl group-hover:text-white text-lc-blue transition-colors duration-300">💡</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Zevik Section -->
+        <section class="py-24 px-8 bg-white border-t-2 border-b-2 border-lc-dark relative">
+            <div class="container mx-auto flex flex-col md:flex-row items-center gap-16">
+                <div class="md:w-1/3 flex-shrink-0 animate-fade-in-left opacity-0">
+                    <div class="relative w-full aspect-square ligne-claire-border p-2 bg-lc-light shadow-lg">
+                        <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר, מומחה בינה מלאכותית" class="w-full h-full object-cover ligne-claire-border">
+                        <div class="absolute inset-0 border-4 border-lc-blue opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                </div>
+                <div class="md:w-2/3 md:border-r-2 md:border-lc-dark md:pr-8 animate-fade-in-right opacity-0">
+                    <h3 class="text-5xl font-rubik text-lc-dark mb-6">האמן מאחורי הקווים: זאביק אבינר</h3>
+                    <p class="text-xl font-assistant leading-relaxed text-gray-800">
+                        מאחורי הקווים עומד זאביק אבינר - אמן ומגשר בעולם הבינה המלאכותית. מומחה בעל ניסיון עשיר
+                        בפיתוח ויישום פרויקטים, זאביק הפך את הנגשת הטכנולוגיה למשימת חייו.
+                    </p>
+                    <p class="mt-4 text-xl font-assistant leading-relaxed text-gray-800">
+                        הוא מאמין שבינה מלאכותית היא לא רק כלי עבודה, אלא שפה חדשה
+                        שאפשר וצריך ללמוד לדבר. הצטרפו אליו לפענח את סודותיה.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-24 px-8 bg-lc-light relative">
+            <h3 class="text-5xl font-rubik text-center text-lc-dark mb-16 animate-fade-in-down opacity-0">נקודת המפגש: צרו קשר</h3>
+            <div class="container mx-auto grid md:grid-cols-2 gap-12 items-start">
+                <div class="ligne-claire-border p-10 bg-white shadow-lg animate-fade-in-left opacity-0 delay-100">
+                    <p class="text-xl font-assistant leading-relaxed text-gray-800 mb-6">
+                        שרטטו את דרככם אלינו. אנחנו כאן כדי ללוות אתכם במסע אל עתיד ה-AI.
+                        לכל שאלה, ייעוץ או קביעת פגישה - נשמח לשמוע מכם.
+                    </p>
+                    <div class="space-y-4">
+                        <a href="https://wa.me/972546609385" target="_blank" class="flex items-center text-lc-blue hover:text-lc-dark text-2xl font-rubik transition-colors duration-300 group">
+                            <span class="text-5xl ml-4 group-hover:scale-110 transition-transform duration-300">💬</span>
+                            <span>ווטסאפ: 054-6609385</span>
+                        </a>
+                        <a href="mailto:zaviner@gmail.com" class="flex items-center text-lc-green hover:text-lc-dark text-2xl font-rubik transition-colors duration-300 group">
+                            <span class="text-5xl ml-4 group-hover:scale-110 transition-transform duration-300">✉️</span>
+                            <span>אימייל: zaviner@gmail.com</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="ligne-claire-border p-10 bg-white shadow-lg animate-fade-in-right opacity-0 delay-200">
+                    <h4 class="text-3xl font-rubik text-lc-dark mb-6">שלחו לנו הודעה</h4>
+                    <form class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-xl font-assistant text-gray-700 mb-2">שם מלא:</label>
+                            <input type="text" id="name" name="name" class="w-full p-3 border-2 border-lc-dark focus:outline-none focus:border-lc-blue transition-colors duration-300 bg-white text-lg font-assistant" placeholder="השם שלך">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-xl font-assistant text-gray-700 mb-2">אימייל:</label>
+                            <input type="email" id="email" name="email" class="w-full p-3 border-2 border-lc-dark focus:outline-none focus:border-lc-blue transition-colors duration-300 bg-white text-lg font-assistant" placeholder="כתובת האימייל שלך">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-xl font-assistant text-gray-700 mb-2">ההודעה שלך:</label>
+                            <textarea id="message" name="message" rows="5" class="w-full p-3 border-2 border-lc-dark focus:outline-none focus:border-lc-blue transition-colors duration-300 bg-white text-lg font-assistant" placeholder="איך נוכל לעזור?"></textarea>
+                        </div>
+                        <button type="submit" class="w-full px-8 py-4 text-2xl font-rubik bg-lc-blue text-white hover:bg-lc-dark transition-colors duration-300 transform hover:scale-105 active:scale-95 shadow-lg">
+                            שלח הודעה
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="py-12 px-8 bg-lc-dark text-lc-light text-center border-t-2 border-lc-blue relative">
+            <div class="container mx-auto">
+                <p class="text-lg font-assistant">&copy; 2023 זאביק אבינר - מומחה בינה מלאכותית. כל הזכויות שמורות.</p>
+                <p class="text-sm font-assistant mt-2 opacity-80">האתר עוצב ברוח הקו הנקי של הבינה המלאכותית.</p>
+            </div>
+        </footer>
+
+    </div> <!-- End content-wrapper -->
+
+    <script>
+        // JavaScript for custom cursor, animations, and interactivity
+        const cursor = document.querySelector('.custom-cursor');
+        // Elements that should trigger cursor change
+        const interactiveElements = document.querySelectorAll('a, button, input, textarea, .group, .ligne-claire-border');
+
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+
+        // Intersection Observer for scroll-based animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        const animationObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    // Apply delay, if any
+                    const delayClass = Array.from(el.classList).find(cls => cls.startsWith('delay-'));
+                    if (delayClass) {
+                        const delay = parseInt(delayClass.replace('delay-', '')) / 1000;
+                        el.style.animationDelay = `${delay}s`;
+                    } else {
+                        el.style.animationDelay = '0s'; // Ensure immediate start if no delay specified
+                    }
+
+                    // Remove opacity-0 (if present) and trigger animation by re-enabling it
+                    el.classList.remove('opacity-0');
+                    el.style.animationPlayState = 'running';
+
+                    // Specific handling for SVG drawing animations
+                    if (el.classList.contains('svg-draw-animation')) {
+                        el.classList.add('visible'); // Activates CSS for drawing animation
+                        const paths = el.querySelectorAll('.draw-rect, .draw-line, .draw-circle');
+                        paths.forEach(path => {
+                             // Re-set initial state and trigger animation
+                            const dashArray = path.getAttribute('stroke-dasharray');
+                            path.style.strokeDashoffset = dashArray; // Reset for replay if needed
+                            const pathDelayClass = Array.from(path.classList).find(cls => cls.startsWith('delay-'));
+                            if (pathDelayClass) {
+                                const pathDelay = parseInt(pathDelayClass.replace('delay-', '')) / 1000;
+                                path.style.animationDelay = `${pathDelay}s`;
+                            } else {
+                                path.style.animationDelay = '0s';
+                            }
+                            path.style.animationPlayState = 'running';
+                        });
+                    }
+
+                    observer.unobserve(el); // Stop observing once animated
+                }
+            });
+        }, observerOptions);
+
+        // Target elements with animation classes for observation
+        document.querySelectorAll('[class*="animate-"]').forEach(el => {
+            // Initially pause animations that are meant to be triggered by scroll
+            if (!el.classList.contains('animate-line-draw-1') && !el.classList.contains('animate-line-draw-2') && !el.classList.contains('animate-line-draw-3')) {
+                el.style.animationPlayState = 'paused';
+            }
+            animationObserver.observe(el);
+        });
+
+        // Set initial opacity for elements that will be animated on scroll
+        document.querySelectorAll('[class*="animate-"]').forEach(el => {
+            if (!el.classList.contains('animate-line-draw-1') && !el.classList.contains('animate-line-draw-2') && !el.classList.contains('animate-line-draw-3') && !el.classList.contains('svg-draw-animation')) {
+                el.classList.add('opacity-0');
+            }
+            if (el.classList.contains('svg-draw-animation')) {
+                el.style.opacity = '0'; // For initial invisibility of the SVG group
+                el.querySelectorAll('.draw-rect, .draw-line, .draw-circle').forEach(path => {
+                    path.style.animationPlayState = 'paused';
+                });
+            }
+        });
+
+        // For background lines, ensure they start correctly
+        document.querySelectorAll('.animate-line-draw-1, .animate-line-draw-2, .animate-line-draw-3').forEach(line => {
+             // Tailwind's scale-y-0 is used, CSS keyframes will handle the scaling up
+             // Ensure the animation plays on load, without observer
+             line.style.animationPlayState = 'running';
+        });
+
+    </script>
+</body>
+</html>

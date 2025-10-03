@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פענוח הצפנים: לשלוט בתודעה המלאכותית</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Hebrew:wght@300;400;700&family=Lora:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS to embody Max Ernst's surrealism */
+        :root {
+            --color-primary: #1a2b3c; /* Deep, muted blue */
+            --color-secondary: #2f4a5c; /* Muted slate blue */
+            --color-accent: #8c9eff; /* Soft, ethereal purple-blue */
+            --color-text-light: #e0e7f2; /* Off-white for readability */
+            --color-text-dark: #0f1a23; /* Very dark blue/black */
+            --color-overlay: rgba(15, 26, 35, 0.85); /* Dark, semi-transparent overlay */
+        }
+
+        body {
+            font-family: 'IBM Plex Sans Hebrew', sans-serif;
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            cursor: none; /* Hide default cursor */
+        }
+
+        h1, h2, h3, .font-lora {
+            font-family: 'Lora', serif;
+        }
+
+        /* Custom Cursor Styling - High Contrast Mandatory */
+        .custom-cursor-inner, .custom-cursor-outer {
+            position: fixed;
+            display: block;
+            pointer-events: none;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: width 0.2s, height 0.2s, background-color 0.2s, transform 0.1s linear;
+        }
+
+        .custom-cursor-inner {
+            width: 8px;
+            height: 8px;
+            background-color: var(--color-accent); /* Light inner part */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark outer shadow */
+        }
+
+        .custom-cursor-outer {
+            width: 30px;
+            height: 30px;
+            border: 2px solid rgba(255,255,255,0.7); /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark outer shadow */
+            transition: all 0.15s ease-out;
+            opacity: 0.8;
+        }
+
+        .custom-cursor-outer.active {
+            width: 50px;
+            height: 50px;
+            opacity: 0.5;
+            transform: translate(-50%, -50%) scale(0.8);
+            border-color: var(--color-accent);
+        }
+
+        /* Max Ernst inspired background layers and effects */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* Layer 1: Deep cosmic texture, foundational */
+        .layer-1 {
+            background-image: url('https://images.unsplash.com/photo-1518066000714-539635179878?q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1920&h=1080&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); /* Abstract cosmic/industrial texture */
+            opacity: 0.1;
+            filter: grayscale(80%) brightness(50%);
+            transform: scale(1.1); /* Ensure coverage during parallax */
+        }
+
+        /* Layer 2: Fragmented organic/mechanical shapes */
+        .layer-2 {
+            background-image: url('https://images.unsplash.com/photo-1547844111-c9183492580a?q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1920&h=1080&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); /* Close-up of eroded surface / abstract texture */
+            opacity: 0.08;
+            filter: sepia(50%) hue-rotate(180deg) brightness(80%);
+            background-size: 130%;
+            background-position: 70% 30%;
+        }
+
+        /* Layer 3: Subtle, wispy elements, almost like thought-forms */
+        .layer-3 {
+            background-image: url('https://images.unsplash.com/photo-1517430030789-9a250392f41d?q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1920&h=1080&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); /* Abstract cloud/smoke texture */
+            opacity: 0.05;
+            filter: contrast(120%) saturate(50%);
+            background-size: 150%;
+            background-position: 40% 60%;
+        }
+
+        /* Specific styles for content sections to enhance the artistic feel */
+        .section-wrapper {
+            position: relative;
+            background-color: var(--color-overlay); /* Semi-transparent background */
+            backdrop-filter: blur(8px) brightness(0.6); /* Blurs background, darkens content */
+            border: 1px solid rgba(var(--color-accent), 0.2);
+            box-shadow: 0 4px 60px rgba(0,0,0,0.5), inset 0 0 15px rgba(var(--color-accent), 0.1);
+            transition: all 0.5s ease-in-out;
+        }
+
+        .fragmented-title {
+            position: relative;
+            display: inline-block;
+            transform: skewY(-3deg) rotate(1deg); /* Slight distortion */
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.6);
+            transition: transform 0.3s ease-out, text-shadow 0.3s ease-out;
+        }
+        .fragmented-title:hover {
+            transform: skewY(0deg) rotate(0deg) scale(1.02);
+            text-shadow: 6px 6px 12px rgba(0,0,0,0.8);
+        }
+
+        .card-effect {
+            position: relative;
+            background-color: rgba(47, 74, 92, 0.7); /* Lighter overlay for cards */
+            border: 1px solid rgba(var(--color-accent), 0.15);
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+        }
+        .card-effect:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 8px 30px rgba(var(--color-accent), 0.3), inset 0 0 8px rgba(var(--color-accent), 0.2);
+        }
+
+        .btn-artistic {
+            background-image: linear-gradient(to right, var(--color-accent) 0%, #6e7ddb 100%);
+            box-shadow: 0 0 20px rgba(var(--color-accent), 0.4);
+            transition: all 0.3s ease-out;
+        }
+        .btn-artistic:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(var(--color-accent), 0.7), 0 5px 15px rgba(0,0,0,0.3);
+            background-image: linear-gradient(to right, #6e7ddb 0%, var(--color-accent) 100%);
+        }
+
+        /* Keyframe animations for subtle movement */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(1deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* SVG styling for abstract elements */
+        .svg-overlay {
+            position: absolute;
+            opacity: 0.05;
+            filter: invert(100%) grayscale(100%) brightness(50%) contrast(150%);
+        }
+
+        .svg-gear {
+            top: 5%;
+            left: 5%;
+            transform: rotate(-20deg);
+        }
+        .svg-roots {
+            bottom: 10%;
+            right: 5%;
+            transform: rotate(10deg);
+        }
+
+        /* For responsive adjustments */
+        @media (max-width: 768px) {
+            .fragmented-title {
+                transform: skewY(0) rotate(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-[var(--color-primary)] via-[var(--color-secondary)] to-[var(--color-text-dark)] min-h-screen relative overflow-x-hidden">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor-inner"></div>
+    <div class="custom-cursor-outer"></div>
+
+    <!-- Max Ernst Parallax Background Layers -->
+    <div class="parallax-layer layer-1" data-speed="-0.05"></div>
+    <div class="parallax-layer layer-2" data-speed="-0.1"></div>
+    <div class="parallax-layer layer-3" data-speed="-0.15"></div>
+
+    <!-- Abstract SVG Overlays (Max Ernst-inspired shapes) -->
+    <svg class="svg-overlay svg-gear w-64 h-64 md:w-96 md:h-96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5">
+        <path d="M12 2C10.8954 2 10 2.89543 10 4V7C10 8.10457 10.8954 9 12 9C13.1046 9 14 8.10457 14 7V4C14 2.89543 13.1046 2 12 2Z" />
+        <path d="M18.8687 5.13132C18.1565 4.41906 17.0189 4.41906 16.3066 5.13132L14.2843 7.1536C13.5721 7.86586 13.5721 9.00346 14.2843 9.71572C14.9966 10.428 16.1342 10.428 16.8464 9.71572L18.8687 7.69344C19.581 6.98118 19.581 5.84358 18.8687 5.13132Z" />
+        <path d="M22 12C22 10.8954 21.1046 10 20 10H17C15.8954 10 15 10.8954 15 12C15 13.1046 15.8954 14 17 14H20C21.1046 14 22 13.1046 22 12Z" />
+        <path d="M18.8687 18.8687C19.581 18.1565 19.581 17.0189 18.8687 16.3066L16.8464 14.2843C16.1342 13.5721 14.9966 13.5721 14.2843 14.2843C13.5721 14.9966 13.5721 16.1342 14.2843 16.8464L16.3066 18.8687C17.0189 19.581 18.1565 19.581 18.8687 18.8687Z" />
+        <path d="M12 22C13.1046 22 14 21.1046 14 20V17C14 15.8954 13.1046 15 12 15C10.8954 15 10 15.8954 10 17V20C10 21.1046 10.8954 22 12 22Z" />
+        <path d="M5.13132 18.8687C4.41906 19.581 4.41906 18.1565 5.13132 17.4442L7.1536 15.4219C7.86586 14.7097 9.00346 14.7097 9.71572 15.4219C10.428 16.1342 10.428 17.2718 9.71572 17.9841L7.69344 20.0064C6.98118 20.7186 5.84358 20.7186 5.13132 18.8687Z" />
+        <path d="M2 12C2 13.1046 2.89543 14 4 14H7C8.10457 14 9 13.1046 9 12C9 10.8954 8.10457 10 7 10H4C2.89543 10 2 10.8954 2 12Z" />
+        <path d="M5.13132 5.13132C5.84358 4.41906 6.98118 4.41906 7.69344 5.13132L9.71572 7.1536C10.428 7.86586 10.428 9.00346 9.71572 9.71572C9.00346 10.428 7.86586 10.428 7.1536 9.71572L5.13132 7.69344C4.41906 6.98118 4.41906 5.84358 5.13132 5.13132Z" />
+    </svg>
+
+    <svg class="svg-overlay svg-roots w-64 h-64 md:w-96 md:h-96" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5">
+        <path d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12Z"/>
+        <path d="M12 6V18"/>
+        <path d="M6 12H18"/>
+        <path d="M16.9497 7.05029L7.05029 16.9497"/>
+        <path d="M7.05029 7.05029L16.9497 16.9497"/>
+    </svg>
+
+
+    <main class="relative z-10 p-4 md:p-8 lg:p-12 max-w-7xl mx-auto space-y-24">
+
+        <!-- Header - Main Title -->
+        <header class="text-center py-16 md:py-24 section-wrapper rounded-3xl animate-float">
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-lora font-bold mb-4 fragmented-title leading-tight text-[var(--color-accent)]">
+                פענוח הצפנים: לשלוט בתודעה המלאכותית
+            </h1>
+            <p class="text-xl md:text-3xl text-gray-200 mt-6 max-w-4xl mx-auto leading-relaxed">
+                מסע אל עומקי הבינה המלאכותית- העתיד הוא עכשיו. עם זאביק אבינר.
+            </p>
+        </header>
+
+        <!-- Core Message Section -->
+        <section class="section-wrapper p-8 md:p-12 rounded-3xl relative overflow-hidden">
+            <h2 class="text-3xl md:text-5xl font-lora font-bold mb-8 text-[var(--color-accent)] fragmented-title">
+                האלכימיה הדיגיטלית: הפיכת AI לנגיש וישים
+            </h2>
+            <div class="text-lg md:text-xl leading-relaxed space-y-6 max-w-3xl mx-auto">
+                <p>
+                    בעידן שבו הקיום האנושי משתלב במארג תודעה מלאכותית, היכולת לפענח את צפניה הופכת למפתח.
+                    אנו מזמינים אתכם למסע ייחודי, מההיכרות הראשונית ועד לשליטה מלאה- לא רק להבין את ה-AI, אלא ליישם אותו ככלי עצמתי בחייכם ובעבודתכם.
+                </p>
+                <p class="text-gray-300">
+                    כלים מעשיים, הבנה עמוקה, והיכולת לברוא מציאויות חדשות. AI אינו עוד מדע בדיוני, אלא מציאות שאנו מעצבים יחד, כעת.
+                </p>
+            </div>
+            <div class="absolute inset-0 opacity-10 pointer-events-none">
+                <svg class="w-full h-full" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="0.2">
+                    <path d="M0 0 L100 0 L100 100 L0 100 Z" stroke-dasharray="10 5" opacity="0.3"/>
+                    <circle cx="20" cy="30" r="10" stroke-dasharray="3 2" opacity="0.4"/>
+                    <path d="M5 50 C20 40, 30 60, 50 50 S80 40, 95 50" stroke-dasharray="5 5" opacity="0.2"/>
+                    <rect x="70" y="10" width="20" height="20" transform="rotate(15 80 20)" opacity="0.3"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- The Guide - Zevik Aviner -->
+        <section class="section-wrapper p-8 md:p-12 rounded-3xl text-center">
+            <h2 class="text-3xl md:text-5xl font-lora font-bold mb-8 text-[var(--color-accent)] fragmented-title">
+                המדריך: זאביק אבינר - האדריכל של המחר
+            </h2>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
+                <div class="relative w-40 h-40 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-[var(--color-accent)] shadow-xl animate-float">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר, מומחה בינה מלאכותית" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500 ease-in-out">
+                    <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-primary)] to-transparent opacity-30"></div>
+                </div>
+                <div class="text-lg md:text-xl leading-relaxed max-w-2xl text-right space-y-4">
+                    <p>
+                        זאביק אבינר, דמות מפתח בעולם הבינה המלאכותית, בעל ניסיון עשיר בפיתוח ויישום פרויקטים, אפליקציות ומערכות AI מתקדמות.
+                    </p>
+                    <p class="text-gray-300">
+                        הוא מביא עמו לא רק ידע טכני עמוק, אלא גם את הפילוסופיה של הנגשת הטכנולוגיה והפיכתה לכלי יומיומי- גשר בין מורכבות לפרקטיקה. הצטרפו לזאביק למסע מרתק אל לב ליבה של המהפכה הדיגיטלית.
+                    </p>
+                    <div class="mt-6 text-sm md:text-base font-bold text-[var(--color-accent)]">
+                        <p>ווטסאפ: <a href="https://wa.me/972546609385" class="hover:underline">054-6609385</a></p>
+                        <p>אימייל: <a href="mailto:zaviner@gmail.com" class="hover:underline">zaviner@gmail.com</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section class="section-wrapper p-8 md:p-12 rounded-3xl relative">
+            <h2 class="text-3xl md:text-5xl font-lora font-bold mb-12 text-[var(--color-accent)] fragmented-title text-center">
+                השבטים של העידן החדש: מי ימצא את דרכו?
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="card-effect p-6 rounded-xl shadow-lg text-center">
+                    <h3 class="font-lora text-2xl font-semibold mb-4 text-[var(--color-accent)]">המתחילים</h3>
+                    <p class="text-gray-200">לדרוך לראשונה בשבילי ה-AI, ללא ידע מוקדם- לגלות עולם חדש.</p>
+                </div>
+                <div class="card-effect p-6 rounded-xl shadow-lg text-center">
+                    <h3 class="font-lora text-2xl font-semibold mb-4 text-[var(--color-accent)]">אנשי מקצוע</h3>
+                    <p class="text-gray-200">לשלב את הבינה המלאכותית בלב העשייה היומיומית, להפוך רעיונות לכלים.</p>
+                </div>
+                <div class="card-effect p-6 rounded-xl shadow-lg text-center">
+                    <h3 class="font-lora text-2xl font-semibold mb-4 text-[var(--color-accent)]">מנהלים וארגונים</h3>
+                    <p class="text-gray-200">להוביל את הצוותים אל העתיד, לחשוף אופקים חדשים של יעילות וחדשנות.</p>
+                </div>
+                <div class="card-effect p-6 rounded-xl shadow-lg text-center">
+                    <h3 class="font-lora text-2xl font-semibold mb-4 text-[var(--color-accent)]">הפורצי דרך</h3>
+                    <p class="text-gray-200">לפתח פרויקטים פורצי גבולות, ליישם חזון טכנולוגי מתקדם ביותר.</p>
+                </div>
+            </div>
+            <div class="absolute inset-0 opacity-10 pointer-events-none">
+                <svg class="w-full h-full" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="0.1">
+                    <path d="M10 10 L20 90 L80 10 L90 90 L10 10 Z" stroke-dasharray="2 2" opacity="0.3"/>
+                    <circle cx="50" cy="50" r="40" stroke-dasharray="4 2" opacity="0.2"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Areas of Expertise -->
+        <section class="section-wrapper p-8 md:p-12 rounded-3xl relative overflow-hidden">
+            <h2 class="text-3xl md:text-5xl font-lora font-bold mb-12 text-[var(--color-accent)] fragmented-title text-center">
+                מפות התודעה: תחומי התמחות ב-AI
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                <div class="card-effect p-6 rounded-xl shadow-lg flex items-center gap-4">
+                    <span class="text-4xl text-[var(--color-accent)]">✍️</span>
+                    <div>
+                        <h3 class="font-lora text-2xl font-semibold text-[var(--color-accent)]">יצירת טקסטים ותוכן</h3>
+                        <p class="text-gray-200 text-sm">להפיח חיים במילים, ליצור סיפורים ותכנים מרתקים בעזרת AI.</p>
+                    </div>
+                </div>
+                <div class="card-effect p-6 rounded-xl shadow-lg flex items-center gap-4">
+                    <span class="text-4xl text-[var(--color-accent)]">💡</span>
+                    <div>
+                        <h3 class="font-lora text-2xl font-semibold text-[var(--color-accent)]">בניית אפליקציות חכמות</h3>
+                        <p class="text-gray-200 text-sm">להפוך רעיונות לאפליקציות מבריקות, המופעלות בכוחה של הבינה המלאכותית.</p>
+                    </div>
+                </div>
+                <div class="card-effect p-6 rounded-xl shadow-lg flex items-center gap-4">
+                    <span class="text-4xl text-[var(--color-accent)]">🌐</span>
+                    <div>
+                        <h3 class="font-lora text-2xl font-semibold text-[var(--color-accent)]">פיתוח אתרים מבוססי AI</h3>
+                        <p class="text-gray-200 text-sm">לבנות חוויות רשת אינטראקטיביות, דינמיות וחכמות.</p>
+                    </div>
+                </div>
+                <div class="card-effect p-6 rounded-xl shadow-lg flex items-center gap-4">
+                    <span class="text-4xl text-[var(--color-accent)]">📊</span>
+                    <div>
+                        <h3 class="font-lora text-2xl font-semibold text-[var(--color-accent)]">ניתוח נתונים ומחקר</h3>
+                        <p class="text-gray-200 text-sm">לפענח תובנות מורכבות מתוך ים הנתונים, להאיר את הנסתר.</p>
+                    </div>
+                </div>
+                <div class="card-effect p-6 rounded-xl shadow-lg flex items-center gap-4">
+                    <span class="text-4xl text-[var(--color-accent)]">🎨</span>
+                    <div>
+                        <h3 class="font-lora text-2xl font-semibold text-[var(--color-accent)]">יצירת תמונות ואומנות</h3>
+                        <p class="text-gray-200 text-sm">לחצות גבולות של יצירתיות, לברוא עולמות ויזואליים חדשים.</p>
+                    </div>
+                </div>
+                <div class="card-effect p-6 rounded-xl shadow-lg flex items-center gap-4">
+                    <span class="text-4xl text-[var(--color-accent)]">⚙️</span>
+                    <div>
+                        <h3 class="font-lora text-2xl font-semibold text-[var(--color-accent)]">אוטומציה של תהליכים</h3>
+                        <p class="text-gray-200 text-sm">לייעל, להאיץ ולשחרר את הפוטנציאל האנושי בעזרת AI.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="absolute inset-0 opacity-10 pointer-events-none">
+                <svg class="w-full h-full" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="0.1">
+                    <path d="M5 50 C20 45, 30 55, 50 50 S80 45, 95 50" stroke-dasharray="5 2" opacity="0.2"/>
+                    <path d="M50 5 C45 20, 55 30, 50 50 S45 80, 50 95" stroke-dasharray="5 2" opacity="0.2"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Services Offered -->
+        <section class="section-wrapper p-8 md:p-12 rounded-3xl text-center relative">
+            <h2 class="text-3xl md:text-5xl font-lora font-bold mb-12 text-[var(--color-accent)] fragmented-title">
+                פורטלים לשליטה: השירותים שלנו
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto">
+                <div class="card-effect p-8 rounded-xl shadow-xl hover:scale-[1.02] transition-transform duration-300">
+                    <h3 class="font-lora text-3xl font-semibold mb-4 text-[var(--color-accent)]">סדנאות קבוצתיות: המעבדה המשותפת</h3>
+                    <p class="text-gray-200 text-lg leading-relaxed">
+                        סדנאות מעשיות וממוקדות, שבהן יחד נצלול אל ליבת ה-AI. חוויה אינטראקטיבית שנועדה להעניק כלים מיידיים ליישום, באווירה של גילוי משותף.
+                    </p>
+                </div>
+                <div class="card-effect p-8 rounded-xl shadow-xl hover:scale-[1.02] transition-transform duration-300">
+                    <h3 class="font-lora text-3xl font-semibold mb-4 text-[var(--color-accent)]">שיעורים פרטיים: הנתיב האישי</h3>
+                    <p class="text-gray-200 text-lg leading-relaxed">
+                        הדרכה אחד על אחד, מותאמת באופן מושלם לקצב, לרמה ולצרכים הייחודיים שלכם. ליווי צמוד לפיתוח מיומנויות AI ממוקדות.
+                    </p>
+                </div>
+                <div class="card-effect p-8 rounded-xl shadow-xl hover:scale-[1.02] transition-transform duration-300">
+                    <h3 class="font-lora text-3xl font-semibold mb-4 text-[var(--color-accent)]">הרצאות לארגונים: להאיר את האופק</h3>
+                    <p class="text-gray-200 text-lg leading-relaxed">
+                        הרצאות מרתקות ומעוררות השראה, הפותחות בפני צוותים אופקים חדשים ומציגות את הפוטנציאל הבלתי מוגבל של הבינה המלאכותית בארגון.
+                    </p>
+                </div>
+                <div class="card-effect p-8 rounded-xl shadow-xl hover:scale-[1.02] transition-transform duration-300">
+                    <h3 class="font-lora text-3xl font-semibold mb-4 text-[var(--color-accent)]">ייעוץ ופיתוח פרויקטים: בניית המחר</h3>
+                    <p class="text-gray-200 text-lg leading-relaxed">
+                        ליווי מקצועי ואישי בפיתוח פרויקטים מבוססי AI- משלב הרעיון ועד למימוש מלא, אנו כאן כדי להגשים את חזונכם הטכנולוגי.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="section-wrapper p-8 md:p-12 rounded-3xl text-center">
+            <h2 class="text-3xl md:text-5xl font-lora font-bold mb-8 text-[var(--color-accent)] fragmented-title">
+                צאו למסע. צרו את עתידכם.
+            </h2>
+            <p class="text-xl md:text-2xl mb-10 text-gray-200 max-w-3xl mx-auto">
+                אל תחכו למחר, התחילו לשלוט בבינה המלאכותית היום.
+                צרו קשר ונגלה יחד את הפוטנציאל הטמון בכלים אלו.
+            </p>
+            <a href="https://wa.me/972546609385" class="inline-block py-4 px-10 rounded-full text-xl md:text-2xl font-bold text-[var(--color-text-dark)] btn-artistic">
+                דברו איתי בווטסאפ עכשיו
+            </a>
+        </section>
+
+        <!-- Footer - Subtler contact info and copyright -->
+        <footer class="text-center py-16 text-gray-400 text-sm">
+            <p class="mb-4">
+                כל הזכויות שמורות לזאביק אבינר © 2024
+            </p>
+            <p>
+                <a href="mailto:zaviner@gmail.com" class="hover:text-[var(--color-accent)] transition-colors duration-300">zaviner@gmail.com</a> |
+                <a href="https://wa.me/972546609385" class="hover:text-[var(--color-accent)] transition-colors duration-300">054-6609385</a>
+            </p>
+        </footer>
+
+    </main>
+
+    <script>
+        // Custom Cursor Logic
+        const cursorInner = document.querySelector('.custom-cursor-inner');
+        const cursorOuter = document.querySelector('.custom-cursor-outer');
+
+        document.addEventListener('mousemove', e => {
+            cursorInner.style.left = e.clientX + 'px';
+            cursorInner.style.top = e.clientY + 'px';
+            cursorOuter.style.left = e.clientX + 'px';
+            cursorOuter.style.top = e.clientY + 'px';
+        });
+
+        document.querySelectorAll('a, button, .card-effect').forEach(el => {
+            el.addEventListener('mouseenter', () => cursorOuter.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursorOuter.classList.remove('active'));
+        });
+
+        // Parallax Effect Logic
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            parallaxLayers.forEach(layer => {
+                const speed = parseFloat(layer.dataset.speed);
+                layer.style.transform = `translateY(${scrollY * speed}px)`;
+            });
+        });
+
+        // Add class to section-wrapper on scroll for subtle animation/reveal
+        const sectionWrappers = document.querySelectorAll('.section-wrapper');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                } else {
+                    entry.target.classList.remove('is-visible'); // Optional: remove on scroll out
+                }
+            });
+        }, observerOptions);
+
+        sectionWrappers.forEach(wrapper => {
+            wrapper.classList.add('opacity-0', 'translate-y-10'); // Initial hidden state
+            observer.observe(wrapper);
+        });
+
+        // Add CSS for .is-visible state dynamically
+        const style = document.createElement('style');
+        style.innerHTML = `
+            .section-wrapper.is-visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

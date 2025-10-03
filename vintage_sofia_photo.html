@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>עתיקות העתיד: שליטה בבינה המלאכותית</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS for sepia, grain, and specific styles */
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #4A3C30; /* Dark sepia base */
+            overflow-x: hidden; /* Prevent horizontal scroll from rotated elements */
+        }
+        h1, h2, h3 {
+            font-family: 'Lora', serif;
+        }
+
+        .sepia-bg {
+            background-color: #FDF1E3; /* Light parchment/cream */
+        }
+
+        .sepia-dark {
+            background-color: #4A3C30; /* Dark sepia */
+        }
+
+        .sepia-text-light {
+            color: #FDF1E3; /* Light text on dark sepia */
+        }
+
+        .sepia-text-dark {
+            color: #4A3C30; /* Dark text on light sepia */
+        }
+
+        /* Sepia filter for background elements to enhance vintage feel */
+        .vintage-filter {
+            filter: sepia(0.8) grayscale(0.2) contrast(1.1);
+        }
+
+        /* Subtle grain overlay for the entire body */
+        .grain-overlay::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            /* A subtle noise pattern as a base64 encoded PNG for grain effect */
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAMAAAAp4XiDAAAAGFBMVEX9/f39/f38/Pz+/v7+/v79/f3////d3d2G3eNTAAAAFElEQVRIx2NgYGDpAwMDOwMDGwMDGAIAkY4D7c48HqoAAAAASUVORK5CYII=');
+            background-size: 50px; /* Size of the grain pattern */
+            opacity: 0.04; /* Very subtle opacity */
+            z-index: -1; /* Above parallax, below content */
+        }
+
+        /* Styling for content blocks, designed to resemble old, faded photographs or notes */
+        .content-card {
+            background-color: #FDF1E3; /* Light sepia/parchment */
+            border: 1px solid #B89F7C; /* Faded gold border */
+            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3); /* Soft shadow */
+            position: relative;
+            /* Initial state for fade-in animation, slight vertical shift and rotation */
+            transform: translateY(30px) rotateZ(var(--rotate-degree, 0deg));
+            opacity: 0;
+            transition: opacity 1s ease-out, transform 1s ease-out; /* Smooth transition */
+            margin-bottom: 3rem; /* Spacing between cards */
+        }
+
+        /* State when content card becomes visible */
+        .content-card.is-visible {
+            opacity: 1;
+            transform: translateY(0) rotateZ(var(--rotate-degree, 0deg));
+        }
+
+        /* Call to Action button styling */
+        .cta-button {
+            background-color: #B89F7C; /* Faded gold */
+            color: #4A3C30; /* Dark sepia text for contrast */
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px; /* Pill shape */
+            transition: all 0.3s ease;
+            box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2);
+            text-decoration: none; /* Remove underline */
+            display: inline-block;
+        }
+        .cta-button:hover {
+            background-color: #A38C6D; /* Slightly darker gold on hover */
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Custom cursor styling as per strict requirements */
+        #custom-cursor {
+            position: fixed;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            pointer-events: none; /* Ensures cursor doesn't interfere with clicks */
+            z-index: 9999; /* Always on top */
+            /* REQUIRED TECHNIQUE: light border + dark, high-opacity box-shadow */
+            border: 2px solid #D4C9B8; /* Light sepia border, visible on dark */
+            box-shadow: 0 0 0 2px rgba(20, 15, 10, 0.8); /* Dark sepia shadow, visible on light */
+            background-color: rgba(212, 201, 184, 0.2); /* Semi-transparent light sepia fill */
+            transition: transform 0.1s ease-out, width 0.2s ease-out, height 0.2s ease-out, background-color 0.2s ease-out, border-color 0.2s ease-out;
+            transform: translate(-50%, -50%); /* Center the cursor div on the mouse coordinates */
+            display: none; /* Hidden by default, shown on body hover */
+        }
+        body:hover #custom-cursor { /* Show custom cursor when mouse enters body */
+            display: block;
+        }
+        body { /* Hide default browser cursor */
+            cursor: none;
+        }
+        a:hover + #custom-cursor,
+        button:hover + #custom-cursor,
+        .interactive-element:hover + #custom-cursor {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(212, 201, 184, 0.4); /* More opaque on hover */
+            border-color: #FDF1E3; /* Brighter border on hover */
+        }
+
+        /* Parallax background effect */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2; /* Placed behind the grain overlay and content */
+            background-image: url('https://source.unsplash.com/random/1920x1080/?vintage,books,science'); /* Dynamic vintage-themed image */
+            background-size: cover;
+            background-position: center;
+            opacity: 0.6; /* Subtler to allow content to stand out */
+            filter: sepia(0.5) grayscale(0.1) contrast(1.05); /* Soft sepia filter for background */
+        }
+
+        /* Specific rotations for artistic, non-linear layout */
+        .rotate-neg-2 { --rotate-degree: -2deg; }
+        .rotate-pos-3 { --rotate-degree: 3deg; }
+        .rotate-neg-1 { --rotate-degree: -1deg; }
+        .rotate-pos-2 { --rotate-degree: 2deg; }
+        .rotate-neg-3 { --rotate-degree: -3deg; }
+        .rotate-pos-1 { --rotate-degree: 1deg; }
+
+        /* General content styling for readability and artistic flow */
+        .main-content-flow > section {
+            margin-bottom: 6rem; /* Enhanced spacing for art piece feel */
+            max-width: 800px; /* Consistent maximum width for content cards */
+            margin-left: auto;
+            margin-right: auto;
+            padding: 2.5rem; /* Standard padding for cards */
+        }
+        /* Adjust for smaller screens */
+        @media (max-width: 768px) {
+            .main-content-flow > section {
+                padding: 1.5rem;
+                margin-bottom: 4rem;
+            }
+            h1 { font-size: 3rem; }
+            h2 { font-size: 2rem; }
+        }
+        @media (max-width: 480px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body class="sepia-dark grain-overlay min-h-screen text-lg leading-relaxed antialiased">
+
+    <!-- Parallax Background Element: A window into another time -->
+    <div class="parallax-bg" id="parallax-bg"></div>
+
+    <!-- Custom Cursor: The seeker's eye in this digital antiquity -->
+    <div id="custom-cursor"></div>
+
+    <!-- Main Artistic Content Wrapper: A collection of unfolding insights -->
+    <main class="relative z-10 p-6 md:p-12 lg:p-16 main-content-flow">
+
+        <!-- Title Section: The grand inscription, faded by time, potent with meaning -->
+        <section class="content-card sepia-text-dark rotate-neg-2 text-center shadow-xl">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 sepia-text-dark">
+                עתיקות העתיד: שליטה בבינה המלאכותית
+            </h1>
+            <p class="text-xl md:text-2xl italic sepia-text-dark">
+                במפגש המרהיב שבין זיכרון העבר ללהט החדשנות, אנו עומדים על ספו של עידן שבו חשיבה מכונה מעצבת את מציאותנו. ברוכים הבאים למסע בו אנו מפצחים את צפונותיה.
+            </p>
+        </section>
+
+        <!-- Message from Zevik Aviner: A personal note, like a signed photograph -->
+        <section class="content-card sepia-text-dark rotate-pos-3 text-center shadow-lg">
+            <h2 class="text-3xl md:text-4xl font-semibold mb-4 sepia-text-dark">
+                קריאה מהדרך: הפיכת הבלתי נודע לנגיש
+            </h2>
+            <p class="mb-6">
+                "אני זאביק אבינר, ומזה שנים אני חוקר את נתיבי הבינה המלאכותית. בעיניי, היא אינה רק טכנולוגיה, אלא שפה חדשה, כלי אדיר המצפה להתגלות בכל אחד ואחת מאיתנו. המשימה שלי היא להנגיש את הכוח הזה, להפוך את המורכבות לפשוטה, את התיאוריה למעשית, ואת העתיד - להווה שלכם."
+            </p>
+            <div class="flex flex-col items-center justify-center space-y-4">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר - מנחה הדרך אל הבינה המלאכותית" class="rounded-full w-28 h-28 object-cover border-4 border-[#B89F7C] shadow-md vintage-filter">
+                <p class="text-xl font-bold sepia-text-dark">
+                    זאביק אבינר - מנחה הדרך
+                </p>
+            </div>
+        </section>
+
+        <!-- Target Audience: Pages of seekers, drawn to the light of knowledge -->
+        <section class="content-card sepia-text-dark rotate-neg-1 shadow-lg">
+            <h2 class="text-3xl md:text-4xl font-semibold mb-6 text-center sepia-text-dark">
+                למי מיועד המסע?
+            </h2>
+            <ul class="list-disc list-inside space-y-3 pr-4 md:pr-8">
+                <li><strong class="sepia-text-dark">חוקרי סודות ראשונים:</strong> למתחילים המשתוקקים לפתוח את השער לעולם ה-AI ולפענח את רזיו.</li>
+                <li><strong class="sepia-text-dark">אומני מקצוע:</strong> לאנשי מקצוע השואפים לשלב את כלי ה-AI בעבודתם היומיומית ולחולל בה שינוי עמוק.</li>
+                <li><strong class="sepia-text-dark">מנהיגי חזון:</strong> למנהלים וארגונים המבקשים להאיר את הדרך לצוותיהם באור העתיד המלאכותי.</li>
+                <li><strong class="sepia-text-dark">בוני עתיד מתקדמים:</strong> למפתחים ויוצרים המוכנים לבנות פרויקטים מורכבים וחדשניים המבוססים על אינטליגנציה מלאכותית.</li>
+            </ul>
+        </section>
+
+        <!-- Areas of Expertise: Facets of the digital craft, like antique tools -->
+        <section class="content-card sepia-text-dark rotate-pos-2 shadow-lg">
+            <h2 class="text-3xl md:text-4xl font-semibold mb-6 text-center sepia-text-dark">
+                אמנות הבינה המלאכותית: תחומי חקירה
+            </h2>
+            <div class="grid md:grid-cols-2 gap-6 text-center">
+                <div class="p-4 bg-[#FDF1E3] border border-[#D4C9B8] rounded-md shadow-sm">
+                    <p class="font-bold mb-2 sepia-text-dark">מילות הקסם:</p>
+                    <p class="text-sm">יצירת טקסטים, סיפורים ותוכן המהדהד נשמה אנושית.</p>
+                </div>
+                <div class="p-4 bg-[#FDF1E3] border border-[#D4C9B8] rounded-md shadow-sm">
+                    <p class="font-bold mb-2 sepia-text-dark">ארכיטקטורת חלומות:</p>
+                    <p class="text-sm">בניית אפליקציות חכמות המבינות אתכם ומגיבות לבקשותיכם.</p>
+                </div>
+                <div class="p-4 bg-[#FDF1E3] border border-[#D4C9B8] rounded-md shadow-sm">
+                    <p class="font-bold mb-2 sepia-text-dark">בד הפיקסלים:</p>
+                    <p class="text-sm">יצירת תמונות ואומנות חזותית מתוך קוד, עיצובים מהפנטים.</p>
+                </div>
+                <div class="p-4 bg-[#FDF1E3] border border-[#D4C9B8] rounded-md shadow-sm">
+                    <p class="font-bold mb-2 sepia-text-dark">כרוניקות הנתונים:</p>
+                    <p class="text-sm">ניתוח נתונים ופענוח מגמות נסתרות, חשיפת סודות העבר והעתיד.</p>
+                </div>
+                <div class="p-4 bg-[#FDF1E3] border border-[#D4C9B8] rounded-md shadow-sm">
+                    <p class="font-bold mb-2 sepia-text-dark">היד הנסתרת:</p>
+                    <p class="text-sm">אוטומציה של תהליכים והפיכתם ליעילים, משחררים זמן ומשאבים.</p>
+                </div>
+                <div class="p-4 bg-[#FDF1E3] border border-[#D4C9B8] rounded-md shadow-sm">
+                    <p class="font-bold mb-2 sepia-text-dark">מלאכת הרשת:</p>
+                    <p class="text-sm">פיתוח אתרים המחשבים וחושבים, חוויה דיגיטלית חסרת תקדים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered: Pathways through the labyrinth of innovation -->
+        <section class="content-card sepia-text-dark rotate-neg-3 shadow-lg">
+            <h2 class="text-3xl md:text-4xl font-semibold mb-6 text-center sepia-text-dark">
+                נתיבי הלימוד
+            </h2>
+            <div class="space-y-6">
+                <div class="border-b pb-4 border-[#D4C9B8]">
+                    <h3 class="text-2xl font-bold sepia-text-dark mb-2">סדנאות קבוצתיות: מסעות קולקטיביים</h3>
+                    <p>
+                        הצטרפו לקבוצה וגלו יחד את עולם ה-AI דרך חוויות מעשיות וממוקדות, שיחשפו בפניכם את כוחם של הכלים החדשים וישלימו את תמונת העתיד המשותפת.
+                    </p>
+                </div>
+                <div class="border-b pb-4 border-[#D4C9B8]">
+                    <h3 class="text-2xl font-bold sepia-text-dark mb-2">שיעורים פרטיים: מפת דרכים אישית</h3>
+                    <p>
+                        התאמה אישית של תוכנית הלימודים לרמתכם ולצרכיכם המדויקים, ליווי צמוד והעמקה יסודית, המאפשרים לכם להתקדם בקצב שלכם.
+                    </p>
+                </div>
+                <div class="border-b pb-4 border-[#D4C9B8]">
+                    <h3 class="text-2xl font-bold sepia-text-dark mb-2">הרצאות לארגונים: להאיר את הדרך</h3>
+                    <p>
+                        פתיחת אופקים חדשים לצוותים בארגונים, הרצאות מרתקות המשלבות השראה, ידע וכלים מעשיים, המניעים חדשנות פנימית.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold sepia-text-dark mb-2">ייעוץ ופיתוח פרויקטים: לבנות את העתיד</h3>
+                    <p>
+                        ליווי מקצועי ואישי בפיתוח פרויקטים מבוססי AI, מהרעיון ועד למימוש. בואו להגשים את החזון שלכם ולתרגם אותו למציאות דיגיטלית.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action / Contact: A final, clear inscription for the intrepid explorer -->
+        <section class="content-card sepia-text-dark rotate-pos-1 text-center shadow-xl">
+            <h2 class="text-3xl md:text-4xl font-semibold mb-6 sepia-text-dark">
+                היכונו לעידן החדש
+            </h2>
+            <p class="mb-8">
+                אל תתנו לעתיד לחלוף על פניכם כעשן חולף. הצטרפו למסע אל השליטה בבינה המלאכותית עוד היום וצרו את המחר במו ידיכם.
+            </p>
+            <div class="space-y-4">
+                <a href="https://wa.me/972546609385" target="_blank" class="cta-button inline-block text-xl interactive-element">
+                    דברו איתי בוואטסאפ
+                </a>
+                <p class="text-lg">
+                    או צרו קשר ישירות, דרך נתיבי התקשורת העתיקים והחדשים:
+                </p>
+                <p class="text-xl font-bold">
+                    ווטסאפ: <a href="https://wa.me/972546609385" target="_blank" class="text-[#B89F7C] hover:underline interactive-element">054-6609385</a>
+                </p>
+                <p class="text-xl font-bold">
+                    אימייל: <a href="mailto:zaviner@gmail.com" class="text-[#B89F7C] hover:underline interactive-element">zaviner@gmail.com</a>
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor Logic for an immersive, artistic experience
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // Add hover effect for interactive elements: the cursor reacts to discovery
+        const interactiveElements = document.querySelectorAll('a, button, .interactive-element');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                customCursor.style.width = '36px';
+                customCursor.style.height = '36px';
+                customCursor.style.backgroundColor = 'rgba(212, 201, 184, 0.4)';
+                customCursor.style.borderColor = '#FDF1E3';
+            });
+            el.addEventListener('mouseleave', () => {
+                customCursor.style.width = '24px';
+                customCursor.style.height = '24px';
+                customCursor.style.backgroundColor = 'rgba(212, 201, 184, 0.2)';
+                customCursor.style.borderColor = '#D4C9B8';
+            });
+        });
+
+        // Parallax Effect for Background: The world shifts subtly as you delve deeper
+        const parallaxBg = document.getElementById('parallax-bg');
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.pageYOffset;
+            // Adjust the divisor for the intensity of the parallax effect
+            parallaxBg.style.transform = `translateY(${scrollPosition * 0.2}px)`;
+        });
+
+        // Intersection Observer for fade-in effect: Content cards reveal themselves as if discovered in an old album
+        const contentCards = document.querySelectorAll('.content-card');
+        const observerOptions = {
+            root: null, // The viewport is the root
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the item is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Stop observing once visible to optimize performance
+                }
+            });
+        }, observerOptions);
+
+        // Attach observer to each content card
+        contentCards.forEach(card => {
+            observer.observe(card);
+        });
+
+        // Immediately show the first card if it's already in view on page load
+        if (contentCards.length > 0) {
+            if (contentCards[0].getBoundingClientRect().top < window.innerHeight) {
+                contentCards[0].classList.add('is-visible');
+            }
+        }
+    </script>
+</body>
+</html>

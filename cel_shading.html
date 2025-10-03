@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - שליטה בבינה מלאכותית</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cel-outline-color: #000;
+            --cel-fill-dark: #0F172A; /* Slate 900 */
+            --cel-fill-medium: #1E293B; /* Slate 800 */
+            --cel-accent-1: #06B6D4; /* Cyan 500 */
+            --cel-accent-2: #FBBF24; /* Amber 400 */
+            --cel-text-light: #F8FAFC; /* Slate 50 */
+            --cel-text-dark: #0F172A; /* Slate 900 */
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: var(--cel-fill-dark);
+            color: var(--cel-text-light);
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-weight: 700;
+        }
+
+        .cel-outline {
+            border: 4px solid var(--cel-outline-color);
+            box-shadow: 6px 6px 0px 0px var(--cel-outline-color);
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+        }
+
+        .cel-outline:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 9px 9px 0px 0px var(--cel-outline-color);
+        }
+
+        .cel-text-shadow {
+            text-shadow: 2px 2px 0px var(--cel-outline-color);
+        }
+
+        .cel-card {
+            background-color: var(--cel-fill-medium);
+            border: 3px solid var(--cel-outline-color);
+            box-shadow: 5px 5px 0px 0px var(--cel-outline-color);
+            transition: all 0.3s ease;
+        }
+
+        .cel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 8px 8px 0px 0px var(--cel-outline-color);
+        }
+
+        .cel-button {
+            background-color: var(--cel-accent-1);
+            color: var(--cel-text-dark);
+            padding: 1rem 2rem;
+            font-weight: 700;
+            border: 3px solid var(--cel-outline-color);
+            box-shadow: 4px 4px 0px 0px var(--cel-outline-color);
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+            cursor: none; /* Inherit custom cursor */
+        }
+
+        .cel-button:hover {
+            background-color: var(--cel-accent-2);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px 0px var(--cel-outline-color);
+        }
+
+        /* Custom Cursor Styling */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid var(--cel-text-light); /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow */
+            transition: transform 0.1s ease-out;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+        #custom-cursor.hovering {
+            transform: translate(-50%, -50%) scale(1.5);
+            background-color: var(--cel-accent-1);
+            border-color: var(--cel-outline-color);
+        }
+
+        /* Background elements - for parallax effect */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        .layer-1 { background: linear-gradient(to bottom right, rgba(6, 182, 212, 0.1), transparent); }
+        .layer-2 { background: linear-gradient(to top left, rgba(251, 191, 36, 0.08), transparent); }
+        .layer-3 { background: linear-gradient(to bottom, rgba(147, 51, 234, 0.05), transparent); }
+
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-layer layer-1"></div>
+    <div class="parallax-layer layer-2"></div>
+    <div class="parallax-layer layer-3"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 p-4 md:p-8 lg:p-12 min-h-screen flex flex-col items-center justify-center text-center">
+
+        <!-- Hero Section -->
+        <section id="hero" class="w-full max-w-7xl mx-auto flex flex-col items-center justify-center min-h-screen py-16 md:py-24 lg:py-32 bg-transparent">
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-black mb-6 text-transparent bg-clip-text bg-gradient-to-l from-cyan-400 to-amber-300 cel-text-shadow leading-tight">
+                בינה מלאכותית: <br class="md:hidden">מעבר לקוד, <br class="md:hidden">מעבר לחלום
+            </h1>
+            <p class="text-xl md:text-3xl font-light max-w-4xl mb-12 leading-relaxed cel-text-shadow">
+                העתיד אינו רק מגיע - הוא נבנה. ובונים אותו אלה שמבינים, אלה ששולטים. הצטרפו למסע אל חזית הידע, והפכו את הבלתי ייאמן לכלי עבודה יומיומי.
+            </p>
+            <a href="#services" class="cel-button text-lg md:text-xl">
+                גלו את הדרך שלכם
+            </a>
+        </section>
+
+        <!-- What We Do - General Message Section -->
+        <section id="what-we-do" class="w-full max-w-7xl mx-auto py-16 md:py-24 lg:py-32 text-right">
+            <h2 class="text-4xl md:text-6xl font-bold mb-12 text-cyan-400 cel-text-shadow">
+                הפיכת חזון למציאות
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+                <div class="cel-card p-6 md:p-8">
+                    <h3 class="text-3xl font-bold mb-4 text-amber-300">נגישות לכל</h3>
+                    <p class="text-lg leading-relaxed">אנו מאמינים כי כוחה של הבינה המלאכותית צריך להיות נגיש לכל אדם וארגון, ללא קשר לרמת ידע מקדימה. נפרק את המורכבות ונציג את הפשטות.</p>
+                </div>
+                <div class="cel-card p-6 md:p-8">
+                    <h3 class="text-3xl font-bold mb-4 text-amber-300">יישום מיידי</h3>
+                    <p class="text-lg leading-relaxed">הידע שתקבלו אינו תאורטי בלבד - הוא מעשי. נדאג שתצאו עם כלים קונקרטיים שניתן ליישם באופן מיידי בעבודה, בפרויקטים אישיים או בחיים.</p>
+                </div>
+                <div class="cel-card p-6 md:p-8">
+                    <h3 class="text-3xl font-bold mb-4 text-amber-300">מסע מתמשך</h3>
+                    <p class="text-lg leading-relaxed">ה-AI מתפתח במהירות מסחררת. אנו מכינים אתכם לא רק להווה, אלא גם לעתיד, ומעניקים לכם את היכולת להמשיך ללמוד, לחקור ולצמוח בתחום.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section id="audience" class="w-full max-w-7xl mx-auto py-16 md:py-24 lg:py-32 text-left">
+            <h2 class="text-4xl md:text-6xl font-bold mb-12 text-cyan-400 cel-text-shadow">
+                למי המחר הזה נועד?
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="cel-card p-6 md:p-8 text-center">
+                    <h3 class="text-2xl font-bold mb-3 text-amber-300">המתחילים</h3>
+                    <p class="text-lg">הצעד הראשון לעולם ה-AI המרתק - ללא ידע מוקדם.</p>
+                </div>
+                <div class="cel-card p-6 md:p-8 text-center">
+                    <h3 class="text-2xl font-bold mb-3 text-amber-300">אנשי המקצוע</h3>
+                    <p class="text-lg">שילוב AI בכלים ובזרימת העבודה הקיימת שלכם.</p>
+                </div>
+                <div class="cel-card p-6 md:p-8 text-center">
+                    <h3 class="text-2xl font-bold mb-3 text-amber-300">מנהלים וארגונים</h3>
+                    <p class="text-lg">הובלת צוותים אל עידן חדש של חדשנות ופרודוקטיביות.</p>
+                </div>
+                <div class="cel-card p-6 md:p-8 text-center">
+                    <h3 class="text-2xl font-bold mb-3 text-amber-300">מפתחי העתיד</h3>
+                    <p class="text-lg">בנייה ופיתוח פרויקטים מבוססי AI - ברמה מתקדמת.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Areas Section -->
+        <section id="expertise" class="w-full max-w-7xl mx-auto py-16 md:py-24 lg:py-32 text-right">
+            <h2 class="text-4xl md:text-6xl font-bold mb-12 text-cyan-400 cel-text-shadow">
+                מפתחות לעולמות חדשים
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+                <div class="cel-card p-6 md:p-8 flex flex-col items-center text-center">
+                    <h3 class="text-2xl font-bold mb-3 text-amber-300">יצירת תוכן חכם</h3>
+                    <p class="text-lg">הפקה אוטומטית של טקסטים, מאמרים ואפילו קוד - בשיא המהירות והיצירתיות.</p>
+                </div>
+                <div class="cel-card p-6 md:p-8 flex flex-col items-center text-center">
+                    <h3 class="text-2xl font-bold mb-3 text-amber-300">אפליקציות מהפכניות</h3>
+                    <p class="text-lg">בניית מערכות ואפליקציות חכמות המשתמשות ב-AI לפתרון בעיות מורכבות.</p>
+                </div>
+                <div class="cel-card p-6 md:p-8 flex flex-col items-center text-center">
+                    <h3 class="text-2xl font-bold mb-3 text-amber-300">אתרי אינטרנט מתקדמים</h3>
+                    <p class="text-lg">הטמעת יכולות AI באתרי אינטרנט ליצירת חווית משתמש עשירה ואישית.</p>
+                </div>
+                <div class="cel-card p-6 md:p-8 flex flex-col items-center text-center">
+                    <h3 class="text-2xl font-bold mb-3 text-amber-300">ניתוח נתונים עמוק</h3>
+                    <p class="text-lg">חשיפת תובנות מורכבות וקבלת החלטות מבוססות נתונים בעזרת AI.</p>
+                </div>
+                <div class="cel-card p-6 md:p-8 flex flex-col items-center text-center">
+                    <h3 class="text-2xl font-bold mb-3 text-amber-300">אומנות דיגיטלית</h3>
+                    <p class="text-lg">יצירת תמונות, איורים ואמנות ויזואלית מרהיבה בעזרת מודלי AI מתקדמים.</p>
+                </div>
+                <div class="cel-card p-6 md:p-8 flex flex-col items-center text-center">
+                    <h3 class="text-2xl font-bold mb-3 text-amber-300">אוטומציה חכמה</h3>
+                    <p class="text-lg">ייעול תהליכים יומיומיים ועסקיים באמצעות אוטומציה מבוססת בינה מלאכותית.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="w-full max-w-7xl mx-auto py-16 md:py-24 lg:py-32 text-center">
+            <h2 class="text-4xl md:text-6xl font-bold mb-12 text-cyan-400 cel-text-shadow">
+                המסלולים שלכם אל השליטה
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
+                <div class="cel-card p-6 md:p-8">
+                    <h3 class="text-3xl font-bold mb-4 text-amber-300">סדנאות קבוצתיות</h3>
+                    <p class="text-lg leading-relaxed">חוויות למידה דינמיות ומעשיות בקבוצות קטנות - לצלול לעומק עם חברים למסע.</p>
+                </div>
+                <div class="cel-card p-6 md:p-8">
+                    <h3 class="text-3xl font-bold mb-4 text-amber-300">שיעורים פרטיים</h3>
+                    <p class="text-lg leading-relaxed">התאמה אישית מלאה - קצב, נושאים ודגשים, בדיוק לצרכים הייחודיים שלכם.</p>
+                </div>
+                <div class="cel-card p-6 md:p-8">
+                    <h3 class="text-3xl font-bold mb-4 text-amber-300">הרצאות לארגונים</h3>
+                    <p class="text-lg leading-relaxed">פתיחת אופקים ומתן השראה לצוותים, עם דגש על פוטנציאל ה-AI בעולם העסקי.</p>
+                </div>
+                <div class="cel-card p-6 md:p-8">
+                    <h3 class="text-3xl font-bold mb-4 text-amber-300">ייעוץ ופיתוח</h3>
+                    <p class="text-lg leading-relaxed">ליווי מקצועי ופיתוח פרויקטים מבוססי AI - מחזון ועד למימוש מלא.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Zevik Section -->
+        <section id="zevik" class="w-full max-w-7xl mx-auto py-16 md:py-24 lg:py-32 text-right">
+            <h2 class="text-4xl md:text-6xl font-bold mb-12 text-cyan-400 cel-text-shadow">
+                זאביק אבינר: האדריכל מאחורי החזון
+            </h2>
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-12">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר" class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover cel-outline shrink-0">
+                <div class="flex-grow">
+                    <h3 class="text-3xl font-bold mb-4 text-amber-300">מומחה בינה מלאכותית, מגשר טכנולוגי</h3>
+                    <p class="text-lg leading-relaxed mb-4">
+                        זאביק אבינר אינו רק מומחה בינה מלאכותית, הוא גשר בין הקוד המורכב לעולם המעשה. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק הפך את משימת חייו להנגיש את הטכנולוגיה המתקדמת ביותר לכל דורש.
+                    </p>
+                    <p class="text-lg leading-relaxed">
+                        הוא מאמין כי AI אינו כלי שנועד רק למעטים, אלא לכולם - וכי בעזרת הדרכה נכונה, כל אחד יכול לשלוט בו ולהפוך אותו לחלק בלתי נפרד מארגז הכלים המקצועי והאישי שלו. בואו ללמוד מזאביק איך להפוך את המחר למציאות של היום.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="w-full max-w-7xl mx-auto py-16 md:py-24 lg:py-32 text-center">
+            <h2 class="text-4xl md:text-6xl font-bold mb-12 text-cyan-400 cel-text-shadow">
+                התחילו את המסע שלכם היום
+            </h2>
+            <p class="text-xl md:text-2xl font-light max-w-3xl mx-auto mb-8 leading-relaxed">
+                בין אם אתם בתחילת הדרך או מחפשים לפתח פרויקטים מורכבים - אני כאן כדי להדריך אתכם. צרו קשר ונצא לדרך יחד.
+            </p>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-6">
+                <a href="https://wa.me/972546609385" class="cel-button text-xl md:text-2xl" target="_blank" rel="noopener noreferrer">
+                    ווטסאפ: 054-6609385
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="cel-button text-xl md:text-2xl" target="_blank" rel="noopener noreferrer">
+                    אימייל: zaviner@gmail.com
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="w-full max-w-7xl mx-auto py-8 text-center text-gray-400 text-sm md:text-base border-t border-gray-700 mt-16">
+            <p>&copy; 2023 זאביק אבינר - כל הזכויות שמורות. נבנה באהבה עם בינה מלאכותית.</p>
+        </footer>
+    </div>
+
+    <script>
+        const customCursor = document.getElementById('custom-cursor');
+        const interactiveElements = 'a, button, .cel-button, .cel-card';
+
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        document.addEventListener('mouseover', e => {
+            let target = e.target;
+            while (target && target !== document.body) {
+                if (target.matches(interactiveElements)) {
+                    customCursor.classList.add('hovering');
+                    return;
+                }
+                target = target.parentElement;
+            }
+            customCursor.classList.remove('hovering');
+        });
+
+        // Parallax effect for background layers
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+
+            parallaxLayers.forEach((layer, index) => {
+                const speed = (index + 1) * 0.05; // Different speeds for each layer
+                layer.style.transform = `translateY(${scrollY * speed}px)`;
+            });
+        });
+
+        // Scroll reveal animation for sections
+        const sections = document.querySelectorAll('section');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the section is visible
+        };
+
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(50px)';
+            section.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+            sectionObserver.observe(section);
+        });
+
+    </script>
+</body>
+</html>

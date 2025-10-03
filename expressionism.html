@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר: AI אקספרסיוניזם - לשלוט בעתיד</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&family=Frank+Ruhl+Libre:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        :root {
+            --color-primary: #0a0e14; /* Deep dark background */
+            --color-secondary: #161e2b; /* Slightly lighter dark */
+            --color-accent-1: #38bdf8; /* Sky blue - AI glow */
+            --color-accent-2: #a78bfa; /* Purple - AI magic */
+            --color-text: #e2e8f0; /* Light text */
+        }
+
+        html, body {
+            scroll-behavior: smooth;
+            background-color: var(--color-primary);
+            color: var(--color-text);
+            font-family: 'Frank Ruhl Libre', serif; /* Body font */
+            overflow-x: hidden; /* Prevent horizontal scroll from skewed elements */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Heebo', sans-serif; /* Heading font */
+            color: var(--color-accent-1); /* Use accent color for headings by default */
+            font-weight: 700;
+        }
+
+        .font-heebo { font-family: 'Heebo', sans-serif; }
+        .font-frank-ruhl-libre { font-family: 'Frank Ruhl Libre', serif; }
+
+        /* Custom Cursor Styling - High Contrast Mandatory */
+        #custom-cursor {
+            width: 20px;
+            height: 20px;
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            border: 2px solid rgba(255, 255, 255, 0.9); /* Bright white border */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8), /* Dark outer shadow */
+                        0 0 10px 3px var(--color-accent-1); /* Accent glow */
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out, width 0.1s ease-out, height 0.1s ease-out, box-shadow 0.1s ease-out;
+        }
+        #custom-cursor.active {
+            width: 30px;
+            height: 30px;
+            border-width: 3px;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.9), /* Stronger dark shadow */
+                        0 0 15px 5px var(--color-accent-2); /* Stronger accent glow on active */
+        }
+
+        /* Expressionist Button */
+        .expressionist-btn {
+            @apply relative overflow-hidden px-8 py-3 bg-gradient-to-br from-emerald-600 to-teal-500 text-white font-heebo text-lg font-bold rounded-xl shadow-xl transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105;
+            background-size: 200% auto;
+            background-position: right center;
+            border: 2px solid var(--color-accent-1);
+        }
+        .expressionist-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255,255,255,0.1);
+            transform: rotate(45deg);
+            transition: all 0.5s ease-out;
+            opacity: 0;
+            z-index: 0;
+        }
+        .expressionist-btn:hover::before {
+            left: 0;
+            top: 0;
+            opacity: 1;
+        }
+        .expressionist-btn > * { /* Ensure text is above pseudo-element */
+            position: relative;
+            z-index: 1;
+        }
+        .expressionist-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Generative background canvas container */
+        #bg-canvas-container {
+            background-image: radial-gradient(circle at 50% 50%, rgba(20,27,42,0.8) 0%, rgba(13,17,23,1) 100%);
+        }
+
+        /* Content section styling for a cohesive, artistic look */
+        .content-section {
+            @apply py-20 px-8 lg:px-20 relative z-20;
+            background: linear-gradient(135deg, rgba(23,32,49,0.95) 0%, rgba(13,17,23,0.95) 100%);
+            border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+
+        /* Distorted background texts - for expressionist visual noise */
+        .distorted-bg-text {
+            @apply absolute text-8xl md:text-[150px] lg:text-[200px] font-heebo font-black text-gray-800 opacity-5 -rotate-6 transform;
+            direction: ltr; /* Force LTR for purely visual effect, not content */
+            right: -20px;
+            top: 10%;
+            user-select: none;
+            pointer-events: none;
+            line-height: 0.8;
+            letter-spacing: -0.05em;
+        }
+        .distorted-bg-text.left {
+            left: -20px;
+            right: auto;
+            transform: rotate(3deg);
+            top: 60%;
+            color: rgba(60,60,60,0.08);
+        }
+
+        /* Expressionist Card Style - Angular and Interactive */
+        .expressionist-card {
+            @apply bg-gray-900 border-2 border-emerald-600 shadow-lg p-6 rounded-lg relative overflow-hidden;
+            transform: skew(-2deg); /* Angular distortion */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .expressionist-card:hover {
+            transform: skew(0deg) scale(1.02);
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
+            border-color: var(--color-accent-1); /* Change border on hover */
+        }
+        .expressionist-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, rgba(56,189,248,0.1) 0%, rgba(167,139,250,0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            z-index: 0;
+        }
+        .expressionist-card:hover::before {
+            opacity: 1;
+        }
+        .expressionist-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Keyframe animation for glowing text - for emotional emphasis */
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 5px var(--color-accent-1), 0 0 10px var(--color-accent-1); }
+            50% { text-shadow: 0 0 15px var(--color-accent-1), 0 0 25px var(--color-accent-1), 0 0 40px var(--color-accent-2); }
+        }
+        .glowing-text {
+            animation: glow 2s infinite alternate;
+        }
+
+        /* Fade-in-up animation for content reveal */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-gray-950 text-gray-100 font-frank-ruhl-libre text-lg" style="min-width: 320px;">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Generative Background Canvas Container (z-index -1) -->
+    <div id="bg-canvas-container" class="fixed inset-0 w-full h-full z-[-1] opacity-70">
+        <canvas id="expressionist-canvas" class="w-full h-full block"></canvas>
+    </div>
+
+    <!-- Main Content Wrapper (z-index +) -->
+    <main class="relative z-10 min-h-screen flex flex-col items-center justify-center pt-20 pb-10">
+
+        <!-- Hero Section -->
+        <section id="hero" class="relative w-full text-center flex flex-col items-center justify-center min-h-[calc(100vh-80px)] px-4 py-20 overflow-hidden">
+            <h1 class="font-heebo text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight glowing-text" style="color: var(--color-accent-1);">
+                בינה מלאכותית: <br class="md:hidden">העתיד כבר כאן - <br>ובאנו לשלוט בו.
+            </h1>
+            <p class="text-xl md:text-2xl lg:text-3xl font-frank-ruhl-libre max-w-4xl mb-12 text-gray-200">
+                מסע אקספרסיוניסטי אל ליבת האינטליגנציה המלאכותית עם <span class="text-emerald-400 font-heebo font-bold">זאביק אבינר</span> – מומחה שמנגיש את הלא-נודע.
+            </p>
+            <a href="#about" class="expressionist-btn">
+                התחילו את המסע הדיגיטלי שלכם
+            </a>
+
+            <!-- Distorted background texts for visual noise -->
+            <div class="distorted-bg-text">AI</div>
+            <div class="distorted-bg-text left">עתיד</div>
+        </section>
+
+        <!-- About Zevik / Vision Section -->
+        <section id="about" class="content-section w-full max-w-7xl mx-auto text-center flex flex-col items-center">
+            <h2 class="font-heebo text-4xl md:text-5xl lg:text-6xl font-bold mb-12 glowing-text" style="color: var(--color-accent-2);">
+                החזון האקספרסיוניסטי: AI ככלי יצירה אנושי
+            </h2>
+            <div class="flex flex-col lg:flex-row items-center justify-center gap-12 text-right">
+                <div class="lg:w-1/2">
+                    <p class="mb-6 leading-relaxed text-gray-300">
+                        בעולם שבו קווי המתאר של המציאות מיטשטשים עם התקדמות הטכנולוגיה, זאביק אבינר ניצב כצייר של העידן הדיגיטלי. הוא אינו רק מלמד AI – הוא מעניק את המכחולים והצבעים כדי שכל אחד יוכל לפסל את עתידו. בעיניו, בינה מלאכותית אינה כוח מרוחק אלא כלי רב עוצמה הממתין להיחשף ולהפוך לישים ונגישים לכולם – מהמתחילים ועד המומחים.
+                    </p>
+                    <p class="mb-6 leading-relaxed text-gray-300">
+                        המסר המרכזי של זאביק הוא הפיכת ה-AI לפרקטי, ליצירתי, ולחלק בלתי נפרד מחיי העבודה והיום-יום. בשיטות הדרכה ייחודיות, הוא חושף את הפוטנציאל הגלום בטכנולוגיה ומראה כיצד ליישם אותה באופן מיידי – לבניית אפליקציות, יצירת תוכן, ניתוח נתונים, אוטומציה ופיתוח פרויקטים פורצי דרך.
+                    </p>
+                    <p class="mb-6 leading-relaxed text-gray-300 font-bold text-emerald-300">
+                        "הבינה המלאכותית היא שפת האמנות החדשה" – אומר זאביק. "בואו נלמד לדבר אותה, לצייר איתה, ולבנות איתה עולמות שלא הכרנו."
+                    </p>
+                </div>
+                <div class="lg:w-1/3 flex flex-col items-center relative">
+                    <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="w-64 h-64 md:w-80 md:h-80 rounded-full object-cover border-4 border-emerald-500 shadow-2xl transform rotate-3 hover:rotate-0 transition-transform duration-300 ease-in-out" style="box-shadow: 0 0 30px rgba(56, 189, 248, 0.4);">
+                    <p class="mt-4 text-center text-xl font-heebo font-semibold text-emerald-400">זאביק אבינר</p>
+                    <p class="text-center text-gray-400 text-sm">מומחה AI | חלוץ דיגיטלי</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section id="audience" class="content-section w-full max-w-7xl mx-auto">
+            <h2 class="font-heebo text-4xl md:text-5xl lg:text-6xl font-bold mb-12 text-center glowing-text" style="color: var(--color-accent-1);">
+                הדים בעולם המלאכותי: מי יצטרף למסע?
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-right">
+                <div class="expressionist-card">
+                    <h3 class="font-heebo text-2xl font-bold mb-4 text-emerald-300">
+                        האמן המתחיל בבינה המלאכותית
+                    </h3>
+                    <p class="text-gray-300">
+                        אלו השואפים לפענח את סודות ה-AI, לגעת בו לראשונה ולגלות עולם של אפשרויות ללא ידע מוקדם. ציירי הדיגיטל של מחר.
+                    </p>
+                </div>
+                <div class="expressionist-card">
+                    <h3 class="font-heebo text-2xl font-bold mb-4 text-emerald-300">
+                        האדריכל המקצועי של העידן החדש
+                    </h3>
+                    <p class="text-gray-300">
+                        אנשי ונשות מקצוע המבקשים לשלב כלי AI בתהליכי העבודה שלהם, לשדרג מיומנויות ולפרוץ גבולות בתחומם.
+                    </p>
+                </div>
+                <div class="expressionist-card">
+                    <h3 class="font-heebo text-2xl font-bold mb-4 text-emerald-300">
+                        המנהיג שמעצב את המחר
+                    </h3>
+                    <p class="text-gray-300">
+                        מנהלים, מנהלות וארגונים המזהים את הכוח הטמון ב-AI ומחפשים להטמיע אותו בצוותים, ליצור חדשנות ולהוביל את השוק.
+                    </p>
+                </div>
+                <div class="expressionist-card md:col-span-2 lg:col-span-1 lg:col-start-2">
+                    <h3 class="font-heebo text-2xl font-bold mb-4 text-emerald-300">
+                        המהנדס האקספרסיוניסט
+                    </h3>
+                    <p class="text-gray-300">
+                        מפתחים ומומחים המעוניינים להעמיק, לבנות פרויקטים מורכבים ולהפוך רעיונות מופשטים למציאות טכנולוגית מדהימה.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Specializations Section -->
+        <section id="specializations" class="content-section w-full max-w-7xl mx-auto">
+            <h2 class="font-heebo text-4xl md:text-5xl lg:text-6xl font-bold mb-12 text-center glowing-text" style="color: var(--color-accent-2);">
+                פיסול ידע: תחומי ההתמחות ב-AI
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-right">
+                <div class="expressionist-card hover:bg-gradient-to-br from-purple-800 to-indigo-700 hover:border-purple-400">
+                    <h3 class="font-heebo text-2xl font-bold mb-4 text-purple-300">
+                        יצירת טקסטים ותוכן
+                    </h3>
+                    <p class="text-gray-300">
+                        ללמוד להפיק תוכן מבריק – ממיילים ועד מאמרים – באמצעות מודלי שפה מתקדמים. הופכים מילים לאמנות.
+                    </p>
+                </div>
+                <div class="expressionist-card hover:bg-gradient-to-br from-indigo-800 to-blue-700 hover:border-indigo-400">
+                    <h3 class="font-heebo text-2xl font-bold mb-4 text-indigo-300">
+                        בניית אפליקציות חכמות
+                    </h3>
+                    <p class="text-gray-300">
+                        לפתח יישומים אינטראקטיביים המשתמשים בבינה מלאכותית כדי לפתור בעיות אמיתיות וליצור חוויות משתמש חדשניות.
+                    </p>
+                </div>
+                <div class="expressionist-card hover:bg-gradient-to-br from-blue-800 to-cyan-700 hover:border-blue-400">
+                    <h3 class="font-heebo text-2xl font-bold mb-4 text-blue-300">
+                        פיתוח אתרים מבוססי AI
+                    </h3>
+                    <p class="text-gray-300">
+                        להפוך אתרי אינטרנט לחיים וחכמים יותר, עם התאמה אישית, אופטימיזציה אוטומטית ופיצ'רים מונעי AI.
+                    </p>
+                </div>
+                <div class="expressionist-card hover:bg-gradient-to-br from-emerald-800 to-green-700 hover:border-emerald-400">
+                    <h3 class="font-heebo text-2xl font-bold mb-4 text-emerald-300">
+                        ניתוח נתונים ומחקר
+                    </h3>
+                    <p class="text-gray-300">
+                        לשלוף תובנות עמוקות ממאגרי נתונים עצומים, לזהות מגמות ולחזות עתיד באמצעות אלגוריתמים מתקדמים.
+                    </p>
+                </div>
+                <div class="expressionist-card hover:bg-gradient-to-br from-pink-800 to-red-700 hover:border-pink-400">
+                    <h3 class="font-heebo text-2xl font-bold mb-4 text-pink-300">
+                        יצירת תמונות ואומנות
+                    </h3>
+                    <p class="text-gray-300">
+                        לתרגם רעיונות ויזואליים למציאות מדהימה באמצעות מודלים גנרטיביים – אומנות דיגיטלית במיטבה.
+                    </p>
+                </div>
+                <div class="expressionist-card hover:bg-gradient-to-br from-orange-800 to-amber-700 hover:border-orange-400">
+                    <h3 class="font-heebo text-2xl font-bold mb-4 text-orange-300">
+                        אוטומציה של תהליכים
+                    </h3>
+                    <p class="text-gray-300">
+                        לייעל משימות חוזרות ונשנות, לשחרר זמן יקר ולאפשר התמקדות במה שחשוב באמת – יצירה וחדשנות.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="content-section w-full max-w-7xl mx-auto">
+            <h2 class="font-heebo text-4xl md:text-5xl lg:text-6xl font-bold mb-12 text-center glowing-text" style="color: var(--color-accent-1);">
+                מבני העתיד: סדנאות, שיעורים וייעוץ
+            </h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 text-right">
+                <div class="expressionist-card bg-gradient-to-br from-gray-800 to-gray-900 border-indigo-600 p-8 flex flex-col items-start">
+                    <h3 class="font-heebo text-3xl font-bold mb-4 text-indigo-300">סדנאות קבוצתיות: גילוי משותף</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        הצטרפו לקבוצה של לומדים סקרנים והתנסו בסדנאות מעשיות, ממוקדות ואינטנסיביות. נפרק יחד את המורכבות של ה-AI ונבנה הבנה מעשית, שלב אחר שלב, בסביבה תומכת ומעוררת השראה. כל סדנה היא קפיצת מדרגה קדימה, עם כלים שתוכלו ליישם מיד.
+                    </p>
+                    <ul class="list-disc pr-6 text-gray-400">
+                        <li>גישה מעשית עם דגש על יישום.</li>
+                        <li>למידה חווייתית בקבוצה.</li>
+                        <li>היכרות עם כלי AI חדשניים.</li>
+                    </ul>
+                </div>
+                <div class="expressionist-card bg-gradient-to-br from-gray-800 to-gray-900 border-emerald-600 p-8 flex flex-col items-start">
+                    <h3 class="font-heebo text-3xl font-bold mb-4 text-emerald-300">שיעורים פרטיים: מסלול מותאם אישית</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        למידה אישית, בקצב שלכם, מותאמת בדיוק לרמה, לצרכים ולשאיפות שלכם. בין אם אתם מתחילים, מקצוענים או מעוניינים להעמיק בתחום ספציפי – זאביק ילווה אתכם צעד אחר צעד, יד ביד, במסלול אישי ודינמי שימקסם את הפוטנציאל שלכם.
+                    </p>
+                    <ul class="list-disc pr-6 text-gray-400">
+                        <li>התאמה אישית מלאה לתלמיד.</li>
+                        <li>מענה לצרכים וקשיים ספציפיים.</li>
+                        <li>התקדמות בקצב אישי.</li>
+                    </ul>
+                </div>
+                <div class="expressionist-card bg-gradient-to-br from-gray-800 to-gray-900 border-orange-600 p-8 flex flex-col items-start">
+                    <h3 class="font-heebo text-3xl font-bold mb-4 text-orange-300">הרצאות לארגונים: השראה ופתיחת אופקים</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        הזדמנות בלתי רגילה לצוותים, למנהלים ולארגונים להיחשף לעולם ה-AI המשתנה במהירות. הרצאות מרתקות ומעוררות מחשבה שיפתחו אופקים חדשים, יציגו את הטרנדים החמים ויספקו כלים ראשוניים להבנה ויישום של בינה מלאכותית בארגון.
+                    </p>
+                    <ul class="list-disc pr-6 text-gray-400">
+                        <li>התאמה לצרכי הארגון.</li>
+                        <li>השראה ומוטיבציה לחדשנות.</li>
+                        <li>הצגת פתרונות AI רלוונטיים.</li>
+                    </ul>
+                </div>
+                <div class="expressionist-card bg-gradient-to-br from-gray-800 to-gray-900 border-purple-600 p-8 flex flex-col items-start">
+                    <h3 class="font-heebo text-3xl font-bold mb-4 text-purple-300">ייעוץ ופיתוח פרויקטים: בניית העתיד</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed">
+                        מעבר ללמידה – ליווי מקצועי בפיתוח פרויקטים מבוססי AI מאפס ועד ליישום מלא. מניסוח הרעיון, דרך תכנון הארכיטקטורה ועד לבנייה בפועל. זאביק מביא ניסיון עשיר בפיתוח פרויקטים מורכבים ויסייע לכם להפוך חזון למציאות טכנולוגית.
+                    </p>
+                    <ul class="list-disc pr-6 text-gray-400">
+                        <li>ליווי מלא לפרויקטים.</li>
+                        <li>פתרונות מותאמים אישית.</li>
+                        <li>יישום יצירתי של AI.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="content-section w-full max-w-7xl mx-auto text-center pb-20">
+            <h2 class="font-heebo text-4xl md:text-5xl lg:text-6xl font-bold mb-12 glowing-text" style="color: var(--color-accent-2);">
+                היכנסו למאטריקס: צרו קשר
+            </h2>
+            <p class="text-xl md:text-2xl mb-8 text-gray-200">
+                אל תחכו לעתיד – צרו אותו עכשיו. זאביק אבינר מחכה לכם.
+            </p>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8">
+                <a href="https://wa.me/972546609385" target="_blank" rel="noopener noreferrer" class="expressionist-btn bg-gradient-to-br from-green-600 to-lime-500 hover:from-green-700 hover:to-lime-600 border-green-400">
+                    <span class="relative z-10">ווטסאפ: 054-6609385</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="expressionist-btn bg-gradient-to-br from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 border-blue-400">
+                    <span class="relative z-10">אימייל: zaviner@gmail.com</span>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="w-full text-center py-8 text-gray-500 text-sm border-t border-gray-800 relative z-10">
+        <p>
+            &copy; 2023 זאביק אבינר - מומחה AI. כל הזכויות שמורות. <br>
+            עיצוב אקספרסיוניסטי עם נשמה דיגיטלית.
+        </p>
+    </footer>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+        document.addEventListener('mousedown', () => cursor.classList.add('active'));
+        document.addEventListener('mouseup', () => cursor.classList.remove('active'));
+        // Hide default cursor
+        document.body.style.cursor = 'none';
+
+        // Generative Expressionist Canvas Background
+        const canvas = document.getElementById('expressionist-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const numParticles = 80;
+        const colors = [
+            'rgba(56, 189, 248, 0.4)',  // var(--color-accent-1) with alpha
+            'rgba(167, 139, 250, 0.4)', // var(--color-accent-2) with alpha
+            'rgba(16, 185, 129, 0.4)',  // emerald with alpha
+            'rgba(244, 63, 94, 0.4)'    // rose/pink for contrast
+        ];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            // Reposition particles on resize to prevent them from going off-screen
+            particles.forEach(p => {
+                p.x = Math.random() * canvas.width;
+                p.y = Math.random() * canvas.height;
+            });
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 5 + 2; // size between 2 and 7
+                this.speedX = Math.random() * 2 - 1; // -1 to 1
+                this.speedY = Math.random() * 2 - 1; // -1 to 1
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.opacity = 0.2 + Math.random() * 0.4; // 0.2 to 0.6
+                this.angle = Math.random() * Math.PI * 2; // For angular shapes
+                this.angularSpeed = Math.random() * 0.05 - 0.025; // Small rotation
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.angle += this.angularSpeed;
+
+                // Wrap around canvas edges
+                if (this.x > canvas.width + this.size) this.x = -this.size;
+                if (this.x < -this.size) this.x = canvas.width + this.size;
+                if (this.y > canvas.height + this.size) this.y = -this.size;
+                if (this.y < -this.size) this.y = canvas.height + this.size;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+
+                // Draw an expressionist-style angular shape (e.g., a distorted square or triangle)
+                ctx.beginPath();
+                ctx.moveTo(-this.size, -this.size);
+                ctx.lineTo(this.size * 1.5, -this.size / 2);
+                ctx.lineTo(this.size, this.size);
+                ctx.lineTo(-this.size / 2, this.size * 1.5);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        function initParticles() {
+            for (let i = 0; i < numParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateCanvas() {
+            // For a 'smear' effect, don't clear fully, draw a semi-transparent rectangle over it
+            ctx.fillStyle = 'rgba(10, 14, 20, 0.05)'; // A very subtle fade with background color
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                // Connect particles if they are close, mimicking neural connections or data flow
+                for (let j = i; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    if (distance < 100) { // Connect if distance is less than 100px
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(56, 189, 248, ${0.1 - (distance / 1000)})`; // Faded connection
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateCanvas);
+        }
+
+        initParticles();
+        animateCanvas();
+
+        // Parallax-like scrolling for hero background texts
+        const heroSection = document.getElementById('hero');
+        const distortedTextAI = heroSection.querySelector('.distorted-bg-text:first-of-type');
+        const distortedTextFuture = heroSection.querySelector('.distorted-bg-text.left');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+
+            if (distortedTextAI) {
+                distortedTextAI.style.transform = `translateY(${scrollY * 0.2}px) rotate(-6deg)`;
+            }
+            if (distortedTextFuture) {
+                distortedTextFuture.style.transform = `translateY(${scrollY * -0.1}px) rotate(3deg)`;
+            }
+        });
+
+        // Intersection Observer for revealing content sections with animation
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in-up');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Apply initial hidden state and transition to elements to be observed
+        document.querySelectorAll('.content-section > h2, .content-section > div > *, .expressionist-btn').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            // Delay for stagger effect
+            const delay = Math.random() * 0.3; // 0 to 300ms delay
+            el.style.transition = `opacity 0.8s ease-out ${delay}s, transform 0.8s ease-out ${delay}s`;
+            observer.observe(el);
+        });
+
+    </script>
+</body>
+</html>

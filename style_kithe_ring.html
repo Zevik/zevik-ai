@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - לשלוט בבינה המלאכותית</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Keith Haring Inspired Color Palette (using Tailwind classes where possible, or custom properties) */
+        :root {
+            --kh-red: #EF4444; /* Tailwind red-500 */
+            --kh-blue: #3B82F6; /* Tailwind blue-500 */
+            --kh-yellow: #FACC15; /* Tailwind yellow-300 */
+            --kh-green: #22C55E; /* Tailwind green-500 */
+            --kh-black: #000000;
+            --kh-white: #FFFFFF;
+            --kh-gray-dark: #1F2937; /* For subtle background patterns */
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll from animations */
+            cursor: none; /* Hide default cursor to use custom one */
+            background-color: var(--kh-black); /* Default background color */
+        }
+
+        /* Custom Cursor Styling */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none; /* Allows interaction with elements beneath */
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 3px solid var(--kh-white); /* White border for visibility on dark backgrounds */
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.8), /* Dark shadow for visibility on light backgrounds */
+                        0 0 10px rgba(255, 255, 255, 0.7); /* Subtle glow for artistic touch */
+            transform: translate(-50%, -50%);
+            z-index: 9999; /* Always on top */
+            transition: width 0.2s ease, height 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+            will-change: transform, width, height, box-shadow; /* Optimize animations */
+        }
+
+        .custom-cursor.active {
+            width: 48px;
+            height: 48px;
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.9), /* More pronounced dark shadow */
+                        0 0 20px var(--kh-yellow); /* Brighter glow on interaction */
+        }
+
+        /* Keith Haring-esque Figure (Simplified Div-based) */
+        .figure-person {
+            width: 100px;
+            height: 150px;
+            position: relative;
+            background-color: transparent;
+            transform-origin: bottom center; /* For subtle rocking animation */
+        }
+        .figure-person .head {
+            width: 40px;
+            height: 40px;
+            background-color: var(--kh-white);
+            border: 4px solid var(--kh-black);
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 4px 4px 0 var(--kh-black);
+        }
+        .figure-person .body {
+            width: 60px;
+            height: 70px;
+            background-color: var(--kh-red);
+            border: 4px solid var(--kh-black);
+            border-radius: 20px 20px 50px 50px; /* Rounded top, more defined bottom */
+            position: absolute;
+            top: 35px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 4px 4px 0 var(--kh-black);
+        }
+        .figure-person .arm {
+            width: 10px;
+            height: 60px;
+            background-color: var(--kh-white);
+            border: 3px solid var(--kh-black);
+            position: absolute;
+            box-shadow: 3px 3px 0 var(--kh-black);
+            border-radius: 5px;
+            transform-origin: top center;
+        }
+        .figure-person .arm.left { top: 45px; left: 15px; transform: rotate(-30deg); }
+        .figure-person .arm.right { top: 45px; right: 15px; transform: rotate(30deg); }
+        .figure-person .leg {
+            width: 15px;
+            height: 60px;
+            background-color: var(--kh-blue);
+            border: 3px solid var(--kh-black);
+            position: absolute;
+            box-shadow: 3px 3px 0 var(--kh-black);
+            border-radius: 5px;
+            transform-origin: top center;
+        }
+        .figure-person .leg.left { bottom: 0; left: 30px; transform: rotate(10deg); }
+        .figure-person .leg.right { bottom: 0; right: 30px; transform: rotate(-10deg); }
+
+        /* Haring Figure Animations */
+        .figure-person.animate {
+            animation: rock 2s infinite ease-in-out alternate;
+        }
+        .figure-person.animate .head, .figure-person.animate .body {
+            animation: bob 1s infinite alternate ease-in-out;
+        }
+        .figure-person.animate .arm.left { animation: arm-left-wave 1s infinite alternate ease-in-out; }
+        .figure-person.animate .arm.right { animation: arm-right-wave 1s infinite alternate ease-in-out; }
+        .figure-person.animate .leg.left { animation: leg-left-kick 1s infinite alternate ease-in-out; }
+        .figure-person.animate .leg.right { animation: leg-right-kick 1s infinite alternate ease-in-out; }
+
+        @keyframes rock {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-5px) rotate(2deg); }
+        }
+        @keyframes bob {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-3px); }
+        }
+        @keyframes arm-left-wave {
+            0% { transform: rotate(-30deg); }
+            100% { transform: rotate(-45deg); }
+        }
+        @keyframes arm-right-wave {
+            0% { transform: rotate(30deg); }
+            100% { transform: rotate(45deg); }
+        }
+        @keyframes leg-left-kick {
+            0% { transform: rotate(10deg); }
+            100% { transform: rotate(20deg); }
+        }
+        @keyframes leg-right-kick {
+            0% { transform: rotate(-10deg); }
+            100% { transform: rotate(-20deg); }
+        }
+
+        /* Radiating lines for energy/interaction */
+        .radiating-lines {
+            position: absolute;
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .radiating-line {
+            position: absolute;
+            background-color: transparent;
+            border-radius: 50%;
+            opacity: 0;
+            animation: radiate 1.8s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        @keyframes radiate {
+            0% { transform: scale(0.1); opacity: 0; }
+            50% { opacity: 0.7; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        /* Dynamic background patterns */
+        .background-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background-color: var(--kh-black);
+        }
+        .bg-element {
+            position: absolute;
+            background-color: var(--kh-gray-dark);
+            border: 2px solid var(--kh-black);
+            opacity: 0.1;
+            box-shadow: 2px 2px 0 var(--kh-black);
+            animation: float-scale 15s infinite ease-in-out alternate;
+        }
+
+        @keyframes float-scale {
+            0% { transform: translateY(0) scale(1) rotate(0deg); }
+            50% { transform: translateY(20px) scale(1.05) rotate(5deg); }
+            100% { transform: translateY(0) scale(1) rotate(0deg); }
+        }
+
+        /* Scroll-based animations */
+        .fade-in-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .fade-in-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Interactive elements base style */
+        .interactive-element {
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+        }
+        .interactive-element:hover {
+            box-shadow: 6px 6px 0 var(--kh-black); /* Lifts the element visually */
+        }
+
+        /* General element styles for Haring-esque outlines */
+        .haring-box-outline {
+            border: 4px solid var(--kh-black);
+            box-shadow: 6px 6px 0 var(--kh-black);
+        }
+        .haring-symbol-base {
+            border: 3px solid var(--kh-black);
+            box-shadow: 3px 3px 0 var(--kh-black);
+            animation: rotate-float 5s infinite linear alternate;
+        }
+
+        @keyframes rotate-float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="custom-cursor"></div>
+
+    <!-- Background Pattern Layer - Z-index -1 -->
+    <div class="background-pattern">
+        <div class="bg-element w-24 h-24 rounded-full top-1/4 left-1/4"></div>
+        <div class="bg-element w-32 h-32 rounded-lg top-1/2 right-1/4 transform rotate-12"></div>
+        <div class="bg-element w-20 h-20 rounded-full bottom-1/4 left-1/2 transform -translate-x-1/2"></div>
+        <div class="bg-element w-28 h-28 rounded-xl top-1/3 left-1/5 transform -rotate-6"></div>
+        <div class="bg-element w-16 h-16 rounded-full bottom-1/5 right-1/5"></div>
+        <div class="bg-element w-12 h-12 rounded-lg top-1/5 right-1/6"></div>
+    </div>
+
+    <!-- Main Content Wrapper - Z-index 10+ -->
+    <div class="relative min-h-screen bg-transparent z-10 p-4 md:p-8 overflow-hidden text-right">
+
+        <!-- Hero Section: Master AI - The Future is Now! -->
+        <section id="hero" class="relative min-h-screen flex flex-col items-center justify-center text-white bg-blue-500/90 rounded-none md:rounded-[100px] haring-box-outline mb-16 p-8 md:p-16 text-center">
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-600/80 to-red-500/70 rounded-none md:rounded-[96px] z-0"></div>
+
+            <div class="relative z-20 max-w-4xl mx-auto flex flex-col items-center space-y-8">
+                <h1 class="text-5xl md:text-7xl font-black leading-tight mb-4 text-white drop-shadow-lg [text-shadow:4px_4px_var(--kh-black)]">
+                    לשלוט ב<span class="text-yellow-300">בינה המלאכותית</span><br> העתיד כבר כאן, בידיים שלך!
+                </h1>
+                <p class="text-2xl md:text-3xl font-bold text-white/90 mb-8 max-w-2xl [text-shadow:2px_2px_var(--kh-black)]">
+                    אומנות, כוח, וכלים מעשיים – AI נגיש, יצירתי ומשנה חיים, לכולם.
+                </p>
+                <button class="bg-yellow-300 text-black text-2xl md:text-3xl font-black py-4 px-8 rounded-full haring-box-outline hover:bg-red-500 hover:text-white transition-all duration-300 interactive-element">
+                    צאו למסע ה-AI שלכם!
+                </button>
+            </div>
+
+            <!-- Dynamic Haring-like AI Brain Figures -->
+            <div class="absolute top-1/4 left-1/4 transform -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-red-500 rounded-full haring-box-outline flex items-center justify-center animate-pulse-slow z-10 invisible md:visible">
+                <span class="text-6xl animate-spin-slow">🧠</span>
+            </div>
+            <div class="absolute bottom-1/4 right-1/4 transform translate-x-1/2 translate-y-1/2 w-64 h-64 bg-green-500 rounded-full haring-box-outline flex items-center justify-center animate-spin-slow reverse z-10 invisible md:visible">
+                 <span class="text-8xl animate-pulse-slow">⚡</span>
+            </div>
+
+            <!-- Radiating lines for energy -->
+            <div class="radiating-lines top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96">
+                <div class="radiating-line border-4 border-yellow-300"></div>
+                <div class="radiating-line border-4 border-yellow-300" style="animation-delay: 0.3s;"></div>
+            </div>
+            <div class="radiating-lines bottom-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-48 h-48 invisible md:visible">
+                <div class="radiating-line border-3 border-white"></div>
+                <div class="radiating-line border-3 border-white" style="animation-delay: 0.2s;"></div>
+            </div>
+        </section>
+
+        <!-- Zavik Aviner - The Guide -->
+        <section id="zavik-intro" class="relative bg-white haring-box-outline rounded-lg p-8 md:p-12 mb-16 fade-in-on-scroll text-black flex flex-col md:flex-row items-center justify-between gap-8 md:gap-16">
+            <div class="md:w-1/2 text-center md:text-right">
+                <h2 class="text-4xl md:text-5xl font-black mb-4 leading-tight text-red-500 drop-shadow-md">זאביק אבינר: המדריך, האמן, המהפכן</h2>
+                <p class="text-xl md:text-2xl font-semibold mb-6">
+                    מומחה בינה מלאכותית עם ניסיון עשיר, זאביק הופך את הטכנולוגיה המתקדמת ביותר לכלי יומיומי ונגיש. הוא לא רק מלמד, הוא מעורר השראה ליצור, לחדש ולפרוץ גבולות עם AI.
+                </p>
+            </div>
+            <div class="md:w-1/2 flex justify-center md:justify-start relative">
+                <div class="relative w-64 h-64 rounded-full haring-box-outline overflow-hidden bg-yellow-300/50 shadow-xl flex items-center justify-center transform hover:scale-105 transition-transform duration-300">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר" class="absolute w-full h-full object-cover object-top filter saturate-150 transform scale-110">
+                    <div class="absolute inset-0 border-4 border-black rounded-full z-10"></div>
+                </div>
+                <!-- Haring-like figure dancing beside Zavik's image -->
+                <div class="figure-person animate absolute -bottom-8 -right-8 w-32 h-48 rotate-6 z-20 hidden md:block">
+                    <div class="head bg-yellow-300 border-black" style="width:50px; height:50px;"></div>
+                    <div class="body bg-green-500 border-black" style="width:70px; height:80px; top:45px;"></div>
+                    <div class="arm left bg-white border-black" style="top:55px; left:10px; height:50px; width:12px; transform:rotate(-40deg);"></div>
+                    <div class="arm right bg-white border-black" style="top:55px; right:10px; height:50px; width:12px; transform:rotate(40deg);"></div>
+                    <div class="leg left bg-blue-500 border-black" style="bottom:0; left:25px; height:55px; width:15px; transform:rotate(15deg);"></div>
+                    <div class="leg right bg-blue-500 border-black" style="bottom:0; right:25px; height:55px; width:15px; transform:rotate(-15deg);"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Message - AI for Everyone -->
+        <section id="core-message" class="relative bg-red-500/90 text-white haring-box-outline rounded-tl-[80px] rounded-br-[80px] p-8 md:p-12 mb-16 fade-in-on-scroll text-center">
+            <h2 class="text-4xl md:text-6xl font-black mb-6 leading-tight drop-shadow-md [text-shadow:4px_4px_var(--kh-black)]">
+                AI לכולם! <span class="text-yellow-300">מפישוט רעיונות</span> מורכבים ועד <span class="text-green-500">יצירת פרויקטים</span> מדהימים.
+            </h2>
+            <p class="text-xl md:text-2xl font-medium mb-8 max-w-3xl mx-auto [text-shadow:2px_2px_var(--kh-black)]">
+                המסע שלכם מתחיל כאן – כלים מעשיים, שימושיים ונגישים, שתוכלו ליישם מיד בעבודה ובחיים. אין צורך בידע קודם, רק ברצון לגלות עולם חדש.
+            </p>
+            <div class="flex flex-wrap justify-center gap-6 mt-10">
+                <div class="haring-symbol-base bg-yellow-300 w-32 h-32 rounded-full flex items-center justify-center text-black text-2xl font-bold p-2 text-center relative interactive-element fade-in-on-scroll hover:scale-105" style="animation-delay: 0.1s;">
+                    <span class="relative z-10">מתחילים</span>
+                    <div class="radiating-lines w-full h-full"><div class="radiating-line border-2 border-black"></div></div>
+                </div>
+                <div class="haring-symbol-base bg-green-500 w-32 h-32 rounded-lg flex items-center justify-center text-black text-2xl font-bold p-2 text-center relative interactive-element fade-in-on-scroll hover:scale-105" style="animation-delay: 0.2s;">
+                    <span class="relative z-10">מקצוענים</span>
+                    <div class="radiating-lines w-full h-full"><div class="radiating-line border-2 border-black"></div></div>
+                </div>
+                <div class="haring-symbol-base bg-blue-500 w-32 h-32 rounded-full flex items-center justify-center text-black text-2xl font-bold p-2 text-center relative interactive-element fade-in-on-scroll hover:scale-105" style="animation-delay: 0.3s;">
+                    <span class="relative z-10">ארגונים</span>
+                    <div class="radiating-lines w-full h-full"><div class="radiating-line border-2 border-black"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Areas -->
+        <section id="expertise" class="relative bg-yellow-300/90 text-black haring-box-outline rounded-lg p-8 md:p-12 mb-16 fade-in-on-scroll">
+            <h2 class="text-4xl md:text-5xl font-black mb-10 text-center text-red-500 drop-shadow-md [text-shadow:3px_3px_var(--kh-black)]">תחומי ההתמחות: איפה ה-AI שלכם פורח?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+                <!-- Expertise Item 1: Text & Content -->
+                <div class="relative bg-white haring-box-outline rounded-xl p-6 text-center interactive-element hover:rotate-2 hover:scale-105 transform transition-all duration-300">
+                    <div class="relative w-24 h-24 mx-auto mb-4 bg-blue-500 rounded-full haring-box-outline flex items-center justify-center shadow-md">
+                        <span class="text-5xl">✍️</span>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-black mb-2 text-black">יצירת טקסטים ותוכן</h3>
+                    <p class="text-lg md:text-xl font-medium">כתיבה יצירתית, שיווקית, טכנית – בקלות ובמהירות עם AI.</p>
+                </div>
+
+                <!-- Expertise Item 2: Smart Apps -->
+                <div class="relative bg-white haring-box-outline rounded-xl p-6 text-center interactive-element hover:-rotate-2 hover:scale-105 transform transition-all duration-300">
+                    <div class="relative w-24 h-24 mx-auto mb-4 bg-red-500 rounded-full haring-box-outline flex items-center justify-center shadow-md">
+                        <span class="text-5xl">📱</span>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-black mb-2 text-black">בניית אפליקציות חכמות</h3>
+                    <p class="text-lg md:text-xl font-medium">פתרונות מבוססי AI שמקפיצים את העסק שלכם קדימה.</p>
+                </div>
+
+                <!-- Expertise Item 3: Web Development -->
+                <div class="relative bg-white haring-box-outline rounded-xl p-6 text-center interactive-element hover:rotate-3 hover:scale-105 transform transition-all duration-300">
+                    <div class="relative w-24 h-24 mx-auto mb-4 bg-green-500 rounded-full haring-box-outline flex items-center justify-center shadow-md">
+                        <span class="text-5xl">🌐</span>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-black mb-2 text-black">פיתוח אתרים מבוססי AI</h3>
+                    <p class="text-lg md:text-xl font-medium">אתרים אינטראקטיביים וחכמים שמתאימים למשתמש.</p>
+                </div>
+
+                <!-- Expertise Item 4: Data Analysis -->
+                <div class="relative bg-white haring-box-outline rounded-xl p-6 text-center interactive-element hover:-rotate-3 hover:scale-105 transform transition-all duration-300">
+                    <div class="relative w-24 h-24 mx-auto mb-4 bg-yellow-300 rounded-full haring-box-outline flex items-center justify-center shadow-md">
+                        <span class="text-5xl">📊</span>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-black mb-2 text-black">ניתוח נתונים ומחקר</h3>
+                    <p class="text-lg md:text-xl font-medium">פענוח תובנות עמוקות וקבלת החלטות מבוססות נתונים.</p>
+                </div>
+
+                <!-- Expertise Item 5: Image & Art Creation -->
+                <div class="relative bg-white haring-box-outline rounded-xl p-6 text-center interactive-element hover:rotate-1 hover:scale-105 transform transition-all duration-300">
+                    <div class="relative w-24 h-24 mx-auto mb-4 bg-blue-500 rounded-full haring-box-outline flex items-center justify-center shadow-md">
+                        <span class="text-5xl">🎨</span>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-black mb-2 text-black">יצירת תמונות ואומנות</h3>
+                    <p class="text-lg md:text-xl font-medium">שחררו את הדמיון – AI יוצר ויזואליה מרהיבה.</p>
+                </div>
+
+                <!-- Expertise Item 6: Process Automation -->
+                <div class="relative bg-white haring-box-outline rounded-xl p-6 text-center interactive-element hover:-rotate-1 hover:scale-105 transform transition-all duration-300">
+                    <div class="relative w-24 h-24 mx-auto mb-4 bg-red-500 rounded-full haring-box-outline flex items-center justify-center shadow-md">
+                        <span class="text-5xl">⚙️</span>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-black mb-2 text-black">אוטומציה של תהליכים</h3>
+                    <p class="text-lg md:text-xl font-medium">יעילות מקסימלית – אוטומציה חכמה לכל משימה.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered -->
+        <section id="services" class="relative bg-green-500/90 text-white haring-box-outline rounded-bl-[80px] rounded-tr-[80px] p-8 md:p-12 mb-16 fade-in-on-scroll">
+            <h2 class="text-4xl md:text-5xl font-black mb-10 text-center text-white drop-shadow-md [text-shadow:3px_3px_var(--kh-black)]">השירותים שלנו: המסלול שלכם להצלחה עם AI</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
+                <!-- Service 1: Workshops -->
+                <div class="relative bg-blue-500/90 haring-box-outline rounded-xl p-6 text-center interactive-element hover:translate-y-[-10px] transform transition-all duration-300">
+                    <div class="w-24 h-24 mx-auto mb-4 bg-white rounded-full haring-box-outline flex items-center justify-center shadow-md">
+                        <span class="text-5xl text-blue-500">👥</span>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-black mb-2 text-white">סדנאות קבוצתיות מעשיות</h3>
+                    <p class="text-lg md:text-xl font-medium">למידה חווייתית בקבוצה, עם כלים ופרויקטים מיידיים.</p>
+                </div>
+
+                <!-- Service 2: Private Lessons -->
+                <div class="relative bg-red-500/90 haring-box-outline rounded-xl p-6 text-center interactive-element hover:translate-y-[-10px] transform transition-all duration-300">
+                    <div class="w-24 h-24 mx-auto mb-4 bg-white rounded-full haring-box-outline flex items-center justify-center shadow-md">
+                        <span class="text-5xl text-red-500">🧑‍🏫</span>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-black mb-2 text-white">שיעורים פרטיים מותאמים אישית</h3>
+                    <p class="text-lg md:text-xl font-medium">ליווי אישי, אחד על אחד, לפי הרמה והצרכים שלכם.</p>
+                </div>
+
+                <!-- Service 3: Lectures for Organizations -->
+                <div class="relative bg-yellow-300/90 haring-box-outline rounded-xl p-6 text-center interactive-element hover:translate-y-[-10px] transform transition-all duration-300">
+                    <div class="w-24 h-24 mx-auto mb-4 bg-white rounded-full haring-box-outline flex items-center justify-center shadow-md">
+                        <span class="text-5xl text-yellow-300">🎤</span>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-black mb-2 text-black">הרצאות מעוררות השראה לארגונים</h3>
+                    <p class="text-lg md:text-xl font-medium text-black">פתיחת אופקים חדשים לצוותים והנהלות בעולם ה-AI.</p>
+                </div>
+
+                <!-- Service 4: Consulting & Project Development -->
+                <div class="relative bg-blue-500/90 haring-box-outline rounded-xl p-6 text-center interactive-element hover:translate-y-[-10px] transform transition-all duration-300">
+                    <div class="w-24 h-24 mx-auto mb-4 bg-white rounded-full haring-box-outline flex items-center justify-center shadow-md">
+                        <span class="text-5xl text-blue-500">🤝</span>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-black mb-2 text-white">ייעוץ ופיתוח פרויקטים מתקדמים</h3>
+                    <p class="text-lg md:text-xl font-medium">ליווי מקצועי מלא, משלב הרעיון ועד למימוש מוצר AI.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="relative bg-black text-white haring-box-outline rounded-[80px] p-8 md:p-12 text-center fade-in-on-scroll">
+            <h2 class="text-4xl md:text-5xl font-black mb-8 text-yellow-300 drop-shadow-md [text-shadow:3px_3px_var(--kh-black)]">בואו נדבר AI!</h2>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 mb-8">
+                <a href="https://wa.me/972546609385" target="_blank" class="flex items-center gap-4 text-3xl font-bold text-white bg-green-500 py-3 px-6 rounded-full haring-box-outline hover:scale-110 hover:shadow-xl transition-all duration-300 interactive-element">
+                    <span class="ml-2">וואטסאפ: 054-6609385</span> 📞
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="flex items-center gap-4 text-3xl font-bold text-white bg-blue-500 py-3 px-6 rounded-full haring-box-outline hover:scale-110 hover:shadow-xl transition-all duration-300 interactive-element">
+                    <span class="ml-2">אימייל: zaviner@gmail.com</span> ✉️
+                </a>
+            </div>
+            <p class="text-lg md:text-xl font-medium text-white/80">
+                זאביק אבינר - יחד נשלוט בבינה המלאכותית וניצור עתיד מזהיר.
+            </p>
+        </section>
+
+    </div> <!-- End Main Content Wrapper -->
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        document.addEventListener('mousedown', () => {
+            cursor.classList.add('active');
+        });
+
+        document.addEventListener('mouseup', () => {
+            cursor.classList.remove('active');
+        });
+
+        // Add/remove active class to cursor on hover of interactive elements
+        document.querySelectorAll('.interactive-element').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+
+        // Scroll-based animations (fade-in effect for sections)
+        const fadeElements = document.querySelectorAll('.fade-in-on-scroll');
+
+        const observerOptions = {
+            root: null, // viewport as the root
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Stop observing once visible
+                }
+            });
+        }, observerOptions);
+
+        fadeElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // Randomize initial animation properties for background elements for a more organic feel
+        const bgElements = document.querySelectorAll('.bg-element');
+        bgElements.forEach(el => {
+            el.style.animationDelay = `${Math.random() * 5}s`;
+            el.style.animationDuration = `${10 + Math.random() * 10}s`;
+            el.style.opacity = `${0.05 + Math.random() * 0.1}`;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אימפרסיוניזם דיגיטלי: אמנות הבינה המלאכותית</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%236B46C1' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: transparent; /* Let the canvas be the background */
+            cursor: none; /* Hide default cursor */
+        }
+        h1, h2, h3 {
+            font-family: 'Amatic SC', cursive;
+            font-weight: 700;
+        }
+        /* Custom cursor style */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease-out, height 0.2s ease-out;
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), /* Dark shadow for contrast */
+                        0 0 10px rgba(107, 46, 178, 0.7); /* Impressionistic glow */
+        }
+        .custom-cursor.active {
+            width: 30px;
+            height: 30px;
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8),
+                        0 0 20px rgba(107, 46, 178, 1); /* Stronger glow on hover */
+        }
+        /* Impressionistic scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 60px;
+            border: 2px solid rgba(255,255,255,0.7);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .scroll-indicator::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background-color: #fca311;
+            border-radius: 50%;
+            animation: scroll-anim 2s infinite ease-in-out;
+        }
+        @keyframes scroll-anim {
+            0% { transform: translateY(-10px); opacity: 0; }
+            50% { transform: translateY(10px); opacity: 1; }
+            100% { transform: translateY(30px); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="text-gray-100 min-h-screen overflow-x-hidden">
+
+    <!-- Generative Impressionistic Canvas Background -->
+    <canvas id="impressionisticCanvas" class="fixed inset-0 w-full h-full z-[-1]"></canvas>
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator"></div>
+
+    <!-- Main Content Wrapper -->
+    <main class="relative z-10 p-4 md:p-8 lg:p-12 max-w-7xl mx-auto">
+
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-screen flex flex-col justify-center items-center text-center py-20 px-4">
+            <h1 class="text-6xl md:text-8xl lg:text-9xl text-white drop-shadow-lg leading-tight mb-4 animate-fade-in-up">
+                אימפרסיוניזם דיגיטלי: אמנות הבינה המלאכותית
+            </h1>
+            <p class="text-2xl md:text-4xl lg:text-5xl text-purple-200 drop-shadow-md leading-relaxed animate-fade-in-up delay-200">
+                העתיד נצבע עכשיו - צבעי הדמיון, מברשת ה-AI
+            </p>
+            <a href="#about" class="mt-12 px-8 py-3 bg-purple-600 text-white text-xl md:text-2xl rounded-full shadow-lg hover:bg-purple-700 transition duration-300 transform hover:scale-105 animate-fade-in-up delay-400">
+                התחילו לצייר את העתיד שלכם
+            </a>
+        </section>
+
+        <!-- Introduction - The New Impressionism -->
+        <section id="about" class="py-20 px-4 md:px-8 bg-gradient-to-t from-transparent to-black/30 backdrop-blur-sm rounded-lg my-16 text-center shadow-2xl">
+            <h2 class="text-5xl md:text-7xl text-yellow-300 mb-8 drop-shadow-lg">המבוא לאימפרסיוניזם החדש</h2>
+            <p class="text-lg md:text-xl lg:text-2xl leading-loose max-w-4xl mx-auto text-gray-200">
+                בעולם שמתפתח במהירות הבזק, היכולת לשלוט בבינה המלאכותית אינה עוד מותרות, אלא מפתח ליצירה. אנו מזמינים אתכם למסע אמנותי, שבו כל פיקסל קוד הופך למשיכת מכחול, וכל אלגוריתם - לסימפוניה של חדשנות. זוהי קריאה לאמנים, ליזמים, לחולמים - לבוא ולצייר את העתיד, בעזרת הכלים העוצמתיים ביותר של העידן הדיגיטלי. הפיכת AI לנגיש וישים לכולם - מהתחלה ועד רמה מתקדמת, עם כלים מעשיים שניתן ליישם מיד בעבודה ובחיים.
+            </p>
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
+                <div class="bg-white/10 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105">
+                    <h3 class="text-3xl text-orange-300 mb-3">למתחילים</h3>
+                    <p class="text-gray-300">הצעד הראשון לעולם קסום ופורץ דרך.</p>
+                </div>
+                <div class="bg-white/10 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105">
+                    <h3 class="text-3xl text-green-300 mb-3">למקצוענים</h3>
+                    <p class="text-gray-300">כלים פרקטיים להטמעת AI בעבודה יומיומית.</p>
+                </div>
+                <div class="bg-white/10 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105">
+                    <h3 class="text-3xl text-blue-300 mb-3">לארגונים</h3>
+                    <p class="text-gray-300">הדרכות מותאמות להעצמת צוותים טכנולוגיים.</p>
+                </div>
+                <div class="bg-white/10 p-6 rounded-xl shadow-lg hover:shadow-xl transition duration-300 transform hover:scale-105">
+                    <h3 class="text-3xl text-purple-300 mb-3">למפתחים</h3>
+                    <p class="text-gray-300">ליווי ופיתוח פרויקטים מבוססי AI מורכבים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Brushstrokes - Areas of Expertise -->
+        <section id="expertise" class="py-20 px-4 md:px-8 text-center bg-gradient-to-b from-transparent to-black/30 backdrop-blur-sm rounded-lg my-16 shadow-2xl">
+            <h2 class="text-5xl md:text-7xl text-teal-300 mb-12 drop-shadow-lg">משיכות המכחול שלנו</h2>
+            <p class="text-xl md:text-2xl leading-loose max-w-4xl mx-auto text-gray-200 mb-12">
+                כמו אמן המכיר כל גוון בפלטה שלו, אנו מציעים שליטה במגוון רחב של טכניקות AI, כל אחת היא משיכת מכחול ייחודית המעצבת את יצירת המופת שלכם:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="flex flex-col items-center bg-white/10 p-8 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-2">
+                    <div class="text-5xl mb-4 text-pink-300">✍️</div>
+                    <h3 class="text-3xl text-pink-300 mb-3">יצירת טקסטים ותוכן</h3>
+                    <p class="text-gray-300">מילים נרקמות באור - הפיכת רעיונות לסיפורים מרתקים, בלוגים, קמפיינים שובי לב.</p>
+                </div>
+                <div class="flex flex-col items-center bg-white/10 p-8 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-2">
+                    <div class="text-5xl mb-4 text-yellow-300">📱</div>
+                    <h3 class="text-3xl text-yellow-300 mb-3">בניית אפליקציות חכמות</h3>
+                    <p class="text-gray-300">מנגינות דיגיטליות - פיתוח יישומים חכמים המגיבים, לומדים ומפשטים את חיינו.</p>
+                </div>
+                <div class="flex flex-col items-center bg-white/10 p-8 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-2">
+                    <div class="text-5xl mb-4 text-blue-300">🌐</div>
+                    <h3 class="text-3xl text-blue-300 mb-3">פיתוח אתרים מבוססי AI</h3>
+                    <p class="text-gray-300">קנבס אינטראקטיבי - אתרים שנושמים, חיים, ומציעים חוויה אישית ובלתי נשכחת.</p>
+                </div>
+                <div class="flex flex-col items-center bg-white/10 p-8 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-2">
+                    <div class="text-5xl mb-4 text-green-300">📊</div>
+                    <h3 class="text-3xl text-green-300 mb-3">ניתוח נתונים ומחקר</h3>
+                    <p class="text-gray-300">מבט מעמיק מעבר למראה - חשיפת תובנות נסתרות מתוך ים הנתונים, להחלטות מושכלות יותר.</p>
+                </div>
+                <div class="flex flex-col items-center bg-white/10 p-8 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-2">
+                    <div class="text-5xl mb-4 text-purple-300">🎨</div>
+                    <h3 class="text-3xl text-purple-300 mb-3">יצירת תמונות ואומנות</h3>
+                    <p class="text-gray-300">צבעים פורצים מהקוד - הגשמת חזונות ויזואליים, יצירת אומנות דיגיטלית חדשנית.</p>
+                </div>
+                <div class="flex flex-col items-center bg-white/10 p-8 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-2">
+                    <div class="text-5xl mb-4 text-orange-300">🤖</div>
+                    <h3 class="text-3xl text-orange-300 mb-3">אוטומציה של תהליכים</h3>
+                    <p class="text-gray-300">ריקוד יעיל - פישוט משימות חוזרות ונשנות, שחרור זמן לאמתית היצירה.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Our Artistic Studio - Services Offered -->
+        <section id="services" class="py-20 px-4 md:px-8 text-center bg-gradient-to-t from-transparent to-black/30 backdrop-blur-sm rounded-lg my-16 shadow-2xl">
+            <h2 class="text-5xl md:text-7xl text-fuchsia-300 mb-12 drop-shadow-lg">הסטודיו האמנותי שלנו</h2>
+            <p class="text-xl md:text-2xl leading-loose max-w-4xl mx-auto text-gray-200 mb-12">
+                בין אם אתם מציירים את ציורכם הראשון או עומדים בפני פרויקט מונומנטלי, הסטודיו שלנו מציע את הסדנאות וההדרכה המושלמת עבורכם:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="bg-white/10 p-8 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 transform hover:rotate-1">
+                    <div class="text-5xl mb-4 text-sky-300">👥</div>
+                    <h3 class="text-3xl text-sky-300 mb-3">סדנאות קבוצתיות</h3>
+                    <p class="text-gray-300">מעגלי יצירה - מפגשים מעשיים, קבוצתיים, המעניקים כלים וטכניקות יישומיות.</p>
+                </div>
+                <div class="bg-white/10 p-8 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-rotate-1">
+                    <div class="text-5xl mb-4 text-lime-300">🧑‍🎨</div>
+                    <h3 class="text-3xl text-lime-300 mb-3">שיעורים פרטיים</h3>
+                    <p class="text-gray-300">ליווי אישי - נתיב אומנותי מותאם אישית, המלווה אתכם צעד אחר צעד בקצב שלכם.</p>
+                </div>
+                <div class="bg-white/10 p-8 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 transform hover:rotate-1">
+                    <div class="text-5xl mb-4 text-red-300">🎤</div>
+                    <h3 class="text-3xl text-red-300 mb-3">הרצאות לארגונים</h3>
+                    <p class="text-gray-300">השראת הצבע - פתיחת אופקים חדשים לצוותים, הצגת העוצמה והפוטנציאל של ה-AI.</p>
+                </div>
+                <div class="bg-white/10 p-8 rounded-2xl shadow-lg hover:shadow-xl transition duration-300 transform hover:-rotate-1">
+                    <div class="text-5xl mb-4 text-indigo-300">🛠️</div>
+                    <h3 class="text-3xl text-indigo-300 mb-3">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-gray-300">הגשמת החזון - ליווי מקצועי מפיתוח הרעיון ועד למימוש פרויקטי AI מורכבים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Maestro - Zavik Aviner -->
+        <section id="contact" class="py-20 px-4 md:px-8 text-center bg-gradient-to-b from-transparent to-black/30 backdrop-blur-sm rounded-lg my-16 shadow-2xl">
+            <h2 class="text-5xl md:text-7xl text-amber-300 mb-12 drop-shadow-lg">המאסטרו - זאביק אבינר</h2>
+            <div class="flex flex-col lg:flex-row items-center justify-center gap-12 max-w-5xl mx-auto">
+                <div class="w-full lg:w-1/3 flex justify-center">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונת זאביק אבינר - מומחה בינה מלאכותית" class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover border-4 border-purple-500 shadow-xl transition-transform duration-300 hover:scale-105">
+                </div>
+                <div class="w-full lg:w-2/3 text-lg md:text-xl lg:text-2xl leading-loose text-gray-200 text-start">
+                    <p class="mb-6">
+                        מאחורי כל יצירת מופת עומד אמן עם חזון. זאביק אבינר, מומחה לבינה מלאכותית ומנטור בעל ניסיון עשיר, הוא המאסטרו שינחה אתכם במסע אל עולם ה-AI. עם ידע מעמיק בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק מתמחה בהנגשת הטכנולוגיה המורכבת והפיכתה לכלי עבודה יומיומי ונגיש לכל.
+                    </p>
+                    <p class="text-2xl md:text-3xl text-purple-400 font-bold mb-4">צרו קשר והתחילו לצייר את העתיד:</p>
+                    <ul class="space-y-3">
+                        <li>
+                            <a href="https://wa.me/972546609385" target="_blank" class="flex items-center text-gray-100 hover:text-green-400 transition-colors duration-300">
+                                <span class="ml-4 text-3xl">📱</span> <span class="text-xl md:text-2xl">וואטסאפ: 054-6609385</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="mailto:zaviner@gmail.com" class="flex items-center text-gray-100 hover:text-red-400 transition-colors duration-300">
+                                <span class="ml-4 text-3xl">📧</span> <span class="text-xl md:text-2xl">אימייל: zaviner@gmail.com</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+        document.addEventListener('mouseover', (e) => {
+            const target = e.target;
+            if (target.tagName === 'A' || target.tagName === 'BUTTON' || target.closest('a') || target.closest('button')) {
+                customCursor.classList.add('active');
+            }
+        });
+        document.addEventListener('mouseout', (e) => {
+            const target = e.target;
+            if (target.tagName === 'A' || target.tagName === 'BUTTON' || target.closest('a') || target.closest('button')) {
+                customCursor.classList.remove('active');
+            }
+        });
+
+        // Impressionistic Canvas Background Logic
+        const canvas = document.getElementById('impressionisticCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const colors = [
+            'rgba(107, 46, 178, 0.5)', // Muted Purple
+            'rgba(156, 39, 176, 0.5)', // Violet
+            'rgba(66, 153, 225, 0.5)', // Blue
+            'rgba(49, 196, 141, 0.5)', // Teal
+            'rgba(251, 191, 36, 0.5)', // Yellow
+            'rgba(245, 158, 11, 0.5)', // Orange
+            'rgba(239, 68, 68, 0.5)', // Red
+        ];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            // Clear and re-draw particles or re-initialize to avoid stale positions
+            if (particles.length === 0) {
+                initParticles();
+            }
+        }
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 50 + 20; // Varied sizes for brush strokes
+                this.speedX = Math.random() * 2 - 1; // -1 to 1
+                this.speedY = Math.random() * 2 - 1;
+                this.color = color;
+                this.opacity = Math.random() * 0.5 + 0.2; // Semi-transparent
+                this.life = 0;
+                this.maxLife = Math.random() * 200 + 100; // Lifespan of particle
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.opacity -= 0.005; // Fade out
+                this.life++;
+
+                // Bounce off edges
+                if (this.x + this.size / 2 > canvas.width || this.x - this.size / 2 < 0) {
+                    this.speedX *= -1;
+                }
+                if (this.y + this.size / 2 > canvas.height || this.y - this.size / 2 < 0) {
+                    this.speedY *= -1;
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, this.opacity); // Ensure opacity doesn't go below 0
+                ctx.filter = `blur(${this.size / 4}px)`; // Impressionistic blur
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 50; i++) { // Initial number of particles
+                createParticle(Math.random() * canvas.width, Math.random() * canvas.height);
+            }
+        }
+
+        function createParticle(x, y) {
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            particles.push(new Particle(x, y, randomColor));
+        }
+
+        let mouse = { x: undefined, y: undefined };
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = event.x;
+            mouse.y = event.y;
+            // Add a new particle near the mouse
+            if (Math.random() < 0.3) { // Reduced frequency
+                createParticle(mouse.x + Math.random() * 20 - 10, mouse.y + Math.random() * 20 - 10);
+            }
+        });
+        window.addEventListener('mouseleave', () => {
+            mouse.x = undefined;
+            mouse.y = undefined;
+        });
+
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear entire canvas each frame
+            // Or use a low-opacity fill for a trailing effect:
+            // ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; // Slightly darken each frame
+            // ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                if (particles[i].opacity <= 0 || particles[i].life >= particles[i].maxLife) {
+                    particles.splice(i, 1);
+                    i--; // Adjust index after splice
+                }
+            }
+
+            // Maintain a minimum number of particles
+            while (particles.length < 30) {
+                createParticle(Math.random() * canvas.width, Math.random() * canvas.height);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('load', () => {
+            resizeCanvas();
+            initParticles();
+            animate();
+        });
+        window.addEventListener('resize', resizeCanvas);
+
+        // Scroll indicator fade
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                scrollIndicator.style.opacity = '0';
+                scrollIndicator.style.transition = 'opacity 0.5s ease-out';
+            } else {
+                scrollIndicator.style.opacity = '1';
+            }
+        });
+    </script>
+</body>
+</html>

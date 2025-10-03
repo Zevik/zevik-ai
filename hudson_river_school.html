@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פסגות התבונה המלאכותית: נופי העתיד נפרשים</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Noto Sans Hebrew', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            background-color: #0d1226; /* Deep dark blue for absolute base */
+        }
+        h1, h2 {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Custom scrollbar for artistic feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d1226; /* Dark background */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #7a6e60, #a09486); /* Earthy, metallic gradient */
+            border-radius: 4px;
+            border: 1px solid #5a4f40;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(to bottom, #8a7e70, #b0a496);
+        }
+
+        /* Parallax layers base styles */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            will-change: transform;
+            background-size: cover;
+            background-position: center bottom;
+        }
+
+        /* Custom cursor styles */
+        #custom-cursor {
+            position: fixed;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.7); /* Dark shadow */
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease, height 0.2s ease, transform 0.05s linear;
+        }
+        a:hover ~ #custom-cursor, button:hover ~ #custom-cursor, .interactive-element:hover ~ #custom-cursor {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Specific styles for content presentation */
+        .content-card {
+            background: linear-gradient(135deg, rgba(13, 18, 38, 0.7), rgba(28, 41, 64, 0.7)); /* Misty, deep blue */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(122, 110, 96, 0.3); /* Subtle golden edge */
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            padding: 2.5rem;
+            margin-bottom: 4rem;
+            border-radius: 12px;
+            color: #e0e7ff; /* Light bluish-white */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .content-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 48px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        .golden-glow {
+            text-shadow: 0 0 5px #ffeb3b, 0 0 10px #ffeb3b, 0 0 15px rgba(255,235,59,0.5);
+        }
+
+        .interactive-text span {
+            display: inline-block;
+            transition: transform 0.2s ease-out, color 0.2s ease-out;
+        }
+        .interactive-text span:hover {
+            transform: translateY(-3px) scale(1.05);
+            color: #ffeb3b; /* Golden hover for text */
+        }
+    </style>
+</head>
+<body class="text-white">
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Layers (Hudson River School Landscape) -->
+    <!-- Far Background - Distant Sky & Mountains -->
+    <div class="parallax-layer z-[-6]" style="background: linear-gradient(to top, #101530 0%, #1a224a 50%, #2f3a6b 100%);"></div>
+    
+    <!-- Mid Background - Hills & Misty Horizon -->
+    <div class="parallax-layer z-[-5]" data-speed="0.2" style="background: url('data:image/svg+xml;utf8,<svg width=\'100%25\' height=\'100%25\' viewBox=\'0 0 100 100\' xmlns=\'http://www.w3.org/2000/svg\'><defs><linearGradient id=\'grad\' x1=\'0%25\' y1=\'0%25\' x2=\'0%25\' y2=\'100%25\'><stop offset=\'0%25\' stop-color=\'%23000000\' stop-opacity=\'0\'/><stop offset=\'50%25\' stop-color=\'%23000000\' stop-opacity=\'0.2\'/><stop offset=\'100%25\' stop-color=\'%230a1024\' stop-opacity=\'0.7\'/></linearGradient></defs><rect width=\'100%25\' height=\'100%25\' fill=\'url(%23grad)\'/></svg>') no-repeat center bottom / 100% 100%, linear-gradient(to top, rgba(20, 25, 45, 0.8) 0%, rgba(30, 38, 65, 0.5) 50%, transparent 100%);"></div>
+
+    <!-- Foreground - Water/Ground Mist -->
+    <div class="parallax-layer z-[-4]" data-speed="0.4" style="background: url('data:image/svg+xml;utf8,<svg width=\'100%25\' height=\'100%25\' viewBox=\'0 0 100 100\' xmlns=\'http://www.w3.org/2000/svg\'><defs><linearGradient id=\'grad\' x1=\'0%25\' y1=\'0%25\' x2=\'0%25\' y2=\'100%25\'><stop offset=\'0%25\' stop-color=\'%23000000\' stop-opacity=\'0\'/><stop offset=\'70%25\' stop-color=\'%23000000\' stop-opacity=\'0.3\'/><stop offset=\'100%25\' stop-color=\'%230a1024\' stop-opacity=\'0.8\'/></linearGradient></defs><rect width=\'100%25\' height=\'100%25\' fill=\'url(%23grad)\'/></svg>') no-repeat center bottom / 100% 100%, linear-gradient(to top, rgba(25, 30, 50, 0.9) 0%, rgba(35, 45, 75, 0.6) 70%, transparent 100%);"></div>
+    
+    <!-- Closest Foreground Mist -->
+    <div class="parallax-layer z-[-3]" data-speed="0.6" style="background: linear-gradient(to top, rgba(30, 35, 60, 0.95) 0%, rgba(40, 50, 80, 0.8) 50%, transparent 100%);"></div>
+
+    <!-- Main Content Area -->
+    <div class="relative z-10 min-h-screen pt-20 pb-40 px-6 sm:px-10 md:px-20 lg:px-32 xl:px-48 flex flex-col items-center">
+
+        <!-- Title / Main Theme -->
+        <h1 class="text-6xl sm:text-7xl md:text-8xl lg:text-9xl text-center leading-tight mt-16 mb-24 golden-glow" style="direction: rtl;">
+            <span class="block mb-4">פסגות התבונה המלאכותית:</span>
+            <span class="block">נופי העתיד נפרשים</span>
+        </h1>
+
+        <!-- Main Message -->
+        <div class="w-full max-w-4xl text-lg sm:text-xl md:text-2xl content-card text-center leading-relaxed">
+            <h2 class="text-3xl sm:text-4xl golden-glow mb-6">עידן חדש עולה</h2>
+            <p class="interactive-text">
+                <span class="block mb-4">בליבו של נוף דיגיטלי נרחב, נפרשת ארץ חדשה – הבינה המלאכותית.</span>
+                <span class="block mb-4">היא אינה ערפל רחוק, אלא נהר אדיר שמחכה שתלמדו לשוט בו.</span>
+                <span class="block mb-4">אנו מציעים לכם מפות עתיקות וכלים חדשניים, להפוך את הנסתר לגלוי,</span>
+                <span class="block mb-4">את המורכב לפשוט, ואת החזון למציאות יומיומית.</span>
+                <span class="block">הצטרפו למסע בו כל אחד הופך ליוצר, למגלה, ולשליט על כוחות העידן החדש.</span>
+            </p>
+        </div>
+
+        <!-- Target Audience -->
+        <div class="w-full max-w-4xl text-lg sm:text-xl content-card text-right">
+            <h2 class="text-3xl sm:text-4xl golden-glow mb-6 text-center">נוסעים בנתיבי העתיד:</h2>
+            <ul class="list-none space-y-4 pr-0">
+                <li class="flex items-start">
+                    <span class="text-yellow-400 text-3xl ml-4">›</span>
+                    <span><span class="font-bold golden-glow">המהססים לפסוע</span> – אל עבר האופק הדיגיטלי, אלו שרק מתחילים לחקור את הפינות הראשונות של הממלכה הדיגיטלית.</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-yellow-400 text-3xl ml-4">›</span>
+                    <span><span class="font-bold golden-glow">המבקשים לחרוש נתיבים חדשים</span> – אנשי מקצוע המעוניינים לשלב את כוח ה-AI בעבודתם ולפרוץ גבולות.</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-yellow-400 text-3xl ml-4">›</span>
+                    <span><span class="font-bold golden-glow">מנהיגי השבטים</span> – מנהלים וארגונים השואפים להאיר את דרך צוותיהם לעתיד טכנולוגי.</span>
+                </li>
+                <li class="flex items-start">
+                    <span class="text-yellow-400 text-3xl ml-4">›</span>
+                    <span><span class="font-bold golden-glow">פורצי הדרך</span> – בונים את המחר במו ידיהם הווירטואליות, המעוניינים בפיתוח פרויקטים מתקדמים מבוססי AI.</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Areas of Expertise -->
+        <div class="w-full max-w-4xl text-lg sm:text-xl content-card text-right">
+            <h2 class="text-3xl sm:text-4xl golden-glow mb-6 text-center">מערכות אקולוגיות של יצירה:</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="flex items-start interactive-element">
+                    <span class="text-emerald-400 text-2xl ml-3">◆</span>
+                    <span><span class="font-bold golden-glow">לשונות הטקסט</span> – ליצור סיפורים, מאמרים ותוכן פורץ דרך.</span>
+                </div>
+                <div class="flex items-start interactive-element">
+                    <span class="text-emerald-400 text-2xl ml-3">◆</span>
+                    <span><span class="font-bold golden-glow">אדריכלות יישומים</span> – לבנות עולמות חכמים ואפליקציות מבוססות בינה.</span>
+                </div>
+                <div class="flex items-start interactive-element">
+                    <span class="text-emerald-400 text-2xl ml-3">◆</span>
+                    <span><span class="font-bold golden-glow">שבילי אתרים</span> – להקים ממלכות דיגיטליות מבוססות תבונה.</span>
+                </div>
+                <div class="flex items-start interactive-element">
+                    <span class="text-emerald-400 text-2xl ml-3">◆</span>
+                    <span><span class="font-bold golden-glow">מעמקי הנתונים</span> – לפענח את סודות המידע ולגלות תובנות.</span>
+                </div>
+                <div class="flex items-start interactive-element">
+                    <span class="text-emerald-400 text-2xl ml-3">◆</span>
+                    <span><span class="font-bold golden-glow">מכחול האמנות</span> – ליצור יופי ואמנות בעידן חדש בעזרת AI.</span>
+                </div>
+                <div class="flex items-start interactive-element">
+                    <span class="text-emerald-400 text-2xl ml-3">◆</span>
+                    <span><span class="font-bold golden-glow">זרמי אוטומציה</span> – להזרים תהליכים אל חופש ויעילות.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Offered -->
+        <div class="w-full max-w-4xl text-lg sm:text-xl content-card text-right">
+            <h2 class="text-3xl sm:text-4xl golden-glow mb-6 text-center">מגדלורים במסע:</h2>
+            <ul class="list-none space-y-4 pr-0">
+                <li class="flex items-start interactive-element">
+                    <span class="text-yellow-400 text-3xl ml-4">●</span>
+                    <span><span class="font-bold golden-glow">סדנאות בלב הקהילה</span> – מסעות קבוצתיים מעשיים וממוקדים, המשלבים ידע וניסיון.</span>
+                </li>
+                <li class="flex items-start interactive-element">
+                    <span class="text-yellow-400 text-3xl ml-4">●</span>
+                    <span><span class="font-bold golden-glow">שיעורים פרטיים</span> – מפה אישית לכל מטייל, המותאמת לרמה ולצרכים הייחודיים.</span>
+                </li>
+                <li class="flex items-start interactive-element">
+                    <span class="text-yellow-400 text-3xl ml-4">●</span>
+                    <span><span class="font-bold golden-glow">הרצאות לארגונים</span> – להאיר את הדרך בפני צוותים שלמים ולפתוח אופקים חדשים.</span>
+                </li>
+                <li class="flex items-start interactive-element">
+                    <span class="text-yellow-400 text-3xl ml-4">●</span>
+                    <span><span class="font-bold golden-glow">ייעוץ ופיתוח פרויקטים</span> – ליווי צמוד לפריצת דרך, מהרעיון ועד למימוש מלא.</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- The Guide - Zevik Aviner -->
+        <div class="w-full max-w-4xl text-lg sm:text-xl content-card text-center flex flex-col items-center">
+            <h2 class="text-3xl sm:text-4xl golden-glow mb-6">המדריך – זאביק אבינר: נווט העידן הדיגיטלי</h2>
+            <div class="relative w-48 h-48 sm:w-64 sm:h-64 rounded-full overflow-hidden mb-6 border-4 border-yellow-400 shadow-lg">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר - מומחה בינה מלאכותית" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500 ease-in-out">
+            </div>
+            <p class="leading-relaxed mb-4 text-right">
+                <span class="interactive-text">מגלה ארצות ותיק בעולם הבינה המלאכותית, זאביק אבינר הוא המצפן החי שלכם.</span>
+                <span class="interactive-text block mt-2">עם ניסיון עשיר בבניית גשרים דיגיטליים ופיתוח פרויקטים מורכבים, הוא מנגיש את הפלא הטכנולוגי והופך אותו לכלי אומן בידי כל אחד.</span>
+                <span class="interactive-text block mt-2">הוא מבין את השפה הסודית של המכונות ומתרגם אותה ללחישות המנחות אתכם אל היעדים הרחוקים ביותר.</span>
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 mt-6 text-xl">
+                <a href="https://wa.me/972546609385" target="_blank" rel="noopener noreferrer" class="text-green-300 hover:text-green-200 transition-colors duration-300 flex items-center justify-center">
+                    <svg class="w-6 h-6 ml-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12.04 2C6.54 2 2.06 6.54 2.06 12.04c0 1.76.47 3.46 1.37 4.96L2 22l5.03-1.37a9.92 9.92 0 005.01 1.37c5.5 0 9.98-4.54 9.98-10.04S17.54 2 12.04 2zM17.5 15.65c-.24.4-.65.4-.9.24L14.4 13.9c-.16-.08-.4-.05-.5.1l-.76 1c-.13.16-.38.16-.58.07L10 13.6c-1.36-.8-2.28-2-2.9-3.23-.1-.2-.03-.4.1-.5l1-1c.15-.15.2-.4.1-.55L9 8.24c-.1-.16-.36-.2-.55-.1L7.7 8.5c-.5.3-.95.7-1.34 1.2-.4.5-.7 1.1-.85 1.7-.15.6-.2 1.3-.05 1.9.36.9.9 1.6 1.55 2.25l2.75 2.75c.6.6 1.3.9 2.1.9.7 0 1.4-.2 2.05-.4l.3-.1c.16-.06.4-.04.5.1l.6 1c.13.2.13.4.05.6l-.3 1c-.05.1-.05.15-.1.2-.15.15-.2.2-.3.2-.2 0-.4-.05-.6-.1z"/>
+                    </svg>
+                    <span>ווטסאפ: 054-6609385</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="text-blue-300 hover:text-blue-200 transition-colors duration-300 flex items-center justify-center">
+                    <svg class="w-6 h-6 ml-2" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                    </svg>
+                    <span>אימייל: zaviner@gmail.com</span>
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Custom Cursor JS
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Parallax Scrolling JS
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+        window.addEventListener('scroll', () => {
+            let scrollY = window.scrollY;
+            parallaxLayers.forEach(layer => {
+                const speed = parseFloat(layer.dataset.speed);
+                if (!isNaN(speed)) {
+                    layer.style.transform = `translateY(${scrollY * speed}px)`;
+                }
+            });
+        });
+
+        // Interactive Text Effect JS
+        document.querySelectorAll('.interactive-text').forEach(textBlock => {
+            const originalText = textBlock.innerHTML;
+            let animatedText = '';
+            originalText.split('').forEach(char => {
+                if (char === ' ') {
+                    animatedText += '&nbsp;'; // Preserve spaces
+                } else if (char === '<') { // Handle HTML tags if any, though content is pure text
+                    animatedText += char;
+                } else {
+                    animatedText += `<span>${char}</span>`;
+                }
+            });
+            textBlock.innerHTML = animatedText;
+        });
+
+        // Animate content cards on scroll
+        const contentCards = document.querySelectorAll('.content-card');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                } else {
+                    // Optional: make them disappear when scrolled out
+                    // entry.target.classList.add('opacity-0', 'translate-y-10');
+                    // entry.target.classList.remove('opacity-100', 'translate-y-0');
+                }
+            });
+        }, observerOptions);
+
+        contentCards.forEach(card => {
+            card.classList.add('opacity-0', 'translate-y-10', 'transition-all', 'duration-700', 'ease-out'); // Initial hidden state
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>

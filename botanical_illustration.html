@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>גן הידע הדיגיטלי - זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@300;400;700&family=Noto+Serif+Hebrew:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Colors & Fonts */
+        :root {
+            --color-leaf-green: hsla(120, 30%, 40%, 1); /* Darker forest green */
+            --color-moss-green: hsla(90, 40%, 60%, 1); /* Moss green */
+            --color-sage-pale: hsla(100, 20%, 80%, 1); /* Pale sage */
+            --color-soil-dark: hsla(20, 30%, 30%, 1); /* Dark soil brown */
+            --color-parchment: hsla(40, 20%, 95%, 1); /* Parchment white */
+            --color-beige-light: hsla(30, 15%, 85%, 1); /* Light beige */
+            --color-rose-dusty: hsla(10, 25%, 65%, 1); /* Dusty rose accent */
+            --color-lavender-muted: hsla(300, 20%, 70%, 1); /* Muted lavender accent */
+            --color-text-dark: var(--color-soil-dark);
+            --color-text-light: var(--color-parchment);
+            --font-serif: 'Noto Serif Hebrew', serif;
+            --font-sans: 'Noto Sans Hebrew', sans-serif;
+            
+            /* RGB equivalents for box-shadows */
+            --color-leaf-green-rgb: 68, 119, 51;
+            --color-moss-green-rgb: 150, 204, 115;
+            --color-soil-dark-rgb: 77, 61, 46;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            color: var(--color-text-dark);
+            background-color: var(--color-beige-light);
+            overflow: hidden; /* Prevent default body scroll */
+            cursor: none; /* Hide default cursor */
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: var(--font-serif);
+        }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease-out, height 0.2s ease-out, opacity 0.2s ease-out;
+            border: 2px solid var(--color-text-light); /* Light border for contrast */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+            opacity: 1; /* Ensure visible */
+        }
+        #custom-cursor.active {
+            width: 30px;
+            height: 30px;
+        }
+
+        /* Parallax Container */
+        .parallax-container {
+            height: 100vh;
+            overflow-x: hidden;
+            overflow-y: auto;
+            perspective: 1px;
+            scroll-behavior: smooth;
+            position: relative;
+        }
+
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            transform-origin: 0 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none; /* Allows clicks to pass through to content */
+        }
+
+        /* Background Layers (adjust z and transform values for parallax) */
+        .parallax-layer-0 { /* Furthest back */
+            transform: translateZ(-2px) scale(3);
+            background: linear-gradient(to bottom, var(--color-beige-light), var(--color-sage-pale));
+            pointer-events: none;
+        }
+        .parallax-layer-1 { /* Mid-ground, subtle organic shapes */
+            transform: translateZ(-1.5px) scale(2.5);
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23BCAEA0' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M0 60V0h60v60h-4v-6c0-2.21 1.79-4 4-4s4 1.79 4 4v6h-4zm0-6v6h60v-6h-4c-2.21 0-4 1.79-4 4s1.79 4 4 4h-4zm-4-4v4h60v-4h-4c-2.21 0-4 1.79-4 4s1.79 4 4 4h-4z' /%3E%3C/g%3E%3C/svg%3E"); /* Faint soil pattern */
+            background-size: 60px 60px;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        .parallax-layer-2 { /* Foreground, more detailed botanical outlines */
+            transform: translateZ(-1px) scale(2);
+            opacity: 0.5;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23C3BEB5' fill-opacity='0.5'%3E%3Cpath d='M25 0V60L0 75V100L50 50L100 100V75L75 60V0H25Z'/%3E%3C/g%3E%3C/svg%3E"); /* Abstract leaf pattern */
+            background-size: 150px 150px;
+            pointer-events: none;
+        }
+
+        /* Content layer */
+        .content-layer {
+            transform: translateZ(0); /* Ensures this layer is effectively at Z=0 for perspective */
+            position: relative;
+            z-index: 10;
+            min-height: 100vh; /* Ensure content is scrollable */
+            padding: 4rem 2rem;
+            color: var(--color-text-dark);
+            pointer-events: auto; /* Allows interaction with content */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Botanical specific styling for sections */
+        .leaf-frame {
+            position: relative;
+            background: rgba(255, 255, 255, 0.7); /* Semi-transparent white */
+            border-radius: 1rem;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(var(--color-leaf-green-rgb), 0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(var(--color-moss-green-rgb), 0.3);
+            max-width: 800px;
+            width: 90%;
+            transition: all 0.3s ease-in-out;
+            pointer-events: auto;
+            opacity: 0; /* Hidden by default for JS animation */
+            transform: translateY(50px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .leaf-frame.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .leaf-frame:hover {
+            box-shadow: 0 15px 40px rgba(var(--color-leaf-green-rgb), 0.2);
+            transform: translateY(-5px);
+        }
+
+        .section-title {
+            color: var(--color-leaf-green);
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background-color: var(--color-moss-green);
+            margin: 1rem auto 0;
+            border-radius: 1px;
+        }
+
+        /* Specific botanical element styles */
+        .branch-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+            opacity: 0; /* Hidden by default for JS animation */
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            position: relative;
+            padding-right: 2rem; /* Space for the icon */
+        }
+        .branch-item.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .branch-icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            margin-left: 1rem;
+            color: var(--color-moss-green);
+            transform: rotateY(0deg);
+            transition: transform 0.3s ease-in-out;
+        }
+        .branch-item:hover .branch-icon {
+            transform: rotateY(180deg);
+        }
+
+        .service-card {
+            background-color: var(--color-parchment);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 1rem;
+            box-shadow: 0 4px 15px rgba(var(--color-soil-dark-rgb), 0.05);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            border-right: 4px solid var(--color-moss-green); /* Subtle accent */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 150px;
+            max-width: 300px;
+            width: 100%;
+        }
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 25px rgba(var(--color-soil-dark-rgb), 0.1);
+            border-right-color: var(--color-leaf-green);
+        }
+        .service-card h3 {
+            color: var(--color-leaf-green);
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-family: var(--font-serif);
+        }
+        .service-card p {
+            color: var(--color-text-dark);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        .zevik-card {
+            background-color: var(--color-parchment);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            margin-top: 3rem;
+            box-shadow: 0 10px 30px rgba(var(--color-leaf-green-rgb), 0.1);
+            border: 1px solid rgba(var(--color-moss-green-rgb), 0.3);
+            max-width: 600px;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .zevik-card.is-visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .zevik-image-frame {
+            border-radius: 50%;
+            border: 5px solid var(--color-moss-green);
+            padding: 5px;
+            background-color: var(--color-parchment);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease-in-out;
+        }
+        .zevik-image-frame:hover {
+            transform: scale(1.05) rotate(2deg);
+            border-color: var(--color-leaf-green);
+        }
+        .zevik-image {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        /* Generic utilities for alignment/spacing (Tailwind-like) */
+        .flex-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .p-8 { padding: 2rem; }
+        .py-16 { padding-top: 4rem; padding-bottom: 4rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mt-12 { margin-top: 3rem; }
+        .grid { display: grid; }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .md\:grid-cols-2 {
+            @media (min-width: 768px) {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+        .lg\:grid-cols-3 {
+            @media (min-width: 1024px) {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+        .lg\:grid-cols-4 {
+            @media (min-width: 1024px) {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+        .gap-8 { gap: 2rem; }
+    </style>
+</head>
+<body>
+    <div id="custom-cursor"></div>
+
+    <div class="parallax-container">
+        <!-- Background Layers (furthest to closest) -->
+        <div class="parallax-layer parallax-layer-0"></div>
+        <div class="parallax-layer parallax-layer-1"></div>
+        <div class="parallax-layer parallax-layer-2"></div>
+
+        <!-- Content Layer -->
+        <div class="content-layer">
+            <h1 class="text-5xl md:text-6xl font-extrabold text-center section-title !mb-4 !text-leaf-green" style="--color-leaf-green: var(--color-leaf-green);">
+                לשלוט בבינה המלאכותית: מסע אל לב גן הידע הדיגיטלי
+            </h1>
+            <p class="text-xl text-center mb-12 max-w-2xl leading-relaxed text-soil-dark" style="color: var(--color-text-dark);">
+                ברוכים הבאים לגן שבו חדשנות פורחת וידע דיגיטלי נבט. כאן, אנו מטפחים את היכולת להפוך את הבינה המלאכותית (AI) לכלי אישי וישים. זרעים של ידע, פירות של חדשנות – מהיכרות ראשונית ועד רמות מומחיות, כלים מעשיים לשילוב מיידי בעבודתך ובחייך.
+            </p>
+
+            <div class="leaf-frame">
+                <h2 class="section-title">
+                    הנבטה ופריחה: המסר המרכזי שלנו
+                </h2>
+                <p class="text-lg leading-relaxed mb-4 text-soil-dark" style="color: var(--color-text-dark);">
+                    הבינה המלאכותית אינה עוד מדע בדיוני, אלא אדמה פורייה לגידול פתרונות ורעיונות. אנו מאמינים כי הנגשתה והטמעתה בידי כל אדם, בכל שלב ובכל תחום, היא המפתח לעתיד. נלמד להכיר, ליישם ולפתח – מהשורש ועד לפרי הבשל ביותר. אצלנו, AI הופך מכלי מורכב לגן פרטי ופורה שניתן לטפח.
+                </p>
+                <p class="text-lg leading-relaxed text-soil-dark" style="color: var(--color-text-dark);">
+                    למה אתם מחכים? בואו נשתול יחד את זרעי ההבנה ונצמיח עולם של אפשרויות.
+                </p>
+            </div>
+
+            <div class="leaf-frame">
+                <h2 class="section-title">
+                    אדמות פוריות המצפות לטיפוח: קהל היעד
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-soil-dark" style="color: var(--color-text-dark);">
+                    <div class="branch-item">
+                        <span class="branch-icon">🌱</span>
+                        <div>
+                            <h3 class="font-serif text-xl mb-1 text-leaf-green" style="color: var(--color-leaf-green);">המתחילים והסקרנים</h3>
+                            <p>אלו המעוניינים לזרוע את זרעי ההבנה הראשונים בעולם ה-AI המרתק.</p>
+                        </div>
+                    </div>
+                    <div class="branch-item">
+                        <span class="branch-icon">🌿</span>
+                        <div>
+                            <h3 class="font-serif text-xl mb-1 text-leaf-green" style="color: var(--color-leaf-green);">אנשי מקצוע בחיפוש אחר צמיחה</h3>
+                            <p>מבקשים להטמיע את כלי ה-AI בעבודתם ולשדרג את יכולותיהם.</p>
+                        </div>
+                    </div>
+                    <div class="branch-item">
+                        <span class="branch-icon">🌳</span>
+                        <div>
+                            <h3 class="font-serif text-xl mb-1 text-leaf-green" style="color: var(--color-leaf-green);">מנהלים וארגונים</h3>
+                            <p>מחפשים להעצים את צוותיהם באמצעות הדרכות AI מותאמות אישית.</p>
+                        </div>
+                    </div>
+                    <div class="branch-item">
+                        <span class="branch-icon">🌸</span>
+                        <div>
+                            <h3 class="font-serif text-xl mb-1 text-leaf-green" style="color: var(--color-leaf-green);">מפתחים מתקדמים</h3>
+                            <p>מעוניינים לטפח פרויקטים מבוססי AI מורכבים וחדשניים.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="leaf-frame">
+                <h2 class="section-title">
+                    ענפי הידע של הגן הדיגיטלי: תחומי התמחות
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-soil-dark" style="color: var(--color-text-dark);">
+                    <div class="service-card">
+                        <h3>יצירת טקסטים ותוכן</h3>
+                        <p>נלמד לגרום למילים לפרוח – יצירת תוכן שיווקי, מאמרים וסיפורים בעזרת AI.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>בניית אפליקציות חכמות</h3>
+                        <p>נבנה יישומים שיחשבו ויפעלו באופן עצמאי, מגיבים לצרכים משתנים.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>פיתוח אתרים מבוססי AI</h3>
+                        <p>נצמיח אתרים אינטראקטיביים הלומדים ומתאימים את עצמם למשתמש.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>ניתוח נתונים ומחקר</h3>
+                        <p>נפענח את סודות המידע – נהפוך נתונים גולמיים לתובנות פורצות דרך.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>יצירת תמונות ואומנות</h3>
+                        <p>נצייר במכחול דיגיטלי – נפיק יצירות ויזואליות עוצרות נשימה בעזרת AI.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>אוטומציה של תהליכים</h3>
+                        <p>נייעל את צמיחת העבודה – נבנה מערכות המבצעות משימות באופן אוטומטי.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="leaf-frame">
+                <h2 class="section-title">
+                    דרכי ההשקיה וההצמחה: השירותים המוצעים
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-soil-dark" style="color: var(--color-text-dark);">
+                    <div class="service-card">
+                        <h3>סדנאות קבוצתיות</h3>
+                        <p>משתלות ידע מעשיות וממוקדות, ללמוד ולצמוח יחד.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>שיעורים פרטיים</h3>
+                        <p>טיפוח אישי ופרטני, בהתאמה מושלמת לקצב ולצרכים הייחודיים שלך.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>הרצאות לארגונים</h3>
+                        <p>רוח הפריחה מגיעה לצוותים – פתיחת אופקים והשראה בעולם ה-AI.</p>
+                    </div>
+                    <div class="service-card">
+                        <h3>ייעוץ ופיתוח פרויקטים</h3>
+                        <p>ליווי מקצועי ומומחה בנטיעת והגשמת פרויקטים מבוססי AI.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="zevik-card">
+                <h2 class="section-title !mb-2 !text-leaf-green" style="color: var(--color-leaf-green);">
+                    זאביק אבינר – הגנן הראשי של הגן הדיגיטלי
+                </h2>
+                <div class="zevik-image-frame">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר, מומחה בינה מלאכותית" class="zevik-image">
+                </div>
+                <p class="text-lg leading-relaxed mb-4 text-soil-dark" style="color: var(--color-text-dark);">
+                    מומחה בינה מלאכותית עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI. זאביק מכיר כל שורש וכל עלה בעולם הבינה המלאכותית, ומתמחה בהנגשת הטכנולוגיה והפיכתה לכלי עבודה וצמיחה יומיומי לכל אחד ואחת.
+                </p>
+                <div class="text-xl mt-6 font-serif text-leaf-green" style="color: var(--color-leaf-green);">
+                    <span>ווטסאפ: <a href="https://wa.me/972546609385" class="hover:underline" style="color: var(--color-leaf-green);">054-6609385</a></span>
+                    <span class="mx-4">|</span>
+                    <span>אימייל: <a href="mailto:zaviner@gmail.com" class="hover:underline" style="color: var(--color-leaf-green);">zaviner@gmail.com</a></span>
+                </div>
+            </div>
+
+            <div class="text-center mt-20 text-sm text-soil-dark opacity-70" style="color: var(--color-text-dark);">
+                <p>&copy; גן הידע הדיגיטלי 2024. כל הזכויות שמורות לזאביק אבינר.</p>
+                <p>האמנות הדיגיטלית נוצרה בהשראת איור בוטני.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for custom cursor, parallax, and scroll animations
+
+        // 1. Custom Cursor
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+        document.addEventListener('mousedown', () => {
+            customCursor.classList.add('active');
+        });
+        document.addEventListener('mouseup', () => {
+            customCursor.classList.remove('active');
+        });
+
+        // 2. Parallax Scrolling
+        const parallaxContainer = document.querySelector('.parallax-container');
+        const layers = document.querySelectorAll('.parallax-layer');
+
+        // Initial setup for parallax layers to ensure they are scaled correctly on load
+        layers.forEach((layer, index) => {
+            const zValue = -2 + (index * 0.5); // Example: -2, -1.5, -1
+            const scaleValue = 3 - (index * 0.5); // Example: 3, 2.5, 2
+            layer.style.transform = `translateZ(${zValue}px) scale(${scaleValue})`;
+        });
+
+        parallaxContainer.addEventListener('scroll', () => {
+            const scrollTop = parallaxContainer.scrollTop;
+            layers.forEach((layer, index) => {
+                const speed = 0.5 + (index * 0.2); // Adjust speed for each layer
+                const zValue = -2 + (index * 0.5);
+                const scaleValue = 3 - (index * 0.5);
+                layer.style.transform = `translateY(${scrollTop * speed}px) translateZ(${zValue}px) scale(${scaleValue})`;
+            });
+        });
+
+        // 3. Scroll-triggered fade-in animations
+        const scrollAnimatedElements = document.querySelectorAll('.leaf-frame, .branch-item, .zevik-card');
+        const branchItems = document.querySelectorAll('.branch-item'); // Need this separately for staggering
+
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the item is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // observer.unobserve(entry.target); // Optional: stop observing after animation
+                }
+            });
+        }, observerOptions);
+
+        scrollAnimatedElements.forEach(element => {
+            observer.observe(element);
+            // Stagger animation for branch items
+            if (element.classList.contains('branch-item')) {
+                const index = Array.from(branchItems).indexOf(element);
+                element.style.transitionDelay = `${index * 0.15}s`;
+            }
+        });
+    </script>
+</body>
+</html>

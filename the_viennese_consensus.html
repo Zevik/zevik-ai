@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - אדריכלות התבונה החדשה</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Frank Ruhl Libre for headings, Heebo for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300..900&family=Heebo:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Styles - Viennese Secession Inspired */
+        :root {
+            --color-primary: #B8860B; /* Gold */
+            --color-secondary: #006466; /* Deep Teal */
+            --color-dark: #0A0A0A; /* Near Black */
+            --color-light: #F5F5DC; /* Cream / Off-white */
+            --color-text-dark-on-light: #2E4237; /* Dark Muted Green for contrast */
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: var(--color-dark);
+            color: var(--color-light);
+            cursor: none; /* Hide default cursor to use custom one */
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax/decorative elements */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Frank Ruhl Libre', serif;
+            color: var(--color-primary); /* Gold for headings */
+        }
+
+        /* Custom Cursor - High-Contrast and Interactive */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none; /* Important: allow interaction with elements underneath */
+            transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease, transform 0.1s ease-out;
+            z-index: 9999; /* Ensure it's always on top */
+            transform: translate(-50%, -50%); /* Center the cursor on mouse coordinates */
+            border: 2px solid var(--color-light); /* Light border for visibility on dark */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark, high-opacity shadow for visibility on light */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .custom-cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--color-primary);
+            border-radius: 50%;
+            transition: transform 0.1s ease-out;
+        }
+
+        /* Active state for cursor on hoverable elements */
+        .custom-cursor.active {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(184, 134, 11, 0.2); /* Goldish translucent fill */
+            border-color: var(--color-primary); /* Gold border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 15px var(--color-primary); /* Enhanced shadow/glow */
+        }
+
+        .custom-cursor.active .custom-cursor-dot {
+            transform: scale(0); /* Hide dot when active */
+        }
+
+        /* Secession-inspired background patterns (subtle geometric) */
+        .secession-pattern-1 {
+            background-image:
+                linear-gradient(45deg, rgba(var(--color-primary-rgb), 0.07) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(var(--color-primary-rgb), 0.07) 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, rgba(var(--color-primary-rgb), 0.07) 75%),
+                linear-gradient(-45deg, transparent 75%, rgba(var(--color-primary-rgb), 0.07) 75%);
+            background-size: 40px 40px;
+            background-position: 0 0, 0 20px, 20px -20px, -20px 0px;
+        }
+
+        /* Decorative gold border around sections */
+        .secession-border-gold {
+            position: relative;
+        }
+        .secession-border-gold::before {
+            content: '';
+            position: absolute;
+            inset: -8px; /* Offset for the decorative border */
+            border: 2px solid var(--color-primary); /* Gold border */
+            z-index: -1;
+            pointer-events: none;
+            box-shadow: 0 0 10px rgba(184, 134, 11, 0.4); /* Subtle glow */
+        }
+
+        /* Parallax Background - Abstract Gold Leaf Effect */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place behind main content */
+            overflow: hidden;
+            background: radial-gradient(circle at top right, var(--color-dark) 0%, transparent 40%),
+                        radial-gradient(circle at bottom left, var(--color-dark) 0%, transparent 40%);
+        }
+
+        .parallax-element {
+            position: absolute;
+            background-color: var(--color-primary); /* Gold */
+            opacity: 0.1;
+            filter: blur(10px); /* Soft blur */
+            border-radius: 50%;
+            transition: transform 0.1s ease-out, opacity 0.5s ease;
+        }
+        /* Different sizes and initial positions for parallax elements */
+        .parallax-element:nth-child(1) { width: 150px; height: 150px; top: 10%; left: 5%; }
+        .parallax-element:nth-child(2) { width: 200px; height: 200px; top: 30%; right: 10%; opacity: 0.08; }
+        .parallax-element:nth-child(3) { width: 100px; height: 100px; bottom: 5%; left: 20%; opacity: 0.12; }
+        .parallax-element:nth-child(4) { width: 250px; height: 250px; top: 50%; left: 50%; opacity: 0.06; }
+        .parallax-element:nth-child(5) { width: 120px; height: 120px; top: 20%; right: 25%; opacity: 0.15; }
+
+        /* Animation for section entrance on scroll */
+        .section-animate {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .section-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Secession-style decorative line with end-caps */
+        .secession-deco-line {
+            width: 150px; /* Wider line for impact */
+            height: 3px; /* Thicker line */
+            background-color: var(--color-primary);
+            margin: 30px auto; /* Centered, more space */
+            position: relative;
+            box-shadow: 0 0 8px rgba(184, 134, 11, 0.5); /* Soft glow */
+        }
+        .secession-deco-line::before, .secession-deco-line::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--color-primary);
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg); /* Diamond shape */
+            background-color: var(--color-dark);
+            box-shadow: 0 0 5px rgba(184, 134, 11, 0.5);
+        }
+        .secession-deco-line::before { left: -20px; } /* Offset more for visual balance */
+        .secession-deco-line::after { right: -20px; }
+
+        /* General styling for content blocks */
+        .secession-block {
+            background-color: rgba(var(--color-secondary-rgb), 0.15); /* Slightly darker, more prominent */
+            border: 1px solid var(--color-secondary);
+            padding: 1.5rem; /* More padding */
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 15px rgba(0,0,0,0.6); /* Deeper shadow */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hover effect */
+        }
+        .secession-block:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.8), 0 0 20px rgba(184, 134, 11, 0.3);
+        }
+
+        /* Utility for RGB values to use with rgba() */
+        .color-primary-rgb { --color-primary-rgb: 184, 134, 11; } /* Gold */
+        .color-secondary-rgb { --color-secondary-rgb: 0, 100, 102; } /* Deep Teal */
+
+        /* Animation for Zevik's image pulse border */
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 3s infinite ease-in-out;
+            border-width: 2px;
+        }
+
+        /* Ensure images scale correctly */
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body class="selection:bg-color-primary selection:text-color-dark color-primary-rgb color-secondary-rgb">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor">
+        <div class="custom-cursor-dot"></div>
+    </div>
+
+    <!-- Parallax Background Elements -->
+    <div class="parallax-bg">
+        <div class="parallax-element" style="left: 5%; top: 10%;"></div>
+        <div class="parallax-element" style="right: 10%; top: 30%;"></div>
+        <div class="parallax-element" style="left: 20%; bottom: 5%;"></div>
+        <div class="parallax-element" style="left: 50%; top: 50%;"></div>
+        <div class="parallax-element" style="right: 25%; top: 20%;"></div>
+    </div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 min-h-screen flex flex-col items-center p-4 sm:p-8 md:p-12 lg:p-16">
+
+        <!-- Header - A Grand Entrance -->
+        <header class="w-full max-w-5xl text-center py-12 md:py-24 mb-16 relative">
+            <h1 class="text-6xl md:text-8xl font-bold mb-4 leading-tight text-color-primary">אדריכלות התבונה החדשה</h1>
+            <p class="text-3xl md:text-4xl mb-8 text-color-light opacity-80 font-light">למדו לשלוט בבינה המלאכותית – העתיד הוא עכשיו</p>
+            <div class="secession-deco-line"></div>
+            <p class="text-xl md:text-2xl mt-8 text-color-light max-w-3xl mx-auto">בצל מורשת הזצסיון הווינאי, שביקש לאחד אמנות וחיים, אנו חושפים את הבינה המלאכותית ככלי לבריאה, למצוינות ולהגשמה עצמית. זהו מסע אל הלב הפועם של הידע הדיגיטלי, בהנחייתו של מאסטרו זאביק אבינר.</p>
+        </header>
+
+        <!-- Section 1: The AI Philosophy - קריאת קהל -->
+        <section id="philosophy" class="section-animate w-full max-w-5xl my-16 p-8 relative overflow-hidden bg-color-dark bg-opacity-70 shadow-lg secession-pattern-1 secession-border-gold">
+            <h2 class="text-5xl md:text-6xl text-color-primary mb-6 text-center">היכן אתם עומדים בשחר העידן החדש?</h2>
+            <div class="secession-deco-line"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-12 text-color-light text-xl">
+                <div class="flex flex-col items-center text-center secession-block">
+                    <span class="text-6xl text-color-primary mb-4">🌟</span>
+                    <h3 class="text-2xl font-semibold mb-2 text-color-primary">החלוצים</h3>
+                    <p class="text-color-light opacity-80">מתחילים המבקשים לפענח את סודות ה-AI.</p>
+                </div>
+                <div class="flex flex-col items-center text-center secession-block">
+                    <span class="text-6xl text-color-primary mb-4">💼</span>
+                    <h3 class="text-2xl font-semibold mb-2 text-color-primary">האומנים</h3>
+                    <p class="text-color-light opacity-80">אנשי מקצוע המבקשים להטמיע AI בעבודתם ולחדש.</p>
+                </div>
+                <div class="flex flex-col items-center text-center secession-block">
+                    <span class="text-6xl text-color-primary mb-4">👑</span>
+                    <h3 class="text-2xl font-semibold mb-2 text-color-primary">המנהיגים</h3>
+                    <p class="text-color-light opacity-80">מנהלים וארגונים השואפים להוביל דרך חדשנות AI.</p>
+                </div>
+                <div class="flex flex-col items-center text-center secession-block">
+                    <span class="text-6xl text-color-primary mb-4">🌌</span>
+                    <h3 class="text-2xl font-semibold mb-2 text-color-primary">החזון</h3>
+                    <p class="text-color-light opacity-80">מפתחי פרויקטים מתקדמים ב-AI, פורצי דרך.</p>
+                </div>
+            </div>
+            <p class="text-2xl md:text-3xl text-color-light mt-12 text-center opacity-90">זאביק אבינר מזמין אתכם למסע – להפוך את המורכב לנגיש, את התיאוריה למעשה, ולהפוך למאסטרים של המחר.</p>
+        </section>
+
+        <!-- Section 2: Core Message - המסר המרכזי -->
+        <section id="message" class="section-animate w-full max-w-5xl my-16 p-8 relative overflow-hidden bg-color-dark bg-opacity-70 shadow-lg secession-border-gold">
+            <h2 class="text-5xl md:text-6xl text-color-primary mb-6 text-center">האיחוד הקדוש: אדם ומכונה בסימפוניית יצירה</h2>
+            <div class="secession-deco-line"></div>
+            <p class="text-xl md:text-2xl text-color-light leading-relaxed mb-8 mt-12">הבינה המלאכותית אינה כלי גרידא, אלא שותפה חדשה במעשה הבריאה האנושי. אנו שואפים להפוך אותה לנגישה, לישימה, ולכוח מניע בחיי היומיום ובחזון העסקי. כלים מעשיים, ידע עמוק, ויכולת ליישם באופן מיידי – זו ההבטחה שלנו. מהצעד הראשון ועד לכיבוש הפסגה – אנו אתכם.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-color-light mt-12">
+                <div class="text-center secession-block">
+                    <h3 class="text-3xl font-semibold mb-4 text-color-primary">הנגשה</h3>
+                    <p class="text-lg opacity-80">שוברים מחיצות, מפיגים חששות. AI לכולם.</p>
+                </div>
+                <div class="text-center secession-block">
+                    <h3 class="text-3xl font-semibold mb-4 text-color-primary">יישום</h3>
+                    <p class="text-lg opacity-80">ידע הופך לכוח ברגע היישום. כלים מעשיים.</p>
+                </div>
+                <div class="text-center secession-block">
+                    <h3 class="text-3xl font-semibold mb-4 text-color-primary">העצמה</h3>
+                    <p class="text-lg opacity-80">מעבר ממתחילים למומחים, מהלכה למעשה.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Domains of Mastery - תחומי התמחות -->
+        <section id="expertise" class="section-animate w-full max-w-5xl my-16 p-8 relative overflow-hidden bg-color-dark bg-opacity-70 shadow-lg secession-pattern-1 secession-border-gold">
+            <h2 class="text-5xl md:text-6xl text-color-primary mb-6 text-center">אוסף הזהב: תחומי מומחיות</h2>
+            <div class="secession-deco-line"></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-12 text-color-light text-lg">
+                <div class="flex items-start secession-block p-4">
+                    <span class="text-3xl text-color-primary ml-4">✍️</span>
+                    <div>
+                        <h3 class="text-2xl font-semibold text-color-primary mb-2">ארכיטקטורת תוכן</h3>
+                        <p class="text-color-light opacity-80">יצירת טקסטים, סיפורים, ומאמרים - עושר לשוני בעזרת AI.</p>
+                    </div>
+                </div>
+                <div class="flex items-start secession-block p-4">
+                    <span class="text-3xl text-color-primary ml-4">📱</span>
+                    <div>
+                        <h3 class="text-2xl font-semibold text-color-primary mb-2">מלאכת האפליקציה</h3>
+                        <p class="text-color-light opacity-80">בניית יישומים חכמים המקיימים אינטראקציה עם העולם.</p>
+                    </div>
+                </div>
+                <div class="flex items-start secession-block p-4">
+                    <span class="text-3xl text-color-primary ml-4">🌐</span>
+                    <div>
+                        <h3 class="text-2xl font-semibold text-color-primary mb-2">קנבס דיגיטלי</h3>
+                        <p class="text-color-light opacity-80">פיתוח אתרים חדשניים, מבוססי AI, החוזים את צרכי המשתמש.</p>
+                    </div>
+                </div>
+                <div class="flex items-start secession-block p-4">
+                    <span class="text-3xl text-color-primary ml-4">📊</span>
+                    <div>
+                        <h3 class="text-2xl font-semibold text-color-primary mb-2">אלכימיה של נתונים</h3>
+                        <p class="text-color-light opacity-80">ניתוח נתונים, פענוח מגמות ומחקר מעמיק בעזרת AI.</p>
+                    </div>
+                </div>
+                <div class="flex items-start secession-block p-4">
+                    <span class="text-3xl text-color-primary ml-4">🎨</span>
+                    <div>
+                        <h3 class="text-2xl font-semibold text-color-primary mb-2">חזיונות דיגיטליים</h3>
+                        <p class="text-color-light opacity-80">יצירת תמונות, אמנות חזותית ועולמות דמיוניים מבית ה-AI.</p>
+                    </div>
+                </div>
+                <div class="flex items-start secession-block p-4">
+                    <span class="text-3xl text-color-primary ml-4">⚙️</span>
+                    <div>
+                        <h3 class="text-2xl font-semibold text-color-primary mb-2">ריקוד המכונות</h3>
+                        <p class="text-color-light opacity-80">אוטומציה חכמה של תהליכים, לשחרור הפוטנציאל האנושי.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Services Offered - שירותים -->
+        <section id="services" class="section-animate w-full max-w-5xl my-16 p-8 relative overflow-hidden bg-color-dark bg-opacity-70 shadow-lg secession-border-gold">
+            <h2 class="text-5xl md:text-6xl text-color-primary mb-6 text-center">המסע המשותף: דרכים למצוינות</h2>
+            <div class="secession-deco-line"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mt-12 text-color-light text-lg">
+                <div class="secession-block p-6">
+                    <h3 class="text-3xl font-semibold mb-4 text-color-primary flex items-center"><span class="text-4xl ml-3">👥</span>סדנאות קבוצתיות – מסעות גילוי</h3>
+                    <p class="opacity-80">צלילה מעשית, ממוקדת וחווייתית לעולם ה-AI. יחד, נפענח סודות ונבנה כלים, תוך למידה הדדית ופריצת גבולות.</p>
+                </div>
+                <div class="secession-block p-6">
+                    <h3 class="text-3xl font-semibold mb-4 text-color-primary flex items-center"><span class="text-4xl ml-3">🎓</span>שיעורים פרטיים – חניכה אישית</h3>
+                    <p class="opacity-80">תוכנית לימודים אישית המותאמת לרמתכם, לקצב שלכם ולמטרותיכם. מסע אחד על אחד אל בקיאות ומומחיות.</p>
+                </div>
+                <div class="secession-block p-6">
+                    <h3 class="text-3xl font-semibold mb-4 text-color-primary flex items-center"><span class="text-4xl ml-3">🏛️</span>הרצאות לארגונים – פתיחת אופקים</h3>
+                    <p class="opacity-80">הרצאות מעוררות השראה ומעמיקות לצוותים, החושפות את הפוטנציאל העצום של ה-AI ומעניקות כלים ראשוניים ליישום.</p>
+                </div>
+                <div class="secession-block p-6">
+                    <h3 class="text-3xl font-semibold mb-4 text-color-primary flex items-center"><span class="text-4xl ml-3">🚀</span>ייעוץ ופיתוח פרויקטים – ליווי מקצועי</h3>
+                    <p class="opacity-80">מחשבה עסקית-טכנולוגית, תכנון אסטרטגי וליווי צמוד בפיתוח פרויקטים מבוססי AI, מהרעיון ועד למימוש מלא.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: The Guide - המדריך -->
+        <section id="about" class="section-animate w-full max-w-5xl my-16 p-8 relative overflow-hidden bg-color-dark bg-opacity-70 shadow-lg secession-pattern-1 secession-border-gold flex flex-col md:flex-row items-center">
+            <div class="md:w-1/3 flex justify-center mb-8 md:mb-0 md:ml-8 relative">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר - מומחה בינה מלאכותית" class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover border-4 border-color-primary shadow-lg transition-transform duration-300 hover:scale-105" loading="lazy">
+                <!-- Decorative pulsating border -->
+                <div class="absolute inset-0 rounded-full border-2 border-color-secondary animate-pulse-slow"></div>
+            </div>
+            <div class="md:w-2/3 text-color-light text-center md:text-right">
+                <h2 class="text-5xl md:text-6xl text-color-primary mb-4">זאביק אבינר – מאסטרו הבינה המלאכותית</h2>
+                <div class="secession-deco-line mx-auto md:mr-0"></div>
+                <p class="text-xl md:text-2xl leading-relaxed mt-8 mb-6">זאביק אבינר, אדריכל ידע ומנהיג חזון, הוא מומחה בינה מלאכותית בעל ניסיון עשיר בפיתוח ויישום מערכות AI מתקדמות. מעבר למומחיותו הטכנית, זאביק מחויב למשימה עמוקה יותר: להפוך את הבינה המלאכותית לכלי נגיש, מעשי ומעצים עבור כל אדם וארגון.</p>
+                <p class="text-xl md:text-2xl leading-relaxed mb-6">הוא רואה ב-AI לא רק טכנולוגיה, אלא שפה חדשה לבריאה והגשמה, ומנחה את תלמידיו לגלות בה את הפוטנציאל האישי והמקצועי שלהם. בידיים בוטחות ובחזון ברור, זאביק מוביל את הדרך לשליטה אמיתית בעתיד.</p>
+                <div class="mt-8 flex flex-col sm:flex-row justify-center md:justify-end gap-4">
+                    <a href="https://wa.me/972546609385" target="_blank" class="inline-flex items-center justify-center bg-color-primary text-color-dark px-6 py-3 rounded-full text-xl font-semibold hover:bg-opacity-90 transition-all duration-300 shadow-md hover:scale-105">
+                        <span class="ml-2">ווטסאפ: 054-6609385</span> <span class="text-2xl">📞</span>
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="inline-flex items-center justify-center bg-color-secondary text-color-light px-6 py-3 rounded-full text-xl font-semibold hover:bg-opacity-90 transition-all duration-300 shadow-md hover:scale-105">
+                        <span class="ml-2">אימייל: zaviner@gmail.com</span> <span class="text-2xl">📧</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="w-full max-w-5xl text-center py-12 border-t border-color-secondary mt-16 text-color-light opacity-70">
+            <p class="text-lg">&copy; 2024 זאביק אבינר - כל הזכויות שמורות. נבנה באמנות ובתבונה דיגיטלית.</p>
+            <p class="text-md mt-2">בהשראת 'הזצסיון הווינאי' - איחוד אמנות, ידע וחדשנות.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // JavaScript for Custom Cursor, Parallax, and Scroll Animations
+
+        // 1. Custom Cursor
+        const cursor = document.querySelector('.custom-cursor');
+        const cursorDot = document.querySelector('.custom-cursor-dot');
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
+        let dotX = 0;
+        let dotY = 0;
+
+        // Easing for smooth movement, with different values for the outer circle and inner dot
+        const ease = 0.15;      // Slower for the outer cursor
+        const dotEase = 0.05;   // Faster for the inner dot, creating a subtle trailing effect
+
+        function animateCursor() {
+            // Update outer cursor position with easing
+            cursorX += (mouseX - cursorX) * ease;
+            cursorY += (mouseY - cursorY) * ease;
+            cursor.style.left = `${cursorX}px`;
+            cursor.style.top = `${cursorY}px`;
+
+            // Update inner dot position with faster easing, relative to the outer cursor
+            dotX += (mouseX - dotX) * dotEase;
+            dotY += (mouseY - dotY) * dotEase;
+            // The dot's transform adjusts its position within the cursor's div
+            cursorDot.style.transform = `translate(-50%, -50%) translate(${dotX - cursorX}px, ${dotY - cursorY}px)`;
+
+            requestAnimationFrame(animateCursor);
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Add 'active' class to cursor on hoverable elements for visual feedback
+        const hoverableElements = document.querySelectorAll('a, button, .secession-block, img, .secession-deco-line');
+        hoverableElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+
+        animateCursor(); // Start cursor animation loop
+
+        // 2. Parallax Background
+        const parallaxElements = document.querySelectorAll('.parallax-element');
+        const parallaxSpeed = 0.05; // Adjust for stronger/weaker parallax effect
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            parallaxElements.forEach((el, index) => {
+                // Apply parallax effect with varying speeds and directions
+                const speedMultiplier = (index + 1) * parallaxSpeed * (index % 2 === 0 ? 1 : -1);
+                el.style.transform = `translateY(${scrollY * speedMultiplier}px)`;
+            });
+        });
+
+        // 3. Scroll-triggered Animations for sections
+        const sections = document.querySelectorAll('.section-animate');
+
+        // Options for the Intersection Observer
+        const observerOptions = {
+            root: null, // The viewport is the root
+            rootMargin: '0px',
+            threshold: 0.1 // 10% of the section must be visible to trigger the animation
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible'); // Add 'visible' class to trigger CSS transition
+                    observer.unobserve(entry.target); // Stop observing once the section is visible
+                }
+            });
+        }, observerOptions);
+
+        // Observe each section
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>

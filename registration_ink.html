@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>דיו דיגיטלי: אמנות השליטה בבינה המלאכותית</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&family=Secular+One&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* הגדרות צבעים וגופנים */
+        :root {
+            --paper-light: #FBFBFB; /* צבע "נייר" בהיר */
+            --ink-dark: #1A1A1A;    /* צבע "דיו" כהה */
+            --ink-medium: #333333;  /* צבע "דיו" בינוני */
+            --accent-blue: #0066CC; /* צבע הדגשה דיגיטלי-כחול */
+        }
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: var(--paper-light);
+            color: var(--ink-dark);
+            cursor: none; /* הסתרת סמן העכבר המוגדר כברירת מחדל */
+            overflow-x: hidden; /* מניעת גלילה אופקית */
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Secular One', sans-serif;
+            color: var(--ink-dark);
+        }
+
+        /* סמן עכבר מותאם אישית - חובה נראות גבוהה */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none; /* לא מפריע לאינטראקציות */
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--paper-light); /* גבול בהיר לנראות על רקע כהה */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* צל כהה לנראות על רקע בהיר */
+            z-index: 9999;
+            transform: translate(-50%, -50%); /* ממורכז על נקודת העכבר */
+            transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .custom-cursor.hovered {
+            width: 30px;
+            height: 30px;
+            background-color: var(--accent-blue);
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.5); /* התאמת צל קלה למצב ריחוף */
+        }
+
+        /* כתמי דיו / קווים ברקע - אפקט עדין של פרלקס */
+        .ink-splatter {
+            position: absolute;
+            background-color: var(--ink-dark);
+            opacity: 0.05; /* עדין מאוד */
+            border-radius: 50%;
+            filter: blur(8px); /* טשטוש קצוות */
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* אנימציה לחשיפת אלמנטים בגלילה */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* סגנון מיוחד לכותרות הראשיות - נראה כמו דיו נשפך */
+        .gradient-text {
+            background: linear-gradient(45deg, var(--ink-dark), var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent; /* פולבק למקרים בהם הפרופרטי לא נתמך */
+        }
+
+        /* רקע עדין המדמה טקסטורת נייר או כתם דיו מרומז */
+        .background-texture {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* השתמשתי בתמונה זמינה של "Ink wash texture" מוויקימדיה. יש להחליף במידת הצורך.*/
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Ink_wash_texture.png/800px-Ink_wash_texture.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.03; /* עדין מאוד */
+            z-index: -2; /* מאחורי הכל */
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- סמן עכבר מותאם אישית -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+
+    <!-- טקסטורת רקע עדינה -->
+    <div class="background-texture"></div>
+
+    <!-- עוטף תוכן ראשי -->
+    <div class="relative z-10 p-4 md:p-8 lg:p-12 min-h-screen">
+
+        <!-- סקציית גיבור - דיו דיגיטלי: אמנות השליטה בבינה המלאכותית -->
+        <section class="min-h-screen flex items-center justify-center text-center mb-24 relative overflow-hidden
+                        bg-gradient-to-br from-gray-100 to-gray-50 reveal">
+            <div class="max-w-4xl mx-auto px-4 relative">
+                <h1 class="text-5xl md:text-7xl lg:text-8xl font-extrabold mb-4 leading-tight gradient-text">
+                    דיו דיגיטלי<br>אמנות השליטה בבינה המלאכותית
+                </h1>
+                <p class="text-xl md:text-2xl lg:text-3xl font-light text-ink-medium mb-8">
+                    העתיד נכתב עכשיו – בואו לצייר אותו יחד
+                </p>
+                <div class="flex flex-wrap justify-center gap-4 text-lg md:text-xl">
+                    <a href="#about" class="px-8 py-3 bg-accent-blue text-white rounded-full hover:bg-opacity-90 transition-all shadow-lg hover:shadow-xl reveal delay-100">
+                        התחילו לצייר את העתיד
+                    </a>
+                    <a href="#contact" class="px-8 py-3 border-2 border-accent-blue text-accent-blue rounded-full hover:bg-accent-blue hover:text-white transition-all shadow-lg hover:shadow-xl reveal delay-200">
+                        צרו קשר
+                    </a>
+                </div>
+            </div>
+            <!-- אלמנטים של פרלקס "דיו" ברקע -->
+            <div class="ink-splatter absolute top-1/4 right-[10%] w-24 h-24" style="transform: translate(-var(--x-offset), -var(--y-offset));"></div>
+            <div class="ink-splatter absolute bottom-1/3 left-[15%] w-32 h-32" style="transform: translate(-var(--x-offset), -var(--y-offset));"></div>
+            <div class="ink-splatter absolute top-[60%] left-[5%] w-16 h-16" style="transform: translate(-var(--x-offset), -var(--y-offset));"></div>
+        </section>
+
+        <!-- מסר מרכזי - הקו המרכזי -->
+        <section id="core-message" class="max-w-5xl mx-auto mb-24 p-8 relative bg-white/70 backdrop-blur-sm rounded-lg shadow-xl reveal">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6 text-center gradient-text">
+                הקו המרכזי: בינה מלאכותית – אמנות נגישה לכולם
+            </h2>
+            <p class="text-lg md:text-xl leading-relaxed text-center text-ink-medium">
+                בכל קו, בכל פיקסל, טמונה הבטחה לעתיד חדשני. אנו מאמינים שהעתיד הדיגיטלי שייך לכולם, ושליטה בבינה המלאכותית היא המברשת החדשה ליצירה.
+                דרך הדרכות מעשיות וכלים ישימים, אנו הופכים את הבינה המלאכותית ממושג מורכב לכלי יצירתי רב עוצמה בידיים שלכם – שניתן ליישם מיד בעבודה ובחיים.
+                מהצעד הראשון ועד לרמת אמן – בואו נפסל יחד את מחר, נצייר את הבינה המלאכותית לא רק ככלי, אלא כיצירה אישית וארגונית משנה מציאות.
+            </p>
+        </section>
+
+        <!-- קהל יעד - הבדים שלנו: למי מיועדת סדנת היצירה? -->
+        <section id="audience" class="max-w-5xl mx-auto mb-24 p-8 relative reveal">
+            <h2 class="text-4xl md:text-5xl font-bold mb-10 text-center gradient-text">
+                הבדים שלנו: למי מיועדת סדנת היצירה?
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white/70 backdrop-blur-sm p-6 rounded-lg shadow-md border border-ink-dark/20 hover:shadow-lg transition-shadow reveal delay-100">
+                    <h3 class="text-2xl font-semibold mb-3 text-accent-blue">סקרנים ומתחילים</h3>
+                    <p class="text-ink-medium">אלו המעוניינים לטבול את מכחולם לראשונה בעולם ה-AI ולצייר את צעדיהם הראשונים.</p>
+                </div>
+                <div class="bg-white/70 backdrop-blur-sm p-6 rounded-lg shadow-md border border-ink-dark/20 hover:shadow-lg transition-shadow reveal delay-200">
+                    <h3 class="text-2xl font-semibold mb-3 text-accent-blue">אנשי מקצוע</h3>
+                    <p class="text-ink-medium">אמני המחר המעוניינים לשלב AI בזרם העבודה היומיומי שלהם ולהעצים את יצירתם.</p>
+                </div>
+                <div class="bg-white/70 backdrop-blur-sm p-6 rounded-lg shadow-md border border-ink-dark/20 hover:shadow-lg transition-shadow reveal delay-300">
+                    <h3 class="text-2xl font-semibold mb-3 text-accent-blue">מנהלים וארגונים</h3>
+                    <p class="text-ink-medium">אדריכלי העתיד המחפשים להטמיע כלים חדשניים בצוותים וליצור תמונה ארגונית שלמה.</p>
+                </div>
+                <div class="bg-white/70 backdrop-blur-sm p-6 rounded-lg shadow-md border border-ink-dark/20 hover:shadow-lg transition-shadow reveal delay-400">
+                    <h3 class="text-2xl font-semibold mb-3 text-accent-blue">מפתחי פרויקטים</h3>
+                    <p class="text-ink-medium">אלו השואפים לפסל יצירות AI מורכבות, מהרעיון המופשט ועד לתוצר המוגמר.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- תחומי התמחות - הפלטה שלנו: תחומי התמחות שייצרו לכם פתרונות -->
+        <section id="expertise" class="max-w-5xl mx-auto mb-24 p-8 relative reveal">
+            <h2 class="text-4xl md:text-5xl font-bold mb-10 text-center gradient-text">
+                הפלטה שלנו: תחומי התמחות שייצרו לכם פתרונות
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-lg">
+                <div class="flex items-start bg-white/70 backdrop-blur-sm p-4 rounded-lg shadow-sm border border-ink-dark/10 hover:shadow-md transition-shadow reveal delay-100">
+                    <span class="text-accent-blue text-3xl ml-3">✍️</span>
+                    <p class="font-medium">יצירת טקסטים ותוכן חדשני</p>
+                </div>
+                <div class="flex items-start bg-white/70 backdrop-blur-sm p-4 rounded-lg shadow-sm border border-ink-dark/10 hover:shadow-md transition-shadow reveal delay-200">
+                    <span class="text-accent-blue text-3xl ml-3">📱</span>
+                    <p class="font-medium">בניית אפליקציות חכמות ויצירתיות</p>
+                </div>
+                <div class="flex items-start bg-white/70 backdrop-blur-sm p-4 rounded-lg shadow-sm border border-ink-dark/10 hover:shadow-md transition-shadow reveal delay-300">
+                    <span class="text-accent-blue text-3xl ml-3">🌐</span>
+                    <p class="font-medium">פיתוח אתרים מבוססי AI לדור הבא</p>
+                </div>
+                <div class="flex items-start bg-white/70 backdrop-blur-sm p-4 rounded-lg shadow-sm border border-ink-dark/10 hover:shadow-md transition-shadow reveal delay-400">
+                    <span class="text-accent-blue text-3xl ml-3">📊</span>
+                    <p class="font-medium">ניתוח נתונים ומחקר מתקדם בעזרת AI</p>
+                </div>
+                <div class="flex items-start bg-white/70 backdrop-blur-sm p-4 rounded-lg shadow-sm border border-ink-dark/10 hover:shadow-md transition-shadow reveal delay-500">
+                    <span class="text-accent-blue text-3xl ml-3">🖼️</span>
+                    <p class="font-medium">יצירת תמונות ואומנות דיגיטלית ב-AI</p>
+                </div>
+                <div class="flex items-start bg-white/70 backdrop-blur-sm p-4 rounded-lg shadow-sm border border-ink-dark/10 hover:shadow-md transition-shadow reveal delay-600">
+                    <span class="text-accent-blue text-3xl ml-3">⚙️</span>
+                    <p class="font-medium">אוטומציה של תהליכים לייעול מקסימלי</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- שירותים מוצעים - הסטודיו של האמן: שירותים שישדרגו את היצירה שלכם -->
+        <section id="services" class="max-w-5xl mx-auto mb-24 p-8 relative reveal">
+            <h2 class="text-4xl md:text-5xl font-bold mb-10 text-center gradient-text">
+                הסטודיו של האמן: שירותים שישדרגו את היצירה שלכם
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-lg">
+                <div class="bg-white/70 backdrop-blur-sm p-6 rounded-lg shadow-md border border-ink-dark/20 hover:shadow-lg transition-shadow reveal delay-100">
+                    <h3 class="text-3xl font-semibold mb-4 text-accent-blue">סדנאות קבוצתיות</h3>
+                    <p class="text-ink-medium">חוויה מעשית, ממוקדת ומעוררת השראה. ללמוד יחד, ליצור יחד – בקבוצה קטנה ומגובשת.</p>
+                </div>
+                <div class="bg-white/70 backdrop-blur-sm p-6 rounded-lg shadow-md border border-ink-dark/20 hover:shadow-lg transition-shadow reveal delay-200">
+                    <h3 class="text-3xl font-semibold mb-4 text-accent-blue">שיעורים פרטיים</h3>
+                    <p class="text-ink-medium">תוכנית לימודים מותאמת אישית, שתוכננה במיוחד לרמה ולצרכים הייחודיים שלכם – בקצב שלכם.</p>
+                </div>
+                <div class="bg-white/70 backdrop-blur-sm p-6 rounded-lg shadow-md border border-ink-dark/20 hover:shadow-lg transition-shadow reveal delay-300">
+                    <h3 class="text-3xl font-semibold mb-4 text-accent-blue">הרצאות לארגונים</h3>
+                    <p class="text-ink-medium">השראה ופתיחת אופקים לצוותים, במטרה להטמיע את הבינה המלאכותית בתרבות הארגונית ולצייר מחדש את גבולות היכולת.</p>
+                </div>
+                <div class="bg-white/70 backdrop-blur-sm p-6 rounded-lg shadow-md border border-ink-dark/20 hover:shadow-lg transition-shadow reveal delay-400">
+                    <h3 class="text-3xl font-semibold mb-4 text-accent-blue">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-ink-medium">ליווי מקצועי ואישי, מתחילתו ועד סופו של כל פרויקט AI – מהקונספט ועד לביצוע מושלם.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- המדריך - קפטן הדיו: זאביק אבינר – המדריך שלכם לעתיד -->
+        <section id="about" class="max-w-5xl mx-auto mb-24 p-8 relative bg-white/70 backdrop-blur-sm rounded-lg shadow-xl reveal">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8 text-center gradient-text">
+                קפטן הדיו: זאביק אבינר – המדריך שלכם לעתיד
+            </h2>
+            <div class="flex flex-col md:flex-row items-center md:items-start gap-8">
+                <div class="flex-shrink-0 mb-6 md:mb-0">
+                    <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover shadow-lg border-4 border-accent-blue/50 transform hover:scale-105 transition-transform duration-300">
+                </div>
+                <div class="flex-grow text-center md:text-right">
+                    <p class="text-lg md:text-xl leading-relaxed text-ink-medium mb-4">
+                        זאביק אבינר אינו רק מומחה בינה מלאכותית; הוא אמן של טכנולוגיה, המכיר כל פינה בעולם הדיגיטלי המתפתח.
+                        עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק הפך את הנגשת הטכנולוגיה למשימת חייו.
+                        הוא מאמין שהיכולת להפוך את AI לכלי עבודה יומיומי טמונה בהבנה עמוקה ובהכוונה מעשית – והוא כאן כדי להעניק לכם אותה.
+                        בואו ללמוד מהטוב ביותר, ולצייר יחד את הגבולות החדשים של האפשרי.
+                    </p>
+                    <p class="text-xl md:text-2xl font-semibold text-accent-blue mt-6">
+                        "הבינה המלאכותית היא לא רק טכנולוגיה – היא הבד הריק שעליו אנו מציירים את עתידנו."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- צור קשר - החתימה: צרו קשר, התחילו ליצור -->
+        <section id="contact" class="max-w-4xl mx-auto mb-16 p-8 relative text-center reveal">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8 gradient-text">
+                החתימה: צרו קשר, התחילו ליצור
+            </h2>
+            <div class="bg-white/70 backdrop-blur-sm p-8 rounded-lg shadow-xl border-4 border-accent-blue/30 inline-block">
+                <p class="text-2xl md:text-3xl font-semibold text-ink-dark mb-4">
+                    מוכנים ללמוד? מחכים לכם.
+                </p>
+                <div class="flex flex-col items-center gap-4 text-xl md:text-2xl font-medium">
+                    <a href="https://wa.me/972546609385" target="_blank" class="flex items-center text-accent-blue hover:underline hover:text-blue-800 transition-colors">
+                        <span class="ml-2">📱 ווטסאפ: 054-6609385</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="inline-block"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.52 3.4 1.48 4.85L2.05 22l5.05-1.32c1.4-.77 2.94-1.18 4.34-1.18 5.45 0 9.91-4.45 9.91-9.91S17.49 2 12.04 2zm0 1.66c4.54 0 8.25 3.71 8.25 8.25S16.58 20.16 12.04 20.16c-1.35 0-2.7-.33-3.87-.98L4.6 20.89l1.41-4.22c-.89-1.47-1.39-3.13-1.39-4.88 0-4.54 3.71-8.25 8.25-8.25zm.04 3.32c-2.03 0-3.69 1.66-3.69 3.69s1.66 3.69 3.69 3.69 3.69-1.66 3.69-3.69-1.66-3.69-3.69-3.69zm2.74 4.88l-.72-.37c-.24-.12-.55-.25-.85-.38-.3-.12-.47-.19-.6-.24-.12-.05-.2-.07-.33-.07-.26 0-.53.07-.79.17-.26.1-.47.25-.66.44-.19.19-.34.42-.42.66-.08.24-.11.5-.08.75.03.25.12.5.21.75.09.25.18.33.27.42.09.09.18.17.3.26.12.09.24.16.37.21.13.05.27.09.43.09.16 0 .3-.03.43-.07.13-.04.29-.1.43-.16.14-.07.28-.15.42-.23.14-.08.27-.17.38-.26.1-.09.2-.18.28-.27.09-.09.17-.19.23-.3.06-.1.1-.2.1-.29 0-.08-.02-.15-.05-.22-.03-.07-.07-.12-.13-.17-.06-.05-.12-.08-.18-.11-.06-.03-.12-.04-.17-.04zm-1.87-1.1c.14-.14.24-.26.3-.39.06-.12.09-.25.09-.39s-.03-.27-.09-.39c-.06-.13-.16-.25-.3-.39-.14-.14-.29-.26-.45-.31-.16-.06-.33-.09-.5-.09-.16 0-.32.03-.45.09-.13.06-.24.14-.33.26-.09.12-.17.25-.23.39-.06.14-.09.28-.09.42 0 .14.03.28.09.42.06.14.14.27.23.39.09.12.2.22.33.29.13.07.28.1.45.1.17 0 .34-.03.5-.09.16-.06.29-.17.42-.3zm.02 0z"/></svg>
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="flex items-center text-accent-blue hover:underline hover:text-blue-800 transition-colors">
+                        <span class="ml-2">📧 אימייל: zaviner@gmail.com</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="inline-block"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- פוטר -->
+        <footer class="text-center text-ink-medium text-sm mt-16 pb-8 reveal">
+            <p>&copy; 2024 זאביק אבינר - כל הזכויות שמורות. אמנות דיגיטלית של AI.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // JavaScript עבור סמן עכבר מותאם אישית, פרלקס ואנימציות גלילה
+
+        // 1. סמן עכבר מותאם אישית
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // הוספת מצב ריחוף לסמן עכבר לאלמנטים אינטראקטיביים
+        document.querySelectorAll('a, button, input[type="submit"], [role="button"], .hover\\:shadow-lg, .hover\\:bg-accent-blue, .hover\\:text-white, .hover\\:underline, .hover\\:scale-105').forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('hovered'));
+        });
+        
+        // 2. אפקט פרלקס עבור כתמי דיו ברקע (על תזוזת העכבר)
+        const inkSplatter1 = document.querySelector('.ink-splatter:nth-of-type(1)');
+        const inkSplatter2 = document.querySelector('.ink-splatter:nth-of-type(2)');
+        const inkSplatter3 = document.querySelector('.ink-splatter:nth-of-type(3)');
+
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+
+            // הזזת הכתמים ביחס לתנועת העכבר
+            if (inkSplatter1) inkSplatter1.style.transform = `translate(${-x * 30}px, ${-y * 30}px)`;
+            if (inkSplatter2) inkSplatter2.style.transform = `translate(${-x * 50}px, ${-y * 50}px)`;
+            if (inkSplatter3) inkSplatter3.style.transform = `translate(${-x * 20}px, ${-y * 20}px)`;
+        });
+
+        // 3. אנימציית חשיפת גלילה (Scroll Reveal)
+        const revealElements = document.querySelectorAll('.reveal');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                } else {
+                    // אופציונלי: הסרת המחלקה 'active' כאשר האלמנט יוצא מה-viewport
+                    // entry.target.classList.remove('active');
+                }
+            });
+        }, {
+            threshold: 0.2, // מפעיל כאשר 20% מהאלמנט גלוי
+            rootMargin: '0px 0px -100px 0px' // התאמת רגישות (מפעיל קצת לפני הגעה מלאה)
+        });
+
+        revealElements.forEach(el => observer.observe(el));
+
+        // חשיפה ראשונית לאלמנטים שכבר ב-viewport בטעינת הדף
+        document.addEventListener('DOMContentLoaded', () => {
+            revealElements.forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight) {
+                    el.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="h-full overflow-hidden">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מגדלור הדעת: שליטה בבינה המלאכותית</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Noto+Serif+Hebrew:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Romanesque styles */
+        body {
+            font-family: 'Noto Serif Hebrew', serif;
+            cursor: none; /* Hide default cursor */
+            overflow: hidden;
+            background-color: #1A1A1A; /* Dark base for stone */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Cinzel Decorative', serif;
+            color: #D4AF37; /* Gold for titles */
+        }
+        .roman-border {
+            border-style: solid;
+            border-width: 4px;
+            border-color: #C7A008; /* Darker gold */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5), 0 0 15px rgba(0,0,0,0.3); /* Inner shadow for depth, outer for elevation */
+            position: relative;
+        }
+        .roman-panel {
+            background-color: #3A3A3A; /* Stone grey */
+            border-style: solid;
+            border-width: 2px;
+            border-color: #8C8C8C; /* Lighter grey for inner border */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 0 8px rgba(0,0,0,0.3);
+        }
+
+        /* Custom Cursor Styling - MANDATORY High-Contrast */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* White border for visibility on dark */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for visibility on light */
+            transition: transform 0.1s ease-out, border-color 0.2s ease-out, box-shadow 0.2s ease-out; /* Smooth transitions */
+        }
+        .custom-cursor.active {
+            transform: scale(1.5); /* Enlarge on click/hover for feedback */
+            border-color: #D4AF37; /* Gold on active for artistic touch */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 15px rgba(212,175,55,0.7); /* Glow for active feedback */
+        }
+
+        /* Main content display transition */
+        .content-transition-enter-active, .content-transition-leave-active {
+            transition: opacity 0.7s ease, transform 0.7s ease; /* Match JS timeout */
+        }
+        .content-transition-enter-from, .content-transition-leave-to {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .content-transition-enter-to, .content-transition-leave-from {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive adjustments for overall layout */
+        @media (max-width: 768px) {
+            #art-container {
+                padding: 1rem;
+            }
+            #main-display {
+                min-height: 300px; /* Smaller min-height for mobile */
+                padding: 1rem;
+            }
+            .content-transition h1 {
+                font-size: 2.5rem; /* Adjust title size */
+            }
+            .content-transition p, .content-transition li {
+                font-size: 1rem; /* Adjust text size */
+            }
+        }
+    </style>
+</head>
+<body class="bg-stone-900 text-gray-100 flex items-center justify-center min-h-screen">
+    <div class="custom-cursor"></div>
+
+    <div id="art-container" class="relative w-full max-w-7xl h-full mx-auto p-4 flex flex-col items-center justify-center">
+
+        <!-- Background layer - Fixed 'fresco' or 'stone wall' with subtle texture -->
+        <div class="fixed inset-0 bg-gradient-to-br from-stone-900 via-stone-800 to-stone-900 opacity-90 z-[-1]"></div>
+        <div class="fixed inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' viewBox=\'0 0 100 100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M100 0L0 100V0H100Z\' fill=\'%233A3A3A\' fill-opacity=\'0.05\'/%3E%3C/svg%3E')] opacity-70 z-[-1]"></div>
+
+
+        <!-- Main Central Altar / Fresco Display Area -->
+        <div id="main-display" class="roman-border relative bg-stone-800 p-8 md:p-12 lg:p-16 text-center shadow-lg rounded-xl mb-8 max-w-4xl w-full mx-auto transition-all duration-700 ease-in-out" style="min-height: 450px;">
+            <div class="content-transition">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl mb-6 leading-tight text-amber-300">
+                    מגדלור הדעת: שליטה בבינה המלאכותית - נבואת העתיד, עתה מתגלה
+                </h1>
+                <p class="text-xl md:text-2xl lg:text-3xl text-gray-200 leading-relaxed max-w-3xl mx-auto">
+                    כמו סודות עתיקים חקוקים באבן, כך מתגלים נתיבי הבינה המלאכותית. זאביק אבינר, האדריכל המודרני, פותח שערי ידע לכל דורש.
+                </p>
+                <div class="mt-8 text-lg text-amber-400">
+                    <p>קראו את הבשורות הבאות כדי להאיר את דרככם.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Panels / Chapters below the main display -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-5xl">
+            <div class="roman-panel text-center p-6 rounded-lg cursor-pointer hover:bg-stone-700 transition-all duration-300 ease-in-out group" data-content="core-message">
+                <h3 class="text-2xl font-bold text-amber-300 mb-2 group-hover:text-amber-200">
+                    מסר הליבה: חזון האדריכל
+                </h3>
+                <p class="text-gray-300 group-hover:text-gray-100 text-lg">
+                    להפוך את הנסתר לגלוי, ואת המורכב לפשוט.
+                </p>
+            </div>
+
+            <div class="roman-panel text-center p-6 rounded-lg cursor-pointer hover:bg-stone-700 transition-all duration-300 ease-in-out group" data-content="target-audience">
+                <h3 class="text-2xl font-bold text-amber-300 mb-2 group-hover:text-amber-200">
+                    קהל היעד: קולות המבקשים
+                </h3>
+                <p class="text-gray-300 group-hover:text-gray-100 text-lg">
+                    מן הטוענים בשער ועד בוני הפרויקטים.
+                </p>
+            </div>
+
+            <div class="roman-panel text-center p-6 rounded-lg cursor-pointer hover:bg-stone-700 transition-all duration-300 ease-in-out group" data-content="expertise-areas">
+                <h3 class="text-2xl font-bold text-amber-300 mb-2 group-hover:text-amber-200">
+                    תחומי המומחיות: פרקי הידע
+                </h3>
+                <p class="text-gray-300 group-hover:text-gray-100 text-lg">
+                    מטקסטים ועד פיתוח אפליקציות חכמות.
+                </p>
+            </div>
+
+            <div class="roman-panel text-center p-6 rounded-lg cursor-pointer hover:bg-stone-700 transition-all duration-300 ease-in-out group" data-content="services-offered">
+                <h3 class="text-2xl font-bold text-amber-300 mb-2 group-hover:text-amber-200">
+                    שירותי המקדש: מנחות הדעת
+                </h3>
+                <p class="text-gray-300 group-hover:text-gray-100 text-lg">
+                    סדנאות, שיעורים, הרצאות וייעוץ אישי.
+                </p>
+            </div>
+
+            <div class="roman-panel text-center p-6 rounded-lg cursor-pointer hover:bg-stone-700 transition-all duration-300 ease-in-out group" data-content="the-guide">
+                <h3 class="text-2xl font-bold text-amber-300 mb-2 group-hover:text-amber-200">
+                    המדריך: זאביק, הסופר של הסיליקון
+                </h3>
+                <p class="text-gray-300 group-hover:text-gray-100 text-lg">
+                    ידו המיומנת מעצבת חזונות בינה מלאכותית.
+                </p>
+            </div>
+
+            <div class="roman-panel text-center p-6 rounded-lg cursor-pointer hover:bg-stone-700 transition-all duration-300 ease-in-out group" data-content="contact-info">
+                <h3 class="text-2xl font-bold text-amber-300 mb-2 group-hover:text-amber-200">
+                    יצירת קשר: קריאה לאדריכל
+                </h3>
+                <p class="text-gray-300 group-hover:text-gray-100 text-lg">
+                    לשגר מסר או להתייעץ.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const customCursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+        document.addEventListener('mousedown', () => {
+            customCursor.classList.add('active');
+        });
+        document.addEventListener('mouseup', () => {
+            customCursor.classList.remove('active');
+        });
+
+        const mainDisplayContentWrapper = document.getElementById('main-display').querySelector('.content-transition');
+        const contentSections = {
+            'core-message': `
+                <h2 class="text-3xl md:text-4xl text-amber-300 mb-6">מסר הליבה: חזון האדריכל</h2>
+                <p class="text-lg md:text-xl text-gray-200 leading-relaxed mb-4">
+                    מן היסוד ועד הפסגה - הפיכת הבינה המלאכותית מכוח נסתר לכלי עוצמתי בידי כל אדם. ידע מעשי, כזה שיהפוך את מלאכת יומכם ואת חייכם לפסל חדשני.
+                </p>
+                <p class="text-base md:text-lg text-gray-300">
+                    אנו מאמינים כי בינה מלאכותית אינה נחלתם של בודדים, אלא אור המיועד להאיר את דרכם של רבים.
+                </p>
+            `,
+            'target-audience': `
+                <h2 class="text-3xl md:text-4xl text-amber-300 mb-6">קהל היעד: קולות המבקשים</h2>
+                <ul class="list-disc list-inside text-right text-lg md:text-xl text-gray-200 leading-relaxed space-y-3 mx-auto max-w-2xl">
+                    <li><strong class="text-amber-400">הטוענים בשערי ההתחלה:</strong> לבבות צמאים להבין את הנס הדיגיטלי, לפתוח את הפתח לעולם ה-AI.</li>
+                    <li><strong class="text-amber-400">אומני המלאכה:</strong> אנשי ואנשות מקצוע המחפשים לחרוט את הבינה המלאכותית בלבה של יצירתם, להטמיע כלים חכמים בעבודתם היומיומית.</li>
+                    <li><strong class="text-amber-400">שומרי המקדש:</strong> מנהלים, מנהלות וארגונים, המבקשים להאיר את דרך צבאם באור החדש ולצייד צוותים בידע פורץ דרך.</li>
+                    <li><strong class="text-amber-400">בוני הפרויקטים:</strong> ברמה מתקדמת, אלו הרוקמים חזונות חדשים מחוטי קוד ובינה, ומחפשים ליווי בפיתוח פרויקטים מבוססי AI.</li>
+                </ul>
+            `,
+            'expertise-areas': `
+                <h2 class="text-3xl md:text-4xl text-amber-300 mb-6">תחומי המומחיות: פרקי הידע</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-lg md:text-xl text-gray-200 leading-relaxed max-w-3xl mx-auto">
+                    <p class="roman-panel p-4 rounded-lg bg-stone-700">חקיקת טקסטים ובראיות תוכן.</p>
+                    <p class="roman-panel p-4 rounded-lg bg-stone-700">בניית כלים חכמים לאורח חיים חדש.</p>
+                    <p class="roman-panel p-4 rounded-lg bg-stone-700">אריגת מרחבים דיגיטליים מבוססי בינה.</p>
+                    <p class="roman-panel p-4 rounded-lg bg-stone-700">ניתוח כתבים עתיקים ונתונים מודרניים.</p>
+                    <p class="roman-panel p-4 rounded-lg bg-stone-700">הגשמת צורות וצבעים באומנות אלגוריתמית.</p>
+                    <p class="roman-panel p-4 rounded-lg bg-stone-700">אוטומציה - תנועה נצחית במחזור הפעולות.</p>
+                </div>
+            `,
+            'services-offered': `
+                <h2 class="text-3xl md:text-4xl text-amber-300 mb-6">שירותי המקדש: מנחות הדעת</h2>
+                <ul class="list-disc list-inside text-right text-lg md:text-xl text-gray-200 leading-relaxed space-y-3 mx-auto max-w-2xl">
+                    <li><strong class="text-amber-400">סדנאות בקהל:</strong> מסעות מעשיים וממוקדים אל לב הבינה, בקבוצות קטנות ואינטימיות.</li>
+                    <li><strong class="text-amber-400">שיעורים פרטיים:</strong> חניכה אישית בחדרי הידע, מותאמת לרמתכם ולצרכיכם הייחודיים.</li>
+                    <li><strong class="text-amber-400">הרצאות לארגונים:</strong> פתיחת אופקים חדשים למשרתי הכתר, הצגת חזית הטכנולוגיה והשפעתה.</li>
+                    <li><strong class="text-amber-400">ייעוץ ופיתוח:</strong> ליווי צמוד של האדריכל בבניית החזון, החל משלב הרעיון ועד יישום הפרויקט.</li>
+                </ul>
+            `,
+            'the-guide': `
+                <h2 class="text-3xl md:text-4xl text-amber-300 mb-6">המדריך: זאביק, הסופר של הסיליקון</h2>
+                <div class="flex flex-col md:flex-row items-center justify-center gap-6">
+                    <img src="https://link.zevikaviner.com/zevik" alt="דיוקן של זאביק אבינר, מדריך הבינה המלאכותית" class="w-36 h-36 rounded-full roman-border object-cover border-4 border-amber-500 shadow-xl mb-4 md:mb-0">
+                    <p class="text-lg md:text-xl text-gray-200 leading-relaxed max-w-2xl text-center md:text-right">
+                        זאביק אבינר - ידו המיומנת עיצבה אינספור פרויקטים, אפליקציות ומערכות מבוססות בינה מלאכותית. סודו טמון ביכולתו המופלאה להפוך את הנסתר לגלוי, ואת המורכב לפשוט, ולהציג את הטכנולוגיה ככלי יומיומי שימושי לכל אחד ואחת.
+                    </p>
+                </div>
+            `,
+            'contact-info': `
+                <h2 class="text-3xl md:text-4xl text-amber-300 mb-6">יצירת קשר: קריאה לאדריכל</h2>
+                <p class="text-lg md:text-xl text-gray-200 leading-relaxed mb-4">
+                    אם ליבכם חפץ בדרך הבינה המלאכותית, אל תהססו לשגר מסר לאדריכל זאביק.
+                </p>
+                <div class="text-xl md:text-2xl text-amber-400 space-y-4">
+                    <p class="hover:text-amber-300 transition-colors duration-200">
+                        <a href="https://wa.me/972546609385" target="_blank" class="flex items-center justify-center md:justify-end gap-2">
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12.04 2c-5.46 0-9.9 4.44-9.9 9.9 0 1.77.46 3.48 1.35 4.96L.5 21.46l4.98-1.3c1.47.88 3.19 1.34 4.96 1.34 5.46 0 9.9-4.44 9.9-9.9S17.5 2 12.04 2zM15 15.6c-.19.3-.47.66-.78.78-.3.1-.96.48-1.55.22-.58-.26-1-.44-1.95-.8-.96-.35-1.87-.96-2.61-1.66-.75-.7-.99-1.34-1.1-1.52-.1-.19-.01-.4-.14-.5-.1-.1-.85-.8-.85-1.96 0-1.16.6-1.74.83-2 .24-.26.54-.3.73-.3.19 0 .4.01.58.01.2 0 .46.06.67.55.23.55.77 1.85.83 1.95.07.1.12.23.03.44-.09.2-.18.3-.34.49-.15.19-.31.32-.42.47-.1.15-.2.27-.08.48.12.2.4.63.85.96.46.33.86.47 1.15.57.29.1.48.07.67.04.19-.03.58-.24.96-.58.38-.34.62-.51.71-.58.09-.07.64-.32 1.22-.05.58.26.96.5 1.15.55.19.05.35.25.4.37.05.12.05.6-.04.88z"/>
+                            </svg>
+                            <span>ווטסאפ: 054-6609385</span>
+                        </a>
+                    </p>
+                    <p class="hover:text-amber-300 transition-colors duration-200">
+                        <a href="mailto:zaviner@gmail.com" class="flex items-center justify-center md:justify-end gap-2">
+                            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                            </svg>
+                            <span>אימייל: zaviner@gmail.com</span>
+                        </a>
+                    </p>
+                </div>
+            `
+        };
+
+        document.querySelectorAll('.roman-panel').forEach(panel => {
+            panel.addEventListener('click', function() {
+                const contentKey = this.dataset.content;
+                
+                // Clear existing transition classes and start fade-out
+                mainDisplayContentWrapper.classList.remove('content-transition-enter-to', 'content-transition-enter-active');
+                mainDisplayContentWrapper.classList.add('content-transition-leave-active', 'content-transition-leave-to');
+
+                setTimeout(() => {
+                    // Update content after fade-out completes
+                    mainDisplayContentWrapper.innerHTML = contentSections[contentKey];
+                    
+                    // Clear fade-out classes and start fade-in
+                    mainDisplayContentWrapper.classList.remove('content-transition-leave-active', 'content-transition-leave-to');
+                    mainDisplayContentWrapper.classList.add('content-transition-enter-active', 'content-transition-enter-to');
+                }, 700); /* Match this duration to the CSS transition duration */
+            });
+        });
+    </script>
+</body>
+</html>

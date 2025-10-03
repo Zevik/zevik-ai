@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - מאיץ בינה מלאכותית בסטימפאנק</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Config for Steampunk Colors/Fonts/Animations -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        steampunkBrass: '#B5A642', // Aged brass
+                        steampunkCopper: '#A45D3B', // Patinated copper
+                        steampunkDark: '#2C2A28', // Dark charcoal/leather
+                        steampunkBrown: '#5A4A3C', // Deep wood/leather
+                        steampunkLight: '#E8DCC2', // Aged parchment/bone
+                        steampunkAccent: '#3B7E67', // Deep emerald glow
+                        steampunkRed: '#8C3D3D', // Muted ruby glow (not heavily used but available)
+                    },
+                    fontFamily: {
+                        heading: ['IBM Plex Sans Arabic', 'sans-serif'],
+                        body: ['Noto Serif Hebrew', 'serif'],
+                    },
+                    keyframes: {
+                        spinSlow: {
+                            '0%': { transform: 'rotate(0deg)' },
+                            '100%': { transform: 'rotate(360deg)' },
+                        },
+                        steamRise: {
+                            '0%': { transform: 'translateY(0) scale(0.8)', opacity: '0.7' },
+                            '100%': { transform: 'translateY(-100px) scale(1.2)', opacity: '0' },
+                        }
+                    },
+                    animation: {
+                        spinSlow: 'spinSlow 30s linear infinite',
+                        steamRise: 'steamRise 7s linear infinite forwards',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Base styles for Steampunk aesthetic and RTL */
+        body {
+            font-family: var(--font-body);
+            color: theme('colors.steampunkLight');
+            background-color: theme('colors.steampunkDark');
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax */
+            direction: rtl; /* Ensure RTL for all content */
+            text-align: right; /* Default text alignment for Hebrew */
+        }
+
+        /* Custom Cursor Styling - High Contrast Mandatory */
+        #custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid theme('colors.steampunkLight'); /* Light border for visibility */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for visibility */
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%); /* Center the cursor on mouse position */
+            transition: transform 0.1s ease-out; /* Smooth movement */
+            background-color: theme('colors.steampunkDark'); /* Base color for the inner part */
+            /* Gear icon for cursor - inline SVG, URL encoded for Steampunk feel */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23B5A642' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z'/%3E%3Cpath fill='%232C2A28' d='M12 11h2v2h-2zm-3 0h2v2H9zm-3 0h2v2H6zm9 0h2v2h-2zm-6-3h2v2H9zM12 6h2v2h-2zm3 0h2v2h-2zM6 9h2v2H6zm0 3h2v2H6zm0 3h2v2H6zm3 3h2v2H9zm3 3h2v2h-2zm3 0h2v2h-2zm3-3h2v2h-2zm0-3h2v2h-2zm0-3h2v2h-2z'/%3E%3C/svg%3E");
+            background-size: cover;
+        }
+
+        /* Parallax Background Layers */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background-size: cover;
+            background-position: center;
+            z-index: -2; /* Ensure these are behind the main content */
+            will-change: transform;
+            opacity: 0.8; /* General opacity for background elements */
+        }
+        /* Individual parallax layer styles with inline SVG backgrounds for efficiency */
+        .parallax-layer-1 {
+            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"%3E%3Cfilter id="f1" x="0" y="0"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" seed="0" result="noise"/%3E%3CfeDiffuseLighting in="noise" lighting-color="%235A4A3C" surfaceScale="5"%3E%3CfeDistantLight azimuth="225" elevation="45"/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width="100%25" height="100%25" fill="%232C2A28"/%3E%3Crect width="100%25" height="100%25" filter="url(%23f1)" opacity="0.4"/%3E%3C/svg%3E');
+            background-size: cover;
+            opacity: 0.9;
+        }
+        .parallax-layer-2 {
+            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"%3E%3Cdefs%3E%3ClinearGradient id="g" x1="0%25" y1="0%25" x2="100%25" y2="100%25"%3E%3Cstop offset="0%25" stop-color="%23A45D3B" stop-opacity="0.8"/%3E%3Cstop offset="100%25" stop-color="%23B5A642" stop-opacity="0.8"/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width="100%25" height="100%25" fill="none"/%3E%3Cg opacity="0.2"%3E%3Ccircle cx="50" cy="50" r="40" stroke="url(%23g)" stroke-width="2" fill="none"/%3E%3Cpath d="M50 10L60 30L40 30L50 10Z" fill="url(%23g)"/%3E%3Cpath d="M50 90L60 70L40 70L50 90Z" fill="url(%23g)"/%3E%3Cpath d="M10 50L30 60L30 40L10 50Z" fill="url(%23g)"/%3E%3Cpath d="M90 50L70 60L70 40L90 50Z" fill="url(%23g)"/%3E%3C/g%3E%3C/svg%3E');
+            background-size: 250px;
+            opacity: 0.1;
+            animation: spinSlow 60s linear infinite;
+        }
+        .parallax-layer-3 {
+            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Cdefs%3E%3ClinearGradient id="g" x1="0%25" y1="0%25" x2="100%25" y2="100%25"%3E%3Cstop offset="0%25" stop-color="%23B5A642" stop-opacity="0.9"/%3E%3Cstop offset="100%25" stop-color="%23A45D3B" stop-opacity="0.9"/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx="50" cy="50" r="45" fill="none" stroke="url(%23g)" stroke-width="2"/%3E%3Cline x1="50" y1="5" x2="50" y2="15" stroke="url(%23g)" stroke-width="2"/%3E%3Cline x1="50" y1="85" x2="50" y2="95" stroke="url(%23g)" stroke-width="2"/%3E%3Cline x1="5" y1="50" x2="15" y2="50" stroke="url(%23g)" stroke-width="2"/%3E%3Cline x1="85" y1="50" x2="95" y2="50" stroke="url(%23g)" stroke-width="2"/%3E%3C/svg%3E');
+            background-size: 350px;
+            opacity: 0.07;
+            animation: spinSlow 40s reverse linear infinite;
+        }
+
+        /* Reusable Steampunk Panel Style */
+        .steampunk-panel {
+            background-color: rgba(44, 42, 40, 0.85); /* Dark background with transparency */
+            border: 2px solid theme('colors.steampunkBrass');
+            box-shadow: 0 0 15px rgba(181, 166, 66, 0.6), inset 0 0 7px rgba(181, 166, 66, 0.4);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            backdrop-filter: blur(3px); /* Glassy/aetheric effect */
+            transition: all 0.3s ease-in-out;
+            text-align: right; /* Ensure RTL */
+        }
+        .steampunk-panel:hover {
+            box-shadow: 0 0 25px rgba(181, 166, 66, 0.8), inset 0 0 10px rgba(181, 166, 66, 0.5);
+            transform: translateY(-3px);
+        }
+
+        /* Glowing Text Effect */
+        .steampunk-glow-text {
+            color: theme('colors.steampunkAccent');
+            text-shadow: 0 0 8px theme('colors.steampunkAccent'), 0 0 15px rgba(59, 126, 103, 0.5), 0 0 20px rgba(59, 126, 103, 0.2);
+        }
+        
+        /* Steampunk Button Style */
+        .steampunk-button {
+            background: linear-gradient(135deg, theme('colors.steampunkBrass') 0%, theme('colors.steampunkCopper') 100%);
+            color: theme('colors.steampunkDark');
+            padding: 0.75rem 1.5rem;
+            border-radius: 5px;
+            font-family: var(--font-heading);
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.3);
+            transition: all 0.2s ease-in-out;
+            border: 1px solid theme('colors.steampunkBrown');
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .steampunk-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.4);
+            filter: brightness(1.1);
+        }
+
+        /* Generative Steam Particle Styling */
+        .steam-particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: steamRise 5s linear infinite;
+            filter: blur(1px);
+            z-index: -1; /* Behind content but in front of fixed backgrounds */
+        }
+
+        /* Responsive fonts using clamp() for fluid typography */
+        .text-h1-responsive { font-size: clamp(2.8rem, 8vw, 5rem); line-height: 1.2; }
+        .text-h2-responsive { font-size: clamp(2.2rem, 6vw, 3.8rem); line-height: 1.3; }
+        .text-h3-responsive { font-size: clamp(1.6rem, 4vw, 2.8rem); line-height: 1.4; }
+        .text-p-responsive { font-size: clamp(1rem, 2vw, 1.25rem); line-height: 1.7; }
+
+        /* Custom scrollbar for a themed experience */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: theme('colors.steampunkDark');
+            border-left: 1px solid theme('colors.steampunkBrown'); /* Border for RTL */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.steampunkBrass');
+            border-radius: 6px;
+            border: 2px solid theme('colors.steampunkCopper');
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.steampunkCopper');
+            box-shadow: 0 0 5px theme('colors.steampunkBrass');
+        }
+
+        /* Steampunk Card for expertise areas */
+        .steampunk-card {
+            background-color: rgba(60, 50, 40, 0.75); /* slightly lighter brown */
+            border: 1px solid theme('colors.steampunkCopper');
+            box-shadow: 0 0 8px rgba(164, 93, 59, 0.5), inset 0 0 4px rgba(164, 93, 59, 0.3);
+            border-radius: 6px;
+            padding: 1.5rem;
+            position: relative;
+            transition: all 0.3s ease-in-out;
+            text-align: right;
+            overflow: hidden;
+        }
+        .steampunk-card::before {
+            content: '';
+            position: absolute;
+            top: -5px; right: -5px; bottom: -5px; left: -5px;
+            border: 1px dashed theme('colors.steampunkBrown');
+            border-radius: 8px;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: -1;
+        }
+        /* Specific hover effect for steampunk-card */
+        .steampunk-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(164, 93, 59, 0.7), inset 0 0 7px rgba(164, 93, 59, 0.5);
+        }
+
+        /* Steampunk Service Module for services section */
+        .steampunk-service-module {
+            background-color: rgba(60, 50, 40, 0.75);
+            border: 2px solid theme('colors.steampunkAccent');
+            box-shadow: 0 0 12px rgba(59, 126, 103, 0.6), inset 0 0 6px rgba(59, 126, 103, 0.4);
+            border-radius: 8px;
+            padding: 1.75rem;
+            position: relative;
+            text-align: right;
+            transition: all 0.3s ease-in-out;
+            overflow: hidden;
+        }
+        .steampunk-service-module:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 20px rgba(59, 126, 103, 0.8), inset 0 0 10px rgba(59, 126, 103, 0.6);
+        }
+        /* Decorative element for service modules */
+        .steampunk-service-module::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 0% 0%, transparent 20%, rgba(59, 126, 103, 0.15) 80%);
+            opacity: 0.7;
+            transform: rotate(-45deg); /* Adjusted rotation for RTL flow */
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Hero section animated gears (using inline SVG for Steampunk gear) */
+        .hero-gear {
+            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Cdefs%3E%3Cfilter id="shadow" x="-50%" y="-50%" width="200%" height="200%"%3E%3CfeOffset result="offOut" in="SourceAlpha" dx="3" dy="3"/%3E%3CfeGaussianBlur result="blurOut" in="offOut" stdDeviation="3"/%3E%3CfeBlend in="SourceGraphic" in2="blurOut" mode="normal"/%3E%3C/filter%3E%3C/defs%3E%3Ccircle cx="50" cy="50" r="40" fill="%23B5A642" stroke="%23A45D3B" stroke-width="4" filter="url(%23shadow)"/%3E%3Cg fill="%232C2A28"%3E%3Cpath d="M50 10 L40 50 L50 70 L60 50 Z" transform="rotate(0 50 50)"/%3E%3Cpath d="M50 10 L40 50 L50 70 L60 50 Z" transform="rotate(45 50 50)"/%3E%3Cpath d="M50 10 L40 50 L50 70 L60 50 Z" transform="rotate(90 50 50)"/%3E%3Cpath d="M50 10 L40 50 L50 70 L60 50 Z" transform="rotate(135 50 50)"/%3E%3Cpath d="M50 10 L40 50 L50 70 L60 50 Z" transform="rotate(180 50 50)"/%3E%3Cpath d="M50 10 L40 50 L50 70 L60 50 Z" transform="rotate(225 50 50)"/%3E%3Cpath d="M50 10 L40 50 L50 70 L60 50 Z" transform="rotate(270 50 50)"/%3E%3Cpath d="M50 10 L40 50 L50 70 L60 50 Z" transform="rotate(315 50 50)"/%3E%3C/g%3E%3C/svg%3E');
+            background-size: cover;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div id="custom-cursor"></div>
+    <!-- Parallax Layers for immersive background -->
+    <div class="parallax-layer parallax-layer-1" data-speed="0.1"></div>
+    <div class="parallax-layer parallax-layer-2" data-speed="0.2"></div>
+    <div class="parallax-layer parallax-layer-3" data-speed="0.3"></div>
+
+    <!-- Main Content Wrapper with a higher z-index -->
+    <main class="relative z-10 min-h-screen py-16 px-4 sm:px-8 lg:px-16 flex flex-col items-center">
+
+        <!-- Hero Section - Gateway to AI mastery -->
+        <section id="hero" class="w-full max-w-6xl text-center py-20 px-6 steampunk-panel overflow-hidden">
+            <h1 class="font-heading text-h1-responsive steampunk-glow-text mb-4 leading-tight">
+                <span class="block">לשלוט במנועי הבינה המלאכותית:</span>
+                <span class="block mt-2">העתיד מונע עכשיו</span>
+            </h1>
+            <p class="font-body text-p-responsive text-steampunkLight mb-8 max-w-2xl mx-auto">
+                הצטרפו לזאביק אבינר, המכונאי הראשי של העידן החדש, וגלו כיצד להפעיל את גלגלי השיניים של ה-AI בחייכם המקצועיים והאישיים.
+                הפכו את המורכבות הטכנולוגית לכוח יצירה מעשי, מהיסודות ועד לפסגת החדשנות.
+            </p>
+            <div class="flex flex-wrap justify-center gap-6 mt-8">
+                <a href="#services" class="steampunk-button text-lg">גלו את הסדנאות והקורסים</a>
+                <a href="#contact" class="steampunk-button text-lg">צרו קשר עם זאביק</a>
+            </div>
+            <!-- Animated decorative gears for the hero section -->
+            <div class="hero-gear absolute top-[-50px] right-[-50px] w-48 h-48 animate-spinSlow opacity-20 hidden lg:block"></div>
+            <div class="hero-gear absolute bottom-[-50px] left-[-50px] w-64 h-64 animate-spinSlow opacity-20 hidden lg:block"></div>
+        </section>
+
+        <!-- About Zevik Section - The Human Compass -->
+        <section id="about" class="w-full max-w-6xl my-16 p-8 steampunk-panel flex flex-col md:flex-row items-center gap-8">
+            <div class="md:w-1/3 flex justify-center order-2 md:order-1"> <!-- Image on the right for RTL -->
+                <div class="relative w-48 h-48 sm:w-64 sm:h-64 rounded-full border-4 border-steampunkBrass overflow-hidden shadow-lg">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר - מומחה בינה מלאכותית" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-steampunkDark opacity-20"></div>
+                </div>
+            </div>
+            <div class="md:w-2/3 text-right order-1 md:order-2"> <!-- Text on the left for RTL -->
+                <h2 class="font-heading text-h2-responsive steampunk-glow-text mb-4">זאביק אבינר: המצפן האנושי בעולם ה-AI</h2>
+                <p class="font-body text-p-responsive text-steampunkLight mb-4">
+                    זאביק אבינר אינו רק מומחה בינה מלאכותית – הוא אדריכל של חשיבה חדשה, מנחה המפרק את מורכבות ה-AI לרכיבים בהירים ונגישים.
+                    עם ניסיון עשיר בפיתוח מנועי למידה, אפליקציות חכמות ומערכות אוטומטיות, זאביק מביא עמו לא רק ידע תיאורטי אלא גם הבנה מעמיקה של יישומים מעשיים.
+                </p>
+                <p class="font-body text-p-responsive text-steampunkLight">
+                    מטרתו היא להפוך את הטכנולוגיה המהפכנית הזו לכלי עבודה יומיומי עבור כל אחד ואחת, ללא קשר לרמת הידע הקודמת.
+                    הוא המורה שילווה אתכם במסע אל עבר השליטה במכונות החושבות של המחר.
+                </p>
+            </div>
+        </section>
+
+        <!-- Main Message / Philosophy Section - The AI Roadmap -->
+        <section class="w-full max-w-6xl my-16 p-8 steampunk-panel text-right">
+            <h2 class="font-heading text-h2-responsive steampunk-glow-text mb-4">מפת הדרכים לבינה מלאכותית</h2>
+            <p class="font-body text-p-responsive text-steampunkLight mb-6">
+                בעולם שבו ה-AI פורץ דרך בקצב מסחרר, הצורך להבין, לשלוט וליישם אותו הופך לחיוני. אנו מאמינים כי בינה מלאכותית אינה נחלתם הבלעדית של מדעני נתונים או מהנדסים. היא כלי עוצמתי, זמין לכל מי שמוכן לפתוח את מוחו ואת תחומו המקצועי לאפשרויות חדשות.
+                מסדנאות יסוד ועד פיתוח פרויקטים מתקדמים – אנו מציעים דרך ברורה וישימה להטמיע את כוחה של הבינה המלאכותית, ולהפוך אותה למנוף לצמיחה אישית ועסקית.
+            </p>
+            <ul class="font-body text-p-responsive text-steampunkLight list-disc pr-6">
+                <li class="mb-2"><strong>הנגשה כוללת:</strong> מונחים מורכבים הופכים לכלים פשוטים.</li>
+                <li class="mb-2"><strong>יישום מיידי:</strong> ידע תיאורטי בשילוב פרקטיקה שתשנה את יומכם.</li>
+                <li class="mb-2"><strong>צמיחה מתמדת:</strong> ליווי אישי וקבוצתי לרכישת מיומנויות חדשניות.</li>
+            </ul>
+        </section>
+
+        <!-- Target Audience Section - Who Should Embark on This Mechanical Journey? -->
+        <section class="w-full max-w-6xl my-16 p-8 steampunk-panel text-right">
+            <h2 class="font-heading text-h2-responsive steampunk-glow-text mb-4">למי מיועד המסע המכניסטי הזה?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-steampunkBrown p-6 rounded-md border border-steampunkBrass shadow-inner text-center">
+                    <h3 class="font-heading text-h3-responsive text-steampunkLight mb-2">מגלי עולם חדש</h3>
+                    <p class="font-body text-sm text-steampunkLight">מתחילים ומתחילות המעוניינים להציץ אל מאחורי הקלעים של מכונת ה-AI.</p>
+                </div>
+                <div class="bg-steampunkBrown p-6 rounded-md border border-steampunkBrass shadow-inner text-center">
+                    <h3 class="font-heading text-h3-responsive text-steampunkLight mb-2">אדריכלי עבודה</h3>
+                    <p class="font-body text-sm text-steampunkLight">אנשי ואנשות מקצוע המבקשים לשלב AI בעבודתם היומיומית ולייעל תהליכים.</p>
+                </div>
+                <div class="bg-steampunkBrown p-6 rounded-md border border-steampunkBrass shadow-inner text-center">
+                    <h3 class="font-heading text-h3-responsive text-steampunkLight mb-2">מנווטים ארגוניים</h3>
+                    <p class="font-body text-sm text-steampunkLight">מנהלים, מנהלות וארגונים השואפים להקנות לצוותיהם יתרון טכנולוגי.</p>
+                </div>
+                <div class="bg-steampunkBrown p-6 rounded-md border border-steampunkBrass shadow-inner text-center">
+                    <h3 class="font-heading text-h3-responsive text-steampunkLight mb-2">מהנדסי חזון</h3>
+                    <p class="font-body text-sm text-steampunkLight">ברמה מתקדמת – פיתוח פרויקטים מבוססי AI וקפיצה אל קדמת הבמה.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Areas Section - Mechanics of AI -->
+        <section class="w-full max-w-6xl my-16 p-8 steampunk-panel text-right">
+            <h2 class="font-heading text-h2-responsive steampunk-glow-text mb-4">מכניקות הבינה המלאכותית: תחומי התמחות</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="steampunk-card">
+                    <h3 class="font-heading text-h3-responsive text-steampunkBrass mb-2">מנועי יצירת תוכן</h3>
+                    <p class="font-body text-p-responsive text-steampunkLight">כתיבת טקסטים, מאמרים, קוד ואפילו שירה באמצעות AI.</p>
+                </div>
+                <div class="steampunk-card">
+                    <h3 class="font-heading text-h3-responsive text-steampunkBrass mb-2">ארכיטקטורת יישומים חכמים</h3>
+                    <p class="font-body text-p-responsive text-steampunkLight">פיתוח אפליקציות ואוטומציות המשלבות יכולות בינה מלאכותית.</p>
+                </div>
+                <div class="steampunk-card">
+                    <h3 class="font-heading text-h3-responsive text-steampunkBrass mb-2">אתרים כפלטפורמות AI</h3>
+                    <p class="font-body text-p-responsive text-steampunkLight">בניית אתרים אינטראקטיביים המשתמשים בבינה מלאכותית לחוויית משתמש עשירה.</p>
+                </div>
+                <div class="steampunk-card">
+                    <h3 class="font-heading text-h3-responsive text-steampunkBrass mb-2">מדידת נתונים וחיזוי</h3>
+                    <p class="font-body text-p-responsive text-steampunkLight">ניתוח נתונים מורכבים והסקת תובנות עסקיות ומחקריות בעזרת AI.</p>
+                </div>
+                <div class="steampunk-card">
+                    <h3 class="font-heading text-h3-responsive text-steampunkBrass mb-2">אומנות דיגיטלית ואלגוריתמית</h3>
+                    <p class="font-body text-p-responsive text-steampunkLight">יצירת תמונות, איורים ואובייקטים אמנותיים בעזרת מודלי AI מתקדמים.</p>
+                </div>
+                <div class="steampunk-card">
+                    <h3 class="font-heading text-h3-responsive text-steampunkBrass mb-2">אוטומציה טכנולוגית</h3>
+                    <p class="font-body text-p-responsive text-steampunkLight">ייעול תהליכים עסקיים ותפעוליים באמצעות מערכות אוטומטיות מבוססות AI.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section - Advanced Training Paths -->
+        <section id="services" class="w-full max-w-6xl my-16 p-8 steampunk-panel text-right">
+            <h2 class="font-heading text-h2-responsive steampunk-glow-text mb-4">מסלולי ההדרכה: הכשרות מתקדמות</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="steampunk-service-module">
+                    <h3 class="font-heading text-h3-responsive text-steampunkAccent mb-2">סדנאות קבוצתיות: בית המלאכה ל-AI</h3>
+                    <p class="font-body text-p-responsive text-steampunkLight mb-4">
+                        סדנאות מעשיות, ממוקדות ואינטנסיביות, המיועדות לקבוצות קטנות וגדולות.
+                        למדו יחד, שתפו פעולה וצרו פתרונות AI יישומים כבר במהלך הסדנה.
+                    </p>
+                    <a href="#contact" class="steampunk-button text-sm">הצטרפו לסדנה</a>
+                </div>
+                <div class="steampunk-service-module">
+                    <h3 class="font-heading text-h3-responsive text-steampunkAccent mb-2">שיעורים פרטיים: ליווי אישי לבניית עתיד</h3>
+                    <p class="font-body text-p-responsive text-steampunkLight mb-4">
+                        הדרכה אחד על אחד, מותאמת באופן מלא לרמתכם, לצרכים הספציפיים שלכם ולפרויקטים שאתם רוצים לפתח.
+                        התקדמו בקצב שלכם, עם תמיכה מלאה.
+                    </p>
+                    <a href="#contact" class="steampunk-button text-sm">קבעו שיעור פרטי</a>
+                </div>
+                <div class="steampunk-service-module">
+                    <h3 class="font-heading text-h3-responsive text-steampunkAccent mb-2">הרצאות לארגונים: השראה והנעת צוותים</h3>
+                    <p class="font-body text-p-responsive text-steampunkLight mb-4">
+                        הרצאות מרתקות ומעוררות מחשבה, המותאמות לצרכי הארגון.
+                        פתחו את האופקים של הצוותים שלכם לעולם ה-AI וכיצד הוא יכול לשנות את העבודה המשותפת.
+                    </p>
+                    <a href="#contact" class="steampunk-button text-sm">הזמינו הרצאה</a>
+                </div>
+                <div class="steampunk-service-module">
+                    <h3 class="font-heading text-h3-responsive text-steampunkAccent mb-2">ייעוץ ופיתוח פרויקטים: בניית מנועים חדשים</h3>
+                    <p class="font-body text-p-responsive text-steampunkLight mb-4">
+                        ליווי מקצועי ואישי בפיתוח פרויקטים מבוססי AI.
+                        החל משלב הרעיון, דרך תכנון וביצוע, ועד להטמעה מלאה – הפכו את הרעיון שלכם למציאות חכמה.
+                    </p>
+                    <a href="#contact" class="steampunk-button text-sm">ייעוץ לפרויקט AI</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section - Start the Engines -->
+        <section id="contact" class="w-full max-w-6xl my-16 p-8 steampunk-panel text-center">
+            <h2 class="font-heading text-h2-responsive steampunk-glow-text mb-4">הפעילו את המנועים: צרו קשר</h2>
+            <p class="font-body text-p-responsive text-steampunkLight mb-8">
+                מוכנים לצאת למסע אל עבר עתיד מונע בינה מלאכותית?
+                זאביק אבינר ממתין לסייע לכם להניע את הפרויקט הבא שלכם.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
+                <a href="https://wa.me/972546609385" target="_blank" rel="noopener noreferrer" class="steampunk-button flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.043 2C6.549 2 2 6.549 2 12.043c0 2.378.852 4.549 2.27 6.223L2.016 22l3.885-1.021c1.637.896 3.486 1.393 5.922 1.393 5.494 0 9.99-4.502 9.99-10.006C22 6.549 17.494 2 12.043 2zm4.35 14.155c-.271.18-.58.318-.9.412-.32.094-.658.141-.996.141-.339 0-.677-.047-.996-.141-.32-.094-.628-.232-.9-.412-.271-.18-.492-.41-.663-.69-.17-.281-.256-.607-.256-.979s.085-.699.256-.979c.171-.28.392-.51.663-.69.271-.18.58-.318.9-.412.32-.094.658-.141.996-.141s.677.047.996.141c.32.094.628.232.9.412.271.18.492.41.663.69.17.281.256.607.256.979s-.085.699-.256.979c-.171.28-.392.51-.663.69zm-.25-2.03c.123.155.204.306.242.454.038.148.057.296.057.444 0 .148-.02.296-.057.444-.038.148-.119.299-.242.454-.123.155-.262.285-.417.391-.155.106-.324.19-.508.252-.184.062-.38.093-.588.093s-.404-.031-.588-.093c-.184-.062-.353-.146-.508-.252-.155-.106-.294-.236-.417-.391-.123-.155-.204-.306-.242-.454-.038-.148-.057-.296-.057-.444 0-.148.02-.296.057-.444.038-.148.119.299.242.454.123.155.262.285.417.391.155.106.324.19.508.252.184.062.38.093.588.093s.404-.031.588-.093c-.184-.062-.353-.146.508-.252.155-.106.294-.236.417-.391z"/></svg>
+                    <span>ווטסאפ: 054-6609385</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="steampunk-button flex items-center gap-2">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    <span>אימייל: zaviner@gmail.com</span>
+                </a>
+            </div>
+            <p class="font-body text-sm text-steampunkLight mt-8">
+                אל תחכו! העתיד כבר כאן, ואתם יכולים להיות חלק מרכזי בהנעתו.
+            </p>
+        </section>
+
+        <!-- Footer -->
+        <footer class="w-full max-w-6xl mt-16 p-8 steampunk-panel text-center text-sm">
+            <p class="font-body text-steampunkLight">
+                © 2023 זאביק אבינר. כל הזכויות שמורות. נבנה עם תשוקה לבינה מלאכותית.
+            </p>
+        </footer>
+
+    </main>
+
+    <!-- JavaScript for Custom Cursor, Parallax, and Generative Elements -->
+    <script>
+        // Custom Cursor movement
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // Parallax Scrolling Effect
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            parallaxLayers.forEach(layer => {
+                const speed = parseFloat(layer.getAttribute('data-speed'));
+                const yPos = -scrollY * speed;
+                layer.style.transform = `translateY(${yPos}px)`;
+            });
+        });
+
+        // Generative Steam Particles for atmospheric effect
+        const mainContent = document.querySelector('main');
+        let particleCount = 0;
+        const maxParticles = 30; // Limit particles for performance optimization
+
+        function createSteamParticle() {
+            if (particleCount >= maxParticles) return; // Cap the number of particles
+
+            const particle = document.createElement('div');
+            particle.classList.add('steam-particle');
+            const size = Math.random() * 20 + 10; // Random size between 10px and 30px
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${Math.random() * 100}%`; // Random horizontal position
+            particle.style.bottom = `-20px`; // Start below the viewport
+            particle.style.opacity = Math.random() * 0.4 + 0.1; // Random opacity for natural look
+            particle.style.animationDuration = `${Math.random() * 4 + 5}s`; // Random animation duration
+            particle.style.animationDelay = `${Math.random() * 3}s`; // Stagger animation start
+            particle.style.filter = `blur(${Math.random() * 2 + 1}px)`; // Apply blur for softness
+
+            mainContent.appendChild(particle);
+            particleCount++;
+
+            // Remove particle after its animation ends to prevent DOM bloat
+            particle.addEventListener('animationend', () => {
+                particle.remove();
+                particleCount--;
+            });
+        }
+
+        // Generate initial batch of particles on load
+        for (let i = 0; i < 15; i++) {
+            createSteamParticle();
+        }
+
+        // Periodically generate new particles to maintain the effect
+        setInterval(createSteamParticle, 1500); // Attempt to create a new particle every 1.5 seconds
+
+        // Add glow effect to interactive elements on hover
+        document.querySelectorAll('.steampunk-card, .steampunk-service-module').forEach(el => {
+            // Store original box-shadow to restore on mouseleave
+            const originalBoxShadow = el.style.boxShadow; 
+            el.addEventListener('mouseenter', () => {
+                if (el.classList.contains('steampunk-card')) {
+                    el.style.boxShadow = '0 8px 20px rgba(164, 93, 59, 0.7), inset 0 0 7px rgba(164, 93, 59, 0.5)';
+                } else if (el.classList.contains('steampunk-service-module')) {
+                    el.style.boxShadow = '0 0 20px rgba(59, 126, 103, 0.8), inset 0 0 10px rgba(59, 126, 103, 0.6)';
+                }
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.boxShadow = originalBoxShadow; // Restore original shadow
+            });
+        });
+
+    </script>
+</body>
+</html>

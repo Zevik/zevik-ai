@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מסע הבינה המלאכותית - זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Tailwind config for jewel tones and specific fonts */
+        :root {
+            --color-persian-blue: #0A1128; /* Deep, almost black blue */
+            --color-persian-gold: #D4AF37; /* Rich gold */
+            --color-persian-emerald: #145C41; /* Dark emerald green */
+            --color-persian-ruby: #8B0000; /* Deep ruby red */
+            --color-persian-saffron: #FFC107; /* Saffron yellow */
+            --color-persian-cream: #F5E8C7; /* Soft cream */
+            --color-persian-lapis: #193B6B; /* Lapis lazuli */
+            --color-persian-light-gold: #F7E4B4; /* Lighter gold for highlights */
+        }
+        
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        /* Custom styles for Persian Miniature */
+        body {
+            overflow-x: hidden; /* Prevent horizontal scroll from subtle misalignments */
+            cursor: none; /* Hide default cursor */
+            font-family: 'Noto Serif Hebrew', serif;
+            background-color: var(--color-persian-cream);
+        }
+
+        /* Custom cursor */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid white; /* Required light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Required dark shadow */
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out, width 0.1s ease-out, height 0.1s ease-out;
+            will-change: transform;
+        }
+
+        .cursor-pointer-active {
+            width: 36px;
+            height: 36px;
+            border-color: var(--color-persian-light-gold);
+            box-shadow: 0 0 0 2px var(--color-persian-blue);
+        }
+
+        /* Parallax layers */
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            right: 0; /* RTL */
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            transform: translateY(0); /* Base transform */
+            will-change: transform;
+        }
+
+        /* Generic ornate border style for content containers */
+        .ornate-frame {
+            border: 3px solid var(--color-persian-gold);
+            border-radius: 1rem;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.7); /* Soft gold glow */
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(var(--color-persian-lapis), 0.1));
+            backdrop-filter: blur(2px);
+            /* Important for high-contrast */
+            color: var(--color-persian-cream); 
+        }
+
+        /* Specific text styles for Persian Miniature feel */
+        .persian-heading {
+            color: var(--color-persian-gold);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            direction: rtl;
+            /* Ensure high contrast on varying backgrounds */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+        }
+
+        .persian-text {
+            color: var(--color-persian-cream);
+            direction: rtl;
+            line-height: 1.8;
+            /* Ensure high contrast on varying backgrounds */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+        }
+
+        /* Background patterns - used via data URI for single file */
+        .pattern-tile-1 {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0 20v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM6 34v-4h-2v4H0v2h2v4h4v-2h-4v-2h4zm0 20v-4h-2v4H0v2h2v4h4v-2h-4v-2h4zM36 4v-4h-2v4h-4v2h4v4h2v-4h4V6h-4zm0 20v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM16 14v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm30 0v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0 20v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0 20v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM50 4v-4h-2v4h-4v2h4v4h2v-4h4V6h-4zm0 20v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zM16 4v-4h-2v4h-4v2h4v4h2v-4h4V6h-4zM0 0h6v6H0V0zm30 0h6v6h-6V0zm0 60h6v-6h-6v6zM0 60h6v-6H0v6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .pattern-tile-2 {
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230A1128' fill-opacity='0.1'%3E%3Cpath d='M0 20L20 0H0v20zm20 0L40 0v20H20zm0 20L40 20v20H20zm0-20L0 40h20V20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+
+        /* Keyframe for subtle shimmer */
+        @keyframes goldShimmer {
+            0% { transform: scale(1); opacity: 0.9; }
+            50% { transform: scale(1.01); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.9; }
+        }
+
+        .animate-shimmer {
+            animation: goldShimmer 4s ease-in-out infinite;
+        }
+
+        /* RTL-specific adjustments for icons/emojis next to text */
+        .space-x-reverse > *:not([hidden]) ~ *:not([hidden]) {
+            margin-right: var(--tw-space-x-reverse);
+            margin-left: 0px;
+        }
+
+        .space-x-reverse {
+             --tw-space-x-reverse: 0.5rem; /* Adjust as needed */
+        }
+
+    </style>
+</head>
+<body class="bg-persian-blue text-persian-cream font-serif antialiased">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-layer z-[-3]" data-speed="0.05" style="background-image: linear-gradient(180deg, var(--color-persian-lapis) 0%, var(--color-persian-blue) 100%);"></div>
+    <div class="parallax-layer z-[-2] opacity-20 pattern-tile-1" data-speed="0.1"></div>
+    <div class="parallax-layer z-[-1] opacity-10 pattern-tile-2" data-speed="0.2"></div>
+
+    <!-- Main Content Wrapper -->
+    <div id="content-wrapper" class="relative z-0 min-h-[300vh] pb-32">
+
+        <!-- 1. Opening Tableau: The Illuminated Scroll -->
+        <section class="h-[100vh] flex items-center justify-center relative overflow-hidden p-8">
+            <div class="absolute inset-0 bg-gradient-to-br from-persian-lapis to-persian-emerald opacity-70"></div>
+            <div class="relative w-4/5 lg:w-3/5 xl:w-1/2 p-8 md:p-12 ornate-frame text-center animate-shimmer"
+                 data-scroll-reveal="fade-up" data-delay="100">
+                <h1 class="text-4xl md:text-6xl font-extrabold mb-6 persian-heading animate-shimmer">
+                    הגילוי הגדול: מסע לשליטה בבינה המלאכותית
+                </h1>
+                <p class="text-xl md:text-2xl font-light persian-text">
+                    ברוכים הבאים למסע אל נבכי הידע העתיק-חדש, בו עתיד הטכנולוגיה פוגש את תבונת האדם.
+                    הצטרפו לזאביק אבינר, המדריך המובהק, לגלות את סודות ה-AI.
+                </p>
+                <div class="mt-8 text-2xl md:text-3xl font-bold persian-heading">
+                    <span class="block">העתיד הוא עכשיו - ובשליטתכם.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. The Sage's Garden of Knowledge - Zevik Aviner's Introduction -->
+        <section class="min-h-[80vh] flex flex-col items-center justify-center p-8 relative">
+            <div class="absolute inset-0 bg-persian-blue opacity-80 z-[-1]"></div>
+            <div class="w-full lg:w-4/5 xl:w-2/3 grid md:grid-cols-3 gap-8 md:gap-12 relative z-10">
+                <div class="md:col-span-2 ornate-frame p-6 md:p-10 self-center" data-scroll-reveal="fade-right" data-delay="200">
+                    <h2 class="text-3xl md:text-5xl mb-6 persian-heading">
+                        זאביק אבינר - אמן הידע ומורה הדרך
+                    </h2>
+                    <p class="text-lg md:text-xl persian-text mb-4">
+                        כמו אמן יקר, זאביק אבינר טווה את חוטי הבינה המלאכותית למארג עשיר של הבנה ויישום.
+                        מומחיותו העצומה בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI מאפשרת לו להנגיש את הפלא
+                        הטכנולוגי לכל דורש, ולהפוך אותו מכלי מסתורי לכלי עבודה יומיומי.
+                    </p>
+                    <p class="text-lg md:text-xl persian-text">
+                        הוא המנחה שיפתח עבורכם את שערי הגן, יחשוף את פרחיו המרהיבים,
+                        ויעניק לכם את המפתח לשלוט בכוחותיהם.
+                    </p>
+                </div>
+                <div class="flex justify-center items-center md:col-span-1" data-scroll-reveal="fade-left" data-delay="300">
+                    <div class="relative w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-persian-gold shadow-lg shadow-persian-saffron animate-shimmer">
+                        <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר - מומחה בינה מלאכותית" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500 ease-in-out">
+                        <div class="absolute inset-0 bg-persian-blue opacity-30"></div>
+                        <div class="absolute inset-0 flex items-center justify-center text-persian-light-gold text-sm md:text-base font-bold text-center p-2 text-shadow-md">
+                            <span class="block">זאביק אבינר<br> מומחה AI</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. The Pillars of Expertise - Ornate Arches -->
+        <section class="min-h-[100vh] bg-persian-emerald pattern-tile-2 opacity-90 relative flex flex-col items-center justify-center p-8 pt-24 pb-24">
+            <h2 class="text-4xl md:text-5xl mb-16 persian-heading text-center" data-scroll-reveal="fade-down" data-delay="100">
+                ענפי העץ המלבלב: תחומי התמחות ב-AI
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-6xl relative z-10">
+                <!-- Each expertise as an ornate card -->
+                <div class="ornate-frame p-6 text-center bg-persian-lapis hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer group" data-scroll-reveal="scale-up" data-delay="150">
+                    <div class="text-5xl mb-4 text-persian-saffron group-hover:text-persian-light-gold">📜</div>
+                    <h3 class="text-2xl font-semibold mb-2 persian-heading">קול המלאכים: טקסטים ותוכן</h3>
+                    <p class="persian-text text-sm md:text-base">ליצור סיפורים, מאמרים ומסרים שיאירו את הדרך.</p>
+                </div>
+                <div class="ornate-frame p-6 text-center bg-persian-lapis hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer group" data-scroll-reveal="scale-up" data-delay="200">
+                    <div class="text-5xl mb-4 text-persian-saffron group-hover:text-persian-light-gold">⚙️</div>
+                    <h3 class="text-2xl font-semibold mb-2 persian-heading">המכונות המדברות: אפליקציות חכמות</h3>
+                    <p class="persian-text text-sm md:text-base">לבנות כלים שיבינו ויפעלו בתבונה יתרה.</p>
+                </div>
+                <div class="ornate-frame p-6 text-center bg-persian-lapis hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer group" data-scroll-reveal="scale-up" data-delay="250">
+                    <div class="text-5xl mb-4 text-persian-saffron group-hover:text-persian-light-gold">🌐</div>
+                    <h3 class="text-2xl font-semibold mb-2 persian-heading">השטיחים המרחפים: אתרים מבוססי בינה</h3>
+                    <p class="persian-text text-sm md:text-base">ליצור נוכחות דיגיטלית שתחשוב, תלמד ותגיב.</p>
+                </div>
+                <div class="ornate-frame p-6 text-center bg-persian-lapis hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer group" data-scroll-reveal="scale-up" data-delay="300">
+                    <div class="text-5xl mb-4 text-persian-saffron group-hover:text-persian-light-gold">🔍</div>
+                    <h3 class="text-2xl font-semibold mb-2 persian-heading">מפות הכוכבים: ניתוח נתונים ומחקר</h3>
+                    <p class="persian-text text-sm md:text-base">לפענח את סודות המידע, לגלות תובנות נסתרות.</p>
+                </div>
+                <div class="ornate-frame p-6 text-center bg-persian-lapis hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer group" data-scroll-reveal="scale-up" data-delay="350">
+                    <div class="text-5xl mb-4 text-persian-saffron group-hover:text-persian-light-gold">🎨</div>
+                    <h3 class="text-2xl font-semibold mb-2 persian-heading">צבעי החלום: יצירת תמונות ואומנות</h3>
+                    <p class="persian-text text-sm md:text-base">לברוא יצירות ויזואליות מרהיבות, ללא גבולות.</p>
+                </div>
+                <div class="ornate-frame p-6 text-center bg-persian-lapis hover:scale-105 transition-transform duration-300 ease-in-out cursor-pointer group" data-scroll-reveal="scale-up" data-delay="400">
+                    <div class="text-5xl mb-4 text-persian-saffron group-hover:text-persian-light-gold">🔄</div>
+                    <h3 class="text-2xl font-semibold mb-2 persian-heading">נתיבי המשי: אוטומציה של תהליכים</h3>
+                    <p class="persian-text text-sm md:text-base">לייעל, להאיץ ולשחרר את פוטנציאל העבודה.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Offerings - The Four Streams of Wisdom -->
+        <section class="min-h-[100vh] bg-persian-blue opacity-95 relative flex flex-col items-center justify-center p-8 pt-24 pb-24">
+            <h2 class="text-4xl md:text-5xl mb-16 persian-heading text-center" data-scroll-reveal="fade-up" data-delay="100">
+                ארבעת זרמי החכמה: שירותי ההדרכה
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 w-full max-w-5xl relative z-10">
+                <!-- Each service as a larger, more detailed panel -->
+                <div class="ornate-frame p-8 bg-persian-lapis flex flex-col items-center text-center group" data-scroll-reveal="fade-right" data-delay="150">
+                    <div class="text-6xl mb-6 text-persian-gold group-hover:scale-110 transition-transform duration-300 ease-in-out">🤝</div>
+                    <h3 class="text-3xl font-semibold mb-4 persian-heading">המעגל המואר - סדנאות קבוצתיות</h3>
+                    <p class="persian-text text-lg md:text-xl">
+                        התכנסו יחד למסעות מעשיים ממוקדים, בהם כל משתתף מוצא את מקומו במארג הידע.
+                        למידה חווייתית שתהפוך את עולם ה-AI לנגיש וישים לקבוצה.
+                    </p>
+                </div>
+                <div class="ornate-frame p-8 bg-persian-lapis flex flex-col items-center text-center group" data-scroll-reveal="fade-left" data-delay="200">
+                    <div class="text-6xl mb-6 text-persian-gold group-hover:scale-110 transition-transform duration-300 ease-in-out">👤</div>
+                    <h3 class="text-3xl font-semibold mb-4 persian-heading">הנתיב האישי - שיעורים פרטיים</h3>
+                    <p class="persian-text text-lg md:text-xl">
+                        מסע אישי, מותאם לרמתכם וצרכיכם המדויקים. זאביק ילווה אתכם צעד אחר צעד,
+                        ויבטיח הבנה מעמיקה ויכולת יישום מיידית.
+                    </p>
+                </div>
+                <div class="ornate-frame p-8 bg-persian-lapis flex flex-col items-center text-center group" data-scroll-reveal="fade-right" data-delay="250">
+                    <div class="text-6xl mb-6 text-persian-gold group-hover:scale-110 transition-transform duration-300 ease-in-out">🏰</div>
+                    <h3 class="text-3xl font-semibold mb-4 persian-heading">פתיחת השערים - הרצאות לארגונים</h3>
+                    <p class="persian-text text-lg md:text-xl">
+                        השראה והנחיה לצוותים, מנהלים וארגונים. הרצאות שיאירו אופקים, יעוררו סקרנות
+                        ויניעו את עולם העבודה לעבר העתיד.
+                    </p>
+                </div>
+                <div class="ornate-frame p-8 bg-persian-lapis flex flex-col items-center text-center group" data-scroll-reveal="fade-left" data-delay="300">
+                    <div class="text-6xl mb-6 text-persian-gold group-hover:scale-110 transition-transform duration-300 ease-in-out">✨</div>
+                    <h3 class="text-3xl font-semibold mb-4 persian-heading">בניית המקדש - ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="persian-text text-lg md:text-xl">
+                        ליווי מקצועי מתחילתו ועד סופו של כל מיזם AI, מתכנון אסטרטגי ועד יישום טכני.
+                        הגשימו את חזונכם בעזרת מומחה.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Final Scroll - The Seal of Contact -->
+        <section class="min-h-[50vh] flex items-center justify-center p-8 relative">
+            <div class="relative w-4/5 lg:w-2/5 p-8 md:p-12 ornate-frame text-center bg-persian-ruby shadow-2xl shadow-persian-ruby animate-shimmer"
+                 data-scroll-reveal="fade-up" data-delay="100">
+                <h2 class="text-3xl md:text-5xl font-extrabold mb-6 persian-heading">
+                    צור קשר: פתחו את השער
+                </h2>
+                <p class="text-xl md:text-2xl font-light persian-text mb-8">
+                    המסע לשליטה בבינה המלאכותית מתחיל בצעד אחד.
+                    אל תהססו לפנות אל המדריך, זאביק אבינר, ולהתחיל את פרקכם החדש.
+                </p>
+                <div class="space-y-4">
+                    <p class="text-2xl md:text-3xl font-bold persian-heading">
+                        <a href="https://wa.me/972546609385" class="text-persian-light-gold hover:text-persian-saffron transition-colors duration-300 flex items-center justify-center space-x-2 space-x-reverse">
+                            <span class="ml-2">וואטסאפ: 054-6609385</span> 💬
+                        </a>
+                    </p>
+                    <p class="text-2xl md:text-3xl font-bold persian-heading">
+                        <a href="mailto:zaviner@gmail.com" class="text-persian-light-gold hover:text-persian-saffron transition-colors duration-300 flex items-center justify-center space-x-2 space-x-reverse">
+                            <span class="ml-2">אימייל: zaviner@gmail.com</span> ✉️
+                        </a>
+                    </p>
+                </div>
+                <div class="mt-12 text-lg persian-text opacity-70">
+                    © 2024 כל הזכויות שמורות לזאביק אבינר.
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Custom Tailwind Configuration for colors
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'persian-blue': 'var(--color-persian-blue)',
+                        'persian-gold': 'var(--color-persian-gold)',
+                        'persian-emerald': 'var(--color-persian-emerald)',
+                        'persian-ruby': 'var(--color-persian-ruby)',
+                        'persian-saffron': 'var(--color-persian-saffron)',
+                        'persian-cream': 'var(--color-persian-cream)',
+                        'persian-lapis': 'var(--color-persian-lapis)',
+                        'persian-light-gold': 'var(--color-persian-light-gold)',
+                    },
+                    fontFamily: {
+                        serif: ['Noto Serif Hebrew', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <script>
+        // JavaScript for custom cursor, parallax, and scroll animations
+
+        // 1. Custom Cursor
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        document.addEventListener('mouseover', (e) => {
+            if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('.group') || e.target.closest('.cursor-pointer')) {
+                customCursor.classList.add('cursor-pointer-active');
+            }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+            if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || e.target.closest('.group') || e.target.closest('.cursor-pointer')) {
+                customCursor.classList.remove('cursor-pointer-active');
+            }
+        });
+        
+        // Ensure cursor is removed if leaving the document window
+        document.addEventListener('mouseleave', () => {
+            customCursor.style.opacity = '0';
+        });
+
+        document.addEventListener('mouseenter', () => {
+            customCursor.style.opacity = '1';
+        });
+
+
+        // 2. Parallax Scrolling
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+        const contentWrapper = document.getElementById('content-wrapper');
+
+        function updateParallax() {
+            const scrollPosition = window.pageYOffset;
+            parallaxLayers.forEach(layer => {
+                const speed = parseFloat(layer.dataset.speed);
+                const translateY = -(scrollPosition * speed);
+                layer.style.transform = `translateY(${translateY}px)`;
+            });
+        }
+
+        // 3. Scroll Reveal Animations (simplified intersection observer)
+        const scrollRevealElements = document.querySelectorAll('[data-scroll-reveal]');
+
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // 10% of element visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = parseInt(entry.target.dataset.delay) || 0;
+                    const animationType = entry.target.dataset.scrollReveal;
+
+                    // Set initial state before transition
+                    entry.target.style.transition = 'none'; // Temporarily disable transition
+                    entry.target.style.opacity = '0';
+
+                    if (animationType === 'fade-up') {
+                        entry.target.style.transform = 'translateY(50px)';
+                    } else if (animationType === 'fade-right') {
+                        entry.target.style.transform = 'translateX(-50px)'; // RTL: comes from left
+                    } else if (animationType === 'fade-left') {
+                        entry.target.style.transform = 'translateX(50px)'; // RTL: comes from right
+                    } else if (animationType === 'scale-up') {
+                        entry.target.style.transform = 'scale(0.8)';
+                    } else if (animationType === 'fade-down') {
+                        entry.target.style.transform = 'translateY(-50px)';
+                    }
+                    
+                    // Trigger reflow to ensure initial state is applied
+                    void entry.target.offsetWidth; 
+
+                    // Apply final state with transition after a short delay
+                    setTimeout(() => {
+                         entry.target.style.transition = `opacity 0.8s ease-out ${delay}ms, transform 0.8s ease-out ${delay}ms`;
+                         entry.target.style.opacity = '1';
+                         entry.target.style.transform = 'translateY(0) translateX(0) scale(1)';
+                    }, 50); // A small delay to ensure transition property is active
+
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, observerOptions);
+
+        scrollRevealElements.forEach(el => {
+            // Set initial hidden state for all elements
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(0) scale(1)'; // Default, will be overridden by animation type
+            el.style.willChange = 'opacity, transform'; // Performance hint
+
+            const animationType = el.dataset.scrollReveal;
+            if (animationType === 'fade-up') {
+                el.style.transform = 'translateY(50px)';
+            } else if (animationType === 'fade-right') {
+                el.style.transform = 'translateX(-50px)';
+            } else if (animationType === 'fade-left') {
+                el.style.transform = 'translateX(50px)';
+            } else if (animationType === 'scale-up') {
+                el.style.transform = 'scale(0.8)';
+            } else if (animationType === 'fade-down') {
+                el.style.transform = 'translateY(-50px)';
+            }
+
+            observer.observe(el);
+        });
+
+
+        // Event Listeners
+        window.addEventListener('scroll', updateParallax);
+        window.addEventListener('resize', updateParallax); // Recalculate on resize
+        updateParallax(); // Initial call
+    </script>
+</body>
+</html>

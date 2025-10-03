@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פירוק הבינה, הרכבת העתיד - זאביק אבינר AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;700&family=Heebo:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define a core color palette with CSS variables for consistency and dynamic use */
+        :root {
+            --primary-bg: #0F0223; /* Deep Indigo/Violet */
+            --content-bg: rgba(18, 10, 43, 0.6); /* Slightly lighter, semi-transparent for depth */
+            --accent-light: #F0F6FF; /* Soft off-white for main text */
+            --accent-yellow: #FACC15; /* Tailwind yellow-400 for headings/emphasis */
+            --accent-pink: #EC4899; /* Tailwind pink-500 */
+            --accent-cyan: #22D3EE; /* Tailwind cyan-400 */
+            --accent-indigo: #818CF8; /* Tailwind indigo-300 */
+            
+            /* Particle colors (with initial opacity) */
+            --particle-color-1: rgba(250, 200, 50, 0.7); /* Custom vibrant yellow */
+            --particle-color-2: rgba(236, 72, 153, 0.7); /* Pink */
+            --particle-color-3: rgba(34, 211, 238, 0.7); /* Cyan */
+            --particle-color-4: rgba(129, 140, 248, 0.7); /* Indigo */
+        }
+        
+        body {
+            font-family: 'Heebo', sans-serif;
+            color: var(--accent-light);
+            background-color: var(--primary-bg);
+            overflow: hidden; /* Hide scrollbars for an immersive full-screen experience */
+            margin: 0;
+            cursor: none; /* Hide default cursor to use custom one */
+            -webkit-font-smoothing: antialiased; /* Better font rendering */
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Frank Ruhl Libre', serif;
+            color: var(--accent-yellow); /* Headings use accent yellow for strong visual anchor */
+        }
+        
+        /* Custom Cursor Styling - High Contrast Mandatory */
+        .custom-cursor {
+            position: fixed;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* Light border for visibility on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for visibility on light backgrounds */
+            pointer-events: none; /* Allows clicks to pass through */
+            z-index: 9999; /* Always on top */
+            transform: translate(-50%, -50%); /* Centers the cursor */
+            transition: transform 0.1s ease-out, opacity 0.3s ease;
+            will-change: transform; /* Optimize animation performance */
+            opacity: 1; /* Visible by default */
+        }
+        .custom-cursor.hidden {
+            opacity: 0; /* Hide when mouse leaves the document */
+        }
+        
+        canvas {
+            display: block; /* Ensure canvas takes full space */
+        }
+
+        /* Divisionism-inspired content block styling */
+        .content-block {
+            background: var(--content-bg);
+            backdrop-filter: blur(5px); /* Soft blur behind content for depth */
+            -webkit-backdrop-filter: blur(5px);
+            border-radius: 1rem; /* Softer, organic edges */
+            padding: 2.5rem;
+            margin: 2rem 0;
+            position: relative;
+            /* Luminous, multi-color shadow to mimic optical blending */
+            box-shadow: 0 0 30px rgba(var(--accent-cyan-rgb, 34, 211, 238), 0.3),
+                        0 0 15px rgba(var(--accent-pink-rgb, 236, 72, 153), 0.2);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            will-change: transform, box-shadow; /* Optimize animation performance */
+        }
+        .content-block:hover {
+            transform: translateY(-5px); /* Subtle lift on hover */
+            box-shadow: 0 0 40px rgba(var(--accent-cyan-rgb, 34, 211, 238), 0.5),
+                        0 0 20px rgba(var(--accent-pink-rgb, 236, 72, 153), 0.3),
+                        0 0 60px rgba(var(--accent-yellow-rgb, 250, 219, 70), 0.2);
+        }
+
+        /* Text glow effect for headings and emphasis */
+        .text-glow {
+            text-shadow: 0 0 8px rgba(var(--accent-yellow-rgb, 250, 219, 70), 0.6),
+                         0 0 15px rgba(var(--accent-cyan-rgb, 34, 211, 238), 0.3);
+        }
+
+        /* RTL specific adjustments for text alignment */
+        .text-right { text-align: right; }
+        .text-left { text-align: left; } /* For elements like phone numbers that naturally flow LTR */
+        
+        /* Image glow effect for Zevik's photo */
+        .glow-effect {
+            box-shadow: 0 0 20px rgba(var(--accent-cyan-rgb, 34, 211, 238), 0.7),
+                        0 0 40px rgba(var(--accent-yellow-rgb, 250, 219, 70), 0.5);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+        .glow-effect:hover {
+            box-shadow: 0 0 30px rgba(var(--accent-cyan-rgb, 34, 211, 238), 1),
+                        0 0 60px rgba(var(--accent-yellow-rgb, 250, 219, 70), 0.7);
+        }
+    </style>
+</head>
+<body class="selection:bg-cyan-700 selection:text-white">
+
+    <!-- Background Canvas for Divisionism Particles - fixed position, negative z-index -->
+    <canvas id="divisionismCanvas" class="fixed inset-0 w-full h-full z-[-1]"></canvas>
+
+    <!-- Custom Cursor Element -->
+    <div class="custom-cursor"></div>
+
+    <!-- Main Content Wrapper - relative position, positive z-index to overlay canvas -->
+    <div class="relative z-10 min-h-screen flex flex-col items-center justify-center p-4 sm:p-8 md:p-12 lg:p-16">
+        <div class="w-full max-w-4xl text-right">
+
+            <!-- Title Section - Central, prominent, with an ethereal background glow -->
+            <div class="content-block text-center mb-8 relative">
+                <h1 class="text-5xl md:text-7xl font-bold mb-4 text-glow leading-tight">פירוק הבינה, הרכבת העתיד</h1>
+                <p class="text-2xl md:text-3xl text-indigo-200 text-glow">ללמוד AI: כל פיקסל ידע, עולם חדש</p>
+                <!-- Inner glow effect for the title block itself -->
+                <div class="absolute inset-0 bg-gradient-to-br from-cyan-400 to-pink-500 opacity-20 blur-xl -z-[1] rounded-xl"></div>
+            </div>
+
+            <!-- Introduction - Sets the artistic and thematic tone -->
+            <div class="content-block">
+                <p class="text-xl leading-relaxed">ברוכים הבאים למרחב שבו ידע נשזר לאור. כאן, תלמדו לא רק להבין את הבינה המלאכותית, אלא לצייר איתה, ליצור עולמות חדשים מפיסות נתונים זוהרות. זאביק אבינר, מומחה AI, ינחה אתכם במסע האמנותי הזה, מן הנקודה הראשונית ועד ליצירת קומפוזיציות דיגיטליות מרהיבות.</p>
+            </div>
+
+            <!-- Core Message - Emphasizes the Divisionist concept of breaking down and recomposing -->
+            <div class="content-block">
+                <h2 class="text-4xl font-bold mb-6 text-glow">הנגשת AI: אמנות הפירוק וההרכבה</h2>
+                <p class="text-xl leading-relaxed">אנו פורטים את המורכב לנקודות ידע ברורות, ומלמדים כיצד לאחד אותן לכדי פתרונות מעשיים המפיצים אור על עבודתכם וחייכם. כלים חדים, ישימים, עכשיו.</p>
+            </div>
+
+            <!-- Target Audience - Described as those who "see the light" or seek it -->
+            <div class="content-block">
+                <h2 class="text-4xl font-bold mb-6 text-glow">מי יראה את האור?</h2>
+                <ul class="space-y-4 text-lg list-none pr-0">
+                    <li class="flex items-start">
+                        <span class="ml-3 text-cyan-400 text-2xl">•</span>
+                        <span><b>הסקרנים</b> - הרואים ניצוצות של עתיד ומבקשים להבין את צבעי ה-AI הראשוניים.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="ml-3 text-pink-500 text-2xl">•</span>
+                        <span><b>היוצרים</b> - אנשי מקצוע המבקשים להטמיע גוונים חדשים ביצירתם הדיגיטלית.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="ml-3 text-yellow-400 text-2xl">•</span>
+                        <span><b>האורגניזמים</b> - מנהלים וארגונים השואפים להאיר את צוותיהם בפרץ ידע.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="ml-3 text-indigo-300 text-2xl">•</span>
+                        <span><b>המאסטרים</b> - המעמיקים, היוצרים פרויקטים המרכיבים עתיד חדש, נקודה אחר נקודה.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Specializations - Presented as a "mosaic" of digital creation -->
+            <div class="content-block">
+                <h2 class="text-4xl font-bold mb-6 text-glow">פסיפס היצירה הדיגיטלית</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-lg">
+                    <p class="flex items-center"><span class="ml-2 text-yellow-400 text-2xl">◇</span>קומפוזיציה טקסטואלית ותוכן זוהר.</p>
+                    <p class="flex items-center"><span class="ml-2 text-pink-500 text-2xl">◇</span>ארכיטקטורת יישומים חכמים.</p>
+                    <p class="flex items-center"><span class="ml-2 text-cyan-400 text-2xl">◇</span>ציור אתרים מבוססי AI.</p>
+                    <p class="flex items-center"><span class="ml-2 text-indigo-300 text-2xl">◇</span>ניתוח נתונים ופיענוח דפוסים.</p>
+                    <p class="flex items-center"><span class="ml-2 text-yellow-400 text-2xl">◇</span>בריאת דימויים ואמנות אלגוריתמית.</p>
+                    <p class="flex items-center"><span class="ml-2 text-pink-500 text-2xl">◇</span>אוטומציה – זרימת תהליכים חלקה.</p>
+                </div>
+            </div>
+
+            <!-- Services Offered - "Brushes and Palettes for Creation" -->
+            <div class="content-block">
+                <h2 class="text-4xl font-bold mb-6 text-glow">מכחולים ופלטות ליצירה</h2>
+                <ul class="space-y-4 text-lg list-none pr-0">
+                    <li class="flex items-start">
+                        <span class="ml-3 text-cyan-400 text-2xl">✦</span>
+                        <span><b>סדנאות קבוצתיות</b> - למידה חווייתית בנקודות מפגש דיגיטליות.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="ml-3 text-yellow-400 text-2xl">✦</span>
+                        <span><b>שיעורים פרטיים</b> - ליווי אישי לצבעוניות הייחודית שלך.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="ml-3 text-pink-500 text-2xl">✦</span>
+                        <span><b>הרצאות לארגונים</b> - פריצת אופקים לקבוצות שלמות, בטכניקות חדשניות.</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="ml-3 text-indigo-300 text-2xl">✦</span>
+                        <span><b>ייעוץ ופיתוח פרויקטים</b> - הרכבת החזון שלך, פיקסל אחר פיקסל, ליצירה מוגמרת.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- The Guide - Zevik Aviner, the "Maestro of Digital Light" -->
+            <div class="content-block flex flex-col md:flex-row items-center gap-8">
+                <div class="flex-shrink-0">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר, מומחה בינה מלאכותית" class="rounded-full w-48 h-48 object-cover border-4 border-cyan-400 shadow-lg glow-effect">
+                </div>
+                <div>
+                    <h2 class="text-4xl font-bold mb-4 text-glow">זאביק אבינר – המאסטרו של האור הדיגיטלי</h2>
+                    <p class="text-xl leading-relaxed">מומחה בינה מלאכותית בעל ניסיון עשיר בהרכבת פרויקטים, יישומים ומערכות המאירות דרך. אמנותו היא בהנגשת הטכנולוגיה, הפיכתה למכחול זמין בידי כל אחד, כדי שיוכל לצייר את עתידו הדיגיטלי.</p>
+                </div>
+            </div>
+
+            <!-- Contact Information - "Let's weave the future together" -->
+            <div class="content-block text-center mt-8 pb-16">
+                <h2 class="text-4xl font-bold mb-6 text-glow">צרו קשר – נשזור יחד את העתיד</h2>
+                <div class="flex flex-col sm:flex-row justify-center gap-6 text-xl">
+                    <a href="https://wa.me/972546609385" class="text-cyan-400 hover:text-cyan-200 transition-colors duration-300 flex items-center justify-center sm:justify-end text-left" target="_blank">
+                        <svg class="w-7 h-7 ml-2" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C7.34 2 3.41 5.92 3.41 10.61c0 2.21.8 4.31 2.24 5.96L4 20l4.08-1.12c1.5.83 3.19 1.3 4.07 1.3 4.7 0 8.63-3.92 8.63-8.61C20.67 5.92 16.74 2 12.04 2zm3.62 14.38c-.28.24-.65.29-1.01.07l-2.08-1.16c-.32-.18-.71-.16-1.01.07-.31.23-1.02.94-1.31 1.07-.29.13-.52.2-.77.07-.26-.13-.98-.32-1.78-.96-.64-.52-1.07-1.07-1.42-1.57-.49-.7-.84-1.5-.94-1.75-.1-.25-.01-.39.22-.6l.79-.88c.2-.23.27-.47.36-.6-.1-.28-.51-1.23-.74-1.73-.23-.5-.45-.44-.6-.44h-.05c-.17 0-.36.05-.56.24-.2.19-.76.7-.76 1.71 0 1-.36 1.95.84 3.05 1.2 1.1 2.38 1.83 2.94 2.12.56.29 1.07.45 1.48.56.41.11.75.09 1.05.02.3-.08.97-.43 1.15-.65.18-.22.3-.41.45-.66.15-.25.29-.48.43-.72.14-.24.28-.48.45-.7.17-.22.31-.38.48-.54.17-.16.35-.31.54-.45.19-.14.38-.25.57-.33.19-.08.38-.11.57-.09.19.02.39.06.57.11.18.05.34.12.5.2.16.08.31.17.47.26.16.09.3.2.43.32.13.12.24.25.34.39.1.14.18.28.25.43.07.15.11.3.14.45.03.15.04.3.03.45-.01.15-.04.3-.08.45-.04.15-.1.3-.17.45-.07.15-.16.3-.27.45-.11.15-.23.29-.36.43-.13.14-.28.27-.45.4-.17.13-.37.24-.59.34-.22.1-.47.18-.75.25z"/></svg>
+                        <span class="text-left">054-6609385</span>
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="text-pink-500 hover:text-pink-300 transition-colors duration-300 flex items-center justify-center sm:justify-start text-left">
+                        <svg class="w-7 h-7 ml-2" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        <span class="text-left">zaviner@gmail.com</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- Custom Cursor Logic ---
+        const customCursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+        // Hide cursor when leaving document, show when re-entering
+        document.addEventListener('mouseenter', () => customCursor.classList.remove('hidden'));
+        document.addEventListener('mouseleave', () => customCursor.classList.add('hidden'));
+
+        // --- Divisionism Canvas Particles Logic ---
+        const canvas = document.getElementById('divisionismCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const numParticles = 250; // Increased density for a richer visual field
+        // Get particle colors from CSS variables to ensure consistency
+        const particleColors = [
+            getComputedStyle(document.documentElement).getPropertyValue('--particle-color-1'),
+            getComputedStyle(document.documentElement).getPropertyValue('--particle-color-2'),
+            getComputedStyle(document.documentElement).getPropertyValue('--particle-color-3'),
+            getComputedStyle(document.documentElement).getPropertyValue('--particle-color-4')
+        ];
+        let mouse = { x: null, y: null, radius: 120 }; // Larger influence radius for cursor
+
+        // Adjust canvas size on window resize to maintain full coverage
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            // Re-initialize particles to adapt to new dimensions
+            initParticles();
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas(); // Initial call to set canvas size
+
+        // Update mouse position
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = e.x;
+            mouse.y = e.y;
+        });
+        // Reset mouse position when leaving window to stop interaction
+        window.addEventListener('mouseout', () => {
+            mouse.x = null;
+            mouse.y = null;
+        });
+
+        // Particle constructor for individual "dots of light"
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 4 + 1; // Size 1 to 5
+                this.baseSpeedX = (Math.random() * 0.7) - 0.35; // Slightly faster base movement
+                this.baseSpeedY = (Math.random() * 0.7) - 0.35;
+                this.speedX = this.baseSpeedX;
+                this.speedY = this.baseSpeedY;
+                this.color = color;
+                this.opacity = Math.random() * 0.6 + 0.4; // Opacity 0.4 to 1
+                this.initialOpacity = this.opacity;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                // Dynamically adjust opacity for the fill style
+                ctx.fillStyle = this.color.replace(/,(\s*\d+\.?\d*)\)$/, `, ${this.opacity})$`); 
+                ctx.shadowBlur = this.size * 2.5; // Stronger glow effect
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.shadowBlur = 0; // Reset shadow to not affect other elements
+            }
+
+            update() {
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
+
+                const maxRepelSpeed = 4; // Maximum speed when repelled
+                const attractionFactor = 0.03; // How strongly they return to base
+                const mouseRepelStrength = 0.8; // How strongly mouse pushes them
+
+                if (mouse.x !== null && mouse.y !== null && distance < mouse.radius) {
+                    // Repel effect when mouse is close
+                    let forceDirectionX = dx / distance;
+                    let forceDirectionY = dy / distance;
+                    let force = (mouse.radius - distance) / mouse.radius; 
+                    let repulsionX = forceDirectionX * force * maxRepelSpeed * mouseRepelStrength;
+                    let repulsionY = forceDirectionY * force * maxRepelSpeed * mouseRepelStrength;
+
+                    this.speedX = -repulsionX + (this.speedX * (1 - attractionFactor)); // Blend with current speed
+                    this.speedY = -repulsionY + (this.speedY * (1 - attractionFactor));
+
+                    this.opacity = Math.min(1, this.initialOpacity + force * 0.4); // Particles glow brighter near cursor
+                } else {
+                    // Gradually return to base speed and opacity when mouse is away
+                    this.speedX = this.speedX * (1 - attractionFactor) + this.baseSpeedX * attractionFactor;
+                    this.speedY = this.speedY * (1 - attractionFactor) + this.baseSpeedY * attractionFactor;
+                    this.opacity = this.opacity * (1 - attractionFactor) + this.initialOpacity * attractionFactor;
+                }
+
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Wrap particles around the screen edges for continuous flow
+                if (this.x > canvas.width + this.size) this.x = -this.size;
+                if (this.x < -this.size) this.x = canvas.width + this.size;
+                if (this.y > canvas.height + this.size) this.y = -this.size;
+                if (this.y < -this.size) this.y = canvas.height + this.size;
+            }
+        }
+
+        // Initialize particles at random positions
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < numParticles; i++) {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * canvas.height;
+                const color = particleColors[Math.floor(Math.random() * particleColors.length)];
+                particles.push(new Particle(x, y, color));
+            }
+        }
+
+        // Animation loop for particles
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas each frame
+            ctx.globalCompositeOperation = 'lighter'; // This blend mode creates the glowing, optical mixing effect
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            requestAnimationFrame(animateParticles); // Loop the animation
+        }
+
+        initParticles(); // Setup initial particles
+        animateParticles(); // Start the animation
+
+        // Dynamically set CSS variables for glowing effects from Tailwind colors
+        // This ensures the JS can influence CSS based on the Tailwind config if needed
+        // For current setup, we get colors directly from CSS variables or Tailwind's default palette.
+        // Tailwind JIT config for rgb values (for box-shadow rgba):
+        // Note: `tailwind.config.theme.extend.colors` might not be directly accessible in vanilla JS
+        // when loaded via CDN. A more robust way is to use getComputedStyle for actual rendered colors.
+        // However, if we define the colors in :root, we can directly reference them for dynamic rgba.
+        // For now, hardcoding RGB values if direct access is an issue, or simply parsing the CSS variable string.
+        const getRgb = (colorName) => {
+            const colorValue = getComputedStyle(document.documentElement).getPropertyValue(colorName);
+            const match = colorValue.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*(\d*\.?\d+))?\)/);
+            if (match) {
+                return `${match[1]}, ${match[2]}, ${match[3]}`;
+            }
+            return '0,0,0'; // Default to black if parsing fails
+        };
+
+        document.documentElement.style.setProperty('--accent-cyan-rgb', getRgb('--accent-cyan'));
+        document.documentElement.style.setProperty('--accent-pink-rgb', getRgb('--accent-pink'));
+        document.documentElement.style.setProperty('--accent-yellow-rgb', getRgb('--accent-yellow'));
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - לשלוט בבינה המלאכותית (Chibi AI)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Heebo:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles for Chibi aesthetic and animations */
+        body {
+            font-family: 'Heebo', sans-serif;
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll from particles */
+            background: linear-gradient(135deg, #f0e6ff 0%, #dbeafe 50%, #fff0f5 100%); /* Soft, pastel gradient */
+            min-height: 100vh; /* Ensure body covers full viewport height */
+        }
+
+        h1, h2, h3 {
+            font-family: 'Fredoka One', cursive; /* Playful Chibi headings */
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 10px rgba(255, 255, 255, 0.7); /* Dark outline for contrast, subtle glow */
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: transform 0.1s ease-out, width 0.1s ease-out, height 0.1s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .custom-cursor::before {
+            content: '✨'; /* A small chibi sparkle */
+            font-size: 16px;
+            line-height: 1;
+            transform: scale(0.8);
+            display: block;
+        }
+        .custom-cursor.active {
+            width: 38px;
+            height: 38px;
+        }
+
+        /* Floating Animation for Chibi elements */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .animate-float {
+            animation: float 5s ease-in-out infinite alternate;
+        }
+
+        /* Wobble Animation for interactive elements */
+        @keyframes wobble {
+            0%, 100% { transform: rotate(0deg); }
+            15% { transform: rotate(-5deg); }
+            30% { transform: rotate(5deg); }
+            45% { transform: rotate(-3deg); }
+            60% { transform: rotate(3deg); }
+            75% { transform: rotate(-1deg); }
+        }
+        .hover-wobble:hover {
+            animation: wobble 0.6s ease-in-out;
+        }
+
+        /* Particle system */
+        .particle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: -10;
+        }
+        .particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.7); /* White for sparkle */
+            border-radius: 50%;
+            opacity: 0;
+            animation: fadeAndMove 10s linear infinite;
+        }
+        @keyframes fadeAndMove {
+            0% {
+                transform: translate(0, 0) scale(0);
+                opacity: 0;
+            }
+            10% { opacity: 0.8; transform: scale(1); }
+            90% { opacity: 0; }
+            100% {
+                transform: translate(var(--x), var(--y)) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* Zevik Image styling */
+        .zevik-image-container {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: #f9fafb; /* Light background */
+            border: 4px solid #a78bfa; /* Soft purple border */
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .zevik-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%; /* Ensure image is perfectly circular */
+        }
+
+        /* Chibi icon styles */
+        .chibi-icon {
+            font-size: 3rem; /* Large enough to be cute and visible */
+            line-height: 1;
+            color: #8b5cf6; /* Main Chibi purple */
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2)); /* Soft shadow for depth */
+            transition: transform 0.2s ease-in-out;
+        }
+        .chibi-icon:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* Content containers - like Chibi clouds */
+        .chibi-cloud {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 3rem 3rem 1rem 3rem; /* Asymmetrical, cloud-like shape */
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 0 0 5px #a78bfa30; /* Soft shadow, subtle colored outline */
+            margin: 2rem auto;
+            max-width: 800px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        .chibi-cloud-alt {
+            background-color: rgba(239, 246, 255, 0.95); /* Light blue variant */
+            border-radius: 3rem 1rem 3rem 3rem;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1), 0 0 0 5px #8b5cf630;
+            margin: 2rem auto;
+            max-width: 800px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="custom-cursor"></div>
+
+    <!-- Particle System -->
+    <div class="particle-container" id="particle-container"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-0 min-h-screen py-16 px-4 md:px-8 lg:px-16">
+
+        <!-- Introduction - Central Chibi Cloud -->
+        <section class="chibi-cloud animate-float max-w-4xl">
+            <h1 class="text-5xl md:text-6xl font-extrabold text-purple-700 leading-tight mb-6">
+                ✨ גלו את הקסם של AI: העתיד כבר כאן! ✨
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-700 mb-8 max-w-2xl mx-auto">
+                הצטרפו לזאביק אבינר, מדריך הבינה המלאכותית שלכם, והפכו את הטכנולוגיה המדהימה הזו לחברה הטובה ביותר שלכם.
+                בואו נלמד, נחקור ונבנה יחד את המחר!
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <a href="#services" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xl py-3 px-8 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 hover-wobble">
+                    המסע מתחיל כאן! 🚀
+                </a>
+                <a href="#contact" class="bg-white text-purple-700 text-xl py-3 px-8 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 hover-wobble">
+                    צרו קשר עם זאביק 💌
+                </a>
+            </div>
+        </section>
+
+        <!-- Zevik Chibi Guiding Figure -->
+        <div class="flex justify-center my-12">
+            <div class="zevik-image-container animate-float hover-wobble">
+                 <img src="https://link.zevikaviner.com/zevik" alt="תמונת זאביק אבינר - מדריך AI" class="zevik-image">
+            </div>
+        </div>
+
+        <!-- Core Message - Another Chibi Cloud -->
+        <section class="chibi-cloud-alt max-w-3xl animate-float" style="animation-delay: 0.3s;">
+            <h2 class="text-4xl md:text-5xl text-blue-700 mb-4">
+                AI לכולם - קל, מעשי וכיף!
+            </h2>
+            <p class="text-lg md:text-xl text-gray-700 leading-relaxed mb-6">
+                המסר שלנו ברור: בינה מלאכותית היא לא רק למדענים.
+                זאביק הופך את עולם ה-AI למסע מרתק ונגיש, ומעניק לכם כלים מעשיים ושימושיים שתוכלו ליישם מיד.
+                בין אם אתם מתחילים או מומחים, בואו לגלות איך AI יכול לשנות את עולמכם!
+            </p>
+        </section>
+
+        <!-- Target Audience - Chibi "Thought Bubbles" -->
+        <section class="my-16 text-center">
+            <h2 class="text-4xl md:text-5xl text-green-700 mb-10">
+                למי המסע הזה מתאים? 🗺️
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+
+                <div class="chibi-cloud p-6 animate-float hover-wobble cursor-pointer">
+                    <span class="chibi-icon">🐣</span>
+                    <h3 class="text-2xl font-bold text-purple-600 mb-3 mt-4">למתחילים סקרנים</h3>
+                    <p class="text-gray-700">הצעדים הראשונים שלכם בעולם ה-AI. נכיר מושגים בסיסיים וכלים שימושיים בקלות.</p>
+                </div>
+
+                <div class="chibi-cloud-alt p-6 animate-float hover-wobble cursor-pointer" style="animation-delay: 0.5s;">
+                    <span class="chibi-icon">💼</span>
+                    <h3 class="text-2xl font-bold text-blue-600 mb-3 mt-4">לאנשי מקצוע</h3>
+                    <p class="text-gray-700">שדרגו את עבודתכם! נלמד איך לשלב AI בתהליכים קיימים ולהתייעל.</p>
+                </div>
+
+                <div class="chibi-cloud p-6 animate-float hover-wobble cursor-pointer" style="animation-delay: 1s;">
+                    <span class="chibi-icon">🏢</span>
+                    <h3 class="text-2xl font-bold text-pink-600 mb-3 mt-4">למנהלים וארגונים</h3>
+                    <p class="text-gray-700">העניקו לצוותים שלכם את הידע המתקדם ביותר ופתחו אופקים חדשים.</p>
+                </div>
+
+                <div class="chibi-cloud-alt p-6 animate-float hover-wobble cursor-pointer" style="animation-delay: 1.5s;">
+                    <span class="chibi-icon">🧙‍♂️</span>
+                    <h3 class="text-2xl font-bold text-yellow-600 mb-3 mt-4">למפתחים ומומחים</h3>
+                    <p class="text-gray-700">פיתוח פרויקטים מבוססי AI וקפיצה לרמה הבאה של חדשנות.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Specializations - Chibi "AI Playground" -->
+        <section class="my-16 text-center" id="specialties">
+            <h2 class="text-4xl md:text-5xl text-purple-700 mb-10">
+                המגרש המשחקים של AI: תחומי התמחות 🎮
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+
+                <div class="chibi-cloud p-6 flex flex-col items-center animate-float hover-wobble cursor-pointer" style="animation-delay: 0.2s;">
+                    <span class="chibi-icon">✍️</span>
+                    <h3 class="text-2xl font-bold text-blue-600 mb-2 mt-4">יוצר טקסטים וסיפורים</h3>
+                    <p class="text-gray-700">כתבו תוכן מבריק בקלות- ממאמרים ועד שירה!</p>
+                </div>
+
+                <div class="chibi-cloud-alt p-6 flex flex-col items-center animate-float hover-wobble cursor-pointer" style="animation-delay: 0.6s;">
+                    <span class="chibi-icon">💡</span>
+                    <h3 class="text-2xl font-bold text-green-600 mb-2 mt-4">אפליקציות חכמות</h3>
+                    <p class="text-gray-700">בנו כלים שימושיים ומהנים שחושבים בשבילכם.</p>
+                </div>
+
+                <div class="chibi-cloud p-6 flex flex-col items-center animate-float hover-wobble cursor-pointer" style="animation-delay: 1s;">
+                    <span class="chibi-icon">🌐</span>
+                    <h3 class="text-2xl font-bold text-pink-600 mb-2 mt-4">אתרים מבוססי AI</h3>
+                    <p class="text-gray-700">העניקו לאתר שלכם מוח חכם שידהים את המבקרים.</p>
+                </div>
+
+                <div class="chibi-cloud-alt p-6 flex flex-col items-center animate-float hover-wobble cursor-pointer" style="animation-delay: 1.4s;">
+                    <span class="chibi-icon">📊</span>
+                    <h3 class="text-2xl font-bold text-yellow-600 mb-2 mt-4">מפענח נתונים</h3>
+                    <p class="text-gray-700">חשפו סודות נסתרים מתוך נתונים וקבלו החלטות טובות יותר.</p>
+                </div>
+
+                <div class="chibi-cloud p-6 flex flex-col items-center animate-float hover-wobble cursor-pointer" style="animation-delay: 1.8s;">
+                    <span class="chibi-icon">🎨</span>
+                    <h3 class="text-2xl font-bold text-red-600 mb-2 mt-4">אמן תמונות ורעיונות</h3>
+                    <p class="text-gray-700">צרו יצירות אומנות ויזואליות בלחיצת כפתור!</p>
+                </div>
+
+                <div class="chibi-cloud-alt p-6 flex flex-col items-center animate-float hover-wobble cursor-pointer" style="animation-delay: 2.2s;">
+                    <span class="chibi-icon">🤖</span>
+                    <h3 class="text-2xl font-bold text-purple-600 mb-2 mt-4">אוטומציה קסומה</h3>
+                    <p class="text-gray-700">תנו ל-AI לעשות עבורכם את העבודה המשעממת.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Services - Chibi "Adventure Path" -->
+        <section class="my-16 text-center" id="services">
+            <h2 class="text-4xl md:text-5xl text-blue-700 mb-10">
+                המסלולים שלכם בעולם ה-AI 🛣️
+            </h2>
+            <div class="flex flex-wrap justify-center gap-8 max-w-6xl mx-auto">
+
+                <div class="chibi-cloud-alt p-8 w-full md:w-2/5 animate-float hover-wobble cursor-pointer" style="animation-delay: 0.3s;">
+                    <span class="chibi-icon">👨‍👩‍👧‍👦</span>
+                    <h3 class="text-3xl font-bold text-purple-700 mb-4 mt-6">סדנאות קבוצתיות - כיף של יחד!</h3>
+                    <p class="text-lg text-gray-700 leading-relaxed">למידה מעשית באווירה תוססת וכיפית. בנו פרויקטים קטנים יחד ותגלו את כוחו של AI.</p>
+                </div>
+
+                <div class="chibi-cloud p-8 w-full md:w-2/5 animate-float hover-wobble cursor-pointer" style="animation-delay: 0.7s;">
+                    <span class="chibi-icon">🧑‍💻</span>
+                    <h3 class="text-3xl font-bold text-pink-700 mb-4 mt-6">שיעורים פרטיים - קסם אישי!</h3>
+                    <p class="text-lg text-gray-700 leading-relaxed">התאמה מושלמת לקצב ולצרכים שלכם. AI בעיניים שלך, בדיוק כמו שאתם אוהבים.</p>
+                </div>
+
+                <div class="chibi-cloud p-8 w-full md:w-2/5 animate-float hover-wobble cursor-pointer" style="animation-delay: 1.1s;">
+                    <span class="chibi-icon">📢</span>
+                    <h3 class="text-3xl font-bold text-green-700 mb-4 mt-6">הרצאות לארגונים - השראה גדולה!</h3>
+                    <p class="text-lg text-gray-700 leading-relaxed">פתחו לצוותים שלכם עולם שלם של אפשרויות עם הרצאות מרתקות ומעוררות מחשבה.</p>
+                </div>
+
+                <div class="chibi-cloud-alt p-8 w-full md:w-2/5 animate-float hover-wobble cursor-pointer" style="animation-delay: 1.5s;">
+                    <span class="chibi-icon">🌟</span>
+                    <h3 class="text-3xl font-bold text-yellow-700 mb-4 mt-6">ייעוץ ופיתוח פרויקטים - ליווי של מומחה!</h3>
+                    <p class="text-lg text-gray-700 leading-relaxed">נבנה יחד את פרויקט ה-AI החלומי שלכם, צעד אחר צעד.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- The Guide - Zevik Aviner's Story -->
+        <section class="chibi-cloud max-w-3xl my-16 animate-float" id="guide" style="animation-delay: 0.5s;">
+            <h2 class="text-4xl md:text-5xl text-purple-700 mb-6">
+                הכירו את הקוסם: זאביק אבינר 🪄
+            </h2>
+            <div class="flex flex-col items-center">
+                 <div class="zevik-image-container mb-6 animate-float hover-wobble">
+                     <img src="https://link.zevikaviner.com/zevik" alt="תמונת זאביק אבינר - מומחה AI" class="zevik-image">
+                </div>
+                <p class="text-lg md:text-xl text-gray-700 leading-relaxed mb-6 max-w-xl">
+                    זאביק הוא לא רק מומחה AI- הוא אשף בלהנגיש את עולם הבינה המלאכותית לכל אחד.
+                    עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות חכמות, זאביק הפך את המורכב לפשוט ואת הבלתי נתפס למציאות יומיומית.
+                    הוא מאמין שכל אחד יכול לשלוט בכלי ה-AI ולרתום אותם להצלחה, ומוכיח זאת בכל שיעור וסדנה.
+                    בואו לגלות את הפוטנציאל שלכם עם המדריך הטוב ביותר!
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Info - Chibi Treasure Chest -->
+        <section class="chibi-cloud-alt max-w-2xl my-16 p-8 animate-float" id="contact" style="animation-delay: 1s;">
+            <h2 class="text-4xl md:text-5xl text-blue-700 mb-6">
+                בואו נדבר! 📞
+            </h2>
+            <p class="text-xl md:text-2xl text-gray-700 mb-6">
+                מוכנים לצאת למסע ה-AI שלכם? זאביק כאן בשבילכם!
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
+                <a href="https://wa.me/972546609385" target="_blank" class="bg-green-500 text-white text-xl py-3 px-6 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center hover-wobble">
+                    <span class="text-3xl ml-2">💬</span> ווטסאפ: 054-6609385
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="bg-red-500 text-white text-xl py-3 px-6 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center hover-wobble">
+                    <span class="text-3xl ml-2">✉️</span> אימייל: zaviner@gmail.com
+                </a>
+            </div>
+        </section>
+
+    </div> <!-- End Main Content Wrapper -->
+
+    <script>
+        // Custom Cursor JS
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Add 'active' class on interactive elements for visual feedback
+        const interactiveElements = document.querySelectorAll('a, button, .hover-wobble, .cursor-pointer');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+
+        // Particle System JS
+        const particleContainer = document.getElementById('particle-container');
+        const numParticles = 30; // Number of particles
+
+        for (let i = 0; i < numParticles; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // Random size for particles
+            const size = Math.random() * 8 + 4; // Between 4px and 12px
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+
+            // Random start position within view
+            const startX = Math.random() * window.innerWidth;
+            const startY = Math.random() * window.innerHeight;
+            particle.style.left = `${startX}px`;
+            particle.style.top = `${startY}px`;
+
+            // Random destination for particles (relative to start)
+            const destX = (Math.random() - 0.5) * window.innerWidth * 0.5; // +/- 25% of screen width
+            const destY = (Math.random() - 0.5) * window.innerHeight * 0.5; // +/- 25% of screen height
+            particle.style.setProperty('--x', `${destX}px`);
+            particle.style.setProperty('--y', `${destY}px`);
+
+            // Random animation duration and delay
+            const duration = Math.random() * 10 + 5; // 5 to 15 seconds
+            const delay = Math.random() * 10; // 0 to 10 seconds delay
+            particle.style.animationDuration = `${duration}s`;
+            particle.style.animationDelay = `${delay}s`;
+
+            particleContainer.appendChild(particle);
+        }
+    </script>
+</body>
+</html>

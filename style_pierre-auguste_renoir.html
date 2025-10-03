@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>בינה מלאכותית באור רנואר - זאביק אבינר: עתיד מצויר</title>
+    <meta name="description" content="הצטרפו לזאביק אבינר, מומחה AI, למסע לימוד והתפתחות בתחומי הבינה המלאכותית, בסגנון אמנותי ונגיש."/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Tailwind Configuration */
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'renoir-cream': '#FFFDF6',
+                        'renoir-peach': '#FCE7D7',
+                        'renoir-rose': '#F0C7C7',
+                        'renoir-sky': '#E0EFF5',
+                        'renoir-sage': '#C6E0CE',
+                        'renoir-sun': '#FFECB3',
+                        'renoir-shadow': '#4A3B3B', /* Darker brown for text */
+                        'renoir-accent': '#8B6F6F', /* Muted accent */
+                        'renoir-leaf': '#9BB5A9',
+                    },
+                    fontFamily: {
+                        amatic: ['"Amatic SC"', 'cursive'],
+                        rubik: ['Rubik', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 2s ease-out forwards',
+                        'slide-up': 'slideUp 1.5s ease-out forwards',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+
+        /* Base styles for the artistic vision */
+        body {
+            font-family: 'Rubik', sans-serif;
+            color: var(--renoir-shadow);
+            background-color: var(--renoir-cream);
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        /* Custom Scrollbar - Renoir inspired */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f7f3ed; /* Lighter background */
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #d1b4a0; /* Soft peach/brown */
+            border-radius: 5px;
+            border: 2px solid #f7f3ed;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background-color: #c09d84;
+        }
+
+        /* Specific styles for parallax layers */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Hero text animations */
+        .animated-heading > span {
+            display: inline-block;
+            opacity: 0;
+            animation: slideUp 0.8s ease-out forwards;
+        }
+        .animated-heading > span:nth-child(1) { animation-delay: 0.1s; }
+        .animated-heading > span:nth-child(2) { animation-delay: 0.2s; }
+        .animated-heading > span:nth-child(3) { animation-delay: 0.3s; }
+        .animated-heading > span:nth-child(4) { animation-delay: 0.4s; }
+        .animated-heading > span:nth-child(5) { animation-delay: 0.5s; }
+        .animated-heading > span:nth-child(6) { animation-delay: 0.6s; }
+        .animated-heading > span:nth-child(7) { animation-delay: 0.7s; }
+        .animated-heading > span:nth-child(8) { animation-delay: 0.8s; }
+        .animated-heading > span:nth-child(9) { animation-delay: 0.9s; }
+        .animated-heading > span:nth-child(10) { animation-delay: 1.0s; }
+        .animated-heading > span:nth-child(11) { animation-delay: 1.1s; }
+        .animated-heading > span:nth-child(12) { animation-delay: 1.2s; }
+        .animated-heading > span:nth-child(13) { animation-delay: 1.3s; }
+        .animated-heading > span:nth-child(14) { animation-delay: 1.4s; }
+        .animated-heading > span:nth-child(15) { animation-delay: 1.5s; }
+        .animated-heading > span:nth-child(16) { animation-delay: 1.6s; }
+        .animated-heading > span:nth-child(17) { animation-delay: 1.7s; }
+        .animated-heading > span:nth-child(18) { animation-delay: 1.8s; }
+        .animated-heading > span:nth-child(19) { animation-delay: 1.9s; }
+        .animated-heading > span:nth-child(20) { animation-delay: 2.0s; }
+
+
+        .animated-paragraph {
+            opacity: 0;
+            animation: fadeIn 2s ease-out forwards 1.5s; /* Delay for paragraph */
+        }
+    </style>
+</head>
+<body class="font-rubik text-renoir-shadow antialiased overflow-x-hidden relative" dir="rtl">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="pointer-events-none fixed z-[9999] rounded-full transition-transform duration-100 ease-out" style="width: 24px; height: 24px; border: 2px solid rgba(255, 255, 255, 0.9); box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.7);"></div>
+
+    <!-- Parallax Background Layers - Renoir Garden / Sky -->
+    <div id="parallax-bg-1" class="parallax-layer bg-gradient-to-br from-renoir-cream to-renoir-peach opacity-80" style="z-index: -4;"></div>
+    <div id="parallax-bg-2" class="parallax-layer bg-[url('https://source.unsplash.com/random/1920x1080/?impressionist-sky,soft-clouds')] bg-center opacity-30" style="z-index: -3;"></div>
+    <div id="parallax-bg-3" class="parallax-layer bg-[url('https://source.unsplash.com/random/1920x1080/?impressionist-garden,light-texture')] bg-center opacity-20" style="z-index: -2;"></div>
+
+    <main class="relative z-10 p-4 sm:p-8 md:p-12 lg:p-16 max-w-7xl mx-auto min-h-screen">
+
+        <!-- Hero Section - The Dawn of AI -->
+        <section class="min-h-screen flex items-center justify-center text-center p-8 lg:p-16">
+            <div class="relative max-w-4xl mx-auto bg-renoir-cream/80 p-8 md:p-12 lg:p-16 rounded-3xl shadow-2xl animate-fade-in" style="animation-delay: 0.5s;">
+                <h1 class="font-amatic text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-renoir-shadow leading-tight mb-6 animated-heading">
+                    <span>ל</span><span>מ</span><span>ד</span><span>ו</span> <span>ל</span><span>ש</span><span>ל</span><span>ו</span><span>ט</span> <span>ב</span><span>ב</span><span>י</span><span>נ</span><span>ה</span> <span>ה</span><span>מ</span><span>ל</span><span>א</span><span>כ</span><span>ו</span><span>ת</span><span>י</span><span>ת</span><br class="hidden sm:block">
+                    <span>-</span> <span>ה</span><span>ע</span><span>ת</span><span>י</span><span>ד</span> <span>ה</span><span>ו</span><span>א</span> <span>ע</span><span>כ</span><span>ש</span><span>י</span><span>ו</span>
+                </h1>
+                <p class="text-lg md:text-xl lg:text-2xl text-renoir-accent animated-paragraph px-4 sm:px-8">
+                    כמו קרני השמש המלטפות ציור רנואר, כך נגלה יחד את עולם הבינה המלאכותית: ננגיש את נבכיו, ניצור כלים מבריקים שיהיו לנו למכחול בחיי היום-יום ובעבודה. זאביק אבינר מזמין אתכם לצייר את עתידכם באור חדש.
+                </p>
+            </div>
+        </section>
+
+        <!-- Main Message - Accessibility & Practicality -->
+        <section class="py-20 md:py-24 lg:py-32 text-center relative">
+            <div class="max-w-3xl mx-auto bg-renoir-peach/70 p-8 md:p-10 rounded-2xl shadow-xl animate-fade-in" style="animation-delay: 2.5s;">
+                <h2 class="font-amatic text-5xl md:text-6xl font-bold mb-6 text-renoir-shadow">הפיכת AI לאמנות נגישה</h2>
+                <p class="text-xl md:text-2xl leading-relaxed text-renoir-shadow animate-slide-up" style="animation-delay: 3s;">
+                    בגישה רכה ומעשית, נהפוך את עולם ה-AI המורכב למציאות פשוטה וישימה. מהצעד הראשון ועד לפיסגה המתקדמת ביותר, תלמדו כלים מעשיים שניתן ליישם באופן מידי - בעבודתכם, ביצירתכם ובחייכם האישיים. AI הוא כבר לא מדע בדיוני, אלא מכחול בידי כל יוצר.
+                </p>
+            </div>
+        </section>
+
+        <!-- Target Audience - A Gallery of Learners -->
+        <section class="py-20 md:py-24 lg:py-32 relative">
+            <h2 class="font-amatic text-center text-5xl md:text-6xl font-bold mb-16 text-renoir-shadow animate-slide-up" style="animation-delay: 3.5s;">למי מיועד המסע המואר הזה?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="p-8 bg-renoir-sky/60 rounded-xl shadow-lg flex flex-col items-center text-center animate-fade-in" style="animation-delay: 4s;">
+                    <p class="text-3xl mb-4">✨</p>
+                    <h3 class="font-amatic text-4xl font-semibold mb-3 text-renoir-accent">מתחילים סקרנים</h3>
+                    <p class="text-lg text-renoir-shadow">אלו המבקשים להכיר את הקסם של ה-AI, ללא ידע מוקדם - כמו צופה בגלריה לראשונה.</p>
+                </div>
+                <div class="p-8 bg-renoir-rose/60 rounded-xl shadow-lg flex flex-col items-center text-center animate-fade-in" style="animation-delay: 4.2s;">
+                    <p class="text-3xl mb-4">🎨</p>
+                    <h3 class="font-amatic text-4xl font-semibold mb-3 text-renoir-accent">אנשי מקצוע יוזמים</h3>
+                    <p class="text-lg text-renoir-shadow">המעוניינים לשלב את הבינה המלאכותית ככלי עבודה, להעצים את יצירתם ולייעל תהליכים.</p>
+                </div>
+                <div class="p-8 bg-renoir-sage/60 rounded-xl shadow-lg flex flex-col items-center text-center animate-fade-in" style="animation-delay: 4.4s;">
+                    <p class="text-3xl mb-4">🏛️</p>
+                    <h3 class="font-amatic text-4xl font-semibold mb-3 text-renoir-accent">מנהלים וארגונים</h3>
+                    <p class="text-lg text-renoir-shadow">המחפשים להאיר את הדרך לצוותיהם ולשלב חדשנות טכנולוגית לרוחב הארגון.</p>
+                </div>
+                <div class="p-8 bg-renoir-sun/60 rounded-xl shadow-lg flex flex-col items-center text-center animate-fade-in" style="animation-delay: 4.6s;">
+                    <p class="text-3xl mb-4">🚀</p>
+                    <h3 class="font-amatic text-4xl font-semibold mb-3 text-renoir-accent">מפתחים מתקדמים</h3>
+                    <p class="text-lg text-renoir-shadow">החולמים לפתח פרויקטים מבוססי AI מורכבים ולצייר את הגבול הבא של הטכנולוגיה.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Areas of Expertise - The Artist's Palette -->
+        <section class="py-20 md:py-24 lg:py-32 relative bg-renoir-cream/60 rounded-3xl p-10 my-20 shadow-2xl">
+            <h2 class="font-amatic text-center text-5xl md:text-6xl font-bold mb-16 text-renoir-shadow animate-slide-up" style="animation-delay: 5s;">מכחולים ועפרונות בידי ה-AI</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+                <div class="flex items-start gap-4 animate-fade-in" style="animation-delay: 5.2s;">
+                    <span class="text-3xl text-renoir-accent">✍️</span>
+                    <div>
+                        <h3 class="font-amatic text-4xl font-semibold mb-2 text-renoir-accent">יצירת טקסטים ותוכן</h3>
+                        <p class="text-lg text-renoir-shadow">להפיח חיים במילים, לכתוב סיפורים, מאמרים ושיווק - בדיוק כפי שהאמן בוחר את צבעיו.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 animate-fade-in" style="animation-delay: 5.4s;">
+                    <span class="text-3xl text-renoir-accent">💡</span>
+                    <div>
+                        <h3 class="font-amatic text-4xl font-semibold mb-2 text-renoir-accent">בניית אפליקציות חכמות</h3>
+                        <p class="text-lg text-renoir-shadow">ליצור כלים חכמים, אפליקציות ופלטפורמות המבינות את המשתמש ומתאימות את עצמן.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 animate-fade-in" style="animation-delay: 5.6s;">
+                    <span class="text-3xl text-renoir-accent">🌐</span>
+                    <div>
+                        <h3 class="font-amatic text-4xl font-semibold mb-2 text-renoir-accent">פיתוח אתרים מבוססי AI</h3>
+                        <p class="text-lg text-renoir-shadow">להפוך אתרים לחוויה אישית, דינמית ומרתקת באמצעות בינה מלאכותית מובנית.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 animate-fade-in" style="animation-delay: 5.8s;">
+                    <span class="text-3xl text-renoir-accent">📈</span>
+                    <div>
+                        <h3 class="font-amatic text-4xl font-semibold mb-2 text-renoir-accent">ניתוח נתונים ומחקר</h3>
+                        <p class="text-lg text-renoir-shadow">לפענח תובנות נסתרות, לראות את התמונה הגדולה ולצייר מפת דרכים להצלחה.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 animate-fade-in" style="animation-delay: 6s;">
+                    <span class="text-3xl text-renoir-accent">🖼️</span>
+                    <div>
+                        <h3 class="font-amatic text-4xl font-semibold mb-2 text-renoir-accent">יצירת תמונות ואומנות</h3>
+                        <p class="text-lg text-renoir-shadow">לפרוץ גבולות יצירתיים וליצור ויזואליות עוצרות נשימה בעזרת AI - ממש כמו רנואר במאה ה-21.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 animate-fade-in" style="animation-delay: 6.2s;">
+                    <span class="text-3xl text-renoir-accent">⚙️</span>
+                    <div>
+                        <h3 class="font-amatic text-4xl font-semibold mb-2 text-renoir-accent">אוטומציה של תהליכים</h3>
+                        <p class="text-lg text-renoir-shadow">לשחרר זמן ואנרגיה למשימות בעלות ערך גבוה יותר, כשה-AI דואג למטלות השגרתיות.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide - Zevik Aviner's Portrait -->
+        <section class="py-20 md:py-24 lg:py-32 relative bg-renoir-peach/70 rounded-3xl p-10 md:p-16 my-20 shadow-2xl flex flex-col lg:flex-row-reverse items-center gap-12">
+            <div class="lg:w-1/3 flex justify-center animate-float" style="animation-delay: 6.5s;">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה קטנה של זאביק אבינר - מומחה בינה מלאכותית" class="w-48 h-48 sm:w-64 sm:h-64 rounded-full object-cover border-4 border-renoir-shadow shadow-lg transition-transform hover:scale-105 duration-300">
+            </div>
+            <div class="lg:w-2/3 text-center lg:text-right animate-fade-in" style="animation-delay: 6.7s;">
+                <h2 class="font-amatic text-5xl md:text-6xl font-bold mb-6 text-renoir-shadow">זאביק אבינר - צייר הדרך</h2>
+                <p class="text-xl md:text-2xl leading-relaxed mb-6 text-renoir-shadow">
+                    זאביק אבינר הוא לא רק מומחה בינה מלאכותית, אלא אמן בפישוט המורכב. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, הוא מביא עמו ידע מעמיק ויכולת נדירה להנגיש את הטכנולוגיה החדשנית ביותר לכל אחד. זאביק מאמין שה-AI צריך להיות כלי עבודה יומיומי ונגיש, ומוביל אתכם צעד אחר צעד, כמו מדריך אמנות המלמד את תלמידיו את סודות המלאכה.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center lg:justify-end gap-4 mt-8 animate-slide-up" style="animation-delay: 7s;">
+                    <a href="https://wa.me/972546609385" target="_blank" class="bg-renoir-shadow text-renoir-cream font-rubik text-lg md:text-xl py-3 px-6 rounded-full shadow-lg hover:bg-renoir-accent transition-colors duration-300 flex items-center justify-center gap-2">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.9 4.45-9.9 9.91 0 1.75.5 3.44 1.46 4.96L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.9-4.45 9.9-9.91S17.5 2 12.04 2zm3.19 13.23c-.13.26-.74.5-1.01.5-.27 0-.97-.1-.97-.5s.38-.59.5-.75.75-.88.9-1.06c.15-.17.25-.33.35-.49.1-.15 0-.28-.13-.53-.13-.25-.97-2.32-1.33-3.17-.35-.85-.71-.72-.97-.72-.27 0-.58-.04-.89-.04-.3 0-.79.1-.89.3-.1.2-.38.97-.47 1.16-.09.19-.19.26-.38.38-.19.13-.38.19-.74.09-.37-.1-.82-.3-1.16-.54-.34-.24-.65-.48-.92-.81-.27-.34-.52-.61-.74-.96-.22-.35-.07-.49-.07-.74.03-.25.13-.47.19-.59.06-.13.3-.34.42-.47.12-.13.19-.23.26-.35.07-.12.03-.24-.03-.38-.06-.13-.5-.72-.68-.88-.19-.15-.4-.13-.57-.13-.17 0-.37 0-.57.04-.2.03-.49.09-.75.35-.26.26-1 1-1 2.45s1.02 2.83 1.16 3.02c.15.19 1.99 3.02 4.83 4.25 2.84 1.23 2.84.82 3.34.77.5-.05 1.3-.53 1.48-1.06.19-.53.19-.97.13-1.06z"/></svg>
+                        ווטסאפ: 054-6609385
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="bg-renoir-accent text-renoir-cream font-rubik text-lg md:text-xl py-3 px-6 rounded-full shadow-lg hover:bg-renoir-shadow transition-colors duration-300 flex items-center justify-center gap-2">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M2.003 5.884l7.893 5.492L2.003 16.86V5.884zm19.994-.002v10.975l-7.893-5.492 7.893-5.483zM0 3.998l11.999 8.36L24 3.998H0zm11.999 9.36l-11.999-8.36V20.002H24V4.998L11.999 13.358z"/></svg>
+                        אימייל: zaviner@gmail.com
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered - A Bouquet of Possibilities -->
+        <section class="py-20 md:py-24 lg:py-32 relative">
+            <h2 class="font-amatic text-center text-5xl md:text-6xl font-bold mb-16 text-renoir-shadow animate-slide-up" style="animation-delay: 7.5s;">מגוון השירותים שלנו - לכל גוון של לומד</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
+                <div class="p-8 bg-renoir-leaf/60 rounded-xl shadow-lg flex flex-col items-center text-center animate-fade-in" style="animation-delay: 7.7s;">
+                    <p class="text-4xl mb-4">🤝</p>
+                    <h3 class="font-amatic text-4xl font-semibold mb-3 text-renoir-accent">סדנאות קבוצתיות</h3>
+                    <p class="text-lg text-renoir-shadow">חוויה משותפת של גילוי ויצירה, בסדנאות מעשיות וממוקדות, כמו ציור משותף בגינה פריזאית.</p>
+                </div>
+                <div class="p-8 bg-renoir-sun/60 rounded-xl shadow-lg flex flex-col items-center text-center animate-fade-in" style="animation-delay: 7.9s;">
+                    <p class="text-4xl mb-4">👤</p>
+                    <h3 class="font-amatic text-4xl font-semibold mb-3 text-renoir-accent">שיעורים פרטיים</h3>
+                    <p class="text-lg text-renoir-shadow">ליווי אישי ומותאם, כמו שיעור אמן פרטי, שיענה בדיוק על קצב הלמידה וצרכי הפיתוח שלכם.</p>
+                </div>
+                <div class="p-8 bg-renoir-sky/60 rounded-xl shadow-lg flex flex-col items-center text-center animate-fade-in" style="animation-delay: 8.1s;">
+                    <p class="text-4xl mb-4">📢</p>
+                    <h3 class="font-amatic text-4xl font-semibold mb-3 text-renoir-accent">הרצאות לארגונים</h3>
+                    <p class="text-lg text-renoir-shadow">פתיחת אופקים חדשים לצוותים, עם השראה וידע עדכני שידליקו את ניצוץ היצירה.</p>
+                </div>
+                <div class="p-8 bg-renoir-rose/60 rounded-xl shadow-lg flex flex-col items-center text-center animate-fade-in" style="animation-delay: 8.3s;">
+                    <p class="text-4xl mb-4">💡</p>
+                    <h3 class="font-amatic text-4xl font-semibold mb-3 text-renoir-accent">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-lg text-renoir-shadow">ליווי מקצועי מתחילתו ועד סופו של כל פרויקט AI, למימוש חזון טכנולוגי באור הזרקורים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer / Call to Action - Closing thought -->
+        <footer class="py-16 md:py-20 text-center text-renoir-shadow relative">
+            <p class="font-amatic text-4xl md:text-5xl animate-fade-in" style="animation-delay: 8.5s;">
+                בואו לצייר את העתיד בבינה מלאכותית.<br>המסע האמנותי שלכם מתחיל כאן.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-8 animate-slide-up" style="animation-delay: 8.7s;">
+                <a href="https://wa.me/972546609385" target="_blank" class="bg-renoir-shadow text-renoir-cream font-rubik text-lg md:text-xl py-3 px-6 rounded-full shadow-lg hover:bg-renoir-accent transition-colors duration-300 flex items-center justify-center gap-2">
+                    התחילו לשוחח בווטסאפ
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="bg-renoir-accent text-renoir-cream font-rubik text-lg md:text-xl py-3 px-6 rounded-full shadow-lg hover:bg-renoir-shadow transition-colors duration-300 flex items-center justify-center gap-2">
+                    שלחו אימייל
+                </a>
+            </div>
+            <p class="text-sm mt-12 text-renoir-shadow/70 animate-fade-in" style="animation-delay: 9s;">
+                &copy; 2024 זאביק אבינר - כל הזכויות שמורות.
+            </p>
+        </footer>
+
+    </main>
+
+    <script>
+        // Custom Cursor JavaScript
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.transform = `translate(${e.clientX - cursor.offsetWidth / 2}px, ${e.clientY - cursor.offsetHeight / 2}px)`;
+        });
+
+        // Parallax Effect JavaScript
+        const parallaxBg1 = document.getElementById('parallax-bg-1');
+        const parallaxBg2 = document.getElementById('parallax-bg-2');
+        const parallaxBg3 = document.getElementById('parallax-bg-3');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            parallaxBg1.style.transform = `translateY(${scrollY * 0.1}px)`;
+            parallaxBg2.style.transform = `translateY(${scrollY * 0.2}px)`;
+            parallaxBg3.style.transform = `translateY(${scrollY * 0.3}px)`;
+        });
+
+        // Optional: Smooth scroll for internal links if needed, though scroll-behavior: smooth in CSS handles it
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Animate elements on scroll for sections after the hero.
+        // This is a more subtle approach than a full scroll library for a single file.
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // 10% of item visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.querySelectorAll('.animate-fade-in, .animate-slide-up, .animate-float').forEach(el => {
+                        el.style.animationPlayState = 'running';
+                    });
+                    // If you want to stop observing after first animation:
+                    // observer.unobserve(entry.target);
+                } else {
+                     // Optionally reset for re-animation on scroll up/down
+                    entry.target.querySelectorAll('.animate-fade-in, .animate-slide-up, .animate-float').forEach(el => {
+                        el.style.animationPlayState = 'paused';
+                    });
+                }
+            });
+        }, observerOptions);
+
+        // Target sections for animation
+        document.querySelectorAll('section, footer').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Initial setup to pause animations until visible
+        document.querySelectorAll('.animate-fade-in, .animate-slide-up, .animate-float').forEach(el => {
+            el.style.animationPlayState = 'paused';
+        });
+    </script>
+</body>
+</html>

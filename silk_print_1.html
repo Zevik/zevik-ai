@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מכונת דפוס המחשבה - זאביק אבינר AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Heebo:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Custom CSS Variables for our Silk Screen Palette */
+        :root {
+            --color-paper: #F0F0F0; /* Off-white, like paper */
+            --color-ink-dark: #1A1A1A; /* Near black, like ink */
+            --color-accent-magenta: #FF3366; /* Vibrant magenta */
+            --color-accent-cyan: #33CCFF; /* Bright cyan */
+            --color-accent-yellow: #FFCC00; /* Bold yellow */
+        }
+
+        /* Base Body Styling - No default cursor, subtle scroll */
+        body {
+            background-color: var(--color-paper);
+            cursor: none; /* Hide default cursor for custom one */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            font-family: 'Heebo', sans-serif;
+            color: var(--color-ink-dark);
+            -webkit-user-select: none; /* Disable text selection for art feel */
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* Font Styling - Bebas Neue for impact, Heebo for readability */
+        h1, h2, h3, h4, .bebas-neue {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 0.05em; /* Characteristic of screen print fonts */
+            text-transform: uppercase;
+        }
+
+        /* Custom Cursor - High Contrast, Interactive */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: transparent;
+            border: 2px solid #FFFFFF; /* Light border for visibility on dark */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for visibility on light */
+            transition: transform 0.1s ease-out, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            transform: translate(-50%, -50%) scale(1);
+            z-index: 9999; /* Always on top */
+        }
+
+        .custom-cursor-hover {
+            transform: translate(-50%, -50%) scale(1.2) rotate(15deg); /* Artistic interaction */
+            background-color: var(--color-accent-magenta);
+            border-color: var(--color-ink-dark);
+            box-shadow: 0 0 0 2px var(--color-accent-cyan);
+        }
+
+        /* Parallax Background Layers - Mimicking layered prints */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            pointer-events: none;
+            background-size: cover;
+            background-position: center;
+            z-index: -1; /* Behind content */
+            transform-style: preserve-3d; /* Enable 3D transforms */
+            will-change: transform; /* Optimize for animation */
+        }
+
+        /* Subtle "Halftone" Overlay Texture for a gritty print feel */
+        .overlay-texture {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.04; /* Very subtle grit */
+            background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 4 4" xmlns="http://www.w3.org/2000/svg"><circle cx="1" cy="1" r="0.5" fill="%23000000" opacity="0.1"/><circle cx="3" cy="3" r="0.5" fill="%23000000" opacity="0.1"/><circle cx="1" cy="3" r="0.5" fill="%23000000" opacity="0.1"/><circle cx="3" cy="1" r="0.5" fill="%23000000" opacity="0.1"/></svg>'); /* Simple noisy dot pattern */
+            background-size: 4px 4px;
+            z-index: 10; /* Above some background, below main content */
+        }
+
+        /* Styled Content Blocks - Distorted, Layered, Vibrant */
+        .ink-block {
+            background-color: var(--color-ink-dark);
+            color: var(--color-paper);
+            padding: 1.5rem 2rem;
+            box-shadow: 10px 10px 0px var(--color-accent-cyan), 20px 20px 0px rgba(0,0,0,0.2); /* Layered shadow */
+            border: 4px solid var(--color-accent-magenta);
+            position: relative;
+            transform: rotate(-3deg); /* Artistic tilt */
+        }
+        .magenta-block {
+            background-color: var(--color-accent-magenta);
+            color: var(--color-ink-dark); /* Dark text on bright magenta */
+            padding: 1.5rem 2rem;
+            box-shadow: -10px 10px 0px var(--color-accent-yellow), -20px 20px 0px rgba(0,0,0,0.2);
+            border: 4px solid var(--color-ink-dark);
+            position: relative;
+            transform: rotate(2deg);
+        }
+        .cyan-block {
+            background-color: var(--color-accent-cyan);
+            color: var(--color-ink-dark);
+            padding: 1.5rem 2rem;
+            box-shadow: 10px -10px 0px var(--color-accent-magenta), 20px -20px 0px rgba(0,0,0,0.2);
+            border: 4px solid var(--color-ink-dark);
+            position: relative;
+            transform: rotate(-1deg);
+        }
+        .yellow-block {
+            background-color: var(--color-accent-yellow);
+            color: var(--color-ink-dark);
+            padding: 1.5rem 2rem;
+            box-shadow: -10px -10px 0px var(--color-accent-cyan), -20px -20px 0px rgba(0,0,0,0.2);
+            border: 4px solid var(--color-ink-dark);
+            position: relative;
+            transform: rotate(3deg);
+        }
+
+        /* Highlighted text within blocks */
+        .highlight-text {
+            display: inline-block;
+            background-color: var(--color-accent-magenta);
+            color: var(--color-ink-dark);
+            padding: 0.1em 0.6em;
+            transform: rotate(-1deg);
+            box-shadow: 2px 2px 0px var(--color-accent-cyan);
+            border-radius: 2px;
+        }
+
+        /* Staggered "Print" Animation on scroll */
+        .stagger-in {
+            opacity: 0;
+            transform: translateY(30px) scale(0.9);
+            filter: blur(5px);
+            animation: staggerPrint 0.9s forwards ease-out;
+            animation-play-state: paused; /* Start paused, play on intersection */
+        }
+
+        .stagger-in.is-visible {
+            animation-play-state: running;
+        }
+
+        @keyframes staggerPrint {
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+                filter: blur(5px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+        
+        /* Contact elements styling */
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        .contact-item:hover {
+            color: var(--color-accent-magenta);
+            transform: translateX(-8px) scale(1.02);
+        }
+        .contact-item svg {
+            color: var(--color-accent-cyan);
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        .contact-item:hover svg {
+            color: var(--color-accent-magenta);
+            transform: rotate(5deg) scale(1.1);
+        }
+
+        /* Zevik's Image Styling - Bold and framed */
+        .zevik-image {
+            width: 180px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 50%; /* Make it round */
+            border: 6px solid var(--color-accent-cyan);
+            box-shadow: 0 0 0 6px var(--color-ink-dark), 0 0 0 12px var(--color-accent-magenta);
+            transition: transform 0.3s ease-in-out, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .zevik-image:hover {
+            transform: scale(1.05) rotate(5deg);
+            border-color: var(--color-accent-magenta);
+            box-shadow: 0 0 0 6px var(--color-accent-magenta), 0 0 0 12px var(--color-ink-dark);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .ink-block, .magenta-block, .cyan-block, .yellow-block {
+                transform: none; /* Remove artistic tilt on smaller screens */
+                box-shadow: 5px 5px 0px rgba(0,0,0,0.1); /* Simpler shadow */
+                border-width: 2px;
+                padding: 1rem;
+            }
+            .custom-cursor {
+                width: 24px;
+                height: 24px;
+            }
+            h1 { font-size: 3.5rem !important; }
+            h1 span { font-size: 2.5rem !important; }
+            h2 { font-size: 2.5rem !important; }
+            h3 { font-size: 2rem !important; }
+            p, ul li { font-size: 1.125rem !important; }
+            .zevik-image {
+                width: 120px;
+                height: 120px;
+                border-width: 4px;
+                box-shadow: 0 0 0 4px var(--color-ink-dark), 0 0 0 8px var(--color-accent-magenta);
+            }
+        }
+
+        /* Tailwind custom configuration */
+        </style>
+        <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        paper: 'var(--color-paper)',
+                        'ink-dark': 'var(--color-ink-dark)',
+                        'accent-magenta': 'var(--color-accent-magenta)',
+                        'accent-cyan': 'var(--color-accent-cyan)',
+                        'accent-yellow': 'var(--color-accent-yellow)',
+                    },
+                    fontFamily: {
+                        bebas: ['Bebas Neue', 'sans-serif'],
+                        heebo: ['Heebo', 'sans-serif'],
+                    },
+                }
+            }
+        }
+        </script>
+</head>
+<body class="overflow-hidden">
+
+    <div class="custom-cursor"></div>
+
+    <!-- Parallax Background Layers - Stylized color washes -->
+    <div class="parallax-layer bg-ink-dark opacity-15" data-depth="0.1" style="transform: scale(1.1) rotate(2deg);"></div>
+    <div class="parallax-layer bg-accent-magenta opacity-10" data-depth="0.05" style="transform: translate(-10%, 10%) scale(1.05) rotate(5deg);"></div>
+    <div class="parallax-layer bg-accent-cyan opacity-10" data-depth="0.03" style="transform: translate(15%, -5%) scale(1.08) rotate(-3deg);"></div>
+
+    <!-- Main Content Canvas - The scrollable art piece -->
+    <div id="scroll-container" class="relative w-full min-h-[450vh] z-0 overflow-y-scroll overflow-x-hidden p-6 sm:p-10 md:p-14 lg:p-20" style="perspective: 1px;">
+        <div class="overlay-texture fixed top-0 left-0 w-full h-full z-[1]"></div>
+
+        <!-- Section 1: The Grand Statement - Manifesto Title -->
+        <section class="min-h-screen flex items-center justify-center p-4">
+            <div class="text-center relative z-20 ink-block max-w-4xl mx-auto p-8 md:p-12 lg:p-16 border-8 border-accent-cyan rotate-[-3deg] md:rotate-[-5deg] transform hover:scale-[1.02] transition-transform duration-300 stagger-in" style="animation-delay: 0.2s;">
+                <h1 class="text-6xl md:text-8xl lg:text-9xl font-bebas leading-none mb-4 md:mb-8 text-accent-yellow drop-shadow-[5px_5px_0px_rgba(0,0,0,0.5)]">
+                    <span class="block text-accent-magenta text-5xl md:text-7xl lg:text-8xl">הדפסת עתיד:</span>
+                    מכונת דפוס המחשבה <br> בינה מלאכותית
+                </h1>
+                <p class="text-2xl md:text-3xl font-heebo leading-relaxed text-paper mt-6 md:mt-10">
+                    <span class="highlight-text text-ink-dark text-4xl">העתיד הוא עכשיו.</span>
+                    <span class="block mt-4">זאביק אבינר מזמין אתכם ללמוד לשלוט בכוחה של הבינה המלאכותית - לא עוד טכנולוגיה מרוחקת, אלא כלי יצירה, חדשנות וצמיחה בידיים שלכם.</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 2: Core Message - AI for Everyone -->
+        <section class="min-h-[120vh] relative p-4 flex flex-col items-center justify-center">
+            <div class="absolute top-1/4 right-1/4 w-96 h-96 bg-accent-cyan opacity-20 rounded-full blur-3xl z-[-1] hidden md:block"></div>
+            <div class="absolute bottom-1/3 left-1/4 w-80 h-80 bg-accent-magenta opacity-20 rounded-full blur-3xl z-[-1] hidden md:block"></div>
+
+            <div class="magenta-block max-w-3xl mx-auto p-6 md:p-10 border-8 border-ink-dark rotate-[2deg] md:rotate-[4deg] transform hover:scale-[1.02] transition-transform duration-300 stagger-in" style="animation-delay: 0.6s;">
+                <h2 class="text-4xl md:text-5xl font-bebas mb-4 text-ink-dark leading-tight">המסר החרוט: AI לכולם</h2>
+                <p class="text-xl md:text-2xl font-heebo leading-relaxed text-paper">
+                    אנו מאמינים שבינה מלאכותית אינה נחלתם הבלעדית של קומץ מומחים.
+                    זוהי שפת העתיד, ואנחנו כאן כדי ללמד אתכם אותה - <span class="highlight-text">מהאות הראשונה ועד ליצירת קוד מורכב.</span>
+                    כלים מעשיים שישנו את דרך העבודה והחיים שלכם, הניתנים ליישום <span class="font-bold text-ink-dark">מיד.</span>
+                    בואו נהפוך את הקסם לכישרון אישי.
+                </p>
+            </div>
+            
+            <div class="cyan-block max-w-2xl mx-auto p-6 md:p-8 mt-16 md:mt-24 border-8 border-ink-dark rotate-[-3deg] md:rotate-[-2deg] transform hover:scale-[1.02] transition-transform duration-300 stagger-in" style="animation-delay: 0.9s;">
+                <h3 class="text-3xl md:text-4xl font-bebas mb-4 text-ink-dark leading-tight">קהל היעד: כל מי שמוכן ליצור</h3>
+                <ul class="text-xl md:text-2xl font-heebo leading-loose text-ink-dark space-y-2 list-none p-0 text-right">
+                    <li class="relative pl-4"><span class="absolute right-0 text-accent-magenta text-3xl leading-none">&gt;</span>מתחילים סקרנים המבקשים לפענח את סודות ה-AI</li>
+                    <li class="relative pl-4"><span class="absolute right-0 text-accent-magenta text-3xl leading-none">&gt;</span>אנשי מקצוע המעוניינים להקפיץ את יכולותיהם</li>
+                    <li class="relative pl-4"><span class="absolute right-0 text-accent-magenta text-3xl leading-none">&gt;</span>מנהלים וארגונים השואפים להוביל חדשנות</li>
+                    <li class="relative pl-4"><span class="absolute right-0 text-accent-magenta text-3xl leading-none">&gt;</span>מפתחים ברמה מתקדמת המכוונים לפרויקטים פורצי דרך</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 3: Areas of Expertise - The Art of AI -->
+        <section class="min-h-[100vh] relative p-4 flex flex-col items-center justify-center">
+            <div class="yellow-block max-w-4xl mx-auto p-6 md:p-10 border-8 border-ink-dark rotate-[1deg] md:rotate-[2deg] transform hover:scale-[1.02] transition-transform duration-300 stagger-in" style="animation-delay: 1.2s;">
+                <h2 class="text-4xl md:text-5xl font-bebas mb-6 text-ink-dark leading-tight text-center">אמנות ה-AI: תחומי התמחות</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 text-center">
+                    <div class="p-4 bg-ink-dark text-paper border-4 border-accent-magenta transform rotate-[-1deg] hover:scale-105 transition-transform duration-200">
+                        <h3 class="text-2xl font-bebas mb-2 text-accent-yellow">כתיבת יצירות</h3>
+                        <p class="text-lg font-heebo">טקסטים, סיפורים ותוכן בכל סגנון</p>
+                    </div>
+                    <div class="p-4 bg-ink-dark text-paper border-4 border-accent-cyan transform rotate-[2deg] hover:scale-105 transition-transform duration-200">
+                        <h3 class="text-2xl font-bebas mb-2 text-accent-yellow">בניית מציאויות</h3>
+                        <p class="text-lg font-heebo">אפליקציות חכמות שחושבות ופועלות</p>
+                    </div>
+                    <div class="p-4 bg-ink-dark text-paper border-4 border-accent-magenta transform rotate-[-3deg] hover:scale-105 transition-transform duration-200">
+                        <h3 class="text-2xl font-bebas mb-2 text-accent-yellow">שערי עולם דיגיטלי</h3>
+                        <p class="text-lg font-heebo">פיתוח אתרים מבוססי בינה יצירתית</p>
+                    </div>
+                    <div class="p-4 bg-ink-dark text-paper border-4 border-accent-cyan transform rotate-[1deg] hover:scale-105 transition-transform duration-200">
+                        <h3 class="text-2xl font-bebas mb-2 text-accent-yellow">פיענוח נסתר</h3>
+                        <p class="text-lg font-heebo">ניתוח נתונים ומחקר מתקדם</p>
+                    </div>
+                    <div class="p-4 bg-ink-dark text-paper border-4 border-accent-magenta transform rotate-[-2deg] hover:scale-105 transition-transform duration-200">
+                        <h3 class="text-2xl font-bebas mb-2 text-accent-yellow">הדפסת דמיון</h3>
+                        <p class="text-lg font-heebo">יצירת תמונות ואומנות בנגיעת קוד</p>
+                    </div>
+                    <div class="p-4 bg-ink-dark text-paper border-4 border-accent-cyan transform rotate-[3deg] hover:scale-105 transition-transform duration-200">
+                        <h3 class="text-2xl font-bebas mb-2 text-accent-yellow">זרימת תהליכים</h3>
+                        <p class="text-lg font-heebo">אוטומציה חכמה לחיים קלים יותר</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Services Offered - Creating Your Future -->
+        <section class="min-h-[100vh] relative p-4 flex flex-col items-center justify-center">
+            <div class="ink-block max-w-3xl mx-auto p-6 md:p-10 border-8 border-accent-magenta rotate-[-4deg] md:rotate-[-6deg] transform hover:scale-[1.02] transition-transform duration-300 stagger-in" style="animation-delay: 1.5s;">
+                <h2 class="text-4xl md:text-5xl font-bebas mb-6 text-accent-yellow leading-tight text-center">השירותים שלנו: כולם אמנות</h2>
+                <ul class="text-xl md:text-2xl font-heebo leading-loose text-paper space-y-4 list-none p-0 text-right">
+                    <li class="relative pl-6">
+                        <span class="absolute right-0 top-0 text-accent-cyan text-4xl leading-none rotate-[-10deg]">&gt;&gt;</span>
+                        <span class="font-bold text-accent-yellow">סדנאות קבוצתיות:</span> חוויה מעשית, ממוקדת ופורצת דרך לקבוצות.
+                    </li>
+                    <li class="relative pl-6">
+                        <span class="absolute right-0 top-0 text-accent-cyan text-4xl leading-none rotate-[5deg]">&gt;&gt;</span>
+                        <span class="font-bold text-accent-yellow">שיעורים פרטיים:</span> מסלול אישי המותאם לרמה ולשאיפות שלכם.
+                    </li>
+                    <li class="relative pl-6">
+                        <span class="absolute right-0 top-0 text-accent-cyan text-4xl leading-none rotate-[-15deg]">&gt;&gt;</span>
+                        <span class="font-bold text-accent-yellow">הרצאות לארגונים:</span> פתיחת אופקים והעצמת צוותים עם ידע ב-AI.
+                    </li>
+                    <li class="relative pl-6">
+                        <span class="absolute right-0 top-0 text-accent-cyan text-4xl leading-none rotate-[8deg]">&gt;&gt;</span>
+                        <span class="font-bold text-accent-yellow">ייעוץ ופיתוח פרויקטים:</span> ליווי מקצועי מהרעיון ועד למימוש.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Section 5: The Guide - Zevik Aviner -->
+        <section class="min-h-[100vh] relative p-4 flex flex-col items-center justify-center">
+            <div class="yellow-block max-w-3xl mx-auto p-6 md:p-10 border-8 border-accent-cyan rotate-[2deg] md:rotate-[3deg] transform hover:scale-[1.02] transition-transform duration-300 stagger-in" style="animation-delay: 1.8s;">
+                <h2 class="text-4xl md:text-5xl font-bebas mb-6 text-ink-dark leading-tight text-center">המדריך: זאביק אבינר - המאסטר</h2>
+                <div class="flex flex-col md:flex-row items-center gap-6 md:gap-10">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר, מומחה בינה מלאכותית" class="zevik-image flex-shrink-0">
+                    <div class="text-center md:text-right">
+                        <p class="text-2xl font-bold font-bebas text-accent-magenta mb-2">זאביק אבינר</p>
+                        <p class="text-xl font-heebo leading-relaxed text-ink-dark mb-4">
+                            מומחה בינה מלאכותית בעל ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI.
+                            מתמחה בהנגשת הטכנולוגיה ובהפיכתה לכלי עבודה יומיומי לכל אחד ואחת.
+                            החזון שלו הוא להעצים אתכם עם היכולת ליצור, לחדש ולשלוט בעתיד הדיגיטלי.
+                        </p>
+                        <div class="mt-6 flex flex-col items-center md:items-start text-lg md:text-xl font-heebo text-ink-dark space-y-3">
+                            <a href="https://wa.me/972546609385" target="_blank" class="contact-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-whatsapp"><path d="M22 13.5V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h7.5"/><path d="M10 16a2 2 0 0 0 2 2h.5l-1.8 1.8c-.3.3-.2.7.1 1l1.5 1.5c.3.3.7.2 1-.1L22 16.5V14l-4 4-1.8-1.8c-.3-.3-.7-.2-1 .1L12 22.5V18a2 2 0 0 0-2-2"/></svg>
+                                <span>ווטסאפ: 054-6609385</span>
+                            </a>
+                            <a href="mailto:zaviner@gmail.com" class="contact-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                                <span>אימייל: zaviner@gmail.com</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Call to Action - A small, punchy statement -->
+        <section class="min-h-[50vh] relative p-4 flex items-center justify-center">
+            <div class="magenta-block max-w-xl mx-auto p-6 md:p-8 text-center border-8 border-ink-dark rotate-[1deg] md:rotate-[2deg] transform hover:scale-[1.02] transition-transform duration-300 stagger-in" style="animation-delay: 2.1s;">
+                <p class="text-3xl md:text-4xl font-bebas text-ink-dark">
+                    הצטרפו למסע. <span class="block text-accent-yellow">הדפיסו את העתיד שלכם.</span>
+                </p>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.querySelector('.custom-cursor');
+        const hoverableElements = document.querySelectorAll('a, button, .contact-item, .zevik-image, [data-hover-cursor]'); 
+
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = e.clientX + 'px';
+            customCursor.style.top = e.clientY + 'px';
+        });
+
+        hoverableElements.forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('custom-cursor-hover'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('custom-cursor-hover'));
+        });
+
+        // Parallax Effect for Background Layers
+        const scrollContainer = document.getElementById('scroll-container');
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+
+        scrollContainer.addEventListener('scroll', () => {
+            const scrollTop = scrollContainer.scrollTop;
+            parallaxLayers.forEach(layer => {
+                const depth = parseFloat(layer.dataset.depth);
+                const movement = -(scrollTop * depth);
+                layer.style.transform = `translateY(${movement}px) ${layer.style.transform.split(') ').slice(1).join(') ')}`; // Preserve other transforms
+            });
+        });
+        
+        // Staggered "Print" Animation on Scroll (using Intersection Observer)
+        const staggerObserverOptions = {
+            root: scrollContainer,
+            rootMargin: '0px',
+            threshold: 0.1 // Trigger when 10% of the item is visible
+        };
+
+        const staggerObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.classList.contains('is-visible')) {
+                    // Set a small delay for each element to enhance the staggered effect
+                    const delay = parseFloat(entry.target.style.animationDelay) || 0;
+                    setTimeout(() => {
+                        entry.target.classList.add('is-visible');
+                    }, delay * 1000); // Convert seconds to milliseconds
+                    observer.unobserve(entry.target); // Stop observing once animated
+                }
+            });
+        }, staggerObserverOptions);
+
+        // Observe all elements with the 'stagger-in' class
+        document.querySelectorAll('.stagger-in').forEach(el => {
+            staggerObserver.observe(el);
+        });
+
+        // Initial check for elements already in view on load
+        staggerObserver.takeRecords().forEach(entry => {
+            if (entry.isIntersecting && !entry.target.classList.contains('is-visible')) {
+                 const delay = parseFloat(entry.target.style.animationDelay) || 0;
+                 setTimeout(() => {
+                    entry.target.classList.add('is-visible');
+                }, delay * 1000);
+                staggerObserver.unobserve(entry.target);
+            }
+        });
+
+    </script>
+</body>
+</html>

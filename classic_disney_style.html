@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מסע הקסם אל ממלכת הבינה המלאכותית</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Define custom CSS variables for Disney-esque colors */
+        :root {
+            --primary-light: #b0e0e6; /* Powder Blue */
+            --primary-dark: #6a5acd; /* Slate Blue */
+            --accent-gold: #ffd700; /* Gold */
+            --accent-pink: #ffb6c1; /* Light Pink */
+            --accent-purple: #dda0dd; /* Plum */
+            --text-dark: #2f4f4f; /* Dark Slate Gray */
+            --text-light: #fdf5e6; /* Old Lace */
+        }
+        body {
+            font-family: 'Rubik', sans-serif;
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden;
+            background-color: var(--primary-dark);
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Amatic SC', cursive;
+            font-weight: 700;
+        }
+        /* Custom Cursor Styling */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-gold); /* Light border for visibility */
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.8), /* Dark shadow for contrast */
+                        0 0 15px var(--accent-gold), /* Golden glow */
+                        0 0 20px var(--accent-pink); /* Pinkish aura */
+            transition: transform 0.1s ease-out, opacity 0.3s ease-in-out;
+            transform: translate(-50%, -50%); /* Center the cursor */
+            opacity: 1;
+        }
+        #custom-cursor.hidden {
+            opacity: 0;
+        }
+
+        /* Parallax Layer Styling */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center bottom; /* Anchor to bottom for upward parallax */
+            z-index: -1;
+            transform: translateY(0); /* Initial state */
+            /* Removed transition here, JS handles movement for smoother control */
+        }
+
+        /* Specific Parallax Layer Backgrounds with SVG data URIs */
+        #layer-stars {
+            background-image: radial-gradient(circle at 50% 10%, rgba(106, 90, 205, 0.8) 0%, rgba(46, 38, 93, 0.9) 100%),
+                              url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><circle cx="10" cy="15" r="0.5" fill="%23FFF" /><circle cx="20" cy="5" r="0.8" fill="%23FFF" /><circle cx="35" cy="20" r="0.6" fill="%23FFF" /><circle cx="45" cy="10" r="0.9" fill="%23FFF" /><circle cx="55" cy="25" r="0.7" fill="%23FFF" /><circle cx="65" cy="15" r="0.5" fill="%23FFF" /><circle cx="75" cy="30" r="1.0" fill="%23FFF" /><circle cx="85" cy="10" r="0.8" fill="%23FFF" /><circle cx="95" cy="20" r="0.6" fill="%23FFF" /><circle cx="15" cy="30" r="0.7" fill="%23FFF" /><circle cx="25" cy="40" r="0.9" fill="%23FFF" /><circle cx="40" cy="35" r="0.5" fill="%23FFF" /><circle cx="50" cy="45" r="1.0" fill="%23FFF" /><circle cx="60" cy="30" r="0.6" fill="%23FFF" /><circle cx="70" cy="40" r="0.8" fill="%23FFF" /><circle cx="80" cy="25" r="0.7" fill="%23FFF" /><circle cx="90" cy="50" r="0.9" fill="%23FFF" /></svg>'); /* Distant stars pattern */
+            background-repeat: no-repeat;
+            background-blend-mode: overlay;
+        }
+        #layer-mountains {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300"><path fill="%238470a8" d="M0 200 L100 150 L200 180 L300 120 L400 160 L500 100 L600 140 L700 80 L800 120 L900 60 L1000 100 V300 H0 Z" /><path fill="%239a82c4" d="M0 220 L150 170 L300 200 L450 140 L600 180 L750 120 L900 160 L1000 100 V300 H0 Z" /><path fill="%23b0a2d2" d="M0 240 L200 190 L400 220 L600 160 L800 200 L1000 140 V300 H0 Z" /></svg>'); /* Layered mountains silhouette */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center bottom;
+        }
+        #layer-clouds {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 200"><path fill="%23b0e0e6" d="M0 100 Q150 50 300 100 T600 100 T900 100 L1000 120 L1000 200 L0 200 Z" opacity="0.6" /><path fill="%23e0ffff" d="M0 120 Q100 80 200 120 T400 120 T600 120 T800 120 T1000 120 L1000 200 L0 200 Z" opacity="0.7" /></svg>'); /* Whimsical clouds */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center bottom;
+        }
+        #layer-glitter {
+            background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><circle cx="10" cy="15" r="0.2" fill="%23FFD700" opacity="0.8" /><circle cx="20" cy="5" r="0.3" fill="%23FFD700" opacity="0.8" /><circle cx="35" cy="20" r="0.25" fill="%23FFD700" opacity="0.8" /><circle cx="45" cy="10" r="0.35" fill="%23FFD700" opacity="0.8" /><circle cx="55" cy="25" r="0.3" fill="%23FFD700" opacity="0.8" /><circle cx="65" cy="15" r="0.2" fill="%23FFD700" opacity="0.8" /><circle cx="75" cy="30" r="0.4" fill="%23FFD700" opacity="0.8" /><circle cx="85" cy="10" r="0.3" fill="%23FFD700" opacity="0.8" /><circle cx="95" cy="20" r="0.25" fill="%23FFD700" opacity="0.8" /><circle cx="15" cy="30" r="0.3" fill="%23FFD700" opacity="0.8" /><circle cx="25" cy="40" r="0.35" fill="%23FFD700" opacity="0.8" /><circle cx="40" cy="35" r="0.2" fill="%23FFD700" opacity="0.8" /><circle cx="50" cy="45" r="0.4" fill="%23FFD700" opacity="0.8" /><circle cx="60" cy="30" r="0.25" fill="%23FFD700" opacity="0.8" /><circle cx="70" cy="40" r="0.3" fill="%23FFD700" opacity="0.8" /><circle cx="80" cy="25" r="0.3" fill="%23FFD700" opacity="0.8" /><circle cx="90" cy="50" r="0.35" fill="%23FFD700" opacity="0.8" /></svg>'); /* Subtle floating glitter */
+            background-size: 100px 100px; /* Smaller pattern for glitter */
+            animation: glitter-flow 60s linear infinite; /* Gentle, slow movement */
+        }
+
+        @keyframes glitter-flow {
+            from { background-position: 0% 0%; }
+            to { background-position: 100% 100%; }
+        }
+
+        /* Content Card Styling - acts like floating storybook pages */
+        .content-card {
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
+            border-radius: 2rem; /* Rounded Disney corners */
+            padding: 2.5rem;
+            margin: 3rem auto;
+            max-width: 900px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2), /* Soft shadow */
+                        0 0 0 5px var(--accent-pink) inset; /* Inner pink border */
+            border: 2px solid var(--accent-gold); /* Outer gold border */
+            transform: scale(1);
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            cursor: default; /* Ensure text cursor for content */
+        }
+        .content-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3),
+                        0 0 0 8px var(--accent-pink) inset;
+        }
+
+        /* Hover Glow Effect for Text */
+        .hover-glow {
+            transition: color 0.3s ease-in-out, transform 0.3s ease-in-out, text-shadow 0.3s ease-in-out;
+        }
+        .hover-glow:hover {
+            color: var(--accent-gold);
+            transform: scale(1.05);
+            text-shadow: 0 0 10px var(--accent-pink);
+        }
+
+        /* Contact Info Link Styling */
+        .contact-info a {
+            color: var(--primary-dark);
+            text-decoration: none;
+            transition: color 0.3s ease-in-out, text-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+            display: inline-flex; /* For icon alignment */
+            align-items: center;
+        }
+        .contact-info a:hover {
+            color: var(--accent-gold);
+            text-shadow: 0 0 8px var(--accent-pink);
+            transform: translateY(-3px);
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            color: var(--text-light);
+            animation: bounce 2s infinite;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) translateX(-50%); }
+            50% { transform: translateY(-10px) translateX(-50%); }
+        }
+    </style>
+</head>
+<body class="text-text-dark selection:bg-accent-pink selection:text-text-light">
+
+    <!-- Custom Cursor - a sparkling magic wand tip -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <!-- These layers are fixed and move at different speeds to create a sense of depth -->
+    <div id="layer-stars" class="parallax-layer bg-gradient-to-t from-slate-blue to-dark-purple" data-speed="0.05"></div>
+    <div id="layer-mountains" class="parallax-layer" data-speed="0.12"></div>
+    <div id="layer-clouds" class="parallax-layer" data-speed="0.2"></div>
+    <div id="layer-glitter" class="parallax-layer" data-speed="0.08"></div>
+
+    <!-- Main Content Area - This wrapper ensures content is above parallax layers -->
+    <div class="relative z-10 min-h-screen pt-16 pb-32"> <!-- Added padding for scroll indicator -->
+
+        <!-- Opening Scene: The Grand Entrance to the AI Kingdom -->
+        <section class="min-h-screen flex flex-col justify-center items-center text-center px-4">
+            <div class="bg-white/80 rounded-full p-8 md:p-12 shadow-xl max-w-lg mb-8"
+                 style="box-shadow: 0 10px 40px rgba(0,0,0,0.3), inset 0 0 0 8px var(--accent-pink), 0 0 0 4px var(--accent-gold);">
+                <h1 class="text-6xl md:text-8xl text-primary-dark tracking-wide leading-tight hover-glow mb-4">
+                    מסע הקסם אל ממלכת הבינה המלאכותית
+                </h1>
+                <p class="text-xl md:text-3xl text-text-dark font-rubik leading-relaxed">
+                    העתיד - פרק חדש בספר הקסמים נפתח ממש עכשיו!
+                </p>
+            </div>
+            <p class="scroll-indicator text-3xl md:text-4xl text-text-light">
+                <span class="block mb-2">גללו למטה...</span>
+                <span class="block">✨</span>
+            </p>
+        </section>
+
+        <!-- Zevik Aviner - The Guide: Introduction to our Master Wizard -->
+        <section class="content-card text-center">
+            <h2 class="text-5xl md:text-6xl text-primary-dark mb-6 hover-glow">
+                הכירו את זאביק אבינר - המאסטר והמדריך
+            </h2>
+            <div class="flex flex-col md:flex-row items-center gap-8 md:gap-12 rtl">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונת זאביק אבינר - מומחה לבינה מלאכותית, מחייך ומזמין"
+                     class="w-40 h-40 md:w-48 md:h-48 rounded-full object-cover border-4 border-accent-gold shadow-lg transform hover:scale-110 transition-transform duration-300">
+                <p class="text-lg md:text-xl text-text-dark leading-relaxed flex-1">
+                    בכל סיפור קסום, ישנו מדריך נאמן. זאביק אבינר הוא קוסם הבינה המלאכותית של העידן החדש -
+                    עם ניסיון עשיר בפיתוח פרויקטים מרהיבים ואפליקציות חכמות, הוא מנגיש את עולם הקסם הטכנולוגי לכולם.
+                    איתו, כל מכשול נהפך לאתגר מרגש, וכל חידה מובילה לגילוי מרהיב.
+                </p>
+            </div>
+        </section>
+
+        <!-- Core Message - Accessibility: Making Magic Accessible to All -->
+        <section class="content-card text-center">
+            <h2 class="text-5xl md:text-6xl text-primary-dark mb-6 hover-glow">
+                הקסם נגיש לכולם: מלחשוש למתחילים ועד לכישופים מתקדמים
+            </h2>
+            <p class="text-xl md:text-2xl text-text-dark leading-relaxed mb-6">
+                זאביק רואה בכל אחד ואחת קוסם פוטנציאלי. הוא מלמד את שפת הקסם הדיגיטלי בצורה מעשית, צעד אחר צעד,
+                כך שתוכלו ליישם את הכלים המופלאים מיד בעבודה ובחיים.
+                אין צורך בידע קודם – רק בלב פתוח ללמוד ובנפש צמאה להמצאה!
+            </p>
+            <p class="text-lg md:text-xl text-primary-dark font-medium leading-relaxed">
+                הצטרפו למסע בו הבינה המלאכותית הופכת מכוח מסתורי לכלי עוצמתי בידיים שלכם.
+            </p>
+        </section>
+
+        <!-- Target Audience - Who is the Magic for?: Adventurers of All Levels -->
+        <section class="content-card">
+            <h2 class="text-5xl md:text-6xl text-primary-dark text-center mb-8 hover-glow">
+                למי מיועד מסע הקסם?
+            </h2>
+            <ul class="space-y-4 text-lg md:text-xl text-text-dark list-none pr-0">
+                <li class="flex items-center">
+                    <span class="text-accent-gold text-3xl md:text-4xl ml-4">🌟</span>
+                    <span>למתחילים ומתחילות שרוצים להכיר את פלאי עולם ה-AI.</span>
+                </li>
+                <li class="flex items-center">
+                    <span class="text-accent-gold text-3xl md:text-4xl ml-4">🎩</span>
+                    <span>לאנשי מקצוע המבקשים להטמיע את קסם ה-AI בשגרת עבודתם.</span>
+                </li>
+                <li class="flex items-center">
+                    <span class="text-accent-gold text-3xl md:text-4xl ml-4">🏰</span>
+                    <span>למנהלים, מנהלות וארגונים המחפשים הדרכות צוות חדשניות.</span>
+                </li>
+                <li class="flex items-center">
+                    <span class="text-accent-gold text-3xl md:text-4xl ml-4">🚀</span>
+                    <span>ולקוסמים מתקדמים – לפיתוח פרויקטים פורצי דרך מבוססי AI.</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Expertise Areas - The Spells You Will Master: Unlocking New Abilities -->
+        <section class="content-card">
+            <h2 class="text-5xl md:text-6xl text-primary-dark text-center mb-8 hover-glow">
+                הקסמים שתוכלו ללמוד לשלוט בהם:
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="text-center p-6 bg-primary-light/30 rounded-xl shadow-md border border-accent-pink hover:bg-primary-light/60 transition-colors">
+                    <span class="block text-5xl mb-3">✍️</span>
+                    <h3 class="text-3xl text-primary-dark mb-2 hover-glow">לחשוש לרוחות דיגיטליות</h3>
+                    <p class="text-text-dark">יצירת טקסטים ותוכן מרתק בקלילות.</p>
+                </div>
+                <div class="text-center p-6 bg-primary-light/30 rounded-xl shadow-md border border-accent-pink hover:bg-primary-light/60 transition-colors">
+                    <span class="block text-5xl mb-3">🔮</span>
+                    <h3 class="text-3xl text-primary-dark mb-2 hover-glow">זימון יצורים קסומים</h3>
+                    <p class="text-text-dark">בניית אפליקציות חכמות המבינות אתכם.</p>
+                </div>
+                <div class="text-center p-6 bg-primary-light/30 rounded-xl shadow-md border border-accent-pink hover:bg-primary-light/60 transition-colors">
+                    <span class="block text-5xl mb-3">🌐</span>
+                    <h3 class="text-3xl text-primary-dark mb-2 hover-glow">אריגת ממלכות דיגיטליות</h3>
+                    <p class="text-text-dark">פיתוח אתרים קסומים מבוססי AI.</p>
+                </div>
+                <div class="text-center p-6 bg-primary-light/30 rounded-xl shadow-md border border-accent-pink hover:bg-primary-light/60 transition-colors">
+                    <span class="block text-5xl mb-3">📜</span>
+                    <h3 class="text-3xl text-primary-dark mb-2 hover-glow">פענוח מגילות עתיקות</h3>
+                    <p class="text-text-dark">ניתוח נתונים ומחקר עם בינה קסומה.</p>
+                </div>
+                <div class="text-center p-6 bg-primary-light/30 rounded-xl shadow-md border border-accent-pink hover:bg-primary-light/60 transition-colors">
+                    <span class="block text-5xl mb-3">🎨</span>
+                    <h3 class="text-3xl text-primary-dark mb-2 hover-glow">ציור חלומות</h3>
+                    <p class="text-text-dark">יצירת תמונות ואומנות מרהיבה בעזרת AI.</p>
+                </div>
+                <div class="text-center p-6 bg-primary-light/30 rounded-xl shadow-md border border-accent-pink hover:bg-primary-light/60 transition-colors">
+                    <span class="block text-5xl mb-3">⚙️</span>
+                    <h3 class="text-3xl text-primary-dark mb-2 hover-glow">אוטומציה של מטלות קסומות</h3>
+                    <p class="text-text-dark">ייעול תהליכים והפגת שעמום.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services - The Ways to Acquire Power: Training Rituals -->
+        <section class="content-card">
+            <h2 class="text-5xl md:text-6xl text-primary-dark text-center mb-8 hover-glow">
+                הדרכים לרכוש את הכוח: שירותי הקסם
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="p-8 bg-accent-pink/20 rounded-xl shadow-md border border-accent-gold text-center hover:bg-accent-pink/40 transition-colors">
+                    <span class="block text-5xl mb-4">🧙‍♀️</span>
+                    <h3 class="text-4xl text-primary-dark mb-3 hover-glow">סדנאות קבוצתיות</h3>
+                    <p class="text-lg text-text-dark leading-relaxed">
+                        מעגלי קסם משותפים בהם נצלול לעומק העניין, נתנסה וניצור יחד.
+                        סדנאות מעשיות וממוקדות, ללמוד ולגלות בכוח הקבוצה.
+                    </p>
+                </div>
+                <div class="p-8 bg-accent-pink/20 rounded-xl shadow-md border border-accent-gold text-center hover:bg-accent-pink/40 transition-colors">
+                    <span class="block text-5xl mb-4">✨</span>
+                    <h3 class="text-4xl text-primary-dark mb-3 hover-glow">שיעורים פרטיים</h3>
+                    <p class="text-lg text-text-dark leading-relaxed">
+                        שיקוי ידע אישי, מותאם רק לכם. ליווי צמוד והתאמה מלאה לרמה, לצרכים ולחלומות שלכם.
+                        למידה ממוקדת שתעצים אתכם באופן אישי.
+                    </p>
+                </div>
+                <div class="p-8 bg-accent-pink/20 rounded-xl shadow-md border border-accent-gold text-center hover:bg-accent-pink/40 transition-colors">
+                    <span class="block text-5xl mb-4">🗣️</span>
+                    <h3 class="text-4xl text-primary-dark mb-3 hover-glow">הרצאות לארגונים</h3>
+                    <p class="text-lg text-text-dark leading-relaxed">
+                        פתיחת שערים חדשים של תודעה והשראה לצוותים בארגונים.
+                        הצגה מרתקת של עולם ה-AI שתפתח אופקים חדשים לכולם.
+                    </p>
+                </div>
+                <div class="p-8 bg-accent-pink/20 rounded-xl shadow-md border border-accent-gold text-center hover:bg-accent-pink/40 transition-colors">
+                    <span class="block text-5xl mb-4">🧭</span>
+                    <h3 class="text-4xl text-primary-dark mb-3 hover-glow">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-lg text-text-dark leading-relaxed">
+                        ליווי מקצועי ואישי במסע הקסם של פיתוח פרויקטים מבוססי AI.
+                        מהרעיון ועד למימוש – זאביק איתכם בכל צעד בדרך.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact - When Imagination Meets Reality: Join the Adventure! -->
+        <section class="content-card text-center mb-0">
+            <h2 class="text-5xl md:text-6xl text-primary-dark mb-6 hover-glow">
+                כשמעוף הדמיון פוגש את קסם המציאות
+            </h2>
+            <p class="text-xl md:text-2xl text-text-dark leading-relaxed mb-8">
+                מוכנים להתחיל את מסע הקסם שלכם אל עולם הבינה המלאכותית?
+                צרו קשר עם זאביק אבינר והפכו את החלום למציאות.
+            </p>
+            <div class="contact-info text-2xl md:text-3xl font-rubik font-medium space-y-4">
+                <p>
+                    <a href="https://wa.me/972546609385" target="_blank">
+                        <span class="ml-3">📞</span> ווטסאפ: 054-6609385
+                    </a>
+                </p>
+                <p>
+                    <a href="mailto:zaviner@gmail.com">
+                        <span class="ml-3">📧</span> אימייל: zaviner@gmail.com
+                    </a>
+                </p>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Tailwind CSS Configuration - Must be before the main script to apply custom colors/fonts -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-light': 'var(--primary-light)',
+                        'primary-dark': 'var(--primary-dark)',
+                        'accent-gold': 'var(--accent-gold)',
+                        'accent-pink': 'var(--accent-pink)',
+                        'accent-purple': 'var(--accent-purple)',
+                        'text-dark': 'var(--text-dark)',
+                        'text-light': 'var(--text-light)',
+                        'slate-blue': '#6a5acd', /* Specific for background gradient */
+                        'dark-purple': '#2e265d', /* Specific for background gradient */
+                    },
+                    fontFamily: {
+                        'amatic': ['Amatic SC', 'cursive'],
+                        'rubik': ['Rubik', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        let cursorX = 0;
+        let cursorY = 0;
+        let targetX = 0;
+        let targetY = 0;
+        const speed = 0.2; // Adjust for smoother or snappier movement
+
+        // Update target position on mouse move
+        document.addEventListener('mousemove', (e) => {
+            targetX = e.clientX;
+            targetY = e.clientY;
+            // Show cursor if it was hidden
+            if (cursor.classList.contains('hidden')) {
+                cursor.classList.remove('hidden');
+            }
+        });
+
+        // Hide cursor when mouse leaves the document
+        document.addEventListener('mouseleave', () => {
+            cursor.classList.add('hidden');
+        });
+
+        // Animation loop for smooth cursor follow
+        function animateCursor() {
+            cursorX += (targetX - cursorX) * speed;
+            cursorY += (targetY - cursorY) * speed;
+            cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor(); // Start the cursor animation
+
+        // Parallax Scroll Logic
+        const parallaxLayers = [
+            { element: document.getElementById('layer-stars'), speed: 0.05 },
+            { element: document.getElementById('layer-mountains'), speed: 0.12 },
+            { element: document.getElementById('layer-clouds'), speed: 0.2 },
+            { element: document.getElementById('layer-glitter'), speed: 0.08 },
+        ];
+
+        // Update parallax layers position on scroll
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            parallaxLayers.forEach(layer => {
+                // Background layers move upwards (negative translateY) as content scrolls down
+                layer.element.style.transform = `translateY(${-scrolled * layer.speed}px)`;
+            });
+        });
+    </script>
+</body>
+</html>

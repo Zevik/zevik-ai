@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>צִ'יפִּים, חוטים וחלומות: לפצח את סודות הבינה המלאכותית</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Heebo:wght@300;400;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <style>
+        /* Define Burton-esque color palette and general styles */
+        :root {
+            --burton-dark: #1a1a2e; /* Deep dark purple-blue */
+            --burton-accent: #e94560; /* Muted red */
+            --burton-light: #fefefe; /* Off-white */
+            --burton-purple-glow: #a78bfa; /* Light purple */
+            --burton-green-glow: #6ee7b7; /* Light green */
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: var(--burton-dark);
+            color: var(--burton-light);
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll for parallax elements */
+        }
+
+        /* Typography for Burton style */
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif; /* Elegant gothic touch */
+        }
+
+        .burton-title {
+            font-family: 'Amatic SC', cursive; /* Whimsical, hand-drawn feel */
+            font-weight: 700;
+        }
+
+        /* Custom Cursor Styling - High Contrast Mandatory */
+        #custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none; /* Allows clicks to pass through */
+            z-index: 9999; /* Always on top */
+            transform: translate(-50%, -50%); /* Center the cursor */
+            transition: transform 0.1s ease-out, opacity 0.1s ease-out; /* Smooth movement */
+            border: 2px solid var(--burton-purple-glow); /* Light color border */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8), /* Dark shadow for contrast */
+                        0 0 15px var(--burton-purple-glow); /* Inner glow effect */
+        }
+
+        #custom-cursor.link-hover {
+            transform: translate(-50%, -50%) scale(1.8); /* Enlarge on hover */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8),
+                        0 0 25px var(--burton-green-glow); /* Change glow on hover */
+            border-color: var(--burton-green-glow); /* Change border color on hover */
+        }
+        
+        /* General scroll reveal animation for artistic progression */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Burton-esque frame styles - artistic, non-standard elements */
+        .burton-frame {
+            border: 2px solid var(--burton-accent);
+            box-shadow: 8px 8px 0px rgba(0, 0, 0, 0.5), -8px -8px 0px rgba(0, 0, 0, 0.3);
+            transform: rotate(-3deg); /* Slight tilt for quirky feel */
+            background-color: rgba(26, 26, 46, 0.7); /* Semi-transparent dark background */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .burton-frame-alt {
+            border: 1px dashed var(--burton-green-glow);
+            box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.4);
+            transform: rotate(2deg); /* Opposite tilt */
+            background-color: rgba(26, 26, 46, 0.8);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        /* Hover effect for interactive elements */
+        .burton-element-hover:hover {
+            transform: scale(1.05) rotate(0deg) !important; /* Straighten and scale on hover */
+            box-shadow: 0 0 20px var(--burton-green-glow) !important;
+        }
+
+        /* Parallax effect for background layers */
+        .parallax-bg-1, .parallax-bg-2 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            z-index: -2; /* Behind main content, behind each other */
+            pointer-events: none; /* Don't interfere with interaction */
+        }
+        .parallax-bg-1 { /* Subtle striped pattern */
+            background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="p" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M5 0V10M10 5H0" stroke="%232e2e46" stroke-width="0.5"/></pattern></defs><rect width="100%" height="100%" fill="url(%23p)"/></svg>'); 
+            z-index: -3; /* Farthest back */
+        }
+        .parallax-bg-2 { /* More detailed, subtle pattern */
+            background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><style>.line{stroke: %233a3a5a; stroke-width:0.8;}</style><path class="line" d="M0 20 L20 0 M0 40 L40 0 M0 60 L60 0 M0 80 L80 0 M0 100 L100 0 M20 100 L100 20 M40 100 L100 40 M60 100 L100 60 M80 100 L100 80" stroke-linecap="square"/></svg>');
+            background-size: 100px 100px; /* Smaller pattern repeat */
+            opacity: 0.1;
+            z-index: -2; 
+        }
+
+        /* Burton-style scrollbar for consistency */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--burton-dark);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--burton-accent);
+            border-radius: 5px;
+            border: 1px solid var(--burton-light);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--burton-purple-glow);
+        }
+    </style>
+</head>
+<body class="overflow-y-scroll antialiased text-burton-light">
+
+    <!-- Custom Cursor Element -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-bg-1" data-parallax-speed="0.05"></div>
+    <div class="parallax-bg-2" data-parallax-speed="0.1"></div>
+    
+    <!-- Main Content Wrapper - Ensures content is on top of parallax backgrounds -->
+    <div class="relative z-10 p-4 md:p-8 min-h-screen max-w-7xl mx-auto">
+
+        <!-- Opening Scene: Title & Subtitle - Immersive Introduction -->
+        <section class="min-h-screen flex flex-col items-center justify-center text-center relative py-16">
+            <div class="max-w-4xl mx-auto reveal-on-scroll">
+                <h1 class="burton-title text-6xl md:text-8xl text-burton-purple-glow leading-tight mb-4 animate-pulse">
+                    צִ'יפִּים, חוטים וחלומות:
+                    <br>לפצח את סודות הבינה המלאכותית
+                </h1>
+                <h2 class="text-3xl md:text-4xl text-burton-green-glow mb-8 font-thin italic">
+                    מסע אל עולם ה-AI עם זאביק אבינר –
+                    <br>האדריכל של המחשבה הדיגיטלית
+                </h2>
+                <div class="text-xl md:text-2xl mt-8 max-w-2xl mx-auto reveal-on-scroll delay-100">
+                    <p class="leading-relaxed">
+                        ברוכים הבאים לממלכה שבה הקוד מתעורר לחיים,
+                        <br>ובינה מלאכותית אינה עוד מדע בדיוני, אלא אמנות שניתן לרתום.
+                    </p>
+                    <p class="mt-4">
+                        המשיכו לגלול כדי לפתוח את השערים למסע המרתק...
+                    </p>
+                </div>
+            </div>
+            <!-- Decorative "AI eye" elements - subtle background glow -->
+            <div class="absolute -top-10 left-1/4 w-32 h-32 md:w-48 md:h-48 rounded-full bg-burton-purple-glow opacity-10 blur-xl animate-slow-pulse"></div>
+            <div class="absolute bottom-20 right-1/4 w-24 h-24 md:w-36 md:h-36 rounded-full bg-burton-green-glow opacity-10 blur-xl animate-slow-pulse delay-200"></div>
+        </section>
+
+        <!-- Core Message - Presented as a mysterious revelation -->
+        <section class="my-32 flex justify-center relative reveal-on-scroll py-16">
+            <div class="burton-frame p-8 md:p-12 max-w-3xl text-center burton-element-hover">
+                <h3 class="text-4xl md:text-5xl text-burton-accent mb-6 font-bold">
+                    המסר ממעבדה נסתרת
+                </h3>
+                <p class="text-xl md:text-2xl leading-loose">
+                    בעולם שבו המכונות מתחילות לחשוב, והאלגוריתמים לוחשים סודות – יש מי שיכול להדריך אותך. לא עוד פחד מהלא נודע, אלא שליטה מוחלטת בלב המבוך הדיגיטלי. אנו מזמינים אותך לפרוץ את הגבולות, ליצור יש מאין, ולהפוך את החלום הממוחשב למציאות – מכלי עבודה פשוט ועד יצירת אומנות מורכבת.
+                </p>
+            </div>
+            <!-- Decorative Gears - symbolizing mechanics of AI -->
+            <div class="absolute -left-10 top-1/2 -translate-y-1/2 w-24 h-24 bg-gray-700 rounded-full flex items-center justify-center opacity-30 animate-spin-slow">
+                <div class="w-16 h-16 bg-gray-800 rounded-full border-2 border-burton-accent"></div>
+            </div>
+            <div class="absolute -right-10 bottom-1/4 w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center opacity-30 animate-spin-reverse-slow delay-100">
+                <div class="w-10 h-10 bg-gray-800 rounded-full border-2 border-burton-green-glow"></div>
+            </div>
+        </section>
+
+        <!-- Target Audience - Each group as a distinct "character" -->
+        <section class="my-32 relative text-center py-16">
+            <h3 class="burton-title text-5xl md:text-6xl text-burton-purple-glow mb-16 reveal-on-scroll">
+                מי הם רוחות הרפאים שאנו קוראים להן?
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 justify-items-center">
+                <div class="burton-frame-alt p-6 burton-element-hover reveal-on-scroll w-full md:w-auto">
+                    <h4 class="text-3xl text-burton-green-glow mb-4">הסקרנים הנצחיים</h4>
+                    <p class="text-lg">למי שהסקרנות מנקרת בו כמו עורב בלילה, ורוצה להכיר את עולם ה-AI מהיסוד.</p>
+                </div>
+                <div class="burton-frame-alt p-6 burton-element-hover reveal-on-scroll delay-100 w-full md:w-auto">
+                    <h4 class="text-3xl text-burton-green-glow mb-4">אדוני המקצוע</h4>
+                    <p class="text-lg">לאנשי מקצוע המעוניינים לצבוע את עתידם בפיקסלים חכמים ולשלב AI בעבודתם.</p>
+                </div>
+                <div class="burton-frame-alt p-6 burton-element-hover reveal-on-scroll delay-200 w-full md:w-auto">
+                    <h4 class="text-3xl text-burton-green-glow mb-4">מובילי הצללים</h4>
+                    <p class="text-lg">למנהלים שחולמים על מכונות יעילות, ולארגונים המחפשים הדרכות לצוותים.</p>
+                </div>
+                <div class="burton-frame-alt p-6 burton-element-hover reveal-on-scroll delay-300 w-full md:w-auto">
+                    <h4 class="text-3xl text-burton-green-glow mb-4">יוצרי מפלצות</h4>
+                    <p class="text-lg">ליזמים שרואים את פרויקט ה-AI הבא כדמות צללית באופק, ורוצים לפתחו ברמה מתקדמת.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Areas - Presented as arcane "spells" or "skills" -->
+        <section class="my-32 relative text-center py-16">
+            <h3 class="burton-title text-5xl md:text-6xl text-burton-accent mb-16 reveal-on-scroll">
+                לחשים ומיומנויות מעולם המכונה
+            </h3>
+            <div class="flex flex-wrap justify-center gap-6">
+                <div class="relative group burton-element-hover w-full sm:w-1/2 lg:w-1/4 p-4 reveal-on-scroll">
+                    <div class="burton-frame p-6 text-center h-full">
+                        <h4 class="text-2xl text-burton-purple-glow mb-2">מילים, סיפורים ולחישות דיגיטליות</h4>
+                        <p class="text-md">יצירת טקסטים ותוכן באמצעות בינה מלאכותית.</p>
+                    </div>
+                </div>
+                <div class="relative group burton-element-hover w-full sm:w-1/2 lg:w-1/4 p-4 reveal-on-scroll delay-100">
+                    <div class="burton-frame p-6 text-center h-full">
+                        <h4 class="text-2xl text-burton-purple-glow mb-2">יצורים חכמים בקוד</h4>
+                        <p class="text-md">בניית אפליקציות חכמות שמתעוררות לחיים.</p>
+                    </div>
+                </div>
+                <div class="relative group burton-element-hover w-full sm:w-1/2 lg:w-1/4 p-4 reveal-on-scroll delay-200">
+                    <div class="burton-frame p-6 text-center h-full">
+                        <h4 class="text-2xl text-burton-purple-glow mb-2">בתים וארמונות בחוטים</h4>
+                        <p class="text-md">פיתוח אתרים מבוססי AI עם נשמה.</p>
+                    </div>
+                </div>
+                <div class="relative group burton-element-hover w-full sm:w-1/2 lg:w-1/4 p-4 reveal-on-scroll delay-300">
+                    <div class="burton-frame p-6 text-center h-full">
+                        <h4 class="text-2xl text-burton-purple-glow mb-2">לפצח את המידע</h4>
+                        <p class="text-md">ניתוח נתונים ומחקר – לגלות את הסודות החבויים.</p>
+                    </div>
+                </div>
+                <div class="relative group burton-element-hover w-full sm:w-1/2 lg:w-1/4 p-4 reveal-on-scroll delay-400">
+                    <div class="burton-frame p-6 text-center h-full">
+                        <h4 class="text-2xl text-burton-purple-glow mb-2">אומנות ממוכנת</h4>
+                        <p class="text-md">יצירת תמונות ואומנות שהמכונה חולמת.</p>
+                    </div>
+                </div>
+                <div class="relative group burton-element-hover w-full sm:w-1/2 lg:w-1/4 p-4 reveal-on-scroll delay-500">
+                    <div class="burton-frame p-6 text-center h-full">
+                        <h4 class="text-2xl text-burton-purple-glow mb-2">מכונות שעושות הכל לבד</h4>
+                        <p class="text-md">אוטומציה של תהליכים – לשחרר את הזמן לדברים החשובים.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered - "Gates" to knowledge -->
+        <section class="my-32 relative text-center py-16">
+            <h3 class="burton-title text-5xl md:text-6xl text-burton-green-glow mb-16 reveal-on-scroll">
+                השערים לעולם הבינה המלאכותית
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+                <div class="burton-frame-alt p-8 burton-element-hover reveal-on-scroll">
+                    <h4 class="text-3xl text-burton-purple-glow mb-4">מעגלי שיח קסומים</h4>
+                    <p class="text-lg mb-4">סדנאות קבוצתיות – מעשיות, ממוקדות, ופותחות אופקים חדשים.</p>
+                    <button class="bg-burton-accent hover:bg-burton-purple-glow text-white font-bold py-3 px-6 rounded-full transition duration-300 transform hover:scale-105">
+                        היכנס למעגל
+                    </button>
+                </div>
+                <div class="burton-frame-alt p-8 burton-element-hover reveal-on-scroll delay-100">
+                    <h4 class="text-3xl text-burton-purple-glow mb-4">פגישות אחד על אחד עם המאסטרו</h4>
+                    <p class="text-lg mb-4">שיעורים פרטיים – התאמה אישית לרמה ולצרכים שלך.</p>
+                    <button class="bg-burton-accent hover:bg-burton-purple-glow text-white font-bold py-3 px-6 rounded-full transition duration-300 transform hover:scale-105">
+                        קבע פגישה
+                    </button>
+                </div>
+                <div class="burton-frame-alt p-8 burton-element-hover reveal-on-scroll delay-200">
+                    <h4 class="text-3xl text-burton-purple-glow mb-4">הרצאות – פתיחת שערים לעולמות חדשים</h4>
+                    <p class="text-lg mb-4">הרצאות לארגונים – פתיחת אופקים והשראה לצוותים שלמים.</p>
+                    <button class="bg-burton-accent hover:bg-burton-purple-glow text-white font-bold py-3 px-6 rounded-full transition duration-300 transform hover:scale-105">
+                        הזמן הרצאה
+                    </button>
+                </div>
+                <div class="burton-frame-alt p-8 burton-element-hover reveal-on-scroll delay-300">
+                    <h4 class="text-3xl text-burton-purple-glow mb-4">ייעוץ ובניית מפלצות חכמות</h4>
+                    <p class="text-lg mb-4">ייעוץ ופיתוח פרויקטים – ליווי מקצועי ליצירת הדבר הבא.</p>
+                    <button class="bg-burton-accent hover:bg-burton-purple-glow text-white font-bold py-3 px-6 rounded-full transition duration-300 transform hover:scale-105">
+                        צור מפלצת
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide - Zevik Aviner, the Alchemist -->
+        <section class="my-32 flex flex-col lg:flex-row items-center justify-center gap-16 relative py-16">
+            <div class="relative w-64 h-64 md:w-80 md:h-80 burton-element-hover reveal-on-scroll">
+                <!-- Image of Zevik in a stylized, tilted frame -->
+                <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="absolute inset-0 w-full h-full object-cover rounded-lg border-4 border-burton-accent shadow-lg z-10 transform -rotate-6 transition-transform duration-300">
+                <!-- Layers of glow and irregular borders for Burton effect -->
+                <div class="absolute inset-0 bg-burton-purple-glow rounded-lg blur-xl opacity-30 z-0 animate-pulse-light"></div>
+                <div class="absolute -inset-2 rounded-lg border-2 border-burton-green-glow transform rotate-3 z-0"></div>
+                <div class="absolute -inset-4 rounded-lg border-1 border-burton-accent transform -rotate-9 z-0"></div>
+            </div>
+            <div class="burton-frame p-8 md:p-12 max-w-2xl text-center lg:text-right burton-element-hover reveal-on-scroll delay-100">
+                <h3 class="burton-title text-5xl md:text-6xl text-burton-purple-glow mb-6">
+                    זאביק אבינר – אלכימאי המחשבה
+                </h3>
+                <p class="text-xl md:text-2xl leading-loose">
+                    לא רק מומחה, אלא אלכימאי של המחשבה הדיגיטלית. מנוסה בבניית יצורים מורכבים מקוד, אפליקציות שרוקדות וטכנולוגיות שלוחשות. שליחו של הלא נודע, הוא הופך את הקסם הטכנולוגי לכלי יומיומי בידי כל אחד ואחת.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Section - Final revelation of communication "channels" -->
+        <section class="my-32 relative text-center py-16">
+            <h3 class="burton-title text-5xl md:text-6xl text-burton-accent mb-16 reveal-on-scroll">
+                כדי לפתוח את התיבה...
+            </h3>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-10">
+                <a href="https://wa.me/972546609385" target="_blank" class="burton-frame-alt p-6 burton-element-hover reveal-on-scroll inline-block group">
+                    <div class="text-4xl text-burton-green-glow mb-2 group-hover:text-burton-purple-glow transition-colors">ווטסאפ</div>
+                    <div class="text-2xl text-white">054-6609385</div>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="burton-frame-alt p-6 burton-element-hover reveal-on-scroll delay-100 inline-block group">
+                    <div class="text-4xl text-burton-green-glow mb-2 group-hover:text-burton-purple-glow transition-colors">אימייל</div>
+                    <div class="text-2xl text-white">zaviner@gmail.com</div>
+                </a>
+            </div>
+            <div class="text-center mt-16 text-lg text-gray-400">
+                <p>כל הזכויות שמורות ליצירה הדיגיטלית, 2024</p>
+            </div>
+        </section>
+
+    </div> <!-- End Main Content Wrapper -->
+
+    <script>
+        // Tailwind CSS configuration - extending theme for custom colors, keyframes, and animations
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'burton-dark': '#1a1a2e',
+                        'burton-accent': '#e94560',
+                        'burton-light': '#fefefe',
+                        'burton-purple-glow': '#a78bfa',
+                        'burton-green-glow': '#6ee7b7',
+                    },
+                    keyframes: {
+                        'slow-pulse': {
+                            '0%, 100%': { transform: 'scale(1)', opacity: '0.1' },
+                            '50%': { transform: 'scale(1.05)', opacity: '0.2' },
+                        },
+                        'pulse-light': {
+                            '0%, 100%': { opacity: '0.3' },
+                            '50%': { opacity: '0.6' },
+                        },
+                        'spin-slow': {
+                            'from': { transform: 'rotate(0deg)' },
+                            'to': { transform: 'rotate(360deg)' },
+                        },
+                        'spin-reverse-slow': {
+                            'from': { transform: 'rotate(0deg)' },
+                            'to': { transform: 'rotate(-360deg)' },
+                        }
+                    },
+                    animation: {
+                        'slow-pulse': 'slow-pulse 4s infinite ease-in-out',
+                        'pulse-light': 'pulse-light 3s infinite ease-in-out',
+                        'spin-slow': 'spin-slow 60s linear infinite',
+                        'spin-reverse-slow': 'spin-reverse-slow 60s linear infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script>
+        // Custom Cursor Logic for immersive interaction
+        const customCursor = document.getElementById('custom-cursor');
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
+
+        // Animate cursor movement for a smooth, trailing effect
+        const animateCursor = () => {
+            const dx = mouseX - cursorX;
+            const dy = mouseY - cursorY;
+            cursorX += dx * 0.1; // Ease-in effect (0.1 is a damping factor)
+            cursorY += dy * 0.1;
+            customCursor.style.left = `${cursorX}px`;
+            customCursor.style.top = `${cursorY}px`;
+            requestAnimationFrame(animateCursor); // Loop animation
+        };
+
+        // Update target coordinates on mouse move
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // Add hover effect for interactive elements (links, buttons, custom frames)
+        document.querySelectorAll('a, button, .burton-element-hover').forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('link-hover'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('link-hover'));
+        });
+
+        animateCursor(); // Start the cursor animation loop
+
+        // Parallax Effect Logic for background layers
+        const parallaxBgs = document.querySelectorAll('[data-parallax-speed]');
+        window.addEventListener('scroll', () => {
+            parallaxBgs.forEach(bg => {
+                const speed = parseFloat(bg.dataset.parallaxSpeed);
+                const yPos = -window.scrollY * speed; // Calculate vertical offset based on scroll and speed
+                bg.style.transform = `translateY(${yPos}px)`;
+            });
+        });
+
+        // Scroll Reveal Animation Logic for content elements (discovery experience)
+        const revealElements = document.querySelectorAll('.reveal-on-scroll');
+
+        const checkIfVisible = () => {
+            revealElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+                // Check if element is in viewport (partially visible)
+                // Trigger visibility when element's top is within 100px from viewport bottom
+                // And element's bottom is within 100px from viewport top
+                if (rect.top <= viewportHeight - 100 && rect.bottom >= 100) {
+                    el.classList.add('is-visible');
+                } else {
+                    // Optional: remove is-visible when out of view, to re-trigger on scroll back
+                    // el.classList.remove('is-visible');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', checkIfVisible); // Check on scroll
+        window.addEventListener('resize', checkIfVisible); // Check on resize
+        checkIfVisible(); // Initial check on page load to reveal elements already in view
+    </script>
+</body>
+</html>

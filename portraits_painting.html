@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פני הבינה המלאכותית: אמנות השליטה - זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Frank+Ruhl+Libre:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* General body styling for background and font */
+        body {
+            font-family: 'Heebo', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            background: linear-gradient(135deg, #1A1A2E 0%, #0F0018 100%); /* Deep, rich background */
+            color: #E0E0E0; /* Light text for contrast */
+            cursor: none; /* Hide default cursor */
+        }
+
+        h1, h2 {
+            font-family: 'Frank Ruhl Libre', serif;
+        }
+
+        /* Custom Cursor Styling - MANDATORY HIGH CONTRAST */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.2s ease-out, width 0.2s ease-out, height 0.2s ease-out, opacity 0.2s ease-out;
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for contrast */
+            opacity: 1;
+        }
+
+        .interactive-hover #custom-cursor {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid #FFD700; /* Gold border on hover */
+            box-shadow: 0 0 0 3px rgba(0,0,0,0.8), 0 0 15px rgba(255, 215, 0, 0.5); /* Glowing shadow */
+        }
+
+        /* Portrait-specific styles */
+        .portrait-frame {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 0 5px rgba(255,255,255,0.1); /* Subtle frame effect */
+            background: rgba(255,255,255,0.05); /* Slight internal glow */
+        }
+        .portrait-image {
+            filter: grayscale(40%) contrast(120%) brightness(90%) sepia(10%); /* Artistic filter */
+            transition: transform 0.8s ease-in-out, filter 0.8s ease-in-out;
+        }
+        .portrait-image:hover {
+            filter: grayscale(0%) contrast(100%) brightness(100%) sepia(0%); /* Full color on hover */
+            transform: scale(1.02);
+        }
+
+        /* Text reveal/animation styles */
+        .text-reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .text-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Unique layout adjustments */
+        .grid-art {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        @media (min-width: 1024px) {
+            .grid-art {
+                grid-template-columns: 2fr 3fr 2fr; /* Asymmetrical for artistic feel */
+            }
+        }
+
+        /* Background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -10; /* Very low z-index */
+        }
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: float 10s infinite ease-in-out alternate;
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) translateX(50vw) scale(1.5); opacity: 0; }
+        }
+        
+        .animated-text-line {
+            opacity: 0;
+            transform: translateX(100px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .animated-text-line.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Pseudo-element for painterly effect */
+        .painterly-stroke::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            right: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #FFD700, #FF69B4); /* Golden-pink gradient */
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s ease-out;
+        }
+        .painterly-stroke.visible::after {
+            transform: scaleX(1);
+        }
+
+        /* Contact details styling */
+        .contact-detail {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            padding-right: 20px; /* Space for icon or artistic flourish */
+        }
+        .contact-detail::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            background: #FFD700; /* Gold dot */
+            border-radius: 50%;
+        }
+        .contact-detail:hover::before {
+            box-shadow: 0 0 10px #FFD700;
+        }
+    </style>
+</head>
+<body class="overflow-y-scroll">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Background Particle Canvas -->
+    <div class="particles"></div>
+
+    <main class="relative z-10 min-h-screen p-8 lg:p-16 flex flex-col items-center justify-center">
+
+        <!-- Main Title - The Art Piece's Name -->
+        <h1 class="text-5xl lg:text-7xl text-center text-white mb-12 drop-shadow-lg leading-tight animated-text-line">
+            <span class="block mb-2">פני הבינה המלאכותית:</span> 
+            <span class="block text-4xl lg:text-6xl text-transparent bg-clip-text bg-gradient-to-l from-purple-400 to-pink-600 font-bold">אמנות השליטה</span>
+        </h1>
+
+        <!-- Introduction - Artistic Interpretation -->
+        <section class="max-w-4xl mx-auto mb-20 text-center text-xl lg:text-2xl text-gray-200 leading-relaxed text-reveal">
+            <p class="mb-6">
+                בעולם שצויר בביטים ובפיקסלים, צומחת חכמה חדשה.
+                <br>זוהי עת להתבונן בעיניים פקוחות אל האופק הדיגיטלי, ולגלות את הדיוקנאות החבויים בתוך קוד.
+            </p>
+            <p class="text-lg text-gray-400">
+                AI אינה רק טכנולוגיה - היא בד ציור, ומכחול רב עוצמה.
+                הבה נפסל יחדיו את עתידך.
+            </p>
+        </section>
+
+        <!-- The Portrait Section - Zevik Aviner -->
+        <section class="relative w-full max-w-5xl mx-auto flex flex-col lg:flex-row items-center justify-center lg:space-x-reverse lg:space-x-12 mb-20">
+            
+            <div class="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 portrait-frame mb-8 lg:mb-0 transform hover:scale-105 transition-transform duration-500 ease-in-out interactive-element">
+                <img src="https://link.zevikaviner.com/zevik" alt="פורטרט של זאביק אבינר - מומחה בינה מלאכותית" 
+                     class="w-full h-full object-cover rounded-lg portrait-image">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-30"></div>
+                <div class="absolute bottom-4 right-4 text-white text-lg font-bold">זאביק אבינר</div>
+            </div>
+
+            <div class="max-w-lg text-right text-reveal animated-text-line" style="transition-delay: 0.3s;">
+                <h2 class="text-4xl lg:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-blue-500 mb-6 drop-shadow-md">
+                    האמן המדריך: זאביק אבינר
+                </h2>
+                <p class="text-xl lg:text-2xl leading-relaxed text-gray-200 mb-6">
+                    בפניו, חקוק ניסיון של שנים, היכולת לפרוש בפניך את לוח הצבעים של ה-AI,
+                    להפוך קונספטים מופשטים למשיכות מכחול מדויקות, ישימות, המשרטטות את עתידך.
+                </p>
+                <p class="text-lg text-gray-400">
+                    מומחה בינה מלאכותית עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI.
+                    מתמחה בהנגשת הטכנולוגיה והפיכתה לכלי עבודה יומיומי.
+                </p>
+            </div>
+        </section>
+
+        <!-- Audience & Expertise - Scattered elements like details in a painting -->
+        <section class="w-full max-w-6xl mx-auto my-20">
+            <h2 class="text-4xl lg:text-5xl text-center text-white mb-12 animated-text-line painterly-stroke" style="transition-delay: 0.6s;">
+                למי מצויר הדיוקן? - מסע אישי באמנות ה-AI
+            </h2>
+            <div class="grid-art grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 text-center">
+                <div class="p-8 bg-gradient-to-br from-indigo-900 to-purple-800 rounded-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 text-reveal interactive-element" style="transition-delay: 0.9s;">
+                    <h3 class="text-3xl text-yellow-300 mb-4">המתחיל</h3>
+                    <p class="text-lg text-gray-200">
+                        המחפש את קו המתאר הראשון בעולם ה-AI - בואו לפרוץ את מחסומי ההתחלה ולצייר את הצעדים הראשונים בביטחון.
+                    </p>
+                </div>
+                <div class="p-8 bg-gradient-to-br from-purple-800 to-pink-700 rounded-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 text-reveal interactive-element" style="transition-delay: 1.2s;">
+                    <h3 class="text-3xl text-green-300 mb-4">המקצוען</h3>
+                    <p class="text-lg text-gray-200">
+                        המבקש להוסיף עומק וגוונים לעבודתו - הטמעת AI ככלי יצירתי ואפקטיבי לשיפור תהליכים ופרויקטים.
+                    </p>
+                </div>
+                <div class="p-8 bg-gradient-to-br from-pink-700 to-red-600 rounded-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 text-reveal interactive-element" style="transition-delay: 1.5s;">
+                    <h3 class="text-3xl text-orange-300 mb-4">המנהל והארגון</h3>
+                    <p class="text-lg text-gray-200">
+                        הרואים בתמונה הגדולה את פוטנציאל הצוות - הדרכות מותאמות אישית לפתיחת אופקים והטמעת חדשנות ארגונית.
+                    </p>
+                </div>
+                <div class="p-8 bg-gradient-to-br from-red-600 to-purple-800 rounded-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 text-reveal interactive-element md:col-span-2 lg:col-span-1 lg:col-start-2" style="transition-delay: 1.8s;">
+                    <h3 class="text-3xl text-blue-300 mb-4">היוצר המתקדם</h3>
+                    <p class="text-lg text-gray-200">
+                        השואף לצייר פרויקטים מבוססי AI מאפס - ליווי ופיתוח רעיונות לכדי יצירות דיגיטליות מורכבות.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Areas - Brushstrokes of Wisdom -->
+        <section class="w-full max-w-6xl mx-auto my-20">
+            <h2 class="text-4xl lg:text-5xl text-center text-white mb-12 animated-text-line painterly-stroke" style="transition-delay: 2.1s;">
+                מכחולים של חכמה: תחומי יצירה עם AI
+            </h2>
+            <div class="flex flex-wrap justify-center gap-6">
+                <div class="bg-gray-800 p-4 rounded-full text-white text-lg shadow-md hover:bg-gray-700 transition-colors duration-200 text-reveal interactive-element" style="transition-delay: 2.3s;">
+                    <span class="text-purple-400">#</span>פיסול טקסטים ותוכן
+                </div>
+                <div class="bg-gray-800 p-4 rounded-full text-white text-lg shadow-md hover:bg-gray-700 transition-colors duration-200 text-reveal interactive-element" style="transition-delay: 2.5s;">
+                    <span class="text-yellow-400">#</span>רישום אפליקציות חכמות
+                </div>
+                <div class="bg-gray-800 p-4 rounded-full text-white text-lg shadow-md hover:bg-gray-700 transition-colors duration-200 text-reveal interactive-element" style="transition-delay: 2.7s;">
+                    <span class="text-pink-400">#</span>ציור אתרים חכמים
+                </div>
+                <div class="bg-gray-800 p-4 rounded-full text-white text-lg shadow-md hover:bg-gray-700 transition-colors duration-200 text-reveal interactive-element" style="transition-delay: 2.9s;">
+                    <span class="text-green-400">#</span>ניתוח גווני נתונים
+                </div>
+                <div class="bg-gray-800 p-4 rounded-full text-white text-lg shadow-md hover:bg-gray-700 transition-colors duration-200 text-reveal interactive-element" style="transition-delay: 3.1s;">
+                    <span class="text-blue-400">#</span>פורטרטים דיגיטליים ואמנות
+                </div>
+                <div class="bg-gray-800 p-4 rounded-full text-white text-lg shadow-md hover:bg-gray-700 transition-colors duration-200 text-reveal interactive-element" style="transition-delay: 3.3s;">
+                    <span class="text-red-400">#</span>אוטומציה כאמנות תנועה
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered - A Gallery of Opportunities -->
+        <section class="w-full max-w-6xl mx-auto my-20">
+            <h2 class="text-4xl lg:text-5xl text-center text-white mb-12 animated-text-line painterly-stroke" style="transition-delay: 3.6s;">
+                הגלריה המלאה: שירותי ההדרכה
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
+                <div class="bg-gradient-to-br from-blue-900 to-indigo-700 p-10 rounded-xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 text-reveal interactive-element" style="transition-delay: 3.8s;">
+                    <h3 class="text-4xl text-yellow-200 mb-4 font-bold">סדנאות קבוצתיות</h3>
+                    <p class="text-xl text-gray-100 leading-relaxed">
+                        מעבדות יצירה מעשיות וממוקדות, ללמוד וליישם כקבוצה. חוויה משותפת של גילוי ופיתוח מיומנויות AI.
+                    </p>
+                </div>
+                <div class="bg-gradient-to-br from-green-900 to-teal-700 p-10 rounded-xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 text-reveal interactive-element" style="transition-delay: 4s;">
+                    <h3 class="text-4xl text-purple-200 mb-4 font-bold">שיעורים פרטיים</h3>
+                    <p class="text-xl text-gray-100 leading-relaxed">
+                        סטודיו אישי לצרכיך - התאמה מדויקת לרמה, לקצב ולשאיפות האישיות שלך בבניית ידע ב-AI.
+                    </p>
+                </div>
+                <div class="bg-gradient-to-br from-red-900 to-orange-700 p-10 rounded-xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 text-reveal interactive-element" style="transition-delay: 4.2s;">
+                    <h3 class="text-4xl text-blue-200 mb-4 font-bold">הרצאות לארגונים</h3>
+                    <p class="text-xl text-gray-100 leading-relaxed">
+                        פתיחת אופקים והשראה לצוותים, הצגת פוטנציאל ה-AI והשפעתה על עולם העבודה המשתנה.
+                    </p>
+                </div>
+                <div class="bg-gradient-to-br from-purple-900 to-indigo-700 p-10 rounded-xl shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 text-reveal interactive-element" style="transition-delay: 4.4s;">
+                    <h3 class="text-4xl text-green-200 mb-4 font-bold">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-xl text-gray-100 leading-relaxed">
+                        ליווי מקצועי ואישי מתפיסה ועד מימוש, להפוך רעיונות מבוססי AI למציאות אמנותית.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Information - The Artist's Signature -->
+        <section class="w-full max-w-4xl mx-auto my-20 text-center text-reveal" style="transition-delay: 4.8s;">
+            <h2 class="text-4xl lg:text-5xl text-white mb-8 animated-text-line painterly-stroke" style="transition-delay: 5s;">
+                חתימת האמן: צור קשר
+            </h2>
+            <div class="text-2xl text-gray-200 space-y-4">
+                <p class="contact-detail text-reveal" style="transition-delay: 5.2s;">
+                    <a href="https://wa.me/972546609385" class="hover:text-yellow-400 transition-colors duration-200 interactive-element">ווטסאפ: 054-6609385</a>
+                </p>
+                <p class="contact-detail text-reveal" style="transition-delay: 5.4s;">
+                    <a href="mailto:zaviner@gmail.com" class="hover:text-yellow-400 transition-colors duration-200 interactive-element">אימייל: zaviner@gmail.com</a>
+                </p>
+            </div>
+            <p class="mt-12 text-lg text-gray-500 animated-text-line" style="transition-delay: 5.6s;">
+                בואו נצייר יחד את העתיד בבינה מלאכותית.
+            </p>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        const interactiveElements = document.querySelectorAll('.interactive-element');
+
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                document.body.classList.add('interactive-hover');
+            });
+            el.addEventListener('mouseleave', () => {
+                document.body.classList.remove('interactive-hover');
+            });
+        });
+
+        // Background Particles Logic
+        const particlesContainer = document.querySelector('.particles');
+        const numParticles = 30; // Number of particles
+
+        for (let i = 0; i < numParticles; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // Random size for particles
+            const size = Math.random() * 8 + 2; // size between 2px and 10px
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+
+            // Random start position
+            particle.style.left = `${Math.random() * 100}vw`;
+            particle.style.top = `${Math.random() * 100}vh`;
+
+            // Random animation delay and duration
+            particle.style.animationDelay = `${Math.random() * 10}s`;
+            particle.style.animationDuration = `${Math.random() * 10 + 10}s`; // 10 to 20 seconds
+
+            particlesContainer.appendChild(particle);
+        }
+
+        // Intersection Observer for text reveal/animation
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    // Optional: Unobserve after animation to prevent re-triggering
+                    // observer.unobserve(entry.target);
+                } else {
+                    // Optional: Remove visible class if element scrolls out of view
+                    // entry.target.classList.remove('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.text-reveal, .animated-text-line, .painterly-stroke').forEach(element => {
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>

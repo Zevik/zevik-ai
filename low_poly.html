@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>פסלי הבינה המלאכותית: זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Tailwind CSS configuration for custom colors and fonts
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'poly-dark': '#1A202C', // Deep dark for backgrounds
+                        'poly-medium': '#2D3748', // Slightly lighter dark for elements
+                        'poly-light': '#A0AEC0', // Muted light gray for contrast
+                        'poly-accent': '#63B3ED', // Vibrant blue for primary accents
+                        'poly-green': '#38B2AC', // Teal for secondary accents and growth
+                        'poly-white': '#E2E8F0', // Off-white for main text
+                    },
+                    fontFamily: {
+                        sans: ['Assistant', 'sans-serif'], // Primary Hebrew font for readability
+                        mono: ['Share Tech Mono', 'monospace'], // For code-like elements
+                        display: ['Rubik', 'sans-serif'], // For prominent titles/headings
+                    },
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts for Hebrew and geometric aesthetic -->
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700&family=Rubik:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles and custom cursor definition */
+        body {
+            overflow-x: hidden; /* Prevent horizontal scroll for a cleaner experience */
+            cursor: none; /* Hide default cursor to use custom one */
+            font-family: 'Assistant', sans-serif; /* Fallback for Assistant */
+            background-color: #1A202C; /* poly-dark as the base background */
+            color: #E2E8F0; /* poly-white as the base text color */
+            direction: rtl; /* Enforce Right-to-Left for Hebrew content */
+            text-align: right; /* Default text alignment for Hebrew */
+        }
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            pointer-events: none; /* Allows clicks to pass through the cursor */
+            transform: translate(-50%, -50%); /* Centers the cursor on the mouse position */
+            z-index: 9999; /* Ensures cursor is always on top */
+            transition: transform 0.1s ease-out; /* Smooth follow animation */
+            /* MANDATORY HIGH-CONTRAST CURSOR STYLING */
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark, high-opacity shadow */
+        }
+
+        /* Low-poly specific styling classes for visual coherence */
+        .low-poly-shape {
+            background-color: var(--tw-bg-opacity, #2D3748); /* poly-medium */
+            border: 1px solid rgba(160, 174, 192, 0.3); /* poly-light with transparency */
+            transform: perspective(1000px) rotateX(var(--rotate-x, 0deg)) rotateY(var(--rotate-y, 0deg)) rotateZ(var(--rotate-z, 0deg));
+            transition: transform 0.5s ease-out;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .low-poly-text-block {
+            /* Gradient background to give depth */
+            background: linear-gradient(135deg, rgba(45, 55, 72, 0.85), rgba(26, 32, 44, 0.75));
+            border-top: 2px solid #63B3ED; /* poly-accent for a sharp edge */
+            border-right: 2px solid #38B2AC; /* poly-green for another edge */
+            box-shadow: 8px 8px 20px rgba(0,0,0,0.6);
+            /* Geometric clipping for low-poly feel, removed on smaller screens */
+            clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .low-poly-text-block:hover {
+            transform: translateY(-8px) rotateX(2deg); /* Subtle hover lift and tilt */
+            box-shadow: 12px 12px 30px rgba(0,0,0,0.8);
+        }
+
+        .low-poly-button {
+            background-color: #63B3ED; /* poly-accent */
+            color: #1A202C; /* poly-dark */
+            font-family: 'Rubik', sans-serif;
+            font-weight: 700;
+            padding: 1rem 2rem;
+            text-align: center;
+            text-transform: uppercase;
+            border: none;
+            /* Geometric clipping for buttons */
+            clip-path: polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%);
+            transition: all 0.3s ease-in-out;
+            box-shadow: 4px 4px 10px rgba(0,0,0,0.4);
+            cursor: pointer;
+        }
+        .low-poly-button:hover {
+            background-color: #38B2AC; /* poly-green */
+            color: #E2E8F0; /* poly-white */
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 6px 6px 15px rgba(0,0,0,0.6);
+        }
+
+        /* Image clipping for Zevik Aviner's photo */
+        .zevik-image-clip {
+            /* Hexagon shape for the image */
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .low-poly-text-block {
+                clip-path: none; /* Remove complex clip-path on small screens for better readability */
+                border-radius: 8px; /* Use standard border-radius */
+            }
+            .low-poly-button {
+                clip-path: none; /* Remove complex clip-path on small screens */
+                border-radius: 8px;
+            }
+            body {
+                text-align: center; /* Center text on small screens for better flow */
+            }
+            .low-poly-text-block h2, .low-poly-text-block h3, .low-poly-text-block p {
+                text-align: center; /* Ensure internal text is centered */
+            }
+            .md\:text-right {
+                text-align: center; /* Override RTL specific alignment for mobile */
+            }
+        }
+    </style>
+</head>
+<body class="bg-poly-dark text-poly-white overflow-y-auto">
+
+    <!-- Custom Cursor Element -->
+    <div id="customCursor" class="custom-cursor"></div>
+
+    <!-- Main Content Area - Z-index ensures it's above any potential background elements -->
+    <main class="relative z-10 p-8 md:p-12 lg:p-16 min-h-screen flex flex-col items-center">
+
+        <!-- Intro Section - Floating Low-Poly Fragment -->
+        <section class="max-w-4xl mx-auto my-16 low-poly-text-block p-8 md:p-12 text-center"
+                 style="--rotate-x: -5deg; --rotate-y: 5deg;">
+            <h1 class="text-4xl md:text-6xl font-display text-poly-accent mb-6 leading-tight">
+                <span class="block animate-pulse">קוד העתיד נכתב עכשיו</span>
+                <span class="block text-3xl md:text-5xl text-poly-green mt-4">פסלו את הבינה המלאכותית בידיכם</span>
+            </h1>
+            <p class="text-xl md:text-2xl font-light leading-relaxed text-poly-light">
+                בעולם המשתנה במהירות, הבינה המלאכותית היא לא רק טכנולוגיה - היא שפה חדשה, כלי יצירה, ומפתח לעתיד.
+                אנו מזמינים אתכם למסע אל תוך ליבת הקוד, לפתוח את צפונות ה-AI ולהפוך את הדמיון למציאות דיגיטלית.
+            </p>
+        </section>
+
+        <!-- Core Message - Intersecting Low-Poly Planes -->
+        <section class="max-w-5xl mx-auto my-20 grid grid-cols-1 md:grid-cols-2 gap-12 text-right">
+            <div class="low-poly-text-block p-8" style="--rotate-y: -3deg; --rotate-z: 2deg;">
+                <h2 class="text-3xl md:text-4xl font-display text-poly-accent mb-6">
+                    <span class="block">מנגישות לחזון</span>
+                    <span class="block text-poly-green text-2xl md:text-3xl mt-2">הבינה המלאכותית לכולם, בכל רמה</span>
+                </h2>
+                <p class="text-lg md:text-xl leading-loose">
+                    החזון שלנו הוא להפוך את כוחה של הבינה המלאכותית לנגיש וישים עבור כל אחד ואחת.
+                    בין אם אתם צעדים ראשונים בעולם הדיגיטלי, או מומחים המבקשים להעמיק,
+                    אנו מספקים את הכלים המעשיים והידע העדכני ביותר.
+                    כאן תמצאו את הגשר בין הרעיון למימוש, בין היסודות ליצירה המתקדמת.
+                </p>
+            </div>
+            <div class="low-poly-text-block p-8" style="--rotate-y: 3deg; --rotate-z: -2deg;">
+                <h2 class="text-3xl md:text-4xl font-display text-poly-green mb-6">
+                    <span class="block">כלים מעשיים, השפעה מיידית</span>
+                    <span class="block text-poly-accent text-2xl md:text-3xl mt-2">יישום חכם בעבודה ובחיים</span>
+                </h2>
+                <p class="text-lg md:text-xl leading-loose">
+                    המסעות הדיגיטליים שלנו לא עוצרים בתיאוריה.
+                    הם מתמקדים ביישום פרקטי, כלים שניתן להטמיע באופן מיידי בעבודה, בפרויקטים אישיים וביצירה.
+                    אנו נלמד אתכם לא רק "מה" לעשות, אלא "איך" לחשוב כמעצבי AI,
+                    ולשנות את הדרך בה אתם פועלים, לומדים ויוצרים.
+                    זהו שינוי מהותי, וזו ההזדמנות שלכם להוביל אותו.
+                </p>
+            </div>
+        </section>
+
+        <!-- Target Audience - Layered Low-Poly Shards -->
+        <section class="max-w-4xl mx-auto my-20 p-8 text-center bg-poly-medium rounded-lg shadow-xl"
+                 style="--rotate-x: 2deg; --rotate-y: -4deg;">
+            <h2 class="text-3xl md:text-5xl font-display text-poly-accent mb-8">
+                למי נועדה הבינה המלאכותית שלנו?
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="low-poly-shape bg-poly-medium p-6 rounded-lg shadow-md hover:bg-poly-light hover:text-poly-dark transition duration-300"
+                     style="--rotate-x: 5deg; --rotate-y: -5deg;">
+                    <p class="text-xl font-display font-bold">מגלי עולם</p>
+                    <p class="text-sm text-poly-light mt-2">הצעדים הראשונים בנתיב הדיגיטלי.</p>
+                </div>
+                <div class="low-poly-shape bg-poly-medium p-6 rounded-lg shadow-md hover:bg-poly-light hover:text-poly-dark transition duration-300"
+                     style="--rotate-x: -5deg; --rotate-y: 5deg;">
+                    <p class="text-xl font-display font-bold">אמני המקצוע</p>
+                    <p class="text-sm text-poly-light mt-2">שילוב AI ככלי יומיומי.</p>
+                </div>
+                <div class="low-poly-shape bg-poly-medium p-6 rounded-lg shadow-md hover:bg-poly-light hover:text-poly-dark transition duration-300"
+                     style="--rotate-x: 5deg; --rotate-y: -5deg;">
+                    <p class="text-xl font-display font-bold">מובילי חזון</p>
+                    <p class="text-sm text-poly-light mt-2">ארגונים וצוותים צמאים לחידוש.</p>
+                </div>
+                <div class="low-poly-shape bg-poly-medium p-6 rounded-lg shadow-md hover:bg-poly-light hover:text-poly-dark transition duration-300"
+                     style="--rotate-x: -5deg; --rotate-y: 5deg;">
+                    <p class="text-xl font-display font-bold">אדריכלי פרויקטים</p>
+                    <p class="text-sm text-poly-light mt-2">בניית פתרונות AI מתקדמים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Areas of Expertise - Polyhedral Grid of Knowledge -->
+        <section class="max-w-6xl mx-auto my-20 text-center">
+            <h2 class="text-4xl md:text-5xl font-display text-poly-green mb-12">
+                הפיקסלים של המחר: תחומי התמחות
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="low-poly-text-block p-6" style="--rotate-y: 5deg;">
+                    <h3 class="text-2xl font-display text-poly-accent mb-3">אריגת מילים</h3>
+                    <p class="text-lg">יצירת טקסטים, תוכן וסיפורים בלחיצת כפתור, בחדשנות ובדיוק.</p>
+                </div>
+                <div class="low-poly-text-block p-6" style="--rotate-y: -5deg;">
+                    <h3 class="text-2xl font-display text-poly-green mb-3">לבנות חשיבה</h3>
+                    <p class="text-lg">פיתוח אפליקציות חכמות המגיבות, לומדות וחושבות עבורכם.</p>
+                </div>
+                <div class="low-poly-text-block p-6" style="--rotate-y: 5deg;">
+                    <h3 class="text-2xl font-display text-poly-accent mb-3">אתרים נושמים</h3>
+                    <p class="text-lg">בניית פלטפורמות דיגיטליות חיות, מבוססות AI, עם אינטליגנציה מובנית.</p>
+                </div>
+                <div class="low-poly-text-block p-6" style="--rotate-y: -5deg;">
+                    <h3 class="text-2xl font-display text-poly-green mb-3">לפענח נתונים</h3>
+                    <p class="text-lg">ניתוח נתונים מורכבים והפקת תובנות עמוקות למחקר והחלטות.</p>
+                </div>
+                <div class="low-poly-text-block p-6" style="--rotate-y: 5deg;">
+                    <h3 class="text-2xl font-display text-poly-accent mb-3">לצייר חלומות</h3>
+                    <p class="text-lg">יצירת תמונות, גרפיקה ואמנות ויזואלית בכוחה של הבינה המלאכותית.</p>
+                </div>
+                <div class="low-poly-text-block p-6" style="--rotate-y: -5deg;">
+                    <h3 class="text-2xl font-display text-poly-green mb-3">לייעל תהליכים</h3>
+                    <p class="text-lg">אוטומציה חכמה המשחררת זמן ומשאבים, לביצועים חסרי תקדים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered - Dynamic Low-Poly Columns -->
+        <section class="max-w-5xl mx-auto my-20 text-center">
+            <h2 class="text-4xl md:text-5xl font-display text-poly-accent mb-12">
+                צמתים של ידע: השירותים שלנו
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="low-poly-text-block p-6 hover:bg-poly-accent hover:text-poly-dark transition-colors duration-300">
+                    <h3 class="text-2xl font-display mb-3">סדנאות עתירות מעשה</h3>
+                    <p class="text-lg text-poly-light hover:text-poly-dark duration-300">מסעות קבוצתיים ממוקדים, חווייתיים ופרקטיים, לפריצת דרך משותפת.</p>
+                </div>
+                <div class="low-poly-text-block p-6 hover:bg-poly-green hover:text-poly-dark duration-300">
+                    <h3 class="text-2xl font-display mb-3">שיעורים אישיים</h3>
+                    <p class="text-lg text-poly-light hover:text-poly-dark duration-300">ליווי פרטני, התאמה מלאה לקצב ולצרכים הייחודיים שלכם.</p>
+                </div>
+                <div class="low-poly-text-block p-6 hover:bg-poly-accent hover:text-poly-dark duration-300">
+                    <h3 class="text-2xl font-display mb-3">הרצאות מעוררות השראה</h3>
+                    <p class="text-lg text-poly-light hover:text-poly-dark duration-300">פתיחת אופקים חדשים לארגונים, הצוותים והמנהלים של המחר.</p>
+                </div>
+                <div class="low-poly-text-block p-6 hover:bg-poly-green hover:text-poly-dark duration-300">
+                    <h3 class="text-2xl font-display mb-3">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-lg text-poly-light hover:text-poly-dark duration-300">ליווי מקצועי מתחילתו ועד סופו, למימוש חזון AI מורכב.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide - Zevik Aviner, with low-poly geometric framing -->
+        <section class="max-w-4xl mx-auto my-20 p-8 low-poly-text-block text-center"
+                 style="--rotate-x: -3deg; --rotate-y: 2deg;">
+            <h2 class="text-4xl md:text-5xl font-display text-poly-green mb-8">
+                המדריך אל עבר הקוד: זאביק אבינר
+            </h2>
+            <div class="flex flex-col md:flex-row-reverse items-center justify-center gap-8 md:gap-12">
+                <div class="w-48 h-48 md:w-64 md:h-64 relative overflow-hidden bg-poly-medium flex items-center justify-center zevik-image-clip border-4 border-poly-accent">
+                    <!-- Image of Zevik Aviner, with low-poly geometric clipping -->
+                    <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="w-full h-full object-cover transform scale-105" />
+                    <!-- Visual overlay for the geometric cut, ensuring it's always visible -->
+                </div>
+                <div class="flex-1 text-lg md:text-xl leading-loose text-poly-light md:text-right">
+                    <p class="mb-4">
+                        זאביק אבינר הוא לא רק מומחה בינה מלאכותית, הוא אמן פיסול דיגיטלי, מנווט בעל ניסיון עשיר בפיתוח
+                        פרויקטים, אפליקציות ומערכות מבוססות AI.
+                    </p>
+                    <p>
+                        חזונו הוא להנגיש את הטכנולוגיה המורכבת, להפוך אותה לכלי עבודה יומיומי לכל אחד ואחת, ולחשוף את הפוטנציאל
+                        הבלתי מוגבל הטמון בה. הוא המצפן שלכם במסע אל עבר השליטה בבינה המלאכותית.
+                    </p>
+                </div>
+            </div>
+            <div class="mt-12 text-center text-xl md:text-2xl font-mono text-poly-accent">
+                <p class="mb-4">
+                    <a href="https://wa.me/972546609385" target="_blank" class="hover:text-poly-green transition-colors duration-300">
+                        ווטסאפ: 054-6609385
+                    </a>
+                </p>
+                <p>
+                    <a href="mailto:zaviner@gmail.com" class="hover:text-poly-green transition-colors duration-300">
+                        אימייל: zaviner@gmail.com
+                    </a>
+                </p>
+            </div>
+        </section>
+
+        <!-- Final Call to Action - Exploding Low-Poly Cube/Button -->
+        <section class="max-w-xl mx-auto my-20 p-10 low-poly-button text-poly-dark hover:bg-poly-accent low-poly-text-block text-center"
+                 style="--rotate-x: 0deg; --rotate-y: 0deg;">
+            <p class="text-3xl md:text-4xl font-display mb-4">צאו למסע. בנו את העתיד.</p>
+            <p class="text-xl md:text-2xl font-bold">הצטרפו לחוד החנית של הבינה המלאכותית.</p>
+        </section>
+
+    </main>
+
+    <!-- JavaScript for Custom Cursor and Subtle Parallax Effects -->
+    <script>
+        const customCursor = document.getElementById('customCursor');
+
+        // Update custom cursor position on mouse movement
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // Optional: Make cursor slightly larger/different on hover over interactive elements
+        document.querySelectorAll('a, button, .low-poly-button, .low-poly-shape').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                customCursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                customCursor.style.borderColor = '#38B2AC'; /* poly-green */
+                customCursor.style.boxShadow = '0 0 0 2px rgba(0,0,0,0.8), 0 0 15px rgba(56, 178, 172, 0.7)'; // Add a glow
+            });
+            el.addEventListener('mouseleave', () => {
+                customCursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                customCursor.style.borderColor = '#FFFFFF';
+                customCursor.style.boxShadow = '0 0 0 2px rgba(0,0,0,0.8)';
+            });
+        });
+
+        // Basic scroll parallax for content sections
+        const sections = document.querySelectorAll('section');
+        document.addEventListener('scroll', () => {
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                const scrollY = window.scrollY;
+                const viewportHeight = window.innerHeight;
+
+                // Calculate parallax offset: element moves slightly based on its position in viewport
+                const offset = (scrollY + viewportHeight / 2 - (rect.top + scrollY + rect.height / 2)) * 0.05; // Adjust 0.05 for intensity
+
+                // Retrieve initial custom CSS properties for rotation
+                const currentRotateX = parseFloat(section.style.getPropertyValue('--rotate-x')) || 0;
+                const currentRotateY = parseFloat(section.style.getPropertyValue('--rotate-y')) || 0;
+                const currentRotateZ = parseFloat(section.style.getPropertyValue('--rotate-z')) || 0;
+
+                // Apply subtle rotation based on scroll, preserving and augmenting initial values
+                section.style.transform = `perspective(1000px) 
+                                           rotateX(${currentRotateX + offset * 0.1}deg) 
+                                           rotateY(${currentRotateY + offset * 0.15}deg) 
+                                           rotateZ(${currentRotateZ + offset * 0.05}deg)`;
+            });
+        });
+    </script>
+
+</body>
+</html>

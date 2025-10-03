@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שערי המחר נפתחים: שליטה בבינה המלאכותית - זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* RetroWave Custom Styles */
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden;
+            background: #0A021B; /* Deep dark background for safety */
+        }
+
+        h1, h2 {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Neon text shadow for high visibility and aesthetic */
+        .neon-text-pink {
+            text-shadow: 0 0 5px #db2777, 0 0 10px #db2777, 0 0 20px #db2777, 0 0 40px #db2777; /* pink-600 */
+        }
+        .neon-text-cyan {
+            text-shadow: 0 0 5px #06b6d4, 0 0 10px #06b6d4, 0 0 20px #06b6d4, 0 0 40px #06b6d4; /* cyan-500 */
+        }
+        .neon-text-purple {
+             text-shadow: 0 0 5px #a855f7, 0 0 10px #a855f7, 0 0 20px #a855f7, 0 0 40px #a855f7; /* purple-500 */
+        }
+
+        /* Custom Cursor - High Contrast */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* White border for visibility on dark */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow for visibility on light */
+            transition: transform 0.1s ease-out, border-color 0.1s ease-out, box-shadow 0.1s ease-out;
+            z-index: 10000;
+            opacity: 1;
+            transform: translate(-50%, -50%); /* Center the cursor */
+        }
+
+        /* RetroWave Fixed Background with Grid and Horizon effects */
+        .retro-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(16, 2, 38, 0.9) 0%, rgba(26, 0, 50, 0.9) 100%);
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .retro-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(to right, rgba(255, 0, 255, 0.05) 1px, transparent 1px), /* Vertical lines */
+                linear-gradient(to bottom, rgba(0, 255, 255, 0.05) 1px, transparent 1px); /* Horizontal lines */
+            background-size: 50px 50px;
+            animation: grid-pulse 15s infinite linear;
+            opacity: 0.3;
+        }
+
+        .retro-background::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px; /* A 'floor' horizon effect */
+            background: linear-gradient(to top, rgba(255, 0, 255, 0.15), transparent);
+            box-shadow: 0 0 100px 50px rgba(0, 255, 255, 0.15);
+            filter: blur(8px);
+            opacity: 0.6;
+        }
+
+        @keyframes grid-pulse {
+            0% { background-position: 0 0; }
+            100% { background-position: 50px 50px; }
+        }
+
+        /* Glitch effect for hover */
+        .glitch-effect:hover {
+            animation: glitch 0.3s infinite;
+        }
+        @keyframes glitch {
+            0% { transform: translate(0, 0); text-shadow: 2px 2px 0 #ff00ff, -2px -2px 0 #00ffff; }
+            25% { transform: translate(-2px, 2px); text-shadow: -2px 2px 0 #ff00ff, 2px -2px 0 #00ffff; }
+            50% { transform: translate(2px, -2px); text-shadow: 2px -2px 0 #ff00ff, -2px 2px 0 #00ffff; }
+            75% { transform: translate(-2px, -2px); text-shadow: -2px -2px 0 #ff00ff, 2px 2px 0 #00ffff; }
+            100% { transform: translate(0, 0); text-shadow: 2px 2px 0 #ff00ff, -2px -2px 0 #00ffff; }
+        }
+
+        /* Typing effect */
+        .typing-effect {
+            overflow: hidden;
+            white-space: nowrap;
+            border-left: .15em solid #06b6d4; /* Blinking cursor for RTL */
+            animation:
+                typing 3.5s steps(40, end) forwards, /* forwards keeps final state */
+                blink-caret .75s step-end infinite;
+            width: 0; /* Start with zero width for typing animation */
+        }
+        /* Override for RTL typing effect, adjust to left border */
+        html[dir="rtl"] .typing-effect {
+             border-right: none;
+             border-left: .15em solid #06b6d4; /* Blinking cursor for RTL */
+        }
+
+
+        /* The typing animation */
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        /* The typewriter cursor effect */
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #06b6d4; }
+        }
+
+        /* Scroll-fade-in effect */
+        .fade-in-on-scroll {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .fade-in-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    </style>
+</head>
+<body class="text-white min-h-screen relative p-4 sm:p-8 md:p-12">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- RetroWave Fixed Background -->
+    <div class="retro-background"></div>
+
+    <!-- Main Content Area - A digital canvas -->
+    <main class="relative z-10 max-w-5xl mx-auto py-12 sm:py-20 md:py-24 space-y-16">
+
+        <!-- Opening Statement / Title - The digital gateway -->
+        <section class="text-center mb-24 px-4 fade-in-on-scroll">
+            <h1 class="text-5xl sm:text-7xl font-bold mb-6 neon-text-pink leading-tight glitch-effect">
+                שערי המחר נפתחים: שליטה בבינה המלאכותית
+            </h1>
+            <p class="text-xl sm:text-2xl text-purple-300 neon-text-purple leading-relaxed typing-effect mx-auto max-w-3xl">
+                בעידן שבו המידע זורם כנהר חשמלי, והבינה המלאכותית אורגת את חוטי המציאות-עתיד, עומדת בפניך הזדמנות — לא רק לצפות, אלא לשלוט. להפוך את המכונה לחלק ממך, להשמיע את קולך בקצב הקוד.
+            </p>
+        </section>
+
+        <!-- Instructor Introduction - The Navigator's Log -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center bg-gray-900 bg-opacity-70 p-8 rounded-lg shadow-lg fade-in-on-scroll">
+            <div class="col-span-1 flex justify-center md:justify-start">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר - מומחה בינה מלאכותית" class="w-48 h-48 rounded-full border-4 border-cyan-400 shadow-lg object-cover glitch-effect">
+            </div>
+            <div class="col-span-2 text-right md:text-right space-y-4">
+                <h2 class="text-3xl sm:text-4xl neon-text-cyan glitch-effect">הנווט שלך אל עבר האופק הדיגיטלי</h2>
+                <p class="text-xl text-purple-200">
+                    <span class="font-bold text-pink-400 text-2xl">זאביק אבינר</span> – אדריכל הקוד, מומחה הבינה המלאכותית שפיענח את צפני המחר. עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI, זאביק מתמחה בהנגשת הטכנולוגיה המורכבת והפיכתה לכלי עבודה יומיומי עוצמתי. הוא המדריך שלך במבוך הדיגיטלי, המוביל אותך לשליטה אמיתית.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center md:justify-start space-y-2 sm:space-y-0 sm:space-x-4 sm:space-x-reverse text-lg">
+                    <a href="https://wa.me/972546609385" target="_blank" class="text-cyan-400 hover:text-cyan-200 transition-colors glitch-effect flex items-center justify-center md:justify-start">
+                        <span class="ml-2">ווטסאפ: 054-6609385</span>
+                        <svg class="inline-block h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.517 2 2.001 6.516 2.001 12.043c0 1.606.463 3.109 1.306 4.41l-.946 3.659 3.737-.982c1.233.684 2.646 1.047 4.148 1.047h.001c5.525 0 10.04-4.516 10.04-10.042c0-5.526-4.515-10.042-10.04-10.042zm.001 18.277c-1.35 0-2.65-.357-3.793-1.026l-.271-.161-2.822.742.753-2.909-.176-.282c-.732-1.168-1.121-2.502-1.121-3.896c0-4.568 3.722-8.291 8.29-8.291c4.566 0 8.29 3.722 8.29 8.291c0 4.566-3.723 8.29-8.29 8.29zm3.504-5.334c-.19-.095-.91-.453-1.05-.505-.13-.052-.236-.08-.335.08-.09.16-.346.505-.425.61-.08.105-.16.115-.29.052-.13-.05-.55-.2-.7-.272-.15-.07-.28-.103-.39-.06-.11.04-.38.19-.5.25-.12.06-.24.08-.36.03-.12-.05-.505-.18-.61-.25-.105-.07-.2-.16-.3-.22-.095-.06-.76-.69-.99-.95-.23-.26-.19-.24-.13-.34.06-.1.13-.2.19-.3.06-.095.03-.18-.005-.25-.037-.06-.334-.8-.453-1.09-.12-.29-.025-.25-.05-.26-.02-.01-.06-.01-.09-.01-.03-.01-.08-.01-.13-.005zm-1.19 8.163v-.001h.001z"/>
+</svg>
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="text-pink-400 hover:text-pink-200 transition-colors glitch-effect flex items-center justify-center md:justify-start">
+                        <span class="ml-2">אימייל: zaviner@gmail.com</span>
+                         <svg class="inline-block h-6 w-6" fill="currentColor" viewBox="0 0 24 24"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/>
+</svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Message / Core Promise - The Pulsing Code -->
+        <section class="text-center px-4 fade-in-on-scroll">
+            <h2 class="text-4xl font-bold mb-8 neon-text-pink glitch-effect">הקוד הפועם: AI ככוח העל שלך</h2>
+            <p class="text-xl sm:text-2xl text-purple-200 leading-relaxed max-w-4xl mx-auto">
+                הפיכת AI לנגיש ולישים לכולם — מהצעדים הראשונים ועד לפיתוחים המתקדמים ביותר. אנו מציעים לך ארגז כלים דיגיטלי מלא בשיטות וטכניקות שתוכל ליישם מיד בעבודה, בלימודים ובחיי היום-יום. אצלנו, אין גבול ליכולת ההשפעה שלך על העתיד.
+            </p>
+        </section>
+
+        <!-- Target Audience / Echoes of Potential - Who will navigate? -->
+        <section class="px-4 fade-in-on-scroll">
+            <h2 class="text-4xl font-bold mb-8 text-center neon-text-cyan glitch-effect">מי ינווט איתנו במרחב הדיגיטלי?</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-indigo-900 bg-opacity-70 p-6 rounded-lg shadow-lg border border-cyan-500 hover:border-pink-500 transition-all glitch-effect">
+                    <h3 class="text-2xl font-bold mb-4 neon-text-pink">אלה שחשים את הזרם</h3>
+                    <p class="text-purple-200">מתחילים ומתחילות המעוניינים להכיר את עולם ה-AI, לפענח את שפתו ולהבין את הפוטנציאל הטמון בו. כאן מתחיל המסע שלך.</p>
+                </div>
+                <div class="bg-indigo-900 bg-opacity-70 p-6 rounded-lg shadow-lg border border-purple-500 hover:border-cyan-500 transition-all glitch-effect">
+                    <h3 class="text-2xl font-bold mb-4 neon-text-cyan">אדריכלי המציאות</h3>
+                    <p class="text-purple-200">אנשי ואנשות מקצוע המעוניינים להטמיע AI בעבודה, לייעל תהליכים, ולפתוח אפיקי יצירה חדשים בענף שלהם.</p>
+                </div>
+                <div class="bg-indigo-900 bg-opacity-70 p-6 rounded-lg shadow-lg border border-pink-500 hover:border-purple-500 transition-all glitch-effect">
+                    <h3 class="text-2xl font-bold mb-4 neon-text-purple">מפקדי הצוותים</h3>
+                    <p class="text-purple-200">מנהלים, מנהלות וארגונים המחפשים הדרכות לצוותים, להבטיח שהארגון כולו ינוע בקצב החדשנות הטכנולוגית.</p>
+                </div>
+                <div class="bg-indigo-900 bg-opacity-70 p-6 rounded-lg shadow-lg border border-cyan-500 hover:border-pink-500 transition-all glitch-effect">
+                    <h3 class="text-2xl font-bold mb-4 neon-text-pink">פורצי הדרך</h3>
+                    <p class="text-purple-200">ברמה מתקדמת – פיתוח פרויקטים מבוססי AI, יצירת פתרונות חדשניים ובניית העתיד במו ידיך.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Areas of Expertise / Algorithmic Echoes - The Six Paths to Command -->
+        <section class="px-4 fade-in-on-scroll">
+            <h2 class="text-4xl font-bold mb-8 text-center neon-text-pink glitch-effect">תחומי פיתוח: שש הדרכים לשליטה</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-purple-900 bg-opacity-70 p-6 rounded-lg shadow-lg border border-pink-500 hover:border-cyan-500 transition-all glitch-effect">
+                    <h3 class="text-2xl font-bold mb-4 neon-text-cyan">נרטיבים דיגיטליים</h3>
+                    <p class="text-purple-100">יצירת טקסטים, סיפורים, מאמרים ותוכן שיווקי באמצעות מודלים לשוניים מתקדמים.</p>
+                </div>
+                <div class="bg-purple-900 bg-opacity-70 p-6 rounded-lg shadow-lg border border-cyan-500 hover:border-pink-500 transition-all glitch-effect">
+                    <h3 class="text-2xl font-bold mb-4 neon-text-pink">יישומי תבונה</h3>
+                    <p class="text-purple-100">בניית אפליקציות חכמות המשלבות יכולות AI לפיתרון בעיות מורכבות וייעול תהליכים.</p>
+                </div>
+                <div class="bg-purple-900 bg-opacity-70 p-6 rounded-lg shadow-lg border border-pink-500 hover:border-cyan-500 transition-all glitch-effect">
+                    <h3 class="text-2xl font-bold mb-4 neon-text-cyan">פורטלים חכמים</h3>
+                    <p class="text-purple-100">פיתוח אתרים מבוססי AI המעניקים חווית משתמש אישית ודינמית.</p>
+                </div>
+                <div class="bg-purple-900 bg-opacity-70 p-6 rounded-lg shadow-lg border border-cyan-500 hover:border-pink-500 transition-all glitch-effect">
+                    <h3 class="text-2xl font-bold mb-4 neon-text-pink">פענוח נתונים</h3>
+                    <p class="text-purple-100">ניתוח נתונים עמוק ומחקר מונחה AI להפקת תובנות עסקיות ואקדמיות.</p>
+                </div>
+                <div class="bg-purple-900 bg-opacity-70 p-6 rounded-lg shadow-lg border border-pink-500 hover:border-cyan-500 transition-all glitch-effect">
+                    <h3 class="text-2xl font-bold mb-4 neon-text-cyan">פסיפסים אלגוריתמיים</h3>
+                    <p class="text-purple-100">יצירת תמונות, אומנות ועיצובים מקוריים בעזרת מודלי AI גנרטיביים.</p>
+                </div>
+                <div class="bg-purple-900 bg-opacity-70 p-6 rounded-lg shadow-lg border border-cyan-500 hover:border-pink-500 transition-all glitch-effect">
+                    <h3 class="text-2xl font-bold mb-4 neon-text-pink">ריקוד האוטומציה</h3>
+                    <p class="text-purple-100">אוטומציה של תהליכים יום-יומיים ועסקיים, לשחרור זמן ומשאבים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered / Digital Forges - Pathways of Learning -->
+        <section class="px-4 fade-in-on-scroll">
+            <h2 class="text-4xl font-bold mb-8 text-center neon-text-cyan glitch-effect">השירותים שלנו: נתיבי הלמידה</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-gray-900 bg-opacity-70 p-6 rounded-lg shadow-lg border border-pink-500 hover:border-cyan-500 transition-all glitch-effect">
+                    <h3 class="text-2xl font-bold mb-4 neon-text-pink">סדנאות תכנות ניאון</h3>
+                    <p class="text-purple-200">סדנאות קבוצתיות מעשיות וממוקדות, ללמידה חווייתית ויישומית. בואו לצלול יחד לעולם ה-AI.</p>
+                </div>
+                <div class="bg-gray-900 bg-opacity-70 p-6 rounded-lg shadow-lg border border-cyan-500 hover:border-pink-500 transition-all glitch-effect">
+                    <h3 class="text-2xl font-bold mb-4 neon-text-cyan">מסעות אישיים באלגוריתם</h3>
+                    <p class="text-purple-200">שיעורים פרטיים המותאמים אישית לרמה ולצרכים שלך, לקצב למידה אופטימלי והתקדמות מהירה.</p>
+                </div>
+                <div class="bg-gray-900 bg-opacity-70 p-6 rounded-lg shadow-lg border border-pink-500 hover:border-cyan-500 transition-all glitch-effect">
+                    <h3 class="text-2xl font-bold mb-4 neon-text-pink">פולסים ארגוניים</h3>
+                    <p class="text-purple-200">הרצאות והדרכות מותאמות לארגונים וצוותים, לפתיחת אופקים חדשים והכנה לעתיד.</p>
+                </div>
+                <div class="bg-gray-900 bg-opacity-70 p-6 rounded-lg shadow-lg border border-cyan-500 hover:border-pink-500 transition-all glitch-effect">
+                    <h3 class="text-2xl font-bold mb-4 neon-text-cyan">ארכיטקטורה של חלומות חכמים</h3>
+                    <p class="text-purple-200">ייעוץ ופיתוח פרויקטים מבוססי AI – ליווי מקצועי משלב הרעיון ועד למימוש מלא.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Call to Action / Contact - Command the Future -->
+        <section class="text-center px-4 py-12 fade-in-on-scroll">
+            <h2 class="text-4xl font-bold mb-8 neon-text-pink glitch-effect">הגיע הזמן לשלוט בעתיד</h2>
+            <p class="text-xl sm:text-2xl text-purple-200 mb-8 max-w-3xl mx-auto">
+                המסע שלך אל עולם הבינה המלאכותית מתחיל עכשיו. אל תחכה שהעתיד יבוא אליך, צור אותו בעצמך. צור קשר עם זאביק אבינר ובנה את הידע שישנה את המחר.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-8 sm:space-x-reverse text-2xl font-bold">
+                <a href="https://wa.me/972546609385" target="_blank" class="block bg-cyan-600 hover:bg-cyan-500 text-white py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg border-2 border-cyan-400 neon-text-pink glitch-effect flex items-center justify-center">
+                    <span class="ml-2">שלח ווטסאפ עכשיו!</span>
+                    <svg class="inline-block h-8 w-8" fill="currentColor" viewBox="0 0 24 24"><path d="M12.04 2C6.517 2 2.001 6.516 2.001 12.043c0 1.606.463 3.109 1.306 4.41l-.946 3.659 3.737-.982c1.233.684 2.646 1.047 4.148 1.047h.001c5.525 0 10.04-4.516 10.04-10.042c0-5.526-4.515-10.042-10.04-10.042zm.001 18.277c-1.35 0-2.65-.357-3.793-1.026l-.271-.161-2.822.742.753-2.909-.176-.282c-.732-1.168-1.121-2.502-1.121-3.896c0-4.568 3.722-8.291 8.29-8.291c4.566 0 8.29 3.722 8.29 8.291c0 4.566-3.723 8.29-8.29 8.29zm3.504-5.334c-.19-.095-.91-.453-1.05-.505-.13-.052-.236-.08-.335.08-.09.16-.346.505-.425.61-.08.105-.16.115-.29.052-.13-.05-.55-.2-.7-.272-.15-.07-.28-.103-.39-.06-.11.04-.38.19-.5.25-.12.06-.24.08-.36.03-.12-.05-.505-.18-.61-.25-.105-.07-.2-.16-.3-.22-.095-.06-.76-.69-.99-.95-.23-.26-.19-.24-.13-.34.06-.1.13-.2.19-.3.06-.095.03-.18-.005-.25-.037-.06-.334-.8-.453-1.09-.12-.29-.025-.25-.05-.26-.02-.01-.06-.01-.09-.01-.03-.01-.08-.01-.13-.005zm-1.19 8.163v-.001h.001z"/>
+</svg>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="block bg-pink-600 hover:bg-pink-500 text-white py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg border-2 border-pink-400 neon-text-cyan glitch-effect flex items-center justify-center">
+                    <span class="ml-2">שלח אימייל!</span>
+                    <svg class="inline-block h-8 w-8" fill="currentColor" viewBox="0 0 24 24"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/>
+</svg>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor Logic
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // Add hover effect to interactive elements for custom cursor feedback
+        document.querySelectorAll('a, button, .glitch-effect, img, div[role="button"]').forEach(el => {
+            el.addEventListener('mouseover', () => {
+                customCursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                customCursor.style.borderColor = '#ff00ff'; /* Pink accent */
+                customCursor.style.boxShadow = '0 0 0 2px rgba(0, 255, 255, 0.8)'; /* Cyan shadow */
+            });
+            el.addEventListener('mouseout', () => {
+                customCursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                customCursor.style.borderColor = '#FFFFFF'; /* Revert to white */
+                customCursor.style.boxShadow = '0 0 0 2px rgba(0,0,0,0.8)'; /* Revert to dark shadow */
+            });
+        });
+
+        // Fade-in on scroll logic for sections
+        const fadeInElements = document.querySelectorAll('.fade-in-on-scroll');
+
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // 10% of element visible triggers intersection
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target); // Stop observing once visible
+                }
+            });
+        }, observerOptions);
+
+        fadeInElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // Typing effect logic (only apply to the first one, for the intro)
+        const typingElement = document.querySelector('.typing-effect');
+        if (typingElement) {
+            // Remove typing effect classes after animation completes to allow normal interaction/copy
+            typingElement.addEventListener('animationend', (event) => {
+                if (event.animationName === 'typing') {
+                    typingElement.style.borderLeft = 'none'; // Remove blinking cursor (for RTL)
+                }
+            });
+        }
+    </script>
+</body>
+</html>

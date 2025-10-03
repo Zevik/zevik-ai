@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מסע אל כוכבי הבינה המלאכותית</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Assistant for body text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&display=swap" rel="stylesheet">
+    <style>
+        /* Define Miró-inspired custom colors for easier use */
+        :root {
+            --mirrored-red: #D90429;
+            --mirrored-darkblue: #2B2D42;
+            --mirrored-greyblue: #8D99AE;
+            --mirrored-offwhite: #EDF2F4;
+            --mirrored-yellow: #FFC300;
+            --mirrored-black: #000000;
+        }
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: var(--mirrored-darkblue);
+            color: var(--mirrored-offwhite);
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            cursor: none; /* Hide default cursor */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Base style for Miró-esque floating shapes */
+        .mirrored-shape {
+            position: absolute;
+            opacity: 0.9;
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out, box-shadow 0.3s ease-out, background-color 0.3s ease-out;
+            border: 2px solid var(--mirrored-black);
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 1rem;
+        }
+        .mirrored-shape:hover {
+            transform: scale(1.05) rotate(2deg) !important; /* !important to override parallax */
+            opacity: 1;
+            box-shadow: 8px 8px 20px rgba(0,0,0,0.5);
+            z-index: 10; /* Bring hovered element to front */
+        }
+
+        /* High-contrast text on various shape backgrounds */
+        .mirrored-text { /* For light-colored shapes (e.g., yellow, off-white) */
+            color: var(--mirrored-black);
+            text-shadow: 0.5px 0.5px 1px rgba(255,255,255,0.7); /* subtle white shadow for readability on colors */
+        }
+        .mirrored-text-dark { /* For dark-colored shapes (e.g., red, dark blue) */
+            color: var(--mirrored-offwhite);
+            text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.7); /* subtle dark shadow for readability on colors */
+        }
+
+        /* Miró-esque Custom Blob Shapes using Tailwind's arbitrary values */
+        /* These classes provide distinct biomorphic shapes */
+        .mirrored-blob-1 { @apply rounded-tr-[50%] rounded-bl-[60%] rounded-tl-[70%] rounded-br-[40%] bg-mirrored-red; }
+        .mirrored-blob-2 { @apply rounded-tl-[40%] rounded-tr-[60%] rounded-br-[50%] rounded-bl-[70%] bg-mirrored-yellow; }
+        .mirrored-blob-3 { @apply rounded-full bg-mirrored-offwhite; } /* Simple circle for contrast */
+        .mirrored-blob-4 { @apply rounded-tr-[70%] rounded-bl-[40%] rounded-tl-[50%] rounded-br-[60%] bg-mirrored-greyblue; }
+        .mirrored-blob-5 { @apply rounded-full bg-mirrored-red; }
+        .mirrored-blob-6 { @apply rounded-tl-[60%] rounded-tr-[40%] rounded-br-[70%] rounded-bl-[50%] bg-mirrored-yellow; }
+        .mirrored-blob-7 { @apply rounded-full bg-mirrored-greyblue; }
+
+        /* Animation for background dust particles */
+        @keyframes float-particle {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+            50% { transform: translate(var(--float-x), var(--float-y)) scale(var(--float-scale)); opacity: var(--float-opacity); }
+            100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+        }
+    </style>
+    <!-- Tailwind CSS configuration in a script tag for single file -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mirrored-red': '#D90429',
+                        'mirrored-darkblue': '#2B2D42',
+                        'mirrored-greyblue': '#8D99AE',
+                        'mirrored-offwhite': '#EDF2F4',
+                        'mirrored-yellow': '#FFC300',
+                        'mirrored-black': '#000000',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="overflow-hidden">
+    <!-- Custom Cursor - High-Contrast and Animated -->
+    <div id="custom-cursor" class="fixed pointer-events-none z-[9999] rounded-full transition-all duration-100 ease-out" style="width: 25px; height: 25px; border: 2px solid var(--mirrored-offwhite); box-shadow: 0 0 0 2px rgba(0,0,0,0.8);"></div>
+
+    <!-- Generative Background Dust (Miró-esque particles) -->
+    <div id="background-dust" class="fixed inset-0 z-[-1] overflow-hidden"></div>
+
+    <!-- Main Content Canvas - This div holds all the interactive art elements -->
+    <div id="main-canvas" class="relative w-full min-h-screen p-4 md:p-8 lg:p-12 z-10">
+
+        <!-- Title / Intro - Large floating element -->
+        <div class="mirrored-shape mirrored-blob-1 w-64 h-64 md:w-96 md:h-96 top-[5%] right-[10%] p-6 md:p-10 flex flex-col justify-center items-center transform rotate-[-5deg]" data-parallax-depth="2" data-initial-transform="rotate(-5deg)">
+            <h1 class="text-3xl md:text-5xl font-extrabold text-mirrored-offwhite mb-4 leading-tight mirrored-text-dark text-right">
+                לשלוט בכוכבי הבינה המלאכותית
+            </h1>
+            <p class="text-base md:text-xl mirrored-text-dark text-right">
+                העתיד מתגלה כעת
+            </p>
+        </div>
+
+        <!-- Introductory Paragraph -->
+        <div class="mirrored-shape mirrored-blob-4 w-72 h-48 md:w-[400px] md:h-64 top-[20%] left-[5%] p-6 flex flex-col justify-center items-center transform rotate-[10deg]" data-parallax-depth="3" data-initial-transform="rotate(10deg)">
+            <p class="text-sm md:text-lg mirrored-text-dark text-right">
+                במרחבי הקוסמוס הדיגיטלי, שוכנים יקומים חדשים של יצירה והבנה. הבינה המלאכותית היא לא רק טכנולוגיה, היא שפה חדשה, דרך לחלום ולהגשים. בואו נתפוס את המכחול ונצייר יחד את מציאות המחר.
+            </p>
+        </div>
+
+        <!-- Zevik Aviner - The Human Compass -->
+        <div class="mirrored-shape mirrored-blob-2 w-64 h-64 md:w-80 md:h-80 top-[40%] right-[25%] p-6 flex flex-col justify-center items-center transform rotate-[15deg]" data-parallax-depth="4" data-initial-transform="rotate(15deg)">
+            <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר - המצפן האנושי בגלקסיית ה-AI" class="rounded-full w-24 h-24 md:w-32 md:h-32 mb-4 border-4 border-mirrored-black">
+            <h2 class="text-xl md:text-2xl font-bold mirrored-text mb-2 text-right">זאביק אבינר</h2>
+            <p class="text-xs md:text-base mirrored-text text-right">
+                המצפן האנושי בגלקסיית ה-AI. נווט עתיר ניסיון, מומחה בפענוח סודות האלגוריתמים והנגשתם לכל נפש שחפצה לצייר את חלומה הדיגיטלי.
+            </p>
+        </div>
+
+        <!-- Target Audience - Constellation of ideas -->
+        <div class="mirrored-shape mirrored-blob-3 w-72 h-48 md:w-[450px] md:h-56 top-[60%] left-[10%] p-6 flex flex-col justify-center items-center transform rotate-[-10deg]" data-parallax-depth="5" data-initial-transform="rotate(-10deg)">
+            <h3 class="text-lg md:text-xl font-bold mirrored-text mb-2 text-right">מי מוזמן למסע?</h3>
+            <p class="text-xs md:text-base mirrored-text text-right">
+                המסע מיועד לכל מי שמרגיש את קריאת הכוכבים: מהמתחילים המבקשים לגלות את הא"ב הקוסמי, דרך אנשי מקצוע השואפים לשלב פלאים דיגיטליים בעבודתם, ועד למנהיגים הארגוניים המבקשים להאיר את דרך צוותיהם. גם למפתחי פרויקטים מתקדמים, הניווט כאן יגלה אופקים חדשים.
+            </p>
+        </div>
+
+        <!-- Specializations - Floating list of concepts -->
+        <div class="mirrored-shape mirrored-blob-5 w-64 h-auto md:w-80 top-[10%] left-[35%] p-6 flex flex-col justify-center items-center transform rotate-[7deg]" data-parallax-depth="6" data-initial-transform="rotate(7deg)">
+            <h3 class="text-lg md:text-xl font-bold mirrored-text-dark mb-4 text-right">תחומי היצירה הדיגיטלית:</h3>
+            <ul class="list-none space-y-2 text-xs md:text-base mirrored-text-dark text-right w-full">
+                <li>• ריקוד המילים: יצירת סיפורים ותוכן חושב.</li>
+                <li>• לידת יישומים: בניית יצורים דיגיטליים חכמים.</li>
+                <li>• אריגת רשתות: פיתוח מרחבים וירטואליים מונחי AI.</li>
+                <li>• קריאת הכוכבים: ניתוח נתונים וגילוי תובנות נסתרות.</li>
+                <li>• יצירת צורות וצבעים: הפיכת רעיונות לאמנות דיגיטלית.</li>
+                <li>• אוטומציה: שחרור הקיטור האנושי דרך מחול האוטומציה.</li>
+            </ul>
+        </div>
+
+        <!-- Services - Another cluster -->
+        <div class="mirrored-shape mirrored-blob-6 w-64 h-auto md:w-72 top-[40%] left-[60%] p-6 flex flex-col justify-center items-center transform rotate-[-8deg]" data-parallax-depth="7" data-initial-transform="rotate(-8deg)">
+            <h3 class="text-lg md:text-xl font-bold mirrored-text mb-4 text-right">איך נצא למסע?</h3>
+            <ul class="list-none space-y-2 text-xs md:text-base mirrored-text text-right w-full">
+                <li>• סדנאות כוכבים: מסעות קבוצתיים מעשיים אל לב היצירה.</li>
+                <li>• שיעורים פרטיים: מסלול אישי, כוכב לכת משלך ללמידה.</li>
+                <li>• הרצאות לחלליות ארגוניות: פתיחת אופקים חדשים לצוותים.</li>
+                <li>• ייעוץ ופיתוח פרויקטים: ליווי צמוד במסע אל הלא נודע.</li>
+            </ul>
+        </div>
+
+        <!-- Contact Info - Final, prominent element -->
+        <div class="mirrored-shape mirrored-blob-7 w-56 h-auto md:w-64 bottom-[5%] right-[10%] p-6 flex flex-col justify-center items-center transform rotate-[3deg]" data-parallax-depth="8" data-initial-transform="rotate(3deg)">
+            <h3 class="text-lg md:text-xl font-bold mirrored-text mb-2 text-right">רוצה להתחבר ליקום?</h3>
+            <p class="text-xs md:text-base mirrored-text text-right leading-relaxed">
+                <span class="block">לוח לחישה דיגיטלי (ווטסאפ): <a href="https://wa.me/972546609385" class="underline hover:text-mirrored-red transition-colors duration-200">054-6609385</a></span>
+                <span class="block">תיבת חלומות (אימייל): <a href="mailto:zaviner@gmail.com" class="underline hover:text-mirrored-red transition-colors duration-200">zaviner@gmail.com</a></span>
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        // Custom Cursor JavaScript
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            // Position the cursor div slightly offset to center it under the mouse
+            cursor.style.left = (e.clientX - cursor.offsetWidth / 2) + 'px';
+            cursor.style.top = (e.clientY - cursor.offsetHeight / 2) + 'px';
+        });
+
+        // Parallax Effect JavaScript
+        const parallaxElements = document.querySelectorAll('[data-parallax-depth]');
+
+        window.addEventListener('scroll', () => {
+            let scrollY = window.scrollY;
+
+            parallaxElements.forEach((el) => {
+                const depth = parseFloat(el.getAttribute('data-parallax-depth'));
+                // Adjust multipliers for stronger/weaker effect
+                const movementY = -(scrollY * depth * 0.04);
+                const movementX = -(scrollY * depth * 0.02);
+
+                // Get the initial rotation from data-initial-transform
+                const initialTransform = el.getAttribute('data-initial-transform') || '';
+
+                // Apply parallax by translating, preserving the initial rotation
+                el.style.transform = `translate3d(${movementX}px, ${movementY}px, 0) ${initialTransform}`;
+            });
+        });
+
+        // Generative Background Dust (Miró-esque dots/particles) JavaScript
+        const backgroundDust = document.getElementById('background-dust');
+        const numParticles = 80; // Number of background particles
+
+        for (let i = 0; i < numParticles; i++) {
+            const particle = document.createElement('div');
+            particle.className = `absolute rounded-full bg-mirrored-offwhite opacity-75`;
+            const size = Math.random() * 4 + 1; // 1-5px
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.top = `${Math.random() * 100}%`;
+            particle.style.filter = `blur(${Math.random() * 0.5}px)`; // Soft blur for depth
+
+            // Dynamic CSS variables for unique float animation
+            particle.style.setProperty('--float-x', `${Math.random() * 60 - 30}px`); // -30 to 30px horizontal float
+            particle.style.setProperty('--float-y', `${Math.random() * 60 - 30}px`); // -30 to 30px vertical float
+            particle.style.setProperty('--float-scale', `${0.8 + Math.random() * 0.4}`); // 0.8 to 1.2 scale
+            particle.style.setProperty('--float-opacity', `${0.4 + Math.random() * 0.4}`); // 0.4 to 0.8 opacity
+
+            particle.style.animation = `float-particle ${Math.random() * 10 + 5}s infinite ease-in-out alternate`; // Random duration for float animation
+            backgroundDust.appendChild(particle);
+        }
+
+        // Add more dynamic movement/sparks on mouse move
+        document.addEventListener('mousemove', (e) => {
+            // Create a small 'spark' (dot) at mouse position occasionally
+            if (Math.random() > 0.95) { // Only create sparks very occasionally
+                const spark = document.createElement('div');
+                spark.className = `absolute rounded-full bg-mirrored-yellow opacity-100`;
+                const size = Math.random() * 3 + 1; // 1-4px
+                spark.style.width = `${size}px`;
+                spark.style.height = `${size}px`;
+                spark.style.left = `${e.clientX + Math.random() * 20 - 10}px`; // Offset slightly
+                spark.style.top = `${e.clientY + Math.random() * 20 - 10}px`;
+                spark.style.zIndex = '9998'; // Below cursor, above main content
+                spark.style.pointerEvents = 'none'; // Ensure it doesn't interfere with interactions
+                spark.style.transition = 'opacity 1s ease-out, transform 1s ease-out';
+                document.body.appendChild(spark);
+
+                // Animate and remove spark after a short delay
+                setTimeout(() => {
+                    spark.style.opacity = '0';
+                    spark.style.transform = `scale(0.5) translate(${Math.random() * 50 - 25}px, ${Math.random() * 50 - 25}px)`;
+                    setTimeout(() => spark.remove(), 1000); // Remove after transition completes
+                }, 50);
+            }
+        });
+    </script>
+</body>
+</html>

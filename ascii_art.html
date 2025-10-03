@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מטריצת AI: פרויקט אמנות אינטראקטיבי</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;700&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        /* Define custom Tailwind colors for the neon theme */
+        :root {
+            --color-neon-green: #34D399; /* Tailwind green-400 */
+            --color-neon-blue: #60A5FA;  /* Tailwind blue-400 */
+            --color-neon-yellow: #FCD34D; /* Tailwind yellow-300 */
+            --color-text-light: #E5E7EB; /* Tailwind gray-200 */
+            --color-text-lighter: #D1D5DB; /* Tailwind gray-300 */
+        }
+        .text-neon-green { color: var(--color-neon-green); }
+        .text-neon-blue { color: var(--color-neon-blue); }
+        .text-neon-yellow { color: var(--color-neon-yellow); }
+        .shadow-neon-green { box-shadow: 0 0 15px var(--color-neon-green); }
+        .shadow-neon-yellow { box-shadow: 0 0 15px var(--color-neon-yellow); }
+        .border-neon-green { border-color: var(--color-neon-green); }
+        .border-neon-blue { border-color: var(--color-neon-blue); }
+        .border-neon-yellow { border-color: var(--color-neon-yellow); }
+
+        /* Custom styles to blend with Tailwind, focusing on ASCII */
+        body {
+            font-family: 'Assistant', sans-serif; /* Default for readability */
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll for animations */
+            background-color: #000; /* Ensure black background */
+        }
+        .ascii-font {
+            font-family: 'VT323', monospace; /* For ASCII art and code blocks */
+            line-height: 0.9; /* Tighter line spacing for ASCII characters */
+            letter-spacing: -0.05em; /* Closer character spacing */
+        }
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            transition: transform 0.1s ease-out; /* Smooth movement */
+            z-index: 9999;
+            /* REQUIRED high-contrast styling */
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow */
+        }
+
+        /* Typewriter Effect CSS */
+        .typewriter span {
+            overflow: hidden; /* Ensures the text is hidden until typed */
+            white-space: pre; /* Prevents text from wrapping */
+            display: inline-block; /* Required for width calculation */
+            border-right: 0.15em solid; /* Blinking caret, will be overwritten by JS */
+            animation: blink-caret 0.75s step-end infinite; /* Initial blink */
+            color: var(--color-neon-green); /* Ensure text color is set */
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--color-neon-green); }
+        }
+
+        /* Specific styles for interactive "glitch" effect */
+        .glitch-hover {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.1s ease-in-out;
+            cursor: pointer;
+        }
+        .glitch-hover:hover {
+            animation: glitch 0.3s linear infinite;
+        }
+
+        @keyframes glitch {
+            0% {
+                transform: translate(0px, 0px);
+                text-shadow: 2px 2px #ff00ff, -2px -2px #00ffff;
+            }
+            25% {
+                transform: translate(-2px, 2px);
+                text-shadow: -2px -2px #ff00ff, 2px 2px #00ffff;
+            }
+            50% {
+                transform: translate(2px, -2px);
+                text-shadow: 2px -2px #ff00ff, -2px 2px #00ffff;
+            }
+            75% {
+                transform: translate(-2px, -2px);
+                text-shadow: -2px 2px #ff00ff, 2px -2px #00ffff;
+            }
+            100% {
+                transform: translate(0px, 0px);
+                text-shadow: 2px 2px #ff00ff, -2px -2px #00ffff;
+            }
+        }
+
+        /* Custom scrollbar for a themed experience */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-neon-green);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-neon-blue);
+        }
+    </style>
+</head>
+<body class="bg-black text-text-light antialiased">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="custom-cursor"></div>
+
+    <!-- ASCII Art Background Canvas -->
+    <canvas id="ascii-bg" class="fixed inset-0 z-[-1] opacity-5"></canvas>
+
+    <main class="relative z-10 p-4 md:p-8 lg:p-12 max-w-7xl mx-auto min-h-screen flex flex-col justify-center items-center text-center">
+
+        <!-- Main Title / ASCII Banner -->
+        <section class="mb-12 md:mb-16 lg:mb-20 w-full text-center">
+            <pre class="ascii-font text-neon-yellow text-xl md:text-3xl lg:text-4xl leading-tight select-none cursor-default whitespace-pre-wrap overflow-hidden" style="filter: drop-shadow(0 0 10px var(--color-neon-yellow));">
++-------------------------------------------------------------+
+|    _   _    ___   _ __ ___      ___ _ __ ___              |
+|   | | | |  / _ \ | '_ ` _ \    / _ \ '__/ __|             |
+|   | |_| | | (_) || | | | | |  |  __/ |  \__ \             |
+|    \__, |  \___/ |_| |_| |_|   \___|_|  |___/             |
+|    |___/                                                  |
+|                                                           |
+|  //<< למדו לשלוט בבינה המלאכותית: העתיד הוא עכשיו >>//   |
++-------------------------------------------------------------+
+            </pre>
+            <p class="mt-4 text-neon-blue text-sm md:text-lg ascii-font">
+                <span class="glitch-hover">> מנחה: זאביק אבינר - אדריכל AI <</span>
+            </p>
+        </section>
+
+        <!-- Core Message - Typewriter effect -->
+        <section class="mb-12 md:mb-16 lg:mb-20 p-6 border-2 border-neon-green rounded-lg shadow-neon-green max-w-3xl w-full text-right bg-black/50">
+            <h2 class="text-xl md:text-2xl text-neon-blue mb-4 ascii-font">> [מטריצת מסר מרכזי]</h2>
+            <p class="text-lg md:text-xl typewriter">
+                <span>ברוכים הבאים לממשק המידע. אנו כאן כדי לפענח את קוד ה-AI עבורכם. הטכנולוגיה החזקה ביותר בהיסטוריה האנושית נגישה כעת לכולם. לא עוד מונחים סבוכים או אלגוריתמים מסתוריים – אלא כלים מעשיים, שיטות עבודה, ויכולות מתקדמות שתוכלו ליישם מיד. ממפת דרכים ראשונית ועד אופטימיזציה של מערכות מורכבות, אנו נצייד אתכם בידע לשלוט, ליצור ולהוביל בעולם המשתנה במהירות של הבינה המלאכותית. הפיכו את הקוד למציאות, היום.</span>
+            </p>
+        </section>
+
+        <!-- Target Audience - "Access Protocols" -->
+        <section class="mb-12 md:mb-16 lg:mb-20 w-full max-w-4xl">
+            <h2 class="text-xl md:text-2xl text-neon-yellow mb-6 ascii-font text-right">> [פרוטוקולי גישה] : יחידות ממוקדות</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+                <div class="p-4 border border-neon-blue rounded-md ascii-font glitch-hover bg-black/40">
+                    <p class="text-neon-blue text-lg">:: USER.INITIATE ::</p>
+                    <p class="text-sm mt-2 text-text-lighter">למתחילים שמבקשים לפענח את שפת ה-AI</p>
+                </div>
+                <div class="p-4 border border-neon-blue rounded-md ascii-font glitch-hover bg-black/40">
+                    <p class="text-neon-blue text-lg">:: PROF.UPGRADE ::</p>
+                    <p class="text-sm mt-2 text-text-lighter">אנשי מקצוע המעוניינים לשדרג יכולות עם AI</p>
+                </div>
+                <div class="p-4 border border-neon-blue rounded-md ascii-font glitch-hover bg-black/40">
+                    <p class="text-neon-blue text-lg">:: ORG.DEPLOY ::</p>
+                    <p class="text-sm mt-2 text-text-lighter">מנהלים וארגונים לשילוב AI אסטרטגי בצוותים</p>
+                </div>
+                <div class="p-4 border border-neon-blue rounded-md ascii-font glitch-hover bg-black/40">
+                    <p class="text-neon-blue text-lg">:: DEV.PROJECT ::</p>
+                    <p class="text-sm mt-2 text-text-lighter">למתקדמים - פיתוח והטמעת פרויקטים מבוססי AI</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Areas of Expertise - "AI Modules" -->
+        <section class="mb-12 md:mb-16 lg:mb-20 w-full max-w-5xl">
+            <h2 class="text-xl md:text-2xl text-neon-green mb-6 ascii-font text-right">> [מודולים לפענוח AI]</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="p-5 border-2 border-neon-yellow rounded-xl bg-gray-900 bg-opacity-50 glitch-hover">
+                    <h3 class="text-lg md:text-xl text-neon-yellow ascii-font mb-2">/TXT.GENERATE/</h3>
+                    <p class="text-sm text-text-light">יצירה, עיבוד ועריכת טקסטים, מאמרים ותוכן באמצעות מודלי שפה מתקדמים.</p>
+                </div>
+                <div class="p-5 border-2 border-neon-yellow rounded-xl bg-gray-900 bg-opacity-50 glitch-hover">
+                    <h3 class="text-lg md:text-xl text-neon-yellow ascii-font mb-2">/APP.BUILD/</h3>
+                    <p class="text-sm text-text-light">בנייה והתאמת יישומים חכמים המשלבים יכולות AI לצרכים עסקיים ואישיים.</p>
+                </div>
+                <div class="p-5 border-2 border-neon-yellow rounded-xl bg-gray-900 bg-opacity-50 glitch-hover">
+                    <h3 class="text-lg md:text-xl text-neon-yellow ascii-font mb-2">/WEB.AI.DEVELOP/</h3>
+                    <p class="text-sm text-text-light">פיתוח אתרים דינמיים ואינטראקטיביים המבוססים על טכנולוגיות בינה מלאכותית.</p>
+                </div>
+                <div class="p-5 border-2 border-neon-yellow rounded-xl bg-gray-900 bg-opacity-50 glitch-hover">
+                    <h3 class="text-lg md:text-xl text-neon-yellow ascii-font mb-2">/DATA.ANALYZE/</h3>
+                    <p class="text-sm text-text-light">ניתוח נתונים מורכבים, חילוץ תובנות ומחקר בעזרת אלגוריתמי למידת מכונה.</p>
+                </div>
+                <div class="p-5 border-2 border-neon-yellow rounded-xl bg-gray-900 bg-opacity-50 glitch-hover">
+                    <h3 class="text-lg md:text-xl text-neon-yellow ascii-font mb-2">/ART.CREATE/</h3>
+                    <p class="text-sm text-text-light">יצירת תמונות, גרפיקה ואמנות דיגיטלית באמצעות מודלים גנרטיביים מתקדמים.</p>
+                </div>
+                <div class="p-5 border-2 border-neon-yellow rounded-xl bg-gray-900 bg-opacity-50 glitch-hover">
+                    <h3 class="text-lg md:text-xl text-neon-yellow ascii-font mb-2">/PROCESS.AUTOMATE/</h3>
+                    <p class="text-sm text-text-light">אוטומציה של תהליכים עסקיים ותפעוליים לשיפור יעילות וחיסכון במשאבים.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Offered - "Operational Directives" -->
+        <section class="mb-12 md:mb-16 lg:mb-20 w-full max-w-4xl text-right">
+            <h2 class="text-xl md:text-2xl text-neon-blue mb-6 ascii-font">> [הוראות הפעלה] : שירותים</h2>
+            <div class="space-y-4">
+                <div class="p-4 border border-neon-green rounded-md flex flex-col md:flex-row justify-between items-start md:items-center glitch-hover bg-black/40">
+                    <p class="text-lg md:text-xl text-neon-green ascii-font mb-2 md:mb-0">:: WORKSHOP.GROUP ::</p>
+                    <p class="text-sm text-text-lighter text-right md:text-left">סדנאות קבוצתיות מעשיות וממוקדות, לבניית יסודות ויישומים מיידיים.</p>
+                </div>
+                <div class="p-4 border border-neon-green rounded-md flex flex-col md:flex-row justify-between items-start md:items-center glitch-hover bg-black/40">
+                    <p class="text-lg md:text-xl text-neon-green ascii-font mb-2 md:mb-0">:: LESSON.PRIVATE ::</p>
+                    <p class="text-sm text-text-lighter text-right md:text-left">שיעורים פרטיים בהתאמה אישית מלאה לרמה, לקצב ולצרכים הייחודיים שלך.</p>
+                </div>
+                <div class="p-4 border border-neon-green rounded-md flex flex-col md:flex-row justify-between items-start md:items-center glitch-hover bg-black/40">
+                    <p class="text-lg md:text-xl text-neon-green ascii-font mb-2 md:mb-0">:: LECTURE.CORP ::</p>
+                    <p class="text-sm text-text-lighter text-right md:text-left">הרצאות השראה ופתיחת אופקים לארגונים, המותאמות לצוותים שונים.</p>
+                </div>
+                <div class="p-4 border border-neon-green rounded-md flex flex-col md:flex-row justify-between items-start md:items-center glitch-hover bg-black/40">
+                    <p class="text-lg md:text-xl text-neon-green ascii-font mb-2 md:mb-0">:: CONSULT.DEVELOP ::</p>
+                    <p class="text-sm text-text-lighter text-right md:text-left">ייעוץ מקצועי וליווי בפיתוח והטמעת פרויקטים מבוססי AI מאפס ועד השלמה.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instructor Profile - Zevik Aviner -->
+        <section class="p-6 border-4 border-neon-yellow rounded-2xl shadow-neon-yellow max-w-2xl w-full text-center bg-black/60">
+            <h2 class="text-xl md:text-3xl text-neon-yellow mb-6 ascii-font animate-pulse">[פרופיל אדריכל AI]</h2>
+
+            <!-- ASCII Art "Image" of Zevik -->
+            <pre class="ascii-font text-neon-blue text-sm md:text-base leading-none mx-auto mb-6 max-w-xs md:max-w-sm overflow-hidden select-none" style="filter: drop-shadow(0 0 5px var(--color-neon-blue));">
+         _.-'--`-._
+        /   _    _   \
+       |  (.)  (.)  |
+       \      /\     /
+        \    (..)   /
+         `--`._.--'
+         / / \ \
+        / /___\ \
+       /_________\
+       |=|=|=|=|=|
+       |==|AI|==|
+       \_________/
+            </pre>
+
+            <h3 class="text-2xl md:text-4xl text-neon-green mb-4 ascii-font">זאביק אבינר</h3>
+            <p class="text-md md:text-lg text-text-light mb-6 max-w-prose mx-auto">
+                מומחה בינה מלאכותית עם ניסיון עשיר בארכיטקטורה, פיתוח והטמעה של מערכות AI פורצות דרך. זאביק מתמחה בהנגשת הטכנולוגיה המורכבת והפיכתה לכלי עבודה יומיומי, מעצים ומניע חדשנות בכל סביבה.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 text-lg md:text-xl text-neon-blue">
+                <a href="https://wa.me/972546609385" target="_blank" class="ascii-font glitch-hover block p-2 border border-neon-blue rounded-md whitespace-nowrap">
+                    >> ווטסאפ: 054-6609385 <<
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="ascii-font glitch-hover block p-2 border border-neon-blue rounded-md whitespace-nowrap">
+                    >> אימייל: zaviner@gmail.com <<
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor JS
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+            cursor.style.transform = 'translate(-50%, -50%)'; // Center the cursor
+        });
+
+        // Typewriter Effect JS
+        document.querySelectorAll('.typewriter').forEach(container => {
+            const span = container.querySelector('span');
+            const originalText = span.textContent;
+            span.textContent = ''; // Clear text to start typing
+            let i = 0;
+            const speed = 50; // Milliseconds per character
+
+            function typeWriter() {
+                if (i < originalText.length) {
+                    span.textContent += originalText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, speed);
+                } else {
+                    span.style.borderRight = 'none'; // Hide caret after typing
+                    span.style.animation = 'none'; // Stop caret animation
+                }
+            }
+            setTimeout(typeWriter, 1500); // 1.5 second delay before starting to type
+        });
+
+        // ASCII Background Animation JS
+        const canvas = document.getElementById('ascii-bg');
+        const ctx = canvas.getContext('2d');
+        let cols, rows;
+        // More AI/code-like characters including Hebrew for variety in background, though VT323 won't render all perfectly.
+        let charArray = ['0', '1', 'A', 'I', '#', '$', '%', '&', '*', '+', '-', '<', '>', '/', '\\', '|', '~', '^', '_', '.', ',', ':', ';', '{', '}', '[', ']', '(', ')', '@', '?', '!', '>', '<', 'ב', 'י', 'נ', 'ה', 'א', 'ל'];
+        let charSize = 12; // Adjust character size for density
+        let animationInterval;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            cols = Math.floor(canvas.width / charSize);
+            rows = Math.floor(canvas.height / charSize);
+            clearInterval(animationInterval); // Clear existing interval
+            drawAsciiBackground(); // Redraw immediately
+            animationInterval = setInterval(drawAsciiBackground, 100); // Set new interval
+        }
+
+        function drawAsciiBackground() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)'; // Slight fade effect for trails
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.font = `${charSize}px 'VT323', monospace`;
+            ctx.fillStyle = '#10B981'; // Tailwind emerald-500, a darker green for background animation
+            ctx.textAlign = 'right'; // RTL alignment for characters
+
+            for (let i = 0; i < cols; i++) {
+                for (let j = 0; j < rows; j++) {
+                    if (Math.random() > 0.98) { // Only update a few characters per frame
+                        let char = charArray[Math.floor(Math.random() * charArray.length)];
+                        // Adjust x position for RTL context
+                        let x = canvas.width - (i * charSize);
+                        let y = j * charSize;
+                        ctx.fillText(char, x, y);
+                    }
+                }
+            }
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas(); // Initial call to setup canvas and animation
+    </script>
+</body>
+</html>

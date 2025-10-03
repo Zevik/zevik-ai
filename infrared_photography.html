@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מעבר לסף הנראה: בינה מלאכותית – עתיד עכשיו</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Rubik:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles for the "Infrared Photography" aesthetic */
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: #0d0d0d; /* Very dark background */
+            color: #e0e0e0; /* Light gray for main text */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            cursor: none; /* Hide default cursor */
+            perspective: 1000px; /* For 3D transforms */
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Heebo', sans-serif;
+            color: #fca3b7; /* Muted pink for titles, like infrared blooms */
+            text-shadow: 0 0 8px rgba(252, 163, 183, 0.4), 0 0 16px rgba(252, 163, 183, 0.2);
+        }
+
+        a {
+            color: #a78bfa; /* Muted purple for links */
+            text-decoration: none;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        a:hover {
+            color: #d8b4fe; /* Lighter purple on hover */
+            text-shadow: 0 0 5px rgba(216, 180, 254, 0.6), 0 0 10px rgba(216, 180, 254, 0.3);
+        }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF; /* Visible on dark */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 15px rgba(255, 255, 255, 0.3); /* Visible on light + glow */
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s ease-out, height 0.2s ease-out, background-color 0.2s ease-out, box-shadow 0.2s ease-out;
+            background-color: rgba(255, 255, 255, 0.1); /* Subtle inner fill */
+        }
+
+        #custom-cursor.interactive {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(252, 163, 183, 0.3); /* Pink glow */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 20px rgba(252, 163, 183, 0.7);
+        }
+
+        /* Infrared Overlay Effect */
+        .infrared-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 25%);
+            filter: grayscale(10%) contrast(120%) brightness(90%); /* Subtle infrared filter */
+            pointer-events: none;
+            z-index: -1;
+            transition: background 0.3s ease-out;
+        }
+
+        /* Section Specific Styles */
+        .art-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(252, 163, 183, 0.1);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Parallax effect */
+        }
+
+        .art-section:nth-child(even) {
+            background-color: #1a0a1a; /* Darker purple-ish */
+        }
+
+        .art-section:nth-child(odd) {
+            background-color: #0d0d0d; /* Even darker */
+        }
+
+        .content-block {
+            max-width: 900px;
+            text-align: center;
+            background-color: rgba(13, 13, 13, 0.7);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(252, 163, 183, 0.15), inset 0 0 15px rgba(252, 163, 183, 0.08);
+            transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+            opacity: 0;
+            transform: translateY(50px) scale(0.95);
+            backdrop-filter: blur(5px); /* Ethereal blur */
+        }
+
+        .content-block.in-view {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .glow-on-hover {
+            position: relative;
+            z-index: 10;
+        }
+
+        .glow-on-hover::before {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #a78bfa, #fca3b7, #d8b4fe);
+            filter: blur(15px);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+        }
+
+        .glow-on-hover:hover::before {
+            opacity: 0.6;
+        }
+
+        /* Specific visual effects */
+        .image-container {
+            position: relative;
+            display: inline-block;
+            filter: grayscale(100%) brightness(70%) contrast(150%) hue-rotate(200deg); /* Infrared image effect */
+            transition: filter 0.5s ease-out;
+        }
+        .image-container:hover {
+            filter: grayscale(0%) brightness(100%) contrast(100%) hue-rotate(0deg); /* Revert to normal on hover */
+        }
+
+        .image-container::after {
+            content: '';
+            position: absolute;
+            inset: -5px;
+            border: 2px solid #fca3b7;
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+        }
+
+        .image-container:hover::after {
+            opacity: 1;
+        }
+
+        .contact-info {
+            direction: ltr; /* Temporarily set LTR for phone/email if needed */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.25rem;
+            color: #e0e0e0;
+            transition: color 0.3s ease;
+        }
+        .contact-item:hover {
+            color: #d8b4fe;
+        }
+
+        .contact-item svg {
+            width: 28px;
+            height: 28px;
+            fill: #fca3b7;
+            transition: fill 0.3s ease;
+        }
+        .contact-item:hover svg {
+            fill: #d8b4fe;
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 5px rgba(252, 163, 183, 0.4); }
+            50% { box-shadow: 0 0 20px rgba(252, 163, 183, 0.8); }
+            100% { box-shadow: 0 0 5px rgba(252, 163, 183, 0.4); }
+        }
+
+        .pulsing-effect {
+            animation: pulse-glow 2s infinite alternate;
+        }
+
+    </style>
+</head>
+<body class="selection:bg-pink-300 selection:text-black">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Infrared Overlay / Parallax Background -->
+    <div class="infrared-overlay"></div>
+
+    <!-- Section 1: Introduction - The Unseen Spectrum -->
+    <section class="art-section" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%231a0a1a"/><stop offset="100%" stop-color="%230d0d0d"/></linearGradient><filter id="f1" x="-50%" y="-50%" width="200%" height="200%"><feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="4" seed="0" result="fnoise"/><feColorMatrix in="fnoise" type="saturate" values="0" result="gs"/><feComponentTransfer in="gs" result="fblurred"><feFuncA type="linear" slope="0.5"/></feComponentTransfer><feGaussianBlur in="fblurred" stdDeviation="1.5"/></filter></defs><rect width="100" height="100" fill="url(%23g1)"/><rect width="100" height="100" fill="url(%23g1)" filter="url(%23f1)" opacity="0.4"/></svg>');">
+        <div class="content-block in-view">
+            <h1 class="text-5xl md:text-6xl font-extrabold mb-8 leading-tight">מעבר לסף הנראה: בינה מלאכותית, העין החבויה של המחר</h1>
+            <p class="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-2xl mx-auto">
+                בעולם שנע במהירות האור, האפשרויות הנסתרות של הבינה המלאכותית ממתינות להתגלות. כמו צילום אינפרא-אדום החושף את אנרגיית החום הבלתי נראית, AI מאפשרת לנו לראות דפוסים, לחזות מגמות ולברוא מציאויות חדשות. זהו מסע אל הלב הפועם של הקוד, אל הפוטנציאל הגלום בכל אחד מאיתנו לשלוט בעתיד – עתיד שהוא כבר כאן.
+            </p>
+        </div>
+    </section>
+
+    <!-- Section 2: The Guide - Zevik Aviner -->
+    <section class="art-section" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><radialGradient id="g2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="%231a0a1a"/><stop offset="100%" stop-color="%230d0d0d"/></radialGradient><filter id="f2" x="-50%" y="-50%" width="200%" height="200%"><feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" seed="1" result="fnoise"/><feColorMatrix in="fnoise" type="saturate" values="0" result="gs"/><feComponentTransfer in="gs" result="fblurred"><feFuncA type="linear" slope="0.3"/></feComponentTransfer><feGaussianBlur in="fblurred" stdDeviation="2"/></filter></defs><rect width="100" height="100" fill="url(%23g2)"/><rect width="100" height="100" fill="url(%23g2)" filter="url(%23f2)" opacity="0.3"/></svg>');">
+        <div class="content-block" data-reveal-delay="200">
+            <div class="relative mb-8 mx-auto w-40 h-40 rounded-full overflow-hidden image-container">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונה קטנה של זאביק אבינר" class="w-full h-full object-cover">
+            </div>
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">זאביק אבינר: המגלה, המנחה, המתורגמן</h2>
+            <p class="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-xl mx-auto mb-6">
+                מומחה בינה מלאכותית, עם עשור של ניסיון בפיענוח ויישום. זאביק אינו רק מלמד AI; הוא מעניק לכם את העין הנוספת, את הכלים לפענח את הנסתר ולהפוך ידע לכוח מעשי. מרמת האפס ועד ליצירת פרויקטים פורצי דרך – הדרכה אישית וממוקדת, המותאמת לתדר הייחודי שלכם.
+            </p>
+        </div>
+    </section>
+
+    <!-- Section 3: Target Audience - Who is This Vision For? -->
+    <section class="art-section" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="g3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="%230d0d0d"/><stop offset="100%" stop-color="%231a0a1a"/></linearGradient><filter id="f3" x="-50%" y="-50%" width="200%" height="200%"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="5" seed="2" result="fnoise"/><feColorMatrix in="fnoise" type="hueRotate" values="90" result="hrotated"/><feComponentTransfer in="hrotated" result="fblurred"><feFuncA type="linear" slope="0.4"/></feComponentTransfer><feGaussianBlur in="fblurred" stdDeviation="1.8"/></filter></defs><rect width="100" height="100" fill="url(%23g3)"/><rect width="100" height="100" fill="url(%23g3)" filter="url(%23f3)" opacity="0.5"/></svg>');">
+        <div class="content-block" data-reveal-delay="400">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8">למי הראייה הזו מיועדת?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+                <p class="p-4 bg-gray-900 rounded-lg shadow-xl pulsing-effect">
+                    לסקרנים, למחפשים, למי שמוכנים לפתוח ערוצי הבנה חדשים.
+                </p>
+                <p class="p-4 bg-gray-900 rounded-lg shadow-xl pulsing-effect" style="animation-delay: 0.5s;">
+                    אם אתם חדשים לממד הדיגיטלי ומבקשים להכיר את כוחה של ה-AI.
+                </p>
+                <p class="p-4 bg-gray-900 rounded-lg shadow-xl pulsing-effect" style="animation-delay: 1s;">
+                    לאנשי מקצוע המבקשים להרחיב את טווח הראייה ולהטמיע AI בעבודתם.
+                </p>
+                <p class="p-4 bg-gray-900 rounded-lg shadow-xl pulsing-effect" style="animation-delay: 1.5s;">
+                    למנהלים, מנהלות וארגונים החוזים את העתיד ומחפשים הדרכות לצוותים.
+                </p>
+                <p class="p-4 bg-gray-900 rounded-lg shadow-xl pulsing-effect md:col-span-2">
+                    ולמפתחים השואפים לחדור לעומק וליצור פרויקטים פורצי דרך מבוססי AI.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Areas of Expertise - The Received Waves -->
+    <section class="art-section" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="g4" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="%231a0a1a"/><stop offset="100%" stop-color="%230d0d0d"/></linearGradient><filter id="f4" x="-50%" y="-50%" width="200%" height="200%"><feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="4" seed="3" result="fnoise"/><feColorMatrix in="fnoise" type="saturate" values="0.5" result="colored"/><feComponentTransfer in="colored" result="fblurred"><feFuncA type="linear" slope="0.3"/></feComponentTransfer><feGaussianBlur in="fblurred" stdDeviation="2.5"/></filter></defs><rect width="100" height="100" fill="url(%23g4)"/><rect width="100" height="100" fill="url(%23g4)" filter="url(%23f4)" opacity="0.6"/></svg>');">
+        <div class="content-block" data-reveal-delay="600">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8">הגלים הנקלטים: תחומי השליטה בבינה המלאכותית</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xl text-gray-200 max-w-4xl mx-auto">
+                <p class="p-5 bg-pink-800/20 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 glow-on-hover">יצירת נרטיבים דיגיטליים</p>
+                <p class="p-5 bg-purple-800/20 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 glow-on-hover">השקת ישויות קוד חכמות</p>
+                <p class="p-5 bg-cyan-800/20 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 glow-on-hover">אריגת מרחבים אינטרנטיים מתפתחים</p>
+                <p class="p-5 bg-emerald-800/20 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 glow-on-hover">פירוק סינגולרי של נתונים</p>
+                <p class="p-5 bg-orange-800/20 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 glow-on-hover">הולדת צורות ויזואליות בלתי צפויות</p>
+                <p class="p-5 bg-blue-800/20 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 glow-on-hover">מיפוי מסלולי אוטומציה חדשניים</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Services - Transmission Channels -->
+    <section class="art-section" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><radialGradient id="g5" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="%230d0d0d"/><stop offset="100%" stop-color="%231a0a1a"/></radialGradient><filter id="f5" x="-50%" y="-50%" width="200%" height="200%"><feTurbulence type="fractalNoise" baseFrequency="0.07" numOctaves="3" seed="4" result="fnoise"/><feColorMatrix in="fnoise" type="hueRotate" values="180" result="hrotated"/><feComponentTransfer in="hrotated" result="fblurred"><feFuncA type="linear" slope="0.2"/></feComponentTransfer><feGaussianBlur in="fblurred" stdDeviation="1.2"/></filter></defs><rect width="100" height="100" fill="url(%23g5)"/><rect width="100" height="100" fill="url(%23g5)" filter="url(%23f5)" opacity="0.4"/></svg>');">
+        <div class="content-block" data-reveal-delay="800">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8">ערוצי שידור: דרכי הגישה לידע</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-200 max-w-3xl mx-auto">
+                <div class="p-6 bg-gray-800/70 rounded-xl shadow-lg border border-pink-700/30 hover:border-pink-500/50 transition-all duration-300 pulsing-effect">
+                    <h3 class="text-2xl font-bold mb-3 text-pink-300">סדנאות התגלות קבוצתיות</h3>
+                    <p class="text-lg">התנסות מעשית ממוקדת, חשיפה לכלי AI מתקדמים בפעולה, בקבוצות קטנות ואינטימיות.</p>
+                </div>
+                <div class="p-6 bg-gray-800/70 rounded-xl shadow-lg border border-purple-700/30 hover:border-purple-500/50 transition-all duration-300 pulsing-effect" style="animation-delay: 0.2s;">
+                    <h3 class="text-2xl font-bold mb-3 text-purple-300">אימוני תדרי ידע פרטיים</h3>
+                    <p class="text-lg">מסלול למידה מותאם אישית, צלילה עמוקה לצרכים והמטרות הייחודיות שלכם.</p>
+                </div>
+                <div class="p-6 bg-gray-800/70 rounded-xl shadow-lg border border-cyan-700/30 hover:border-cyan-500/50 transition-all duration-300 pulsing-effect" style="animation-delay: 0.4s;">
+                    <h3 class="text-2xl font-bold mb-3 text-cyan-300">הרצאות פריצת תפיסה לארגונים</h3>
+                    <p class="text-lg">פתיחת אופקים חדשים לצוותים, השראה והבנה של הפוטנציאל העסקי של ה-AI.</p>
+                </div>
+                <div class="p-6 bg-gray-800/70 rounded-xl shadow-lg border border-green-700/30 hover:border-green-500/50 transition-all duration-300 pulsing-effect" style="animation-delay: 0.6s;">
+                    <h3 class="text-2xl font-bold mb-3 text-green-300">ייעוץ וליווי פרויקטים חזויים</h3>
+                    <p class="text-lg">מליווי רעיוני ועד פיתוח מלא – הגשמת חזונות מבוססי AI הלכה למעשה.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: Contact - Meeting Point -->
+    <section class="art-section" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="g6" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%230d0d0d"/><stop offset="100%" stop-color="%231a0a1a"/></linearGradient><filter id="f6" x="-50%" y="-50%" width="200%" height="200%"><feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="5" result="fnoise"/><feColorMatrix in="fnoise" type="saturate" values="0" result="gs"/><feComponentTransfer in="gs" result="fblurred"><feFuncA type="linear" slope="0.6"/></feComponentTransfer><feGaussianBlur in="fblurred" stdDeviation="1.0"/></filter></defs><rect width="100" height="100" fill="url(%23g6)"/><rect width="100" height="100" fill="url(%23g6)" filter="url(%23f6)" opacity="0.3"/></svg>');">
+        <div class="content-block" data-reveal-delay="1000">
+            <h2 class="text-4xl md:text-5xl font-bold mb-10">נקודת מפגש: צרו קשר</h2>
+            <p class="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-xl mx-auto mb-8">
+                מוכנים לפענח את הנסתר? לשלוט בתדרי הבינה המלאכותית? שלחו אות חיים.
+            </p>
+            <div class="contact-info">
+                <a href="https://wa.me/972546609385" target="_blank" class="contact-item glow-on-hover interactive-element">
+                    <svg viewBox="0 0 24 24" class="inline-block" style="direction: ltr;"><path d="M12.04 2C7.39 2 3.61 5.78 3.61 10.43c0 1.83.56 3.53 1.54 4.95L2 22l7.15-1.89c1.35.73 2.89 1.13 4.09 1.13 4.65 0 8.43-3.78 8.43-8.43S16.69 2 12.04 2zM17.07 15.01c-.24 0-.65-.13-.93-.27-.29-.15-1.74-.85-2.02-.95-.29-.1-.5-.15-.71.15-.21.3-.81.95-1.02 1.19-.21.24-.42.27-.79.08-.37-.19-.9-.35-1.71-1.05-.63-.53-1.06-1.19-1.28-1.57-.22-.38-.02-.59.13-.73.13-.13.29-.35.43-.53.15-.19.2-.35.27-.47.07-.12.04-.22-.02-.35-.07-.12-.71-1.72-.97-2.36-.26-.63-.53-.54-.73-.55-.19 0-.42-.02-.63-.02-.21 0-.55.08-.85.43-.29.35-1.1 1.07-1.1 2.61s1.13 3.03 1.29 3.24c.16.21 2.22 3.39 5.37 4.62 3.15 1.23 3.79 1.03 4.48.97.69-.07 1.35-.44 1.54-.85.19-.39.19-.73.13-.85-.06-.12-.24-.19-.5-.32z"/></svg>
+                    <span style="direction: ltr;">054-6609385</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="contact-item glow-on-hover interactive-element">
+                    <svg viewBox="0 0 24 24" class="inline-block"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    <span style="direction: ltr;">zaviner@gmail.com</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const customCursor = document.getElementById('custom-cursor');
+        const interactiveElements = document.querySelectorAll('a, .glow-on-hover, .image-container'); // Elements that make cursor glow
+
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+            document.body.style.setProperty('--mouse-x', `${e.clientX}px`);
+            document.body.style.setProperty('--mouse-y', `${e.clientY}px`);
+        });
+
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('interactive'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('interactive'));
+        });
+
+        // Intersection Observer for content reveal
+        const contentBlocks = document.querySelectorAll('.content-block');
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.3 // Trigger when 30% of the item is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const delay = parseInt(entry.target.dataset.revealDelay || 0);
+                    setTimeout(() => {
+                        entry.target.classList.add('in-view');
+                    }, delay);
+                    observer.unobserve(entry.target); // Stop observing once revealed
+                }
+            });
+        }, observerOptions);
+
+        contentBlocks.forEach(block => {
+            observer.observe(block);
+        });
+
+        // Initial reveal for the first section
+        document.querySelector('.art-section .content-block').classList.add('in-view');
+
+    </script>
+</body>
+</html>

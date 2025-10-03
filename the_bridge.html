@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הגשר אל הבינה המלאכותית - זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Die Brücke Palette & Fonts */
+        :root {
+            --color-primary-red: #C70039;
+            --color-secondary-yellow: #FFC300;
+            --color-accent-teal: #1A535C;
+            --color-accent-turquoise: #4ECDC4;
+            --color-dark: #000000;
+            --color-light: #F8F8F8;
+        }
+
+        body {
+            font-family: 'Rubik', sans-serif;
+            cursor: none; /* Hide default cursor */
+            background-color: var(--color-dark);
+            color: var(--color-light);
+            overflow-x: hidden; /* Prevent horizontal scroll from transformed elements */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            color: var(--color-secondary-yellow); /* Default heading color */
+        }
+
+        /* Custom Cursor */
+        #custom-cursor {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease-out, background-color 0.2s ease-out, border 0.2s ease-out, box-shadow 0.2s ease-out;
+            transform: translate(-50%, -50%); /* Center cursor on mouse position */
+            border: 2px solid var(--color-light); /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow */
+            background-color: rgba(255, 255, 255, 0.1); /* Subtle internal fill */
+        }
+
+        #custom-cursor.active {
+            transform: translate(-50%, -50%) scale(1.5);
+            background-color: var(--color-primary-red);
+            border: 2px solid var(--color-secondary-yellow);
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 10px rgba(255,255,255,0.5); /* Glowing effect */
+        }
+
+        /* Background layers - Die Brücke aesthetic */
+        .background-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+            opacity: 0.8;
+        }
+
+        .bg-shape-1 {
+            background-color: var(--color-primary-red);
+            width: 150vw;
+            height: 150vh;
+            position: absolute;
+            top: -20vh;
+            left: -50vw;
+            transform: rotate(-15deg);
+            clip-path: polygon(0 0, 100% 20%, 80% 100%, 20% 80%);
+            opacity: 0.15;
+        }
+        .bg-shape-2 {
+            background-color: var(--color-accent-teal);
+            width: 120vw;
+            height: 120vh;
+            position: absolute;
+            bottom: -30vh;
+            right: -40vw;
+            transform: rotate(25deg);
+            clip-path: polygon(20% 0, 100% 0, 80% 100%, 0% 100%);
+            opacity: 0.1;
+        }
+        .bg-shape-3 {
+            background-color: var(--color-secondary-yellow);
+            width: 80vw;
+            height: 80vh;
+            position: absolute;
+            top: 10vh;
+            right: -20vw;
+            transform: rotate(-5deg);
+            clip-path: polygon(0 10%, 100% 0, 100% 90%, 0% 100%);
+            opacity: 0.08;
+        }
+
+        /* Specific section styling */
+        section {
+            padding-right: 1.5rem; /* Equivalent to pr-6 */
+            padding-left: 1.5rem; /* Equivalent to pl-6 */
+            margin-bottom: 8rem; /* Equivalent to mb-32 */
+            position: relative;
+            z-index: 10;
+            background-color: transparent; /* Ensure content is above background layers */
+        }
+
+        /* Ensure images fit the theme, apply filters */
+        .die-bruecke-image {
+            filter: grayscale(80%) contrast(120%) sepia(30%);
+            border: 4px solid var(--color-secondary-yellow);
+            box-shadow: 8px 8px 0px rgba(var(--color-primary-red), 0.7);
+            transition: transform 0.3s ease-out;
+        }
+        .die-bruecke-image:hover {
+            transform: scale(1.05) rotate(2deg);
+        }
+
+        /* Text high contrast checks - Tailwind classes will handle this mainly */
+        .text-on-dark { color: var(--color-light); }
+        .text-on-light { color: var(--color-dark); }
+
+        /* Specific text blocks with color */
+        .text-block-red { background-color: var(--color-primary-red); color: var(--color-light); }
+        .text-block-yellow { background-color: var(--color-secondary-yellow); color: var(--color-dark); }
+        .text-block-teal { background-color: var(--color-accent-teal); color: var(--color-light); }
+
+        /* For interactive elements, ensure high contrast for active states */
+        a:hover, button:hover {
+            background-color: var(--color-secondary-yellow);
+            color: var(--color-dark);
+        }
+
+        /* Key Die Brücke visual effects */
+        .angular-divider {
+            height: 4px;
+            background: linear-gradient(to left, var(--color-primary-red), var(--color-secondary-yellow), var(--color-accent-teal));
+            transform: skewY(-1deg);
+            margin-top: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        .fractured-text span {
+            display: inline-block;
+            transition: transform 0.3s ease-out, color 0.3s ease-out;
+        }
+        .fractured-text:hover span {
+            transform: translateY(-5px) rotate(-2deg);
+            color: var(--color-primary-red);
+        }
+        .fractured-text:hover span:nth-child(even) {
+            transform: translateY(5px) rotate(2deg);
+            color: var(--color-accent-teal);
+        }
+    </style>
+</head>
+<body class="bg-dark text-light min-h-screen">
+    <div id="custom-cursor"></div>
+
+    <!-- Background layers -->
+    <div class="background-layer">
+        <div id="bg-shape-1" class="bg-shape-1 transition-transform duration-500 ease-out"></div>
+        <div id="bg-shape-2" class="bg-shape-2 transition-transform duration-500 ease-out"></div>
+        <div id="bg-shape-3" class="bg-shape-3 transition-transform duration-500 ease-out"></div>
+    </div>
+
+    <main class="relative z-10 container mx-auto py-12 px-4 sm:px-6 lg:px-8">
+
+        <!-- Hero Section -->
+        <section class="min-h-screen flex flex-col justify-center items-center text-center pb-16">
+            <h1 class="text-6xl sm:text-7xl lg:text-8xl font-bold mb-8 leading-tight text-right drop-shadow-lg text-secondary-yellow animate-fade-in-up">
+                העתיד אינו ממתין. <br class="hidden sm:block">הוא נבנה כעת, בידיים שלנו.
+            </h1>
+            <p class="text-2xl sm:text-3xl lg:text-4xl mb-12 max-w-4xl text-right leading-relaxed text-light fractured-text">
+                <span>ה</span><span>ג</span><span>ש</span><span>ר</span><span>:</span>
+                <span>ש</span><span>ע</span><span>ר</span><span> </span><span>ה</span><span>כ</span><span>נ</span><span>י</span><span>ס</span><span>ה</span><span> </span><span>ש</span><span>ל</span><span>ך</span><span> </span><span>ל</span><span>ע</span><span>ו</span><span>ל</span><span>ם</span><span> </span><span>ה</span><span>-</span><span>AI</span><span>.</span>
+                <span>ש</span><span>ל</span><span>י</span><span>ט</span><span>ה</span><span>,</span>
+                <span>י</span><span>צ</span><span>י</span><span>ר</span><span>ה</span><span>,</span>
+                <span>ה</span><span>ש</span><span>ר</span><span>א</span><span>ה</span><span>.</span>
+            </p>
+            <a href="#contact" class="inline-block px-10 py-5 bg-primary-red text-light text-2xl font-bold uppercase tracking-wide hover:bg-secondary-yellow hover:text-dark transition-all duration-300 transform hover:scale-105 shadow-lg interactive-hover border-4 border-light">
+                בנה את הגשר שלך
+            </a>
+        </section>
+
+        <div class="angular-divider"></div>
+
+        <!-- Section: What is this Bridge? -->
+        <section class="max-w-5xl mx-auto mb-24 lg:mb-32">
+            <h2 class="text-5xl sm:text-6xl mb-10 text-right text-accent-turquoise">
+                בינה מלאכותית: לא רק למעטים.
+            </h2>
+            <p class="text-2xl sm:text-3xl leading-relaxed text-light mb-8 pr-4 border-r-4 border-primary-red">
+                זוהי שפה חדשה, כוח יצירה חסר גבולות, כלי עבודה שישנה הכל. אנו מנגישים אותה, לכל אחד ואחת. מהצעד הראשון ועד לקפיצה הגדולה. הגשר הוא המפתח שלך לעולם של אפשרויות בלתי נתפסות.
+            </p>
+            <p class="text-xl sm:text-2xl leading-relaxed text-gray-300 pr-4 border-r-4 border-accent-teal">
+                האם אתה מוכן לחצות?
+            </p>
+        </section>
+
+        <div class="angular-divider"></div>
+
+        <!-- Section: The Pathfinders (Target Audience) -->
+        <section class="mb-24 lg:mb-32 bg-accent-teal bg-opacity-20 p-8 sm:p-12 -mx-4 sm:-mx-6 lg:-mx-8 relative overflow-hidden">
+            <h2 class="text-5xl sm:text-6xl mb-12 text-center text-secondary-yellow relative z-10">
+                למי הלב קורא?
+            </h2>
+            <div class="absolute inset-0 bg-accent-teal opacity-10 blur-xl z-0 transform -rotate-3 scale-110"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16 relative z-10">
+                <div class="p-6 bg-dark bg-opacity-70 border-l-4 border-primary-red shadow-xl">
+                    <h3 class="text-3xl sm:text-4xl mb-4 text-primary-red">החדשנים חסרי הפחד</h3>
+                    <p class="text-lg sm:text-xl text-gray-200">אלה שרואים את המחר, שמחפשים את הקצה הבא של הטכנולוגיה, ומוכנים ללמוד, ליצור ולהוביל שינוי.</p>
+                </div>
+                <div class="p-6 bg-dark bg-opacity-70 border-l-4 border-secondary-yellow shadow-xl">
+                    <h3 class="text-3xl sm:text-4xl mb-4 text-secondary-yellow">המנהיגים שמעזים להוביל</h3>
+                    <p class="text-lg sm:text-xl text-gray-200">מנהלים וארגונים שמבינים שבינה מלאכותית היא לא אופציה, אלא הכרח, ומעוניינים להטמיע אותה בצוותיהם.</p>
+                </div>
+                <div class="p-6 bg-dark bg-opacity-70 border-l-4 border-accent-turquoise shadow-xl">
+                    <h3 class="text-3xl sm:text-4xl mb-4 text-accent-turquoise">היוצרים שחורגים מהמוכר</h3>
+                    <p class="text-lg sm:text-xl text-gray-200">יוצרים, אמנים, ואנשי תוכן המבקשים להעצים את קולם, ליצור בדרכים חדשות, ולפרוץ גבולות יצירתיים באמצעות AI.</p>
+                </div>
+                <div class="p-6 bg-dark bg-opacity-70 border-l-4 border-primary-red shadow-xl">
+                    <h3 class="text-3xl sm:text-4xl mb-4 text-primary-red">החולמים על פרויקטים פורצי דרך</h3>
+                    <p class="text-lg sm:text-xl text-gray-200">אנשי פיתוח וחדשנות ברמה מתקדמת, המעוניינים לבנות ולהוביל פרויקטים מבוססי AI, ולחקור את עומקי הטכנולוגיה.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="angular-divider"></div>
+
+        <!-- Section: The Tools of Creation (Specialties) -->
+        <section class="max-w-6xl mx-auto mb-24 lg:mb-32">
+            <h2 class="text-5xl sm:text-6xl mb-12 text-center text-primary-red">
+                הצבעים שעל לוח הצייר הדיגיטלי:
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="p-6 bg-secondary-yellow text-dark shadow-lg transform rotate-1 transition-transform duration-300 hover:rotate-0 interactive-hover">
+                    <h3 class="text-3xl mb-3 text-dark">מילים נשזור</h3>
+                    <p class="text-lg">יצירת טקסטים ותוכן מהדהד, קופירייטינג, כתיבה שיווקית ועוד - בכוחה של AI.</p>
+                </div>
+                <div class="p-6 bg-accent-teal text-light shadow-lg transform -rotate-1 transition-transform duration-300 hover:rotate-0 interactive-hover">
+                    <h3 class="text-3xl mb-3 text-secondary-yellow">קוד נכתוב</h3>
+                    <p class="text-lg">בניית אפליקציות חכמות, מערכות לומדות, ופתרונות מותאמים אישית בעזרת AI.</p>
+                </div>
+                <div class="p-6 bg-primary-red text-light shadow-lg transform rotate-2 transition-transform duration-300 hover:rotate-0 interactive-hover">
+                    <h3 class="text-3xl mb-3 text-secondary-yellow">רשת נפרוש</h3>
+                    <p class="text-lg">פיתוח אתרים דינמיים ואינטראקטיביים המוטמעים בבינה מלאכותית, לחוויה מתקדמת.</p>
+                </div>
+                <div class="p-6 bg-secondary-yellow text-dark shadow-lg transform -rotate-2 transition-transform duration-300 hover:rotate-0 interactive-hover">
+                    <h3 class="text-3xl mb-3 text-dark">נתונים נפענח</h3>
+                    <p class="text-lg">ניתוח נתונים מתקדם, מחקר מעמיק והפקת תובנות עסקיות קריטיות בעזרת AI.</p>
+                </div>
+                <div class="p-6 bg-accent-teal text-light shadow-lg transform rotate-1 transition-transform duration-300 hover:rotate-0 interactive-hover">
+                    <h3 class="text-3xl mb-3 text-secondary-yellow">מכחול נרים</h3>
+                    <p class="text-lg">יצירת תמונות, איורים ואומנות ויזואלית באמצעות בינה מלאכותית - דמיון הופך למציאות.</p>
+                </div>
+                <div class="p-6 bg-primary-red text-light shadow-lg transform -rotate-1 transition-transform duration-300 hover:rotate-0 interactive-hover">
+                    <h3 class="text-3xl mb-3 text-secondary-yellow">זמן נחסוך</h3>
+                    <p class="text-lg">אוטומציה חכמה של תהליכים בעבודה ובחיים, לשחרור זמן יקר ולהגברת יעילות.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="angular-divider"></div>
+
+        <!-- Section: Building the Bridge (Services) -->
+        <section class="max-w-4xl mx-auto mb-24 lg:mb-32">
+            <h2 class="text-5xl sm:text-6xl mb-12 text-right text-accent-turquoise">
+                הגשר נבנה בכל צורה, לכל צורך:
+            </h2>
+            <div class="space-y-10">
+                <div class="flex flex-col sm:flex-row-reverse items-start sm:items-center bg-dark bg-opacity-70 p-6 shadow-xl border-r-4 border-secondary-yellow">
+                    <h3 class="text-3xl sm:text-4xl text-secondary-yellow mb-4 sm:mb-0 sm:ml-8 flex-shrink-0">סדנאות עומק</h3>
+                    <p class="text-xl sm:text-2xl text-gray-200">חוויה קבוצתית, מעשית, מטלטלת. ללמוד יחד, ליצור יחד, ולגלות את הכוח המשותף של AI.</p>
+                </div>
+                <div class="flex flex-col sm:flex-row-reverse items-start sm:items-center bg-dark bg-opacity-70 p-6 shadow-xl border-r-4 border-primary-red">
+                    <h3 class="text-3xl sm:text-4xl text-primary-red mb-4 sm:mb-0 sm:ml-8 flex-shrink-0">שיעורים פרטיים</h3>
+                    <p class="text-xl sm:text-2xl text-gray-200">נתיב אישי, מותאם, צעד אחר צעד. ללמוד בקצב שלך, להתמקד בצרכים המדויקים שלך, עם ליווי צמוד.</p>
+                </div>
+                <div class="flex flex-col sm:flex-row-reverse items-start sm:items-center bg-dark bg-opacity-70 p-6 shadow-xl border-r-4 border-accent-teal">
+                    <h3 class="text-3xl sm:text-4xl text-accent-teal mb-4 sm:mb-0 sm:ml-8 flex-shrink-0">הרצאות מעוררות</h3>
+                    <p class="text-xl sm:text-2xl text-gray-200">לארגונים, הצתה של ניצוץ חדש. להכניס את עולם ה-AI ללב הצוות, ולפתוח אופקים חדשים של חדשנות.</p>
+                </div>
+                <div class="flex flex-col sm:flex-row-reverse items-start sm:items-center bg-dark bg-opacity-70 p-6 shadow-xl border-r-4 border-secondary-yellow">
+                    <h3 class="text-3xl sm:text-4xl text-secondary-yellow mb-4 sm:mb-0 sm:ml-8 flex-shrink-0">ייעוץ ופיתוח</h3>
+                    <p class="text-xl sm:text-2xl text-gray-200">ליווי צמוד, רעיונות שהופכים למציאות. מפיתוח אסטרטגיה ועד הטמעת פתרונות AI מורכבים.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="angular-divider"></div>
+
+        <!-- Section: The Architect (Zeev's Profile) -->
+        <section class="max-w-6xl mx-auto mb-24 lg:mb-32 flex flex-col md:flex-row-reverse items-center justify-center bg-primary-red bg-opacity-20 p-8 sm:p-12 -mx-4 sm:-mx-6 lg:-mx-8">
+            <div class="w-full md:w-1/3 mb-8 md:mb-0 md:mr-12 flex justify-center">
+                <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית"
+                     class="w-64 h-64 sm:w-80 sm:h-80 object-cover rounded-full die-bruecke-image">
+            </div>
+            <div class="w-full md:w-2/3 text-center md:text-right">
+                <h2 class="text-5xl sm:text-6xl mb-6 text-light drop-shadow-lg">
+                    זאביק אבינר - האמן, המורה, הבנאי.
+                </h2>
+                <p class="text-xl sm:text-2xl leading-relaxed text-gray-200 mb-6 pr-4 border-r-4 border-secondary-yellow">
+                    מעבר למומחיות, מעבר לניסיון - ישנה תשוקה. תשוקה להנגיש את הכוח המהפכני של הבינה המלאכותית, להפוך טכנולוגיה מורכבת לכלי עבודה יומיומי, נגיש, מעצים.
+                </p>
+                <p class="text-xl sm:text-2xl leading-relaxed text-gray-300 pr-4 border-r-4 border-accent-teal">
+                    זאביק הוא המדריך שלכם במסע אל עבר השליטה, האדם שראה את העתיד ובנה גשר אליו. הוא לא רק מלמד, הוא מעניק חזון.
+                </p>
+            </div>
+        </section>
+
+        <div class="angular-divider"></div>
+
+        <!-- Contact Section -->
+        <section id="contact" class="max-w-3xl mx-auto text-center py-16">
+            <h2 class="text-5xl sm:text-6xl mb-8 text-secondary-yellow">
+                צרו קשר, בואו נבנה יחד.
+            </h2>
+            <p class="text-xl sm:text-2xl leading-relaxed text-gray-200 mb-10">
+                המסע אל עבר שליטה ב-AI מתחיל בצעד אחד. בואו נצעד אותו יחד.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center space-y-6 sm:space-y-0 sm:space-x-8 sm:space-x-reverse">
+                <a href="https://wa.me/972546609385" target="_blank" class="px-8 py-4 bg-accent-teal text-light text-xl font-bold uppercase hover:bg-secondary-yellow hover:text-dark transition-all duration-300 transform hover:scale-105 shadow-lg interactive-hover border-4 border-light">
+                    ווטסאפ: 054-6609385
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="px-8 py-4 bg-primary-red text-light text-xl font-bold uppercase hover:bg-secondary-yellow hover:text-dark transition-all duration-300 transform hover:scale-105 shadow-lg interactive-hover border-4 border-light">
+                    אימייל: zaviner@gmail.com
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-8 text-gray-400 text-sm">
+        <p>&copy; 2023 זאביק אבינר - כל הזכויות שמורות.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const customCursor = document.getElementById('custom-cursor');
+            const bgShape1 = document.getElementById('bg-shape-1');
+            const bgShape2 = document.getElementById('bg-shape-2');
+            const bgShape3 = document.getElementById('bg-shape-3');
+
+            // Custom Cursor Logic
+            document.addEventListener('mousemove', (e) => {
+                customCursor.style.left = `${e.clientX}px`;
+                customCursor.style.top = `${e.clientY}px`;
+            });
+
+            document.querySelectorAll('a, button, .interactive-hover').forEach(el => {
+                el.addEventListener('mouseenter', () => customCursor.classList.add('active'));
+                el.addEventListener('mouseleave', () => customCursor.classList.remove('active'));
+            });
+
+            // Parallax-like Background Movement
+            document.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                bgShape1.style.transform = `translateY(${scrollY * 0.1}px) rotate(-15deg)`;
+                bgShape2.style.transform = `translateY(${scrollY * -0.05}px) rotate(25deg)`;
+                bgShape3.style.transform = `translateX(${scrollY * 0.03}px) rotate(-5deg)`;
+            });
+
+            // Fractured Text animation on hover (already handled by CSS)
+            document.querySelectorAll('.fractured-text').forEach(textBlock => {
+                textBlock.innerHTML = textBlock.textContent.split('').map(char => `<span>${char}</span>`).join('');
+            });
+        });
+    </script>
+</body>
+</html>

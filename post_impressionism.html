@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>בינה מלאכותית: צבעי המחר - עם זאביק אבינר</title>
+    <meta name="description" content="צא למסע אמנותי אל עולם הבינה המלאכותית עם זאביק אבינר. פוסט-אימפרסיוניזם דיגיטלי המנגיש AI לכל יצירה.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Rubik+Mono+One&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply font-heebo bg-gradient-to-br from-[#1a1a2e] via-[#0f3460] to-[#533483] text-purple-100; /* Dark, vibrant base */
+            }
+            h1, h2, h3 {
+                @apply font-rubik-mono-one text-yellow-300 text-center; /* Bold, artistic headings */
+            }
+            p, ul, li {
+                @apply text-lg leading-relaxed text-teal-200; /* Readable body text */
+            }
+            a {
+                @apply text-yellow-300 hover:text-white transition duration-300;
+            }
+        }
+        @layer components {
+            .section-canvas {
+                @apply relative overflow-hidden px-8 sm:px-12 md:px-16 lg:px-20 py-24 sm:py-32 md:py-40 border-b-2 border-yellow-400 border-opacity-30;
+            }
+            .content-block {
+                @apply max-w-4xl mx-auto p-6 md:p-8 bg-black bg-opacity-40 rounded-lg shadow-xl backdrop-blur-sm border border-yellow-300 border-opacity-20 text-right;
+            }
+            .content-block p, .content-block ul {
+                @apply text-right; /* Ensure RTL for content within blocks */
+            }
+            .content-block li {
+                @apply mb-2;
+            }
+        }
+        /* Custom Keyframes for background animations */
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes rotateElement {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.05); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        @keyframes pulseElement {
+            0%, 100% { transform: scale(1); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 1; }
+        }
+    </style>
+    <style> /* Direct CSS for custom cursor (as per directive) */
+        #custom-cursor {
+            width: 30px;
+            height: 30px;
+            border: 2px solid #FFFFFF; /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* Dark shadow */
+            border-radius: 9999px; /* Tailwind's rounded-full */
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%); /* Center the cursor */
+            transition: transform 0.1s ease-out, opacity 0.1s ease-out; /* Smooth movement */
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'heebo': ['Heebo', 'sans-serif'],
+                        'rubik-mono-one': ['Rubik Mono One', 'monospace'],
+                    },
+                    colors: {
+                        'primary-dark': '#1a1a2e',
+                        'secondary-dark': '#0f3460',
+                        'accent-dark': '#533483',
+                        'yellow-300': '#fcd34d', /* Vibrant yellow for highlights */
+                        'teal-200': '#99f6e4', /* Lighter teal for body text */
+                        'purple-100': '#f3e8ff', /* Light purple for main text base */
+                    },
+                    animation: {
+                        gradientShift: 'gradientShift 15s ease infinite',
+                        rotateElement: 'rotateElement 20s linear infinite alternate',
+                        pulseElement: 'pulseElement 10s ease-in-out infinite',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="relative min-h-screen">
+
+    <!-- Background Layers (fixed, negative z-index for depth, artistic flair) -->
+    <div class="fixed inset-0 w-full h-full bg-gradient-to-br from-[#1a1a2e] via-[#0f3460] to-[#533483] animate-gradientShift z-[-2]" style="background-size: 200% 200%;"></div>
+
+    <!-- Layer 1: Pulsating soft light, mimicking an AI 'core' or a light source in a painting -->
+    <div id="ai-core-light" class="fixed w-96 h-96 bg-yellow-300 opacity-50 blur-3xl rounded-full -z-10" style="left: 50%; top: 50%; transform: translate(-50%, -50%) scale(1);"></div>
+
+    <!-- Layer 2: Abstract swirling, rotating shapes for dynamic background -->
+    <div class="fixed inset-0 w-full h-full -z-10 overflow-hidden">
+        <div class="absolute w-64 h-64 bg-teal-200 opacity-20 blur-2xl rounded-full parallax-layer" data-parallax-speed="0.05" style="top: 10%; left: 15%; animation: rotateElement 20s linear infinite alternate;"></div>
+        <div class="absolute w-80 h-80 bg-purple-400 opacity-15 blur-3xl rounded-full parallax-layer" data-parallax-speed="0.08" style="bottom: 5%; right: 10%; animation: rotateElement 25s reverse linear infinite alternate;"></div>
+        <div class="absolute w-52 h-52 bg-pink-500 opacity-10 blur-xl rounded-full parallax-layer" data-parallax-speed="0.03" style="top: 30%; right: 20%; animation: pulseElement 10s ease-in-out infinite;"></div>
+    </div>
+
+    <!-- Main Content Wrapper (positive z-index to be on top of backgrounds) -->
+    <div class="relative z-[10] min-h-screen flex flex-col justify-between pt-8 pb-16">
+        <main class="container mx-auto space-y-24 md:space-y-32">
+
+            <!-- Hero Section: The Digital Dawn -->
+            <section class="section-canvas text-center">
+                <div class="content-block bg-opacity-50">
+                    <h1 class="text-5xl sm:text-6xl md:text-7xl mb-6">האור בזריחה הדיגיטלית - שליטה ב-AI, עכשיו!</h1>
+                    <p class="text-xl md:text-2xl mt-4 max-w-3xl mx-auto text-purple-100">
+                        העתיד אינו רק מגיע, הוא כבר כאן, מתעצב בצבעים עזים ובמשיכות מכחול דיגיטליות. זאביק אבינר מזמין אתכם לגלות את סודות הבינה המלאכותית, ולהפוך אותה לכלי יצירה ועשייה בחייכם. זהו קריאתו של הקנבס החדש.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Section: The Essence / Core Message -->
+            <section class="section-canvas">
+                <div class="content-block">
+                    <h2 class="text-4xl md:text-5xl mb-8">פלטת הצבעים החדשה של המוח</h2>
+                    <p class="mb-4 text-purple-100">
+                        הבינה המלאכותית היא לא רק טכנולוגיה, היא עדשה חדשה שדרכה אנו רואים את העולם - מנגישה את המורכב ביותר, ומאפשרת לכל אחד לצייר את עתידו. זהו מסע משיכות מכחול ראשונות ועד ליצירות מופת של ממש, עם כלים מעשיים שייצבו אתכם במרכז הבמה הדיגיטלית.
+                    </p>
+                    <p class="text-purple-100">
+                        אנו מאמינים כי הנגשת ה-AI לכולם היא הדרך ליצור גלריה של חדשנות אישית וארגונית, להפוך רעיונות מופשטים ליצירות מוחשיות שניתן ליישם מיד בעבודה ובחיים.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Section: Target Audience (as "Who are the Visionaries?") -->
+            <section class="section-canvas">
+                <div class="content-block">
+                    <h2 class="text-4xl md:text-5xl mb-8">למי מיועדת התערוכה?</h2>
+                    <ul class="list-none space-y-4 text-purple-100">
+                        <li>
+                            <strong class="text-yellow-300">למתחילים סקרנים:</strong> אלה שמריחים את ניחוח השמן ומוכנים לטבול את אצבעותיהם בעולם חדש, להתחיל את הקומפוזיציה הראשונה שלהם ב-AI.
+                        </li>
+                        <li>
+                            <strong class="text-yellow-300">למקצוענים שרוצים לחדש:</strong> אמנים שמחפשים כלים חדשים בפלטה הדיגיטלית שלהם, כדי לשכלל את סגנונם ולפרוץ גבולות.
+                        </li>
+                        <li>
+                            <strong class="text-yellow-300">למנהלים ואוצרים:</strong> מובילי צוותים וארגונים שרוצים להציג את היצירות הבאות, להבין את הפוטנציאל העצום של AI בשיפור וייעול.
+                        </li>
+                        <li>
+                            <strong class="text-yellow-300">לחלוצים פורצי דרך:</strong> אלה שרואים מעבר לאופק, ומעוניינים לבנות את פרויקטי ה-AI פורצי הדרך הבאים, ולהיות בחזית היצירה.
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section: Areas of Expertise (as "The Brushstrokes of Creation") -->
+            <section class="section-canvas">
+                <div class="content-block">
+                    <h2 class="text-4xl md:text-5xl mb-8">משיכות המכחול של היצירה</h2>
+                    <p class="mb-6 text-purple-100">
+                        אלו הן אבני היסוד של פלטת היצירה שלנו ב-AI, תחומים בהם הבינה המלאכותית הופכת מחשבות למציאות, ממש כמו מכחול ביד אמן:
+                    </p>
+                    <ul class="list-none space-y-4 text-purple-100">
+                        <li>
+                            <strong class="text-yellow-300">אורות וצלילים של מילים:</strong> יצירת טקסטים, סיפורים ותוכן שנושם חיים ומעורר השראה.
+                        </li>
+                        <li>
+                            <strong class="text-yellow-300">קומפוזיציות אינטראקטיביות:</strong> בניית אפליקציות חכמות המגיבות למגע, לחשיבה ולצרכים משתנים.
+                        </li>
+                        <li>
+                            <strong class="text-yellow-300">נופים דיגיטליים מתפתחים:</strong> פיתוח אתרים מבוססי AI, נושמים ומתחדשים, שיוצרים חוויה דינמית.
+                        </li>
+                        <li>
+                            <strong class="text-yellow-300">פרשנות צבעים ונתונים:</strong> ניתוח נתונים ומחקר, מציאת דפוסים נסתרים והפקת תובנות עמוקות.
+                        </li>
+                        <li>
+                            <strong class="text-yellow-300">גלריות חזותיות אינסופיות:</strong> יצירת תמונות ואמנות חדשנית, פתיחת דלתות לעולם של דמיון ויצירתיות.
+                        </li>
+                        <li>
+                            <strong class="text-yellow-300">מחול הכלים האוטומטי:</strong> אוטומציה של תהליכים, הפיכת פעולות חוזרות לנחל זורם ויעיל.
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section: Services Offered (as "The Workshops of the Master") -->
+            <section class="section-canvas">
+                <div class="content-block">
+                    <h2 class="text-4xl md:text-5xl mb-8">הסדנאות של המאסטר</h2>
+                    <p class="mb-6 text-purple-100">
+                        אנו מציעים מגוון רחב של הזדמנויות ללמוד, ליצור ולהתפתח, כל אחת מהן מעוצבת כדי להתאים לקנבס האישי שלכם:
+                    </p>
+                    <ul class="list-none space-y-4 text-purple-100">
+                        <li>
+                            <strong class="text-yellow-300">סדנאות קבוצתיות:</strong> מעגלי יצירה שיתופיים, מעשיים וממוקדים, בהם כל אחד מוסיף גוון משלו ליצירה משותפת.
+                        </li>
+                        <li>
+                            <strong class="text-yellow-300">שיעורים פרטיים:</strong> ליווי אישי ואינטימי, התאמה של קו היצירה לסגנונכם הייחודי, לרמה ולצרכים המדויקים שלכם.
+                        </li>
+                        <li>
+                            <strong class="text-yellow-300">הרצאות לארגונים:</strong> פתיחת אופקים חדשים, חשיפת צוותים לגלריה המתפתחת של ה-AI והשפעתה על עולם העבודה.
+                        </li>
+                        <li>
+                            <strong class="text-yellow-300">ייעוץ ופיתוח פרויקטים:</strong> ליווי אמן מקצועי, מניב השראה ועד למימוש היצירה המוגמרת, מפיתוח הרעיון ועד ליישום.
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Section: The Guide (Zevik Aviner) -->
+            <section class="section-canvas pb-24">
+                <div class="content-block">
+                    <h2 class="text-4xl md:text-5xl mb-8">המאסטר - זאביק אבינר</h2>
+                    <p class="mb-8 text-purple-100">
+                        זאביק אבינר הוא לא רק מומחה, הוא המדריך שלכם בעולם החדש והצבעוני הזה של הבינה המלאכותית. אמן AI ופורץ דרך עם ניסיון עשיר בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI. זאביק מאמין שכל אחד יכול לצייר עם AI, להנגיש את הטכנולוגיה ולהפוך אותה לכלי עבודה יומיומי. הוא הופך את המורכב לפשוט, את התיאוריה לכלי עבודה מעשי שישנה את דרך הראייה שלכם.
+                    </p>
+                    <div class="flex flex-col items-center justify-center space-y-6">
+                        <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר, מומחה בינה מלאכותית ומדריך AI" class="rounded-full w-40 h-40 object-cover border-4 border-yellow-300 shadow-xl transition-transform duration-500 hover:scale-105">
+                        <div class="text-center">
+                            <p class="text-xl md:text-2xl mb-2">
+                                <a href="https://wa.me/972546609385" class="hover:underline text-teal-200 hover:text-white transition duration-300">ווטסאפ: 054-6609385</a>
+                            </p>
+                            <p class="text-xl md:text-2xl">
+                                <a href="mailto:zaviner@gmail.com" class="hover:underline text-teal-200 hover:text-white transition duration-300">אימייל: zaviner@gmail.com</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="mt-20 text-center text-purple-100 text-sm px-8">
+            <p>
+                © 2023 צבעי המחר - זאביק אבינר. כל הזכויות שמורות ליצירה הדיגיטלית.
+                <br>
+                אתר זה נוצר בהשראת האמנות הפוסט-אימפרסיוניסטית ועקרונות הבינה המלאכותית.
+            </p>
+        </footer>
+    </div>
+
+    <!-- Custom Cursor Element -->
+    <div id="custom-cursor"></div>
+
+    <script>
+        // Custom Cursor JavaScript
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        // Parallax Effect for Background Layers
+        document.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+
+            // Move parallax layers slower than the scroll
+            document.querySelectorAll('.parallax-layer').forEach(layer => {
+                const speed = parseFloat(layer.dataset.parallaxSpeed) || 0.1;
+                layer.style.transform = `translateY(${scrollY * speed}px)`;
+            });
+
+            // Animate the central 'AI core' light based on scroll
+            const aiCore = document.getElementById('ai-core-light');
+            if (aiCore) {
+                // Opacity changes from 30% to 100% as you scroll down
+                const opacity = Math.min(1, Math.max(0.3, scrollY / 1000));
+                // Scale changes slightly to give a 'breathing' effect
+                const scale = Math.min(1.2, Math.max(1, 1 + scrollY / 2000));
+                aiCore.style.opacity = opacity;
+                aiCore.style.transform = `translate(-50%, -50%) scale(${scale})`;
+            }
+        });
+    </script>
+</body>
+</html>

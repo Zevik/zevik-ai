@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ליצור את המחר: אומנות הבינה המלאכותית בידיים שלך - זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;700&family=Heebo:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary-dark: #121212;
+            --color-accent-gold: #D4AF37; /* A richer, more antique gold */
+            --color-accent-blue: #64B5F6; /* A celestial, ethereal blue */
+            --color-text-light: #E0E0E0;
+            --color-text-secondary: #B0B0B0;
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: var(--color-primary-dark);
+            color: var(--color-text-light);
+            cursor: none; /* Hide default cursor to use custom one */
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--color-accent-gold);
+            font-weight: 700;
+        }
+
+        .text-gradient-gold-blue {
+            background: linear-gradient(135deg, var(--color-accent-gold) 0%, var(--color-accent-blue) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent; /* Fallback for browsers that don't support background-clip: text */
+        }
+
+        /* Scroll snapping for immersive section transitions */
+        .scroll-snap-y {
+            scroll-snap-type: y mandatory;
+        }
+        .scroll-snap-start {
+            scroll-snap-align: start;
+        }
+
+        /* Parallax Background - simulating a grand fresco or celestial sphere */
+        .parallax-bg {
+            background-image: url('https://images.unsplash.com/photo-1518621741544-d8ed92518e1d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); /* Abstract cosmic art */
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.08; /* Very subtle background to maintain focus on content */
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1; /* Ensure background is behind content */
+            filter: grayscale(80%) brightness(50%); /* Mute and darken for depth */
+        }
+
+        /* High-Contrast Custom Cursor */
+        #custom-cursor {
+            width: 24px;
+            height: 24px;
+            margin: -12px; /* Center the cursor on the pointer */
+            transition: transform 0.1s ease-out; /* Smooth movement */
+            border-width: 2px;
+            border-style: solid;
+            border-color: var(--color-text-light); /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 15px rgba(255,255,255,0.3); /* Dark shadow for contrast, white glow for artistic effect */
+            pointer-events: none; /* Allows clicks to pass through */
+            z-index: 9999; /* Always on top */
+            position: fixed;
+            border-radius: 50%;
+        }
+
+        /* Reveal on Scroll Animation - for dramatic content entry */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Michelangelo-inspired "Terribilità" styles for awe and grandeur */
+        .terribilita-shadow {
+            text-shadow: 0 0 10px rgba(255,255,255,0.4), 0 0 25px var(--color-accent-blue);
+        }
+
+        .terribilita-border-glow {
+            border-image: linear-gradient(45deg, var(--color-accent-gold) 0%, var(--color-accent-blue) 100%) 1;
+            border-width: 2px;
+            border-style: solid;
+            box-shadow: 0 0 15px rgba(212,175,55,0.4), 0 0 30px rgba(100,181,246,0.3);
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden scroll-snap-y">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Layer -->
+    <div class="parallax-bg"></div>
+
+    <main class="relative z-10 min-h-screen">
+
+        <!-- Section 1: Hero - The Divine Spark / המעוף האלוהי -->
+        <section class="h-screen flex items-center justify-center p-4 relative overflow-hidden text-center scroll-snap-start">
+            <div class="max-w-4xl mx-auto space-y-8 reveal-on-scroll">
+                <h1 class="text-6xl md:text-8xl lg:text-9xl terribilita-shadow leading-tight text-gradient-gold-blue">
+                    ליצור את המחר.
+                </h1>
+                <p class="text-2xl md:text-3xl lg:text-4xl font-light leading-relaxed text-gray-300">
+                    אומנות הבינה המלאכותית בידיים שלך - העתיד הוא עכשיו.
+                </p>
+                <p class="text-xl md:text-2xl lg:text-3xl font-light terribilita-shadow text-var(--color-accent-blue)">
+                    זאביק אבינר חושף את הסודות העתיקים של החדשנות הדיגיטלית.
+                </p>
+                <a href="#about" class="inline-block mt-12 px-8 py-4 bg-transparent terribilita-border-glow text-var(--color-accent-gold) text-xl md:text-2xl rounded-full hover:scale-105 transition-transform duration-300 ease-in-out">
+                    צא למסע היצירה
+                </a>
+            </div>
+        </section>
+
+        <!-- Section 2: About Zevik - The Maestro / המאסטרו -->
+        <section id="about" class="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-gradient-to-br from-gray-900 to-black scroll-snap-start">
+            <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 items-center text-center md:text-right reveal-on-scroll">
+                <div class="relative flex justify-center md:justify-end">
+                    <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="w-64 h-64 md:w-80 md:h-80 rounded-full object-cover border-4 terribilita-border-glow shadow-2xl relative z-10">
+                    <div class="absolute inset-0 bg-var(--color-accent-blue) opacity-20 rounded-full filter blur-3xl scale-110"></div>
+                </div>
+                <div class="space-y-6">
+                    <h2 class="text-5xl md:text-6xl text-gradient-gold-blue">זאביק אבינר - המאסטרו</h2>
+                    <p class="text-lg md:text-xl leading-relaxed text-gray-300">
+                        כמו פסל המגלה את הצורה החבויה בשיש, כך זאביק אבינר מגלה את הפוטנציאל הטמון בבינה המלאכותית. מומחה בעל ניסיון עשיר בפיתוח פרויקטים פורצי דרך, זאביק הוא המדריך שיעניק לך את הכלים לפסל את עתידך הדיגיטלי. הוא מתמחה בהנגשת הטכנולוגיה המורכבת והפיכתה לכלי יצירה יומיומי, מנגיש את ה"טרביליטה" של ה-AI לכל אדם.
+                    </p>
+                    <p class="text-md md:text-lg text-var(--color-accent-gold) font-bold">
+                        "הבינה המלאכותית היא לא רק טכנולוגיה - היא אמנות חדשה, ואנו האמנים."
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The Canvas & Tools - תחומי ההשראה / כלי הפיסול -->
+        <section class="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-gradient-to-tl from-black to-gray-800 scroll-snap-start">
+            <div class="max-w-7xl mx-auto text-center reveal-on-scroll">
+                <h2 class="text-5xl md:text-7xl mb-16 text-gradient-gold-blue terribilita-shadow">
+                    כלי הפיסול: אומנויות הבינה המלאכותית
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+                    <!-- Tool Card 1 -->
+                    <div class="p-8 terribilita-border-glow rounded-3xl bg-gray-900 bg-opacity-70 backdrop-blur-sm hover:scale-105 transition-transform duration-300 ease-in-out">
+                        <h3 class="text-3xl terribilita-shadow mb-4 text-var(--color-accent-gold)">פסל הטקסט: יצירת נרטיבים דיגיטליים</h3>
+                        <p class="text-lg text-gray-300">
+                            ממאמרים עמוקים ועד סיפורים קצרים ופרסומות מבריקות - למד/י לעצב מילים בעזרת AI. כל מילה היא מכה בפטיש, כל משפט - קו מברשת מדויק.
+                        </p>
+                    </div>
+                    <!-- Tool Card 2 -->
+                    <div class="p-8 terribilita-border-glow rounded-3xl bg-gray-900 bg-opacity-70 backdrop-blur-sm hover:scale-105 transition-transform duration-300 ease-in-out">
+                        <h3 class="text-3xl terribilita-shadow mb-4 text-var(--color-accent-gold)">אדריכל האפליקציות: בניית עולמות חכמים</h3>
+                        <p class="text-lg text-gray-300">
+                            הפוך/הפכי רעיונות לאפליקציות מבריקות ואינטואיטיביות. בנה/בני תשתית דיגיטלית שחושבת, מרגישה ופועלת בקלילות אלוהית.
+                        </p>
+                    </div>
+                    <!-- Tool Card 3 -->
+                    <div class="p-8 terribilita-border-glow rounded-3xl bg-gray-900 bg-opacity-70 backdrop-blur-sm hover:scale-105 transition-transform duration-300 ease-in-out">
+                        <h3 class="text-3xl terribilita-shadow mb-4 text-var(--color-accent-gold)">קודש הקודשים: פיתוח אתרים מבוססי AI</h3>
+                        <p class="text-lg text-gray-300">
+                            לא רק אתרים, אלא יצירות ארכיטקטוניות דיגיטליות שמתפתחות, לומדות ומגיבות. אתרים נושמים, חושבים ומתחברים למשתמשיהם ברמה עמוקה.
+                        </p>
+                    </div>
+                    <!-- Tool Card 4 -->
+                    <div class="p-8 terribilita-border-glow rounded-3xl bg-gray-900 bg-opacity-70 backdrop-blur-sm hover:scale-105 transition-transform duration-300 ease-in-out">
+                        <h3 class="text-3xl terribilita-shadow mb-4 text-var(--color-accent-gold)">מנבא העתיד: ניתוח נתונים ומחקר</h3>
+                        <p class="text-lg text-gray-300">
+                            פענח/י את הצפנים של הידע הגלום בנתונים. AI ככלי חיזוי ובניית אסטרטגיות מבוססות תובנות עמוקות, כמו ראיית נולד.
+                        </p>
+                    </div>
+                    <!-- Tool Card 5 -->
+                    <div class="p-8 terribilita-border-glow rounded-3xl bg-gray-900 bg-opacity-70 backdrop-blur-sm hover:scale-105 transition-transform duration-300 ease-in-out">
+                        <h3 class="text-3xl terribilita-shadow mb-4 text-var(--color-accent-gold)">הולדת ונוס הדיגיטלית: יצירת תמונות ואומנות</h3>
+                        <p class="text-lg text-gray-300">
+                            הפוך/הפכי את דמיונך למציאות ויזואלית מרהיבה. צור/צרי אומנות דיגיטלית, תמונות ועיצובים מרהיבים בלחיצת כפתור, בדומה למגע אלוהי.
+                        </p>
+                    </div>
+                    <!-- Tool Card 6 -->
+                    <div class="p-8 terribilita-border-glow rounded-3xl bg-gray-900 bg-opacity-70 backdrop-blur-sm hover:scale-105 transition-transform duration-300 ease-in-out">
+                        <h3 class="text-3xl terribilita-shadow mb-4 text-var(--color-accent-gold)">מכונת הגלגל: אוטומציה של תהליכים</h3>
+                        <p class="text-lg text-gray-300">
+                            שחרר/י את הפוטנציאל האנושי ממשימות חוזרות. AI כמנוע אוטומציה יעיל, המאפשר לך להתמקד במה שחשוב באמת - יצירה וחדשנות.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Pathways to Mastery - הדרכים לאמן / שירותים מוצעים -->
+        <section class="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-gradient-to-br from-black to-gray-900 scroll-snap-start">
+            <div class="max-w-6xl mx-auto text-center reveal-on-scroll">
+                <h2 class="text-5xl md:text-7xl mb-16 text-gradient-gold-blue terribilita-shadow">
+                    הדרכים לאמן: שירותי הדרכה וליווי
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <!-- Service Card 1 -->
+                    <div class="p-8 terribilita-border-glow rounded-3xl bg-gray-900 bg-opacity-70 backdrop-blur-sm hover:scale-105 transition-transform duration-300 ease-in-out">
+                        <h3 class="text-3xl terribilita-shadow mb-4 text-var(--color-accent-gold)">סדנאות קבוצתיות: בונים יחד</h3>
+                        <p class="text-lg text-gray-300">
+                            חוויה מעשית, ממוקדת ומרתקת בקבוצות קטנות. למד/י ליישם AI באופן מיידי, לשתף פעולה ולצמוח יחד כמו סדנה של אמנים.
+                        </p>
+                    </div>
+                    <!-- Service Card 2 -->
+                    <div class="p-8 terribilita-border-glow rounded-3xl bg-gray-900 bg-opacity-70 backdrop-blur-sm hover:scale-105 transition-transform duration-300 ease-in-out">
+                        <h3 class="text-3xl terribilita-shadow mb-4 text-var(--color-accent-gold)">שיעורים פרטיים: פיסול אישי</h3>
+                        <p class="text-lg text-gray-300">
+                            מסלול לימודים מותאם אישית לרמה ולצרכים שלך. קבל/י ליווי צמוד, תשומת לב מלאה וחתור/חתרי למצוינות אישית בבינה המלאכותית.
+                        </p>
+                    </div>
+                    <!-- Service Card 3 -->
+                    <div class="p-8 terribilita-border-glow rounded-3xl bg-gray-900 bg-opacity-70 backdrop-blur-sm hover:scale-105 transition-transform duration-300 ease-in-out">
+                        <h3 class="text-3xl terribilita-shadow mb-4 text-var(--color-accent-gold)">הרצאות לארגונים: השראה המונית</h3>
+                        <p class="text-lg text-gray-300">
+                            פתח/פתחי אופקים חדשים לצוות שלך. הרצאות מעוררות השראה ומעניקות ידע פרקטי, המכינות את הארגון שלך לעידן ה-AI.
+                        </p>
+                    </div>
+                    <!-- Service Card 4 -->
+                    <div class="p-8 terribilita-border-glow rounded-3xl bg-gray-900 bg-opacity-70 backdrop-blur-sm hover:scale-105 transition-transform duration-300 ease-in-out">
+                        <h3 class="text-3xl terribilita-shadow mb-4 text-var(--color-accent-gold)">ייעוץ ופיתוח פרויקטים: בניית יצירות מופת</h3>
+                        <p class="text-lg text-gray-300">
+                            ליווי מקצועי וצמוד בפיתוח פרויקטים מבוססי AI. משלב התכנון ועד למימוש, נהפוך את הרעיון שלך למציאות פורצת דרך.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Contact - הקריאה ליצירה / צור קשר -->
+        <section class="min-h-screen flex items-center justify-center p-8 relative overflow-hidden bg-gradient-to-br from-gray-900 to-black scroll-snap-start">
+            <div class="max-w-4xl mx-auto text-center space-y-8 reveal-on-scroll">
+                <h2 class="text-5xl md:text-7xl mb-8 text-gradient-gold-blue terribilita-shadow">
+                    הקריאה ליצירה.
+                </h2>
+                <p class="text-xl md:text-2xl leading-relaxed text-gray-300 mb-8">
+                    העתיד אינו ממתין, הוא נוצר עכשיו, בידיים שלך.
+                    צור/צרי קשר עם זאביק אבינר והתחל/התחילי לפסל את מחר.
+                </p>
+
+                <div class="flex flex-col md:flex-row justify-center items-center gap-8 text-2xl md:text-3xl font-bold">
+                    <a href="https://wa.me/972546609385" target="_blank" class="flex items-center terribilita-border-glow px-6 py-3 rounded-full hover:scale-105 transition-transform duration-300 ease-in-out text-white bg-[#25D366] bg-opacity-70">
+                        <span class="ml-3">054-6609385</span>
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="flex items-center terribilita-border-glow px-6 py-3 rounded-full hover:scale-105 transition-transform duration-300 ease-in-out text-white bg-[#D9534F] bg-opacity-70">
+                        <span class="ml-3">zaviner@gmail.com</span>
+                    </a>
+                </div>
+                <p class="text-lg mt-12 text-gray-500">
+                    כל הזכויות שמורות לזאביק אבינר &copy; 2024.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor JavaScript
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        });
+
+        // Reveal on Scroll JavaScript for dramatic content entry
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Optional: uncomment below to stop observing once visible
+                    // observer.unobserve(entry.target);
+                } else {
+                    // Optional: uncomment below to re-trigger animation when scrolling back up
+                    // entry.target.classList.remove('is-visible');
+                }
+            });
+        }, { threshold: 0.3 }); // Adjust threshold: how much of the element must be visible to trigger
+
+        document.querySelectorAll('.reveal-on-scroll').forEach(element => {
+            observer.observe(element);
+        });
+
+        // Simple Scroll-based Parallax for the fixed background
+        const parallaxBg = document.querySelector('.parallax-bg');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            // Adjust the 0.05 factor to control parallax speed
+            parallaxBg.style.backgroundPositionY = `calc(50% + ${scrollY * 0.05}px)`; 
+        });
+    </script>
+</body>
+</html>

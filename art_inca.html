@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שליטת הבינה המלאכותית: דרך האבות לעתיד</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='-.1em' x='-.05em' font-size='100' fill='%23DDAA00'%3E%F0%9F%A7%A0%3C/text%3E%3C/svg%3E">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700&family=Rubik:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/tailwindcss">
+        module.exports = {
+            theme: {
+                extend: {
+                    colors: {
+                        'inca-dark-brown': '#1A100B', // Very dark brown, almost black
+                        'inca-gold': '#DDAA00',      // Rich gold
+                        'inca-red': '#7C1F1F',       // Deep, muted red
+                        'inca-blue': '#003366',      // Deep navy blue
+                        'inca-green': '#005500',     // Dark forest green
+                        'inca-cream': '#F5F5DC',     // Creamy off-white
+                        'inca-earth': '#4A2E1A',     // Medium dark brown
+                        'inca-accent': '#FFD700',    // Bright gold for highlights
+                        'inca-stone-dark': '#614D41',  // Darker stone
+                    },
+                    fontFamily: {
+                        'rubik': ['Rubik', 'sans-serif'],
+                        'frank-ruhl-libre': ['"Frank Ruhl Libre"', 'serif'],
+                    },
+                    animation: {
+                        'slow-pulse': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'flow-pattern': 'flow 20s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        flow: {
+                            '0%': { backgroundPosition: '0% 0%' },
+                            '100%': { backgroundPosition: '100% 100%' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Base styles for the overall artistic feel */
+        body {
+            font-family: 'Frank Ruhl Libre', serif;
+            color: var(--inca-cream, #F5F5DC); /* inca-cream */
+            background-color: var(--inca-dark-brown, #1A100B); /* inca-dark-brown */
+            margin: 0;
+            overflow-x: hidden; /* Prevent horizontal scroll from parallax */
+            cursor: none; /* Hide default cursor */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Rubik', sans-serif;
+            color: var(--inca-gold, #DDAA00); /* inca-gold */
+        }
+
+        /* Custom cursor styling */
+        #custom-cursor {
+            position: fixed;
+            pointer-events: none; /* Ensure cursor doesn't block interactions */
+            transform: translate(-50%, -50%); /* Center the cursor */
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--inca-cream, #F5F5DC); /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.7); /* Dark shadow for contrast */
+            transition: width 0.2s ease-out, height 0.2s ease-out, transform 0.05s linear; /* Smooth visual changes */
+            z-index: 9999; /* Always on top */
+            opacity: 1;
+        }
+
+        /* Parallax layers */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            will-change: transform; /* Optimize for animation */
+        }
+
+        /* Specific background patterns for Inca feel */
+        .bg-pattern-0 {
+            background-image: radial-gradient(circle at top left, var(--inca-earth, #4A2E1A) 0%, var(--inca-dark-brown, #1A100B) 70%); /* Darker base */
+            z-index: -10;
+        }
+        .bg-pattern-1 {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%234A2E1A' fill-opacity='0.2'%3E%3Cpath d='M30 15V0H0v30h15v30h30V30H30V15zm0 0H15v15h15V15zm15 15H30v15h15V30zm0 0V15h15v15H45zm0 15H30v15h15V45zm0 0V30h15v15H45zM30 45H15v15h15V45z'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 30px 30px;
+            z-index: -9;
+            opacity: 0.3;
+        }
+        .bg-pattern-2 {
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%237C1F1F' fill-opacity='0.1'%3E%3Cpath d='M98 0H2V2h96V0zM98 98H2v2h96v-2zM0 98V2h2v96H0zM100 98V2h-2v96h2zM98 2V0h-2v2h2zM2 98V96h2v2H2zM98 96v2h-2v-2h2zM4 2v2h2V2H4zM96 2v2h-2V2h2zM96 98v-2h-2v2h2zM4 98v-2h2v2H4zM50 0h-2v2h2V0zM50 100h-2v-2h2v2zM0 50v-2h2v2H0zM100 50v-2h-2v2h2zM50 2h-2v2h2V2zM2 50v-2h2v2H2zM98 50v-2h-2v2h2zM50 98h-2v2h2v-2zM25 0h-2v2h2V0zM75 0h-2v2h2V0zM25 100h-2v-2h2v2zM75 100h-2v-2h2v2zM0 25v-2h2v2H0zM0 75v-2h2v2H0zM100 25v-2h-2v2h2zM100 75v-2h-2v2h2zM25 2h-2v2h2V2zM75 2h-2v2h2V2zM2 25v-2h2v2H2zM2 75v-2h2v2H2zM98 25v-2h2v2h-2zM98 75v-2h2v2h-2zM25 98h-2v2h2v-2zM75 98h-2v2h2v-2z'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 50px 50px;
+            z-index: -8;
+            opacity: 0.15;
+            animation: flow-pattern 40s linear infinite; /* Subtle animation */
+        }
+
+        /* Generative particle styles */
+        .particle {
+            position: absolute;
+            background-color: var(--inca-accent, #FFD700); /* inca-accent */
+            border-radius: 50%;
+            opacity: 0;
+            animation: fadeInOut 2s ease-out forwards, float 3s infinite alternate;
+            pointer-events: none;
+            z-index: 50; /* Above main content, below cursor */
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 0.7; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.5); }
+        }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            25% { transform: translateY(-5px) rotate(5deg); }
+            50% { transform: translateY(0px) rotate(0deg); }
+            75% { transform: translateY(5px) rotate(-5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* Scroll indicator */
+        #scroll-indicator {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0.7;
+            animation: bounce 2s infinite;
+            z-index: 100;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-10px) translateX(-50%); }
+            60% { transform: translateY(-5px) translateX(-50%); }
+        }
+
+    </style>
+</head>
+<body class="font-frank-ruhl-libre text-inca-cream leading-relaxed antialiased">
+
+    <!-- Custom Cursor -->
+    <div id="custom-cursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-layer bg-pattern-0" data-speed="-0.1"></div>
+    <div class="parallax-layer bg-pattern-1" data-speed="-0.2"></div>
+    <div class="parallax-layer bg-pattern-2" data-speed="-0.3"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 mx-auto px-4 sm:px-6 lg:px-8 py-16 min-h-screen flex flex-col justify-center max-w-7xl main-content-wrapper">
+
+        <!-- Hero Section -->
+        <section id="hero" class="relative text-center py-20 md:py-32 lg:py-48 bg-inca-earth bg-opacity-30 rounded-lg shadow-xl mb-24 interactive-element" style="background-image: linear-gradient(to bottom right, rgba(26,16,11,0.7), rgba(74,46,26,0.5), rgba(26,16,11,0.7)); border: 1px solid var(--inca-gold, #DDAA00);">
+            <div class="p-8 sm:p-12 md:p-16">
+                <h1 class="font-rubik text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 text-inca-gold leading-tight animate-slow-pulse">
+                    שליטת הבינה המלאכותית:<br> דרך האבות לעתיד
+                </h1>
+                <p class="text-xl sm:text-2xl lg:text-3xl text-inca-cream mb-10 max-w-3xl mx-auto">
+                    הצטרפו למסע בו ידע עתיק פוגש חדשנות פורצת דרך.
+                    <br><span class="text-inca-accent font-rubik font-medium">AI נגיש. AI מעשי. AI בשליטתך.</span>
+                </p>
+                <a href="#about" class="inline-block bg-inca-gold text-inca-dark-brown font-rubik font-bold py-3 px-8 rounded-full text-lg sm:text-xl transition duration-300 ease-in-out hover:scale-105 hover:bg-inca-accent shadow-lg interactive-element">
+                    פענחו את הסודות
+                </a>
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-transparent via-inca-red to-transparent opacity-10 animate-[pulse_5s_infinite]"></div>
+        </section>
+
+        <!-- Scroll Indicator -->
+        <div id="scroll-indicator" class="text-inca-accent">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            <span class="text-sm font-rubik mt-1">גללו</span>
+        </div>
+
+        <!-- About AI Section -->
+        <section id="about" class="my-24 py-16 bg-inca-stone-dark bg-opacity-50 rounded-lg shadow-xl border-t border-inca-gold interactive-element">
+            <div class="container mx-auto text-center px-8 md:px-16">
+                <h2 class="font-rubik text-3xl sm:text-4xl lg:text-5xl font-bold mb-8 text-inca-gold">
+                    שמש חדשה זורחת: כוחה של הבינה המלאכותית
+                </h2>
+                <p class="text-lg sm:text-xl mb-8 leading-loose max-w-4xl mx-auto">
+                    בימים אלו, שמש חדשה זורחת - שמש הבינה המלאכותית. היא מבטיחה כוח ליצור, לנתח ולשלוט בעולם של נתונים, פותחת בפנינו עולמות של אפשרויות בלתי נתפסות. אנו מזמינים אתכם, חוקרי העתיד, לפענח את סודותיה ולגלות את הפוטנציאל הטמון בה - לא רק ככלי, אלא כשותף לדרך, שיעצים את יצירתיותכם ואת יכולתכם להשפיע.
+                </p>
+                <div class="grid md:grid-cols-3 gap-8 mt-12 text-inca-cream">
+                    <div class="p-6 bg-inca-earth rounded-lg shadow-md border-r border-inca-gold">
+                        <h3 class="font-rubik text-xl sm:text-2xl font-semibold mb-4 text-inca-accent">השער למתחילים</h3>
+                        <p>הכירו את יסודות ה-AI בצורה אינטואיטיבית ומעשית, ללא ידע קודם.</p>
+                    </div>
+                    <div class="p-6 bg-inca-earth rounded-lg shadow-md border-r border-inca-gold">
+                        <h3 class="font-rubik text-xl sm:text-2xl font-semibold mb-4 text-inca-accent">העוצמה למקצוענים</h3>
+                        <p>הטמיעו כלים חכמים בעבודתכם היומיומית והאיצו תהליכים.</p>
+                    </div>
+                    <div class="p-6 bg-inca-earth rounded-lg shadow-md border-r border-inca-gold">
+                        <h3 class="font-rubik text-xl sm:text-2xl font-semibold mb-4 text-inca-accent">החזון למנהיגים</h3>
+                        <p>הבינו את ההשפעה האסטרטגית של AI עבור ארגונכם ועתידו.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Section -->
+        <section id="expertise" class="my-24 py-16 bg-inca-earth bg-opacity-60 rounded-lg shadow-xl border-t border-inca-gold interactive-element">
+            <div class="container mx-auto text-center px-8 md:px-16">
+                <h2 class="font-rubik text-3xl sm:text-4xl lg:text-5xl font-bold mb-12 text-inca-gold">
+                    עמודי התווך של היצירה: תחומי שליטה ב-AI
+                </h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+                    <!-- Text & Content -->
+                    <div class="expertise-card p-8 bg-inca-stone-dark rounded-lg shadow-md border-b-2 border-inca-red transform hover:scale-105 transition duration-300 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-inca-red opacity-10 group-hover:opacity-20 transition-opacity duration-300"></div>
+                        <svg class="h-16 w-16 mx-auto mb-4 text-inca-accent transform group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        <h3 class="font-rubik text-2xl font-semibold mb-3 text-inca-gold">הכתבת מחשבות</h3>
+                        <p class="text-lg text-inca-cream">יצירת נרטיבים דיגיטליים, מאמרים, קמפיינים וכל תוכן טקסטואלי ברמת דיוק ומהירות חסרות תקדים.</p>
+                    </div>
+                    <!-- Smart Apps -->
+                    <div class="expertise-card p-8 bg-inca-stone-dark rounded-lg shadow-md border-b-2 border-inca-gold transform hover:scale-105 transition duration-300 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-inca-gold opacity-10 group-hover:opacity-20 transition-opacity duration-300"></div>
+                        <svg class="h-16 w-16 mx-auto mb-4 text-inca-accent transform group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-3 1h2m0 0l3-1h2m-5-4H9.75M12 3v4m6-4v4m-6 4H6m6 0h6m-7-4V6c0-1.1.9-2 2-2h4c1.1 0 2 .9 2 2v5m-4 13L9.75 17m4.5 0L14.25 17M12 12h.01"></path></svg>
+                        <h3 class="font-rubik text-2xl font-semibold mb-3 text-inca-gold">פיסול יקומים</h3>
+                        <p class="text-lg text-inca-cream">בניית כלים חכמים ואפליקציות אינטראקטיביות, המגיבות לצרכי המשתמש בזמן אמת.</p>
+                    </div>
+                    <!-- AI Websites -->
+                    <div class="expertise-card p-8 bg-inca-stone-dark rounded-lg shadow-md border-b-2 border-inca-blue transform hover:scale-105 transition duration-300 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-inca-blue opacity-10 group-hover:opacity-20 transition-opacity duration-300"></div>
+                        <svg class="h-16 w-16 mx-auto mb-4 text-inca-accent transform group-hover:-translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
+                        <h3 class="font-rubik text-2xl font-semibold mb-3 text-inca-gold">ארכיטקטורה דיגיטלית</h3>
+                        <p class="text-lg text-inca-cream">פיתוח אתרים חכמים, המשתמשים ב-AI לשיפור חווית משתמש, אופטימיזציה ותפעול.</p>
+                    </div>
+                    <!-- Data Analysis -->
+                    <div class="expertise-card p-8 bg-inca-stone-dark rounded-lg shadow-md border-b-2 border-inca-green transform hover:scale-105 transition duration-300 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-inca-green opacity-10 group-hover:opacity-20 transition-opacity duration-300"></div>
+                        <svg class="h-16 w-16 mx-auto mb-4 text-inca-accent transform group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        <h3 class="font-rubik text-2xl font-semibold mb-3 text-inca-gold">פענוח נבואות</h3>
+                        <p class="text-lg text-inca-cream">גילוי תובנות עמוקות ודפוסים נסתרים מתוך כמויות אדירות של נתונים, לחיזוי וקבלת החלטות.</p>
+                    </div>
+                    <!-- Image & Art Generation -->
+                    <div class="expertise-card p-8 bg-inca-stone-dark rounded-lg shadow-md border-b-2 border-inca-red transform hover:scale-105 transition duration-300 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-inca-red opacity-10 group-hover:opacity-20 transition-opacity duration-300"></div>
+                        <svg class="h-16 w-16 mx-auto mb-4 text-inca-accent transform group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <h3 class="font-rubik text-2xl font-semibold mb-3 text-inca-gold">צביעת חלומות</h3>
+                        <p class="text-lg text-inca-cream">הפיכת רעיונות ויזואליים למציאות דיגיטלית - יצירת תמונות, איורים ואמנות בלחיצת כפתור.</p>
+                    </div>
+                    <!-- Process Automation -->
+                    <div class="expertise-card p-8 bg-inca-stone-dark rounded-lg shadow-md border-b-2 border-inca-blue transform hover:scale-105 transition duration-300 relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-inca-blue opacity-10 group-hover:opacity-20 transition-opacity duration-300"></div>
+                        <svg class="h-16 w-16 mx-auto mb-4 text-inca-accent transform group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                        <h3 class="font-rubik text-2xl font-semibold mb-3 text-inca-gold">ריקוד המכונות</h3>
+                        <p class="text-lg text-inca-cream">אוטומציה חכמה של תהליכים עסקיים ותפעוליים, לחיסכון בזמן וייעול משאבים.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="my-24 py-16 bg-inca-stone-dark bg-opacity-50 rounded-lg shadow-xl border-t border-inca-gold interactive-element">
+            <div class="container mx-auto text-center px-8 md:px-16">
+                <h2 class="font-rubik text-3xl sm:text-4xl lg:text-5xl font-bold mb-12 text-inca-gold">
+                    נתיבי הלמידה: הדרכים לשליטה
+                </h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="service-card p-6 bg-inca-earth rounded-lg shadow-md border-l-2 border-inca-gold transform hover:translate-y-[-5px] transition duration-300">
+                        <h3 class="font-rubik text-xl sm:text-2xl font-semibold mb-3 text-inca-accent">מעגלי ידע</h3>
+                        <p class="text-lg text-inca-cream">סדנאות קבוצתיות מעשיות וממוקדות, לבניית יסודות חזקים ופיתוח מיומנויות מתקדמות.</p>
+                    </div>
+                    <div class="service-card p-6 bg-inca-earth rounded-lg shadow-md border-l-2 border-inca-red transform hover:translate-y-[-5px] transition duration-300">
+                        <h3 class="font-rubik text-xl sm:text-2xl font-semibold mb-3 text-inca-accent">ליווי אישי</h3>
+                        <p class="text-lg text-inca-cream">שיעורים פרטיים והתאמה אישית מלאה לרמה, לצרכים ולמטרות הספציפיות שלכם.</p>
+                    </div>
+                    <div class="service-card p-6 bg-inca-earth rounded-lg shadow-md border-l-2 border-inca-blue transform hover:translate-y-[-5px] transition duration-300">
+                        <h3 class="font-rubik text-xl sm:text-2xl font-semibold mb-3 text-inca-accent">השראה ארגונית</h3>
+                        <p class="text-lg text-inca-cream">הרצאות מרתקות לארגונים, המפגישות צוותים עם העתיד שנוצר בידי AI.</p>
+                    </div>
+                    <div class="service-card p-6 bg-inca-earth rounded-lg shadow-md border-l-2 border-inca-green transform hover:translate-y-[-5px] transition duration-300">
+                        <h3 class="font-rubik text-xl sm:text-2xl font-semibold mb-3 text-inca-accent">בניית עתיד</h3>
+                        <p class="text-lg text-inca-cream">ייעוץ ופיתוח פרויקטים מבוססי AI - ליווי מקצועי משלב הרעיון ועד יישום מלא.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide Section -->
+        <section id="guide" class="my-24 py-16 bg-inca-earth bg-opacity-70 rounded-lg shadow-xl border-t border-inca-gold interactive-element">
+            <div class="container mx-auto text-center px-8 md:px-16 flex flex-col md:flex-row items-center justify-center">
+                <div class="md:w-1/3 mb-8 md:mb-0 md:ml-12 relative group">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונה של זאביק אבינר" class="rounded-full w-48 h-48 md:w-64 md:h-64 object-cover mx-auto border-4 border-inca-gold shadow-lg transform group-hover:scale-105 transition-transform duration-300" loading="lazy">
+                    <div class="absolute inset-0 rounded-full border-4 border-inca-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-slow-pulse"></div>
+                </div>
+                <div class="md:w-2/3 text-center md:text-right">
+                    <h2 class="font-rubik text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 text-inca-gold">
+                        המנחה: השאמאן של העידן החדש
+                    </h2>
+                    <p class="text-lg sm:text-xl leading-loose max-w-2xl mx-auto md:mx-0">
+                        זאביק אבינר - לא רק מומחה, אלא גשר בין העולמות. עם ניסיון עשיר בהפיכת תאוריה למציאות, זאביק הוא המדריך שלכם בעולם המורכב והמרתק של הבינה המלאכותית. הוא יחשוף בפניכם את הקודים, ילמד אתכם את השפה ויעצים אתכם ליצור פלאים משלכם. מסע הלמידה איתו יפתח בפניכם שער ליכולות חדשות, ויבסס את מקומכם כמובילים בעידן ה-AI.
+                    </p>
+                    <div class="mt-8 text-lg sm:text-xl font-rubik text-inca-accent">
+                        <p class="mb-2">ווטסאפ: <a href="https://wa.me/972546609385" class="hover:underline">054-6609385</a></p>
+                        <p>אימייל: <a href="mailto:zaviner@gmail.com" class="hover:underline">zaviner@gmail.com</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer / Call to Action -->
+        <footer class="mt-24 py-12 text-center bg-inca-dark-brown bg-opacity-70 rounded-lg shadow-inner border-t border-inca-gold interactive-element">
+            <h2 class="font-rubik text-3xl sm:text-4xl lg:text-5xl font-bold mb-8 text-inca-gold">
+                צרו קשר - והתחילו את מסעכם לשליטה
+            </h2>
+            <p class="text-lg sm:text-xl mb-10 max-w-3xl mx-auto">
+                העתיד הוא עכשיו. אל תחכו שהטכנולוגיה תעקוף אתכם - בואו לשלוט בה. זאביק אבינר ממתין לכם לפענח את סודות ה-AI.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
+                <a href="https://wa.me/972546609385" class="inline-block bg-inca-green text-inca-cream font-rubik font-bold py-3 px-8 rounded-full text-lg sm:text-xl transition duration-300 ease-in-out hover:scale-105 hover:bg-opacity-90 shadow-lg interactive-element">
+                    שלחו הודעה בוואטסאפ
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="inline-block bg-inca-blue text-inca-cream font-rubik font-bold py-3 px-8 rounded-full text-lg sm:text-xl transition duration-300 ease-in-out hover:scale-105 hover:bg-opacity-90 shadow-lg interactive-element">
+                    שלחו אימייל
+                </a>
+            </div>
+        </footer>
+
+    </div> <!-- End Main Content Wrapper -->
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
+        const speed = 0.2; // Adjust for cursor smoothness
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            // Check if hovered over interactive elements and adjust cursor size
+            const target = e.target.closest('.interactive-element, .expertise-card, .service-card');
+            if (target) {
+                cursor.style.width = '40px';
+                cursor.style.height = '40px';
+                cursor.style.border = '3px solid var(--inca-accent, #FFD700)'; // Brighter border for hover
+                cursor.style.boxShadow = '0 0 0 3px rgba(0,0,0,0.8), 0 0 15px rgba(255,215,0,0.5)'; // Add glow
+            } else {
+                cursor.style.width = '28px';
+                cursor.style.height = '28px';
+                cursor.style.border = '2px solid var(--inca-cream, #F5F5DC)';
+                cursor.style.boxShadow = '0 0 0 2px rgba(0,0,0,0.7)';
+            }
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * speed;
+            cursorY += (mouseY - cursorY) * speed;
+            cursor.style.left = `${cursorX}px`;
+            cursor.style.top = `${cursorY}px`;
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Parallax Scrolling Effect
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            parallaxLayers.forEach(layer => {
+                const speed = parseFloat(layer.dataset.speed);
+                const transformY = -scrollY * speed;
+                layer.style.transform = `translateY(${transformY}px)`;
+            });
+        });
+
+        // Generative Particles on Scroll (visible in content area)
+        const generateParticle = (x, y) => {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const size = Math.random() * 8 + 4; // Particle size between 4px and 12px
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${x + (Math.random() - 0.5) * 50}px`; // Randomize start position
+            particle.style.top = `${y + (Math.random() - 0.5) * 50}px`;
+            particle.style.opacity = '0';
+            particle.style.animationDelay = `${Math.random() * 0.5}s`; // Stagger animation
+            document.body.appendChild(particle); // Append to body to ensure z-index works
+            
+            // Remove particle after animation
+            particle.addEventListener('animationend', () => {
+                particle.remove();
+            });
+        };
+
+        let lastScrollY = 0;
+        let particleSpawnTimeout = null;
+        let particleSpawnRate = 100; // milliseconds between particles during active scroll
+
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            const scrollDelta = Math.abs(currentScrollY - lastScrollY);
+
+            // Hide scroll indicator after first scroll
+            const scrollIndicator = document.getElementById('scroll-indicator');
+            if (currentScrollY > 50) {
+                scrollIndicator.style.display = 'none';
+            } else {
+                scrollIndicator.style.display = 'flex';
+            }
+
+            // More particles when scrolling faster
+            if (scrollDelta > 5) { // Threshold for "active" scrolling
+                if (!particleSpawnTimeout) {
+                    particleSpawnTimeout = setInterval(() => {
+                        const x = Math.random() * window.innerWidth;
+                        const y = Math.random() * window.innerHeight;
+                        generateParticle(x, y);
+                    }, particleSpawnRate);
+                }
+            } else {
+                clearInterval(particleSpawnTimeout);
+                particleSpawnTimeout = null;
+            }
+            lastScrollY = currentScrollY;
+        });
+
+        // Initial particles when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            for (let i = 0; i < 15; i++) {
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                generateParticle(x, y);
+            }
+        });
+    </script>
+</body>
+</html>

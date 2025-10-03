@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - מפענח הקוד: AI, העתיד עכשיו</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Hebrew:wght@300;400;700&family=Orbitron:wght@400;700&family=Oxanium:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles for Glitch Art aesthetic */
+        body {
+            font-family: 'IBM Plex Sans Hebrew', sans-serif;
+            background-color: #0d0d0d; /* Dark background */
+            color: #e0e0e0; /* Light text */
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll from glitch effects */
+        }
+        h1, h2, h3 {
+            font-family: 'Orbitron', sans-serif; /* Futuristic font for headings */
+            color: #00ffff; /* Neon cyan for main titles */
+            text-shadow: 2px 2px 0px rgba(255,0,255,0.7), -2px -2px 0px rgba(0,255,255,0.7); /* Chromatic aberration effect */
+            transition: text-shadow 0.1s ease-out, transform 0.1s ease-out; /* Smooth transition for glitch */
+        }
+        h2 {
+            font-family: 'Oxanium', sans-serif; /* Sub-headings */
+            color: #9333ea; /* Purple for subheadings */
+            text-shadow: 1px 1px 0px rgba(255,255,0,0.5), -1px -1px 0px rgba(0,255,255,0.5);
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background-color: transparent;
+            border: 2px solid #00FFFF; /* Light color for border (Neon Cyan) */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 10px rgba(0,255,255,0.5); /* Dark shadow + glowing effect */
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: width 0.1s ease-out, height 0.1s ease-out, border-radius 0.1s ease-out, box-shadow 0.1s ease-out;
+            will-change: transform;
+        }
+        .custom-cursor.glitch {
+            border-radius: 0;
+            width: 25px;
+            height: 25px;
+            animation: cursor-glitch 0.2s infinite alternate;
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 15px rgba(255,0,255,0.7); /* Glitch color on hover */
+        }
+
+        @keyframes cursor-glitch {
+            0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); opacity: 1; }
+            50% { transform: translate(-55%, -45%) rotate(5deg) scale(1.1); opacity: 0.8; }
+            100% { transform: translate(-45%, -55%) rotate(-5deg) scale(0.9); opacity: 1; }
+        }
+
+        /* Glitchy Text Effect (on hover for some elements) */
+        .glitch-text:hover {
+            animation: text-glitch-hover 0.3s steps(2, start) infinite alternate;
+        }
+
+        @keyframes text-glitch-hover {
+            0% {
+                text-shadow: 2px 2px 0px rgba(255,0,255,0.7), -2px -2px 0px rgba(0,255,255,0.7);
+                transform: translateX(0px);
+            }
+            33% {
+                text-shadow: 4px -2px 0px rgba(255,0,255,0.7), -4px 2px 0px rgba(0,255,255,0.7);
+                transform: translateX(-2px);
+            }
+            66% {
+                text-shadow: -2px 4px 0px rgba(255,0,255,0.7), 2px -4px 0px rgba(0,255,255,0.7);
+                transform: translateX(2px);
+            }
+            100% {
+                text-shadow: 2px 2px 0px rgba(255,0,255,0.7), -2px -2px 0px rgba(0,255,255,0.7);
+                transform: translateX(0px);
+            }
+        }
+
+        /* Glitchy Background Layer (using pseudo-elements) */
+        .glitch-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+            background-image:
+                linear-gradient(rgba(0,0,0,0.8) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,0,0,0.8) 1px, transparent 1px);
+            background-size: 3px 3px;
+            animation: bg-flicker 10s linear infinite alternate, bg-shift 20s linear infinite;
+        }
+        .glitch-bg::before,
+        .glitch-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.15;
+            animation: scanline-glitch 3s linear infinite alternate;
+        }
+        .glitch-bg::before {
+            background-image: repeating-linear-gradient(
+                to bottom,
+                transparent 0%,
+                transparent 2px,
+                rgba(0, 255, 255, 0.05) 3px,
+                rgba(255, 0, 255, 0.05) 4px
+            );
+        }
+        .glitch-bg::after {
+            background-image: repeating-linear-gradient(
+                to right,
+                transparent 0%,
+                transparent 2px,
+                rgba(255, 255, 0, 0.05) 3px,
+                rgba(0, 255, 255, 0.05) 4px
+            );
+            animation: scanline-glitch 4s linear infinite reverse;
+        }
+
+        @keyframes bg-flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.9; }
+        }
+        @keyframes bg-shift {
+            0%, 100% { background-position: 0 0; }
+            25% { background-position: 10px 10px; }
+            50% { background-position: 0 20px; }
+            75% { background-position: 20px 0; }
+        }
+        @keyframes scanline-glitch {
+            0% { transform: translateY(0%); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* Scroll Progress Indicator */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            right: 0; /* RTL: right side */
+            width: 0%;
+            height: 5px;
+            background: linear-gradient(to left, #ff00ff, #00ffff); /* Fading colors */
+            z-index: 9998;
+        }
+
+        /* Glitch section dividers */
+        .glitch-divider {
+            position: relative;
+            height: 2px;
+            background: linear-gradient(to right, #00ffff, #ff00ff);
+            overflow: hidden;
+            margin-y: 2rem;
+            filter: drop-shadow(0 0 5px #00ffff) drop-shadow(0 0 5px #ff00ff);
+        }
+        .glitch-divider::before, .glitch-divider::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background: #0d0d0d;
+            animation: divider-glitch 2s linear infinite alternate;
+        }
+        .glitch-divider::before {
+            right: 0; /* RTL: right side */
+            transform: skewX(20deg);
+        }
+        .glitch-divider::after {
+            left: 0; /* RTL: left side */
+            transform: skewX(-20deg);
+        }
+
+        @keyframes divider-glitch {
+            0%, 100% { transform: translateX(0) skewX(20deg); }
+            50% { transform: translateX(100%) skewX(-20deg); }
+        }
+
+        /* Specific link styles to make them stand out in glitch art */
+        a {
+            color: #00FFFF; /* Neon cyan */
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+        a:hover {
+            color: #FF00FF; /* Neon magenta on hover */
+            text-shadow: 0 0 5px #FF00FF, 0 0 10px #FF00FF; /* Glowing effect */
+        }
+        a::after {
+            content: '';
+            position: absolute;
+            right: 0; /* RTL: underline from right */
+            bottom: -2px;
+            width: 0;
+            height: 1px;
+            background: #FF00FF;
+            transition: width 0.3s ease;
+        }
+        a:hover::after {
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-[#0d0d0d] text-gray-200">
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+
+    <!-- Glitchy Background -->
+    <div class="glitch-bg"></div>
+
+    <!-- Scroll Progress Indicator -->
+    <div id="scroll-progress"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 min-h-screen container mx-auto p-4 md:p-8 pt-20">
+
+        <!-- Hero Section -->
+        <section id="hero" class="min-h-screen flex items-center justify-center text-center py-20 relative overflow-hidden">
+            <div class="max-w-4xl px-4 relative z-20">
+                <h1 class="text-6xl md:text-8xl font-bold mb-4 leading-tight glitch-text-interactive js-glitch-text">
+                    <span class="block">מפענח הקוד:</span>
+                    <span class="block text-[#ff00ff] mt-4">AI, העתיד עכשיו.</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed glitch-on-scroll">
+                    במבוך הבינארי, היכן שנתונים פוגשים דמיון – אנו מגלים את השפה החדשה.
+                    זוהי לא רק טכנולוגיה, זוהי אמנות, מדע, והיכולת לברוא מחר.
+                    <span class="block mt-4 text-[#00ffff]">הכוח בידיים שלכם.</span>
+                </p>
+                <a href="#services" class="inline-block bg-[#00ffff] text-[#0d0d0d] px-8 py-4 text-xl font-bold rounded-full hover:bg-[#ff00ff] transition-all duration-300 glitch-text-interactive">
+                    הצטרפו למסע
+                </a>
+            </div>
+            <!-- Dynamic Glitch Elements (pure CSS for now) -->
+            <div class="absolute top-[10%] left-[10%] w-24 h-24 border-2 border-[#ff00ff] opacity-20 animate-pulse duration-[5s] -z-10 transform rotate-[-10deg]"></div>
+            <div class="absolute bottom-[20%] right-[15%] w-36 h-36 border-2 border-[#00ffff] opacity-20 animate-spin duration-[7s] -z-10 transform rotate-[15deg]"></div>
+        </section>
+
+        <div class="glitch-divider my-16"></div>
+
+        <!-- About Zevik / Vision Section -->
+        <section id="about" class="py-20 flex flex-col lg:flex-row items-center gap-12 text-center lg:text-right px-4">
+            <div class="lg:w-1/3 flex justify-center lg:justify-start relative">
+                <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="w-64 h-64 md:w-80 md:h-80 object-cover rounded-lg border-4 border-[#00ffff] shadow-lg shadow-[#00ffff]/30 transform rotate-[-3deg] transition-transform duration-300 z-10" loading="lazy">
+                <div class="absolute inset-0 border-4 border-[#ff00ff] opacity-30 transform rotate-[3deg] -z-10 animate-pulse duration-[3s]"></div>
+            </div>
+            <div class="lg:w-2/3">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6 js-glitch-text">זאביק אבינר: המדריך במבוך הנתונים</h2>
+                <p class="text-lg md:text-xl text-gray-300 leading-relaxed mb-6 glitch-on-scroll">
+                    במעמקי הקוד וברוח החדשנות, זאביק אבינר מזמין אתכם למסע אל ליבת הבינה המלאכותית.
+                    מומחיותו אינה רק בטכנולוגיה, אלא ביכולת להפוך אותה לנגישה, מובנת ושימושית לכולם.
+                    מפיקסל ראשון ועד ארכיטקטורה מורכבת – שליטה היא נגישות.
+                    בינה מלאכותית אינה נחלתם הבלעדית של מומחי קוד, אלא כלי עוצמתי שמחכה להיחשף על-ידי כל מי שמעז לחשוב אחרת.
+                    העתיד אינו ממתין – הוא נברא כאן ועכשיו, על ידכם.
+                </p>
+                <div class="flex flex-wrap gap-4 justify-center lg:justify-end text-lg md:text-xl font-bold text-[#00ffff]">
+                    <a href="https://wa.me/972546609385" target="_blank" rel="noopener noreferrer" class="glitch-text-interactive flex items-center gap-2">
+                        <span class="text-xl">📞</span> 054-6609385
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" target="_blank" rel="noopener noreferrer" class="glitch-text-interactive flex items-center gap-2">
+                        <span class="text-xl">✉️</span> zaviner@gmail.com
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <div class="glitch-divider my-16"></div>
+
+        <!-- Services Section -->
+        <section id="services" class="py-20 px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 js-glitch-text">מסלולי פענוח: השירותים שלנו</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="p-8 border-2 border-[#ff00ff] shadow-xl shadow-[#ff00ff]/20 bg-[#1a0a1a] transform hover:scale-105 transition-transform duration-300 relative overflow-hidden group">
+                    <h3 class="text-2xl font-bold mb-4 text-[#00ffff] glitch-text-interactive js-glitch-text">סדנאות פורצות גבולות</h3>
+                    <p class="text-gray-300 leading-relaxed glitch-on-scroll">
+                        צלילה מעשית וממוקדת אל קצה היכולת הטכנולוגית.
+                        למידה חווייתית שתצייד אתכם בכלים ליישום מיידי –
+                        מהקונספט ועד הביצוע.
+                        פתחו ערוצים חדשים של יצירה ועשייה.
+                    </p>
+                    <div class="absolute inset-0 bg-[#00ffff] opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
+                </div>
+                <div class="p-8 border-2 border-[#00ffff] shadow-xl shadow-[#00ffff]/20 bg-[#0a1a1a] transform hover:scale-105 transition-transform duration-300 relative overflow-hidden group">
+                    <h3 class="text-2xl font-bold mb-4 text-[#ff00ff] glitch-text-interactive js-glitch-text">שיעורים פרטיים: אלגוריתם אישי</h3>
+                    <p class="text-gray-300 leading-relaxed glitch-on-scroll">
+                        הדרכה מותאמת אישית, המתוכננת כאלגוריתם ייחודי עבורכם.
+                        בין אם אתם מתחילים או שואפים להתמחות –
+                        נפצח יחד את הקוד להצלחה אישית.
+                        התקדמו בקצב שלכם, בנתיב המדויק לכם.
+                    </p>
+                    <div class="absolute inset-0 bg-[#ff00ff] opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
+                </div>
+                <div class="p-8 border-2 border-[#ff00ff] shadow-xl shadow-[#ff00ff]/20 bg-[#1a0a1a] transform hover:scale-105 transition-transform duration-300 relative overflow-hidden group">
+                    <h3 class="text-2xl font-bold mb-4 text-[#00ffff] glitch-text-interactive js-glitch-text">הרצאות לארגונים: פריצת תודעה</h3>
+                    <p class="text-gray-300 leading-relaxed glitch-on-scroll">
+                        פתח ערוצים חדשים של חשיבה ויישום לצוותים בארגונים.
+                        הרצאות מעוררות השראה המציגות את עולם ה-AI –
+                        מאתגרות, מלמדות ומעודדות חדשנות ארגונית.
+                        העצימו את היכולות הדיגיטליות שלכם.
+                    </p>
+                    <div class="absolute inset-0 bg-[#00ffff] opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
+                </div>
+                <div class="p-8 border-2 border-[#00ffff] shadow-xl shadow-[#00ffff]/20 bg-[#0a1a1a] transform hover:scale-105 transition-transform duration-300 relative overflow-hidden group">
+                    <h3 class="text-2xl font-bold mb-4 text-[#ff00ff] glitch-text-interactive js-glitch-text">ייעוץ ופיתוח פרויקטים</h3>
+                    <p class="text-gray-300 leading-relaxed glitch-on-scroll">
+                        הופכים רעיונות לקוד חי, פרויקטים למציאות.
+                        ליווי מקצועי, ייעוץ אסטרטגי ופיתוח ממוקד –
+                        מהגדרת הצורך ועד השקת המערכת.
+                        היכנסו למרחב של חדשנות מעשית.
+                    </p>
+                    <div class="absolute inset-0 bg-[#ff00ff] opacity-0 group-hover:opacity-5 transition-opacity duration-300"></div>
+                </div>
+            </div>
+        </section>
+
+        <div class="glitch-divider my-16"></div>
+
+        <!-- Expertise Section -->
+        <section id="expertise" class="py-20 px-4">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 js-glitch-text">תחומי התמחות: מעבר לגבולות</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-[#121212] p-6 border-l-4 border-[#00ffff] shadow-md hover:border-[#ff00ff] transition-colors duration-300">
+                    <h3 class="text-xl font-bold mb-2 text-[#00ffff] js-glitch-text">יצירת טקסטים ותוכן</h3>
+                    <p class="text-gray-400 glitch-on-scroll">הפיכת רעיונות למילים חכמות – AI כשותף לכתיבה.</p>
+                </div>
+                <div class="bg-[#121212] p-6 border-l-4 border-[#ff00ff] shadow-md hover:border-[#00ffff] transition-colors duration-300">
+                    <h3 class="text-xl font-bold mb-2 text-[#ff00ff] js-glitch-text">בניית אפליקציות חכמות</h3>
+                    <p class="text-gray-400 glitch-on-scroll">אפליקציות שמבינות, לומדות ומגיבות – חכמות באמת.</p>
+                </div>
+                <div class="bg-[#121212] p-6 border-l-4 border-[#00ffff] shadow-md hover:border-[#ff00ff] transition-colors duration-300">
+                    <h3 class="text-xl font-bold mb-2 text-[#00ffff] js-glitch-text">פיתוח אתרים מבוססי AI</h3>
+                    <p class="text-gray-400 glitch-on-scroll">אתרים שמתאימים את עצמם, מנתחים ומספקים חוויה אישית.</p>
+                </div>
+                <div class="bg-[#121212] p-6 border-l-4 border-[#ff00ff] shadow-md hover:border-[#00ffff] transition-colors duration-300">
+                    <h3 class="text-xl font-bold mb-2 text-[#ff00ff] js-glitch-text">ניתוח נתונים ומחקר</h3>
+                    <p class="text-gray-400 glitch-on-scroll">פיצוח תובנות ממידע – הפוך נתונים לכוח מניע.</p>
+                </div>
+                <div class="bg-[#121212] p-6 border-l-4 border-[#00ffff] shadow-md hover:border-[#ff00ff] transition-colors duration-300">
+                    <h3 class="text-xl font-bold mb-2 text-[#00ffff] js-glitch-text">יצירת תמונות ואומנות</h3>
+                    <p class="text-gray-400 glitch-on-scroll">הבינה המלאכותית ככלי לברוא עולמות ויזואליים חדשים.</p>
+                </div>
+                <div class="bg-[#121212] p-6 border-l-4 border-[#ff00ff] shadow-md hover:border-[#00ffff] transition-colors duration-300">
+                    <h3 class="text-xl font-bold mb-2 text-[#ff00ff] js-glitch-text">אוטומציה של תהליכים</h3>
+                    <p class="text-gray-400 glitch-on-scroll">שחרור זמן ואנרגיה באמצעות אינטגרציה חכמה של AI.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="glitch-divider my-16"></div>
+
+        <!-- Call to Action / Contact -->
+        <section id="contact" class="py-20 text-center px-4">
+            <h2 class="text-4xl md:text-5xl font-bold mb-8 js-glitch-text">צרו קשר: הבה נתחיל לפענח את המחר</h2>
+            <p class="text-xl md:text-2xl text-gray-300 mb-10 leading-relaxed max-w-2xl mx-auto glitch-on-scroll">
+                האם אתם מוכנים לשלוט בכוחה של הבינה המלאכותית?
+                בין אם זו שאלה, פרויקט חדש, או רצון לפתוח צוהר לעתיד –
+                אני כאן כדי להדריך אתכם.
+            </p>
+            <div class="flex flex-wrap gap-6 justify-center text-2xl md:text-3xl font-bold">
+                <a href="https://wa.me/972546609385" target="_blank" rel="noopener noreferrer" class="bg-[#ff00ff] text-[#0d0d0d] px-8 py-4 rounded-full hover:bg-[#00ffff] transition-all duration-300 glitch-text-interactive flex items-center gap-2">
+                    <span class="text-4xl">💬</span> ווטסאפ
+                </a>
+                <a href="mailto:zaviner@gmail.com" target="_blank" rel="noopener noreferrer" class="bg-[#00ffff] text-[#0d0d0d] px-8 py-4 rounded-full hover:bg-[#ff00ff] transition-all duration-300 glitch-text-interactive flex items-center gap-2">
+                    <span class="text-4xl">📧</span> אימייל
+                </a>
+            </div>
+            <p class="text-lg md:text-xl text-gray-500 mt-8 glitch-on-scroll">
+                לפעמים, השלב הראשון בבניית העתיד הוא פשוט ללחוץ.
+            </p>
+        </section>
+
+    </div>
+
+    <!-- JavaScript for interactivity -->
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.querySelector('.custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        // Add glitch effect on interactive elements
+        document.querySelectorAll('a, button, .glitch-text-interactive').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('glitch'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('glitch'));
+        });
+
+        // Scroll Progress Indicator Logic
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (scrollTop / scrollHeight) * 100;
+            document.getElementById('scroll-progress').style.width = `${scrolled}%`;
+        });
+
+        // Dynamic Glitch Effects for text elements on scroll
+        const glitchableElements = document.querySelectorAll('.js-glitch-text, .glitch-on-scroll');
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const glitchObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                const el = entry.target;
+
+                if (entry.isIntersecting) {
+                    // Only start glitching if not already glitching
+                    if (!el._glitchInterval) {
+                        const originalText = el.dataset.originalText || el.textContent;
+                        const originalTextShadow = el.dataset.originalTextShadow || '';
+                        const originalTransform = el.dataset.originalTransform || '';
+                        
+                        const glitchEffect = () => {
+                            let glitchedText = '';
+                            for (let i = 0; i < originalText.length; i++) {
+                                // 8% chance to glitch a character, to keep it subtle but noticeable
+                                if (Math.random() < 0.08) {
+                                    glitchedText += String.fromCharCode(Math.floor(Math.random() * 94) + 33); // Random printable ASCII
+                                } else {
+                                    glitchedText += originalText[i];
+                                }
+                            }
+                            el.textContent = glitchedText;
+                            // Apply random chromatic aberration like text-shadow
+                            el.style.textShadow = `${Math.random() * 4 - 2}px ${Math.random() * 4 - 2}px 0 rgba(255,0,255,0.7), ${Math.random() * 4 - 2}px ${Math.random() * 4 - 2}px 0 rgba(0,255,255,0.7)`;
+                            // Apply subtle random text shift
+                            el.style.transform = `translateX(${Math.random() * 4 - 2}px) translateY(${Math.random() * 4 - 2}px)`;
+                        };
+
+                        const clearGlitch = () => {
+                            el.textContent = originalText;
+                            el.style.textShadow = originalTextShadow;
+                            el.style.transform = originalTransform;
+                        };
+
+                        // Glitch every 1-3 seconds, for a short duration
+                        const interval = setInterval(() => {
+                            glitchEffect();
+                            setTimeout(clearGlitch, 150); // Glitch for 150ms
+                        }, Math.random() * 2000 + 1000); // Random interval between 1s and 3s
+
+                        el._glitchInterval = interval; // Store interval ID
+                    }
+
+                } else {
+                    // Stop glitching when out of view
+                    if (el._glitchInterval) {
+                        clearInterval(el._glitchInterval);
+                        el.textContent = el.dataset.originalText; // Restore original text
+                        el.style.textShadow = el.dataset.originalTextShadow || ''; // Restore original shadow
+                        el.style.transform = el.dataset.originalTransform || ''; // Restore original transform
+                        delete el._glitchInterval; // Clean up
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Initialize observer for glitchable elements
+        glitchableElements.forEach(el => {
+            el.dataset.originalText = el.textContent; // Store original text
+            // Store computed styles for restoration, as inline styles might be empty
+            el.dataset.originalTextShadow = window.getComputedStyle(el).textShadow;
+            el.dataset.originalTransform = window.getComputedStyle(el).transform;
+            glitchObserver.observe(el);
+        });
+
+        // Image hover glitch effect for Zevik's image
+        document.addEventListener('DOMContentLoaded', () => {
+            const zevikImage = document.querySelector('img[alt="זאביק אבינר - מומחה בינה מלאכותית"]');
+            if (zevikImage) {
+                zevikImage.addEventListener('mouseenter', () => {
+                    zevikImage.style.filter = 'grayscale(100%) hue-rotate(90deg) contrast(150%) brightness(1.2)';
+                    zevikImage.style.transform = 'rotate(5deg) scale(1.05) translateX(3px)';
+                    zevikImage.classList.add('animate-pulse'); // Tailwind pulse animation
+                });
+                zevikImage.addEventListener('mouseleave', () => {
+                    zevikImage.style.filter = ''; // Reset filter
+                    zevikImage.style.transform = 'rotate(-3deg)'; // Revert to initial
+                    zevikImage.classList.remove('animate-pulse');
+                });
+            }
+        });
+
+    </script>
+</body>
+</html>

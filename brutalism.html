@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שליטה בבינה המלאכותית: העתיד עכשיו</title>
+    <!-- Google Fonts: Heebo - for strong, utilitarian brutalist typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Base styles for the brutalist digital canvas */
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: #1A1A1A; /* Deep, dark concrete base */
+            color: #D3D3D3; /* Light, almost white text for contrast */
+            cursor: none; /* Hide default browser cursor */
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Custom Cursor - High-Contrast and Interactive (MANDATORY IMPLEMENTATION) */
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none; /* Allows clicks to pass through */
+            z-index: 9999;
+            width: 28px; /* Slightly larger base size */
+            height: 28px;
+            border-radius: 50%;
+            transition: transform 0.2s ease-out, background-color 0.2s ease-out;
+            transform: translate(-50%, -50%); /* Center cursor accurately */
+            /* REQUIRED high-contrast visibility: light border + dark shadow */
+            border: 2px solid rgba(255, 255, 255, 0.9); /* Visible on dark backgrounds */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8), 0 0 12px rgba(0, 150, 255, 0.7); /* Dark shadow visible on light, plus AI glow */
+            animation: cursorPulse 2s infinite ease-in-out; /* Subtle pulse animation */
+        }
+
+        /* Cursor state on interaction (active/hover) */
+        .custom-cursor.active {
+            transform: translate(-50%, -50%) scale(0.85); /* Shrink on click/hover */
+            background-color: rgba(0, 150, 255, 0.2); /* Faint electric blue fill */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 150, 255, 1); /* Enhanced glow */
+        }
+
+        /* Keyframe animation for cursor pulse */
+        @keyframes cursorPulse {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.03); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* Brutalist Block Styling - Heavy, Structural Elements */
+        .brutalist-block {
+            background-color: #333333; /* Darker concrete for content blocks */
+            padding: 3rem;
+            margin-bottom: 3rem;
+            box-shadow: 12px 12px 0px rgba(0,0,0,0.6); /* Prominent, heavy shadow for depth */
+            position: relative;
+            overflow: hidden; /* Contains children, prevents overflow of pseudo-elements */
+            border: 1px solid #666666; /* Subtle edge definition */
+        }
+
+        /* Brutalist Typography Styles */
+        .brutalist-text {
+            line-height: 1.5;
+            letter-spacing: 0.03em; /* Slightly increased letter spacing for impact */
+            direction: rtl; /* Ensure text direction is right-to-left */
+            text-align: right; /* Default text alignment for brutalism + RTL */
+        }
+
+        .brutalist-title {
+            font-size: 3.5rem; /* Large and imposing */
+            line-height: 1.1;
+            font-weight: 900; /* Ultra-bold */
+            color: #D3D3D3;
+            margin-bottom: 2rem;
+            text-shadow: 6px 6px 0px rgba(0,0,0,0.7); /* Heavy text shadow */
+            word-break: keep-all; /* Prevent awkward word breaks */
+        }
+        @media (min-width: 768px) {
+            .brutalist-title { font-size: 5rem; }
+        }
+        @media (min-width: 1024px) {
+            .brutalist-title { font-size: 7rem; }
+        }
+
+        .brutalist-subtitle {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: #0096FF; /* Electric blue accent for AI theme */
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+        }
+        @media (min-width: 768px) {
+            .brutalist-subtitle { font-size: 3rem; }
+        }
+        @media (min-width: 1024px) {
+            .brutalist-subtitle { font-size: 4rem; }
+        }
+
+        .brutalist-paragraph {
+            font-size: 1.1rem;
+            font-weight: 300; /* Lighter weight for readability */
+            margin-bottom: 1rem;
+            color: #E0E0E0;
+        }
+        @media (min-width: 768px) {
+            .brutalist-paragraph { font-size: 1.25rem; }
+        }
+
+        /* Generative Background Element - Subtle Brutalist Grid */
+        .background-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1; /* Behind all content */
+            pointer-events: none;
+            opacity: 0.08; /* Very subtle */
+            background-image:
+                linear-gradient(to right, #444 1px, transparent 1px),
+                linear-gradient(to bottom, #444 1px, transparent 1px);
+            background-size: 60px 60px; /* Larger grid squares */
+            animation: grid-shift 120s linear infinite; /* Slow, continuous shift */
+        }
+
+        @keyframes grid-shift {
+            from { background-position: 0 0; }
+            to { background-position: 60px 60px; } /* Shifts one grid unit */
+        }
+
+        /* Scroll-Triggered Reveal Effect - Chunky and Deliberate */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(80px); /* Starts lower */
+            transition: opacity 0.9s ease-out, transform 0.9s ease-out; /* Slower transition */
+        }
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Zevik's Image Styling - Brutalist Framed */
+        .zevik-image {
+            width: 100%;
+            height: auto;
+            max-width: 280px; /* Slightly larger image */
+            border: 6px solid #0096FF; /* Electric blue border */
+            box-shadow: 18px 18px 0px rgba(0,0,0,0.7); /* Deep shadow */
+            filter: grayscale(100%) brightness(0.9); /* Desaturate and slightly darken for brutalism */
+            transition: filter 0.4s ease-in-out, transform 0.4s ease-in-out;
+        }
+        .zevik-image:hover {
+            filter: grayscale(0%) brightness(1); /* Full color on hover */
+            transform: scale(1.07) rotate(-2deg); /* Slight rotation on hover */
+        }
+
+        /* Link Styling - Understated but interactive */
+        a {
+            color: inherit; /* Inherit text color */
+            text-decoration: none;
+            position: relative;
+            display: inline-block;
+        }
+        a:hover {
+            color: #00BFFF; /* Lighter blue on hover */
+        }
+        a::after {
+            content: '';
+            position: absolute;
+            right: 0; /* RTL adjustment */
+            bottom: -3px; /* Deeper underline */
+            width: 0;
+            height: 3px; /* Thicker line */
+            background-color: #0096FF;
+            transition: width 0.35s ease-out;
+        }
+        a:hover::after {
+            width: 100%;
+            left: 0; /* Ensures full width from right */
+        }
+
+        /* Brutalist Button Styling - Bold and Interactive */
+        .brutalist-button {
+            display: block;
+            width: fit-content;
+            padding: 1.25rem 2.5rem; /* Generous padding */
+            background-color: #0096FF;
+            color: #1A1A1A; /* Dark text on bright button */
+            font-weight: 900;
+            font-size: 1.4rem;
+            text-align: center;
+            border: none;
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.7); /* Chunky shadow */
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, background-color 0.2s ease-out;
+            cursor: pointer;
+            margin-top: 2rem;
+            letter-spacing: 0.05em; /* Bold lettering */
+        }
+        .brutalist-button:hover {
+            transform: translate(-5px, -5px); /* Button "lifts" */
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.9); /* Deeper shadow on hover */
+            background-color: #00BFFF; /* Lighter blue */
+        }
+        .brutalist-button:active {
+            transform: translate(0, 0); /* Snaps back down */
+            box-shadow: 3px 3px 0px rgba(0,0,0,0.5); /* Shallower shadow */
+            background-color: #007ACC; /* Darker blue */
+        }
+
+        /* Selection styling for an enhanced visual experience */
+        ::selection {
+            background-color: #0096FF;
+            color: #1A1A1A;
+        }
+        ::-moz-selection {
+            background-color: #0096FF;
+            color: #1A1A1A;
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-500 selection:text-white">
+    <!-- Custom Cursor Element -->
+    <div class="custom-cursor"></div>
+
+    <!-- Generative Brutalist Background Grid -->
+    <div class="background-grid"></div>
+
+    <!-- Main Content Area - A Series of Brutalist Blocks -->
+    <main class="relative z-10 min-h-screen p-6 md:p-12 lg:p-20 flex flex-col items-center brutalist-text">
+
+        <!-- Imposing Title Block: The Core Thesis -->
+        <section class="brutalist-block w-full max-w-6xl text-center reveal-on-scroll">
+            <h1 class="brutalist-title">
+                <span class="text-blue-500 block">לשלוט בבינה המלאכותית:</span>
+                <span class="block mt-4 md:mt-6 lg:mt-8">העתיד הוא עכשיו.</span>
+            </h1>
+            <p class="brutalist-paragraph mt-8 text-xl md:text-2xl font-light text-gray-200">
+                אנו עומדים בנקודת המפנה של ההיסטוריה האנושית. בינה מלאכותית אינה כלי עזר נוסף;
+                היא הכוח האדריכלי שמגדיר מחדש את יסודות הקיום הדיגיטלי והפיזי כאחד.
+                השאלה אינה אם היא תשנה את עולמנו, אלא האם אנו נהיה המהנדסים של שינוי זה, או רק עדיו.
+            </p>
+            <p class="brutalist-paragraph text-lg md:text-xl font-extralight text-gray-300 mt-6">
+                הכוח לבנות, ליצור ולהשפיע נמצא בידי אלו שמבינים, לומדים ומשתלטים על קוד הפעולה.
+                הצטרף לתהליך הבנייה – לא רק באמצעות הבינה המלאכותית, אלא כארכיטקטיה המוחלטת שלה.
+            </p>
+        </section>
+
+        <!-- Zevik Aviner: The Master Architect Block -->
+        <section class="brutalist-block w-full max-w-6xl flex flex-col md:flex-row items-center md:items-start gap-10 reveal-on-scroll">
+            <div class="md:w-1/3 flex justify-center md:justify-end">
+                <img src="https://link.zevikaviner.com/zevik" alt="תמונתו של זאביק אבינר - מומחה בינה מלאכותית" class="zevik-image">
+            </div>
+            <div class="md:w-2/3 text-center md:text-right">
+                <h2 class="brutalist-subtitle">זאביק אבינר: המומחה המנחה</h2>
+                <p class="brutalist-paragraph text-lg md:text-xl text-gray-200">
+                    זאביק אבינר אינו רק מומחה בינה מלאכותית; הוא מתכנן, בונה ומתרגם את השפה המורכבת של ה-AI לעקרונות פעולה בהירים.
+                    עם עשרות שנות ניסיון בהובלת פרויקטים טכנולוגיים, פיתוח אפליקציות חכמות ומערכות מורכבות,
+                    זאביק רואה את משימתו בהנגשת הכוח העצום של ה-AI לכל אדם וארגון.
+                </p>
+                <p class="brutalist-paragraph text-md md:text-lg text-gray-300 mt-4">
+                    הוא המדריך שלך לפענוח המבנה, החומרים וכלי העבודה של העידן החדש.
+                    הוא ילמד אותך כיצד להטמיע את הטכנולוגיה בחייך ובעבודתך, צעד אחר צעד, ממתחילים ועד למתקדמים ביותר.
+                </p>
+                <p class="brutalist-paragraph text-md md:text-lg text-gray-400 mt-4 font-bold">
+                    ידע הוא יסוד. שליטה היא בנייה.
+                </p>
+            </div>
+        </section>
+
+        <!-- Pillars of AI Mastery: Core Competencies -->
+        <section class="brutalist-block w-full max-w-6xl text-center reveal-on-scroll">
+            <h2 class="brutalist-subtitle">עמודי התווך של השליטה ב-AI</h2>
+            <p class="brutalist-paragraph text-xl text-gray-200 mb-10">
+                אלו הם הממדים הקונקרטיים שבהם תוכל לבנות את מומחיותך, לבנה אחר לבנה,
+                תוך שימוש בבינה המלאכותית ככלי יסודי לבנייה, יצירה וטרנספורמציה:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-right">
+                <div class="bg-gray-700 p-8 shadow-lg brutalist-text border-l-4 border-b-4 border-blue-500 reveal-on-scroll">
+                    <h3 class="text-2xl font-bold text-blue-500 mb-3">ארכיטקטורת טקסט ותוכן</h3>
+                    <p class="text-gray-200 text-lg">יצירת נרטיבים, מאמרים, תסריטים וקמפיינים חכמים – בלחיצת כפתור, בהתאמה מושלמת לצרכים שלך.</p>
+                </div>
+                <div class="bg-gray-700 p-8 shadow-lg brutalist-text border-l-4 border-b-4 border-blue-500 reveal-on-scroll delay-100">
+                    <h3 class="text-2xl font-bold text-blue-500 mb-3">הנדסת אפליקציות חכמות</h3>
+                    <p class="text-gray-200 text-lg">תכנון ובניית מערכות שמבינות, מגיבות ולומדות – עבור העסק, הלקוחות והתהליכים הפנימיים שלך.</p>
+                </div>
+                <div class="bg-gray-700 p-8 shadow-lg brutalist-text border-l-4 border-b-4 border-blue-500 reveal-on-scroll delay-200">
+                    <h3 class="text-2xl font-bold text-blue-500 mb-3">פיתוח נוף דיגיטלי</h3>
+                    <p class="text-gray-200 text-lg">הקמה ותחזוקה של אתרים דינמיים ורספונסיביים, מועצמים על ידי יכולות AI מתקדמות.</p>
+                </div>
+                <div class="bg-gray-700 p-8 shadow-lg brutalist-text border-l-4 border-b-4 border-blue-500 reveal-on-scroll delay-300">
+                    <h3 class="text-2xl font-bold text-blue-500 mb-3">פיענוח נתונים (דאטה)</h3>
+                    <p class="text-gray-200 text-lg">ניתוח כמויות עצומות של מידע, חשיפת תובנות עמוקות וקבלת החלטות מבוססות ראיות בזמן אמת.</p>
+                </div>
+                <div class="bg-gray-700 p-8 shadow-lg brutalist-text border-l-4 border-b-4 border-blue-500 reveal-on-scroll delay-400">
+                    <h3 class="text-2xl font-bold text-blue-500 mb-3">יצירת אומנות דיגיטלית</h3>
+                    <p class="text-gray-200 text-lg">הפיכת רעיונות ויזואליים למציאות מרהיבה, בעזרת מודלי AI מתקדמים ליצירת תמונות, וידאו ואנימציות.</p>
+                </div>
+                <div class="bg-gray-700 p-8 shadow-lg brutalist-text border-l-4 border-b-4 border-blue-500 reveal-on-scroll delay-500">
+                    <h3 class="text-2xl font-bold text-blue-500 mb-3">אוטומציה טוטאלית</h3>
+                    <p class="text-gray-200 text-lg">ייעול והאצת תהליכים עסקיים, חיסכון בזמן ובמשאבים – בניית מערכות עצמאיות שיעבדו עבורך.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pathways to Mastery: Structured Learning Offerings -->
+        <section class="brutalist-block w-full max-w-6xl text-center reveal-on-scroll">
+            <h2 class="brutalist-subtitle">המסלולים שלך לשליטה</h2>
+            <p class="brutalist-paragraph text-xl text-gray-200 mb-10">
+                בין אם אתה אבן יסוד חדשה או עמוד תמך מנוסה בבניין הטכנולוגי,
+                לזאביק אבינר יש את המסלול המדויק עבורך להפוך לאדריכל AI מיומן:
+            </p>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 text-right">
+                <div class="bg-gray-700 p-10 shadow-xl brutalist-text border-t-4 border-r-4 border-blue-500 reveal-on-scroll">
+                    <h3 class="text-3xl font-bold text-blue-500 mb-4">סדנאות קבוצתיות: בנייה משותפת</h3>
+                    <p class="text-gray-200 text-xl">
+                        הצטרף לקבוצת עמיתים ותבנה ידע וכלים פרקטיים בסביבה דינמית ותומכת.
+                        למידה מעשית ממוקדת שתהפוך אותך למשתמש AI בטוח ומיומן.
+                    </p>
+                </div>
+                <div class="bg-gray-700 p-10 shadow-xl brutalist-text border-t-4 border-r-4 border-blue-500 reveal-on-scroll delay-100">
+                    <h3 class="text-3xl font-bold text-blue-500 mb-4">שיעורים פרטיים: תוכנית אישית</h3>
+                    <p class="text-gray-200 text-xl">
+                        התאמה מלאה לרמתך, לצרכיך ולשאיפותיך הייחודיות.
+                        ליווי אישי ובניית פרויקטים ספציפיים איתך, צעד אחר צעד, עד למימוש מלא.
+                    </p>
+                </div>
+                <div class="bg-gray-700 p-10 shadow-xl brutalist-text border-t-4 border-r-4 border-blue-500 reveal-on-scroll delay-200">
+                    <h3 class="text-3xl font-bold text-blue-500 mb-4">הרצאות לארגונים: פתיחת אופקים</h3>
+                    <p class="text-gray-200 text-xl">
+                        העצם את צוותיך בידע, במוטיבציה ובהבנה עמוקה של האפשרויות הטמונות ב-AI.
+                        סמינרים והרצאות מעוררות השראה לארגונים בכל סדר גודל.
+                    </p>
+                </div>
+                <div class="bg-gray-700 p-10 shadow-xl brutalist-text border-t-4 border-r-4 border-blue-500 reveal-on-scroll delay-300">
+                    <h3 class="text-3xl font-bold text-blue-500 mb-4">ייעוץ ופיתוח פרויקטים: ליווי מקצועי</h3>
+                    <p class="text-gray-200 text-xl">
+                        משלב הרעיון הראשוני ועד למימוש והטמעה מוצלחת.
+                        ליווי צמוד בפיתוח פרויקטים מבוססי AI, מבטיח הצלחה ויישום מיטבי בארגונך.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action / Contact Block: Direct and Uncompromising -->
+        <section class="brutalist-block w-full max-w-6xl text-center reveal-on-scroll">
+            <h2 class="brutalist-subtitle">בנה את עתידך עכשיו.</h2>
+            <p class="brutalist-paragraph text-xl text-gray-200 mb-10">
+                הדרך לשליטה מתחילה בצעד אחד. צור קשר ישיר עם זאביק אבינר,
+                ותכנן את המסלול האישי שלך בעולם הבינה המלאכותית.
+                הפוטנציאל העצום מחכה – הצעד הראשון הוא שלך.
+            </p>
+            <div class="flex flex-col md:flex-row justify-center gap-8 mt-8">
+                <a href="https://wa.me/972546609385" target="_blank" class="brutalist-button">
+                    ווטסאפ: 054-6609385
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="brutalist-button">
+                    אימייל: zaviner@gmail.com
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Custom Cursor Interaction Logic
+        const customCursor = document.querySelector('.custom-cursor');
+        
+        // Update cursor position on mouse movement
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = e.clientX + 'px';
+            customCursor.style.top = e.clientY + 'px';
+        });
+
+        // Add 'active' class on mouse down for click feedback
+        document.addEventListener('mousedown', () => {
+            customCursor.classList.add('active');
+        });
+        document.addEventListener('mouseup', () => {
+            customCursor.classList.remove('active');
+        });
+
+        // Add 'active' class when hovering over interactive elements
+        document.addEventListener('mouseover', (e) => {
+            const target = e.target;
+            // Check if target is a link, button, or within a brutalist-button
+            if (target.tagName === 'A' || target.tagName === 'BUTTON' || target.classList.contains('brutalist-button') || target.closest('.brutalist-button')) {
+                customCursor.classList.add('active');
+            }
+        });
+        document.addEventListener('mouseout', (e) => {
+            const target = e.target;
+            // Remove 'active' class when leaving interactive elements
+            if (target.tagName === 'A' || target.tagName === 'BUTTON' || target.classList.contains('brutalist-button') || target.closest('.brutalist-button')) {
+                customCursor.classList.remove('active');
+            }
+        });
+
+        // Scroll Reveal Animation Logic
+        const revealElements = document.querySelectorAll('.reveal-on-scroll');
+
+        // Intersection Observer options
+        const observerOptions = {
+            root: null, // Use the viewport as the container
+            rootMargin: '0px',
+            threshold: 0.15 // Element is visible when 15% of it is in the viewport
+        };
+
+        // Callback function for the Intersection Observer
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Optional: Stop observing element once it has been revealed
+                    // observer.unobserve(entry.target);
+                } else {
+                    // Optional: Remove 'is-visible' class when element scrolls out of view
+                    // entry.target.classList.remove('is-visible');
+                }
+            });
+        }, observerOptions);
+
+        // Attach the observer to each reveal element
+        revealElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // Apply delayed transitions for staggered reveals (Brutalist blocks)
+        const delayedRevealElements = document.querySelectorAll('.reveal-on-scroll[class*="delay-"]');
+        delayedRevealElements.forEach(el => {
+            const delayMatch = el.className.match(/delay-(\d+)/);
+            if (delayMatch && delayMatch[1]) {
+                const delay = parseInt(delayMatch[1]);
+                el.style.transitionDelay = `${delay / 1000}s`; // Convert ms to seconds
+            }
+        });
+    </script>
+</body>
+</html>

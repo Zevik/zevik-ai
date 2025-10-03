@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>זאביק אבינר - לשלוט בבינה המלאכותית: המסע הקסום</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Rubik:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* הגדרות צבעים ופונטים בסגנון ג'יבלי */
+        :root {
+            --ghibli-sky-light: #A0C9E8; /* תכלת שמיים בהיר */
+            --ghibli-sky-dark: #6CA2D8;  /* כחול שמיים עמוק יותר */
+            --ghibli-leaf-green: #8BBF8B; /* ירוק עלים עדין */
+            --ghibli-earth-brown: #C19A6B; /* חום אדמה רך */
+            --ghibli-accent-yellow: #FFD700; /* צהוב הדגשה בהיר - זהב */
+            --ghibli-text-dark: #333333; /* צבע טקסט כהה */
+            --ghibli-text-light: #F0F0F0; /* צבע טקסט בהיר */
+            --ghibli-bg-main: #E0EFFF; /* רקע כללי בהיר וחללי */
+            --ghibli-overlay-blue: rgba(160, 201, 232, 0.4); /* שכבת על כחולה שקופה */
+        }
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: var(--ghibli-bg-main);
+            color: var(--ghibli-text-dark);
+            overflow-x: hidden; /* מניעת גלילה אופקית מפרלקס */
+            cursor: none; /* הסתרת סמן העכבר המוגדר כברירת מחדל */
+            direction: rtl; /* כיווניות ימין-לשמאל */
+            text-align: right; /* יישור טקסט לימין */
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Rubik', sans-serif;
+            color: var(--ghibli-text-dark);
+            text-align: center; /* יישור כותרות למרכז */
+        }
+        .text-right { text-align: right; } /* לתקן איפה שצריך ימין */
+        .text-left { text-align: left; } /* לתקן איפה שצריך שמאל */
+
+        /* סמן עכבר מותאם אישית - מחייב נראות גבוהה */
+        #custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #FFFFFF; /* גבול בהיר לנראות על רקע כהה */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8); /* צל כהה לנראות על רקע בהיר */
+            border-radius: 50%;
+            pointer-events: none; /* כדי לא לחסום אינטראקציה עם אלמנטים */
+            z-index: 9999;
+            transform: translate(-50%, -50%); /* מרכוז הסמן על מיקום העכבר */
+            transition: width 0.2s ease, height 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+        }
+        #custom-cursor.hovered {
+            width: 30px;
+            height: 30px;
+            transform: translate(-50%, -50%) scale(1.2);
+            background-color: rgba(255, 255, 255, 0.2); /* מילוי עדין בהובר */
+        }
+
+        /* אנימציות בסגנון ג'יבלי */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); opacity: 0.8; }
+            50% { transform: translateY(-12px) rotate(3deg); opacity: 1; }
+            100% { transform: translateY(0px) rotate(0deg); opacity: 0.8; }
+        }
+        .float-element {
+            animation: float 5s ease-in-out infinite;
+        }
+
+        @keyframes subtle-breath {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.01); }
+            100% { transform: scale(1); }
+        }
+        .subtle-breath-animation {
+            animation: subtle-breath 8s ease-in-out infinite;
+        }
+
+        /* שכבות רקע לפרלקס */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-size: cover;
+            background-position: center center;
+            z-index: -1; /* מאחורי התוכן הראשי */
+            transform: translateZ(0); /* האצת חומרה */
+        }
+
+        /* עיצובי רקע ספציפיים לתחושת ג'יבלי */
+        .sky-bg {
+            background: linear-gradient(to bottom, var(--ghibli-sky-light) 0%, var(--ghibli-sky-dark) 100%);
+            opacity: 0.8;
+        }
+        .data-stream-1 {
+            background-image: radial-gradient(circle at 10% 20%, rgba(132, 219, 237, 0.3) 0%, transparent 70%),
+                              radial-gradient(circle at 80% 90%, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+            animation: dataStreamFloat 15s ease-in-out infinite alternate;
+            opacity: 0.6;
+            transform: scale(1.1);
+        }
+        .data-stream-2 {
+            background-image: radial-gradient(circle at 90% 10%, rgba(180, 240, 180, 0.4) 0%, transparent 70%),
+                              radial-gradient(circle at 20% 70%, rgba(200, 200, 255, 0.3) 0%, transparent 70%);
+            animation: dataStreamFloat 18s ease-in-out infinite alternate-reverse;
+            opacity: 0.5;
+            transform: scale(1.05);
+        }
+
+        @keyframes dataStreamFloat {
+            0% { transform: translate(0, 0) scale(1.05); }
+            100% { transform: translate(25px, 35px) scale(1.1); }
+        }
+
+        /* שכבת על כללית לקטעי תוכן */
+        .section-overlay {
+            background-color: var(--ghibli-overlay-blue);
+            backdrop-filter: blur(5px); /* אפקט טשטוש עדין */
+            border-radius: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* כרטיסים בסגנון ג'יבלי */
+        .ghibli-card {
+            background-color: rgba(255, 255, 255, 0.85); /* רקע בהיר ושקוף למחצה */
+            backdrop-filter: blur(8px);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .ghibli-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        /* מחוון גלילה עדין */
+        #scroll-indicator {
+            position: fixed;
+            bottom: 2rem;
+            right: 50%; /* מיקום במרכז התחתון */
+            transform: translateX(50%); /* תיקון מיקום עבור RTL */
+            width: 30px;
+            height: 50px;
+            border: 2px solid white;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            z-index: 100;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        #scroll-indicator::before {
+            content: '';
+            width: 4px;
+            height: 8px;
+            background-color: white;
+            border-radius: 2px;
+            animation: scroll-dot 1.5s infinite;
+        }
+        @keyframes scroll-dot {
+            0% { transform: translateY(8px); opacity: 1; }
+            100% { transform: translateY(28px); opacity: 0; }
+        }
+        #scroll-indicator.hidden {
+            opacity: 0;
+        }
+
+        /* התאמות רספונסיביות לטיפוגרפיה */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            h2 { font-size: 2rem; }
+            .text-5xl { font-size: 3rem; }
+            .text-4xl { font-size: 2.25rem; }
+            .text-2xl { font-size: 1.5rem; }
+            .ghibli-card { padding: 1.5rem; }
+        }
+
+    </style>
+</head>
+<body class="relative min-h-screen">
+
+    <!-- סמן עכבר מותאם אישית -->
+    <div id="custom-cursor"></div>
+
+    <!-- שכבות רקע פרלקס -->
+    <div class="parallax-layer sky-bg" id="parallax-sky"></div>
+    <div class="parallax-layer data-stream-1" id="parallax-data-1" style="transform: translateZ(0);"></div>
+    <div class="parallax-layer data-stream-2" id="parallax-data-2" style="transform: translateZ(0);"></div>
+
+    <!-- עוטף התוכן הראשי - ממוקם מעל שכבות הפרלקס -->
+    <div class="relative z-10 p-4 md:p-8 lg:p-12 min-h-screen flex flex-col items-center justify-start text-ghibli-text-dark">
+
+        <!-- קטע גיבור - Hero Section -->
+        <header class="w-full text-center py-16 md:py-24 lg:py-32 relative z-20">
+            <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight text-white drop-shadow-lg subtle-breath-animation"
+                style="text-shadow: 3px 3px 8px rgba(0,0,0,0.4);">
+                ברוכים הבאים לעולם שבו הבינה המלאכותית פוגשת את הדמיון
+            </h1>
+            <p class="text-xl md:text-2xl lg:text-3xl mt-6 text-white leading-relaxed drop-shadow-md subtle-breath-animation"
+               style="text-shadow: 2px 2px 6px rgba(0,0,0,0.3);">
+                מסע קסום אל עתיד שאתם מעצבים, בהנחיית זאביק אבינר - מומחה הבינה המלאכותית.
+            </p>
+            <div class="mt-12">
+                <a href="#services" class="inline-block bg-ghibli-accent-yellow text-ghibli-text-dark font-rubik font-bold py-3 px-8 rounded-full shadow-lg hover:scale-105 transition-transform duration-300 ease-out text-lg md:text-xl transform hover:rotate-1">
+                    הצטרפו למסע
+                </a>
+            </div>
+        </header>
+
+        <!-- קטע מסר מרכזי -->
+        <section class="w-full max-w-4xl mx-auto my-16 md:my-24 p-8 section-overlay text-center float-element" id="main-message">
+            <h2 class="text-3xl md:text-4xl font-rubik font-bold mb-6 text-ghibli-text-dark">הפיכת הקסם למציאות: AI נגיש וישים לכולם</h2>
+            <p class="text-lg md:text-xl leading-relaxed text-gray-800 text-right">
+                בעולם המשתנה בקצב מסחרר, הבינה המלאכותית היא כבר לא מדע בדיוני - היא הכוח המניע של המחר.
+                אנו מזמינים אתכם ללמוד כיצד לרתום את העוצמה הזו, להפוך אותה לכלי עבודה יומיומי,
+                ולצרוף כלים מעשיים שניתן ליישם מיד בעבודה ובחיים.
+                ממתחילים ועד מומחים, נפתח יחד את הפוטנציאל הטמון בכל אחד ואחת. העתיד הוא עכשיו.
+            </p>
+        </section>
+
+        <!-- קטע קהל יעד -->
+        <section class="w-full max-w-5xl mx-auto my-16 md:my-24 p-8 section-overlay text-center">
+            <h2 class="text-3xl md:text-4xl font-rubik font-bold mb-10 text-ghibli-text-dark">מי מוזמן למסע?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="ghibli-card text-center">
+                    <h3 class="font-rubik text-2xl font-semibold mb-3 text-ghibli-text-dark">חוקרים מתחילים</h3>
+                    <p class="text-gray-700 text-right">למי שרוצה להכיר את עולם ה-AI בפעם הראשונה, מהיסודות ועד הבנה מעמיקה ומרתקת.</p>
+                </div>
+                <div class="ghibli-card text-center">
+                    <h3 class="font-rubik text-2xl font-semibold mb-3 text-ghibli-text-dark">בעלי מקצועות</h3>
+                    <p class="text-gray-700 text-right">להטמיע AI בעבודה השוטפת, לייעל תהליכים ולפתוח אופקים חדשים בקריירה שלכם, בכל תחום.</p>
+                </div>
+                <div class="ghibli-card text-center">
+                    <h3 class="font-rubik text-2xl font-semibold mb-3 text-ghibli-text-dark">מנהלים וארגונים</h3>
+                    <p class="text-gray-700 text-right">להכיר את הכלים שישנו את פני הארגון, ולהכשיר צוותים לעידן החדש של החדשנות והיעילות.</p>
+                </div>
+                <div class="ghibli-card text-center">
+                    <h3 class="font-rubik text-2xl font-semibold mb-3 text-ghibli-text-dark">מתקדמים ויוזמים</h3>
+                    <p class="text-gray-700 text-right">לפיתוח פרויקטים מבוססי AI, מהרעיון המקורי ועד למימוש מלא ומוצלח בשטח.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- קטע תחומי התמחות -->
+        <section class="w-full max-w-6xl mx-auto my-16 md:my-24 p-8 section-overlay">
+            <h2 class="text-3xl md:text-4xl font-rubik font-bold mb-10 text-center text-ghibli-text-dark">אומנויות ה-AI שאנו מלמדים</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="ghibli-card flex items-start p-6">
+                    <span class="text-4xl ml-4 mr-2 text-ghibli-accent-yellow">✍️</span>
+                    <div>
+                        <h3 class="font-rubik text-2xl font-semibold mb-2 text-ghibli-text-dark">יצירת לחשים דיגיטליים: טקסט ותוכן</h3>
+                        <p class="text-gray-700 text-right">ללמוד איך AI כותב עבורכם סיפורים מרתקים, מאמרים מקצועיים, קוד יעיל ואפילו שירה נוגעת ללב.</p>
+                    </div>
+                </div>
+                <div class="ghibli-card flex items-start p-6">
+                    <span class="text-4xl ml-4 mr-2 text-ghibli-accent-yellow">🛠️</span>
+                    <div>
+                        <h3 class="font-rubik text-2xl font-semibold mb-2 text-ghibli-text-dark">בניית יצורים חכמים: אפליקציות AI</h3>
+                        <p class="text-gray-700 text-right">הפיכת רעיונות פורצי דרך לאפליקציות וכלים חכמים המקיימים אינטראקציה חלקה עם המשתמשים.</p>
+                    </div>
+                </div>
+                <div class="ghibli-card flex items-start p-6">
+                    <span class="text-4xl ml-4 mr-2 text-ghibli-accent-yellow">🌐</span>
+                    <div>
+                        <h3 class="font-rubik text-2xl font-semibold mb-2 text-ghibli-text-dark">שזירת קורי רשת: אתרים מבוססי AI</h3>
+                        <p class="text-gray-700 text-right">פיתוח אתרים דינמיים, אינטראקטיביים וחווייתיים המונעים על ידי בינה מלאכותית מתקדמת.</p>
+                    </div>
+                </div>
+                <div class="ghibli-card flex items-start p-6">
+                    <span class="text-4xl ml-4 mr-2 text-ghibli-accent-yellow">📊</span>
+                    <div>
+                        <h3 class="font-rubik text-2xl font-semibold mb-2 text-ghibli-text-dark">פענוח סודות: ניתוח נתונים ומחקר</h3>
+                        <p class="text-gray-700 text-right">הפקת תובנות עמוקות ודפוסי התנהגות מורכבים ממאגרי נתונים עצומים בעזרת AI.</p>
+                    </div>
+                </div>
+                <div class="ghibli-card flex items-start p-6">
+                    <span class="text-4xl ml-4 mr-2 text-ghibli-accent-yellow">🎨</span>
+                    <div>
+                        <h3 class="font-rubik text-2xl font-semibold mb-2 text-ghibli-text-dark">ציור חלומות: יצירת תמונות ואומנות</h3>
+                        <p class="text-gray-700 text-right">להפוך מילים לתמונות עוצרות נשימה, ליצור סגנונות חדשים ולהפיק יצירות אמנות דיגיטליות מרהיבות.</p>
+                    </div>
+                </div>
+                <div class="ghibli-card flex items-start p-6">
+                    <span class="text-4xl ml-4 mr-2 text-ghibli-accent-yellow">⚙️</span>
+                    <div>
+                        <h3 class="font-rubik text-2xl font-semibold mb-2 text-ghibli-text-dark">החיים בלחיצת כפתור: אוטומציה</h3>
+                        <p class="text-gray-700 text-right">ייעול תהליכים יומיומיים בעבודה ובחיים האישיים באמצעות אוטומציה חכמה המבוססת על AI.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- קטע שירותים מוצעים -->
+        <section class="w-full max-w-5xl mx-auto my-16 md:my-24 p-8 section-overlay" id="services">
+            <h2 class="text-3xl md:text-4xl font-rubik font-bold mb-10 text-center text-ghibli-text-dark">שבילי למידה קסומים</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="ghibli-card p-6 flex flex-col items-center text-center">
+                    <h3 class="font-rubik text-2xl font-semibold mb-3 text-ghibli-text-dark">סדנאות קבוצתיות: מסע משותף</h3>
+                    <p class="text-gray-700 text-right mb-4">חוויה מעשית, ממוקדת ואינטראקטיבית בקבוצה קטנה. ללמוד יחד, לגלות יחד, ולצמוח יחד בעולם ה-AI.</p>
+                    <a href="https://wa.me/972546609385?text=אשמח%20לפרטים%20על%20סדנאות%20קבוצתיות%20ללימוד%20AI" target="_blank" class="bg-ghibli-sky-dark text-white font-bold py-2 px-6 rounded-full hover:bg-ghibli-sky-light transition-colors duration-300">קבלו פרטים</a>
+                </div>
+                <div class="ghibli-card p-6 flex flex-col items-center text-center">
+                    <h3 class="font-rubik text-2xl font-semibold mb-3 text-ghibli-text-dark">שיעורים פרטיים: נתיב אישי</h3>
+                    <p class="text-gray-700 text-right mb-4">הדרכה אחד על אחד, מותאמת באופן אישי לרמה ולצרכים הספציפיים שלכם. צעד אחר צעד, בקצב שלכם.</p>
+                    <a href="https://wa.me/972546609385?text=אשמח%20לפרטים%20על%20שיעורים%20פרטיים%20ללימוד%20AI" target="_blank" class="bg-ghibli-sky-dark text-white font-bold py-2 px-6 rounded-full hover:bg-ghibli-sky-light transition-colors duration-300">קבעו שיעור</a>
+                </div>
+                <div class="ghibli-card p-6 flex flex-col items-center text-center">
+                    <h3 class="font-rubik text-2xl font-semibold mb-3 text-ghibli-text-dark">הרצאות לארגונים: השראה לצוות</h3>
+                    <p class="text-gray-700 text-right mb-4">פתיחת אופקים והכרה מעמיקה עם עולם ה-AI לכלל עובדי הארגון, בהרצאות מרתקות ומעוררות השראה.</p>
+                    <a href="https://wa.me/972546609385?text=אשמח%20לפרטים%20על%20הרצאות%20AI%20לארגונים" target="_blank" class="bg-ghibli-sky-dark text-white font-bold py-2 px-6 rounded-full hover:bg-ghibli-sky-light transition-colors duration-300">הזמינו הרצאה</a>
+                </div>
+                <div class="ghibli-card p-6 flex flex-col items-center text-center">
+                    <h3 class="font-rubik text-2xl font-semibold mb-3 text-ghibli-text-dark">ייעוץ ופיתוח פרויקטים: ליווי מומחה</h3>
+                    <p class="text-gray-700 text-right mb-4">הגשמת פרויקטים מבוססי AI עם ליווי מקצועי צמוד, מהקונספט הראשוני ועד לביצוע מושלם.</p>
+                    <a href="https://wa.me/972546609385?text=אשמח%20לייעוץ%20או%20פיתוח%20פרויקטים%20ב-AI" target="_blank" class="bg-ghibli-sky-dark text-white font-bold py-2 px-6 rounded-full hover:bg-ghibli-sky-light transition-colors duration-300">קבלו ייעוץ</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- קטע המדריך - זאביק אבינר -->
+        <section class="w-full max-w-4xl mx-auto my-16 md:my-24 p-8 section-overlay text-center" id="the-guide">
+            <h2 class="text-3xl md:text-4xl font-rubik font-bold mb-8 text-ghibli-text-dark">המנחה של המסע: זאביק אבינר</h2>
+            <div class="flex flex-col md:flex-row items-center md:items-start md:text-right">
+                <div class="md:ml-8 mb-6 md:mb-0 transform hover:scale-105 transition-transform duration-300 ease-out">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונת זאביק אבינר" class="w-48 h-48 rounded-full object-cover shadow-xl border-4 border-ghibli-accent-yellow">
+                </div>
+                <div class="flex-grow">
+                    <h3 class="font-rubik text-3xl font-bold mb-3 text-ghibli-text-dark">הקוסם של הבינה המלאכותית</h3>
+                    <p class="text-lg leading-relaxed text-gray-800 mb-4 text-right">
+                        זאביק אבינר הוא מומחה בינה מלאכותית בעל ניסיון עשיר ומוכח בפיתוח פרויקטים מורכבים,
+                        אפליקציות חכמות ומערכות חדשניות מבוססות AI.
+                        הוא מאמין נלהב בהנגשת הטכנולוגיה המורכבת לכל אחד ואחת,
+                        והפיכתה לכלי עבודה יומיומי רב עוצמה המעצים באופן דרמטי את היכולות האישיות והארגוניות.
+                        עם זאביק כמדריך, תגלו שהעתיד כבר כאן, והוא נגיש ומרתק יותר מאי פעם.
+                    </p>
+                    <div class="mt-6 text-xl text-ghibli-text-dark font-semibold">
+                        <p class="mb-2">ווטסאפ: <a href="https://wa.me/972546609385" target="_blank" class="text-blue-600 hover:underline">054-6609385</a></p>
+                        <p>אימייל: <a href="mailto:zaviner@gmail.com" class="text-blue-600 hover:underline">zaviner@gmail.com</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- פוטר - Footer -->
+        <footer class="w-full text-center py-10 mt-16 text-white text-lg relative z-20"
+                style="background-color: rgba(0,0,0,0.4); backdrop-filter: blur(3px);">
+            <p>&copy; 2023 זאביק אבינר - כל הזכויות שמורות. נבנה באהבה, בהשראה ובבינה מלאכותית.</p>
+            <p class="mt-2 text-sm">עיצוב בהשראת עולמות הפנטזיה הקסומים של סטודיו ג'יבלי.</p>
+        </footer>
+
+    </div>
+
+    <!-- מחוון גלילה -->
+    <div id="scroll-indicator"></div>
+
+    <script>
+        // לוגיקה לסמן העכבר המותאם אישית
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+        document.querySelectorAll('a, button, input[type="submit"], .ghibli-card').forEach(el => {
+            el.addEventListener('mouseenter', () => customCursor.classList.add('hovered'));
+            el.addEventListener('mouseleave', () => customCursor.classList.remove('hovered'));
+        });
+
+        // לוגיקה לאפקט הפרלקס
+        const parallaxSky = document.getElementById('parallax-sky');
+        const parallaxData1 = document.getElementById('parallax-data-1');
+        const parallaxData2 = document.getElementById('parallax-data-2');
+
+        window.addEventListener('scroll', () => {
+            let scrollPosition = window.pageYOffset;
+            // שכבות זזות במהירויות שונות כדי ליצור עומק
+            parallaxSky.style.transform = `translateY(${scrollPosition * 0.15}px)`;
+            parallaxData1.style.transform = `translateY(${scrollPosition * 0.25}px)`;
+            parallaxData2.style.transform = `translateY(${scrollPosition * 0.35}px)`;
+
+            // הסתרת מחוון הגלילה לאחר הגלילה הראשונה
+            const scrollIndicator = document.getElementById('scroll-indicator');
+            if (scrollPosition > 100) { // סף אקראי
+                scrollIndicator.classList.add('hidden');
+            } else {
+                scrollIndicator.classList.remove('hidden');
+            }
+        });
+
+        // אנימציית הופעה עדינה לאלמנטים בעת גלילה באמצעות Intersection Observer
+        const elementsToAnimate = document.querySelectorAll('.section-overlay, .ghibli-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    observer.unobserve(entry.target); // הפסק להתבונן ברגע שהאנימציה הוצגה
+                }
+            });
+        }, {
+            threshold: 0.1, // מפעיל כאשר 10% מהאלמנט גלוי
+            rootMargin: '0px 0px -10% 0px' // מפעיל מעט לפני שהאלמנט מגיע לתחתית המסך
+        });
+
+        elementsToAnimate.forEach(el => {
+            el.style.opacity = '0'; // מצב התחלתי עבור אנימציה
+            el.style.transform = 'translateY(30px)'; // מתחיל מעט מתחת למיקום הסופי
+            el.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out'; // הגדרת מעבר חלק
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

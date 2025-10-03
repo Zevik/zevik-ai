@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מגילת הבינה המלאכותית: דרכו של זאביק אבינר</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Hebrew:wght@400;700&family=Heebo:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom Tailwind Configuration (for fonts, colors, etc.) */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        :root {
+            --color-parchment: #fcf8e8; /* Light, warm off-white */
+            --color-ink-dark: #2c2f33; /* Dark charcoal */
+            --color-ink-light: #4a4a4a;
+            --color-carolingian-gold: #D4AF37; /* Rich gold */
+            --color-carolingian-red: #8B0000; /* Deep red */
+            --color-carolingian-blue: #0A2463; /* Deep blue */
+            --color-carolingian-green: #2B5E2B; /* Deep green */
+        }
+
+        html {
+            font-family: 'Heebo', sans-serif;
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+        }
+
+        h1, h2, h3, h4, .font-serif-hebrew {
+            font-family: 'Noto Serif Hebrew', serif;
+        }
+
+        body {
+            cursor: none; /* Hide default cursor */
+            background-color: var(--color-ink-dark); /* Overall dark background */
+            color: var(--color-parchment);
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* Custom Cursor Styling */
+        #custom-cursor {
+            position: fixed;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: transform 0.15s ease-out, border 0.15s ease-out, box-shadow 0.15s ease-out;
+            border: 2px solid var(--color-parchment); /* Light border */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 5px rgba(255, 255, 255, 0.2); /* Dark shadow + subtle glow */
+            mix-blend-mode: normal; /* Ensure normal blend mode */
+        }
+
+        .cursor-hover {
+            transform: translate(-50%, -50%) scale(1.3);
+            border: 2px solid var(--color-carolingian-gold); /* Gold-like border on hover */
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.8), 0 0 15px var(--color-carolingian-gold); /* Enhanced glow */
+        }
+
+        /* Carolingian-style borders */
+        .carolingian-frame {
+            position: relative;
+            padding: 2rem;
+            border: 1px solid var(--color-carolingian-gold);
+            box-shadow: 0 0 0 3px var(--color-carolingian-gold), 0 0 15px rgba(212, 175, 55, 0.4);
+            background-color: rgba(var(--color-ink-dark), 0.85); /* Slightly transparent dark */
+            background-image:
+                linear-gradient(135deg, rgba(212, 175, 55, 0.05) 25%, transparent 25%),
+                linear-gradient(225deg, rgba(212, 175, 55, 0.05) 25%, transparent 25%),
+                linear-gradient(45deg, rgba(212, 175, 55, 0.05) 25%, transparent 25%),
+                linear-gradient(315deg, rgba(212, 175, 55, 0.05) 25%, rgba(44, 47, 51, 0.85) 25%);
+            background-size: 40px 40px;
+        }
+
+        /* Scroll reveal animations */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+            will-change: opacity, transform;
+        }
+
+        .scroll-reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Specific styles for initial large letter */
+        .drop-cap:first-letter {
+            float: right; /* In RTL, drop caps float right */
+            font-size: 5em; /* Large initial letter */
+            line-height: 0.8;
+            font-family: 'Noto Serif Hebrew', serif;
+            color: var(--color-carolingian-gold);
+            margin-left: 0.1em; /* Space from remaining text */
+            margin-top: 0.05em;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+
+        /* Ensure links are always visible */
+        a {
+            color: var(--color-carolingian-gold);
+            text-decoration: underline;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: var(--color-parchment);
+            text-decoration: none;
+        }
+
+        .highlight-text {
+            color: var(--color-carolingian-gold);
+            font-weight: 700;
+        }
+
+        .section-separator {
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--color-carolingian-gold), transparent);
+            margin: 4rem auto;
+            opacity: 0.6;
+        }
+
+        .page-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(to bottom right, var(--color-ink-dark) 0%, rgba(10, 36, 99, 0.8) 50%, var(--color-ink-dark) 100%);
+            z-index: -2; /* Even deeper than default background */
+        }
+    </style>
+</head>
+<body class="overflow-y-scroll leading-relaxed text-lg">
+
+    <!-- Overall page fixed background -->
+    <div class="page-background"></div>
+
+    <!-- Custom Cursor HTML element -->
+    <div id="custom-cursor"></div>
+
+    <!-- Main Content Wrapper - z-index to be above fixed backgrounds -->
+    <main class="relative z-10 min-h-screen">
+
+        <!-- Initial Scroll-down hint (Carolingian-style) -->
+        <div class="fixed bottom-8 left-1/2 -translate-x-1/2 text-center text-carolingian-gold animate-bounce z-50">
+            <p class="font-serif-hebrew text-xl">גְלוֹל לַחֲזוֹת</p>
+            <svg class="w-8 h-8 mx-auto mt-2" fill="var(--color-carolingian-gold)" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+            </svg>
+        </div>
+
+
+        <!-- "Manuscript Page" 1 - Title & Introduction -->
+        <section class="min-h-screen flex items-center justify-center p-8 lg:p-16 relative">
+            <div class="carolingian-frame max-w-4xl w-full text-center scroll-reveal" data-threshold="0.5">
+                <h1 class="text-6xl lg:text-8xl font-serif-hebrew text-carolingian-gold mb-6 leading-tight">
+                    מגילת הבינה המלאכותית
+                </h1>
+                <p class="text-3xl lg:text-4xl text-parchment drop-cap leading-relaxed">
+                    <span class="font-serif-hebrew text-carolingian-red text-6xl">ה</span>תגלוּת גדולה ניצבת בפתחנו – עידן הבינה המלאכותית. כְּקַדמונים שפענחו סודות כוכבים, אנו נקראים כעת לפענח את קוד החשיבה הדיגיטלית. זו אינה רק טכנולוגיה, זוהי שפה חדשה, כלי בראשיתי ליצירה ולשינוי.
+                    מגילה זו, בהנחיית <span class="highlight-text">החכם זאביק אבינר</span>, היא שערכם למסע אל עומקי הידע, להפוך את הנסתר לנגיש, את המורכב לפשוט, ואת העתיד – להווה בידיכם.
+                </p>
+            </div>
+        </section>
+
+        <div class="section-separator scroll-reveal" data-threshold="0.8"></div>
+
+        <!-- "Manuscript Page" 2 - Core Message & Audience -->
+        <section class="min-h-screen flex items-center justify-center p-8 lg:p-16 relative">
+            <div class="carolingian-frame max-w-4xl w-full text-center scroll-reveal" data-threshold="0.5">
+                <h2 class="text-4xl lg:text-6xl font-serif-hebrew text-carolingian-red mb-8">
+                    צו הַשָּׁעָה: לפתוח את אוצרות הבינה
+                </h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 text-right text-parchment">
+                    <div class="p-4 border-2 border-carolingian-gold shadow-md shadow-carolingian-red scroll-reveal" data-threshold="0.6">
+                        <h3 class="text-3xl font-serif-hebrew text-carolingian-gold mb-4">המסר המרכזי</h3>
+                        <p class="text-xl leading-relaxed">
+                            <span class="font-serif-hebrew text-carolingian-blue text-4xl">ה</span>פיכת הבינה המלאכותית לנגישה ולשימושית עבור כל נשמה. מצעדים ראשונים ועד לפסגות היצירה המתקדמות ביותר. כאן תרכשו כלים עוצמתיים שיוכלו להשתלב מיד בפעולתכם, להאיר את דרככם בעבודה ובחיי היומיום.
+                        </p>
+                    </div>
+                    <div class="p-4 border-2 border-carolingian-gold shadow-md shadow-carolingian-red scroll-reveal" data-threshold="0.7">
+                        <h3 class="text-3xl font-serif-hebrew text-carolingian-gold mb-4">קַהל מחפשי הדעת</h3>
+                        <ul class="list-none space-y-4 text-xl leading-relaxed">
+                            <li><span class="text-carolingian-gold">♦</span> <span class="highlight-text">המתחילים והמתחילות:</span> אלו המבקשים להאיר את דרכם בעולם ה-AI המסתורי.</li>
+                            <li><span class="text-carolingian-gold">♦</span> <span class="highlight-text">אנשי ואנשות המקצוע:</span> המייחלים להטמיע את כוחה של הבינה בעבודתם.</li>
+                            <li><span class="text-carolingian-gold">♦</span> <span class="highlight-text">מנהלים וארגונים:</span> החפצים להוביל את צוותיהם לעידן חדש של יצירה.</li>
+                            <li><span class="text-carolingian-gold">♦</span> <span class="highlight-text">אומני הבינה המتقدمים:</span> המבקשים לפתח פרויקטים מורכבים ולפרוץ גבולות.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-separator scroll-reveal" data-threshold="0.8"></div>
+
+        <!-- "Manuscript Page" 3 - Specializations -->
+        <section class="min-h-screen flex items-center justify-center p-8 lg:p-16 relative">
+            <div class="carolingian-frame max-w-4xl w-full text-center scroll-reveal" data-threshold="0.5">
+                <h2 class="text-4xl lg:text-6xl font-serif-hebrew text-carolingian-green mb-8">
+                    תחומי המלאכה הקדושה
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-right text-parchment">
+                    <div class="flex items-start mb-4 scroll-reveal" data-threshold="0.6">
+                        <span class="text-carolingian-gold text-4xl leading-none ml-4 transform -translate-y-1">❖</span>
+                        <div>
+                            <h3 class="text-2xl font-serif-hebrew text-carolingian-gold mb-2">אריגת מילים בחכמה</h3>
+                            <p>יצירת טקסטים, תוכן עשיר ונרטיבים מרתקים באמצעות כוחה של הבינה.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start mb-4 scroll-reveal" data-threshold="0.65">
+                        <span class="text-carolingian-gold text-4xl leading-none ml-4 transform -translate-y-1">❖</span>
+                        <div>
+                            <h3 class="text-2xl font-serif-hebrew text-carolingian-gold mb-2">בניין עולמות דיגיטליים</h3>
+                            <p>פיתוח אפליקציות חכמות ואתרי אינטרנט הנושמים בינה.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start mb-4 scroll-reveal" data-threshold="0.7">
+                        <span class="text-carolingian-gold text-4xl leading-none ml-4 transform -translate-y-1">❖</span>
+                        <div>
+                            <h3 class="text-2xl font-serif-hebrew text-carolingian-gold mb-2">פענוח אותות הנתונים</h3>
+                            <p>ניתוח מידע ומחקר מעמיק, להפיק תובנות נסתרות מזרמי הנתונים.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start mb-4 scroll-reveal" data-threshold="0.75">
+                        <span class="text-carolingian-gold text-4xl leading-none ml-4 transform -translate-y-1">❖</span>
+                        <div>
+                            <h3 class="text-2xl font-serif-hebrew text-carolingian-gold mb-2">ציור במכחול האלגוריתם</h3>
+                            <p>יצירת תמונות ואומנות חזותית מרהיבה בעזרת כלי ה-AI.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start mb-4 scroll-reveal" data-threshold="0.8">
+                        <span class="text-carolingian-gold text-4xl leading-none ml-4 transform -translate-y-1">❖</span>
+                        <div>
+                            <h3 class="text-2xl font-serif-hebrew text-carolingian-gold mb-2">אוטומציה קסומה</h3>
+                            <p>ייעול תהליכים והפיכת המורכב לפשוט, באצילות הבינה המלאכותית.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-separator scroll-reveal" data-threshold="0.8"></div>
+
+        <!-- "Manuscript Page" 4 - Services Offered -->
+        <section class="min-h-screen flex items-center justify-center p-8 lg:p-16 relative">
+            <div class="carolingian-frame max-w-4xl w-full text-center scroll-reveal" data-threshold="0.5">
+                <h2 class="text-4xl lg:text-6xl font-serif-hebrew text-carolingian-blue mb-8">
+                    שערי הידע הנפתחים
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-right text-parchment">
+                    <div class="p-4 border-2 border-carolingian-red shadow-md shadow-carolingian-gold scroll-reveal" data-threshold="0.6">
+                        <h3 class="text-3xl font-serif-hebrew text-carolingian-red mb-4">סדנאות התגלות קבוצתיות</h3>
+                        <p class="text-xl">
+                            מסעות לימוד מעשיים וממוקדים, לקבוצות המחפשות דרך משותפת אל סודות הבינה. חוויה חברתית מעצימה.
+                        </p>
+                    </div>
+                    <div class="p-4 border-2 border-carolingian-red shadow-md shadow-carolingian-gold scroll-reveal" data-threshold="0.65">
+                        <h3 class="text-3xl font-serif-hebrew text-carolingian-red mb-4">שיעורים אישיים במסורת חונכות</h3>
+                        <p class="text-xl">
+                            הדרכה פרטנית, המותאמת לרמתכם ולצרכיכם הייחודיים. קשר עמוק של מורה ותלמיד.
+                        </p>
+                    </div>
+                    <div class="p-4 border-2 border-carolingian-red shadow-md shadow-carolingian-gold scroll-reveal" data-threshold="0.7">
+                        <h3 class="text-3xl font-serif-hebrew text-carolingian-red mb-4">הרצאות פורצות דרך לארגונים</h3>
+                        <p class="text-xl">
+                            פתיחת אופקים חדשים לצוותים ומנהלים, חשיפה לעוצמת ה-AI וכיצד היא תשנה את עולמם.
+                        </p>
+                    </div>
+                    <div class="p-4 border-2 border-carolingian-red shadow-md shadow-carolingian-gold scroll-reveal" data-threshold="0.75">
+                        <h3 class="text-3xl font-serif-hebrew text-carolingian-red mb-4">ליווי יצירה ופיתוח פרויקטים</h3>
+                        <p class="text-xl">
+                            הדרכה וייעוץ מקצועי, שלב אחר שלב, לפיתוח פרויקטים פורצי גבולות המבוססים על בינה מלאכותית.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-separator scroll-reveal" data-threshold="0.8"></div>
+
+        <!-- "Manuscript Page" 5 - The Guide & Contact -->
+        <section class="min-h-screen flex items-center justify-center p-8 lg:p-16 relative">
+            <div class="carolingian-frame max-w-5xl w-full flex flex-col lg:flex-row items-center justify-center gap-12 text-center scroll-reveal" data-threshold="0.5">
+                <div class="lg:w-1/3 text-center scroll-reveal" data-threshold="0.6">
+                    <h2 class="text-4xl lg:text-5xl font-serif-hebrew text-carolingian-gold mb-6">
+                        החכם, המדריך: זאביק אבינר
+                    </h2>
+                    <div class="relative w-48 h-48 mx-auto mb-6 border-4 border-carolingian-red rounded-full overflow-hidden shadow-lg shadow-carolingian-blue transform hover:scale-105 transition-transform duration-300 group">
+                        <img src="https://link.zevikaviner.com/zevik" alt="תמונת דיוקן של זאביק אבינר, מומחה לבינה מלאכותית" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+                        <div class="absolute inset-0 bg-carolingian-gold opacity-10 group-hover:opacity-0 transition-opacity duration-500"></div>
+                        <div class="absolute inset-0 border-2 border-carolingian-gold rounded-full z-10"></div>
+                    </div>
+                    <p class="text-xl text-parchment leading-relaxed drop-cap text-right lg:text-center">
+                        <span class="font-serif-hebrew text-carolingian-red text-4xl">ז</span>אביק אבינר, מורה דרך ומאור עיניים בעולמות הבינה המלאכותית. עם ניסיון עשיר בפיתוח פרויקטים מורכבים, אפליקציות חכמות ומערכות נושמות AI, זאביק הפך למומחה בהנגשת טכנולוגיה זו לכל אדם. הוא בונה גשרים בין המורכב למובן, והופך את הבינה המלאכותית לכלי עבודה יומיומי, עוצמתי ונגיש.
+                    </p>
+                </div>
+                <div class="lg:w-1/3 text-parchment text-right scroll-reveal" data-threshold="0.7">
+                    <h3 class="text-3xl font-serif-hebrew text-carolingian-blue mb-4">
+                        שערי התקשורת
+                    </h3>
+                    <p class="text-xl mb-4 leading-relaxed">
+                        למגע והתייעצות, פנו אל החכם זאביק אבינר דרך השערים הדיגיטליים:
+                    </p>
+                    <ul class="space-y-4 text-2xl font-serif-hebrew">
+                        <li>
+                            <span class="text-carolingian-gold">✉</span> <a href="mailto:zaviner@gmail.com" class="hover-target text-parchment hover:text-carolingian-gold">zaviner@gmail.com</a>
+                        </li>
+                        <li>
+                            <span class="text-carolingian-gold">✆</span> <a href="https://wa.me/972546609385" target="_blank" class="hover-target text-parchment hover:text-carolingian-gold">054-6609385 (ווטסאפ)</a>
+                        </li>
+                    </ul>
+                    <p class="mt-8 text-xl text-carolingian-red font-serif-hebrew">
+                        העתיד הוא עכשיו – בואו לשלוט בו.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- A final decorative separator -->
+        <div class="section-separator scroll-reveal" data-threshold="0.9"></div>
+
+        <!-- Hidden Copyright/Credit (Subtle, as per art piece nature) -->
+        <div class="text-center text-xs text-gray-500 py-8 scroll-reveal" data-threshold="0.95">
+            <p>&copy; 2023 מגילת הבינה המלאכותית. כל הזכויות שמורות.</p>
+        </div>
+
+    </main>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Add hover effect to interactive elements
+        const hoverTargets = document.querySelectorAll('a, button, .hover-target, .group'); // .group added for Zevik's image
+        hoverTargets.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
+        });
+
+        // Scroll Reveal Logic (Intersection Observer API)
+        const scrollRevealElements = document.querySelectorAll('.scroll-reveal');
+
+        const observerOptions = {
+            root: null, // viewport
+            rootMargin: '0px',
+            threshold: 0.1 // element becomes visible when 10% of it is in viewport
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                const threshold = parseFloat(entry.target.dataset.threshold || observerOptions.threshold);
+                if (entry.isIntersecting && entry.intersectionRatio >= threshold) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Stop observing once visible
+                }
+            });
+        }, observerOptions);
+
+        scrollRevealElements.forEach(el => {
+            observer.observe(el);
+        });
+
+        // Hide scroll hint after first scroll
+        const scrollHint = document.querySelector('.fixed.bottom-8');
+        let hasScrolled = false;
+        document.addEventListener('scroll', () => {
+            if (!hasScrolled && window.scrollY > 50) { // If scrolled more than 50px
+                scrollHint.classList.add('opacity-0', 'pointer-events-none');
+                setTimeout(() => scrollHint.remove(), 1000); // Remove after fade
+                hasScrolled = true;
+            }
+        }, { once: false, passive: true }); // passive for better scroll performance
+    </script>
+</body>
+</html>

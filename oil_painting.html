@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>אמן הבינה המלאכותית: לצייר את העתיד עם זאביק אבינר</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;700&family=Heebo:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* General RTL adjustments & Font Smoothing */
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            cursor: none; /* Hide default cursor */
+        }
+        body {
+            font-family: 'Heebo', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            background-color: #0d1117; /* Very dark base */
+            color: #e2e8f0; /* Light text for high contrast */
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            /* REQUIRED High-Contrast Technique */
+            border: 2px solid rgba(255, 255, 255, 0.9); /* Light border */
+            box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.8); /* Dark shadow */
+            transition: transform 0.15s ease-out, width 0.15s ease-out, height 0.15s ease-out, border 0.15s ease-out, box-shadow 0.15s ease-out;
+        }
+        .custom-cursor.hovered {
+            width: 45px;
+            height: 45px;
+            border: 3px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+        .custom-cursor.clicked {
+            transform: translate(-50%, -50%) scale(0.8);
+            background-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.7), 0 0 30px rgba(255, 255, 255, 0.5);
+        }
+
+        /* Oil Painting Art Style Typography */
+        .frank-ruhl {
+            font-family: 'Frank Ruhl Libre', serif;
+        }
+
+        /* Background Layers for Parallax */
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -2; /* Ensure content is on top */
+            will-change: transform; /* Optimize for animation */
+        }
+
+        /* Specific background styling for an 'oil painting' feel */
+        .bg-layer-1 {
+            background: radial-gradient(circle at 80% 20%, rgba(20,30,40,0.4) 0%, rgba(10,15,20,0.9) 100%);
+        }
+        .bg-layer-2 {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.1"><filter id="f"><feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="3" result="t"/><feDisplacementMap in2="t" in="SourceGraphic" scale="5"/></filter><rect width="100" height="100" fill="%234a4e69" filter="url(%23f)"/></svg>') repeat;
+            background-size: 300px;
+            opacity: 0.1;
+        }
+        .bg-layer-3 { /* A more painterly texture, closer */
+            background: linear-gradient(135deg, rgba(20, 25, 30, 0.2) 0%, rgba(50, 60, 70, 0.05) 50%, rgba(20, 25, 30, 0.2) 100%),
+                        url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(#noiseFilter)" opacity="0.05"/></svg>') repeat;
+            background-size: cover, 200px; /* Cover the gradient, repeat noise */
+            opacity: 0.2;
+            filter: contrast(1.1) saturate(1.1);
+        }
+
+        /* Content containers as "canvases" */
+        .canvas-section {
+            background-color: rgba(15, 20, 25, 0.85); /* Slightly transparent dark background */
+            backdrop-filter: blur(5px); /* Soft blur effect */
+            border: 1px solid rgba(70, 80, 90, 0.3);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6), 0 0 0 10px rgba(255, 255, 255, 0.02) inset; /* Soft shadow and inner glow */
+            border-radius: 12px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            position: relative; /* For z-index and potential overlays */
+            overflow: hidden;
+        }
+        .canvas-section::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.005) 50%, rgba(255,255,255,0.02) 100%);
+            pointer-events: none;
+            z-index: 1; /* Above background, below text */
+            opacity: 0.8;
+        }
+
+        /* Specific styles for artistic elements */
+        .highlight-text {
+            color: #d4af37; /* Muted gold for highlights */
+        }
+        .text-shadow-light {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+        }
+        .text-shadow-dark {
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="selection:bg-cyan-600 selection:text-white">
+
+    <!-- Custom Cursor -->
+    <div class="custom-cursor" id="customCursor"></div>
+
+    <!-- Parallax Background Layers -->
+    <div class="parallax-layer bg-layer-1" data-parallax-speed="0.1"></div>
+    <div class="parallax-layer bg-layer-2" data-parallax-speed="0.2"></div>
+    <div class="parallax-layer bg-layer-3" data-parallax-speed="0.3"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 min-h-screen p-8 md:p-12 lg:p-16 flex flex-col items-center">
+
+        <!-- Hero Section - A grand opening canvas -->
+        <section class="canvas-section max-w-5xl mx-auto text-center relative z-20 mt-16 md:mt-24">
+            <h1 class="frank-ruhl text-5xl md:text-7xl font-bold mb-6 leading-tight text-shadow-light">
+                <span class="highlight-text">אמן הבינה המלאכותית:</span>
+                <br>
+                לצייר את העתיד, מברשת אחר מברשת
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 leading-relaxed text-gray-200 text-shadow-dark">
+                ברוכים הבאים לסדנה של זאביק אבינר -
+                <span class="highlight-text font-bold">שם הופכים נתוני עתיד למציאות אמנותית.</span>
+                למדו לשלוט במברשת הדיגיטלית החדשה: הבינה המלאכותית.
+            </p>
+            <a href="#contact" class="inline-block bg-gradient-to-r from-teal-600 to-cyan-700 hover:from-teal-700 hover:to-cyan-800 text-white frank-ruhl text-lg md:text-xl py-4 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 cursor-pointer">
+                התחילו לצייר את העתיד שלכם
+            </a>
+        </section>
+
+        <!-- Core Message Section -->
+        <section class="canvas-section max-w-4xl mx-auto text-right z-20">
+            <h2 class="frank-ruhl text-4xl md:text-5xl font-bold mb-6 highlight-text text-shadow-light">המסר על הקנבס: הנגשת החדשנות</h2>
+            <p class="text-lg md:text-xl leading-relaxed text-gray-200 mb-4 text-shadow-dark">
+                בעולם שמשתנה במהירות, הבינה המלאכותית היא לא עוד טרנד - היא <span class="highlight-text font-bold">הצבעים החדשים בפלטה שלכם.</span>
+                אנו הופכים את הלא-נודע לנגיש, את המורכב לפשוט, ואת החזון שלכם לכלי עבודה עוצמתי.
+            </p>
+            <p class="text-lg md:text-xl leading-relaxed text-gray-200 text-shadow-dark">
+                הבינה המלאכותית אינה רק כלי - היא <span class="highlight-text font-bold">שותף יצירתי</span> שממתין להתגלות. מכלים מעשיים שניתן ליישם מיד ועד לפיתוח פרויקטים פורצי דרך - אצלנו תלמדו לא רק להשתמש, אלא <span class="highlight-text font-bold">ליצור אמנות עם AI.</span>
+            </p>
+        </section>
+
+        <!-- Target Audience Section -->
+        <section class="canvas-section max-w-4xl mx-auto text-center z-20">
+            <h2 class="frank-ruhl text-4xl md:text-5xl font-bold mb-10 highlight-text text-shadow-light">למי נצייר יחד? גלריית קהלי היעד</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="p-6 bg-gray-800 bg-opacity-70 rounded-lg shadow-xl border border-gray-700 hover:border-teal-500 transition-all duration-300">
+                    <h3 class="frank-ruhl text-2xl font-bold mb-3 highlight-text">המכחול הראשון</h3>
+                    <p class="text-gray-300">למבקשי המכחול הראשון בעולם ה-AI - בואו לגלות את היסודות בפשטות ובכיף.</p>
+                </div>
+                <div class="p-6 bg-gray-800 bg-opacity-70 rounded-lg shadow-xl border border-gray-700 hover:border-teal-500 transition-all duration-300">
+                    <h3 class="frank-ruhl text-2xl font-bold mb-3 highlight-text">אדריכלי העתיד</h3>
+                    <p class="text-gray-300">לאנשי מקצוע המעוניינים להטמיע AI בעבודתם ולבנות יתרון תחרותי.</p>
+                </div>
+                <div class="p-6 bg-gray-800 bg-opacity-70 rounded-lg shadow-xl border border-gray-700 hover:border-teal-500 transition-all duration-300">
+                    <h3 class="frank-ruhl text-2xl font-bold mb-3 highlight-text">מובילי השראה</h3>
+                    <p class="text-gray-300">למנהלים וארגונים המחפשים להאיר אופקים חדשים לצוותים שלהם.</p>
+                </div>
+                <div class="p-6 bg-gray-800 bg-opacity-70 rounded-lg shadow-xl border border-gray-700 hover:border-teal-500 transition-all duration-300">
+                    <h3 class="frank-ruhl text-2xl font-bold mb-3 highlight-text">מאסטרים של הקוד</h3>
+                    <p class="text-gray-300">לרמה המתקדמת - פיתוח פרויקטים חדשניים מבוססי AI מאפס.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Specializations Section -->
+        <section class="canvas-section max-w-5xl mx-auto z-20">
+            <h2 class="frank-ruhl text-4xl md:text-5xl font-bold mb-10 text-center highlight-text text-shadow-light">תחומי התמחות: הפלטה של האמן</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="flex items-start bg-gray-800 bg-opacity-70 rounded-lg p-5 shadow-md border border-gray-700 hover:border-cyan-500 transition-all duration-300">
+                    <div class="ml-4 text-cyan-400 text-3xl">🎨</div>
+                    <div>
+                        <h3 class="frank-ruhl text-2xl font-bold mb-2 highlight-text">לצייר מילים: יצירת נרטיבים דיגיטליים</h3>
+                        <p class="text-gray-300">שליטה באמנות הניסוח האוטומטי - יצירת טקסטים, תסריטים ותוכן שובה לב.</p>
+                    </div>
+                </div>
+                <div class="flex items-start bg-gray-800 bg-opacity-70 rounded-lg p-5 shadow-md border border-gray-700 hover:border-cyan-500 transition-all duration-300">
+                    <div class="ml-4 text-cyan-400 text-3xl">📱</div>
+                    <div>
+                        <h3 class="frank-ruhl text-2xl font-bold mb-2 highlight-text">אפליקציות חושבות: ארכיטקטורה חכמה בקוד</h3>
+                        <p class="text-gray-300">בניית אפליקציות חכמות שמבינות, לומדות ומתפתחות עם המשתמש.</p>
+                    </div>
+                </div>
+                <div class="flex items-start bg-gray-800 bg-opacity-70 rounded-lg p-5 shadow-md border border-gray-700 hover:border-cyan-500 transition-all duration-300">
+                    <div class="ml-4 text-cyan-400 text-3xl">🌐</div>
+                    <div>
+                        <h3 class="frank-ruhl text-2xl font-bold mb-2 highlight-text">קנבס דינמי: אתרים שרואים, חושבים ופועלים</h3>
+                        <p class="text-gray-300">פיתוח אתרים מבוססי AI המציעים חווית משתמש אישית ומתקדמת.</p>
+                    </div>
+                </div>
+                <div class="flex items-start bg-gray-800 bg-opacity-70 rounded-lg p-5 shadow-md border border-gray-700 hover:border-cyan-500 transition-all duration-300">
+                    <div class="ml-4 text-cyan-400 text-3xl">📊</div>
+                    <div>
+                        <h3 class="frank-ruhl text-2xl font-bold mb-2 highlight-text">לפענח את סודות המידע: תובנות עמוקות וצבעוניות</h3>
+                        <p class="text-gray-300">ניתוח נתונים ומחקר באמצעות AI לחילוץ תובנות עסקיות ואמנותיות.</p>
+                    </div>
+                </div>
+                <div class="flex items-start bg-gray-800 bg-opacity-70 rounded-lg p-5 shadow-md border border-gray-700 hover:border-cyan-500 transition-all duration-300">
+                    <div class="ml-4 text-cyan-400 text-3xl">🖼️</div>
+                    <div>
+                        <h3 class="frank-ruhl text-2xl font-bold mb-2 highlight-text">הפרומפט כמברשת: אמנות דיגיטלית חסרת גבולות</h3>
+                        <p class="text-gray-300">יצירת תמונות, גרפיקות ואומנות ויזואלית באמצעות בינה מלאכותית יוצרת.</p>
+                    </div>
+                </div>
+                <div class="flex items-start bg-gray-800 bg-opacity-70 rounded-lg p-5 shadow-md border border-gray-700 hover:border-cyan-500 transition-all duration-300">
+                    <div class="ml-4 text-cyan-400 text-3xl">⚙️</div>
+                    <div>
+                        <h3 class="frank-ruhl text-2xl font-bold mb-2 highlight-text">ריקוד המכונות: אוטומציה שמביאה פלא</h3>
+                        <p class="text-gray-300">אוטומציה של תהליכים מורכבים ושיפור יעילות בכל תחום.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="canvas-section max-w-4xl mx-auto text-right z-20">
+            <h2 class="frank-ruhl text-4xl md:text-5xl font-bold mb-10 highlight-text text-shadow-light">גלריית השירותים: סטודיו פתוח לכולם</h2>
+            <div class="space-y-8">
+                <div class="bg-gray-800 bg-opacity-70 rounded-lg p-6 shadow-xl border border-gray-700 hover:border-teal-500 transition-all duration-300 flex items-center">
+                    <span class="text-5xl ml-4 text-yellow-400">🤝</span>
+                    <div>
+                        <h3 class="frank-ruhl text-3xl font-bold mb-2 highlight-text">סדנאות יצירה קבוצתיות</h3>
+                        <p class="text-gray-300 text-lg">מעשיות, ממוקדות ושוברות מוסכמות. ללמוד יחד, ליצור יחד.</p>
+                    </div>
+                </div>
+                <div class="bg-gray-800 bg-opacity-70 rounded-lg p-6 shadow-xl border border-gray-700 hover:border-teal-500 transition-all duration-300 flex items-center">
+                    <span class="text-5xl ml-4 text-yellow-400">👨‍🎨</span>
+                    <div>
+                        <h3 class="frank-ruhl text-3xl font-bold mb-2 highlight-text">שיעורים אישיים: סטודיו פרטי</h3>
+                        <p class="text-gray-300 text-lg">התאמה אישית לרמה ולצרכים שלכם, אחד על אחד עם המאסטרו.</p>
+                    </div>
+                </div>
+                <div class="bg-gray-800 bg-opacity-70 rounded-lg p-6 shadow-xl border border-gray-700 hover:border-teal-500 transition-all duration-300 flex items-center">
+                    <span class="text-5xl ml-4 text-yellow-400">💡</span>
+                    <div>
+                        <h3 class="frank-ruhl text-3xl font-bold mb-2 highlight-text">הרצאות לארגונים: השראה לצוותים</h3>
+                        <p class="text-gray-300 text-lg">פתיחת אופקים והענקת כלים מעשיים לצוותים שלמים, בהרצאות מרתקות.</p>
+                    </div>
+                </div>
+                <div class="bg-gray-800 bg-opacity-70 rounded-lg p-6 shadow-xl border border-gray-700 hover:border-teal-500 transition-all duration-300 flex items-center">
+                    <span class="text-5xl ml-4 text-yellow-400">🛠️</span>
+                    <div>
+                        <h3 class="frank-ruhl text-3xl font-bold mb-2 highlight-text">ייעוץ ופיתוח פרויקטים: ליווי אמנותי</h3>
+                        <p class="text-gray-300 text-lg">ליווי מקצועי צמוד - מהרעיון הגולמי ועד לגלריה המוגמרת.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Guide Section (Zevik Aviner) -->
+        <section class="canvas-section max-w-4xl mx-auto text-center z-20">
+            <h2 class="frank-ruhl text-4xl md:text-5xl font-bold mb-10 highlight-text text-shadow-light">המאסטרו: זאביק אבינר</h2>
+            <div class="flex flex-col md:flex-row items-center md:items-start justify-center md:space-x-8 md:space-x-reverse">
+                <div class="mb-6 md:mb-0 md:ml-8 flex-shrink-0">
+                    <img src="https://link.zevikaviner.com/zevik" alt="תמונת דיוקן של זאביק אבינר, מומחה לבינה מלאכותית" class="w-48 h-48 rounded-full object-cover border-4 border-teal-500 shadow-xl" loading="lazy">
+                </div>
+                <div class="text-right">
+                    <p class="text-lg md:text-xl leading-relaxed text-gray-200 mb-4 text-shadow-dark">
+                        עם מברשת ידע עשירה וניסיון בפרויקטים פורצי דרך,
+                        <span class="highlight-text font-bold">זאביק אבינר הוא המדריך שלכם</span>
+                        בעולם המורכב והמרתק של הבינה המלאכותית.
+                    </p>
+                    <p class="text-lg md:text-xl leading-relaxed text-gray-200 text-shadow-dark">
+                        הוא לא רק מלמד - הוא מאייר את הדרך להפיכת הבלתי אפשרי לאפשרי, בכלים שניתן ליישם כבר היום.
+                        מומחה בהנגשת הטכנולוגיה ובהפיכתה לכלי עבודה יומיומי.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="canvas-section max-w-3xl mx-auto text-center z-20">
+            <h2 class="frank-ruhl text-4xl md:text-5xl font-bold mb-8 highlight-text text-shadow-light">צרו קשר עם האמן</h2>
+            <p class="text-xl md:text-2xl text-gray-200 mb-6 text-shadow-dark">
+                המסע שלכם לעולם ה-AI מתחיל כאן. בואו נצייר את העתיד יחד!
+            </p>
+            <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8 md:space-x-reverse">
+                <a href="https://wa.me/972546609385" target="_blank" class="flex items-center bg-green-600 hover:bg-green-700 text-white frank-ruhl text-xl py-3 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 cursor-pointer">
+                    <span class="ml-3">ווטסאפ: 054-6609385</span>
+                    <span class="text-2xl">📞</span>
+                </a>
+                <a href="mailto:zaviner@gmail.com" class="flex items-center bg-blue-600 hover:bg-blue-700 text-white frank-ruhl text-xl py-3 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 active:scale-95 cursor-pointer">
+                    <span class="ml-3">אימייל: zaviner@gmail.com</span>
+                    <span class="text-2xl">📧</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer - A subtle signature -->
+        <footer class="mt-20 py-8 text-center text-gray-500 text-sm z-20">
+            <p>&copy; <span class="highlight-text">2023 זאביק אבינר</span> - כל הזכויות שמורות ליצירה הדיגיטלית.</p>
+            <p>מכחול וקוד: עתיד הבינה המלאכותית.</p>
+        </footer>
+
+    </div> <!-- End of Main Content Wrapper -->
+
+    <script>
+        // Custom Cursor JavaScript
+        const customCursor = document.getElementById('customCursor');
+        const interactiveElements = document.querySelectorAll('a, button, .cursor-pointer');
+
+        document.addEventListener('mousemove', (e) => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        document.addEventListener('mousedown', () => {
+            customCursor.classList.add('clicked');
+        });
+
+        document.addEventListener('mouseup', () => {
+            customCursor.classList.remove('clicked');
+        });
+
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                customCursor.classList.add('hovered');
+            });
+            el.addEventListener('mouseleave', () => {
+                customCursor.classList.remove('hovered');
+            });
+        });
+
+        // Parallax Scrolling JavaScript
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+
+            parallaxLayers.forEach(layer => {
+                const speed = parseFloat(layer.dataset.parallaxSpeed);
+                const yPos = -(scrollY * speed);
+                layer.style.transform = `translateY(${yPos}px)`;
+            });
+        });
+
+        // Add 'cursor-pointer' to all relevant interactive elements dynamically (fallback)
+        document.querySelectorAll('a, button').forEach(el => {
+            el.classList.add('cursor-pointer');
+        });
+
+    </script>
+</body>
+</html>

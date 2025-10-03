@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Master: העתיד הוא עכשיו! – זאביק אבינר</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Varela+Round&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom CSS to integrate with Tailwind and enhance Pop Art */
+        body {
+            font-family: 'Varela Round', sans-serif;
+            background-color: #0d0d2b; /* Dark indigo base */
+            cursor: none; /* Hide default cursor */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 0.05em;
+        }
+        .pop-text-shadow {
+            text-shadow: 4px 4px #ff007f, 8px 8px #00ffff; /* Pink and cyan shadow */
+        }
+        .pop-button {
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            transform: skew(-10deg);
+        }
+        .pop-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff007f, #ffff00); /* Pink to Yellow */
+            z-index: -1;
+            transition: transform 0.3s ease;
+            transform: translateX(-100%) skew(10deg);
+        }
+        .pop-button:hover::before {
+            transform: translateX(0%) skew(10deg);
+        }
+        .pop-button span {
+            display: inline-block;
+            transform: skew(10deg);
+        }
+
+        /* Pop-Art specific backgrounds/elements */
+        .bg-dots {
+            background-image: radial-gradient(#ffff00 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .bg-lines {
+            background-image: linear-gradient(90deg, #ff007f 1px, transparent 1px), linear-gradient(#ff007f 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .speech-bubble {
+            position: relative;
+            background: #fff;
+            border-radius: .4em;
+            padding: 1rem;
+            color: #0d0d2b;
+        }
+        .speech-bubble:after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            width: 0;
+            height: 0;
+            border: 20px solid transparent;
+            border-left-color: #fff;
+            border-right: 0;
+            border-bottom: 0;
+            margin-top: -10px;
+            margin-right: -20px;
+        }
+        /* RTL adjustment for speech bubble */
+        .speech-bubble.rtl-bubble:after {
+            left: 0;
+            right: auto;
+            border-left-color: transparent;
+            border-right-color: #fff;
+            margin-left: -20px;
+            margin-right: 0;
+        }
+
+        /* Ensure scroll-margin-top for anchor links */
+        section {
+            scroll-margin-top: 5rem; /* Adjust this value as needed to clear fixed headers */
+        }
+
+        /* Additional custom animations for Pop Art feel */
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0.8; }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 6s infinite ease-in-out;
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .animate-gradient-shift {
+            background-size: 200% 200%;
+            animation: gradient-shift 15s ease infinite;
+        }
+    </style>
+</head>
+<body class="text-white text-right">
+    <!-- Custom Cursor -->
+    <div id="custom-cursor" class="fixed z-[9999] pointer-events-none w-6 h-6 rounded-full border-2 border-white shadow-[0_0_0_2px_rgba(0,0,0,0.8)] transition-transform duration-100 ease-out -translate-x-1/2 -translate-y-1/2"></div>
+
+    <!-- Main Content Wrapper -->
+    <div class="relative z-10 min-h-screen">
+        <!-- Background Elements (Parallax) -->
+        <div class="fixed top-0 left-0 w-full h-full bg-[#0d0d2b] z-[-1]"></div>
+        <div id="parallax-shape-1" class="absolute top-1/4 left-1/4 w-48 h-48 bg-yellow-400 rounded-full opacity-20 z-[-1]"></div>
+        <div id="parallax-shape-2" class="absolute top-1/2 right-1/3 w-64 h-64 bg-fuchsia-500 rounded-lg transform rotate-45 opacity-20 z-[-1]"></div>
+        <div id="parallax-shape-3" class="absolute bottom-1/4 left-1/2 w-32 h-32 bg-cyan-400 rounded-full opacity-20 z-[-1]"></div>
+
+        <!-- Header - Fixed, but design as Pop Art -->
+        <header class="fixed top-0 right-0 w-full bg-[#0d0d2b]/90 backdrop-blur-sm z-50 p-4 md:p-6 shadow-lg border-b-4 border-yellow-400 transform skew-y-[-1deg]">
+            <nav class="container mx-auto flex justify-between items-center transform skew-y-[1deg]">
+                <a href="#hero" class="text-3xl md:text-4xl text-yellow-400 font-bold pop-text-shadow leading-none">
+                    AI<span class="text-fuchsia-500">Master</span>
+                </a>
+                <ul class="flex space-x-4 md:space-x-8 text-lg md:text-xl font-bold">
+                    <li><a href="#why-ai" class="hover:text-fuchsia-500 transition-colors">למה עכשיו?</a></li>
+                    <li><a href="#audience" class="hover:text-fuchsia-500 transition-colors">למי זה מיועד?</a></li>
+                    <li><a href="#services" class="hover:text-fuchsia-500 transition-colors">שירותים</a></li>
+                    <li><a href="#zavik" class="hover:text-fuchsia-500 transition-colors">על המומחה</a></li>
+                    <li><a href="#contact" class="hover:text-fuchsia-500 transition-colors">צרו קשר</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Hero Section -->
+        <section id="hero" class="relative min-h-screen flex items-center justify-center pt-24 md:pt-32 pb-16 overflow-hidden">
+            <div class="absolute inset-0 bg-dots opacity-50 animate-pulse-slow z-[-1]"></div>
+            <div class="container mx-auto px-4 text-center relative z-10">
+                <h1 class="text-6xl md:text-8xl lg:text-[10rem] font-extrabold leading-none mb-6 pop-text-shadow">
+                    AI<span class="text-fuchsia-500">:</span> העתיד<br class="md:hidden"> הוא <span class="text-yellow-400">עכשיו!</span>
+                </h1>
+                <p class="text-2xl md:text-3xl lg:text-4xl text-cyan-400 mb-10 pop-text-shadow">
+                    למדו לשלוט במהפכה הדיגיטלית עם <span class="text-white">זאביק אבינר</span>
+                </p>
+                <a href="#services" class="inline-block pop-button bg-yellow-400 text-black text-2xl md:text-3xl px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                    <span>התחילו את המסע שלכם <span class="font-bold text-fuchsia-500">&#x2190;</span></span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Why AI Now Section -->
+        <section id="why-ai" class="relative py-16 md:py-24 bg-fuchsia-500/20 border-t-8 border-b-8 border-yellow-400 transform skew-y-[-2deg] my-16">
+            <div class="container mx-auto px-4 relative z-10 transform skew-y-[2deg]">
+                <h2 class="text-5xl md:text-6xl text-center font-extrabold text-white mb-12 pop-text-shadow">
+                    למה AI דווקא עכשיו? המהפכה כבר כאן!
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-gradient-to-br from-yellow-400 to-fuchsia-500 p-8 rounded-2xl shadow-xl border-4 border-white transform hover:scale-105 transition-transform duration-300">
+                        <h3 class="text-3xl font-bold text-black mb-4">נגישות מוחלטת</h3>
+                        <p class="text-lg text-gray-800">ה-AI כבר אינו נחלתם של מומחים בלבד. עם הכלים הנכונים וההדרכה המקצועית, כל אחד יכול להפוך את הטכנולוגיה המדהימה הזו לכלי עבודה יומיומי.</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-cyan-400 to-yellow-400 p-8 rounded-2xl shadow-xl border-4 border-white transform hover:scale-105 transition-transform duration-300">
+                        <h3 class="text-3xl font-bold text-black mb-4">עוצמה יצירתית</h3>
+                        <p class="text-lg text-gray-800">דמיינו עולם בו רעיונותיכם מקבלים חיים במהירות שיא! AI מאפשר יצירת תוכן, תמונות, קוד ואומנות בדרכים שלא הכרנו, ופותח אופקים חדשים לדמיון.</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-fuchsia-500 to-cyan-400 p-8 rounded-2xl shadow-xl border-4 border-white transform hover:scale-105 transition-transform duration-300">
+                        <h3 class="text-3xl font-bold text-black mb-4">יעילות חסרת תקדים</h3>
+                        <p class="text-lg text-gray-800">הטמיעו AI בתהליכי העבודה שלכם וצפו כיצד משימות מייגעות הופכות לאוטומטיות. חסכו זמן, כסף ומשאבים, והתמקדו במה שבאמת חשוב.</p>
+                    </div>
+                    <div class="bg-gradient-to-br from-yellow-400 to-cyan-400 p-8 rounded-2xl shadow-xl border-4 border-white transform hover:scale-105 transition-transform duration-300 md:col-span-2 lg:col-span-1 mx-auto lg:mx-0">
+                        <h3 class="text-3xl font-bold text-black mb-4">פיתוח וצמיחה</h3>
+                        <p class="text-lg text-gray-800">אל תישארו מאחור. לימוד AI הוא לא רק טרנד, אלא השקעה הכרחית בעתיד המקצועי שלכם. בואו לרכוש כלים שיקפיצו אתכם קדימה.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Audience Section -->
+        <section id="audience" class="py-16 md:py-24 relative bg-cyan-400/20">
+            <div class="absolute inset-0 bg-lines opacity-30 z-[-1]"></div>
+            <div class="container mx-auto px-4 relative z-10">
+                <h2 class="text-5xl md:text-6xl text-center font-extrabold text-white mb-16 pop-text-shadow">
+                    למי זה מתאים? לכולם!
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-12">
+                    <div class="bg-white p-8 rounded-3xl shadow-2xl border-4 border-fuchsia-500 transform rotate-[-2deg] hover:rotate-0 hover:scale-105 transition-all duration-300">
+                        <h3 class="text-3xl md:text-4xl font-bold text-fuchsia-700 mb-4 flex items-center">
+                            <span class="text-5xl md:text-6xl ml-4">&#128100;</span>
+                            <span class="leading-tight">המתחילים והסקרנים</span>
+                        </h3>
+                        <p class="text-gray-800 text-lg">בואו לצלול לעולם ה-AI מהיסודות. נסביר, נדגים ונבנה בסיס איתן שיפתח לכם את המחשבה והיכולות.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl shadow-2xl border-4 border-yellow-400 transform rotate-[2deg] hover:rotate-0 hover:scale-105 transition-all duration-300">
+                        <h3 class="text-3xl md:text-4xl font-bold text-yellow-700 mb-4 flex items-center">
+                            <span class="text-5xl md:text-6xl ml-4">&#128187;</span>
+                            <span class="leading-tight">אנשי המקצוע והמפתחים</span>
+                        </h3>
+                        <p class="text-gray-800 text-lg">שדרגו את ארגז הכלים שלכם! הטמיעו AI בפרויקטים קיימים, בנו אפליקציות חכמות ונתחו נתונים כמו מקצוענים.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl shadow-2xl border-4 border-cyan-500 transform rotate-[-3deg] hover:rotate-0 hover:scale-105 transition-all duration-300">
+                        <h3 class="text-3xl md:text-4xl font-bold text-cyan-700 mb-4 flex items-center">
+                            <span class="text-5xl md:text-6xl ml-4">&#128188;</span>
+                            <span class="leading-tight">מנהלים וארגונים</span>
+                        </h3>
+                        <p class="text-gray-800 text-lg">הכינו את הצוות שלכם לעתיד! הרצאות והדרכות מותאמות אישית שיפתחו את הראש ויספקו כלים ליישום מיידי.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-3xl shadow-2xl border-4 border-fuchsia-400 transform rotate-[1deg] hover:rotate-0 hover:scale-105 transition-all duration-300">
+                        <h3 class="text-3xl md:text-4xl font-bold text-fuchsia-700 mb-4 flex items-center">
+                            <span class="text-5xl md:text-6xl ml-4">&#128640;</span>
+                            <span class="leading-tight">המתקדמים והחדשנים</span>
+                        </h3>
+                        <p class="text-gray-800 text-lg">מעוניינים לפתח פרויקטים מורכבים? נלווה אתכם בתכנון, פיתוח ויישום פתרונות AI פורצי דרך.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Specialties / AI Superpowers Section -->
+        <section id="specialties" class="py-16 md:py-24 relative bg-[#0d0d2b] overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-yellow-400/10 to-fuchsia-500/10 z-[-1] animate-gradient-shift"></div>
+            <div class="container mx-auto px-4 relative z-10">
+                <h2 class="text-5xl md:text-6xl text-center font-extrabold text-white mb-16 pop-text-shadow">
+                    עם AI, תהפכו למאסטרים בתחומים אלו:
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="pop-art-card p-6 bg-yellow-400 text-black rounded-lg shadow-xl border-4 border-white flex flex-col justify-center items-center transform -skew-x-6 hover:skew-x-0 transition-transform duration-300">
+                        <span class="text-6xl mb-4">&#128221;</span>
+                        <h3 class="text-3xl font-bold">יצירת טקסט ותוכן</h3>
+                        <p class="text-center mt-2">כתבו, ערכו ותמצתו כל טקסט במהירות וביעילות.</p>
+                    </div>
+                    <div class="pop-art-card p-6 bg-fuchsia-500 text-white rounded-lg shadow-xl border-4 border-white flex flex-col justify-center items-center transform skew-x-6 hover:skew-x-0 transition-transform duration-300">
+                        <span class="text-6xl mb-4">&#128187;</span>
+                        <h3 class="text-3xl font-bold">בניית אפליקציות חכמות</h3>
+                        <p class="text-center mt-2">הפכו רעיונות לאפליקציות מבוססות בינה מלאכותית.</p>
+                    </div>
+                    <div class="pop-art-card p-6 bg-cyan-400 text-black rounded-lg shadow-xl border-4 border-white flex flex-col justify-center items-center transform -skew-x-6 hover:skew-x-0 transition-transform duration-300">
+                        <span class="text-6xl mb-4">&#127760;</span>
+                        <h3 class="text-3xl font-bold">פיתוח אתרים ב-AI</h3>
+                        <p class="text-center mt-2">צרו אתרים דינמיים ואינטראקטיביים בעזרת AI.</p>
+                    </div>
+                    <div class="pop-art-card p-6 bg-white text-black rounded-lg shadow-xl border-4 border-fuchsia-500 flex flex-col justify-center items-center transform skew-x-6 hover:skew-x-0 transition-transform duration-300">
+                        <span class="text-6xl mb-4">&#128202;</span>
+                        <h3 class="text-3xl font-bold">ניתוח נתונים ומחקר</h3>
+                        <p class="text-center mt-2">הפיקו תובנות עמוקות מנתונים בקלות ובמהירות.</p>
+                    </div>
+                    <div class="pop-art-card p-6 bg-yellow-400 text-black rounded-lg shadow-xl border-4 border-white flex flex-col justify-center items-center transform -skew-x-6 hover:skew-x-0 transition-transform duration-300">
+                        <span class="text-6xl mb-4">&#127912;</span>
+                        <h3 class="text-3xl font-bold">יצירת תמונות ואומנות</h3>
+                        <p class="text-center mt-2">הפכו רעיונות ויזואליים למציאות מרהיבה.</p>
+                    </div>
+                    <div class="pop-art-card p-6 bg-fuchsia-500 text-white rounded-lg shadow-xl border-4 border-white flex flex-col justify-center items-center transform skew-x-6 hover:skew-x-0 transition-transform duration-300">
+                        <span class="text-6xl mb-4">&#128640;</span>
+                        <h3 class="text-3xl font-bold">אוטומציה של תהליכים</h3>
+                        <p class="text-center mt-2">בנו מערכות שיפעלו עבורכם, ויפשטו כל משימה.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="py-16 md:py-24 bg-cyan-400/20 relative border-t-8 border-yellow-400">
+            <div class="container mx-auto px-4 relative z-10">
+                <h2 class="text-5xl md:text-6xl text-center font-extrabold text-white mb-16 pop-text-shadow">
+                    דרכים להפוך למאסטר AI:
+                </h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div class="bg-gradient-to-br from-yellow-400 to-fuchsia-500 p-8 rounded-3xl shadow-2xl border-4 border-white transform rotate-[-1deg] hover:rotate-0 hover:scale-105 transition-all duration-300">
+                        <h3 class="text-4xl font-bold text-black mb-4 flex items-center">
+                            <span class="text-5xl ml-4">&#128101;</span>
+                            <span class="leading-tight">סדנאות קבוצתיות</span>
+                        </h3>
+                        <p class="text-lg text-gray-800 mb-4">למידה חווייתית ומעשית בקבוצה קטנה. נצלול יחד לעולם ה-AI, נתרגל וניישם כלים עוצמתיים מיידית.</p>
+                        <ul class="list-disc list-inside text-gray-800 text-lg">
+                            <li>מעשיות וממוקדות</li>
+                            <li>בניית כלים ופרויקטים קטנים</li>
+                            <li>סביבת למידה תומכת</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gradient-to-br from-fuchsia-500 to-cyan-400 p-8 rounded-3xl shadow-2xl border-4 border-white transform rotate-[2deg] hover:rotate-0 hover:scale-105 transition-all duration-300">
+                        <h3 class="text-4xl font-bold text-white mb-4 flex items-center">
+                            <span class="text-5xl ml-4">&#128100;</span>
+                            <span class="leading-tight">שיעורים פרטיים</span>
+                        </h3>
+                        <p class="text-lg text-white mb-4">מסלול למידה אישי המותאם בדיוק לרמה, לצרכים ולשאיפות שלכם. התקדמו בקצב שלכם עם ליווי צמוד.</p>
+                        <ul class="list-disc list-inside text-white text-lg">
+                            <li>התאמה אישית מלאה</li>
+                            <li>פתרון בעיות ספציפיות</li>
+                            <li>התקדמות מהירה ויעילה</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gradient-to-br from-cyan-400 to-yellow-400 p-8 rounded-3xl shadow-2xl border-4 border-white transform rotate-[-2deg] hover:rotate-0 hover:scale-105 transition-all duration-300">
+                        <h3 class="text-4xl font-bold text-black mb-4 flex items-center">
+                            <span class="text-5xl ml-4">&#127891;</span>
+                            <span class="leading-tight">הרצאות לארגונים</span>
+                        </h3>
+                        <p class="text-lg text-gray-800 mb-4">פתחו את אופקי הצוות שלכם עם הרצאות מרתקות ומעוררות השראה על עולם ה-AI והשלכותיו על העבודה והעתיד.</p>
+                        <ul class="list-disc list-inside text-gray-800 text-lg">
+                            <li>התאמה לצרכי הארגון</li>
+                            <li>פתיחת אופקים ומוטיבציה</li>
+                            <li>הבנה מעמיקה של הפוטנציאל</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gradient-to-br from-yellow-400 to-cyan-400 p-8 rounded-3xl shadow-2xl border-4 border-white transform rotate-[1deg] hover:rotate-0 hover:scale-105 transition-all duration-300">
+                        <h3 class="text-4xl font-bold text-black mb-4 flex items-center">
+                            <span class="text-5xl ml-4">&#128269;</span>
+                            <span class="leading-tight">ייעוץ ופיתוח פרויקטים</span>
+                        </h3>
+                        <p class="text-lg text-gray-800 mb-4">ליווי מקצועי ואישי בפיתוח ויישום פרויקטים מבוססי AI, מהרעיון ועד למוצר המוגמר.</p>
+                        <ul class="list-disc list-inside text-gray-800 text-lg">
+                            <li>תכנון אסטרטגי</li>
+                            <li>פיתוח טכנולוגי</li>
+                            <li>ליווי ויישום</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Zavik Section -->
+        <section id="zavik" class="relative py-16 md:py-24 bg-[#0d0d2b] overflow-hidden">
+            <div class="container mx-auto px-4 relative z-10 text-center md:text-right">
+                <h2 class="text-5xl md:text-6xl font-extrabold text-white mb-16 pop-text-shadow">
+                    זאביק אבינר: המאסטר שלכם ל-AI
+                </h2>
+                <div class="flex flex-col md:flex-row items-center md:items-start justify-center md:justify-end gap-12">
+                    <div class="w-full md:w-1/3 lg:w-1/4">
+                        <img src="https://link.zevikaviner.com/zevik" alt="זאביק אבינר - מומחה בינה מלאכותית" class="w-full rounded-full border-8 border-yellow-400 shadow-2xl transform rotate-3 hover:rotate-0 hover:scale-105 transition-all duration-300">
+                    </div>
+                    <div class="w-full md:w-2/3 lg:w-3/4 flex flex-col items-center md:items-start">
+                        <div class="speech-bubble rtl-bubble bg-white text-black p-6 rounded-lg shadow-xl text-xl md:text-2xl mb-8 transform skew-y-1 md:skew-y-0 md:skew-x-[-2deg] hover:skew-y-0 hover:skew-x-0 transition-all duration-300">
+                            "אני כאן כדי להפוך את עולם ה-AI הבלתי נתפס - לנגיש, מעשי ומלהיב עבורכם! בואו נבנה את העתיד יחד."
+                        </div>
+                        <p class="text-xl md:text-2xl text-white mb-6 leading-relaxed">
+                            זאביק אבינר הוא מומחה בינה מלאכותית עם ניסיון עשיר ומוכח בפיתוח פרויקטים, אפליקציות ומערכות מבוססות AI. הוא מתמחה בהנגשת הטכנולוגיה המורכבת והפיכתה לכלי עבודה יומיומי אפקטיבי.
+                        </p>
+                        <p class="text-xl md:text-2xl text-cyan-400 font-bold pop-text-shadow">
+                            המשימה שלי: להעצים אתכם עם כוחה של הבינה המלאכותית!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-16 md:py-24 bg-gradient-to-tr from-fuchsia-500 to-yellow-400 relative border-t-8 border-cyan-400">
+            <div class="container mx-auto px-4 text-center relative z-10">
+                <h2 class="text-5xl md:text-6xl font-extrabold text-white mb-12 pop-text-shadow">
+                    העתיד מחכה! צרו קשר עכשיו!
+                </h2>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-16 mb-12">
+                    <a href="https://wa.me/972546609385" target="_blank" class="flex items-center pop-button bg-white text-black text-2xl md:text-3xl px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                        <span class="text-4xl ml-4">&#128172;</span>
+                        <span>ווטסאפ: 054-6609385</span>
+                    </a>
+                    <a href="mailto:zaviner@gmail.com" class="flex items-center pop-button bg-white text-black text-2xl md:text-3xl px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                        <span class="text-4xl ml-4">&#128231;</span>
+                        <span>אימייל: zaviner@gmail.com</span>
+                    </a>
+                </div>
+                <p class="text-2xl md:text-3xl text-white pop-text-shadow leading-relaxed">
+                    אל תחכו! התחילו היום את המסע שלכם לעבר שליטה מלאה בעולם ה-AI ופתחו דלתות להזדמנויות חדשות ומרגשות.
+                </p>
+            </div>
+        </section>
+
+        <!-- Footer - Minimalist Pop Art -->
+        <footer class="bg-[#0d0d2b] text-gray-400 text-center py-8 border-t-4 border-fuchsia-500 transform skew-y-[1deg]">
+            <div class="container mx-auto px-4 transform skew-y-[-1deg]">
+                <p class="text-lg">© 2023 AI Master by זאביק אבינר. כל הזכויות שמורות.</p>
+                <p class="text-sm mt-2">מעוצב באהבה ובבינה מלאכותית (כמעט).</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript for custom cursor and parallax -->
+    <script>
+        // Custom Cursor
+        const customCursor = document.getElementById('custom-cursor');
+        document.addEventListener('mousemove', e => {
+            customCursor.style.left = `${e.clientX}px`;
+            customCursor.style.top = `${e.clientY}px`;
+        });
+
+        document.querySelectorAll('a, button, .pop-button, .pop-art-card').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                customCursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                customCursor.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+            });
+            el.addEventListener('mouseleave', () => {
+                customCursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                customCursor.style.backgroundColor = 'transparent';
+            });
+        });
+
+        // Parallax Effect (simple)
+        const parallaxShape1 = document.getElementById('parallax-shape-1');
+        const parallaxShape2 = document.getElementById('parallax-shape-2');
+        const parallaxShape3 = document.getElementById('parallax-shape-3');
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+
+            // Adjust these multipliers for different speeds
+            if (parallaxShape1) parallaxShape1.style.transform = `translateY(${scrollY * 0.2}px)`;
+            if (parallaxShape2) parallaxShape2.style.transform = `rotate(45deg) translateY(${scrollY * 0.1}px)`;
+            if (parallaxShape3) parallaxShape3.style.transform = `translateY(${scrollY * 0.3}px)`;
+        });
+
+        // Smooth scroll for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
